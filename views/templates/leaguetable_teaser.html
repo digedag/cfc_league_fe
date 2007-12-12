@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Template für Ligatabelle</title>
+</head>
+<body>
+
+<h1>Template für einen Teaser der Ligatabelle</h1>
+<p>
+Das Template hat die volle Funktionaltät der normalen Tabelle. Es kann also auf alle Daten
+zugegriffen werden. Dieses Template liegt also nur als kleines Beispiel bei.
+</p>
+<h2>Vorhandene Marker:</h2>
+<pre>
+###ROW### Subpart für eine Zeile der Tabelle
+###ROW_TYPE### Marker für den Typ einer Zeile. Dies ist eine laufende Nummer bei 0 beginnend und leaguetable.rowtype endend.
+###ROW_POSITION_MARK### Marker für spezielle Markierung einer Tabellenposition aus Wettbewerbsdatensatz
+###ROW_POSITION### Marker für Tabellenplatz
+###ROW_...### Marker für Werte aus dem Teamdatensatz
+###ROW_MATCHCOUNT### Marker für Anzahl der Spiele
+</pre>
+
+<!-- ###LEAGUE_TABLE### start -->
+<div class="cfcleague-teaser">
+###ROW###
+
+<p class="###ROW_MARKCLUB###">
+###ROW_POSITION###. ###ROW_SHORT_NAME###<br />
+</p>
+
+###ROW###
+</div>
+<!-- ###LEAGUE_TABLE### end -->
+
+</body>
+</html>

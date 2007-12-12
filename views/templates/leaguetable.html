@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>Template für Ligatabelle</title>
+</head>
+<body>
+
+<h1>Template für Ligatabelle</h1>
+<h2>Vorhandene Marker:</h2>
+<pre>
+###CONTROLS### Subpart für das Steuerungspanel der Tabelle
+###CONTROL_TABLETYPE### Subpart für Auswahl des Tabellentyps (Normal, Heim oder Auswärts)
+###CONTROL_TABLESCOPE### Subpart für Auswahl Tabellenscope (Normal, Hin- oder Rückrunde)
+###CONTROL_POINTSYSTEM### Subpart für Auswahl Punktsystem (2- oder 3-Punktesystem)
+
+###CONTROL_TABLETYPE_NORMAL_LINK### Subpart für Link auf Tabellentyp normal
+###CONTROL_TABLETYPE_HOME_LINK### Subpart für Link auf Tabellentyp Heim
+###CONTROL_TABLETYPE_AWAY_LINK### Subpart für Link auf Tabellentyp Auswärts
+
+###CONTROL_TABLETYPE_NORMAL_LINK_URL### Marker für URL auf Tabellentyp normal
+###CONTROL_TABLETYPE_HOME_LINK_URL### Marker für URL auf Tabellentyp Heim
+###CONTROL_TABLETYPE_AWAY_LINK_URL### Marker für URL auf Tabellentyp Auswärts
+
+###CONTROL_TABLESCOPE_NORMAL_LINK### Subpart für Link auf Tabellenscope normal
+###CONTROL_TABLESCOPE_FIRST_LINK### Subpart für Link auf Tabellenscope Hinrunde
+###CONTROL_TABLESCOPE_SECOND_LINK### Subpart für Link auf Tabellenscope Rückrunde
+
+###CONTROL_POINTSYSTEM_POINT3_LINK### Subpart für Link auf 3-Punkte-Tabelle
+###CONTROL_POINTSYSTEM_POINT2_LINK### Subpart für Link auf 2-Punkte-Tabelle
+
+Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei aktive Links unterschieden werden!
+
+###ROW### Subpart für eine Zeile der Tabelle
+###ROW_ROLL### Marker für den Typ einer Zeile. Dies ist eine laufende Nummer bei 0 beginnend und leaguetable.table.rowroll endend.
+###ROW_MARKCLUB### Marker zur Markierung von ausgewählten Teams. Dies sollte eine CSS-Klasse sein
+###ROW_MARK### Marker zur Markierung von bestimmten Tabellenpositionen. Der Inhalt wird aus dem Wettbewerbsdatensatz geholt.
+###ROW_POSITION### Marker für Tabellenplatz
+###ROW_...### Marker für Werte aus dem Teamdatensatz
+###ROW_LINK### Subpart für Link auf die Teamdarstellung
+###ROW_MATCHCOUNT### Marker für Anzahl der Spiele
+</pre>
+
+<!-- ###LEAGUE_TABLE### start -->
+
+<!-- ###CONTROLS### start -->
+<div class="cfcleague-scopeselection">
+###CONTROL_TABLETYPE###
+<p>
+###CONTROL_TABLETYPE_NORMAL_LINK### ###CONTROL_TABLETYPE_NORMAL### ###CONTROL_TABLETYPE_NORMAL_LINK###
+###CONTROL_TABLETYPE_HOME_LINK### ###CONTROL_TABLETYPE_HOME### ###CONTROL_TABLETYPE_HOME_LINK###
+###CONTROL_TABLETYPE_AWAY_LINK### ###CONTROL_TABLETYPE_AWAY### ###CONTROL_TABLETYPE_AWAY_LINK###
+</p>
+###CONTROL_TABLETYPE###
+
+###CONTROL_TABLESCOPE###
+<p>
+###CONTROL_TABLESCOPE_NORMAL_LINK### ###CONTROL_TABLESCOPE_NORMAL### ###CONTROL_TABLESCOPE_NORMAL_LINK### 
+###CONTROL_TABLESCOPE_FIRST_LINK### ###CONTROL_TABLESCOPE_FIRST### ###CONTROL_TABLESCOPE_FIRST_LINK### 
+###CONTROL_TABLESCOPE_SECOND_LINK### ###CONTROL_TABLESCOPE_SECOND### ###CONTROL_TABLESCOPE_SECOND_LINK###
+</p>
+###CONTROL_TABLESCOPE###
+
+###CONTROL_POINTSYSTEM###
+<p>
+###CONTROL_POINTSYSTEM_POINT3_LINK### ###CONTROL_POINTSYSTEM_POINT3### ###CONTROL_POINTSYSTEM_POINT3_LINK###
+###CONTROL_POINTSYSTEM_POINT2_LINK### ###CONTROL_POINTSYSTEM_POINT2### ###CONTROL_POINTSYSTEM_POINT2_LINK###
+</p>
+###CONTROL_POINTSYSTEM###
+
+</div>
+<!-- ###CONTROLS### end -->
+
+<div class="cfcleague-leaguetable">
+<table cellspacing="0" cellpadding="0" class="cfcleague-leaguetable">
+<tr>
+  <th>Pl.</th><th>Verein</th><th>Spiele</th><th>S</th><th>U</th><th>N</th><th>Tore</th><th>Diff</th><th>Punkte</th>
+</tr>
+
+###ROW###
+<tr class="cfcleague-leaguetable-row###ROW_ROLL### ###ROW_MARKCLUB### cfcleague-leaguetable-row_###ROW_MARK###">
+  <td>###ROW_POSITION###.</td>
+  <td>###ROW_LOGO### ###ROW_LINK######ROW_NAME######ROW_PENALTIES######ROW_LINK###</td>
+  <td>###ROW_MATCHCOUNT###</td>
+  <td>###ROW_WINCOUNT###</td>
+  <td>###ROW_DRAWCOUNT###</td>
+  <td>###ROW_LOSECOUNT###</td>
+  <td>###ROW_GOALS1###:###ROW_GOALS2###</td>
+  <td>###ROW_GOALS_DIFF###</td>
+  <td>###ROW_POINTS######ROW_POINTS2###</td>
+</tr>
+###ROW###
+</table>
+
+<!-- ###PENALTIES### start -->
+<div class="cfcleague-leaguetable-comments">
+
+<h3>Hinweise</h3>
+<!-- ###PENALTY### start -->
+<p class="cfcleague-leaguetable-comment">* ###PENALTY_COMMENT###
+</p>
+<!-- ###PENALTY### end -->
+</div>
+<!-- ###PENALTIES### end -->
+
+</div>
+<!-- ###LEAGUE_TABLE### end -->
+
+</body>
+</html>

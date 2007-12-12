@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>Template für Spielplan</title>
+</head>
+<body>
+
+<h1>Template für Statistiken</h1>
+
+###STATISTICS###
+
+###STATISTIC_PLAYERSUMMARY###
+<div id="cfcleague-playerstats-info">
+Stand nach <b>###PLAYERSUMMARY_NUMBEROFUSEDMATCHES###</b> von <b>###PLAYERSUMMARY_NUMBEROFMATCHES###</b> Spielen.
+</div>
+###STATISTIC_PLAYERSUMMARY###
+
+###STATISTIC_PLAYER###
+<table class="cfcleague-statistic-table">
+<tr>
+  <th>&nbsp;</th>
+  <th colspan="2" class="center">###PLAYER_LABEL_MATCHES###</th>
+  <th colspan="3" class="center">###PLAYER_LABEL_CARDS###</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  <th colspan="2" class="center">###PLAYER_LABEL_CHANGE###</th>
+</tr>
+<tr>
+  <th>###PLAYER_LABEL_PLAYER###</th>
+  <th>###PLAYER_LABEL_MATCHCOUNT###</th>
+  <th>###PLAYER_LABEL_MINUTES###</th>
+  <th>###PLAYER_LABEL_CARD_YELLOW###</th>
+  <th>###PLAYER_LABEL_CARD_YELLOWRED###</th>
+  <th>###PLAYER_LABEL_CARD_RED###</th>
+  <th>###PLAYER_LABEL_GOALS###</th>
+  <th>###PLAYER_LABEL_ASSISTS###</th>
+  <th>###PLAYER_LABEL_GOALS_OWN###</th>
+  <th>###PLAYER_LABEL_CHANGE_IN###</th>
+  <th>###PLAYER_LABEL_CHANGE_OUT###</th>
+</tr>
+###PLAYER_PROFILE###
+<tr>
+  <td class="cfcleague-statistic-label">###PLAYER_PROFILE_LAST_NAME###, ###PLAYER_PROFILE_FIRST_NAME###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_MATCH_COUNT###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_MATCH_MINUTES###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_CARD_YELLOW###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_CARD_YELLOWRED###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_CARD_RED###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_GOALS_ALL###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_GOALS_ASSIST###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_GOALS_OWN###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_CHANGED_IN###</td>
+  <td class="cfcleague-statistic-value-r">###PLAYER_PROFILE_CHANGED_OUT###</td>
+
+</tr>
+###PLAYER_PROFILE###
+</table>
+###STATISTIC_PLAYER###
+
+###STATISTIC_SCORERLIST###
+<h2>###SCORERLIST_LABEL_HEADLINE###</h2>
+
+<table class="cfcleague-statistic-table">
+<tr>
+  <th>###SCORERLIST_LABEL_PLAYER###</th>
+  <th class="center">###SCORERLIST_LABEL_GOALS### (###SCORERLIST_LABEL_GOALS_PER_MATCH###)</th>
+  <th class="center">###SCORERLIST_LABEL_MINUTES_PER_GOAL###</th>
+  <th>###SCORERLIST_LABEL_GOALS_HOME###</th>
+  <th>###SCORERLIST_LABEL_GOALS_AWAY###</th>
+  <th>###SCORERLIST_LABEL_GOALS_HEAD###</th>
+  <th>###SCORERLIST_LABEL_GOALS_PENALTY###</th>
+  <th>###SCORERLIST_LABEL_GOALS_JOKER###</th>
+</tr>
+
+###SCORERLIST_PROFILE###
+<tr>
+  <td class="cfcleague-statistic-label">###SCORERLIST_PROFILE_LAST_NAME###, ###SCORERLIST_PROFILE_FIRST_NAME###</td>
+  <td class="cfcleague-statistic-value-r">###SCORERLIST_PROFILE_GOALS_ALL### ###SCORERLIST_PROFILE_GOALS_ALL_PER_MATCH###</td>
+  <td class="cfcleague-statistic-value-r">###SCORERLIST_PROFILE_GOALS_ALL_AFTER_MINUTES###</td>
+  <td class="cfcleague-statistic-value-r">###SCORERLIST_PROFILE_GOALS_HOME###</td>
+  <td class="cfcleague-statistic-value-r">###SCORERLIST_PROFILE_GOALS_AWAY###</td>
+  <td class="cfcleague-statistic-value-r">###SCORERLIST_PROFILE_GOALS_HEAD### ###SCORERLIST_PROFILE_GOALS_HEAD_PER_MATCH###</td>
+  <td class="cfcleague-statistic-value-r">###SCORERLIST_PROFILE_GOALS_PENALTY###</td>
+  <td class="cfcleague-statistic-value-r">###SCORERLIST_PROFILE_GOALS_JOKER###</td>
+</tr>
+###SCORERLIST_PROFILE###
+
+</table>
+###STATISTIC_SCORERLIST###
+
+
+###STATISTIC_ASSISTLIST###
+<h2>###ASSISTLIST_LABEL_HEADLINE###</h2>
+
+<table class="cfcleague-statistic-table">
+<tr>
+  <th>###ASSISTLIST_LABEL_PLAYER###</th>
+  <th>###ASSISTLIST_LABEL_ASSISTS###</th>
+</tr>
+###ASSISTLIST_PROFILE###
+<tr>
+  <td class="cfcleague-statistic-label">###ASSISTLIST_PROFILE_LAST_NAME###, ###ASSISTLIST_PROFILE_FIRST_NAME###</td>
+  <td class="cfcleague-statistic-value-c">###ASSISTLIST_PROFILE_GOALS_ASSIST###</td>
+</tr>
+###ASSISTLIST_PROFILE###
+
+</table>
+###STATISTIC_ASSISTLIST###
+
+###STATISTIC_VISITORS###
+<h2>###VISITORS_LABEL_HEADLINE###</h2>
+<table class="cfcleague-statistic-table">
+<tr><th></th><th colspan="2" class="center">###VISITORS_LABEL_HOME###</th><th colspan="2" class="center">###VISITORS_LABEL_AWAY###</th><th colspan="2" class="center">###VISITORS_LABEL_ALL###</th></tr>
+<tr><th>###VISITORS_LABEL_TEAM###</th><th>###VISITORS_LABEL_TOTAL###</th><th>###VISITORS_LABEL_AVERAGE###</th><th>###VISITORS_LABEL_TOTAL###</th><th>###VISITORS_LABEL_AVERAGE###</th><th>###VISITORS_LABEL_TOTAL###</th><th>###VISITORS_LABEL_AVERAGE###</th></tr>
+###VISITORS_TEAM###
+<tr>
+<td class="cfcleague-statistic-label">###VISITORS_TEAM_NAME###</td>
+<td class="cfcleague-statistic-value-r">###VISITORS_TEAM_HOME_TOTAL###</td><td class="cfcleague-statistic-value-r">###VISITORS_TEAM_HOME_AVERAGE###</td>
+<td class="cfcleague-statistic-value-r">###VISITORS_TEAM_AWAY_TOTAL###</td><td class="cfcleague-statistic-value-r">###VISITORS_TEAM_AWAY_AVERAGE###</td>
+<td class="cfcleague-statistic-value-r">###VISITORS_TEAM_ALL_TOTAL###</td><td class="cfcleague-statistic-value-r">###VISITORS_TEAM_ALL_AVERAGE###</td>
+</tr>
+###VISITORS_TEAM###
+</table>
+###STATISTIC_VISITORS###
+
+###STATISTICS###
+
+</body>
+</html>

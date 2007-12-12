@@ -1,0 +1,29 @@
+# Einbindung in calendar base
+
+plugin.tx_cal_controller {
+  view {
+    cfc_league_events {
+      template = EXT:cfc_league_fe/views/templates/match_event.html
+      headerStyle = green_catheader
+      bodyStyle = green_catbody
+      event_length = 180
+      legendCalendarName = Match events
+      legendDescription = title
+      prefix = Match:&nbsp;
+
+      # Wir übernehmen zur Formatierung des Spiels als Vorlage die Config aus dem Spielplan
+      match < plugin.tx_cfcleaguefe_competition.matchtable.match
+      # Im Kalender reicht die Uhrzeit
+      match.date.strftime  = %H:%M Uhr
+
+      # Es kann auf die gleichen Werte wie in den normalen Views eingegrenzt werden
+      # Andernfalls werden alle Spiele in den Kalender eingetragen!
+#      saisonSelection = 4
+#      groupSelection = 1
+#      clubSelection = 1
+#      competitionSelection = 1
+    }
+  }	
+}
+
+

@@ -1,0 +1,818 @@
+# TS Setup
+
+# #####
+# Competition-Plugin
+# #####
+
+# TODO rename controller
+includeLibs.tx_cfcleaguefe_controllers_competition = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_matchtable.php
+
+plugin.tx_cfcleaguefe_competition                = USER
+plugin.tx_cfcleaguefe_competition.flexform       = flexform_competition.xml
+plugin.tx_cfcleaguefe_competition.userFunc       = tx_cfcleaguefe_controllers_matchtable->main
+plugin.tx_cfcleaguefe_competition.defaultAction  = tx_cfcleaguefe_actions_MatchTable
+plugin.tx_cfcleaguefe_competition.qualifier      = cfc_league_fe
+plugin.tx_cfcleaguefe_competition.templatePath   = EXT:cfc_league_fe/views/templates
+plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallang.xml
+
+
+# Allgemeines Formatierungsangaben für Personen
+temp.profile {
+  # Durch die definition als TEXT werden die Daten als RTE formatiert
+  description = TEXT
+  summary = TEXT
+  birthday = DATETIME
+  birthday {
+    strftime = %d. %B %Y
+    ifEmpty = -
+  }
+  duration_of_contract = DATETIME
+  duration_of_contract {
+    strftime = %d.%B %Y
+    ifEmpty = -
+  }
+  weight.ifEmpty = -
+  height.ifEmpty = -
+  firstImage {
+    file.maxW = 100
+    file.maxH = 100
+  }
+}
+
+# Allgemeines Formatierungsangaben für ein Team
+temp.team {
+  firstImage {
+    file.maxW = 480
+    file.maxH = 500
+    file_ctime.strftime = %d-%b-%y
+    file_ctime.wrap = Letzte Änderung:&nbsp;
+    imageLinkWrap < tt_content.image.20.1.imageLinkWrap
+    description.parseFunc < tt_content.text.20.parseFunc
+    creator.wrap = Foto:&nbsp; |
+    creator.ifEmpty = -
+  }
+  images {
+    file.maxW = 100
+    file.maxH = 100
+    imageLinkWrap < tt_content.image.20.1.imageLinkWrap
+  }
+  # Formatierung der Spieler-, Trainer-, Betreuerdatensätze
+  player < temp.profile
+  player.birthday.strftime = %d.%m.%y
+  coach < temp.profile
+  coach.birthday.strftime = %d.%m.%y
+  supporter < temp.profile
+  supporter.birthday.strftime = %d.%m.%y
+
+  comment.parseFunc < tt_content.text.20.parseFunc
+  coaches_comment.parseFunc < tt_content.text.20.parseFunc
+  players_comment.parseFunc < tt_content.text.20.parseFunc
+  supporters_comment.parseFunc < tt_content.text.20.parseFunc
+
+  name.if {
+    # Nix zeigen, wenn es ein Dummy-Team ist
+    value = 0
+    equals.field = dummy
+  }
+  short_name < temp.team.name
+
+  # Formatierung des Team-Logos
+  logo {
+    file.maxW = {$plugin.tx_cfcleaguefe_matchreport.maxW_logo}
+    file.maxH = {$plugin.tx_cfcleaguefe_matchreport.maxH_logo}
+    # Wenn kein Teamlogo vorhanden ist
+    noLogo_stdWrap {
+      if {
+		    # Nix zeigen, wenn es ein Dummy-Team ist
+		    value = 0
+		    equals.field = dummy
+      }
+      cObject = IMAGE
+      cObject {
+        wrap =
+        
+//        file = fileadmin/images/fussball.gif
+        file = GIFBUILDER
+        file {
+          XY = {$plugin.tx_cfcleaguefe_matchreport.maxW_logo},{$plugin.tx_cfcleaguefe_matchreport.maxH_logo}
+          backColor = #ffff00
+          10 = TEXT
+          10 {
+            text = Kein Logo
+            fontSize = 14
+            niceText = 1
+            fontColor = #000000
+            offset = {$plugin.tx_cfcleaguefe_matchreport.maxW_logo}/2-30, {$plugin.tx_cfcleaguefe_matchreport.maxH_logo}/2+4
+          }
+        }
+
+      }
+    }
+  }
+}
+
+plugin.tx_cfcleaguefe_competition {
+  # Rendering of items. re-use the RTE parseFunc configuration for normal content
+  general_stdWrap {
+    parseFunc < tt_content.text.20.parseFunc
+  }
+
+  # Daten für die Ligatabelle
+  leaguetable {
+    # Ausgabe mit HTML-Template
+    viewType = HTML
+    # PID der Seite für den Teamview
+    teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
+    # Angabe zur Tabelle
+    table < temp.team
+    table {
+      roll.value = 1
+#      team.name.wrap = -|-
+      markClub {
+        override = cfcleague-leaguetable-rowTeam
+        if.value = 1
+        if.equals.field = markClub
+      }
+      penalties {
+        override = &nbsp;*
+        if.value = 0
+        if.isGreaterThan.field = penalties
+      }
+      points2 {
+        wrap = : |
+        if.value = -1
+        if.isGreaterThan.field = points2
+      }
+      logo{
+        file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+        file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+        noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+      }
+      # Optional ein String, der zwischen den Zeilen steht
+#      implode = <br />
+    }
+    # Formatierung der Spielstrafen
+    penalty {
+      comment.wrap = |
+    }
+    controls {
+      tabletype {
+        current.noLink = 1
+        current.wrap = <b>|</b>
+        normal.wrap = <span>|</span>
+        0.override = NORMAL
+        1.override = HOME
+        2.override = AWAY
+      }
+      tablescope {
+        current.noLink = 1
+        current.wrap = <b>|</b>
+        0.override = NORMAL
+        1.override = FIRST
+        2.override = SECOND
+      }
+      pointsystem {
+        current.noLink = 1
+        current.wrap = <b>|</b>
+        0.override = POINT2
+        1.override = POINT3
+      }
+    }
+  }
+
+  # Daten für den Spielplan-View
+  matchtable {
+    # Ausgabe mit HTML-Template
+    viewType = HTML
+    # Status der Spiele im Spielplan (0-angesetzt, 1-läuft, 2-beendet)
+#    status = 0,1,2
+    # Die Anzahl der Spiele limitieren. 0 bedeutet keine Einschränkung
+    limit = 0
+    match {
+      roll.value = 1
+      stadium.ifEmpty = Ort noch unbekannt
+      stadium.wrap = (|)
+      date.strftime  = %a, %d.%m.%y Anstoss: %H:%M Uhr
+
+      # Optional ein String, der zwischen den Spielen steht
+#      implode = <br />
+      home < temp.team
+      home.logo{
+        file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+        file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+        noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+      }
+      guest < plugin.tx_cfcleaguefe_competition.matchtable.match.home
+    }
+    # PID der Seite für den Teamview
+    teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
+  }
+
+  # ???
+  match {
+    date.strftime  = {$plugin.tx_cfcleaguefe_competition.format_date}
+  }
+
+  statistics {
+    ####
+    # Liste der Vorlagengeber
+    assistlist.labels (
+     headline,player,assists
+    )
+    assistlist.profile < temp.profile
+    scorerlist.profile {
+	    assists.ifEmpty = -
+	  }
+	  ####
+    # Liste der Torschützen
+    scorerlist.labels (
+     headline,player,goals,goals_own,goals_head,
+     goals_home,goals_away, goals_joker, goals_penalty,
+     goals_per_match, minutes_per_goal
+    )
+    scorerlist.profile < temp.profile
+    scorerlist.profile {
+	    goals_all.ifEmpty = -
+	    goals_all_per_match {
+	      wrap = (|)
+  	    number_format.decimal = 2
+	      # Auch an ganze Zahlen Nachkommastellen anfügen
+	      number_format.dontCheckFloat = 1
+	    }
+	    goals_all_after_minutes.number_format.decimal = 0
+	    goals_all_after_minutes.number_format.dontCheckFloat = 1
+	    goals_home.ifEmpty = -
+	    goals_away.ifEmpty = -
+	    goals_head.ifEmpty = -
+	    goals_head_per_match.wrap = (|)
+	    goals_head_per_match.number_format.decimal = 2
+	    goals_head_per_match.number_format.dontCheckFloat = 1
+	    goals_penalty.ifEmpty = -
+	    goals_joker.ifEmpty = -
+	  }
+	  ####
+    # Spielerstatistik
+    player.labels (
+      matches,matchcount,minutes,cards,player,card_yellow,card_yellowred,card_red,
+      goals,goals_own,goals_home,goals_away,assists,change,change_in,change_out
+    )
+    # Sortierung der Spieler: 0-alphabetisch, 1-wie im Team
+    player.profileSortOrder = 0
+    player.profile < temp.profile
+    player.profile {
+#      last_name.wrap = <i>|</i>
+#      label_last_name.wrap = <i>|</i>
+	    match_count.wrap = <b>|</b>
+	    match_count.ifEmpty = -
+	    match_minutes.ifEmpty = -
+	    card_yellow.ifEmpty = -
+	    card_yellowred.ifEmpty = -
+	    card_red.ifEmpty = -
+	    goals_all.ifEmpty = -
+	    changed_in.ifEmpty = -
+	    changed_out.ifEmpty = -
+	    goals_assist.ifEmpty = -
+	  }
+	  ####
+    # Zuschauerstatistik
+    visitors { 
+      labels (
+       headline,team,home,away,all,total,average
+      )
+      # Sortierung: home_total, away_total, all_total
+      sortOrder = home_average
+    }
+  }
+  # Liste der aktuell anstehenden Liveticker
+  tickerlist {
+    match {
+      date.strftime  = {$plugin.tx_cfcleaguefe_competition.tickerlist_format_date}
+      home < temp.team
+      guest < plugin.tx_cfcleaguefe_competition.tickerlist.match.home
+    }
+  }
+  # Angaben zur ScopeAuswahl
+  scopeSelection {
+    # Ausgabe mit HTML-Template
+    viewType = HTML
+    group.current.noLink = 1
+    group.isCurrent.if.value = 1
+    group.isCurrent.if.equals.field = isCurrent
+    group.isCurrent.override = selected="selected"
+    saison < plugin.tx_cfcleaguefe_competition.scopeSelection.group
+    saison { 
+      current.noLink = 1
+      normal.wrap = <span>|</span>
+      # String zwischen den Datensätzen
+      implode = -
+      eachWrap.wrap = -|-
+      allWrap.wrap = #|#
+    }
+    competition < plugin.tx_cfcleaguefe_competition.scopeSelection.group
+    round < plugin.tx_cfcleaguefe_competition.scopeSelection.group
+    club < plugin.tx_cfcleaguefe_competition.scopeSelection.group
+
+#    competition.current.noLink = 1
+#    round.current.noLink = 1
+#    club.current.noLink = 1
+#    club.isCurrent.if.value = 1
+#    club.isCurrent.if.equals.field = isCurrent
+#    club.isCurrent.override = selected="selected"
+  }
+}
+
+# Define a base layout for chartlines
+plugin.tx_cfcleaguefe_competition.chart.title = Tabellenfahrt der COMPETITION_NAME
+plugin.tx_cfcleaguefe_competition.chart.line = LINE
+plugin.tx_cfcleaguefe_competition.chart.line {
+  title = egal
+  lineColor = egal
+  lineStyle = solid
+  lineStyle{
+    thickness = 2
+    color = blue
+  }
+  shadow = true
+  marker = circle
+  marker {
+    fillColor = white@0.4
+    size = 3
+    shadow = true
+  }
+}
+# Define a base layout for tablecharts
+plugin.tx_cfcleaguefe_competition.chart {
+  factory = png
+  width = 480
+  height = 300
+  antialias = native
+  font.default = fileadmin/fonts/nimbus.ttf
+  font.default {
+    size = 8
+  }
+  background = gradient
+  background {
+    direction = vertical_mirrored
+    startColor = steelblue
+    endColor = lightcyan
+  }
+  borderColor = black
+  10 = VERTICAL
+    10 {
+    percentage = 5
+    10 = TITLE
+    10 {
+      text = Eine Tabellenfahrt
+      font {
+        size = 10
+      }
+    }
+    20 = VERTICAL
+    20 {
+      percentage = 88
+      10 = PLOTAREA
+      10 {
+        id = plotarea1
+        axis{
+          y {
+            inverted = 1
+            forceMinimum = 1
+            labelInterval = 1
+            title = Tabellenplatz
+            title {
+              angle = 90
+              size = 8
+            }
+#            forceMinimum = 20
+          }
+          x {
+            label = minimum
+            axisIntersection = max
+            title = Spieltag
+            title {
+              angle = 0
+              size = 8
+            }
+          }
+        }
+        axisPadding = 10
+# Hintergrund der Diagrammfläche: Bild, Farbe oder Gradient
+# Beispiel für Farbe
+#        fillStyle = image
+#        fillStyle {
+#          image = fileadmin/images/website/cfc_schraeg_420.jpg
+#        }
+# Beispiel für Farbe ohne Alpha-Channel
+#        fillColor = yellow
+# Beispiel für Farbe mit Alpha-Channel
+#       fillColor = lightgrey@0.5
+
+# Beispiel für Gradient
+        fillStyle = gradient
+        fillStyle {
+          direction = vertical
+          startColor = white@50
+          endColor = lightgrey@50
+        }
+
+        10 = GRID
+        10 {
+          axis = y
+          type = line
+          lineColor = gray@0.2
+        }
+## Dieser Teil wird komplett ersetzt
+## Einstellungen bei chartline setzen
+        20 = LINE
+        20 {
+          title = Error: No Data delivered
+          lineColor = red
+          dataset {
+            10 = random
+            10 {
+              count = 10
+              minimum = 2
+              maximum = 15
+              includeZero = true
+            }
+          }
+      	}
+##
+      }
+      20 = LEGEND
+      20 {
+        plotarea.1 = plotarea1
+      }
+    }
+  }
+}
+
+tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_competition
+
+
+# #####
+# Das Report Plugin
+# #####
+includeLibs.tx_cfcleaguefe_controllers_report = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_report.php
+
+# icon for related news
+temp.penaltyicon = IMAGE
+temp.penaltyicon {
+  file = EXT:cfc_league_fe/res/gelbe-karte.gif
+  file.width = 7
+  file.height = 10
+  params = class="cfcleague-card"
+}
+
+# CASE Anweisung für eine Spielstrafe
+temp.penaltyType = CASE
+temp.penaltyType {
+  key.field = type
+  default = TEXT
+  default.value = 
+  # Die Nummern entsprechen der ID des Tickertyps
+  70 < temp.penaltyicon
+  70.file = EXT:cfc_league_fe/res/gelbe-karte.gif
+  71 < temp.penaltyicon
+  71.file = EXT:cfc_league_fe/res/gelbrote-karte.gif
+  72 < temp.penaltyicon
+  72.file = EXT:cfc_league_fe/res/rote-karte.gif
+#          noTrimWrap = | (|)|
+}
+# Jetzt noch ein CASE für alle anderen Tickertypen
+temp.tickerType < temp.penaltyType
+temp.tickerType {
+#  100 = TEXT
+#  100.value = Meldung
+  10 = TEXT
+  10.value = Tor:&nbsp;
+  11 = TEXT
+  11.value = Kopfball:&nbsp;
+  12 = TEXT
+  12.value = Elfmeter:&nbsp;
+  30 = TEXT
+  30.value = Eigentor:&nbsp;
+  32 = TEXT
+  32.value = Elfmeter verschossen:&nbsp;
+  33 = TEXT
+  33.value = Eckball:&nbsp;
+}
+
+# Standardanzeige für Personen
+temp.profiles {
+  ifEmpty = unbekannt
+  seperator = |, |
+  profile {
+    reverse = 0
+    last_name = 1
+    last_name.s_weight = 2
+    first_name.noTrimWrap = || |
+    first_name.s_weight = 1
+  }
+}
+
+# Spieler im Spielbericht
+temp.reportPlayers < temp.profiles
+temp.reportPlayers.profile {
+  first_name >
+  # Den Nachnamen des Teamcaptains formatieren
+  last_name.cObject = COA
+  last_name.cObject {
+    1 = TEXT
+    1.value = <b>
+    1.if.value = 0
+    1.if.isGreaterThan.field = teamCaptain
+    2 = TEXT
+    2.field = last_name
+    3 = TEXT
+    3.value = (C)</b>
+    3.if.value = 0
+    3.if.isGreaterThan.field = teamCaptain
+  }
+
+  # Die Karten einblenden
+  ifPenalty {
+    s_weight = 3
+    ticker {
+      type.cObject < temp.penaltyType
+    }
+  }
+}
+
+plugin.tx_cfcleaguefe_report   = USER
+plugin.tx_cfcleaguefe_report {
+  flexform       = flexform_report.xml
+  userFunc       = tx_cfcleaguefe_controllers_report->main
+  defaultAction  = tx_cfcleaguefe_actions_MatchReport
+  qualifier      = cfc_league_fe
+  templatePath   = EXT:cfc_league_fe/views/templates
+  locallangFilename = EXT:cfc_league_fe/locallang.xml
+
+  # Angaben zur ScopeAuswahl
+  scopeSelection {
+    # Ausgabe mit HTML-Template
+    viewType = HTML
+    saison.current.noLink = 1
+    group.current.noLink = 1
+  }
+
+  # Rendering of news items. re-use the RTE parseFunc configuration for normal content
+  general_stdWrap {
+    parseFunc < tt_content.text.20.parseFunc
+  }
+
+  profilelist {
+    profile < temp.profile
+    profile.firstImage {
+      file.maxW = 40
+      file.maxH = 40
+      wrap = <br />|
+    }
+  }
+  profileview {
+    profile < temp.profile
+    profile.firstImage {
+      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
+      file.maxW = 150
+      file.maxH = 200
+    }
+    profile.images {
+      file.maxW = 100
+      file.maxH = 100
+      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
+    }
+  }
+  # View TeamView
+  teamview {
+    team < temp.team
+  }
+  # View MatchReport
+  matchreport {
+    # Ausgabe mit HTML-Template
+    viewType = HTML
+
+    # Anweisungen für den Spieldatensatz
+    match {
+      # Hier immer mit den Namen der Spalte verwenden
+      visitors.ifEmpty = -
+      game_report.parseFunc < tt_content.text.20.parseFunc
+      date.strftime  = {$plugin.tx_cfcleaguefe_matchreport.format_date}
+      home < temp.team
+      guest < temp.team
+      players_home = 1
+      players_guest = 1
+
+		  firstImage {
+		    file.maxW = 100
+		    file.maxH = 100
+	      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
+		  }
+	    images {
+	      file.maxW = 100
+	      file.maxH = 100
+	      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
+	    }
+	
+	    media {
+	      mp3 {
+	        player {
+	          backgroundColor = 88C0E8
+	          autoStart = 0
+	          autoReplay = 0
+	        }
+	      }
+	    }
+
+      # Mit den DynaMarkern können Listen von Spiel-Ereignissen zusammengestellt werden
+      # Der Zugriff im HTML-Template erfolgt nach folgendem Prinzip: 
+      # der DynaMarker "scorerHome" hat den Marker ###MATCH_SCORERHOME###
+      # Es können beliebige weitere Listen erstellt werden. Bei der Benennung sollten aber
+      # Kollisionen mit Attributen des Datensatzes "Spiel" vermieden werden.
+      dynaMarkers {
+        # Die Heimtorschützen anzeigen
+        scorerHome {
+		      cron = 1
+		      ifEmpty = Fehlanzeige
+          # Possible values are home and guest. Empty for both
+          noteTeam = home
+          noteType = 10,11,12,30
+#          noteIgnoreType = ??
+          implode = <br />
+		      seperator = |<br/>|
+		      ticker {
+		        minute.s_weight = 0
+		        minute.wrap = |.&nbsp;
+		        type.s_weight = 3
+		        # Typname bei Kopf, Elfm, und Eigentor anzeigen
+		        type.cObject = CASE
+		        type.cObject {
+						  key.field = type
+						  default = TEXT
+						  default.value = 
+						  11 = TEXT
+						  11.value = Kopfball
+						  12 = TEXT
+						  12.value = Elfmeter
+						  30 = TEXT
+						  30.value = Eigentor
+		        }
+		        type.required = 1
+		        type.wrap = &nbsp;(|)
+		        profile < temp.profiles.profile
+		        profile.s_weight = 2
+		        # Spielstandsanzeige
+		        goals_home >
+		        goals_home.s_weight = 5
+		        goals_home.cObject = COA
+		        goals_home.cObject {
+		          20 = TEXT
+		          20.field = goals_home
+		          20.wrap = &nbsp;|:
+		          30 = TEXT
+		          30.field = goals_guest
+		        }
+		      }
+        }
+        # Beim Gastteam ändern wir nur ein Attribut
+        scorerGuest < plugin.tx_cfcleaguefe_report.matchreport.match.dynaMarkers.scorerHome
+        scorerGuest.noteTeam = guest
+        # Der MatchTicker kann auch dynamisch erstellt werden
+        tickerlist < plugin.tx_cfcleaguefe_report.matchreport.match.dynaMarkers.scorerHome
+        tickerlist {
+          noteTeam >
+          noteType >
+          noteIgnoreType = 200,31
+		      ticker {
+		        minute >
+		        minute.cObject = COA
+		        minute.cObject {
+		          10 = TEXT
+		          10.field = minute
+		          10.wrap = <div class="cfcleague-report-ticker-head"><span class="cfcleague-ticker-min">|.
+		          # Bei Bedarf die Extrazeit einblenden
+		          20 = TEXT
+		          20.field = extra_time
+		          20.wrap = <span class="cfcleague-ticker-min">(+|)</span>
+		          20.if.value = 0
+		          20.if.equals.field = extra_time
+		          20.if.negate = 1
+		          30 = TEXT
+		          30.value = &nbsp;min </span>
+		        }
+		        # Spielstandsanzeige
+		        goals_home >
+		        goals_home.s_weight = 5
+		        goals_home.cObject = COA
+		        goals_home.cObject {
+		          10 = TEXT
+		          10.value = <span class="cfcleague-ticker-score">Spielstand:&nbsp;
+		          20 = TEXT
+		          20.field = goals_home
+		          20.wrap = |:
+		          30 = TEXT
+		          30.field = goals_guest
+		          90 = TEXT
+		          90.value = </span></div><div class="cfcleague-report-ticker-msg">
+		        }
+
+		        # Anzeige des Typs
+		        type.cObject < temp.tickerType
+		        # Typ vor dem Spieler anzeigen
+		        type.s_weight = 7
+		        type.required = 1
+		        type.wrap >
+
+		        profile.s_weight = 10
+						# Bei Auswechslungen auch den zweiten Spieler zeigen
+						profile2 < temp.reportPlayers.profile
+		        profile2.s_weight = 9
+		        profile2.first_name {
+		          required = 1
+		          wrap = |&nbsp;
+		        }
+		        profile2.wrap = |&nbsp;kommt f&uuml;r&nbsp;
+            profile2.ifPenalty >
+		        profile2.required = 1
+
+		        comment.s_weight = 100
+		        comment.wrap = <br /><span class="cfcleague-ticker-comment">|</span></div>
+		      }
+        }
+      }
+    }
+
+    # Im Report werden Listen von Personen und Ticker gezeigt. Diese basieren nicht auf
+    # HTML-Templates, sondern können nur per TS formatiert werden. Die folgenden Listen
+    # werden vom System vorgegeben. Zusätzlich können im Match über die dynaMarkers
+    # eigene Listen erstellt werden
+
+    coachnames < temp.profiles
+    lineup < temp.reportPlayers
+    lineup.profile {
+      # Bei Auswechslungen einen Tickerwrap setzen
+      ifChangedOut {
+        # Position des ChangeOut-Tickers
+        s_weight = 4
+        ticker {
+          minute.wrap = |.&nbsp;
+          profile >
+          profile2 < temp.reportPlayers.profile
+          profile2 {
+            s_weight = 2
+            # Falls der eingewechselte Spieler wieder raus muss
+            ifChangedOut {
+              s_weight = 4
+              ticker {
+                minute.wrap = |.&nbsp;
+                profile2 < temp.reportPlayers.profile
+                noTrimWrap = |, ||
+              }
+            }
+            # Wenn der auch wieder raus musste, könnte es hier weitergehen...
+          }
+#          wrap = &nbsp;(|)
+          noTrimWrap = | (|)|
+        }
+      }
+    }
+
+    substnames < temp.profiles
+    substnames.profile {
+      first_name >
+      # Die Karten einblenden
+      ifPenalty {
+        s_weight = 3
+        ticker {
+          type.cObject < temp.penaltyType
+        }
+      }
+#      seperator = |, |
+    }
+    
+
+    refereenames < temp.profiles
+    refereenames.profile {
+      # Heimatstadt des Schiedsrichters anzeigen
+      home_town {
+        s_weight = 10
+        wrap = &nbsp;(|)
+        required = 1
+      }
+    }
+
+    assistsnames < temp.profiles
+    assistsnames{
+      seperator = | und |
+      profile {
+        reverse = 1
+        first_name.wrap = ,&nbsp;|
+        first_name.s_weight = 2
+        last_name.s_weight = 1
+      }
+#      wrap = |<br/>
+    }
+  }
+}
+
+tt_content.list.20.tx_cfcleaguefe_report    =< plugin.tx_cfcleaguefe_report
+

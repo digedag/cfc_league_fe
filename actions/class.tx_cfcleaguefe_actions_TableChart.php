@@ -1,0 +1,173 @@
+<?php
+/***************************************************************
+*  Copyright notice
+*
+*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  All rights reserved
+*
+*  This script is part of the TYPO3 project. The TYPO3 project is
+*  free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  The GNU General Public License can be found at
+*  http://www.gnu.org/copyleft/gpl.html.
+*
+*  This script is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  This copyright notice MUST APPEAR in all copies of the script!
+***************************************************************/
+
+require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+
+require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
+require_once(PATH_site.t3lib_extMgm::siteRelPath("pbimagegraph").'class.tx_pbimagegraph_ts.php');
+require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_LeagueTable.php');
+
+
+/**
+ * Controller für die Anzeige eines Spielplans
+ */
+class tx_cfcleaguefe_actions_TableChart {
+
+  /**
+   *
+   */
+  function execute($parameters,$configurations){
+
+    // Die Werte des aktuellen Scope ermitteln
+    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+    $saisonUids = $scopeArr['SAISON_UIDS'];
+    $groupUids = $scopeArr['GROUP_UIDS'];
+    $compUids = $scopeArr['COMP_UIDS'];
+    $roundUid = $scopeArr['ROUND_UIDS'];
+
+
+    //TODO: der folgende Block ist für die Darstellung der Tabelle identisch und wird ggf. doppelt ausgeführt
+    $out = '';
+    // Sollte kein Wettbewerb ausgewählt bzw. konfiguriert worden sein, dann suchen wir eine
+    // passende Liga
+    if(strlen($compUids) == 0) {
+      $comps = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids, '1');
+      if(count($comps) > 0)
+        $currCompetition = $comps[0];
+        // Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten. 
+        // Das ist aber generell eine Fehlkonfiguration.
+      else
+        return $out; // Ohne Liga keine Tabelle!
+    }
+    else {
+      // Die Tabelle wird berechnet, wenn der aktuelle Scope auf eine Liga zeigt
+      if(!(isset($compUids) && t3lib_div::testInt($compUids))) {
+        return "";
+      }
+      // Wir müssen den Typ des Wettbewerbs ermitteln.
+      $currCompetition = new tx_cfcleaguefe_models_competition($compUids);
+      if(intval($currCompetition->record['type']) != 1) {
+        return $out;
+      }
+    }
+
+//t3lib_div::debug($tsArr , 'ac_chart');
+
+    // Okay, es ist eine Liga
+
+    $viewData =& $configurations->getViewData();
+    $viewData->offsetSet('plot', $this->generateGraph($parameters, $configurations,$currCompetition)); // Die Testplot für den View bereitstellen
+
+    // View
+    $view = tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
+    $view->setTemplatePath($configurations->getTemplatePath());
+    $out = $view->render('tablechart', $configurations);
+    return $out;
+  }
+
+  /**
+   * Erzeugt den Graphen
+   */
+  function generateGraph(&$parameters, &$configurations, &$league) {
+
+    $leagueTable = new tx_cfcleaguefe_util_LeagueTable;
+    $xyDataset = $leagueTable->generateChart($parameters,$configurations, $league);
+
+    $tsArr = $configurations->get('chart.');
+/*
+    $xyDataset = Array(
+      'CFC' => Array('1' => '3', '2' => '3', '3' => '1'),
+      'HFC' => Array('1' => '5', '2' => '4', '3' => '4'),
+      'Cottbus' => Array('1' => '1', '2' => '1', '3' => '2')
+    );
+*/
+    $this->createChartDataset($xyDataset, $tsArr, $configurations, $league);
+
+
+
+    return tx_pbimagegraph_ts::make($tsArr);
+//t3lib_div::debug($strOutput, 'ac_MatchTable');
+
+  }
+
+  /**
+   * Fügt in das TS-Array die zusätzlichen Daten ein
+   */
+  function createChartDataset($xyDataset, &$tsArr, &$configurations, &$league) {
+
+    $defaultLine = $configurations->get('chart.line');
+    $defaultLineArr = $configurations->get('chart.line.');
+
+    $colors = t3lib_div::trimExplode(',',$configurations->get('chartColors'));
+
+    $title = $configurations->get('chart.title');
+//    t3lib_div::debug($title ,'ac_chart');
+    if($tsArr['10.']['10.']['text']) {
+      if($title) {
+        $tsArr['10.']['10.']['text'] = str_replace('COMPETITION_NAME',$league->record['name'],$title);
+        // Hier könnten noch zusätzliche Ersetzungsstrings eingebaut werden..
+      }
+    }
+//t3lib_div::debug($tsArr['10.']['10.']['text'], 'ac_chart');
+    // Maximum ist die Anzahl der Teams in der Liga
+    $tsArr['10.']['20.']['10.']['axis.']['y.']['forceMaximum'] = count(t3lib_div::intExplode(',',$league->record['teams']));
+
+    $seriesCnt = 20;
+    $seriesIdx = 0;
+    foreach($xyDataset As $key => $series) {
+      $tsArr['10.']['20.']['10.'][$seriesCnt] = $defaultLine ? $defaultLine : 'LINE';
+      $tsArr['10.']['20.']['10.'][$seriesCnt . '.'] = $defaultLineArr;
+
+      $tsArr['10.']['20.']['10.'][$seriesCnt . '.']['title'] = $key;
+      // Wo muss die Farbe rein?
+      if(isset($tsArr['10.']['20.']['10.'][$seriesCnt . '.']['lineStyle']))
+        $tsArr['10.']['20.']['10.'][$seriesCnt . '.']['lineStyle.']['color'] = $colors[$seriesIdx] ? $colors[$seriesIdx] : red;
+      else
+        $tsArr['10.']['20.']['10.'][$seriesCnt . '.']['lineColor'] = $colors[$seriesIdx] ? $colors[$seriesIdx] : red;
+
+//    t3lib_div::debug($tsArr['10.']['20.']['10.'][$seriesCnt . '.']['lineColor'] ,'ac_chart');
+      // Jetzt die Daten rein
+      $dataCnt = 10;
+      $tsArr['10.']['20.']['10.'][$seriesCnt . '.']['dataset.']['10'] = 'trivial';
+      foreach($series As $x => $y) {
+        $tsArr['10.']['20.']['10.'][$seriesCnt . '.']['dataset.']['10.'][$dataCnt] = 'point';
+        $tsArr['10.']['20.']['10.'][$seriesCnt . '.']['dataset.']['10.'][$dataCnt. '.']['x'] = $x;
+        $tsArr['10.']['20.']['10.'][$seriesCnt . '.']['dataset.']['10.'][$dataCnt. '.']['y'] = $y;
+        $dataCnt += 10;
+      }
+      $seriesCnt += 10;
+      $seriesIdx++;
+    }
+
+//    t3lib_div::debug($tsArr ,'ac_chart');
+
+  }
+
+}
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_TableChart.php'])	{
+  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_TableChart.php']);
+}
+
+?>

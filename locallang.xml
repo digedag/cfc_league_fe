@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<description>language labels for cfc_league_fe frontend strings</description>
+		<type>database</type>
+		<csh_table></csh_table>
+		<fileId>EXT:cfc_league_fe/locallang.xml</fileId>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+
+<!-- Labels for assist-list -->
+			<label index="statistics_assistlist_label_headline">Best assists</label>
+			<label index="statistics_assistlist_label_player">Player</label>
+			<label index="statistics_assistlist_label_assists">Assists</label>
+<!-- Labels for scorer-list -->
+			<label index="statistics_scorerlist_label_headline">Best scorer</label>
+			<label index="statistics_scorerlist_label_player">Player</label>
+			<label index="statistics_scorerlist_label_goals">Goals</label>
+			<label index="statistics_scorerlist_label_goals_home">Home</label>
+			<label index="statistics_scorerlist_label_goals_away">Away</label>
+			<label index="statistics_scorerlist_label_goals_head">Head</label>
+			<label index="statistics_scorerlist_label_goals_penalty">Penalty</label>
+			<label index="statistics_scorerlist_label_goals_joker">Joker</label>
+			<label index="statistics_scorerlist_label_goals_per_match">per Match</label>
+			<label index="statistics_scorerlist_label_minutes_per_goal">Minutes per goal</label>
+
+<!-- Labels for player statistics -->
+<!-- Example how to overwrite a columnname in statistic -->
+			<label index="statistics_player_profile_last_name">Name</label>
+
+			<label index="statistics_player_label_matches">Matches</label>
+			<label index="statistics_player_label_matchcount">Count</label>
+			<label index="statistics_player_label_minutes">Minutes</label>
+			<label index="statistics_player_label_cards">Cards</label>
+			<label index="statistics_player_label_player">Player</label>
+			<label index="statistics_player_label_card_yellow">Y</label>
+			<label index="statistics_player_label_card_yellowred">Y/R</label>
+			<label index="statistics_player_label_card_red">R</label>
+			<label index="statistics_player_label_goals">Goals</label>
+			<label index="statistics_player_label_assists">Assists</label>
+			<label index="statistics_player_label_goals_own">Own</label>
+			<label index="statistics_player_label_change">Changes</label>
+			<label index="statistics_player_label_change_in">In</label>
+			<label index="statistics_player_label_change_out">Out</label>
+
+			<label index="statistics_visitors_label_headline">Visitors</label>
+			<label index="statistics_visitors_label_team">Team</label>
+			<label index="statistics_visitors_label_home">Home</label>
+			<label index="statistics_visitors_label_away">Away</label>
+			<label index="statistics_visitors_label_all">All</label>
+			<label index="statistics_visitors_label_total">Total</label>
+			<label index="statistics_visitors_label_average">Average</label>
+
+
+<!-- Other Messages -->
+			<label index="profile.notFound">Profile not found</label>
+			<label index="profile.unknownLastname">Unknown</label>
+			<label index="profile.unknownFirstname"></label>
+			<label index="team.notFound">Team not found</label>
+			<label index="statistics_noTypeFound">No statistics type defined.</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+
+<!-- Labels der Assist-Statistik -->
+			<label index="statistics_assistlist_label_headline">Die besten Torvorbereiter</label>
+			<label index="statistics_assistlist_label_player">Spieler</label>
+			<label index="statistics_assistlist_label_assists">Assists</label>
+<!-- Labels der Scorer-Statistik -->
+			<label index="statistics_scorerlist_label_headline">Die Torschützen</label>
+			<label index="statistics_scorerlist_label_player">Spieler</label>
+			<label index="statistics_scorerlist_label_goals">Tore</label>
+			<label index="statistics_scorerlist_label_goals_home">Heim</label>
+			<label index="statistics_scorerlist_label_goals_away">Auswärts</label>
+			<label index="statistics_scorerlist_label_goals_head">Kopfball</label>
+			<label index="statistics_scorerlist_label_goals_penalty">Elfmeter</label>
+			<label index="statistics_scorerlist_label_goals_joker">Jokertore</label>
+			<label index="statistics_scorerlist_label_goals_per_match">pro Spiel</label>
+			<label index="statistics_scorerlist_label_minutes_per_goal">Minuten je Tor</label>
+<!-- Labels der Spielerstatistik -->
+			<label index="statistics_player_label_player">Spieler</label>
+			<label index="statistics_player_label_matches">Spiele</label>
+			<label index="statistics_player_label_minutes">Min.</label>
+			<label index="statistics_player_label_cards">Karten</label>
+			<label index="statistics_player_label_card_yellow">Gelb</label>
+			<label index="statistics_player_label_card_yellowred">G/R</label>
+			<label index="statistics_player_label_card_red">Rot</label>
+			<label index="statistics_player_label_goals">Tore</label>
+			<label index="statistics_player_label_assists">Assists</label>
+			<label index="statistics_player_label_goals_own">ET</label>
+			<label index="statistics_player_label_change">Wechsel</label>
+			<label index="statistics_player_label_change_in">Einw.</label>
+			<label index="statistics_player_label_change_out">Ausw.</label>
+			<label index="statistics_player_label_matchcount">Anz.</label>
+<!-- Labels der Zuschauerstatistik -->
+			<label index="statistics_visitors_label_headline">Zuschauerstatistik</label>
+			<label index="statistics_visitors_label_team">Team</label>
+			<label index="statistics_visitors_label_home">Heim</label>
+			<label index="statistics_visitors_label_away">Auswärts</label>
+			<label index="statistics_visitors_label_all">Gesamt</label>
+			<label index="statistics_visitors_label_total">Total</label>
+			<label index="statistics_visitors_label_average">Schnitt</label>
+
+			<label index="profile.notFound">Person nicht gefunden</label>
+			<label index="profile.unknownLastname">unbekannt</label>
+			<label index="statistics_noTypeFound">Es wurde kein Statistiktyp definiert.</label>
+		</languageKey>
+	</data>
+</T3locallang>

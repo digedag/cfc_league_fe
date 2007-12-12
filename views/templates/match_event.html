@@ -1,0 +1,93 @@
+<html>
+<head>
+</head>
+
+<body>
+
+<p>
+Diese Datei enthält die Templates für die einzelnen Darstellungsformen des Kalenders.
+Die verfügbaren Marker sind noch nicht ganz ausgereift, aber es sollten zumindest die 
+Basismarker des Spiels, sowie alle Marker der beteiligten Teams verfügbar sein.
+Es gilt das übliche Prinzip: Der Marker beginnt immer mit MATCH und dann folgen die 
+vorhandenen Spalten:
+</p>
+<pre>
+###MATCH_DATE### - Datum des Spiels (Formatierung der Zeit über TS vornehmen)
+###MATCH_GUEST_NAME### Name der Gastmannschaft
+###MATCH_GUEST_LOGO### Logo der Gastmannschaft
+###MATCH_COMPETITION_NAME### Name des Wettbewerbs
+###MATCH_ROUND### Spielrunde
+usw.
+</pre>
+
+
+<!-- Das Template für die Monatsansicht des Kalenders -->
+###TEMPLATE_PHPICALENDAR_EVENT_MONTH###
+
+
+<div class="V9">
+<span class="default_categoryheader_bullet">•</span>
+<span class="default_categoryheader_text">###MATCH_DATE###
+###MATCH_COMPETITION_NAME###<br />
+<b>###MATCH_HOME_SHORT_NAME### - ###MATCH_GUEST_SHORT_NAME###</b>
+</span>
+</div>
+###TEMPLATE_PHPICALENDAR_EVENT_MONTH###
+
+
+
+
+<!-- Das Template für die Wochenansicht des Kalenders -->
+###TEMPLATE_PHPICALENDAR_EVENT_WEEK###
+<div class="match-single-item">
+<h2>###MATCH_COMPETITION_NAME###</h2>
+###MATCH_HOME_NAME### - ###MATCH_GUEST_NAME###
+</div>
+###TEMPLATE_PHPICALENDAR_EVENT_WEEK###
+
+
+
+
+<!-- Tagesansicht -->
+###TEMPLATE_PHPICALENDAR_EVENT_DAY###
+<div class="match-single-item">
+<h2>###MATCH_COMPETITION_NAME###</h2>
+###MATCH_HOME_NAME### - ###MATCH_GUEST_NAME###
+</div>
+###TEMPLATE_PHPICALENDAR_EVENT_DAY###
+
+
+
+
+
+<!-- keine Ahnung?  -->
+###TEMPLATE_PHPICALENDAR_EVENT_ALLDAY###
+<div class="match-single-item">
+<h2>###MATCH_COMPETITION_NAME###</h2>
+###MATCH_HOME_NAME### - ###MATCH_GUEST_NAME###
+</div>
+###TEMPLATE_PHPICALENDAR_EVENT_ALLDAY###
+
+
+
+
+<!-- Jahreskalender  -->
+###TEMPLATE_PHPICALENDAR_EVENT_YEAR###
+<div class="match-single-item">
+<h2>###MATCH_COMPETITION_NAME###</h2>
+###MATCH_HOME_NAME### - ###MATCH_GUEST_NAME###
+</div>
+###TEMPLATE_PHPICALENDAR_EVENT_YEAR###
+
+
+
+
+<!-- Wahrscheinlich die Einzelansicht des Kalenders -->
+###TEMPLATE_PHPICALENDAR_EVENT###
+<div class="match-single-item">
+<h2>###MATCH_COMPETITION_NAME###</h2>
+###MATCH_HOME_NAME### - ###MATCH_GUEST_NAME###
+</div>
+###TEMPLATE_PHPICALENDAR_EVENT###
+</body>
+</html>

@@ -1,0 +1,121 @@
+<html>
+<head>
+ <title>cfc_league_fe: Template for TeamView</title>
+</head>
+<body>
+
+<pre>
+Verfügbare Tags für Bilder:
+
+###TEAM_FIRST_PICTURE### Das erste Bild in der Bildliste
+###TEAM_FIRST_PICTURE_CAPTION### Der Infotext des Bilds
+###TEAM_FIRST_PICTURE_DESCRIPTION### Beschreibung des Bilds
+###TEAM_PLAYER_FIRST_PICTURE### Das erste Bild des Spielers
+###TEAM_PLAYER_PICTURES### Subpart für weitere Bilder der Spieler
+###TEAM_PLAYER_PICTURES_2### Subpart für ein weiteres Bild des Spielers innerhalb der weiteren Bilder
+###TEAM_PLAYER_PICTURE### Marker für ein weiteres Bild innerhalb von ###PLAYER_PICTURES_2###
+###TEAM_COACH_FIRST_PICTURE### Das erste Bild des Trainers
+###TEAM_SUPPORTER_FIRST_PICTURE### Das erste Bild eines Betreuers
+Für weitere Team-, Trainer- und Betreuerbilder gelten die gleichen Regeln wie bei den Spielern.
+
+Alle Daten des Teams sind über die Spaltennamen verfügbar und können bei Bedarf auch per TS 
+formatiert werden. Beispiele:
+###TEAM_NAME### Name des Teams
+###TEAM_SHORT_NAME### Kurzname des Teams
+###TEAM_PLAYERS_COMMENT### Bemerkung zu Betreuern
+###TEAM_SUPPORTERS_COMMENT### Bemerkung zu Betreuern
+###TEAM_COACHES_COMMENT### Bemerkung zu Betreuern
+###TEAM_COMMENT### Bemerkung zum Team
+###TEAM_LOGO### Logo des Teams
+</pre>
+
+<!-- ###TEAM_VIEW### begin-->
+<div id="cfcleague-teamview">
+
+  <h1>###TEAM_FIRST_PICTURE_TITLE###</h1>
+
+<p class="cfcleague-teamview-firstpic">###TEAM_FIRST_PICTURE###</p>
+<p class="cfcleague-teamview-firstpic-creator">###TEAM_FIRST_PICTURE_CREATOR###</p>
+<p class="cfcleague-teamview-firstpic-description">###TEAM_FIRST_PICTURE_DESCRIPTION###</p>
+
+
+  <!-- ###TEAM_PLAYERS### begin -->
+  <div class="cfcleague-teamview-players">
+  <h2>Das Aufgebot</h2>
+  <table style="width:483px">
+   <tr>
+    <th>Position</th>
+    <th>Name,Vorname</th>
+    <th>geb.am</th>
+    <th>Größe</th>
+    <th>Gewicht</th>
+    <th>Nat.</th>
+   </tr>
+    <!-- ###TEAM_PLAYER### begin -->
+   <tr class="cfcleaguefe-teamview-player">
+    <td>###TEAM_PLAYER_POSITION### ###TEAM_PLAYER_FIRST_PICTURE###</td>
+    <td>###TEAM_PLAYER_LINK######TEAM_PLAYER_LAST_NAME###, ###TEAM_PLAYER_FIRST_NAME######TEAM_PLAYER_LINK###</td>
+    <td>###TEAM_PLAYER_BIRTHDAY###</td>
+    <td>###TEAM_PLAYER_HEIGHT###</td>
+    <td>###TEAM_PLAYER_WEIGHT###</td>
+    <td>###TEAM_PLAYER_NATIONALITY###</td>
+   </tr>
+    <!-- ###TEAM_PLAYER### end -->
+  </table>
+  </div>
+    ###TEAM_PLAYERS_COMMENT###
+  <!-- ###TEAM_PLAYERS### end -->
+
+  <!-- ###TEAM_COACHES### begin -->
+  <div class="cfcleague-teamview-coaches">
+  <h2>Die Trainer</h2>
+  <table style="width:483px">
+   <tr>
+    <th>Name,Vorname</th>
+    <th>geb.am</th>
+   </tr>
+    <!-- ###TEAM_COACH### begin -->
+   <tr class="cfcleaguefe-teamview-coach">
+    <td>###TEAM_COACH_LINK######TEAM_COACH_LAST_NAME###, ###TEAM_COACH_FIRST_NAME######TEAM_COACH_LINK###</td>
+    <td>###TEAM_COACH_BIRTHDAY###</td>
+   </tr>
+    <!-- ###TEAM_COACH### end -->
+  </table>
+    ###TEAM_COACHES_COMMENT###
+  </div>
+  <!-- ###TEAM_COACHES### end -->
+
+  <!-- ###TEAM_SUPPORTERS### begin -->
+  <div class="cfcleague-teamview-supporters">
+  <h2>Die Betreuer</h2>
+  <table style="width:483px">
+   <tr>
+    <th>Name,Vorname</th>
+    <th>geb.am</th>
+   </tr>
+    <!-- ###TEAM_SUPPORTER### begin -->
+   <tr class="cfcleaguefe-teamview-coach">
+    <td>###TEAM_SUPPORTER_LINK######TEAM_SUPPORTER_LAST_NAME###, ###TEAM_SUPPORTER_FIRST_NAME######TEAM_SUPPORTER_LINK### (###TEAM_SUPPORTER_POSITION###)</td>
+    <td>###TEAM_SUPPORTER_BIRTHDAY###</td>
+   </tr>
+    <!-- ###TEAM_SUPPORTER### end -->
+  </table>
+    ###TEAM_SUPPORTERS_COMMENT###
+  </div>
+  <!-- ###TEAM_SUPPORTERS### end -->
+
+
+  <!-- ###TEAM_PICTURES### begin -->
+  Weitere Bilder (nur testweise)
+  <!-- ###TEAM_PICTURES_2### begin -->
+  <div class="cfcleaguefe-teamview-picture">
+  ###TEAM_PICTURE### <br>###TEAM_PICTURE_TITLE###
+  </div>
+  <!-- ###TEAM_PICTURES_2### end -->
+  <!-- ###TEAM_PICTURES### end -->
+
+</div>
+
+<!-- ###TEAM_VIEW### end -->
+</body>
+</html>

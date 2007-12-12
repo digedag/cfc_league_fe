@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>Template cfc_league_fe</title>
+</head>
+<body>
+
+<p>
+This is the template for scope selection. Right now this is not final, because some Markers don't work.
+Markers
+###SAISON_SELECTION### Subpart for Saisonselection
+###SAISON_SELECTION_2### Subpart for a single saison
+###SAISON_LINK### Subpart for Link to saison
+###SAISON_LINK_URL### Marker of URL to saison
+###SAISON_[colname]### value of saison column
+So for instance:
+###SAISON_NAME### is the name of saison
+All markers are available for GROUP (age group), COMPETITION and ROUND too.
+
+</p>
+
+<!-- <b>Gehe zu</b> -->
+<form style="margin-bottom: 0pt;" action="dummy.php" method="get">
+  <select name="action" onchange="window.location=(this.options[this.selectedIndex].value);">
+    <option value="http://www.egal.de/index.php?id=123&amp;cfc_league_fe[saison]=4&cHash=3fa0906be9">Mai 2007</option>
+    <option value="http://www.egal.de/index.php?id=123&amp;cfc_league_fe[saison]=1&cHash=70458b8d5d">Juni 2007</option>
+    <option value="http://www.egal.de/index.php?id=123&amp;cfc_league_fe%5Bsaison%5D=2&cHash=b3c4275ae8">Juli 2007</option>
+  </select>
+</form>
+
+<!-- ###SCOPE_SELECTION### start -->
+<div class="cfcleague-scopeselection">
+<form style="margin:0; padding:0;" action="dummy.php" method="get">
+
+
+<!-- Auswahl der Saison -->
+###SAISON_SELECTION###
+<div class="cfcleague-scopeselection-saison">
+<!--
+###SAISON_LINK_FIRST#### ##SAISON_NAME### ###SAISON_LINK_FIRST###
+###SAISON_LINK_PREV#### ##SAISON_NAME### ###SAISON_LINK_PREV###
+-->
+###SAISON_SELECTION_2###
+###SAISON_LINK######SAISON_NAME######SAISON_LINK### 
+
+###SAISON_SELECTION_2###
+<!--
+###SAISON_LINK_NEXT#### ##SAISON_NAME### ###SAISON_LINK_NEXT###
+###SAISON_LINK_LAST#### ##SAISON_NAME### ###SAISON_LINK_LAST###
+-->
+</div>
+###SAISON_SELECTION###
+
+
+<!-- Auswahl der Altersklasse -->
+###GROUP_SELECTION###
+<div class="cfcleague-scopeselection-group">
+###GROUP_SELECTION_2###
+###GROUP_LINK######GROUP_NAME######GROUP_LINK### 
+
+###GROUP_SELECTION_2###
+</div>
+###GROUP_SELECTION###
+
+
+<!-- Auswahl des Wettbewerbs -->
+###COMPETITION_SELECTION###
+<div class="cfcleague-scopeselection-competition">
+###COMPETITION_SELECTION_2###
+###COMPETITION_LINK######COMPETITION_NAME######COMPETITION_LINK### 
+
+###COMPETITION_SELECTION_2###
+</div>
+###COMPETITION_SELECTION###
+
+<!-- Auswahl des Vereins -->
+###CLUB_SELECTION###
+<div class="cfcleague-scopeselection-competition">
+
+  <select name="action" onchange="window.location=(this.options[this.selectedIndex].value);">
+###CLUB_SELECTION_2###
+    <option ###CLUB_ISCURRENT### value="/###CLUB_LINK_URL###">###CLUB_NAME###</option>
+###CLUB_SELECTION_2###
+  </select>
+</div>
+###CLUB_SELECTION###
+
+
+<!-- Auswahl des Spieltags -->
+###ROUND_SELECTION###
+<div class="cfcleague-scopeselection-round">
+<b>Spieltag:</b>
+###ROUND_SELECTION_2###
+###ROUND_LINK######ROUND_NUMBER######ROUND_LINK### 
+
+###ROUND_SELECTION_2###
+</div>
+###ROUND_SELECTION###
+
+</form>
+</div>
+<!-- ###SCOPE_SELECTION### end -->
+
+
+</body>
+<html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'cfc_league_fe'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+
+			<label index="plugin.competition.flexform.tab.Common">Common</label>
+			<label index="plugin.competition.flexform.tab.MatchTable">Match table</label>
+			<label index="plugin.competition.flexform.tab.LeagueTable">League Table</label>
+			<label index="plugin.competition.flexform.tab.TableChart">League Chart</label>
+			<label index="plugin.competition.flexform.tab.TickerList">Liveticker List</label>
+			<label index="plugin.competition.flexform.action">View Types</label>
+			<label index="plugin.competition.flexform.action.CompetitionSelection">Competition Selection</label>
+			<label index="plugin.competition.flexform.action.MatchTable">Match table</label>
+			<label index="plugin.competition.flexform.action.LeagueTable">League table</label>
+			<label index="plugin.competition.flexform.action.TableChart">Tablechart</label>
+			<label index="plugin.competition.flexform.action.LiveTickerList">Live Ticker List</label>
+			<label index="plugin.competition.flexform.action.Statistics">Statistics</label>
+			<label index="plugin.competition.flexform.TableType">Table type</label>
+			<label index="plugin.competition.flexform.tabletype.Normal">Standard Table</label>
+			<label index="plugin.competition.flexform.tabletype.Home">Home Table</label>
+			<label index="plugin.competition.flexform.tabletype.Guest">Away Table</label>
+			<label index="plugin.competition.flexform.TableTypeInput">Show Selectbox for table type</label>
+			<label index="plugin.competition.flexform.ShowLiveTable">Show Live-Table</label>
+			<label index="plugin.competition.flexform.TableScope">Saison</label>
+			<label index="plugin.competition.flexform.tablescope.Normal">Standard Table</label>
+			<label index="plugin.competition.flexform.tablescope.FirstHalf">First Round</label>
+			<label index="plugin.competition.flexform.tablescope.SecondHalf">Second Round</label>
+			<label index="plugin.competition.flexform.TableScopeInput">Show Selectbox for table scope</label>
+			<label index="plugin.competition.flexform.PointSystemInput">Show Selectbox for point system</label>
+			<label index="plugin.competition.flexform.leaguetable.clubs">Emphasize clubs</label>
+			<label index="plugin.competition.flexform.leaguetable.size">Number of teams to show</label>
+			<label index="plugin.competition.flexform.tablechart.clubs">Clubs on chart</label>
+			<label index="plugin.competition.flexform.tablechart.colors">Colors for clubs</label>
+			<label index="plugin.competition.flexform.matchtable.report_page">Page for report</label>
+			<label index="plugin.competition.flexform.matchtable.time_range">Time range</label>
+			<label index="plugin.competition.flexform.matchtable.time_range.past">Days before</label>
+			<label index="plugin.competition.flexform.matchtable.time_range.future">Days ahead</label>
+			<label index="plugin.competition.flexform.statistics.type">Type of statistics</label>
+			<label index="plugin.competition.flexform.statistics.type.player">Player</label>
+			<label index="plugin.competition.flexform.statistics.type.scorerlist">Scorer</label>
+			<label index="plugin.competition.flexform.statistics.type.assistlist">Assists</label>
+			<label index="plugin.competition.flexform.statistics.type.playersummary">Player summary</label>
+			<label index="plugin.competition.flexform.statistics.type.visitors">Visitors</label>
+			<label index="plugin.competition.flexform.tickerlist.ticker_page">Page for live ticker</label>
+			<label index="plugin.competition.flexform.tickerlist.ticker_url">Static Url for live ticker</label>
+
+			<label index="plugin.competition.flexform.template">Template</label>
+			<label index="plugin.competition.flexform.scopeTemplate">Scope template</label>
+
+			<label index="plugin.competition.label">cfc_league: League Management</label>
+			<label index="plugin.competition.flexform.saison">Saison</label>
+			<label index="plugin.competition.flexform.saisonInput">Show Selectbox for saison?</label>
+			<label index="plugin.competition.flexform.group">Age Group</label>
+			<label index="plugin.competition.flexform.groupInput">Show Selectbox for age group?</label>
+			<label index="plugin.competition.flexform.competition">Competition</label>
+			<label index="plugin.competition.flexform.competitionInput">Show Selectbox for competition?</label>
+			<label index="plugin.competition.flexform.roundInput">Show Selectbox for competition rounds?</label>
+			<label index="plugin.competition.flexform.group">Age group</label>
+			<label index="plugin.competition.flexform.club">Club</label>
+			<label index="plugin.competition.flexform.clubInput">Show Selectbox for Club</label>
+
+			<label index="plugin.report.label">cfc_league: Reports</label>
+			<label index="plugin.report.flexform.action.MatchReport">Match report</label>
+			<label index="plugin.report.flexform.action.TeamView">Team view</label>
+			<label index="plugin.report.flexform.action.ProfileView">Profile view</label>
+			<label index="plugin.report.flexform.action.ProfileList">Profile list</label>
+			<label index="plugin.report.flexform.tab.Common">Common</label>
+			<label index="plugin.report.flexform.tab.MatchReport">Match Report</label>
+			<label index="plugin.report.flexform.tickerType">Hide types in Ticker</label>
+			<label index="plugin.report.flexform.teamview.team">Show single team</label>
+			<label index="plugin.report.flexform.teamview.club">Club teams only</label>
+			<label index="plugin.report.flexform.teamview.profile_page">Page for profile single view</label>
+			<label index="plugin.report.flexform.teamview.coach_page">Page for coach single view</label>
+			<label index="plugin.report.flexform.teamview.player_page">Page for player single view</label>
+			<label index="plugin.report.flexform.profileview.profile">Player to show</label>
+			<label index="plugin.report.flexform.template">Template</label>
+			<label index="plugin.report.flexform.matchreport.showTicker">Show ticker</label>
+			<label index="plugin.report.flexform.matchreport.matchUid">Static match UID</label>
+
+			<label index="plugin.report.sign.capricorn">Capricorn</label>
+			<label index="plugin.report.sign.aquarius">Aquarius</label>
+			<label index="plugin.report.sign.pisces">Pisces</label>
+			<label index="plugin.report.sign.aries">Aries</label>
+			<label index="plugin.report.sign.taurus">Taurus</label>
+			<label index="plugin.report.sign.gemini">Gemini</label>
+			<label index="plugin.report.sign.cancer">Cancer</label>
+			<label index="plugin.report.sign.leo">Leo</label>
+			<label index="plugin.report.sign.virgo">Virgo</label>
+			<label index="plugin.report.sign.libra">Libra</label>
+			<label index="plugin.report.sign.scorpio">Scorpio</label>
+			<label index="plugin.report.sign.sagittarius">Sagittarius</label>
+
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="plugin.competition.flexform.tab.Common">Allgemein</label>
+			<label index="plugin.competition.flexform.tab.MatchTable">Spielplan</label>
+			<label index="plugin.competition.flexform.tab.LeagueTable">Ligatabelle</label>
+			<label index="plugin.competition.flexform.tab.TickerList">Liveticker Liste</label>
+			<label index="plugin.competition.flexform.tab.TableChart">Tabellenfahrt</label>
+			<label index="plugin.competition.flexform.action">Darstellungselemente</label>
+			<label index="plugin.competition.flexform.action.CompetitionSelection">Wettbewerbsauswahl</label>
+			<label index="plugin.competition.flexform.action.MatchTable">Spielplan</label>
+			<label index="plugin.competition.flexform.action.LeagueTable">Ligatabelle</label>
+			<label index="plugin.competition.flexform.action.TableChart">Tabellenfahrt</label>
+			<label index="plugin.competition.flexform.action.LiveTickerList">Liste der Live-Ticker</label>
+			<label index="plugin.competition.flexform.action.Statistics">Statistiken</label>
+			<label index="plugin.competition.flexform.TableType">Tabellentyp</label>
+			<label index="plugin.competition.flexform.tabletype.Normal">Normal</label>
+			<label index="plugin.competition.flexform.tabletype.Home">Heimtabelle</label>
+			<label index="plugin.competition.flexform.tabletype.Guest">Auswärtstabelle</label>
+			<label index="plugin.competition.flexform.TableTypeInput">Selectbox für Tabellentyp anzeigen</label>
+			<label index="plugin.competition.flexform.ShowLiveTable">Zeige Live-Tabelle</label>
+			<label index="plugin.competition.flexform.TableScope">Tabellenscope</label>
+			<label index="plugin.competition.flexform.tablescope.Normal">Saison</label>
+			<label index="plugin.competition.flexform.tablescope.FirstHalf">Hinrunde</label>
+			<label index="plugin.competition.flexform.tablescope.SecondHalf">Rückrunde</label>
+			<label index="plugin.competition.flexform.TableScopeInput">Selectbox für Tabellenscope anzeigen</label>
+			<label index="plugin.competition.flexform.PointSystemInput">Selectbox für Punktsystem anzeigen</label>
+			<label index="plugin.competition.flexform.leaguetable.clubs">Vereine hervorheben</label>
+			<label index="plugin.competition.flexform.leaguetable.size">Maximal sichtbare Teams</label>
+			<label index="plugin.competition.flexform.tablechart.clubs">Dargestellte Vereine</label>
+			<label index="plugin.competition.flexform.tablechart.colors">Farben der Vereine</label>
+			<label index="plugin.competition.flexform.matchtable.report_page">Seite für Spielbericht</label>
+			<label index="plugin.competition.flexform.matchtable.time_range">Zeitraum</label>
+			<label index="plugin.competition.flexform.matchtable.time_range.past">Tage zurück</label>
+			<label index="plugin.competition.flexform.matchtable.time_range.future">Tage im voraus</label>
+			<label index="plugin.competition.flexform.statistics.type">Art der Statistik</label>
+			<label index="plugin.competition.flexform.statistics.type.player">Spieler</label>
+			<label index="plugin.competition.flexform.statistics.type.scorerlist">Torschützenliste</label>
+			<label index="plugin.competition.flexform.statistics.type.assistlist">Beste Torvorlagengeber</label>
+			<label index="plugin.competition.flexform.statistics.type.playersummary">Spielerzusammenfassung</label>
+			<label index="plugin.competition.flexform.statistics.type.visitors">Zuschauer</label>
+			<label index="plugin.competition.flexform.tickerlist.ticker_page">Seite für Liveticker</label>
+			<label index="plugin.competition.flexform.tickerlist.ticker_url">Feste Url für Liveticker</label>
+
+			<label index="plugin.competition.label">cfc_league: Ligaverwaltung</label>
+			<label index="plugin.competition.flexform.saisonInput">Selectbox für Saison?</label>
+			<label index="plugin.competition.flexform.group">Altersklasse</label>
+			<label index="plugin.competition.flexform.groupInput">Selectbox for Altersklasse?</label>
+			<label index="plugin.competition.flexform.competition">Wettbewerb</label>
+			<label index="plugin.competition.flexform.competitionInput">Selectbox für Wettbewerb?</label>
+			<label index="plugin.competition.flexform.roundInput">Selectbox für Spieltage?</label>
+			<label index="plugin.competition.flexform.group">Altersgruppe</label>
+			<label index="plugin.competition.flexform.competition">Wettbewerb</label>
+			<label index="plugin.competition.flexform.club">Verein</label>
+			<label index="plugin.competition.flexform.clubInput">Selectbox für Verein?</label>
+
+			<label index="plugin.report.label">cfc_league: Berichte</label>
+			<label index="plugin.report.flexform.tab.MatchReport">Spielberichte</label>
+			<label index="plugin.report.flexform.action.MatchReport">Spielbericht</label>
+			<label index="plugin.report.flexform.action.TeamView">Teamdarstellung</label>
+			<label index="plugin.report.flexform.action.ProfileView">Personenprofil</label>
+			<label index="plugin.report.flexform.action.ProfileList">Personenliste</label>
+			<label index="plugin.report.flexform.tickerType">Verstecke Typen im Ticker</label>
+			<label index="plugin.report.flexform.teamview.team">Zeige Team</label>
+			<label index="plugin.report.flexform.teamview.club">Nur Teams des Vereins</label>
+			<label index="plugin.report.flexform.profileview.profile">Spieler anzeigen</label>
+			<label index="plugin.report.flexform.teamview.profile_page">Seite für Einzelanzeige</label>
+			<label index="plugin.report.flexform.teamview.coach_page">Seite für Trainer-Einzelanzeige</label>
+			<label index="plugin.report.flexform.teamview.player_page">Seite für Spieler-Einzelanzeige</label>
+			<label index="plugin.report.flexform.matchreport.showTicker">Zeige Ticker</label>
+			<label index="plugin.report.flexform.matchreport.matchUid">Feste Spiel-UID</label>
+
+			<label index="plugin.report.sign.capricorn">Steinbock</label>
+			<label index="plugin.report.sign.aquarius">Wassermann</label>
+			<label index="plugin.report.sign.pisces">Fische</label>
+			<label index="plugin.report.sign.aries">Widder</label>
+			<label index="plugin.report.sign.taurus">Stier</label>
+			<label index="plugin.report.sign.gemini">Zwillinge</label>
+			<label index="plugin.report.sign.cancer">Krebs</label>
+			<label index="plugin.report.sign.leo">Löwe</label>
+			<label index="plugin.report.sign.virgo">Jungfrau</label>
+			<label index="plugin.report.sign.libra">Waage</label>
+			<label index="plugin.report.sign.scorpio">Skorpion</label>
+			<label index="plugin.report.sign.sagittarius">Schütze</label>
+
+		</languageKey>
+	</data>
+</T3locallang>

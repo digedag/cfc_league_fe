@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>HTML-Template for match report</title>
+</head>
+<body>
+
+###MATCHREPORT###
+
+<h2>Der Spielbericht</h2>
+
+<table style="width:100%">
+<tr>
+<td class="cfcleague-report-teamname">###MATCH_HOME_LOGO###</td><td class="cfcleague-report-result">###MATCH_GOALS_HOME### : ###MATCH_GOALS_GUEST###</td><td class="cfcleague-report-teamname">###MATCH_GUEST_LOGO###</td>
+</tr>
+<tr>
+<td class="cfcleague-report-teamname">###MATCH_HOME_NAME###</td>
+<td style="text-align:center">
+ Stadion: <b>###MATCH_STADIUM###</b><br />
+ Datum: <b>###MATCH_DATE###</b><br />
+ Schiedsrichter: <b>###MATCH_REFEREENAMES###</b><br />
+ SRA: <b>###MATCH_ASSISTSNAMES###</b><br />
+ Zuschauer: <b>###MATCH_VISITORS###</b><br />
+</td>
+<td class="cfcleague-report-teamname">###MATCH_GUEST_NAME###</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<th colspan="2">Die Aufstellungen</th>
+</tr>
+<tr>
+<td>###MATCH_LINEUP_HOME###</td>
+<td>###MATCH_LINEUP_GUEST###</td>
+</tr>
+<tr>
+<th colspan="2">Auf der Auswechselbank</th>
+</tr>
+<tr>
+<td>###MATCH_SUBSTNAMES_HOME###</td>
+<td>###MATCH_SUBSTNAMES_GUEST###</td>
+</tr>
+<tr>
+<th colspan="2">Die Trainer</th>
+</tr>
+<tr>
+<td>###MATCH_COACHNAMES_HOME###</td>
+<td>###MATCH_COACHNAMES_GUEST###</td>
+</tr>
+<tr>
+<th colspan="2">So fielen die Tore</th>
+</tr>
+<tr>
+<td>###MATCH_SCORERHOME###</td>
+<td>###MATCH_SCORERGUEST###</td>
+</tr>
+</table>
+
+<!-- ###MATCH_MEDIAS### begin -->
+<div id="cfcleague-report-media">
+<h2>Trainerkommentare</h2>
+<!-- ###MATCH_MEDIAS_2### begin -->
+###MATCH_MEDIA###
+<!-- ###MATCH_MEDIAS_2### end -->
+</div>
+<!-- ###MATCH_MEDIAS### end -->
+
+
+<div id="cfcleague-report-summary">
+ <div id="cfcleague-report-summary-author">###MATCH_GAME_REPORT_AUTHOR###</div>
+ <div id="cfcleague-report-summary-text">###MATCH_GAME_REPORT###</div>
+</div>
+
+
+<h2>Das Spielstenogramm</h2>
+<div id="cfcleague-report-ticker">
+###MATCH_TICKERLIST###
+</div>
+
+<!-- 
+###MATCH_NOTES###
+###MATCH_NOTE###
+###MATCH_NOTE_MINUTE### - ###MATCH_NOTE_PLAYER### - ###MATCH_NOTE_TEXT###
+###MATCH_NOTE###
+###MATCH_NOTES###
+ -->
+
+  <!-- ###MATCH_PICTURES### begin -->
+  <div id="cfcleague-report-images">
+  ###MATCH_FIRST_PICTURE###
+  <!-- ###MATCH_PICTURES_2### begin -->
+  ###MATCH_PICTURE###
+  <!-- ###MATCH_PICTURES_2### end -->
+  </div>
+  <!-- ###MATCH_PICTURES### end -->
+
+
+###MATCHREPORT###
+
+</body>
+</html> 
