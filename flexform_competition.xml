@@ -42,6 +42,11 @@
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.Statistics</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_Statistics</numIndex>
                   </numIndex>
+                  <numIndex index="6" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.TeamList</numIndex>
+                    <numIndex index="1">tx_cfcleaguefe_actions_TeamList</numIndex>
+                  </numIndex>
+
                 </items>
                 <multiple>0</multiple>
                 <maxitems>10</maxitems>
