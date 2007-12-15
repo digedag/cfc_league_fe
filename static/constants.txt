@@ -15,6 +15,12 @@ plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable = 20
 # cat=plugin.tx_cfcleaguefe_competition/maxH_logo_matchtable; type=int+;label=Maximum height of logos in matchtable
 plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable = 20
 
+# cat=plugin.tx_cfcleaguefe_competition/maxW_logo_teamlist; type=int+;label=Maximum width of logos in teamlist
+plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist = 40
+
+# cat=plugin.tx_cfcleaguefe_competition/maxH_logo_teamlist; type=int+;label=Maximum height of logos in teamlist
+plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist = 40
+
 
 # cat=plugin.tx_cfcleaguefe_matchreport/format_date; type=string;label=Formatter-String for match date
 plugin.tx_cfcleaguefe_matchreport.format_date = %d.%m.%Y %H:%M Uhr
@@ -24,4 +30,3 @@ plugin.tx_cfcleaguefe_matchreport.maxW_logo = 70
 
 # cat=plugin.tx_cfcleaguefe_matchreport/maxH_logo; type=int+;label=Maximum height of logos in match report
 plugin.tx_cfcleaguefe_matchreport.maxH_logo = 70
-
