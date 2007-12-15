@@ -55,6 +55,8 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
     $arr = array();
 
     $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
+    $start_date = is_object($start_date) ? $start_date->getTime() : $start_date;
+    $end_date = is_object($end_date) ? $end_date->getTime() : $end_date;
     $matchTable->setDateRange($start_date, $end_date);
     $matchTable->setPidList($pidList);
 
@@ -110,11 +112,11 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
   /**
    * TODO Implement search function!
    *
-   * @param unknown_type $pidList
-   * @param unknown_type $starttime
-   * @param unknown_type $endtime
-   * @param unknown_type $searchword
-   * @param unknown_type $locationIds
+   * @param string $pidList
+   * @param date $starttime
+   * @param date $endtime
+   * @param string $searchword
+   * @param array $locationIds
    * @return array
    */
   function search($pidList='', $starttime, $endtime, $searchword, $locationIds) {
