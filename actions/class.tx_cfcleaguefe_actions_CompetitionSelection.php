@@ -51,7 +51,7 @@ class tx_cfcleaguefe_actions_CompetitionSelection {
 
     $view->setTemplatePath($configurations->getTemplatePath());
     // Das Template wird komplett angegeben
-    $view->setTemplateFile($configurations->get('competitionSelectionTemplate'));
+    $view->setTemplateFile($configurations->get('scopeTemplate'));
     $out = $view->render( ($viewType == 'HTML') ? 'scopeselection' : 'competitionselection', $configurations);
 
     return $out;
