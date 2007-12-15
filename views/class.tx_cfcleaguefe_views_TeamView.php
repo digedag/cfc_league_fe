@@ -31,7 +31,7 @@ tx_div::load('tx_rnbase_view_Base');
 
 
 /**
- * Viewklasse für die Anzeige des Kalenders
+ * Viewklasse für die Anzeige des Teams
  */
 class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base {
   /**
