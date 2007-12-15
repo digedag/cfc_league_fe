@@ -2,6 +2,14 @@
 
 Änderungen
 ----------
+v0.2.3 (??.12.2007)
+- Neuer View: Teamliste
+- Anpassungen für Cal Version 0.16
+- Templatevariable von des ScopeView von competitionSelectionTemplate 
+  auf scopeTemplate geändert. Dadurch funktioniert jetzt die Zuordnung im Flexform.
+- Der Spielplan akzeptiert jetzt auch UIDs von Teams aus dem Request. Dies kann man
+  mit der Einstellung matchtable.acceptTeamIdFromRequest wieder deaktivieren.
+
 v0.2.2 (12.11.2007)
 - Bugfix: Bei Wettbewerbsstrafen wurden Niederlagen nicht korrigiert
 - Nicht verwendete Kontrollelemente der Ligatabelle werden jetzt automatisch ausgeblendet. Vorher
