@@ -108,7 +108,15 @@ class tx_cfcleaguefe_models_matchtable{
   function setSaison($uid){
     $this->_saison = $uid;
   }
-
+  /**
+   * comma seperated string with team uids
+   *
+   * @param string $uid
+   */
+  function setTeam($uid){
+    $this->_team = trim(implode(',',t3lib_div::intExplode(',',$uid)));
+  }
+  
   /**
    * Sucht Spiele aus der Datenbank mit den definierten Werten. Die Spiele werden mit den
    * maximal verfügbaren Daten geliefert. Es finden also immer Joins auf andere Tabellen statt.
@@ -159,6 +167,11 @@ class tx_cfcleaguefe_models_matchtable{
       $where .= ' (t1.club = ' . $club . ' OR t2.club = ' . $club . ')';
     }
 
+    if($this->_team && strlen($this->_team)) {
+      if(strlen($where) >0) $where .= ' AND ';
+      $where .= ' (home IN (' . $this->_team . ') OR guest IN (' . $this->_team . '))';
+    }
+    
     if(isset($status)) {
       if(strlen($where) >0) $where .= ' AND ';
       $where .= ' tx_cfcleague_games.status IN (' . $status . ')';

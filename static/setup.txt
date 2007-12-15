@@ -188,6 +188,7 @@ plugin.tx_cfcleaguefe_competition {
 #    status = 0,1,2
     # Die Anzahl der Spiele limitieren. 0 bedeutet keine Einschränkung
     limit = 0
+    acceptTeamIdFromRequest = 1
     match {
       roll.value = 1
       stadium.ifEmpty = Ort noch unbekannt
@@ -318,6 +319,17 @@ plugin.tx_cfcleaguefe_competition {
 #    club.isCurrent.if.value = 1
 #    club.isCurrent.if.equals.field = isCurrent
 #    club.isCurrent.override = selected="selected"
+  }
+  teamlist {
+    viewType = HTML
+    roll.value = 1
+    teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
+    team < temp.team
+    team.logo{
+      file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist}
+      file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}
+      noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist},{$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}
+    }
   }
 }
 
@@ -450,9 +462,14 @@ plugin.tx_cfcleaguefe_competition.chart {
 tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_competition
 
 
+
+
+
+##############################################################
 # #####
 # Das Report Plugin
 # #####
+##############################################################
 includeLibs.tx_cfcleaguefe_controllers_report = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_report.php
 
 # icon for related news

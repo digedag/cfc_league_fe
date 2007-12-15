@@ -56,7 +56,12 @@ class tx_cfcleaguefe_actions_MatchTable {
     $matchTable->setOrderDesc($configurations->get('matchtable.orderDesc') ? true : false );
     $status = $configurations->get('matchtable.status');
     $extended = $configurations->get('matchtable.allData');
-
+    // Spielplan für ein Team
+    $teamId = $configurations->get('matchtable.teamId');
+    if(!$teamId && $configurations->get('matchtable.acceptTeamIdFromRequest')) {
+      $teamId = $parameters->offsetGet('$teamId');
+    }
+    $matchTable->setTeam($teamId);
 
     $matches = $matchTable->findMatches($saisonUids, $groupUids, $compUids, $club, $roundUid, $status, $extended);
     
