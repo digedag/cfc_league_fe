@@ -1,0 +1,43 @@
+<html>
+<head>
+ <title>cfc_league_fe: Template for TeamView</title>
+</head>
+<body>
+
+<pre>
+Verfügbare Tags für Bilder:
+
+###TEAM_FIRST_PICTURE### Das erste Bild in der Bildliste
+###TEAM_FIRST_PICTURE_CAPTION### Der Infotext des Bilds
+###TEAM_FIRST_PICTURE_DESCRIPTION### Beschreibung des Bilds
+###TEAM_PLAYER_FIRST_PICTURE### Das erste Bild des Spielers
+###TEAM_PLAYER_PICTURES### Subpart für weitere Bilder der Spieler
+###TEAM_PLAYER_PICTURES_2### Subpart für ein weiteres Bild des Spielers innerhalb der weiteren Bilder
+###TEAM_PLAYER_PICTURE### Marker für ein weiteres Bild innerhalb von ###PLAYER_PICTURES_2###
+###TEAM_COACH_FIRST_PICTURE### Das erste Bild des Trainers
+###TEAM_SUPPORTER_FIRST_PICTURE### Das erste Bild eines Betreuers
+Für weitere Team-, Trainer- und Betreuerbilder gelten die gleichen Regeln wie bei den Spielern.
+
+Alle Daten des Teams sind über die Spaltennamen verfügbar und können bei Bedarf auch per TS 
+formatiert werden. Beispiele:
+###TEAM_NAME### Name des Teams
+###TEAM_SHORT_NAME### Kurzname des Teams
+###TEAM_PLAYERS_COMMENT### Bemerkung zu Betreuern
+###TEAM_SUPPORTERS_COMMENT### Bemerkung zu Betreuern
+###TEAM_COACHES_COMMENT### Bemerkung zu Betreuern
+###TEAM_COMMENT### Bemerkung zum Team
+###TEAM_LOGO### Logo des Teams
+###TEAM_AGEGROUP_NAME### Name der Altersklasse des Teams
+</pre>
+
+<!-- ###TEAM_LIST### begin-->
+<!-- ###TEAM### begin entry for single team -->
+<div id="cfcleague-teamview">
+  <h2>###TEAM_LOGO### ###TEAM_NAME### (###TEAM_AGEGROUP_NAME###) ###TEAM_LINK###(Infos)###TEAM_LINK###</h2>
+
+</div>
+<!-- ###TEAM### end -->
+
+<!-- ###TEAM_LIST### end -->
+</body>
+</html>
