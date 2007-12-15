@@ -22,6 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('cal').'controller/class.tx_cal_registry.php');
 require_once(t3lib_extMgm::extPath('cal').'model/class.tx_cal_phpicalendar_model.php');
 
 /**
@@ -46,19 +47,25 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
   /**
    * Wir überschreiben die Methode der Basisklasse, damit wir die eigenen Marker verwenden können.
    */
-  function fillTemplate($subpartName){
-    $file = $this->cObj->fileResource($this->conf['view.']['cfc_league_events.']['template']);
+  function fillTemplate($subpartMarker){
+    if(is_object($this->cObj))
+      $cObj = $this->cObj;
+    else {
+      $cObj = &tx_cal_registry::Registry('basic','cobj');
+    }
+    
+    $file = $cObj->fileResource($this->conf['view.']['cfc_league_events.']['template']);
     if ($file == '') {
     	return '<h3>cal: no match template file found:</h3>'.$this->conf['view.']['cfc_league_events.']['template'];
     }
 
-    $template = $this->cObj->getSubpart($file, $subpartName);
+    $template = $cObj->getSubpart($file, $subpartMarker);
     if(!$template){
-      return 'could not find the '.$subpartMarker.' subpart-marker in view.cfc_league_events.template: '.$this->conf['view.']['cfc_league_events.']['template'];
+      return 'could not find the -'.$subpartMarker.'- subpart-marker in view.cfc_league_events.template: '.$this->conf['view.']['cfc_league_events.']['template'];
     }
 
     $configurations = tx_div::makeInstance('tx_rnbase_configurations');
-    $configurations->init($this->conf, $this->cObj, 'cfc_league_fe', 'cfc_league_fe');
+    $configurations->init($this->conf, $cObj, 'cfc_league_fe', 'cfc_league_fe');
     $this->formatter = &$configurations->getFormatter();
 
     $markerArray = $this->formatter->getItemMarkerArrayWrapped($this->_match->record, 'view.cfc_league_events.match.', 0, 'MATCH_');
@@ -81,8 +88,19 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     $row = $match->record;
     $this->setType($this->serviceKey);
     $this->setUid($row['uid']);
-    $this->setStarttime($row['date']);
-    $this->setEndtime($row['date'] + (60*105));
+
+    // In cal 0.16.x ändert sich das Datumsformat 
+    if(method_exists($this, 'setStart')) {
+  		$start_date = new tx_cal_date($row['date']);
+  		$end_date = new tx_cal_date($row['date'] + (60*105));
+  		$this->setStart($start_date);
+  		$this->setEnd($end_date);
+    }
+    else {
+      $this->setStarttime($row['date']);
+      $this->setEndtime($row['date'] + (60*105));
+    }
+    
     $this->setTitle('Fussball');
     $this->setSubheader($row['short']);
     $this->setImage($row['image']);
