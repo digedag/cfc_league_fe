@@ -246,6 +246,12 @@ static $total = 0;
         $ignorePlayer = 0;
       }
     }
+    if($ignorePlayer) {
+    	// Bub 1864066
+    	// Spieler die nicht im Spiel waren können trotzdem rote Karten bekommen
+      if(tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match) != 0)
+        $playerData['card_red'] = intval($playerData['card_red']) + 1;
+    }
     if(!$ignorePlayer) {
       // Der Spieler war im Spiel. Wir suchen die restlichen Daten
       $min = tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
