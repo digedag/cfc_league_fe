@@ -286,6 +286,8 @@ plugin.tx_cfcleaguefe_competition {
   }
   # Liste der aktuell anstehenden Liveticker
   tickerlist {
+    # Die Anzahl der Spiele limitieren. 0 bedeutet keine Einschränkung
+    limit = 0
     match {
       date.strftime  = {$plugin.tx_cfcleaguefe_competition.tickerlist_format_date}
       home < temp.team
@@ -358,7 +360,8 @@ plugin.tx_cfcleaguefe_competition.chart {
   width = 480
   height = 300
   antialias = native
-  font.default = fileadmin/fonts/nimbus.ttf
+  font.default = typo3conf/ext/cfc_league_fe/res/nimbus.ttf
+#  font.default = fileadmin/fonts/nimbus.ttf
   font.default {
     size = 8
   }
