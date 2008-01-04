@@ -25,6 +25,7 @@
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
 
+tx_div::load('tx_cfcleaguefe_util_ScopeController');
 
 /**
  * Controller für die Anzeige einer Personenliste
