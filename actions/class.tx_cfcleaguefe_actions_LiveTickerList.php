@@ -45,7 +45,10 @@ class tx_cfcleaguefe_actions_LiveTickerList {
 //t3lib_div::debug($scopeArr , 'ac_tickerlist');
 
     $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
-    $matchTable->setLiveTicker(1); // Nur LiveTickerspiel holen
+    $matchTable->setTimeRange($configurations->get('tickerlist.timeRangePast'),$configurations->get('tickerlist.timeRangeFuture'));
+    $matchTable->setLimit($configurations->get('tickerlist.limit'));
+    $matchTable->setOrderDesc($configurations->get('tickerlist.orderDesc') ? true : false );
+    $matchTable->setLiveTicker(1); // Nur LiveTickerspiele holen
 
     $matches = $matchTable->findMatches($saisonUids, $groupUids, $compUids, $club, $roundUid);
 
