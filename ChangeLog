@@ -3,9 +3,15 @@
 Änderungen
 ----------
 v0.2.3 (??.12.2007)
+- Neuer View: Kreuztabelle
+- Bug 1864071 - Gelbe Karten nur zählen, wenn nicht Gelbrot erhalten
+- Integration tt_address für Vereine
+- Bug 1864066: Rote Karte wird auch für Auswechselspieler in Statistik gewertet
+- Für die Tabellenfahrt wird ein Font mitgeliefert
+- Liste der Liveticker um weitere TS-Config erweitert (limit, orderby und timeRange)
 - Neuer View: Teamliste
 - Anpassungen für Cal Version 0.16
-- Templatevariable von des ScopeView von competitionSelectionTemplate 
+- Templatevariable des ScopeView von competitionSelectionTemplate 
   auf scopeTemplate geändert. Dadurch funktioniert jetzt die Zuordnung im Flexform.
 - Der Spielplan akzeptiert jetzt auch UIDs von Teams aus dem Request. Dies kann man
   mit der Einstellung matchtable.acceptTeamIdFromRequest wieder deaktivieren.
