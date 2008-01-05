@@ -29,6 +29,7 @@ require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
  * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich
  */
 class tx_cfcleaguefe_util_MatchMarker {
+	private $fullMode = true;
 
   /**
    * Erstellt eine neue Instanz
@@ -48,6 +49,14 @@ class tx_cfcleaguefe_util_MatchMarker {
   }
 
   /**
+   * Set fillMode on or off 
+   *
+   * @param boolean $mode
+   */
+  public function setFullMode($mode) {
+  	$this->fullMode = $mode;
+  }
+  /**
    * @param $template das HTML-Template
    * @param $profile das Profil
    * @param $formatter der zu verwendente Formatter
@@ -61,20 +70,24 @@ class tx_cfcleaguefe_util_MatchMarker {
     if(!is_object($match)) {
       return $formatter->configurations->getLL('match.notFound');
     }
-
+//$time = t3lib_div::milliseconds();
+    
     $this->prepareFields($match);
-    // TODO: Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
-    $this->addDynamicMarkers($template, $match, $formatter, $matchConfId,$matchMarker);
+    // Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
+    if($this->fullMode)
+	    $this->addDynamicMarkers($template, $match, $formatter, $matchConfId,$matchMarker);
     
     // Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
     $markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $matchConfId, 0, $matchMarker.'_');
+
     $subpartArray = array();
     // Es wird jetzt das Template verändert und die Daten der Teams eingetragen
-    $template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $matchConfId.'home.', $this->links, 'MATCH_HOME');
-    $template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $matchConfId.'guest.', $this->links, 'MATCH_GUEST');
-
-    $this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
-    $this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
+    if($this->fullMode) {
+	    $template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $matchConfId.'home.', $this->links, 'MATCH_HOME');
+  	  $template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $matchConfId.'guest.', $this->links, 'MATCH_GUEST');
+	    $this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
+	    $this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
+    }
     
     $wrappedSubpartArray = array('###'.$matchMarker.'_LINK###' => $noLink, 
                                  '###'.$matchMarker.'_HOME_LINK###' => $noLink, 
@@ -83,6 +96,10 @@ class tx_cfcleaguefe_util_MatchMarker {
     $this->prepareLinks($match, $matchMarker, $markerArray, $wrappedSubpartArray);
 
     $this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
+//$total['total'] = t3lib_div::milliseconds() - $time;
+//if($total['total'] > 40	)
+//t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
+    
     return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
   }
 
@@ -143,7 +160,8 @@ class tx_cfcleaguefe_util_MatchMarker {
     for($i = -1; $i < 3; $i++) {
       $subpartArray['###RESULT_STATUS_'.$i.'###'] = '';
     }
-
+    $subpartArray['###RESULT_STATUS_-10###'] = '';
+    
     $subTemplate = $formatter->cObj->getSubpart($template, '###RESULT_STATUS_'.$match->record['status'].'###');
     if($subTemplate)
       $subpartArray['###RESULT_STATUS_'.$match->record['status'].'###'] = 
