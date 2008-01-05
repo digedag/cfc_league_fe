@@ -106,6 +106,7 @@ class tx_cfcleaguefe_actions_MatchTable {
       $matches[$i]->setHome( $teamsArr[$matches[$i]->record['home']]);
       $matches[$i]->setGuest( $teamsArr[$matches[$i]->record['guest']]);
     }
+    return $teamsArr;
   }
 
 }
