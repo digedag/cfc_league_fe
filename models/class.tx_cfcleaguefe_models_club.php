@@ -31,8 +31,23 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_bas
  * Model für einen Verein.
  */
 class tx_cfcleaguefe_models_club extends tx_rnbase_model_base {
+  /** Array with loaded club instances */
+  private static $instances;
+	
   function getTableName(){return 'tx_cfcleague_club';}
 
+  /**
+   * Returns address dataset or null
+   * @return tx_cfcleaguefe_models_address or null
+   */
+  function getAddress() {
+  	if(!$this->record['address'])
+  		return null;
+		tx_div::load('tx_cfcleaguefe_models_address');
+    $classname = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_address');
+    $address = new $classname($this->record['address']);
+		return $address;
+  }
   /**
    * Liefert die Teams dieses Vereins
    * @param $saisonIds commaseperated saison-uids
@@ -123,6 +138,22 @@ AND tx_cfcleague_competition.agegroup = 1
 
   }
 
+  /**
+   * Returns cached instances of clubs
+   *
+   * @param int $$clubUid
+   * @return tx_cfcleaguefe_models_club
+   */
+  static function getInstance($clubUid) {
+    $uid = intval($clubUid);
+    if(!$uid) throw new Exception('Team uid expected. Was: >' . $clubUid . '<', -1);
+    if(! self::$instances[$uid]) {
+      $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_club');
+      self::$instances[$uid] = new $className($teamUid);
+    }
+    return self::$instances[$uid];
+  }
+  
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_club.php']) {

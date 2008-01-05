@@ -34,7 +34,6 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
   var $_players;
   var $_coaches;
   var $_supporters;
-  var $_club;
   /** Array with loaded team instances */
   private static $instances;
 
@@ -54,11 +53,12 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
    */
   function getClub() {
     if(!$this->record['club']) return 0;
-    if(!isset($this->_club)) {
-      $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_club');
-      $_club = new $className($this->record['club']);
-    }
-    return $_club;
+    return tx_cfcleaguefe_models_club::getInstance($this->record['club']);
+//    if(!isset($this->_club)) {
+//      $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_club');
+//      $_club = new $className($this->record['club']);
+//    }
+//    return $_club;
   }
 
   /**
