@@ -63,6 +63,19 @@ temp.team {
   coach.birthday.strftime = %d.%m.%y
   supporter < temp.profile
   supporter.birthday.strftime = %d.%m.%y
+  club.address {
+    name.blank = -
+    email.typolink {
+    	target = _BLANK
+    	parameter.field = email
+    }
+    email.ifBlank = -
+    www.typolink {
+    	target = _BLANK
+    	parameter.field = www
+    }
+    www.ifBlank = -
+  }
 
   comment.parseFunc < tt_content.text.20.parseFunc
   coaches_comment.parseFunc < tt_content.text.20.parseFunc
@@ -193,7 +206,9 @@ plugin.tx_cfcleaguefe_competition {
       roll.value = 1
       stadium.ifEmpty = Ort noch unbekannt
       stadium.wrap = (|)
+  		date = DATETIME
       date.strftime  = %a, %d.%m.%y Anstoss: %H:%M Uhr
+      date.ifEmpty = -
 
       # Optional ein String, der zwischen den Spielen steht
 #      implode = <br />
@@ -209,10 +224,15 @@ plugin.tx_cfcleaguefe_competition {
     teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
   }
 
-  # ???
-  match {
-    date.strftime  = {$plugin.tx_cfcleaguefe_competition.format_date}
-  }
+	matchcrosstable {
+    headline.team < plugin.tx_cfcleaguefe_competition.matchtable.match.home
+    dataline.team < plugin.tx_cfcleaguefe_competition.matchtable.match.home
+    # aus Performancegründen nur die Basismarker des Spiels aktivieren
+		dataline.matchFullMode = 0
+		dataline.match.date = DATETIME
+		dataline.match.date.strftime = %d.%m.%y
+		dataline.match.date.ifEmpty = ??
+	}
 
   statistics {
     ####
