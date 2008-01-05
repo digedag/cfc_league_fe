@@ -33,12 +33,12 @@ tx_div::load('tx_rnbase_util_BaseMarker');
 class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 
   /**
-   * @param $template das HTML-Template
-   * @param $profile das Profil
-   * @param $formatter der zu verwendente Formatter
-   * @param $teamConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
-   * @param $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-   * @param $teamMarker Name des Markers für das Team, z.B. TEAM, MATCH_HOME usw.
+   * @param string $template das HTML-Template
+   * @param tx_cfcleaguefe_models_team $team das Team
+   * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
+   * @param string $teamConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
+   * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
+   * @param string $teamMarker Name des Markers für das Team, z.B. TEAM, MATCH_HOME usw.
    *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
    * @return String das geparste Template
    */
@@ -48,7 +48,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 //      return ''; // Ohne Team kein Ergebnis
     }
 
-//t3lib_div::debug($team->record , 'utl_teammarker');
+    //t3lib_div::debug($team->record , 'utl_teammarker');
 
     $teamLink = 0;
     $playerLink = 0;
@@ -62,11 +62,11 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
     }
     $emptyArr = array();
     $noLink = array('','');
-
     // Es wird das MarkerArray mit den Daten des Teams gefüllt.
-    $markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $teamConfId , 0, $teamMarker.'_',$team->getColumnNames());
-    $markerArray['###'.$teamMarker.'_LOGO###'] = $team->getLogo($formatter, $teamConfId.'logo.');
+		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $teamConfId , 0, $teamMarker.'_',$team->getColumnNames());
 
+		$markerArray['###'.$teamMarker.'_LOGO###'] = $team->getLogo($formatter, $teamConfId.'logo.');
+    
     if($teamLink && $team->hasReport()) {
       $token = md5(microtime());
       $teamLink->label($token);
@@ -101,12 +101,25 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
                                    '###'.$teamMarker.'_SUPPORTER###', $teamConfId.'supporter.', $teamMarker.'_SUPPORTER',
                                    $supporterLink);
 
+    // set club data
+    $template = $this->_addClubData($template, $team->getClub(), $formatter, $teamConfId.'club.', $teamMarker.'_CLUB');
 
     $out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
+    
     return $out;
   }
 
+  /**
+   * Hinzufügen der Daten des Vereins
+   *
+   * @param array $firstMarkerArray
+   * @param tx_cfcleaguefe_models_club $club
+   */
+  protected function _addClubData($template, &$club, &$formatter, $clubConf, $markerPrefix) {
+    $clubMarker = tx_div::makeInstance('tx_cfcleaguefe_util_ClubMarker');
+    $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, null, $markerPrefix);
+  	return $template;
+  }
   /**
    * Hinzufügen der Spieler des Teams.
    * param $template HTML-Template für die Profile
