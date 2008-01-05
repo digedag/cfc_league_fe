@@ -164,6 +164,7 @@ static $total = 0;
    */
   function _countMatch4Player(&$player, &$match, &$playersArr) {
     $ignorePlayer = 1;
+    $isYellowRed = false;
     $playerData = &$this->_getPlayerData($playersArr, $player);
 
     // In welchem Team steht der Spieler?
@@ -196,6 +197,7 @@ static $total = 0;
         $min = tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
         if($min != 0){
           $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
+          $isYellowRed = true;
         }
       }
       //Keine gelbrote, aber vielleicht rot?
@@ -229,6 +231,7 @@ static $total = 0;
           $min2 = tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
           if($min2 != 0){
             $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
+            $isYellowRed = true;
           }
         }
         if(intval($min2) == 0) {
@@ -247,17 +250,18 @@ static $total = 0;
       }
     }
     if($ignorePlayer) {
-    	// Bub 1864066
-    	// Spieler die nicht im Spiel waren können trotzdem rote Karten bekommen
+    	// Bug 1864066 - Spieler, die nicht im Spiel waren können trotzdem rote Karten bekommen
       if(tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match) != 0)
         $playerData['card_red'] = intval($playerData['card_red']) + 1;
     }
     if(!$ignorePlayer) {
       // Der Spieler war im Spiel. Wir suchen die restlichen Daten
-      $min = tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
-      if($min != 0)
-        $playerData['card_yellow'] = intval($playerData['card_yellow']) + 1;
-        
+      // Bug 1864071 - Gelbe Karten nur zählen, wenn nicht gelbrot
+      if(!$isYellowRed) {
+	      $min = tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
+	      if($min != 0)
+	        $playerData['card_yellow'] = intval($playerData['card_yellow']) + 1;
+      }        
       $this->_countGoals(0,'goals_all', $player, $match, $playerData);
       $this->_countGoals(11,'goals_head', $player, $match, $playerData);
       $this->_countGoals(12,'goals_penalty', $player, $match, $playerData);
