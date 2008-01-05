@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<table>
+<tr><th> --   </th><th>TEAM 1</th><th>TEAM 2</th><th>TEAM 3</th></tr>
+
+<tr><th>TEAM 1</th><th> -    </th><th> 1:0  </th><th> 2:0  </th></tr>
+
+<tr><th>TEAM 2</th><th> 1:0  </th><th> -    </th><th> 2:0  </th></tr>
+<tr><th>TEAM 3</th><th> 1:0  </th><th> 2:0  </th><th> -    </th></tr>
+</table>
+
+###CROSSTABLE###
+<table border="1">
+###HEADLINE###
+<tr><th> -- </th>###TEAM###<th>###TEAM_SHORT_NAME###</th>###TEAM###</tr>
+###HEADLINE###
+
+###DATALINE###
+<tr><th>###DATALINE_TEAM_LOGO######DATALINE_TEAM_NAME###</th>###MATCH###<td>
+
+<!-- ###RESULT_STATUS_0### Ergebnis vor dem Spiel -->
+###MATCH_DATE###
+<!-- ###RESULT_STATUS_0### Ergebnis vor dem Spiel -->
+
+<!-- ###RESULT_STATUS_-10### Ergebnis bei Spielverlegung -->
+verlegt
+<!-- ###RESULT_STATUS_-10### Ergebnis bei Spielverlegung -->
+
+<!-- ###RESULT_STATUS_1### Ergebnis während des Spiels -->
+###MATCH_GOALS_HOME### : ###MATCH_GOALS_GUEST###
+<!-- ###RESULT_STATUS_1### Ergebnis während des Spiels -->
+
+<!-- ###RESULT_STATUS_2### Ergebnis nach Spielende -->
+###MATCH_LINK######MATCH_GOALS_HOME### : ###MATCH_GOALS_GUEST######MATCH_LINK###
+<!-- ###RESULT_STATUS_2### Ergebnis nach Spielende -->
+
+
+</td>###MATCH###</tr>
+###DATALINE###
+</table>
+###CROSSTABLE###
+
+</body>
+</html>
