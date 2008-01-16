@@ -77,7 +77,13 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     $template = $teamMarker->parseTemplate($template, $this->_match->getHome(), $this->formatter, 'view.cfc_league_events.match.home.', null, 'MATCH_HOME');
     $template = $teamMarker->parseTemplate($template, $this->_match->getGuest(), $this->formatter, 'view.cfc_league_events.match.guest.', null, 'MATCH_GUEST');
 
-    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray);
+    // Die Original-Marker von Cal mit einbinden
+    $rems = array ();
+		$wrapped = array();
+		$this->getMarker($template, $markerArray, $rems, $wrapped, $this->conf['view']);
+    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $rems, $wrapped);
+    
+//    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray);
 
 //t3lib_div::debug($markerArray, 'mdl_event');
 
