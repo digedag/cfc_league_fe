@@ -61,7 +61,8 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
 
     $template = $cObj->getSubpart($file, $subpartMarker);
     if(!$template){
-      return 'could not find the -'.$subpartMarker.'- subpart-marker in view.cfc_league_events.template: '.$this->conf['view.']['cfc_league_events.']['template'];
+			preg_match("/###(.*)###/", $subpartMarker, $marker);
+    	return 'could not find the -'.$marker[1].'- subpart-marker in view.cfc_league_events.template: '.$this->conf['view.']['cfc_league_events.']['template'];
     }
 
     $configurations = tx_div::makeInstance('tx_rnbase_configurations');
