@@ -5,15 +5,20 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 // Spiele als Ereignisse für die Extension cal bereitstellen
 
-t3lib_extMgm::addService($_EXTKEY,  'cal_event_model' /* sv type */,  'tx_cfcleaguefe_sv1_MatchEvent' /* sv key */,
-  array(
-    'title' => 'Cal Match Model', 'description' => '', 'subtype' => 'event',
-    'available' => TRUE, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_MatchEvent.php',
-    'className' => 'tx_cfcleaguefe_sv1_MatchEvent',
-  )
-);
+$confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
+
+// Cal-Service nur bei Bedarf einbinden
+if(intval($confArr['enableCalService'])) {
+	t3lib_extMgm::addService($_EXTKEY,  'cal_event_model' /* sv type */,  'tx_cfcleaguefe_sv1_MatchEvent' /* sv key */,
+	  array(
+	    'title' => 'Cal Match Model', 'description' => '', 'subtype' => 'event',
+	    'available' => TRUE, 'priority' => 50, 'quality' => 50,
+	    'os' => '', 'exec' => '',
+	    'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_MatchEvent.php',
+	    'className' => 'tx_cfcleaguefe_sv1_MatchEvent',
+	  )
+	);
+}
 
 t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerStatistics' /* sv key */,
   array(
