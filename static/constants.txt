@@ -9,6 +9,12 @@ plugin.tx_cfcleaguefe_competition.tickerlist_format_date = %d. %B ab %H:%M Uhr
 # cat=plugin.tx_cfcleaguefe_competition/teampage; type=int+;label=PID of page for teamview
 plugin.tx_cfcleaguefe_competition.teampage = 0
 
+# cat=plugin.tx_cfcleaguefe_competition/profilepage; type=int+;label=PID of page for profile view (coaches and supporters)
+plugin.tx_cfcleaguefe_competition.profilepage = 0
+
+# cat=plugin.tx_cfcleaguefe_competition/playerpage; type=int+;label=PID of page for player view
+plugin.tx_cfcleaguefe_competition.playerpage = 0
+
 # cat=plugin.tx_cfcleaguefe_competition/maxW_logo_matchtable; type=int+;label=Maximum width of logos in matchtable
 plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable = 20
 
