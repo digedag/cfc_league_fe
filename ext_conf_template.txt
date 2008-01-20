@@ -1,0 +1,2 @@
+  # cat=basic//10; type=boolean; label= Enable Integration for Calender Base (cal): This option enables the integration service for Calender Base. This allows to show matches in all calender views. See manual for more information.
+enableCalService = 0
