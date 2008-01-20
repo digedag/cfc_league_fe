@@ -58,7 +58,11 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
       else
         return $out; // Ohne Wettbewerb keine Tabelle!
     }
-    
+    else {
+      $currCompetition = t3lib_div::intExplode(',', $compUids);
+      $currCompetition = $currCompetition[0];
+    }
+
 //t3lib_div::debug($scopeArr, 'ac_MatchTable');
 
     $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
