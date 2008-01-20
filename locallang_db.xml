@@ -53,7 +53,7 @@
 			<label index="plugin.competition.flexform.template">Template</label>
 			<label index="plugin.competition.flexform.scopeTemplate">Scope template</label>
 
-			<label index="plugin.competition.label">cfc_league: League Management</label>
+			<label index="plugin.competition.label">T3sports: League Management</label>
 			<label index="plugin.competition.flexform.saison">Saison</label>
 			<label index="plugin.competition.flexform.saisonInput">Show Selectbox for saison?</label>
 			<label index="plugin.competition.flexform.group">Age Group</label>
@@ -65,7 +65,7 @@
 			<label index="plugin.competition.flexform.club">Club</label>
 			<label index="plugin.competition.flexform.clubInput">Show Selectbox for Club</label>
 
-			<label index="plugin.report.label">cfc_league: Reports</label>
+			<label index="plugin.report.label">T3sports: Reports</label>
 			<label index="plugin.report.flexform.action.MatchReport">Match report</label>
 			<label index="plugin.report.flexform.action.TeamView">Team view</label>
 			<label index="plugin.report.flexform.action.ProfileView">Profile view</label>
@@ -141,7 +141,7 @@
 			<label index="plugin.competition.flexform.tickerlist.ticker_page">Seite für Liveticker</label>
 			<label index="plugin.competition.flexform.tickerlist.ticker_url">Feste Url für Liveticker</label>
 
-			<label index="plugin.competition.label">cfc_league: Ligaverwaltung</label>
+			<label index="plugin.competition.label">T3sports: Ligaverwaltung</label>
 			<label index="plugin.competition.flexform.saisonInput">Selectbox für Saison?</label>
 			<label index="plugin.competition.flexform.group">Altersklasse</label>
 			<label index="plugin.competition.flexform.groupInput">Selectbox for Altersklasse?</label>
@@ -153,7 +153,7 @@
 			<label index="plugin.competition.flexform.club">Verein</label>
 			<label index="plugin.competition.flexform.clubInput">Selectbox für Verein?</label>
 
-			<label index="plugin.report.label">cfc_league: Berichte</label>
+			<label index="plugin.report.label">T3sports: Berichte</label>
 			<label index="plugin.report.flexform.tab.MatchReport">Spielberichte</label>
 			<label index="plugin.report.flexform.action.MatchReport">Spielbericht</label>
 			<label index="plugin.report.flexform.action.TeamView">Teamdarstellung</label>

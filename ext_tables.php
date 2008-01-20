@@ -53,8 +53,8 @@ t3lib_extMgm::addPlugin(Array('LLL:EXT:'.$_EXTKEY.'/locallang_db.php:plugin.repo
 
 
 // list static templates in templates selection
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/', 'League Management');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/', 'T3sports');
 
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/cal/','League Management cal-events');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/cal/','T3sports cal-events');
 
 ?>
