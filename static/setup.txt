@@ -36,6 +36,24 @@ temp.profile {
   firstImage {
     file.maxW = 100
     file.maxH = 100
+    # Dummy is used if no image is given
+    dummy.cObject = IMAGE
+    dummy.cObject {
+      file = GIFBUILDER
+	    file {
+	      XY = 70,100
+        backColor = #ffff00
+        10 = TEXT
+        10 {
+          text = Kein Bild
+          fontSize = 14
+          niceText = 1
+          fontColor = #000000
+          offset = 5, 43
+        }
+
+      }
+    }
   }
 }
 
@@ -346,6 +364,8 @@ plugin.tx_cfcleaguefe_competition {
     viewType = HTML
     roll.value = 1
     teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
+    profilePage = {$plugin.tx_cfcleaguefe_competition.profilepage}
+    playerPage = {$plugin.tx_cfcleaguefe_competition.playerpage}
     team < temp.team
     team.logo{
       file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist}
