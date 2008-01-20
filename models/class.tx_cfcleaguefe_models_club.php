@@ -146,10 +146,10 @@ AND tx_cfcleague_competition.agegroup = 1
    */
   static function getInstance($clubUid) {
     $uid = intval($clubUid);
-    if(!$uid) throw new Exception('Team uid expected. Was: >' . $clubUid . '<', -1);
+    if(!$uid) throw new Exception('Club uid expected. Was: >' . $clubUid . '<', -1);
     if(! self::$instances[$uid]) {
       $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_club');
-      self::$instances[$uid] = new $className($teamUid);
+      self::$instances[$uid] = new $className($clubUid);
     }
     return self::$instances[$uid];
   }
