@@ -59,6 +59,10 @@
 			<label index="profile.unknownFirstname"></label>
 			<label index="team.notFound">Team not found</label>
 			<label index="statistics_noTypeFound">No statistics type defined.</label>
+
+			<label index="matchcrosstable.noData">No matches found</label>
+
+
 		</languageKey>
 		<languageKey index="de" type="array">
 
@@ -104,6 +108,9 @@
 			<label index="profile.notFound">Person nicht gefunden</label>
 			<label index="profile.unknownLastname">unbekannt</label>
 			<label index="statistics_noTypeFound">Es wurde kein Statistiktyp definiert.</label>
+
+
+			<label index="matchcrosstable.noData">Es wurden keine Spiele gefunden.</label>
 		</languageKey>
 	</data>
 </T3locallang>

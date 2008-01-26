@@ -249,7 +249,9 @@ plugin.tx_cfcleaguefe_competition {
 		dataline.matchFullMode = 0
 		dataline.match.date = DATETIME
 		dataline.match.date.strftime = %d.%m.%y
-		dataline.match.date.ifEmpty = ??
+		dataline.match.date.ifEmpty = n.a.
+		dataline.ownmatch = <td>-</td>
+		dataline.nomatch = <td>&nbsp;</td>
 	}
 
   statistics {

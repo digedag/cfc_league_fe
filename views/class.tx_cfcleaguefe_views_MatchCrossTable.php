@@ -54,19 +54,25 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 
   /**
    * Erstellung des Outputstrings
+   * @param string $template
+   * @param array $viewData
+   * @param tx_rnbase_configurations $configurations
    */
   function _createView($template, &$viewData, &$configurations) {
     $cObj =& $this->formatter->cObj;
     $matches = $viewData->offsetGet('matches');
     // Wir benötigen die beteiligten Teams
     $teams = $viewData->offsetGet('teams');
+    if(!is_array($matches) || !count($matches)) {
+    	return $configurations->getLL('matchcrosstable.noData');
+    }
     
+    $this->removeDummyTeams($teams);
     // Mit den Teams können wir die Headline bauen
     $headlineTemplate = $cObj->getSubpart($template, '###HEADLINE###');
     $subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $cObj, $configurations);
 
     $teamsArray = $this->generateTableData($matches, $teams);
-
     $datalineTemplate = $cObj->getSubpart($template, '###DATALINE###');
     $subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations);
     
@@ -84,10 +90,11 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    */
   private function generateTableData(&$matches, &$teams) {
   	$ret = array();
+
+  	reset($teams);
   	$teamIds = array_keys($teams);
   	$teamCnt = count($teamIds);
   	$initArray = array_flip($teamIds);
-  	reset($teams);
   	$opponents = $teams;
   	while (list($uid,$team)=each($teams))	{
   		$ret[$uid] = $initArray;
@@ -95,19 +102,28 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
   		// In das Array alle Heimspiele des Teams legen
   		for($i=0; $i < $teamCnt; $i++) {
   			if($uid == $teamIds[$i])
-  				$ret[$uid][$uid] = '<td>-</td>'; // Das Spiel gegen sich selbst
+  				$ret[$uid][$uid] = $this->ownMatchStr; // Das Spiel gegen sich selbst
   			else
 	  			$ret[$uid][$teamIds[$i]] = $this->findMatch($matches, $uid, $teamIds[$i]);
   		}
   	}
   	return $ret;
   }
+  /**
+   * Sucht aus dem Spielarray die Paarung mit der Heim- und Gastmannschaft
+   *
+   * @param array $matches
+   * @param int $home uid der Heimmannschaft
+   * @param int $guest uid der Gastmannschaft
+   * @return tx_cfcleaguefe_models_match
+   */
   private function findMatch(&$matches, $home, $guest) {
   	for($i=0, $cnt = count($matches); $i < $cnt; $i++) {
   		if($matches[$i]->record['home'] == $home && $matches[$i]->record['guest'] == $guest)
   			return $matches[$i];
   	}
-  	return 'NONE';
+  	// Die Paarung gibt es nicht.
+  	return $this->noMatchStr;
   }
   /**
    * Erstellt die Datenzeilen der Tabelle
@@ -185,6 +201,18 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
     
     return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
   }
+  private function removeDummyTeams(&$teams) {
+  	// Das Team 'Spielfrei' vorher entfernen
+  	$dummyTeams = array();
+  	reset($teams);
+  	while (list($uid,$team)=each($teams))	{
+  		if($team->isDummy())
+  			$dummyTeams[] = $uid;
+  	}
+  	foreach($dummyTeams As $uid)
+  		unset($teams[$uid]);
+  	reset($teams);
+  }
   /**
    * Vorbereitung der Link-Objekte
    */
@@ -194,6 +222,10 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
     $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
     $this->links = array();
 
+    // String für Zellen ohne Spielansetzung
+    $this->noMatchStr = $configurations->get('matchcrosstable.dataline.nomatch');
+    $this->ownMatchStr = $configurations->get('matchcrosstable.dataline.ownmatch');
+    
     $reportPage = $configurations->get('reportPage');
     if($reportPage) {
       $link = new $linkClass;
