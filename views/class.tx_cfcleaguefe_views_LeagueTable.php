@@ -122,7 +122,6 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
       $tableData = $this->_cropTable($tableData, $tableSize);
     }
 
-
     $rowRoll = intval($configurations->get('leaguetable.table.roll.value'));
 //t3lib_div::debug($rowRoll , 'roll vw_leaguetable');
     $parts = array();
@@ -136,10 +135,11 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
       // auf Strafen prüfen
       $this->_preparePenalties($row, $penalties);
 
-//t3lib_div::debug($row , 'vw_ltable');
-      $row['team']->record = t3lib_div::array_merge($row, $row['team']->record);
+      $team = $row['team'];
+      unset($row['team']); // Gibt sonst Probleme mit PHP5.2
+      $team->record = t3lib_div::array_merge($row, $team->record);
 
-      $parts[] = $this->teamMarker->parseTemplate($template, $row['team'], $this->formatter, 'leaguetable.table.', $this->links, 'ROW');
+      $parts[] = $this->teamMarker->parseTemplate($template, $team, $this->formatter, 'leaguetable.table.', $this->links, 'ROW');
 
       $position++;
       $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
