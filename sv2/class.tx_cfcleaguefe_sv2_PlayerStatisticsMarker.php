@@ -57,7 +57,9 @@ class tx_cfcleaguefe_sv2_PlayerStatisticsMarker {
       $player = $playerStat['player'];
     	if(!is_object($player))
     	  continue; // Ohne Spieler wird auch nix gezeigt
+    	unset($playerStat['player']); // PHP 5.2, sonst klappt der merge nicht
     	$player->record = array_merge($playerStat, $player->record);
+//    	$player->record = array_merge($playerStat, $player->record);
     	// Jetzt für jedes Profil das Template parsen
       $parts[] = $profileMarkerObj->parseTemplate($playerTemplate, $player, $formatter, $statsConfId.'profile.', $linkProfile, $statsMarker.'_PROFILE');
     }
