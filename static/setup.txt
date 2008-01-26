@@ -18,9 +18,8 @@ plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallan
 
 # Allgemeines Formatierungsangaben für Personen
 temp.profile {
-  # Durch die definition als TEXT werden die Daten als RTE formatiert
-  description = TEXT
-  summary = TEXT
+  description.parseFunc =< lib.parseFunc_RTE
+  summary.parseFunc =< lib.parseFunc_RTE
   birthday = DATETIME
   birthday {
     strftime = %d. %B %Y
@@ -65,7 +64,7 @@ temp.team {
     file_ctime.strftime = %d-%b-%y
     file_ctime.wrap = Letzte Änderung:&nbsp;
     imageLinkWrap < tt_content.image.20.1.imageLinkWrap
-    description.parseFunc < tt_content.text.20.parseFunc
+    description.parseFunc =< lib.parseFunc_RTE
     creator.wrap = Foto:&nbsp; |
     creator.ifEmpty = -
   }
@@ -95,10 +94,10 @@ temp.team {
     www.ifBlank = -
   }
 
-  comment.parseFunc < tt_content.text.20.parseFunc
-  coaches_comment.parseFunc < tt_content.text.20.parseFunc
-  players_comment.parseFunc < tt_content.text.20.parseFunc
-  supporters_comment.parseFunc < tt_content.text.20.parseFunc
+  comment.parseFunc =< lib.parseFunc_RTE
+  coaches_comment.parseFunc =< lib.parseFunc_RTE
+  players_comment.parseFunc =< lib.parseFunc_RTE
+  supporters_comment.parseFunc =< lib.parseFunc_RTE
 
   name.if {
     # Nix zeigen, wenn es ein Dummy-Team ist
@@ -145,7 +144,7 @@ temp.team {
 plugin.tx_cfcleaguefe_competition {
   # Rendering of items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
-    parseFunc < tt_content.text.20.parseFunc
+    parseFunc =< lib.parseFunc_RTE
   }
 
   # Daten für die Ligatabelle
@@ -620,7 +619,7 @@ plugin.tx_cfcleaguefe_report {
 
   # Rendering of news items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
-    parseFunc < tt_content.text.20.parseFunc
+    parseFunc =< lib.parseFunc_RTE
   }
 
   profilelist {
@@ -643,6 +642,7 @@ plugin.tx_cfcleaguefe_report {
       file.maxH = 100
       imageLinkWrap < tt_content.image.20.1.imageLinkWrap
     }
+
   }
   # View TeamView
   teamview {
@@ -657,7 +657,7 @@ plugin.tx_cfcleaguefe_report {
     match {
       # Hier immer mit den Namen der Spalte verwenden
       visitors.ifEmpty = -
-      game_report.parseFunc < tt_content.text.20.parseFunc
+      game_report.parseFunc =< lib.parseFunc_RTE
       date.strftime  = {$plugin.tx_cfcleaguefe_matchreport.format_date}
       home < temp.team
       guest < temp.team
