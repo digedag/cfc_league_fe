@@ -91,7 +91,8 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
         }
         $options['where'] = $where;
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_match';
-        $options['orderby'] = 'sorting';
+        // Issue 1880237: Return matches sorted by round
+        $options['orderby'] = 'round, date';
         $this->matchesByState[$status . '_' . $scope] = tx_rnbase_util_DB::doSelect($what,'tx_cfcleague_games',$options, 0);
       }
       return $this->matchesByState[$status . '_' . $scope];
@@ -120,6 +121,8 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
   }
   /**
    * Liefert ein Array mit allen Spielrunden der Liga
+   * 
+   * @return array
    */
   function getRounds(){
     # build SQL for select
