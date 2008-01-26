@@ -22,10 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+
 // Die Datenbank-Klasse
 require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
 
+tx_div::load('tx_cfcleaguefe_models_club');
 
 /**
  * Model für ein Team.
