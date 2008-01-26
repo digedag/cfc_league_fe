@@ -60,16 +60,14 @@ class tx_cfcleaguefe_util_LeagueTable  {
 
     // Hier je nach TableScope die Spiele holen
     $matches = $league->getMatches(2, $this->cfgTableScope);
-
+    
     // Wir berechnen die Tabelle jetzt häppchenweise für jeden Spieltag einzeln
     // Daher zerlegen wir die Spiele zunächst in die einzelnen Spieltage
     $rounds = array();
     foreach($matches As $match) {
       $rounds[$match->record['round']][] = $match;
     }
-
 // t3lib_div::debug(is_array($this->cfgChartClubs), 'util_leaguetable');
-
     $xyData = Array();
     foreach($rounds As $round => $roundMatches) {
       $this->handleMatches($roundMatches);
@@ -83,6 +81,16 @@ class tx_cfcleaguefe_util_LeagueTable  {
       }
     }
 
+    // Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
+		// Den höchsten absolvierten Spieltag ermitteln
+		$lastRound = intval(array_pop(array_keys($rounds)));
+		$maxRound = count($league->getRounds());
+		$teamName = array_pop(array_keys($xyData));
+		for( ; $lastRound <= $maxRound; $lastRound++) {
+			// Es muss nur für ein Team ein weiterer Wert hinzugefügt werden
+			$xyData[$teamName][$lastRound] = null;
+		}
+		
 
 // t3lib_div::debug($xyData,'util_leaguetable');
 
