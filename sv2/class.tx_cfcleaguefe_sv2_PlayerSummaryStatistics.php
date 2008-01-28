@@ -73,6 +73,7 @@ class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_Play
     // Wir zählen wieviele Spiele die Wettbewerbe haben, die in der
     // Statistik betrachtet wurden. 
     $ret = array();
+    $this->result['numberOfMatches'] = 0;
 //    $compUid = t3lib_div::intExplode(',', $scopeArr['COMP_UIDS']);
 //    if(count($compUid) == 1) {
     $compClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_competition');
