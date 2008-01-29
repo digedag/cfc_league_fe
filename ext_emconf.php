@@ -11,8 +11,8 @@
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'Liga Management FE',
-	'description' => 'Frontend-Plugins der TYPO3-Ligaverwaltung. EnthÃ¤lt u.a. Darstellungen fÃ¼r Spielplan, Spielbericht, Liga-Tabellen, Team- und Spieler-Profile. Funktioniert nur mit PHP5! Frontend plugins for TYPO3 league and club management system. Contains views for matchtable, leaguetable, matchreport, team and player reports and many more. Requires PHP5!',
+	'title' => 'T3sports FE',
+	'description' => 'FE-Plugins von T3sports. Enthält u.a. Views für Spielplan, Spielbericht, Tabellen, Team- und Spieleransicht. FE plugins for T3sports. Contains views for matchtable, leaguetable, matchreport, team and player reports and many more. Requires PHP5!',
 	'category' => 'plugin',
 	'shy' => 0,
 	'version' => '0.2.2',
@@ -37,11 +37,11 @@ $EM_CONF[$_EXTKEY] = array(
 			'php' => '5.0.0-0.0.0',
 			'div' => '0.0.11-0.0.0',
 			'lib' => '0.0.23-0.0.0',
-			'rn_base' => '0.0.9-0.0.0',
+			'rn_base' => '0.0.10-0.0.0',
 			'rn_memento' => '',
 			'pbimagegraph' => '1.1.1-0.0.0',
 			'dam' => '1.0.11-0.0.0',
-			'cfc_league' => '0.2.0-0.0.0',
+			'cfc_league' => '0.2.6-0.0.0',
 		),
 		'conflicts' => array(
 		),
