@@ -16,6 +16,13 @@ plugin.tx_cfcleaguefe_competition.templatePath   = EXT:cfc_league_fe/views/templ
 plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallang.xml
 
 
+lib.t3sports.pagebrowser {
+  limit = 15
+  maxPages = 11
+  pagefloat = CENTER
+}
+
+
 # Allgemeines Formatierungsangaben für Personen
 temp.profile {
   description.parseFunc =< lib.parseFunc_RTE
@@ -56,8 +63,19 @@ temp.profile {
   }
 }
 
+
 # Allgemeines Formatierungsangaben für ein Team
-temp.team {
+lib.t3sports.team {
+  pagebrowser < lib.t3sports.pagebrowser
+  links {
+    team.parameter = {$plugin.tx_cfcleaguefe_competition.teampage}
+    player.parameter = {$plugin.tx_cfcleaguefe_competition.playerpage}
+    coach.parameter = {$plugin.tx_cfcleaguefe_competition.profilepage}
+    supporter.parameter = {$plugin.tx_cfcleaguefe_competition.profilepage}
+  }
+  roll.value = 1
+  listinfo.llkeyEmpty = teamlist_empty
+  
   firstImage {
     file.maxW = 480
     file.maxH = 500
@@ -104,7 +122,7 @@ temp.team {
     value = 0
     equals.field = dummy
   }
-  short_name < temp.team.name
+  short_name < lib.t3sports.team.name
 
   # Formatierung des Team-Logos
   logo {
@@ -142,6 +160,8 @@ temp.team {
 }
 
 plugin.tx_cfcleaguefe_competition {
+  teamlistTemplate = {$plugin.tx_cfcleaguefe_competition.teamlistTemplate}
+
   # Rendering of items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
     parseFunc =< lib.parseFunc_RTE
@@ -151,10 +171,8 @@ plugin.tx_cfcleaguefe_competition {
   leaguetable {
     # Ausgabe mit HTML-Template
     viewType = HTML
-    # PID der Seite für den Teamview
-    teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
     # Angabe zur Tabelle
-    table < temp.team
+    table < lib.t3sports.team
     table {
       roll.value = 1
 #      team.name.wrap = -|-
@@ -221,6 +239,9 @@ plugin.tx_cfcleaguefe_competition {
     acceptTeamIdFromRequest = 1
     match {
       roll.value = 1
+      links {
+        match.parameter = {$plugin.tx_cfcleaguefe_matchreport.matchpage}
+      }
       stadium.ifEmpty = Ort noch unbekannt
       stadium.wrap = (|)
   		date = DATETIME
@@ -229,7 +250,7 @@ plugin.tx_cfcleaguefe_competition {
 
       # Optional ein String, der zwischen den Spielen steht
 #      implode = <br />
-      home < temp.team
+      home < lib.t3sports.team
       home.logo{
         file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
         file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
@@ -237,8 +258,6 @@ plugin.tx_cfcleaguefe_competition {
       }
       guest < plugin.tx_cfcleaguefe_competition.matchtable.match.home
     }
-    # PID der Seite für den Teamview
-    teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
   }
 
 	matchcrosstable {
@@ -329,7 +348,7 @@ plugin.tx_cfcleaguefe_competition {
     limit = 0
     match {
       date.strftime  = {$plugin.tx_cfcleaguefe_competition.tickerlist_format_date}
-      home < temp.team
+      home < lib.t3sports.team
       guest < plugin.tx_cfcleaguefe_competition.tickerlist.match.home
     }
   }
@@ -363,15 +382,16 @@ plugin.tx_cfcleaguefe_competition {
   }
   teamlist {
     viewType = HTML
-    roll.value = 1
-    teamPage = {$plugin.tx_cfcleaguefe_competition.teampage}
-    profilePage = {$plugin.tx_cfcleaguefe_competition.profilepage}
-    playerPage = {$plugin.tx_cfcleaguefe_competition.playerpage}
-    team < temp.team
+    team < lib.t3sports.team
     team.logo{
       file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist}
       file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}
       noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist},{$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}
+    }
+    options {
+      orderby {
+        TEAM.NAME = asc
+      }
     }
   }
 }
@@ -646,7 +666,7 @@ plugin.tx_cfcleaguefe_report {
   }
   # View TeamView
   teamview {
-    team < temp.team
+    team < lib.t3sports.team
   }
   # View MatchReport
   matchreport {
@@ -659,8 +679,8 @@ plugin.tx_cfcleaguefe_report {
       visitors.ifEmpty = -
       game_report.parseFunc =< lib.parseFunc_RTE
       date.strftime  = {$plugin.tx_cfcleaguefe_matchreport.format_date}
-      home < temp.team
-      guest < temp.team
+      home < lib.t3sports.team
+      guest < lib.t3sports.team
       players_home = 1
       players_guest = 1
 
