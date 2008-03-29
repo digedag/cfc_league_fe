@@ -26,37 +26,22 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
 tx_div::load('tx_rnbase_view_Base');
-//tx_div::load('tx_dam_db');
-//tx_div::load('tx_dam_media');
 
 
 /**
  * Viewklasse für die Anzeige des Teams
  */
 class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base {
-  /**
-   * Erstellen des Frontend-Outputs
-   */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-    if(!$templateCode) {
-      return 'Sorry, template not found!'; // . (' . $this->getTemplate($view,'.html') .')';
-    }
-
-    $template = $cObj->getSubpart($templateCode,'###TEAM_VIEW###');
-
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
-
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
     $team =& $viewData->offsetGet('team');
     if(is_object($team))
       $out = $this->_createView($template, $team, $cObj, $configurations);
     else
       $out = 'Sorry, no team found...';
     return $out;
-  }
+	}
+  function getMainSubpart() {return '###TEAM_VIEW###';}
+	
 
   function _createView($template, &$team, &$cObj, &$configurations) {
     $out = '';
@@ -64,37 +49,14 @@ class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base {
     $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
     $teamMarker = new $teamMarkerClass;
 
-    $links = array( 'team' => $this->linkTeam, 
-                    'player' => $this->linkPlayer, 
-                    'coach' => $this->linkProfile, 
-                    'supporter' => $this->linkProfile);
-
-    $out .= $teamMarker->parseTemplate($template, $team, $this->formatter, 'teamview.team.', $links, 'TEAM');
-
+    $out .= $teamMarker->parseTemplate($template, $team, $this->formatter, 'teamview.team.', 'TEAM');
 
     return $out;
   }
 
   function _init(&$configurations) {
     $this->formatter = &$configurations->getFormatter();
-
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
-    $this->linkPlayer = new $linkClass;
-    $this->linkPlayer->designatorString = $configurations->getQualifier();
-    $this->linkPlayer->destination(intval($configurations->get('playerPage')));
-
-    $this->linkProfile = new $linkClass;
-    $this->linkProfile->designatorString = $configurations->getQualifier();
-    $this->linkProfile->destination(intval($configurations->get('profilePage'))); // Das Ziel der Seite vorbereiten
-
-    $this->linkTeam = new $linkClass;
-    $this->linkTeam->designatorString = $configurations->getQualifier();
-    $this->linkTeam->destination(intval($configurations->get('teamPage'))); // Das Ziel der Seite vorbereiten
-
   }
-
-//t3lib_div::debug($damPics['files'][603] , 'view_teamview');
-//t3lib_div::debug($media, 'view_teamview');
 
 }
 
