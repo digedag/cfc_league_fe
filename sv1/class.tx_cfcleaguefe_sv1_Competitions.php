@@ -26,7 +26,7 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
 tx_div::load('tx_rnbase_util_DB');
 
-interface tx_cfcleaguefe_TeamService {
+interface tx_cfcleaguefe_CompetitionService {
   function search($fields, $options);
 }
 
@@ -35,18 +35,18 @@ interface tx_cfcleaguefe_TeamService {
  * 
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Teams extends t3lib_svbase implements tx_cfcleaguefe_TeamService  {
+class tx_cfcleaguefe_sv1_Competitions extends t3lib_svbase implements tx_cfcleaguefe_CompetitionService  {
 
   /**
-   * Search database for teams
+   * Search database for competitions
    *
    * @param array $fields
    * @param array $options
-   * @return array of tx_cfcleaguefe_models_team
+   * @return array of tx_cfcleaguefe_models_competition
    */
   function search($fields, $options) {
   	tx_div::load('tx_rnbase_util_SearchBase');
-		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Team');
+		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Competition');
 		return $searcher->search($fields, $options);
   }
   
