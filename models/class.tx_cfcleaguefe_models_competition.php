@@ -155,6 +155,14 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
   }
 
   /**
+   * Returns the age croup of this competition
+   *
+   * @return tx_cfcleaguefe_models_group
+   */
+  function getGroup() {
+  	return tx_cfcleaguefe_models_group::getInstance($this->record['agegroup']);
+  }
+  /**
    * Returns all team participating this competition.
    * @return array of tx_cfcleaguefe_models_team
    */
