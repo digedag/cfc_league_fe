@@ -5,6 +5,11 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 // Spiele als Ereignisse für die Extension cal bereitstellen
 
+require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+tx_div::load('tx_cfcleaguefe_util_ServiceRegistry');
+tx_div::load('tx_rnbase_util_SearchBase');
+
+
 $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
 
 // Cal-Service nur bei Bedarf einbinden
@@ -70,13 +75,23 @@ t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_c
   )
 );
 
-t3lib_extMgm::addService($_EXTKEY,  'cfcleague_teams' /* sv type */,  'tx_cfcleaguefe_sv1_Teams' /* sv key */,
+t3lib_extMgm::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Teams' /* sv key */,
   array(
-    'title' => 'Team services', 'description' => 'Service functions for team access', 'subtype' => '',
+    'title' => 'Team services', 'description' => 'Service functions for team access', 'subtype' => 'team',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Teams.php',
     'className' => 'tx_cfcleaguefe_sv1_Teams',
+  )
+);
+
+t3lib_extMgm::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Competitions' /* sv key */,
+  array(
+    'title' => 'Team services', 'description' => 'Service functions for competition access', 'subtype' => 'competition',
+    'available' => TRUE, 'priority' => 50, 'quality' => 50,
+    'os' => '', 'exec' => '',
+    'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Competitions.php',
+    'className' => 'tx_cfcleaguefe_sv1_Competitions',
   )
 );
 
