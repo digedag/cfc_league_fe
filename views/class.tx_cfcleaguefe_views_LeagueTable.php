@@ -32,23 +32,14 @@ tx_div::load('tx_rnbase_view_Base');
  */
 class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
-  /**
-   * Erstellen des Frontend-Outputs
-   */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-    // Den entscheidenden Teil herausschneiden
-    $templateCode = $cObj->getSubpart($templateCode, '###LEAGUE_TABLE###');
-
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
-
-    $out = $this->_createView($templateCode, $viewData, $configurations);
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
+		
+    $out = $this->_createView($template, $viewData, $configurations);
     return $out;
-  }
-
+	}
+	
+  function getMainSubpart() {return '###LEAGUE_TABLE###';}
+	
   /**
    * Erstellung des Outputstrings
    */
@@ -139,7 +130,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
       unset($row['team']); // Gibt sonst Probleme mit PHP5.2
       $team->record = t3lib_div::array_merge($row, $team->record);
 
-      $parts[] = $this->teamMarker->parseTemplate($template, $team, $this->formatter, 'leaguetable.table.', $this->links, 'ROW');
+      $parts[] = $this->teamMarker->parseTemplate($template, $team, $this->formatter, 'leaguetable.table.', 'ROW');
 
       $position++;
       $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
@@ -296,15 +287,6 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
     $this->link = new $linkClass;
     $this->link->designatorString = $configurations->getQualifier();
     $this->link->destination($pid); // Das Ziel der Seite vorbereiten
-
-    $teamPage = $configurations->get('leaguetable.teamPage');
-    if($teamPage) {
-      $linkTeam = new $linkClass;
-      $linkTeam->designatorString = $configurations->getQualifier();
-      $linkTeam->destination($teamPage); // Das Ziel der Seite vorbereiten
-
-      $this->links['team'] = $linkTeam;
-    }
 
     // Den TeamMarker erstellen
     $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
