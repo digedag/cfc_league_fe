@@ -29,6 +29,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.ph
 require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
 
 tx_div::load('tx_cfcleaguefe_models_club');
+tx_div::load('tx_cfcleaguefe_search_Builder');
 
 /**
  * Model für ein Team.
@@ -57,11 +58,29 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
   function getClub() {
     if(!$this->record['club']) return 0;
     return tx_cfcleaguefe_models_club::getInstance($this->record['club']);
-//    if(!isset($this->_club)) {
-//      $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_club');
-//      $_club = new $className($this->record['club']);
-//    }
-//    return $_club;
+  }
+  /**
+   * Returns the teams age group. This value is retrieved from the teams competitions. So 
+   * the first competition found, decides about the age group.
+   * @return tx_cfcleaguefe_models_group or null
+   */
+  function getAgeGroup() {
+  	$comps = $this->getCompetitions(true);
+  	for($i=0, $cnt = count($comps); $i < $cnt; $i++) {
+  		if(is_object($comps[$i]->getGroup())) return $comps[$i]->getGroup();
+  	}
+  	return null;
+  }
+  /**
+   * Returns the competitons of this team
+   * @param boolean $obligateOnly if true, only obligate competitions are returned
+   * @return array of tx_cfcleaguefe_models_competition
+   */
+  function getCompetitions($obligateOnly = false) {
+  	$fields = array();
+  	tx_cfcleaguefe_search_Builder::buildCompetitionByTeam($fields, $this->uid,$obligateOnly);
+  	$srv = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
+  	return $srv->search($fields, $options);
   }
 
   /**
