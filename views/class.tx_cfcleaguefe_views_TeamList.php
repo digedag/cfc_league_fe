@@ -26,85 +26,33 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
 tx_div::load('tx_rnbase_view_Base');
-//tx_div::load('tx_dam_db');
+tx_div::load('tx_rnbase_util_ListBuilder');
 //tx_div::load('tx_dam_media');
 
 
 /**
- * Viewklasse für die Anzeige des Kalenders
+ * Viewklasse für die Anzeige einer Teamliste.
+ * Isn't it tiny! ;-)
  */
 class tx_cfcleaguefe_views_TeamList extends tx_rnbase_view_Base {
   /**
    * Erstellen des Frontend-Outputs
    */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-    if(!$templateCode) {
-      return 'Sorry, template not found!'; // . (' . $this->getTemplate($view,'.html') .')';
-    }
-
-    $template = $cObj->getSubpart($templateCode,'###TEAM_LIST###');
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
 
     // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
     $teams =& $viewData->offsetGet('teams');
-    if(is_array($teams))
-      $out = $this->_createView($template, $teams, $cObj, $configurations);
-    else
-      $out = 'Sorry, no teams found...';
+	  $builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
+	  $listBuilder = new $builderClass();
+    
+    $out = $listBuilder->render($teams, 
+    								$viewData, $template, 'tx_cfcleaguefe_util_TeamMarker', 
+    								'teamlist.team.', 'TEAM', $formatter);
     return $out;
   }
 
-  function _createView($template, &$teams, &$cObj, &$configurations) {
-    $out = '';
-
-    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $teamMarker = new $teamMarkerClass;
-    $subTemplate = $cObj->getSubpart($template, '###TEAM###');
-    $rowRoll = intval($configurations->get('teamlist.team.roll.value'));
-    $rowRollCnt = 0;
-    $parts = array();
-    
-    $links = array( 'team' => $this->linkTeam, 
-                    'player' => $this->linkPlayer, 
-                    'coach' => $this->linkProfile, 
-                    'supporter' => $this->linkProfile);
-
-    for($i = 0, $size = count($teams); $i < $size; $i++) {
-      $team = $teams[$i];
-      $team->record['roll'] = $rowRollCnt;
-      $parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'teamlist.team.', $links, 'TEAM');
-      $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
-    }
-
-    $subpartArray['###TEAM###'] = implode($parts, $configurations->get('teamlist.team.implode'));
-    $markerArray = array('###TEAMCOUNT###' => count($teams), );
-    
-    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-  }
-
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
-
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
-    $this->linkPlayer = new $linkClass;
-    $this->linkPlayer->designatorString = $configurations->getQualifier();
-    $this->linkPlayer->destination(intval($configurations->get('teamlist.playerPage')));
-
-    $this->linkProfile = new $linkClass;
-    $this->linkProfile->designatorString = $configurations->getQualifier();
-    $this->linkProfile->destination(intval($configurations->get('teamlist.profilePage'))); // Das Ziel der Seite vorbereiten
-
-    $this->linkTeam = new $linkClass;
-    $this->linkTeam->designatorString = $configurations->getQualifier();
-    $this->linkTeam->destination(intval($configurations->get('teamlist.teamPage'))); // Das Ziel der Seite vorbereiten
-  }
-
-//t3lib_div::debug($damPics['files'][603] , 'view_teamview');
-//t3lib_div::debug($media, 'view_teamview');
-
+  function getMainSubpart() {return '###TEAM_LIST###';}
+  
 }
 
 
