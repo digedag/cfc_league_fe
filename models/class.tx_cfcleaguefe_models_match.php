@@ -50,7 +50,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    */
   private function _init() {
     // Wenn das Spiel noch nicht beendet ist, gibt es nichts zu tun
-    if(!($this->isFinished() || $this->isRunning())) return;
+//    if(!($this->isFinished() || $this->isRunning())) return;
     
     // Um das Endergebnis zu ermitteln, muss bekannt sein, wieviele Spielabschnitte 
     // es gibt. Dies steht im Wettbewerb
@@ -554,7 +554,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
              is_extratime, goals_home_et, goals_guest_et,
              is_penalty, goals_home_ap, goals_guest_ap, 
              tx_cfcleague_games.competition,
-             tx_cfcleague_competition.name As competition_name, tx_cfcleague_competition.type As competition_type,
+             tx_cfcleague_competition.name As competition_name,tx_cfcleague_competition.short_name As competition_short_name, tx_cfcleague_competition.type As competition_type,
              (SELECT tx_cfcleague_group.name FROM tx_cfcleague_group WHERE tx_cfcleague_group.uid = tx_cfcleague_competition.agegroup) As agegroup,
              date, round, round_name, stadium, status, visitors, link_ticker, tx_cfcleague_games.link_report, LENGTH(game_report) AS has_report
              ' . ($extended ? '
