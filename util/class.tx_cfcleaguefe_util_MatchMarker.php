@@ -33,16 +33,9 @@ class tx_cfcleaguefe_util_MatchMarker {
 
   /**
    * Erstellt eine neue Instanz
-   * @param $links Array mit den Link-Instanzen. Keys: team, match, ticker, player usw.
+   * @param $$options Array with options. not used until now.
    */
-  function tx_cfcleaguefe_util_MatchMarker($links) {
-    $this->token = md5(microtime());
-    $this->links = array();
-    foreach($links As $key => $link) {
-      $link->label($this->token);
-      $this->links[$key] = $link;
-    }
-//t3lib_div::debug($this->links, 'utl_matchmarker');
+  function tx_cfcleaguefe_util_MatchMarker(&$options = null) {
     // Den TeamMarker erstellen
     $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
     $this->teamMarker = new $teamMarkerClass;
@@ -70,21 +63,21 @@ class tx_cfcleaguefe_util_MatchMarker {
     if(!is_object($match)) {
       return $formatter->configurations->getLL('match.notFound');
     }
+    $this->initLinks($formatter->configurations, $matchConfId);
 //$time = t3lib_div::milliseconds();
     
     $this->prepareFields($match);
     // Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
     if($this->fullMode)
 	    $this->addDynamicMarkers($template, $match, $formatter, $matchConfId,$matchMarker);
-    
     // Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
     $markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $matchConfId, 0, $matchMarker.'_');
-
+    
     $subpartArray = array();
     // Es wird jetzt das Template verändert und die Daten der Teams eingetragen
     if($this->fullMode) {
-	    $template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $matchConfId.'home.', $this->links, 'MATCH_HOME');
-  	  $template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $matchConfId.'guest.', $this->links, 'MATCH_GUEST');
+	    $template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $matchConfId.'home.', 'MATCH_HOME');
+  	  $template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $matchConfId.'guest.', 'MATCH_GUEST');
 	    $this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
 	    $this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
     }
@@ -191,19 +184,19 @@ class tx_cfcleaguefe_util_MatchMarker {
       $wrappedSubpartArray['###'.$matchMarker.'_TICKER_LINK###'] = explode($this->token, $link->makeTag());
       $markerArray['###'.$matchMarker.'_TICKER_LINK_URL###'] = $link->makeUrl();
     }
-    // Die Links auf die Teams
-    if($this->links['team']) {
-      $link = $this->links['team'];
-      if(intval($match->record['home_link_report'])) {
-        $link->parameters(array('teamId' => $match->record['home']));
-        $wrappedSubpartArray['###'.$matchMarker.'_HOME_LINK###'] = explode($this->token, $link->makeTag());
-      }
-      if(intval($match->record['guest_link_report'])) {
-        $link->parameters(array('teamId' => $match->record['guest']));
-        $wrappedSubpartArray['###'.$matchMarker.'_GUEST_LINK###'] = explode($this->token, $link->makeTag());
-      }
-//t3lib_div::debug($wrappedSubpartArray, 'utl_matchmarker');
-    }
+//    // Die Links auf die Teams
+//    if($this->links['team']) {
+//      $link = $this->links['team'];
+//      if(intval($match->record['home_link_report'])) {
+//        $link->parameters(array('teamId' => $match->record['home']));
+//        $wrappedSubpartArray['###'.$matchMarker.'_HOME_LINK###'] = explode($this->token, $link->makeTag());
+//      }
+//      if(intval($match->record['guest_link_report'])) {
+//        $link->parameters(array('teamId' => $match->record['guest']));
+//        $wrappedSubpartArray['###'.$matchMarker.'_GUEST_LINK###'] = explode($this->token, $link->makeTag());
+//      }
+////t3lib_div::debug($wrappedSubpartArray, 'utl_matchmarker');
+//    }
   }
   
   /**
@@ -228,6 +221,7 @@ class tx_cfcleaguefe_util_MatchMarker {
 
     $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
     $media = new $mediaClass($filePath);
+//    $media->fetchFullMetaData();
     $media->fetchFullIndex();
     $markerFirst = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'firstImage.', $baseMarker.'_FIRST_PICTURE');
     $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
@@ -240,9 +234,9 @@ class tx_cfcleaguefe_util_MatchMarker {
     $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_PICTURES_2###');
     $markerArray = array();
     $out = '';
+//    reset($damPics);
 
-//t3lib_div::debug($gPictureTemplate, 'utl_teammarker');
-    // Alle Bilder hinzufügen
+		// Alle Bilder hinzufügen
     while(list($uid, $filePath) = each($damPics['files'])) {
       $media = new $mediaClass($filePath);
       $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'images.',$baseMarker.'_PICTURE');
@@ -304,6 +298,20 @@ class tx_cfcleaguefe_util_MatchMarker {
     $gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
   }
 
+  /**
+   * Create Links
+   *
+   * @param tx_rnbase_configurations $configurations
+   * @param string $teamConfId
+   */
+  protected function initLinks(&$configurations, $confId) {
+
+    $this->token = md5(microtime());
+  	$this->links['match'] =& $configurations->createLink();
+    $this->links['match']->destination(intval($configurations->get($confId.'links.match.parameter')));
+    $this->links['match']->label($this->token);
+  }
+  
 }
 
 
