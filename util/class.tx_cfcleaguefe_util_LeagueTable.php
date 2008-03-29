@@ -81,21 +81,17 @@ class tx_cfcleaguefe_util_LeagueTable  {
       }
     }
 
-    // Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
+		// Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
 		// Den höchsten absolvierten Spieltag ermitteln
-		$lastRound = intval(array_pop(array_keys($rounds)));
+		$lastRound = intval(array_pop(array_keys($rounds))) + 1;
 		$maxRound = count($league->getRounds());
 		$teamName = array_pop(array_keys($xyData));
 		for( ; $lastRound <= $maxRound; $lastRound++) {
 			// Es muss nur für ein Team ein weiterer Wert hinzugefügt werden
 			$xyData[$teamName][$lastRound] = null;
 		}
-		
-
-// t3lib_div::debug($xyData,'util_leaguetable');
-
-    return $xyData;
-  }
+		return $xyData;
+	}
 
   /**
    * Für die Berechnung der Liga benötigen wir die Config, die Parameter und die Liga
