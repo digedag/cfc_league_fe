@@ -30,15 +30,36 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_bas
  * Model für eine Altersklasse.
  */
 class tx_cfcleaguefe_models_group extends tx_rnbase_model_base {
-
+  private static $instances = array();
+	
   function getTableName(){return 'tx_cfcleague_group';}
 
+  /**
+   * Liefert den Namen
+   *
+   * @return string
+   */
+  function getName() {
+  	return $this->record['name'];
+  }
+
+  /**
+   * Liefert die Instance eines Landes
+   *
+   * @param int $uid
+   * @return tx_dsagbase_models_land
+   */
+  static public function getInstance($uid) {
+  	self::_init();
+  	return self::$instances[$uid];
+  }
+  
   /**
    * statische Methode, die ein Array mit Instanzen dieser Klasse liefert. Ist der übergebene
    * Parameter leer, dann werden alle Saison-Datensätze aus der Datenbank geliefert. Ansonsten 
    * wird ein String mit der uids der gesuchten Saisons erwartet ('2,4,10,...').
    */
-  function findAll($uids) {
+  static function findAll($uids) {
     if(is_string($uids) && strlen($uids) > 0) {
       $where = 'uid IN (' . $uids .')';
     }
@@ -51,7 +72,22 @@ class tx_cfcleaguefe_models_group extends tx_rnbase_model_base {
     return  tx_rnbase_util_DB::queryDB('*','tx_cfcleague_group',$where,
               '','sorting','tx_cfcleaguefe_models_group',0);
   }
-  
+  /**
+   * Lädt alle Instanzen aus der DB und legt sie in das Array self::$instances.
+   * Key ist die UID der Alterklasse.
+   */
+  private static function _init() {
+  	if(count(self::$instances))
+  		return;
+
+  	$options['wrapperclass'] = 'tx_cfcleaguefe_models_group';
+    $result = tx_rnbase_util_DB::doSelect('*', 
+    					'tx_cfcleague_group', $options, 0);
+  	foreach($result As $group) {
+  		self::$instances[$group->uid] = $group;
+  	}
+  }
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_group.php']) {
