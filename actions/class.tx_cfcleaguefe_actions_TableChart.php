@@ -131,7 +131,7 @@ class tx_cfcleaguefe_actions_TableChart {
     }
 //t3lib_div::debug($tsArr['10.']['10.']['text'], 'ac_chart');
     // Maximum ist die Anzahl der Teams in der Liga
-    $tsArr['10.']['20.']['10.']['axis.']['y.']['forceMaximum'] = count(t3lib_div::intExplode(',',$league->record['teams']));
+    $tsArr['10.']['20.']['10.']['axis.']['y.']['forceMaximum'] = count($league->getTeams());
 
     $seriesCnt = 20;
     $seriesIdx = 0;
