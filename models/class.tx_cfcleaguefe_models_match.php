@@ -204,6 +204,15 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     }
   }
 
+  /**
+   * Returns the competition
+   *
+   * @return tx_cfcleaguefe_models_competition
+   */
+  function getCompetition() {
+    return tx_cfcleaguefe_models_competition::getInstance($this->record['competition']);
+  }
+  
 
   /**
    * Liefert das Heim-Team als Objekt
