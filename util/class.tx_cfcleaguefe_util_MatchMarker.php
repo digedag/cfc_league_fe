@@ -37,8 +37,10 @@ class tx_cfcleaguefe_util_MatchMarker {
    */
   function tx_cfcleaguefe_util_MatchMarker(&$options = null) {
     // Den TeamMarker erstellen
-    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $this->teamMarker = new $teamMarkerClass;
+    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
+    $this->teamMarker = new $markerClass;
+    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_CompetitionMarker');
+    $this->competitionMarker = new $markerClass;
   }
 
   /**
@@ -51,7 +53,7 @@ class tx_cfcleaguefe_util_MatchMarker {
   }
   /**
    * @param $template das HTML-Template
-   * @param $profile das Profil
+   * @param tx_cfcleaguefe_models_match $match das Spiel
    * @param $formatter der zu verwendente Formatter
    * @param $profileConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
    * @param $link Link-Instanz, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
@@ -81,6 +83,8 @@ class tx_cfcleaguefe_util_MatchMarker {
 	    $this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
 	    $this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
     }
+    // Add competition
+	  $template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $matchConfId.'competition.', 'MATCH_COMPETITION');
     
     $wrappedSubpartArray = array('###'.$matchMarker.'_LINK###' => $noLink, 
                                  '###'.$matchMarker.'_HOME_LINK###' => $noLink, 
@@ -165,7 +169,7 @@ class tx_cfcleaguefe_util_MatchMarker {
   /**
    * Vorbereiten der Links 
    *
-   * @param tx_cfcleaguefe_match $match
+   * @param tx_cfcleaguefe_models_match $match
    * @param string $matchMarker
    * @param array $markerArray
    * @param array $wrappedSubpartArray
@@ -184,19 +188,6 @@ class tx_cfcleaguefe_util_MatchMarker {
       $wrappedSubpartArray['###'.$matchMarker.'_TICKER_LINK###'] = explode($this->token, $link->makeTag());
       $markerArray['###'.$matchMarker.'_TICKER_LINK_URL###'] = $link->makeUrl();
     }
-//    // Die Links auf die Teams
-//    if($this->links['team']) {
-//      $link = $this->links['team'];
-//      if(intval($match->record['home_link_report'])) {
-//        $link->parameters(array('teamId' => $match->record['home']));
-//        $wrappedSubpartArray['###'.$matchMarker.'_HOME_LINK###'] = explode($this->token, $link->makeTag());
-//      }
-//      if(intval($match->record['guest_link_report'])) {
-//        $link->parameters(array('teamId' => $match->record['guest']));
-//        $wrappedSubpartArray['###'.$matchMarker.'_GUEST_LINK###'] = explode($this->token, $link->makeTag());
-//      }
-////t3lib_div::debug($wrappedSubpartArray, 'utl_matchmarker');
-//    }
   }
   
   /**
@@ -221,8 +212,11 @@ class tx_cfcleaguefe_util_MatchMarker {
 
     $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
     $media = new $mediaClass($filePath);
-//    $media->fetchFullMetaData();
-    $media->fetchFullIndex();
+		// Check DAM-Version
+		if(method_exists($media, 'fetchFullMetaData'))
+			$media->fetchFullMetaData();
+		else
+			$media->fetchFullIndex();
     $markerFirst = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'firstImage.', $baseMarker.'_FIRST_PICTURE');
     $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
 //t3lib_div::debug($formatter->cObj->data, 'match_marker');

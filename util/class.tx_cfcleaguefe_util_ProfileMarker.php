@@ -103,7 +103,8 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 
     if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
       // Alle Marker löschen
-      $firstMarkerArray['###'.$profileMarker.'_FIRST_PICTURE###'] = $formatter->dataStdWrap($profile->record, '', $profileConfId.'firstImage.dummy.');
+    	
+    	$firstMarkerArray['###'.$profileMarker.'_FIRST_PICTURE###'] = $formatter->dataStdWrap($profile->record, '', $profileConfId.'firstImage.dummy.');
 //      $gSubpartArray['###'. $profileMarker .'_PICTURES###'] = '';
       tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
                         tx_rnbase_util_FormatUtil::getDAMColumns(), $profileMarker.'_FIRST_PICTURE_');
@@ -113,10 +114,15 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 
     $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
     $media = new $mediaClass($filePath);
-    $media->fetchFullIndex();
+		// Check DAM-Version
+		if(method_exists($media, 'fetchFullMetaData'))
+			$media->fetchFullMetaData();
+		else
+			$media->fetchFullIndex();
+    
     $markerFirst = $formatter->getItemMarkerArray4DAM($media, $profileConfId.'firstImage.',$profileMarker.'_FIRST_PICTURE');
     $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
-
+    
     // Jetzt ersetzen wir die weiteren Bilder
     // Das Template holen wir aus dem übergebenen Template
     $pictureTemplate = $formatter->cObj->getSubpart($template,'###'.$profileMarker.'_PICTURES###');
