@@ -57,7 +57,6 @@ class tx_cfcleaguefe_util_LeagueTable  {
     $this->_initConfig($parameters, $configurations, $league);
     // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
     $this->_initTeams($configurations, $league);
-
     // Hier je nach TableScope die Spiele holen
     $matches = $league->getMatches(2, $this->cfgTableScope);
     
@@ -67,8 +66,8 @@ class tx_cfcleaguefe_util_LeagueTable  {
     foreach($matches As $match) {
       $rounds[$match->record['round']][] = $match;
     }
-// t3lib_div::debug(is_array($this->cfgChartClubs), 'util_leaguetable');
     $xyData = Array();
+    $this->handlePenalties();
     foreach($rounds As $round => $roundMatches) {
       $this->handleMatches($roundMatches);
       // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
@@ -80,7 +79,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
           $xyData[$team['teamName']][$round] = $position +1;
       }
     }
-
+    
 		// Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
 		// Den höchsten absolvierten Spieltag ermitteln
 		$lastRound = intval(array_pop(array_keys($rounds))) + 1;
@@ -138,9 +137,11 @@ class tx_cfcleaguefe_util_LeagueTable  {
     foreach($this->penalties As $penalty) {
       // Welches Team ist betroffen?
       if(array_key_exists($penalty->record['team'], $this->_teamData)) {
-//    t3lib_div::debug($penalty,'util_leaguetable Team gefunden');
+//    t3lib_div::debug($penalty, 'tx_cfcleaguefe_util_LeagueTable'); // TODO: Remove me!
         // Die Strafe wird für den View mit abgespeichert
-        $this->_teamData[$penalty->record['team']]['penalties'][] = $penalty;
+        // Falls es eine Korrektur ist, dann nicht speichern
+				if(!$penalty->isCorrection())
+	        $this->_teamData[$penalty->record['team']]['penalties'][] = $penalty;
         // Die Punkte abziehen
         $this->_teamData[$penalty->record['team']]['points'] -= $penalty->record['points_pos'];
         $this->_teamData[$penalty->record['team']]['points2'] += $penalty->record['points_neg'];
