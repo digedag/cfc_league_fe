@@ -166,10 +166,13 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
    * Returns all team participating this competition.
    * @return array of tx_cfcleaguefe_models_team
    */
-  function getTeams() {
+  function getTeams($ignoreDummies = true) {
     if(!is_array($this->teams)) {
       $uids = $this->record['teams'];
-      $options['where'] = 'uid IN (' . $uids .')';
+      $options['where'] = 'uid IN (' . $uids .') ';
+      if($ignoreDummies)
+      	$options['where'] .= ' AND dummy = 0  ';
+      
       $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
       $options['orderby'] = 'sorting';
       $this->teams = tx_rnbase_util_DB::doSelect('*','tx_cfcleague_teams',$options, 0);
