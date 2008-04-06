@@ -37,6 +37,9 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_bas
  */
 class tx_cfcleaguefe_models_competition_penalty extends tx_rnbase_model_base {
   function getTableName(){return 'tx_cfcleague_competition_penalty';}
+  function isCorrection() {
+  	return $this->record['correction'] > 0;
+  }
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition_penalty.php']) {
