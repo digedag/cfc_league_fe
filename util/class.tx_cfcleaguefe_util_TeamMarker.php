@@ -31,6 +31,8 @@ tx_div::load('tx_rnbase_util_BaseMarker');
  * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich
  */
 class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
+	function tx_cfcleaguefe_util_TeamMarker(&$options = null) {
+	}
 
   /**
    * @param string $template das HTML-Template
@@ -42,11 +44,12 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
    *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
    * @return String das geparste Template
    */
-  public function parseTemplate($template, &$team, &$formatter, $teamConfId, $links=0, $teamMarker = 'TEAM') {
+  public function parseTemplate($template, &$team, &$formatter, $teamConfId, $teamMarker = 'TEAM') {
     if(!is_object($team)) {
-      return $formatter->configurations->getLL('team.notFound');
+      return $formatter->configurations->getLL('team_notFound');
 //      return ''; // Ohne Team kein Ergebnis
     }
+    $links = $this->initLinks($formatter->configurations, $teamConfId);
 
     //t3lib_div::debug($team->record , 'utl_teammarker');
 
@@ -62,9 +65,9 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
     }
     $emptyArr = array();
     $noLink = array('','');
+    $this->prepareRecord($team);
     // Es wird das MarkerArray mit den Daten des Teams gefüllt.
 		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $teamConfId , 0, $teamMarker.'_',$team->getColumnNames());
-
 		$markerArray['###'.$teamMarker.'_LOGO###'] = $team->getLogo($formatter, $teamConfId.'logo.');
     
     if($teamLink && $team->hasReport()) {
@@ -75,7 +78,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
     }
     else
       $wrappedSubpartArray['###'.$teamMarker.'_LINK###'] = $noLink;
-
+//t3lib_div::debug($wrappedSubpartArray, 'tx_cfcleaguefe_util_TeamMarker'); // TODO: Remove me!
     // Jetzt die Bilder einbinden
     $subpartArray = array();
     $this->_addTeamPictures($subpartArray, $markerArray,$team,$formatter, $template, $teamConfId, $teamMarker);
@@ -109,6 +112,16 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
     return $out;
   }
 
+  /**
+   * Prepare team record before rendering
+   *
+   * @param tx_cfcleaguefe_models_team $team
+   */
+  private function prepareRecord(&$team) {
+  	$group = $team->getAgeGroup();
+  	$team->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
+  }
+  
   /**
    * Hinzufügen der Daten des Vereins
    *
@@ -186,7 +199,11 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 
     $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
     $media = new $mediaClass($filePath);
-    $media->fetchFullIndex();
+		// Check DAM-Version
+		if(method_exists($media, 'fetchFullMetaData'))
+			$media->fetchFullMetaData();
+		else
+			$media->fetchFullIndex();
     $markerFirst = $formatter->getItemMarkerArray4DAM($media, $teamConfId.'firstImage.', $teamMarker.'_FIRST_PICTURE');
     $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
 
@@ -222,7 +239,25 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
   public function initLabelMarkers(&$formatter, $confId, $defaultMarkerArr = 0, $marker = 'TEAM') {
     return $this->prepareLabelMarkers('tx_cfcleaguefe_models_team', $formatter, $confId, $defaultMarkerArr, $marker);
   }
-  
+  /**
+   * Create Links
+   *
+   * @param tx_rnbase_configurations $configurations
+   * @param string $teamConfId
+   */
+  protected function initLinks(&$configurations, $teamConfId) {
+
+    $links['team'] =& $configurations->createLink();
+    $links['team']->destination(intval($configurations->get($teamConfId.'links.team.parameter')));
+    $links['player'] =& $configurations->createLink();
+    $links['player']->destination(intval($configurations->get($teamConfId.'links.player.parameter')));
+    $links['coach'] =& $configurations->createLink();
+    $links['coach']->destination(intval($configurations->get($teamConfId.'links.coach.parameter')));
+    $links['supporter'] =& $configurations->createLink();
+    $links['supporter']->destination(intval($configurations->get($teamConfId.'links.supporter.parameter')));
+    
+  	return $links;
+  }
 }
 
 
