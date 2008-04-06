@@ -1,5 +1,7 @@
 # TS Setup
 
+#require // tslib_fe->getConfigArray // t3lib_TStemplate->start // t3lib_pageSelect->storeHash // t3lib_DB->exec_INSERTquery // t3lib_DB->debug
+
 # #####
 # Competition-Plugin
 # #####
@@ -21,10 +23,13 @@ lib.t3sports.pagebrowser {
   maxPages = 11
   pagefloat = CENTER
 }
-
+lib.t3sports.competition {
+  short_name.crop = 5 | ... | 1
+  short_name.ifEmpty.field = name
+}
 
 # Allgemeines Formatierungsangaben für Personen
-temp.profile {
+lib.t3sports.profile {
   description.parseFunc =< lib.parseFunc_RTE
   summary.parseFunc =< lib.parseFunc_RTE
   birthday = DATETIME
@@ -66,7 +71,7 @@ temp.profile {
 
 # Allgemeines Formatierungsangaben für ein Team
 lib.t3sports.team {
-  pagebrowser < lib.t3sports.pagebrowser
+  pagebrowser =< lib.t3sports.pagebrowser
   links {
     team.parameter = {$plugin.tx_cfcleaguefe_competition.teampage}
     player.parameter = {$plugin.tx_cfcleaguefe_competition.playerpage}
@@ -92,11 +97,11 @@ lib.t3sports.team {
     imageLinkWrap < tt_content.image.20.1.imageLinkWrap
   }
   # Formatierung der Spieler-, Trainer-, Betreuerdatensätze
-  player < temp.profile
+  player =< lib.t3sports.profile
   player.birthday.strftime = %d.%m.%y
-  coach < temp.profile
+  coach =< lib.t3sports.profile
   coach.birthday.strftime = %d.%m.%y
-  supporter < temp.profile
+  supporter =< lib.t3sports.profile
   supporter.birthday.strftime = %d.%m.%y
   club.address {
     name.blank = -
@@ -158,6 +163,19 @@ lib.t3sports.team {
     }
   }
 }
+# Team Small is used in matchtable etc.
+lib.t3sports.teamSmall < lib.t3sports.team
+lib.t3sports.teamSmall {
+	logo{
+    file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+  }
+}
+
+lib.t3sports.match {
+  competition =< lib.t3sports.competition
+}
 
 plugin.tx_cfcleaguefe_competition {
   teamlistTemplate = {$plugin.tx_cfcleaguefe_competition.teamlistTemplate}
@@ -172,7 +190,7 @@ plugin.tx_cfcleaguefe_competition {
     # Ausgabe mit HTML-Template
     viewType = HTML
     # Angabe zur Tabelle
-    table < lib.t3sports.team
+    table =< lib.t3sports.team
     table {
       roll.value = 1
 #      team.name.wrap = -|-
@@ -191,7 +209,7 @@ plugin.tx_cfcleaguefe_competition {
         if.value = -1
         if.isGreaterThan.field = points2
       }
-      logo{
+      logo {
         file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
         file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
         noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
@@ -237,6 +255,7 @@ plugin.tx_cfcleaguefe_competition {
     # Die Anzahl der Spiele limitieren. 0 bedeutet keine Einschränkung
     limit = 0
     acceptTeamIdFromRequest = 1
+    match =< lib.t3sports.match
     match {
       roll.value = 1
       links {
@@ -250,19 +269,14 @@ plugin.tx_cfcleaguefe_competition {
 
       # Optional ein String, der zwischen den Spielen steht
 #      implode = <br />
-      home < lib.t3sports.team
-      home.logo{
-        file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
-        file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-        noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-      }
-      guest < plugin.tx_cfcleaguefe_competition.matchtable.match.home
+      home =< lib.t3sports.teamSmall
+      guest =< lib.t3sports.teamSmall
     }
   }
 
 	matchcrosstable {
-    headline.team < plugin.tx_cfcleaguefe_competition.matchtable.match.home
-    dataline.team < plugin.tx_cfcleaguefe_competition.matchtable.match.home
+    headline.team =< lib.t3sports.teamSmall
+    dataline.team =< lib.t3sports.teamSmall
     # aus Performancegründen nur die Basismarker des Spiels aktivieren
 		dataline.matchFullMode = 0
 		dataline.match.date = DATETIME
@@ -278,7 +292,7 @@ plugin.tx_cfcleaguefe_competition {
     assistlist.labels (
      headline,player,assists
     )
-    assistlist.profile < temp.profile
+    assistlist.profile =< lib.t3sports.profile
     scorerlist.profile {
 	    assists.ifEmpty = -
 	  }
@@ -289,7 +303,7 @@ plugin.tx_cfcleaguefe_competition {
      goals_home,goals_away, goals_joker, goals_penalty,
      goals_per_match, minutes_per_goal
     )
-    scorerlist.profile < temp.profile
+    scorerlist.profile =< lib.t3sports.profile
     scorerlist.profile {
 	    goals_all.ifEmpty = -
 	    goals_all_per_match {
@@ -317,7 +331,7 @@ plugin.tx_cfcleaguefe_competition {
     )
     # Sortierung der Spieler: 0-alphabetisch, 1-wie im Team
     player.profileSortOrder = 0
-    player.profile < temp.profile
+    player.profile =< lib.t3sports.profile
     player.profile {
 #      last_name.wrap = <i>|</i>
 #      label_last_name.wrap = <i>|</i>
@@ -348,8 +362,8 @@ plugin.tx_cfcleaguefe_competition {
     limit = 0
     match {
       date.strftime  = {$plugin.tx_cfcleaguefe_competition.tickerlist_format_date}
-      home < lib.t3sports.team
-      guest < plugin.tx_cfcleaguefe_competition.tickerlist.match.home
+      home =< lib.t3sports.team
+      guest =< lib.t3sports.team
     }
   }
   # Angaben zur ScopeAuswahl
@@ -382,7 +396,7 @@ plugin.tx_cfcleaguefe_competition {
   }
   teamlist {
     viewType = HTML
-    team < lib.t3sports.team
+    team =< lib.t3sports.team
     team.logo{
       file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist}
       file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}
@@ -643,7 +657,7 @@ plugin.tx_cfcleaguefe_report {
   }
 
   profilelist {
-    profile < temp.profile
+    profile =< lib.t3sports.profile
     profile.firstImage {
       file.maxW = 40
       file.maxH = 40
@@ -651,7 +665,7 @@ plugin.tx_cfcleaguefe_report {
     }
   }
   profileview {
-    profile < temp.profile
+    profile =< lib.t3sports.profile
     profile.firstImage {
       imageLinkWrap < tt_content.image.20.1.imageLinkWrap
       file.maxW = 150
@@ -666,7 +680,7 @@ plugin.tx_cfcleaguefe_report {
   }
   # View TeamView
   teamview {
-    team < lib.t3sports.team
+    team =< lib.t3sports.team
   }
   # View MatchReport
   matchreport {
@@ -679,8 +693,8 @@ plugin.tx_cfcleaguefe_report {
       visitors.ifEmpty = -
       game_report.parseFunc =< lib.parseFunc_RTE
       date.strftime  = {$plugin.tx_cfcleaguefe_matchreport.format_date}
-      home < lib.t3sports.team
-      guest < lib.t3sports.team
+      home =< lib.t3sports.team
+      guest =< lib.t3sports.team
       players_home = 1
       players_guest = 1
 
