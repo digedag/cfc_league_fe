@@ -134,43 +134,40 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    * @param tslib_content $cObj
    * @param tx_rnbase_configurations $configurations
    */
-  private function _createDatalines($template, $datalines, &$teams, &$cObj, &$configurations) {
-    $subTemplate = $cObj->getSubpart($template, '###MATCH###');
-    $freeTemplate = $cObj->getSubpart($template, '###MATCH_FREE###');
-    $rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
+	private function _createDatalines($template, $datalines, &$teams, &$cObj, &$configurations) {
+		$subTemplate = $cObj->getSubpart($template, '###MATCH###');
+		$freeTemplate = $cObj->getSubpart($template, '###MATCH_FREE###');
+		$rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
 
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-    $matchMarker = new $markerClass($this->links);
-    $matchMarker->setFullMode(intval($configurations->get('matchcrosstable.dataline.matchFullMode') != 0));
-    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $teamMarker = new $teamMarkerClass;
+		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
+		$matchMarker = new $markerClass($this->links);
+		$matchMarker->setFullMode(intval($configurations->get('matchcrosstable.dataline.matchFullMode') != 0));
+		$teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
+		$teamMarker = new $teamMarkerClass;
     
-    $lines = array();
-    // Über alle Zeilen iterieren
-    foreach($datalines as $uid=>$matches) {
-    	$rowRollCnt = 0;
-	    $parts = array();
-	    foreach($matches As $match){
-    		if(is_object($match)) {
-		      $match->record['roll'] = $rowRollCnt;
-		      $parts[] = $matchMarker->parseTemplate($match->isDummy() ? $freeTemplate : $subTemplate, $match, $this->formatter, 'matchcrosstable.dataline.match.', 'MATCH');
-    		}
-    		else
-    			$parts[] = $match;
+		$lines = array();
+		// Über alle Zeilen iterieren
+		foreach($datalines as $uid=>$matches) {
+			$rowRollCnt = 0;
+			$parts = array();
+			foreach($matches As $match){
+				if(is_object($match)) {
+					$match->record['roll'] = $rowRollCnt;
+					$parts[] = $matchMarker->parseTemplate($match->isDummy() ? $freeTemplate : $subTemplate, $match, $this->formatter, 'matchcrosstable.dataline.match.', 'MATCH');
+				}
+				else
+					$parts[] = $match;
 
-        $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
-	    }
-	    // Jetzt die einzelnen Teile zusammenfügen
-	    $subpartArray['###MATCH###'] = implode($parts, $configurations->get('matchcrosstable.dataline.match.implode'));
-	    // Und das Team ins MarkerArray
-      $lineTemplate = $teamMarker->parseTemplate($template, $teams[$uid], $this->formatter, 'matchcrosstable.dataline.team.', $this->links, 'DATALINE_TEAM');
-	    
-    	$lines[] = $this->formatter->cObj->substituteMarkerArrayCached($lineTemplate, $markerArray, $subpartArray);
-    }
-    return  implode($lines, $configurations->get('matchcrosstable.dataline.implode'));
-    
-//    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-  }
+				$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
+			}
+			// Jetzt die einzelnen Teile zusammenfügen
+			$subpartArray['###MATCH###'] = implode($parts, $configurations->get('matchcrosstable.dataline.match.implode'));
+			// Und das Team ins MarkerArray
+			$lineTemplate = $teamMarker->parseTemplate($template, $teams[$uid], $this->formatter, 'matchcrosstable.dataline.team.', 'DATALINE_TEAM');
+			$lines[] = $this->formatter->cObj->substituteMarkerArrayCached($lineTemplate, $markerArray, $subpartArray);
+		}
+		return  implode($lines, $configurations->get('matchcrosstable.dataline.implode'));
+	}
   /**
    * Creates the table head
    *
@@ -188,11 +185,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
     $rowRollCnt = 0;
     $parts = array();
     
-    $links = array( 'team' => $this->links['team']);
-
   	while (list($uid,$team)=each($teams))	{
       $team->record['roll'] = $rowRollCnt;
-      $parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'matchcrosstable.headline.team.', $links, 'TEAM');
+      $parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'matchcrosstable.headline.team.', 'TEAM');
       $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
     }
 
@@ -213,37 +208,16 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
   		unset($teams[$uid]);
   	reset($teams);
   }
-  /**
-   * Vorbereitung der Link-Objekte
-   */
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
+	/**
+	 * Vorbereitung der Link-Objekte
+	 */
+	function _init(&$configurations) {
+		$this->formatter = &$configurations->getFormatter();
 
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
-    $this->links = array();
-
-    // String für Zellen ohne Spielansetzung
-    $this->noMatchStr = $configurations->get('matchcrosstable.dataline.nomatch');
-    $this->ownMatchStr = $configurations->get('matchcrosstable.dataline.ownmatch');
-    
-    $reportPage = $configurations->get('reportPage');
-    if($reportPage) {
-      $link = new $linkClass;
-      $link->designatorString = $configurations->getQualifier();
-      $link->destination($reportPage); // Das Ziel der Seite vorbereiten
-      $this->links['match'] = $link;
-    }
-
-    $teamPage = $configurations->get('matchcrosstable.teamPage');
-    if($teamPage) {
-      $linkTeam = new $linkClass;
-      $linkTeam->designatorString = $configurations->getQualifier();
-      $linkTeam->destination($teamPage); // Das Ziel der Seite vorbereiten
-
-      $this->links['team'] = $linkTeam;
-    }
-  }
-
+		// String für Zellen ohne Spielansetzung
+		$this->noMatchStr = $configurations->get('matchcrosstable.dataline.nomatch');
+		$this->ownMatchStr = $configurations->get('matchcrosstable.dataline.ownmatch');
+	}
 }
 
 
