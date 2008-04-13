@@ -30,17 +30,34 @@ lib.t3sports.competition {
 
 # Allgemeines Formatierungsangaben für Personen
 lib.t3sports.profile {
+  links {
+    showprofile.pid = {$plugin.tx_cfcleaguefe_competition.playerpage}
+  }
   description.parseFunc =< lib.parseFunc_RTE
   summary.parseFunc =< lib.parseFunc_RTE
-  birthday = DATETIME
+  birthday = CASE
   birthday {
-    strftime = %d. %B %Y
-    ifEmpty = -
+    default = TEXT
+    default.field = birthday
+    default.strftime = %d. %B %Y
+    2 = TEXT
+    2.value = -
+    key {
+      field = birthday
+      ifEmpty = 2
+    }
   }
-  duration_of_contract = DATETIME
+  duration_of_contract = CASE
   duration_of_contract {
-    strftime = %d.%B %Y
-    ifEmpty = -
+    default = TEXT
+    default.field = duration_of_contract
+    default.strftime = %d. %B %Y
+    2 = TEXT
+    2.value = -
+    key {
+      field = duration_of_contract
+      ifEmpty = 2
+    }
   }
   weight.ifEmpty = -
   height.ifEmpty = -
@@ -73,7 +90,9 @@ lib.t3sports.profile {
 lib.t3sports.team {
   pagebrowser =< lib.t3sports.pagebrowser
   links {
-    team.parameter = {$plugin.tx_cfcleaguefe_competition.teampage}
+    showteam.pid = {$plugin.tx_cfcleaguefe_competition.teampage}
+    # Link auf Spielplan
+    showmatchtable.pid = {$plugin.tx_cfcleaguefe_competition.matchtablepage}
     player.parameter = {$plugin.tx_cfcleaguefe_competition.playerpage}
     coach.parameter = {$plugin.tx_cfcleaguefe_competition.profilepage}
     supporter.parameter = {$plugin.tx_cfcleaguefe_competition.profilepage}
@@ -101,8 +120,11 @@ lib.t3sports.team {
   player.birthday.strftime = %d.%m.%y
   coach =< lib.t3sports.profile
   coach.birthday.strftime = %d.%m.%y
+  coach.links.showprofile.pid = {$plugin.tx_cfcleaguefe_competition.profilepage}
+  
   supporter =< lib.t3sports.profile
   supporter.birthday.strftime = %d.%m.%y
+  supporter.links.showprofile.pid = {$plugin.tx_cfcleaguefe_competition.profilepage}
   club.address {
     name.blank = -
     email.typolink {
@@ -174,6 +196,9 @@ lib.t3sports.teamSmall {
 }
 
 lib.t3sports.match {
+  links {
+    report.pid = {$plugin.tx_cfcleaguefe_matchreport.matchpage}
+  }
   competition =< lib.t3sports.competition
 }
 
@@ -258,9 +283,6 @@ plugin.tx_cfcleaguefe_competition {
     match =< lib.t3sports.match
     match {
       roll.value = 1
-      links {
-        match.parameter = {$plugin.tx_cfcleaguefe_matchreport.matchpage}
-      }
       stadium.ifEmpty = Ort noch unbekannt
       stadium.wrap = (|)
   		date = DATETIME
