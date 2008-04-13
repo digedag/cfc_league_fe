@@ -14,13 +14,15 @@
 ###MATCH_HOME### Marker für UID des Heimteams
 ###MATCH_HOME_NAME### Marker für Name des Heimteams
 ###MATCH_HOME_SHORT_NAME### Marker für Kurzname des Heimteams
-###MATCH_HOME_LINK### Subpart für Link auf das Heimteam
+###MATCH_HOME_SHOWTEAMLINK### Subpart für Link auf das Heimteam
 ###MATCH_HOME_LOGO### Marker für das Logo des Heimteams
 ###MATCHCOUNT### Marker für Anzahl der Spiele
 ###MATCH_COMPETITION_NAME### Marker für Name des Wettbewerbs
 ###MATCH_DATE### Marker für Datum des Spiels
 ###MATCH_GOALS_HOME### Marker für Tore des Heimteams nach Spielende
 ###MATCH_GOALS_GUEST### Marker für Tore des Gastteams nach Spielende
+###MATCH_REPORTLINK### Marker für Link zum Spielbericht
+###MATCH_TICKERLINK### Marker für Link zum Liveticker
 
 </pre>
 <p>Weitere Marker ergeben sich aus den obigen Beispielen. Statt HOME verwendet man z.B. GUEST
@@ -37,9 +39,9 @@ für die Gastmannschaft.
 </tr>
 <tr class="cfcleague-matchtable-row###MATCH_ROLL### cfcleague-matchtable-rowmatch">
 <td>###MATCH_ROUND_NAME###</td>
-<td>###MATCH_HOME_LOGO### ###MATCH_HOME_LINK######MATCH_HOME_NAME######MATCH_HOME_LINK###</td>
+<td>###MATCH_HOME_LOGO### ###MATCH_HOME_SHOWTEAMLINK######MATCH_HOME_NAME######MATCH_HOME_SHOWTEAMLINK###</td>
 <td>-</td>
-<td>###MATCH_GUEST_LINK######MATCH_GUEST_NAME######MATCH_GUEST_LINK### ###MATCH_GUEST_LOGO###</td>
+<td>###MATCH_GUEST_SHOWTEAMLINK######MATCH_GUEST_NAME######MATCH_GUEST_SHOWTEAMLINK### ###MATCH_GUEST_LOGO###</td>
 <td class="cfcleague-matchtable-result">
 
 <!-- ###RESULT_STATUS_0### Ergebnis vor dem Spiel -->
@@ -55,7 +57,7 @@ verlegt
 <!-- ###RESULT_STATUS_1### Ergebnis während des Spiels -->
 
 <!-- ###RESULT_STATUS_2### Ergebnis nach Spielende -->
-###MATCH_LINK######MATCH_GOALS_HOME### : ###MATCH_GOALS_GUEST######MATCH_LINK###
+###MATCH_REPORTLINK######MATCH_GOALS_HOME### : ###MATCH_GOALS_GUEST######MATCH_REPORTLINK###
 <!-- ###RESULT_STATUS_2### Ergebnis nach Spielende -->
 </td>
 </tr>
@@ -69,7 +71,7 @@ verlegt
 <td>###MATCH_ROUND_NAME###</td>
 <td>
 ###MATCH_HOME_LOGO### ###MATCH_HOME_LINK######MATCH_HOME_NAME######MATCH_HOME_LINK### 
-###MATCH_GUEST_LINK######MATCH_GUEST_NAME######MATCH_GUEST_LINK### ###MATCH_GUEST_LOGO###</td>
+###MATCH_GUEST_SHOWTEAMLINK######MATCH_GUEST_NAME######MATCH_GUEST_SHOWTEAMLINK### ###MATCH_GUEST_LOGO###</td>
 <td>-</td>
 <td>spielfrei</td>
 <td class="cfcleague-matchtable-result">
