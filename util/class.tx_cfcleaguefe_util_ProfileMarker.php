@@ -53,39 +53,27 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
    * @param $template das HTML-Template
    * @param $profile das Profil
    * @param $formatter der zu verwendente Formatter
-   * @param $profileConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
+   * @param $confId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
    * @param $link Link-Instanz, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-   * @param $profileMarker Name des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
+   * @param $marker Name des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
    *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
    * @return String das geparste Template
    */
-  public function parseTemplate($template, &$profile, &$formatter, $profileConfId, $link = 0, $profileMarker = 'PROFILE') {
+  public function parseTemplate($template, &$profile, &$formatter, $confId, $marker = 'PROFILE') {
     if(!is_object($profile)) {
-      return $formatter->configurations->getLL('profile.notFound');
-//      return ''; // Ohne Profil kein Ergebnis
+      return $formatter->configurations->getLL('profile_notFound');
     }
 
-    if($link) {
-      $token = md5(microtime());
-      $link->label($token);
-    }
-    $emptyArr = array();
-    $noLink = array('','');
 
     // Es wird das MarkerArray mit den Daten des Spielers gefüllt.
-    $markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $profileConfId , 0, $profileMarker.'_',$profile->getColumnNames());
-    $markerArray['###'.$profileMarker.'_SIGN###'] = $profile->getSign();
-//t3lib_div::debug($markerArray, 'utl_marker');
+    $markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $confId , 0, $marker.'_',$profile->getColumnNames());
+    $markerArray['###'.$marker.'_SIGN###'] = $profile->getSign();
+    $wrappedSubpartArray = array();
+    $subpartArray = array();
+    $this->prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
     
-    if($link && $profile->hasReport()) {
-      $link->parameters(array('profileId' => $profile->uid));
-      $wrappedSubpartArray['###'.$profileMarker.'_LINK###'] = explode($token, $link->makeTag());
-    }
-    else
-      $wrappedSubpartArray['###'.$profileMarker.'_LINK###'] = $noLink;
-
     // Jetzt die Bilder einbinden
-    $subpartArray['###'.$profileMarker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $profileConfId, $profileMarker);
+    $subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
 
 
     $out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -140,6 +128,27 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
     }
     return $out;
   }
+	/**
+	 * Links vorbereiten
+	 *
+	 * @param tx_cfcleaguefe_models_profile $profile
+	 * @param string $marker
+	 * @param array $markerArray
+	 * @param array $wrappedSubpartArray
+	 * @param string $confId
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 */
+	private function prepareLinks(&$profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+
+//		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
+		if($profile->hasReport()) {
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showprofile', $marker, array('profileId' => $profile->uid));
+		}
+		else {
+		$linkMarker = $marker . '_' . strtoupper('showprofile').'LINK';
+		$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
+		}
+	}
 }
 
 

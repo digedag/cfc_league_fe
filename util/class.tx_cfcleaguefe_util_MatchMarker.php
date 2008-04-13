@@ -25,17 +25,19 @@
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
+tx_div::load('tx_rnbase_util_BaseMarker');
+
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich
  */
-class tx_cfcleaguefe_util_MatchMarker {
+class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	private $fullMode = true;
 
   /**
    * Erstellt eine neue Instanz
    * @param $$options Array with options. not used until now.
    */
-  function tx_cfcleaguefe_util_MatchMarker(&$options = null) {
+  function tx_cfcleaguefe_util_MatchMarker(&$options = array()) {
     // Den TeamMarker erstellen
     $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
     $this->teamMarker = new $markerClass;
@@ -55,50 +57,43 @@ class tx_cfcleaguefe_util_MatchMarker {
    * @param $template das HTML-Template
    * @param tx_cfcleaguefe_models_match $match das Spiel
    * @param $formatter der zu verwendente Formatter
-   * @param $profileConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
-   * @param $link Link-Instanz, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-   * @param $profileMarker Name des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
-   *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
+   * @param $matchConfId Pfad der TS-Config des Spiels, z.B. 'listView.match.'
+   * @param $matchMarker Name des Markers für ein Spiel, z.B. MATCH
    * @return String das geparste Template
    */
-  public function parseTemplate($template, &$match, &$formatter, $matchConfId, $matchMarker = 'MATCH') {
-    if(!is_object($match)) {
-      return $formatter->configurations->getLL('match.notFound');
-    }
-    $this->initLinks($formatter->configurations, $matchConfId);
+	public function parseTemplate($template, &$match, &$formatter, $matchConfId, $matchMarker = 'MATCH') {
+		if(!is_object($match)) {
+			return $formatter->configurations->getLL('match.notFound');
+		}
 //$time = t3lib_div::milliseconds();
     
-    $this->prepareFields($match);
-    // Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
-    if($this->fullMode)
-	    $this->addDynamicMarkers($template, $match, $formatter, $matchConfId,$matchMarker);
-    // Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
-    $markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $matchConfId, 0, $matchMarker.'_');
-    
-    $subpartArray = array();
-    // Es wird jetzt das Template verändert und die Daten der Teams eingetragen
-    if($this->fullMode) {
-	    $template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $matchConfId.'home.', 'MATCH_HOME');
-  	  $template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $matchConfId.'guest.', 'MATCH_GUEST');
-	    $this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
-	    $this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
-    }
-    // Add competition
-	  $template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $matchConfId.'competition.', 'MATCH_COMPETITION');
-    
-    $wrappedSubpartArray = array('###'.$matchMarker.'_LINK###' => $noLink, 
-                                 '###'.$matchMarker.'_HOME_LINK###' => $noLink, 
-                                 '###'.$matchMarker.'_GUEST_LINK###' => $noLink);
+		$this->prepareFields($match);
+		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
+		if($this->fullMode)
+			$this->addDynamicMarkers($template, $match, $formatter, $matchConfId,$matchMarker);
+		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
+		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $matchConfId, 0, $matchMarker.'_');
+		$wrappedSubpartArray = array();
+		$subpartArray = array();
+		$this->prepareLinks($match, $matchMarker, $markerArray, $subpartArray, $wrappedSubpartArray, $matchConfId, $formatter);
 
-    $this->prepareLinks($match, $matchMarker, $markerArray, $wrappedSubpartArray);
-
-    $this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
+		// Es wird jetzt das Template verändert und die Daten der Teams eingetragen
+		$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $matchConfId.'home.', $matchMarker.'_HOME');
+		$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $matchConfId.'guest.', $matchMarker.'_GUEST');
+		if($this->fullMode) {
+			$this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
+			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
+		}
+		// Add competition
+		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $matchConfId.'competition.', 'MATCH_COMPETITION');
+    
+		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
 //$total['total'] = t3lib_div::milliseconds() - $time;
 //if($total['total'] > 40	)
 //t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
     
-    return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-  }
+		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+	}
 
   /**
    * Im folgenden werden einige Personenliste per TS aufbereitet. Jede dieser Listen 
@@ -166,29 +161,6 @@ class tx_cfcleaguefe_util_MatchMarker {
                                                $markerArray, $subpartArray, $wrappedSubpartArray);
   }
 
-  /**
-   * Vorbereiten der Links 
-   *
-   * @param tx_cfcleaguefe_models_match $match
-   * @param string $matchMarker
-   * @param array $markerArray
-   * @param array $wrappedSubpartArray
-   */
-  private function prepareLinks(&$match, $matchMarker, &$markerArray, &$wrappedSubpartArray) {
-    // Links vorbereiten
-    if($this->links['match'] && $match->hasReport()) {
-      $link = $this->links['match'];
-      $link->parameters(array('matchId' => $match->uid));
-      $wrappedSubpartArray['###'.$matchMarker.'_LINK###'] = explode($this->token, $link->makeTag());
-      $markerArray['###'.$matchMarker.'_LINK_URL###'] = $link->makeUrl();
-    }
-    if($this->links['ticker'] && $match->isTicker()) {
-      $link = $this->links['ticker'];
-      $link->parameters(array('matchId' => $match->uid));
-      $wrappedSubpartArray['###'.$matchMarker.'_TICKER_LINK###'] = explode($this->token, $link->makeTag());
-      $markerArray['###'.$matchMarker.'_TICKER_LINK_URL###'] = $link->makeUrl();
-    }
-  }
   
   /**
    * Hinzufügen der Bilder des Spiels. Das erste Bild wird gesondert gemarkert, die restlichen 
@@ -292,20 +264,32 @@ class tx_cfcleaguefe_util_MatchMarker {
     $gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
   }
 
-  /**
-   * Create Links
-   *
-   * @param tx_rnbase_configurations $configurations
-   * @param string $teamConfId
-   */
-  protected function initLinks(&$configurations, $confId) {
-
-    $this->token = md5(microtime());
-  	$this->links['match'] =& $configurations->createLink();
-    $this->links['match']->destination(intval($configurations->get($confId.'links.match.parameter')));
-    $this->links['match']->label($this->token);
-  }
-  
+	/**
+	 * Links vorbereiten
+	 *
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param string $marker
+	 * @param array $markerArray
+	 * @param array $wrappedSubpartArray
+	 * @param string $confId
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 */
+	private function prepareLinks(&$match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+		if($match->hasReport()) {
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'report', $marker, array('matchId' => $match->uid));
+		}
+		else {
+			$linkMarker = $marker . '_' . strtoupper('report').'LINK';
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
+		}
+		if($match->isTicker()) {
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'ticker', $marker, array('matchId' => $match->uid));
+		}
+		else {
+			$linkMarker = $marker . '_' . strtoupper('ticker').'LINK';
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
+		}
+	}
 }
 
 
