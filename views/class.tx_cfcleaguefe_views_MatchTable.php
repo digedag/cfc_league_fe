@@ -32,59 +32,26 @@ tx_div::load('tx_rnbase_view_Base');
  */
 class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base {
 
-  /**
-   * Erstellen des Frontend-Outputs
-   */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-    // Den entscheidenden Teil herausschneiden
-    $templateCode = $cObj->getSubpart($templateCode, '###MATCHTABLE###');
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
-
-    $out = $this->_createView($templateCode, $viewData, $configurations);
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
+    $out = $this->_createView($template, $viewData, $configurations);
     return $out;
-  }
-
+	}
+	
+  function getMainSubpart() {return '###MATCHTABLE###';}
+	
   /**
    * Erstellung des Outputstrings
    */
   function _createView($template, &$viewData, &$configurations) {
     $cObj =& $this->formatter->cObj;
     $matches = $viewData->offsetGet('matches');
-    $subTemplate = $cObj->getSubpart($template, '###MATCH###');
-    $freeTemplate = $cObj->getSubpart($template, '###MATCH_FREE###');
-//------------ Check TS!!
-    $rowRoll = intval($configurations->get('matchtable.match.roll.value'));
-    $rowRollCnt = 0;
-    $parts = array();
-
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-    $matchMarker = new $markerClass($this->links);
-
-    foreach($matches As $match){
-      $match->record['roll'] = $rowRollCnt;
-
-      if($match->isDummy()) {
-        $parts[] = $matchMarker->parseTemplate($freeTemplate, $match, $this->formatter, 'matchtable.match.', 'MATCH');
-      }
-      else {
-        $parts[] = $matchMarker->parseTemplate($subTemplate, $match, $this->formatter, 'matchtable.match.', 'MATCH');
-      }
-
-//      $parts[] = $this->_fillMatchTemplate($subTemplate, $match, $this->link, $this->linkTeam, $configurations);
-
-      $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
-    }
-
-    // Jetzt die einzelnen Teile zusammenfügen
-    $subpartArray['###MATCH###'] = implode($parts, $configurations->get('matchtable.match.implode'));
-    $subpartArray['###MATCH_FREE###'] = '';
-
-    $markerArray = array('###MATCHCOUNT###' => count($matches), );
-    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+	  $builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
+	  $listBuilder = new $builderClass(tx_div::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
+	  
+    $out = $listBuilder->render($matches, 
+    								$viewData, $template, 'tx_cfcleaguefe_util_MatchMarker', 
+    								'matchtable.match.', 'MATCH', $this->formatter);
+    return $out;
   }
 
   /**
@@ -102,15 +69,6 @@ class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base {
       $link->designatorString = $configurations->getQualifier();
       $link->destination($reportPage); // Das Ziel der Seite vorbereiten
       $this->links['match'] = $link;
-    }
-
-    $teamPage = $configurations->get('matchtable.teamPage');
-    if($teamPage) {
-      $linkTeam = new $linkClass;
-      $linkTeam->designatorString = $configurations->getQualifier();
-      $linkTeam->destination($teamPage); // Das Ziel der Seite vorbereiten
-
-      $this->links['team'] = $linkTeam;
     }
   }
 
