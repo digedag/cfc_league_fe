@@ -146,8 +146,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
         $this->_teamData[$penalty->record['team']]['points'] -= $penalty->record['points_pos'];
         $this->_teamData[$penalty->record['team']]['points2'] += $penalty->record['points_neg'];
 
-        $this->_teamData[$penalty->record['team']]['goals1'] -= $penalty->record['goals_pos'];
-        $this->_teamData[$penalty->record['team']]['goals2'] += $penalty->record['goals_neg'];
+        $this->addGoals($penalty->record['team'], ($penalty->record['goals_pos'] * -1), $penalty->record['goals_neg']);
 
         $this->_teamData[$penalty->record['team']]['matchCount'] += $penalty->record['matches'];
         $this->_teamData[$penalty->record['team']]['winCount'] += $penalty->record['wins'];
