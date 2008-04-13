@@ -54,9 +54,9 @@
 
 
 <!-- Other Messages -->
-			<label index="profile.notFound">Profile not found</label>
-			<label index="profile.unknownLastname">Unknown</label>
-			<label index="profile.unknownFirstname"></label>
+			<label index="profile_notFound">Profile not found</label>
+			<label index="profile_unknownLastname">Unknown</label>
+			<label index="profile_unknownFirstname"></label>
 			<label index="team_notFound">Team not found</label>
 			<label index="teamlist_empty">No teams found.</label>
 			<label index="statistics_noTypeFound">No statistics type defined.</label>

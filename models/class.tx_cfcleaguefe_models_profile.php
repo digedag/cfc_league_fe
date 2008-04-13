@@ -58,8 +58,8 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     }
     if(intval($profile->uid) < 0) {
       // Bei unbekannten Profilen holen wir den Namen aus der Config
-      $profile->record['last_name'] = $formatter->configurations->getLL('profile.unknownLastname');
-      $profile->record['first_name'] = $formatter->configurations->getLL('profile.unknownFirstname');
+      $profile->record['last_name'] = $formatter->configurations->getLL('profile_unknownLastname');
+      $profile->record['first_name'] = $formatter->configurations->getLL('profile_unknownFirstname');
 //      t3lib_div::debug($formatter->configurations->getLL('player.unknownLastname'),'mdl_profile');
     }
 // TODO Das sollte dynamisch gestaltet werden, damit alle Daten der Tabelle verwendet
