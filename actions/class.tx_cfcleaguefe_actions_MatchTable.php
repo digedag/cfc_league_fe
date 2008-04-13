@@ -59,7 +59,7 @@ class tx_cfcleaguefe_actions_MatchTable {
     // Spielplan für ein Team
     $teamId = $configurations->get('matchtable.teamId');
     if(!$teamId && $configurations->get('matchtable.acceptTeamIdFromRequest')) {
-      $teamId = $parameters->offsetGet('$teamId');
+      $teamId = $parameters->offsetGet('teamId');
     }
     $matchTable->setTeam($teamId);
 
