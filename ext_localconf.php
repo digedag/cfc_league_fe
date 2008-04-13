@@ -27,7 +27,7 @@ if(intval($confArr['enableCalService'])) {
 
 t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerStatistics' /* sv key */,
   array(
-    'title' => 'Player Statistics', 'description' => 'Statistical data about players', 'subtype' => 'player',
+    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.player', 'description' => 'Statistical data about players', 'subtype' => 'player',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_PlayerStatistics.php',
@@ -37,7 +37,7 @@ t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_c
 
 t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_ScorerStatistics' /* sv key */,
   array(
-    'title' => 'Scorer Statistics', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
+    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.scorerlist', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_ScorerStatistics.php',
@@ -47,7 +47,7 @@ t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_c
 
 t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_AssistStatistics' /* sv key */,
   array(
-    'title' => 'Assist Statistics', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
+    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.assistlist', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_AssistStatistics.php',
@@ -57,7 +57,7 @@ t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_c
 
 t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' /* sv key */,
   array(
-    'title' => 'Summery of player statistics', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
+    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.playersummary', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_PlayerSummaryStatistics.php',
@@ -67,11 +67,21 @@ t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_c
 
 t3lib_extMgm::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_VisitorStatistics' /* sv key */,
   array(
-    'title' => 'Visitor statistics', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
+    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.visitors', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_VisitorStatistics.php',
     'className' => 'tx_cfcleaguefe_sv2_VisitorStatistics',
+  )
+);
+
+t3lib_extMgm::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Matches' /* sv key */,
+  array(
+    'title' => 'Team services', 'description' => 'Service functions for match access', 'subtype' => 'match',
+    'available' => TRUE, 'priority' => 50, 'quality' => 50,
+    'os' => '', 'exec' => '',
+    'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Matches.php',
+    'className' => 'tx_cfcleaguefe_sv1_Matches',
   )
 );
 

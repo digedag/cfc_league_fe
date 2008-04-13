@@ -30,17 +30,40 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
  * Services
  */
 class tx_cfcleaguefe_util_ServiceRegistry {
+	/**
+	 * Liefert die vorhandenen Statistic-Services für die Auswahl im Flexform
+	 *
+	 */
+	function lookupStatistics($config) {
+		$services = self::lookupServices('cfcleague_statistics');
+		foreach ($services As $subtype => $info) {
+			$title = $info['title'];
+			if(substr($title, 0, 4) === 'LLL:') {
+				$title = $GLOBALS['LANG']->sL($title);
+			}
+			$config['items'][] = array($title, $subtype);
+		}
+		return $config;
+	}
+	
 
 	/**
-	 * Liefert den Akag-Service
+	 * Liefert den Match-Service
+	 * @return tx_cfcleaguefe_MatchService
+	 */
+	static function getMatchService() {
+		return self::getService('cfcleague_data', 'match');
+	}
+	/**
+	 * Liefert den Team-Service
 	 * @return tx_cfcleaguefe_TeamService
 	 */
 	static function getTeamService() {
 		return self::getService('cfcleague_data', 'team');
 	}
 	/**
-	 * Liefert den Akag-Service
-	 * @return tx_cfcleaguefe_TeamService
+	 * Liefert den Wettbewerbsservice
+	 * @return tx_cfcleaguefe_CompetitionService
 	 */
 	static function getCompetitionService() {
 		return self::getService('cfcleague_data', 'competition');
@@ -53,6 +76,25 @@ class tx_cfcleaguefe_util_ServiceRegistry {
       return tx_rnbase_util_Misc::mayday('Service ' . $type . ' - ' . $subType . ' not found!');;
     }
     return $srv;
+	}
+	/**
+	 * Returns an array with all subtypes for given service key.
+	 *
+	 * @param string $type
+	 */
+	static function lookupServices($serviceType) {
+		global $T3_SERVICES;
+		$priority = array(); // Remember highest priority
+		$services = array();
+		if(is_array($T3_SERVICES[$serviceType])) {
+			foreach($T3_SERVICES[$serviceType] As $key => $info) {
+				if($info['available'] AND (!isset($priority[$info['subtype']]) || $info['priority'] >= $priority[$info['subtype']]) ) {
+					$priority[$info['subtype']] = $info['priority'];
+					$services[$info['subtype']] = $info;
+				}
+			}
+		}
+		return $services;
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_ServiceRegistry.php'])	{
