@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2006 Rene Nitzsche
+ *  (c) 2008 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -25,16 +25,8 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
 tx_div::load('tx_rnbase_util_SearchBase');
 
-define('AKAGSRV_FIELD_AKAG_NAME', 'AKAG.NAME');
-define('AKAGSRV_FIELD_AKAG_SORTING', 'AKAG.SORTING');
-define('AKAGSRV_FIELD_AKAG_BESCHREIBUNG', 'AKAG.BESCHREIBUNG');
-define('AKAGSRV_FIELD_AKAG_RUBRIK', 'AKAG.RUBRIK');
-define('AKAGSRV_FIELD_AKAG_THEMEN', 'AKAG.THEMEN');
-define('AKAGSRV_FIELD_MEMBER_PERSON', 'MEMBER.PERSON');
-define('AKAGSRV_FIELD_MANDAT_PERSON', 'MANDAT.PERSON');
-define('AKAGSRV_FIELD_MANDAT_FUNKTION', 'MANDAT.FUNKTION');
-define('AKAGSRV_FIELD_MANDAT_SORTING', 'MANDAT.SORTING');
-define('AKAGSRV_FIELD_MANDAT_GRUPPENTYP', 'MANDAT.GRUPPENTYP');
+define('COMPSRV_FIELD_COMP_NAME', 'COMP.NAME');
+define('COMPSRV_FIELD_TEAM_NAME', 'TEAM.NAME');
 
 /**
  * Class to search comptitions from database
