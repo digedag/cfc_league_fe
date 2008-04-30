@@ -31,100 +31,69 @@ tx_div::load('tx_rnbase_view_Base');
  * Viewklasse für die Anzeige eines Personenprofils
  */
 class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base {
-  /**
-   * Erstellen des Frontend-Outputs
-   */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-
-
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
+	/**
+	 * Create fe output
+	 *
+	 * @param string $template
+	 * @param arrayobject $viewData
+	 * @param tx_rnbase_configurations $configurations
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @return string
+	 */
+	function createOutput($template, &$viewData, &$configurations, &$formatter) {
     $data =& $viewData->offsetGet('data');
-
-//    t3lib_div::debug($data, 'vw_stats');
-    
-    $template = $cObj->getSubpart($templateCode,'###STATISTICS###');
-    
-//    $out = $template;
-    $out = $this->_createView($template, $data, $cObj, $configurations);
-    return $out;
-  }
-
-  function _createView($template, &$data, &$cObj, &$configurations) {
     if(!count($data)) return $template; // ohne Daten gibt's keine Marker
 
-    // Jetzt über die einzelnen Statistiken iterieren
-    $markerArray = array();
-    $subpartArray = $this->_getSubpartArray($configurations);
-    $parts = array();
-    foreach ($data as $type => $stats) {
-    	$service = t3lib_div::makeInstanceService('cfcleague_statistics', $type);
-      if(!is_object($service)) // Ohne den Service geht nix
-        continue;
-      $srvTemplate = $cObj->getSubpart($template,'###STATISTIC_'.strtoupper($type).'###');
-      // Der Service muss jetzt den Marker liefert
-      $srvMarker = $service->getMarker($configurations);
-      $subpartArray['###STATISTIC_'.strtoupper($type).'###'] = $srvMarker->parseTemplate($srvTemplate, $stats, $this->formatter, 'statistics.'.$type.'.', strtoupper($type));
-    }
+    $cObj =& $configurations->getCObj(0);
+		// Jetzt über die einzelnen Statistiken iterieren
+		$markerArray = array();
+		$subpartArray = $this->_getSubpartArray($configurations);
+		$parts = array();
+		$services = tx_cfcleaguefe_util_ServiceRegistry::lookupServices('cfcleague_statistics');
+		foreach($services As $subtype => $info) {
+			// Init all stats with empty subpart
+			$subpartArray['###STATISTIC_'.strtoupper($subtype).'###'] = '';
+		}
+
+		foreach ($data as $type => $stats) {
+			$service = t3lib_div::makeInstanceService('cfcleague_statistics', $type);
+			if(!is_object($service)) // Ohne den Service geht nix
+				continue;
+			$srvTemplate = $cObj->getSubpart($template,'###STATISTIC_'.strtoupper($type).'###');
+			// Der Service muss jetzt den Marker liefert
+			$srvMarker = $service->getMarker($configurations);
+			$subpartArray['###STATISTIC_'.strtoupper($type).'###'] = $srvMarker->parseTemplate($srvTemplate, $stats, $configurations->getFormatter(), 'statistics.'.$type.'.', strtoupper($type));
+		}
 //t3lib_div::debug($subpartArray, 'tx_cfcleaguefe_views_Statistics');
-    $out = $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
+ 		$out = $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
+		return $out;
+	}
 
-/*
-//    $token = md5(microtime());
-//    $this->linkMatch->label($token);
-    $emptyArr = array();
-//    $noLink = array('','');
+	/**
+	 * Erstellt das initiale Subpart-Array. Alle möglichen Servicetemplates sind
+	 * bereits leer enthalten
+	 *
+	 * @param tx_rnbase_configurations $configurations
+	 * @return array
+	 */
+	function _getSubpartArray(&$configurations) {
+		$ret = array();
+		// Flexform auslesen
+		$flex =& $configurations->getFlexFormArray();
+		$types = $this->_getItemsArrayFromFlexForm($flex, 's_statistics', 'statisticTypes');
+		foreach($types As $type) {
+			$ret['###STATISTIC_'.strtoupper($type[1]).'###'] = '';
+		}
+		return $ret;
+	}
 
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-    $matchMarker = new $markerClass($this->links);
+	function _getItemsArrayFromFlexForm($flexArr, $sheetName, $valueName) {
+		return $flexArr['sheets'][$sheetName]['ROOT']['el'][$valueName]['TCEforms']['config']['items'];
+	}
 
-    for($i=0; $i < count($matches); $i++) {
-      $match = $matches[$i];
-
-      $parts[] = $matchMarker->parseTemplate($matchTemplate, $match, $this->formatter, 'tickerlist.match.', 'MATCH');
-    }
-    // Jetzt die einzelnen Teile zusammenfügen
-    $subpartArray['###MATCH###'] = implode($parts, $configurations->get('tickerlist.match.implode'));
-
-    // Zum Schluß das Haupttemplate zusammenstellen
-//    $template = $cObj->getSubpart($template,'###MATCHES###');
-    $markerArray = array();
-//    $subpartArray['###MATCH###'] = $out;
-    $out = $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
-*/
-    return $out;
-  }
-
-  /**
-   * Erstellt das initiale Subpart-Array. Alle möglichen Servicetemplates sind
-   * bereits leer enthalten
-   *
-   * @param tx_rnbase_configurations $configurations
-   * @return array
-   */
-  function _getSubpartArray(&$configurations) {
-    $ret = array();
-    // Flexform auslesen
-    $flex =& $configurations->getFlexFormArray();
-    $types = $this->_getItemsArrayFromFlexForm($flex, 's_statistics', 'statisticTypes');
-    foreach($types As $type) {
-      $ret['###STATISTIC_'.strtoupper($type[1]).'###'] = '';
-    }
-    return $ret;
-  }
-
-  function _getItemsArrayFromFlexForm($flexArr, $sheetName, $valueName) {
-    return $flexArr['sheets'][$sheetName]['ROOT']['el'][$valueName]['TCEforms']['config']['items'];
-  }
-  
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
-
-  }
-
+	function getMainSubpart(&$viewData) {
+		return '###STATISTICS###';
+	}
 }
 
 
