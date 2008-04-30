@@ -688,6 +688,10 @@ plugin.tx_cfcleaguefe_report {
       file.maxH = 40
       wrap = <br />|
     }
+    options.orderby {
+      PROFILE.LAST_NAME = asc
+      PROFILE.FIRST_NAME = asc
+    }
   }
   profileview {
     profile =< lib.t3sports.profile
