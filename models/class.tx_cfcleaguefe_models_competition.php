@@ -22,9 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// Die Datenbank-Klasse
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
-require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
+tx_div::load('tx_rnbase_model_base');
 
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
@@ -119,20 +117,36 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
     $parts = intval($this->record['match_parts']);
     return $parts > 0 ? $parts : 2;
   }
-  /**
-   * Liefert ein Array mit allen Spielrunden der Liga
-   * 
-   * @return array
-   */
-  function getRounds(){
-    # build SQL for select
-    $what = 'distinct round as uid,round AS number,round_name As name, max(status) As finished';
+	/**
+	 * Liefert ein Array mit allen Spielrunden der Liga
+	 * 
+	 * @return array
+	 */
+	function getRounds(){
+		# build SQL for select
+		$what = 'distinct round as uid,round AS number,round_name As name, max(status) As finished';
     
-    # WHERE
-    # Die UID der Liga setzen
-    $where = 'competition="'.$this->uid.'"';
+		# WHERE
+		# Die UID der Liga setzen
+		$where = 'competition="'.$this->uid.'"';
 
-    return tx_rnbase_util_DB::queryDB($what,'tx_cfcleague_games',$where, 'round,round_name','round','tx_cfcleaguefe_models_competition_round');
+		return tx_rnbase_util_DB::queryDB($what,'tx_cfcleague_games',$where, 'round,round_name','round','tx_cfcleaguefe_models_competition_round');
+	}
+	/**
+	 * Liefert die Spiele einer bestimmten Spielrunde
+	 *
+	 * @param int $roundId
+	 */
+	function getMatchesByRound($roundId) {
+		$fields = array();
+		$options = array();
+	  $fields['MATCH.ROUND'][OP_EQ_INT] = $roundId;
+	  $fields['MATCH.COMPETITION'][OP_EQ_INT] = $this->uid;
+//	  $options['debug'] = 1;
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+  	$matches = $service->search($fields, $options);
+//t3lib_div::debug($roundId, 'tx_cfcleaguefe_models_competition'); // TODO: Remove me!
+  	return $matches;
   }
 
   /**
@@ -160,6 +174,7 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
    * @return tx_cfcleaguefe_models_group
    */
   function getGroup() {
+		tx_div::load('tx_cfcleaguefe_models_group');
   	return tx_cfcleaguefe_models_group::getInstance($this->record['agegroup']);
   }
   /**
@@ -194,6 +209,7 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
   /**
    * Returns an instance of tx_cfcleaguefe_models_competition
    * @param int $uid
+   * @return tx_cfcleaguefe_models_competition
    */
   public static function &getInstance($uid, $record = 0) {
     $uid = intval($uid);
