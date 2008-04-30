@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2008 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -98,24 +98,6 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
   }
 	
   /**
-   * Sucht den Spieler, der gezeigt werden soll.
-   */
-  function findProfiles($firstChar, &$configurations) {
-
-    $what = '*';
-    $from = 'tx_cfcleague_profiles';
-    $options['where'] = "LEFT(UCASE(last_name),1) = '$firstChar' ";
-    $options['pidlist'] = $configurations->get('profilelistPages');
-    $options['recursive'] = $configurations->get('profilelistRecursive');
-    $options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
-    $options['orderby'] = 'last_name,first_name';
-
-    $rows = tx_rnbase_util_DB::doSelect($what,$from,$options,0);
-
-    return $rows;
-  }
-
-  /**
    * Wir verwenden einen alphabetischen Pager. Also muß zunächst ermittelt werden, welche
    * Buchstaben überhaupt vorkommen.
    * @param tx_cfcleaguefe_ProfileService $service
@@ -158,15 +140,6 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
     $data['list'] = $ret;
     $data['default'] = $current;
     return $data;
-
-//t3lib_div::debug($rows, 'act_proflist');
-/*
-SELECT LEFT(UCASE(`last_name`),1), count(LEFT(UCASE(`last_name`),1)) 
-FROM `tx_cfcleague_profiles` 
-WHERE 1
-GROUP BY LEFT(UCASE(`last_name`),1)
-*/
-
   }
   /**
    * Liefert die Anzahl der Ergebnisse pro Seite
