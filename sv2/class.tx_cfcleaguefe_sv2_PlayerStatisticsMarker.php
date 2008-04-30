@@ -59,8 +59,10 @@ class tx_cfcleaguefe_sv2_PlayerStatisticsMarker {
 				continue; // Ohne Spieler wird auch nix gezeigt
 			unset($playerStat['player']); // PHP 5.2, sonst klappt der merge nicht
 			$player->record = array_merge($playerStat, $player->record);
+			$player->record['roll'] = $rowRollCnt;
 			// Jetzt für jedes Profil das Template parsen
 			$parts[] = $profileMarkerObj->parseTemplate($playerTemplate, $player, $formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
+			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 		}
 		// Jetzt die einzelnen Teile zusammenfügen
 		$subpartArray['###'.$statsMarker.'_PROFILE###'] = implode($parts, $configurations->get($statsMarker.'profile.implode'));
