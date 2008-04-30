@@ -38,7 +38,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
     return $out;
 	}
 	
-  function getMainSubpart() {return '###LEAGUE_TABLE###';}
+  function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
 	
   /**
    * Erstellung des Outputstrings
