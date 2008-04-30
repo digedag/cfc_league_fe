@@ -33,8 +33,7 @@ tx_div::load('tx_rnbase_action_BaseIOC');
  * jeden Buchstaben eine eigene Seite erstellt.
  */
 class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
-		
-	
+
 	/**
 	 * handle request
 	 *
@@ -65,26 +64,27 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 		$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
 		$pageBrowser = new $className('profiles');
 		$pageSize = $this->getPageSize($parameters, $configurations);
-    //Wurde neu gesucht?
-    if($parameters->offsetGet('plnewsearch')) {
-    	$pageBrowser->setState(null, $listSize, $pageSize);
-    	$configurations->removeKeepVar('plnewsearch');    
-    }
-    else {
-    	$pageBrowser->setState($parameters, $listSize, $pageSize);
-    }
-    $limit = $pageBrowser->getState();
-    $options = array_merge($options, $limit);
+		//Wurde neu gesucht?
+		if($parameters->offsetGet('plnewsearch')) {
+			$pageBrowser->setState(null, $listSize, $pageSize);
+			$configurations->removeKeepVar('plnewsearch');
+		}
+		else {
+			$pageBrowser->setState($parameters, $listSize, $pageSize);
+		}
+		$limit = $pageBrowser->getState();
+		$options = array_merge($options, $limit);
 		$result = $service->search($fields, $options);
 		$viewData->offsetSet('profiles', $result);
-    $viewData->offsetSet('pagebrowser', $pageBrowser);
+		$viewData->offsetSet('pagebrowser', $pageBrowser);
 
-    return null;
+		return null;
 	}
   protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar) {
   	// ggf. die Konfiguration aus der TS-Config lesen
   	tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
   	tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
+
   	if($firstChar) {
 			$specials = tx_rnbase_util_SearchBase::getSpecialChars();
 			$firsts = $specials[$firstChar];
