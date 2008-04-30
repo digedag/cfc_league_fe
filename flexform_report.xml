@@ -400,7 +400,7 @@
               </config>
             </TCEforms>
           </profilelistPage>
-          <profilelistPages>
+          <profilelist.options.pidlist>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:lang/locallang_general.php:LGL.startingpoint</label>
@@ -414,8 +414,8 @@
                 <show_thumbs>1</show_thumbs>
               </config>
             </TCEforms>
-          </profilelistPages>
-          <profilelistRecursive>
+          </profilelist.options.pidlist>
+          <profilelist.options.recursive>
             <TCEforms>
               <label>LLL:EXT:lang/locallang_general.php:LGL.recursive</label>
               <config>
@@ -451,7 +451,15 @@
                  <size>1</size>
               </config>
             </TCEforms>
-          </profilelistRecursive>
+          </profilelist.options.recursive>
+          <profilelist.charbrowser>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.charbrowser</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </profilelist.charbrowser>
           <profilelistTemplate>
             <TCEforms>
               <exclude>1</exclude>

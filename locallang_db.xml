@@ -95,6 +95,7 @@
 			<label index="plugin.report.sign.libra">Libra</label>
 			<label index="plugin.report.sign.scorpio">Scorpio</label>
 			<label index="plugin.report.sign.sagittarius">Sagittarius</label>
+			<label index="plugin.report.flexform.charbrowser">Characterbrowser</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -181,6 +182,8 @@
 			<label index="plugin.report.sign.libra">Waage</label>
 			<label index="plugin.report.sign.scorpio">Skorpion</label>
 			<label index="plugin.report.sign.sagittarius">Schütze</label>
+
+			<label index="plugin.report.flexform.charbrowser">Buchstaben-Menu</label>
 
 		</languageKey>
 	</data>
