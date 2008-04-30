@@ -105,4 +105,14 @@ t3lib_extMgm::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleag
   )
 );
 
+t3lib_extMgm::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Profiles' /* sv key */,
+  array(
+    'title' => 'Profile services', 'description' => 'Service functions for profile access', 'subtype' => 'profile',
+    'available' => TRUE, 'priority' => 50, 'quality' => 50,
+    'os' => '', 'exec' => '',
+    'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Profiles.php',
+    'className' => 'tx_cfcleaguefe_sv1_Profiles',
+  )
+);
+
 ?>
