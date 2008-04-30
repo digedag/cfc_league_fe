@@ -29,47 +29,45 @@
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_sv2_PlayerStatisticsMarker {
-  /**
-   * Fills template of player statistics service. 
-   *
-   * @param string $srvTemplate
-   * @param array $stats
-   * @param tx_rnbase_util_FormatUtil $formatter
-   * @param string $statsConfId
-   * @param string $statsMarker
-   * @return string
-   */
-  function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker) {
-    $configurations =& $formatter->configurations;
-    // Das Template für einen Spieler holen
-    $playerTemplate = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_PROFILE###');
+	/**
+	 * Fills template of player statistics service. 
+	 *
+	 * @param string $srvTemplate
+	 * @param array $stats
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $statsConfId
+	 * @param string $statsMarker
+	 * @return string
+	 */
+	function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker) {
+		$configurations =& $formatter->configurations;
+		// Das Template für einen Spieler holen
+		$playerTemplate = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_PROFILE###');
 
-    // Es wird der ProfileMarker verwendet
-    $profileMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ProfileMarker');
-    $profileMarkerObj = new $profileMarkerClass;
-    $profileMarkerObj->initLabelMarkers($formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
-    $markerArray = $profileMarkerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
+		// Es wird der ProfileMarker verwendet
+		$profileMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ProfileMarker');
+		$profileMarkerObj = new $profileMarkerClass;
+		$profileMarkerObj->initLabelMarkers($formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
+		$markerArray = $profileMarkerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
 
-    $rowRoll = intval($configurations->get($statsConfId.'profile.roll.value'));
-    $rowRollCnt = 0;
-    $parts = array();
-    foreach ($stats as $playerStat) {
-      $player = $playerStat['player'];
-    	if(!is_object($player))
-    	  continue; // Ohne Spieler wird auch nix gezeigt
-    	unset($playerStat['player']); // PHP 5.2, sonst klappt der merge nicht
-    	$player->record = array_merge($playerStat, $player->record);
-//    	$player->record = array_merge($playerStat, $player->record);
-    	// Jetzt für jedes Profil das Template parsen
-      $parts[] = $profileMarkerObj->parseTemplate($playerTemplate, $player, $formatter, $statsConfId.'profile.', $linkProfile, $statsMarker.'_PROFILE');
-    }
-    // Jetzt die einzelnen Teile zusammenfügen
-    $subpartArray['###'.$statsMarker.'_PROFILE###'] = implode($parts, $configurations->get($statsMarker.'profile.implode'));
+		$rowRoll = intval($configurations->get($statsConfId.'profile.roll.value'));
+		$rowRollCnt = 0;
+		$parts = array();
+		foreach ($stats as $playerStat) {
+			$player = $playerStat['player'];
+			if(!is_object($player))
+				continue; // Ohne Spieler wird auch nix gezeigt
+			unset($playerStat['player']); // PHP 5.2, sonst klappt der merge nicht
+			$player->record = array_merge($playerStat, $player->record);
+			// Jetzt für jedes Profil das Template parsen
+			$parts[] = $profileMarkerObj->parseTemplate($playerTemplate, $player, $formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
+		}
+		// Jetzt die einzelnen Teile zusammenfügen
+		$subpartArray['###'.$statsMarker.'_PROFILE###'] = implode($parts, $configurations->get($statsMarker.'profile.implode'));
 
-    $markerArray['###PLAYERCOUNT###'] = count($parts);
-    return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
-  }
-
+		$markerArray['###PLAYERCOUNT###'] = count($parts);
+		return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerStatisticsMarker.php']) {
