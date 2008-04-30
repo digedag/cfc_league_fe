@@ -23,7 +23,8 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
+tx_div::load('tx_rnbase_action_BaseIOC');
+
 
 
 /**
@@ -31,45 +32,71 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.ph
  * Die Liste wird sortiert nach Namen angezeigt. Dabei wird ein Pager verwendet, der für
  * jeden Buchstaben eine eigene Seite erstellt.
  */
-class tx_cfcleaguefe_actions_ProfileList {
-
-  /**
-   *
-   */
-  function execute($parameters,&$configurations){
+class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
+		
+	
+	/**
+	 * handle request
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewData
+	 * @return string
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewData) {
 // Zunächst sollten wir die Anfangsbuchstaben ermitteln
-    $pagerData = $this->findPagerData($configurations);
-    $defaultChar = 0;
-    if(count($pagerData)) {
-      $keys = array_keys($pagerData);
-      $defaultChar = $keys[0];
+    $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+		
+		if($configurations->get('profilelist.charbrowser')) {
+			$pagerData = $this->findPagerData($service, $configurations);
+
+			$firstChar = $parameters->offsetGet('charpointer');
+			$firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar,0,1) : $pagerData['default'];
+			$viewData->offsetSet('pagerData', $pagerData);
+			$viewData->offsetSet('charpointer', $firstChar);
+		}
+
+		$fields = array();
+		$options = array('count'=> 1);
+		$this->initSearch($fields, $options, $parameters, $configurations, $firstChar);
+		$listSize = $service->search($fields, $options);
+		unset($options['count']);
+		// PageBrowser initialisieren
+		$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
+		$pageBrowser = new $className('profiles');
+		$pageSize = $this->getPageSize($parameters, $configurations);
+    //Wurde neu gesucht?
+    if($parameters->offsetGet('plnewsearch')) {
+    	$pageBrowser->setState(null, $listSize, $pageSize);
+    	$configurations->removeKeepVar('plnewsearch');    
     }
+    else {
+    	$pageBrowser->setState($parameters, $listSize, $pageSize);
+    }
+    $limit = $pageBrowser->getState();
+    $options = array_merge($options, $limit);
+		$result = $service->search($fields, $options);
+		$viewData->offsetSet('profiles', $result);
+    $viewData->offsetSet('pagebrowser', $pageBrowser);
 
-    // Wir benötigen die aktuelle Seite
-    $firstChar = $parameters->offsetGet('pointer');
-    $firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar,0,1) : $defaultChar;
-
-    // Jetzt laden wir die Profile
-    $profiles = $this->findProfiles($firstChar, $configurations);
-
-
-    $viewData =& $configurations->getViewData();
-    $viewData->offsetSet('profiles', $profiles);
-    $viewData->offsetSet('pagerData', $pagerData);
-    $viewData->offsetSet('pointer', $firstChar);
-
-// t3lib_div::debug($viewData,'ac_proflist');
-
-    // View
-    $view = tx_div::makeInstance('tx_cfcleaguefe_views_ProfileList');
-    $view->setTemplatePath($configurations->getTemplatePath());
-    // Das Template wird komplett angegeben
-    $view->setTemplateFile($configurations->get('profilelistTemplate'));
-    $out = $view->render('profileview', $configurations);
-
-    return $out;
+    return null;
+	}
+  protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar) {
+  	// ggf. die Konfiguration aus der TS-Config lesen
+  	tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
+  	tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
+  	if($firstChar) {
+			$specials = tx_rnbase_util_SearchBase::getSpecialChars();
+			$firsts = $specials[$firstChar];
+			if($firsts) {
+				$firsts = implode('\',\'',$firsts);
+			}
+			else $firsts = $firstChar;
+  		
+  		$fields[SEARCH_FIELD_CUSTOM] = "LEFT(UCASE(last_name),1) IN ('$firsts') ";;
+  	}
   }
-
+	
   /**
    * Sucht den Spieler, der gezeigt werden soll.
    */
@@ -91,23 +118,46 @@ class tx_cfcleaguefe_actions_ProfileList {
   /**
    * Wir verwenden einen alphabetischen Pager. Also muß zunächst ermittelt werden, welche
    * Buchstaben überhaupt vorkommen.
+   * @param tx_cfcleaguefe_ProfileService $service
+   * @param tx_rnbase_configurations $configurations
    */
-  function findPagerData(&$configurations) {
+  function findPagerData(&$service, &$configurations) {
 
-    $what = 'LEFT(UCASE(last_name),1) As first_char, count(LEFT(UCASE(last_name),1)) As size';
-    $from = 'tx_cfcleague_profiles';
-//    $options['where'] = '1';
-    $options['pidlist'] = $configurations->get('profilelistPages');
-    $options['recursive'] = $configurations->get('profilelistRecursive');
+  	$options['what'] = 'LEFT(UCASE(last_name),1) As first_char, count(LEFT(UCASE(last_name),1)) As size';
     $options['groupby'] = 'LEFT(UCASE(last_name),1)';
+  	$fields = array();
+  	tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
+  	tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
 
-    $rows = tx_rnbase_util_DB::doSelect($what,$from,$options,0);
-    $ret = array();
+    $from = 'tx_cfcleague_profiles';
+
+    $rows = $service->search($fields, $options);
+
+    $specials = tx_rnbase_util_SearchBase::getSpecialChars();
+  	$wSpecials = array();
+  	foreach($specials As $key => $special) {
+  		foreach ($special As $char) {
+  			$wSpecials[$char] = $key;
+  		}
+  	}
+    
+  	$ret = array();
     foreach($rows As $row) {
-      $ret[$row['first_char']] = $row['size'];
+      if(array_key_exists(($row['first_char']), $wSpecials)) {
+      	$ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];
+      }
+      else
+	    	$ret[$row['first_char']] = $row['size'];
     }
-
-    return $ret;
+    
+    $current = 0;
+    if(count($ret)) {
+      $keys = array_keys($ret);
+      $current = $keys[0];
+    }
+    $data['list'] = $ret;
+    $data['default'] = $current;
+    return $data;
 
 //t3lib_div::debug($rows, 'act_proflist');
 /*
@@ -118,7 +168,19 @@ GROUP BY LEFT(UCASE(`last_name`),1)
 */
 
   }
-
+  /**
+   * Liefert die Anzahl der Ergebnisse pro Seite
+   *
+   * @param array $parameters
+   * @param tx_rnbase_configurations $configurations
+   * @return int
+   */
+  protected function getPageSize(&$parameters, &$configurations) {
+  	return intval($configurations->get('profilelist.profile.pagebrowser.limit'));
+  }
+  
+	function getTemplateName() {return 'profileview';}
+	function getViewClassName() { return 'tx_cfcleaguefe_views_ProfileList'; }
 
 }
 
