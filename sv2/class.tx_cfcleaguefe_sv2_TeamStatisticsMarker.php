@@ -47,25 +47,26 @@ class tx_cfcleaguefe_sv2_TeamStatisticsMarker extends tx_rnbase_util_BaseMarker 
     $rowRollCnt = 0;
     $parts = array();
     foreach ($stats as $teamStat) {
-      try {
-        $teamClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
-        $team = call_user_func(array($teamClass,'getInstance'), $teamStat['team']);
-      }
-      catch (Exception $e) {
-        continue; // Ohne Team wird auch nix gezeigt
-      }
-    	$team->record = array_merge($teamStat, $team->record);
-    	// Jetzt für jedes Team das Template parsen
-      $parts[] = $markerObj->parseTemplate($template, $team, $formatter, $statsConfId.'team.', $statsMarker.'_TEAM');
-    	
-    }
-    // Jetzt die einzelnen Teile zusammenfügen
-    $subpartArray['###'.$statsMarker.'_TEAM###'] = implode($parts, $configurations->get($statsMarker.'team.implode'));
+			try {
+				$teamClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
+				$team = call_user_func(array($teamClass,'getInstance'), $teamStat['team']);
+			}
+			catch (Exception $e) {
+				continue; // Ohne Team wird auch nix gezeigt
+			}
+			unset($playerStat['team']); // PHP 5.2, sonst klappt der merge nicht
+			$team->record = array_merge($teamStat, $team->record);
+			$team->record['roll'] = $rowRollCnt;
+			// Jetzt für jedes Team das Template parsen
+			$parts[] = $markerObj->parseTemplate($template, $team, $formatter, $statsConfId.'team.', $statsMarker.'_TEAM');
+			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
+		}
+		// Jetzt die einzelnen Teile zusammenfügen
+		$subpartArray['###'.$statsMarker.'_TEAM###'] = implode($parts, $configurations->get($statsMarker.'team.implode'));
 
-    $markerArray['###TEAMCOUNT###'] = count($parts);
-    return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
-    
-  }
+		$markerArray['###TEAMCOUNT###'] = count($parts);
+		return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
+	}
 
 }
 

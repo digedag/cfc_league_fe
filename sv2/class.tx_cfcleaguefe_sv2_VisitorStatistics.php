@@ -109,10 +109,10 @@ class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
    *
    * @param tx_rnbase_configurations $configurations
    */
-  public function getMarker($configurations) {
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_sv2_TeamStatisticsMarker');
-    return new $markerClass();
-  }
+	public function getMarker($configurations) {
+		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_sv2_TeamStatisticsMarker');
+		return new $markerClass();
+	}
   
   /**
    * Zählt die Zuschauer eines Spiels
