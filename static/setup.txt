@@ -30,6 +30,8 @@ lib.t3sports.competition {
 
 # Allgemeines Formatierungsangaben für Personen
 lib.t3sports.profile {
+  pagebrowser =< lib.t3sports.pagebrowser
+
   links {
     showprofile.pid = {$plugin.tx_cfcleaguefe_competition.playerpage}
   }
@@ -679,6 +681,7 @@ plugin.tx_cfcleaguefe_report {
   }
 
   profilelist {
+  	charbrowser = 0
     profile =< lib.t3sports.profile
     profile.firstImage {
       file.maxW = 40
