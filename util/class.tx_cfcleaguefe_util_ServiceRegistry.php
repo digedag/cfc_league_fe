@@ -46,7 +46,14 @@ class tx_cfcleaguefe_util_ServiceRegistry {
 		return $config;
 	}
 	
-
+	/**
+	 * Liefert den Profile-Service
+	 * @return tx_cfcleaguefe_ProfileService
+	 */
+	static function getProfileService() {
+		return self::getService('cfcleague_data', 'profile');
+	}
+	
 	/**
 	 * Liefert den Match-Service
 	 * @return tx_cfcleaguefe_MatchService
