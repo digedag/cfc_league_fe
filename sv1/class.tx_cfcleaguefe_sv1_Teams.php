@@ -37,18 +37,18 @@ interface tx_cfcleaguefe_TeamService {
  */
 class tx_cfcleaguefe_sv1_Teams extends t3lib_svbase implements tx_cfcleaguefe_TeamService  {
 
-  /**
-   * Search database for teams
-   *
-   * @param array $fields
-   * @param array $options
-   * @return array of tx_cfcleaguefe_models_team
-   */
-  function search($fields, $options) {
-  	tx_div::load('tx_rnbase_util_SearchBase');
+	/**
+	 * Search database for teams
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @return array of tx_cfcleaguefe_models_team
+	 */
+	function search($fields, $options) {
+		tx_div::load('tx_rnbase_util_SearchBase');
 		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Team');
 		return $searcher->search($fields, $options);
-  }
+	}
   
 }
 
