@@ -36,7 +36,7 @@ class tx_cfcleaguefe_sv2_TeamStatisticsMarker extends tx_rnbase_util_BaseMarker 
     $configurations =& $formatter->configurations;
     // Das Template für ein Team holen
     $template = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_TEAM###');
-    
+
     // Es wird der TeamMarker verwendet
     $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
     $markerObj = new $markerClass;
@@ -56,7 +56,7 @@ class tx_cfcleaguefe_sv2_TeamStatisticsMarker extends tx_rnbase_util_BaseMarker 
       }
     	$team->record = array_merge($teamStat, $team->record);
     	// Jetzt für jedes Team das Template parsen
-      $parts[] = $markerObj->parseTemplate($template, $team, $formatter, $statsConfId.'team.', $linkTeam, $statsMarker.'_TEAM');
+      $parts[] = $markerObj->parseTemplate($template, $team, $formatter, $statsConfId.'team.', $statsMarker.'_TEAM');
     	
     }
     // Jetzt die einzelnen Teile zusammenfügen
