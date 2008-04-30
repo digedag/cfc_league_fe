@@ -23,6 +23,7 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+tx_div::load('tx_rnbase_action_BaseIOC');
 
 require_once(t3lib_extMgm::extPath('rn_memento') . 'sv1/class.tx_rnmemento_sv1.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_Spyc.php');
@@ -50,47 +51,40 @@ require_once(t3lib_extMgm::extPath('cfc_league') . 'util/class.tx_cfcleague_util
  * 
  * Diese Klasse zeigt zunächst die Auswertung für die Spieler eines Teams.
  */
-class tx_cfcleaguefe_actions_Statistics {
-  /**
-   * Erstellung von statistischen Angaben
-   *
-   * @param object $parameters
-   * @param tx_rnbase_configurations $configurations
-   * @return string HTML output
-   */
-  function execute($parameters,$configurations){
-//    global $T3_SERVICES;
+class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC {
+	/**
+	 * handle request
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewData
+	 * @return string
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewData) {
+	//    global $T3_SERVICES;
 //t3lib_div::debug($T3_SERVICES['cfcleague_statistics'], 'tx_cfcleaguefe_actions_PlayerStatistics');
-    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
-    // Die notwendigen Statistikklassen ermitteln
-    $types = t3lib_div::trimExplode(',', $configurations->get('statisticTypes'), 1);
-    if(!count($types)) {
-      // Abbruch kein Typ angegeben
-      return $configurations->getLL('statistics_noTypeFound');
-    }
-    $services = array();
-    foreach ($types as $type) {
-      $service = t3lib_div::makeInstanceService('cfcleague_statistics', $type);
-      if(is_object($service))
-      	$services[$type] = $service;
-    }
-    $matches =& tx_cfcleaguefe_util_MatchTicker::getMatches4Scope($scopeArr);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		// Die notwendigen Statistikklassen ermitteln
+		$types = t3lib_div::trimExplode(',', $configurations->get('statisticTypes'), 1);
+		if(!count($types)) {
+			// Abbruch kein Typ angegeben
+			return $configurations->getLL('statistics_noTypeFound');
+		}
+		$services = array();
+		foreach ($types as $type) {
+			$service = t3lib_div::makeInstanceService('cfcleague_statistics', $type);
+			if(is_object($service))
+				$services[$type] = $service;
+		}
+		$matches =& tx_cfcleaguefe_util_MatchTicker::getMatches4Scope($scopeArr);
     
-    // Aufruf der Statistik
-    $data = tx_cfcleaguefe_util_Statistics::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
-    
-    $viewData =& $configurations->getViewData();
-    $viewData->offsetSet('data', $data); // Services bereitstellen
-    // View
-    $view = tx_div::makeInstance('tx_cfcleaguefe_views_Statistics');
-    $view->setTemplatePath($configurations->getTemplatePath());
-    // Das Template wird komplett angegeben
-    $view->setTemplateFile($configurations->get('statisticTemplate'));
-    $out = $view->render('statistics', $configurations);
-    return $out;
-  }
-  
+		// Aufruf der Statistik
+		$data = tx_cfcleaguefe_util_Statistics::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
+		$viewData->offsetSet('data', $data); // Services bereitstellen
 
+		return null;
+	}
+  
   /**
    * Liefert auf Basis des aktuellen Scopes einen eindeutigen Key unter dem das Memento gespeichert
    * werden kann.
@@ -101,6 +95,8 @@ class tx_cfcleaguefe_actions_Statistics {
     return tx_rnbase_util_Spyc::YAMLDump($scopeArr) . 'playerstats';
   }
 
+  function getTemplateName() {return 'statistics';}
+	function getViewClassName() { return 'tx_cfcleaguefe_views_Statistics'; }
 }
 
 /**
