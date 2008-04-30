@@ -47,7 +47,9 @@ class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC {
     $this->handlePageBrowser($parameters,$configurations, $viewdata, $fields, $options);
     $service = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();
   	$teams = $service->search($fields, $options);
-
+  	
+    $this->viewType = $configurations->get('teamlist.viewType');
+  	
     $viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
 	}
 	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
@@ -105,10 +107,9 @@ class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC {
   	return intval($configurations->get('teamlist.team.pagebrowser.limit'));
   }
 	
-  function getTemplateName(&$configurations) {return 'teamlist';}
-  function getViewClassName(&$configurations) {
-    $viewType = $configurations->get('teamlist.viewType');
-  	return ($viewType == 'HTML') ? 'tx_cfcleaguefe_views_TeamList' : 'tx_rnbase_view_phpTemplateEngine';
+  function getTemplateName() {return 'teamlist';}
+  function getViewClassName() {
+  	return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_TeamList' : 'tx_rnbase_view_phpTemplateEngine';
   }
   
 }
