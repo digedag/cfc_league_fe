@@ -212,6 +212,13 @@ plugin.tx_cfcleaguefe_competition {
     parseFunc =< lib.parseFunc_RTE
   }
 
+  scope {
+    competition.options {
+      orderby {
+        COMPETITION.SORTING = asc
+      }
+    }
+  }
   # Daten für die Ligatabelle
   leaguetable {
     # Ausgabe mit HTML-Template
@@ -303,6 +310,7 @@ plugin.tx_cfcleaguefe_competition {
     dataline.team =< lib.t3sports.teamSmall
     # aus Performancegründen nur die Basismarker des Spiels aktivieren
 		dataline.matchFullMode = 0
+		dataline.match =< lib.t3sports.match
 		dataline.match.date = DATETIME
 		dataline.match.date.strftime = %d.%m.%y
 		dataline.match.date.ifEmpty = n.a.
