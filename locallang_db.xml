@@ -60,6 +60,17 @@
 			<label index="plugin.competition.flexform.groupInput">Show Selectbox for age group?</label>
 			<label index="plugin.competition.flexform.competition">Competition</label>
 			<label index="plugin.competition.flexform.competitionInput">Show Selectbox for competition?</label>
+
+			<label index="plugin.competition.flexform.competitionType">Competition Types</label>
+			<label index="plugin.competition.flexform.competitionType.League">League</label>
+			<label index="plugin.competition.flexform.competitionType.Cup">Cup</label>
+			<label index="plugin.competition.flexform.competitionType.Other">Single Matches</label>
+			<label index="plugin.competition.flexform.competitionType.Combined">Combined</label>
+			<label index="plugin.competition.flexform.competitionObligation">Obligation</label>
+			<label index="plugin.competition.flexform.competitionObligation.All">All</label>
+			<label index="plugin.competition.flexform.competitionObligation.Obligate">Obligate</label>
+			<label index="plugin.competition.flexform.competitionObligation.Free">free</label>
+
 			<label index="plugin.competition.flexform.roundInput">Show Selectbox for competition rounds?</label>
 			<label index="plugin.competition.flexform.group">Age group</label>
 			<label index="plugin.competition.flexform.club">Club</label>
@@ -148,6 +159,17 @@
 			<label index="plugin.competition.flexform.groupInput">Selectbox for Altersklasse?</label>
 			<label index="plugin.competition.flexform.competition">Wettbewerb</label>
 			<label index="plugin.competition.flexform.competitionInput">Selectbox für Wettbewerb?</label>
+
+			<label index="plugin.competition.flexform.competitionType">Wettbewerbstypen</label>
+			<label index="plugin.competition.flexform.competitionType.League">Liga</label>
+			<label index="plugin.competition.flexform.competitionType.Cup">Pokal</label>
+			<label index="plugin.competition.flexform.competitionType.Other">Freundschaftspiele</label>
+			<label index="plugin.competition.flexform.competitionType.Combined">Kombinierte Wettbewerbe</label>
+			<label index="plugin.competition.flexform.competitionObligation">Pflichtwettbewerbe</label>
+			<label index="plugin.competition.flexform.competitionObligation.All">Alle</label>
+			<label index="plugin.competition.flexform.competitionObligation.Obligate">Pflichtwettbewerbe</label>
+			<label index="plugin.competition.flexform.competitionObligation.Free">Freie Wettbewerbe</label>
+
 			<label index="plugin.competition.flexform.roundInput">Selectbox für Spieltage?</label>
 			<label index="plugin.competition.flexform.group">Altersgruppe</label>
 			<label index="plugin.competition.flexform.competition">Wettbewerb</label>

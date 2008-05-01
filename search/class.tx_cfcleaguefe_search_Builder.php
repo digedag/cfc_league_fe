@@ -34,6 +34,45 @@ tx_div::load('tx_rnbase_util_SearchBase');
 class tx_cfcleaguefe_search_Builder {
 
 	/**
+	 * Search for competition by scope data
+	 *
+	 * @param array $fields
+	 * @param string $teamUids comma separated list of team UIDs
+	 * @return boolean true if condition is set
+	 */
+	static function buildCompetitionByScope(&$fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids) {
+		$result = false;
+		if(strlen(trim($compUids))) {
+	  	$fields['COMPETITION.UID'][OP_IN_INT] = $compUids;
+   		$result = true;
+		}
+		if(strlen(trim($groupUids))) {
+	  	$fields['COMPETITION.AGEGROUP'][OP_EQ_INT] = $groupUids;
+   		$result = true;
+		}
+		if(strlen(trim($saisonUids))) {
+	  	$fields['COMPETITION.SAISON'][OP_EQ_INT] = $saisonUids;
+   		$result = true;
+		}
+		// Wettbewerbstypen
+		$types = $configurations->get('scope.competition.type');
+		if(strlen(trim($types))) {
+	  	$fields['COMPETITION.TYPE'][OP_IN_INT] = $types;
+   		$result = true;
+		}
+		// Pflichtwettbewerbe
+		$obligate = intval($configurations->get('scope.competition.obligation'));
+		if($obligate) {
+			if($obligate == 1)
+	  		$fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = 1;
+	  	else
+	  		$fields['COMPETITION.OBLIGATION'][OP_NOTEQ_INT] = 1;
+   		$result = true;
+		}
+  	return $result;
+	}
+	
+	/**
 	 * Search for competition by teams
 	 *
 	 * @param array $fields

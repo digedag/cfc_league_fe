@@ -127,6 +127,62 @@
               </config>
             </TCEforms>
           </competitionSelectionInput>
+          <scope.competition.type>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType</label>
+              <config>
+                <type>select</type>
+                <items type="array">
+                  <numIndex index="0" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.League</numIndex>
+                    <numIndex index="1">1</numIndex>
+                  </numIndex>
+                  <numIndex index="1" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.Cup</numIndex>
+                    <numIndex index="1">2</numIndex>
+                  </numIndex>
+                  <numIndex index="2" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.Other</numIndex>
+                    <numIndex index="1">3</numIndex>
+                  </numIndex>
+                  <!-- numIndex index="3" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.Combined</numIndex>
+                    <numIndex index="1">100</numIndex>
+                  </numIndex-->
+                </items>
+                <multiple>1</multiple>
+                <maxitems>4</maxitems>
+                <size>4</size>
+              </config>
+            </TCEforms>
+          </scope.competition.type>
+          <scope.competition.obligation>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation</label>
+              <config>
+                <type>select</type>
+                <items type="array">
+                  <numIndex index="0" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.All</numIndex>
+                    <numIndex index="1">0</numIndex>
+                  </numIndex>
+                  <numIndex index="1" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.Obligate</numIndex>
+                    <numIndex index="1">1</numIndex>
+                  </numIndex>
+                  <numIndex index="2" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.Free</numIndex>
+                    <numIndex index="1">2</numIndex>
+                  </numIndex>
+                </items>
+                <multiple>0</multiple>
+                <maxitems>1</maxitems>
+                <size>1</size>
+              </config>
+            </TCEforms>
+          </scope.competition.obligation>
           <roundSelectionInput>
             <TCEforms>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.roundInput</label>

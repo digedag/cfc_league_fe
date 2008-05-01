@@ -24,10 +24,11 @@
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_saison.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_competition.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_group.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_club.php');
+tx_div::load('tx_cfcleaguefe_search_Builder');
+tx_div::load('tx_cfcleaguefe_models_saison');
+tx_div::load('tx_cfcleaguefe_models_competition');
+tx_div::load('tx_cfcleaguefe_models_group');
+tx_div::load('tx_cfcleaguefe_models_club');
 
 /**
  * Viele Views dieser Extension müssen wissen, für welche Saison, Liga, Alterklasse
@@ -149,21 +150,29 @@ class tx_cfcleaguefe_util_ScopeController {
    * vorbereitet und in die viewData der Config gelegt.
    * @return String Die UIDs als String
    */
-  function handleCurrentCompetition($parameters,&$configurations, $saisonUids,$groupUids, $useObjects = false) {
-    $viewData =& $configurations->getViewData();
-    $compUids = $configurations->get('competitionSelection');
+	function handleCurrentCompetition($parameters,&$configurations, $saisonUids,$groupUids, $useObjects = false) {
+		$viewData =& $configurations->getViewData();
+		$compUids = $configurations->get('competitionSelection');
 
-    // Soll eine SelectBox für Wettkämpfe gezeigt werden?
-    if($configurations->get('competitionSelectionInput')) {
-      // Die UIDs der Wettkämpfe in Objekte umwandeln, um eine Selectbox zu bauen
-      $competitions = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids);
-      $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($competitions,$parameters,'competition', $useObjects ? '' : 'name');
-      $compUids = $dataArr[1];
-      $viewData->offsetSet('competition_select', $dataArr);
-      $configurations->addKeepVar('competition',$compUids);
-    }
-    return $compUids;
-  }
+		// Soll eine SelectBox für Wettkämpfe gezeigt werden?
+		if($configurations->get('competitionSelectionInput')) {
+			// Die UIDs der Wettkämpfe in Objekte umwandeln, um eine Selectbox zu bauen
+			// Suche der Wettbewerbe über den Service
+			$compServ = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
+			$fields = array();
+			$options = array();
+			tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'scope.competition.options.');
+			tx_cfcleaguefe_search_Builder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
+      
+			$competitions = $compServ->search($fields, $options);
+//			$competitions = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids);
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($competitions,$parameters,'competition', $useObjects ? '' : 'name');
+			$compUids = $dataArr[1];
+			$viewData->offsetSet('competition_select', $dataArr);
+			$configurations->addKeepVar('competition',$compUids);
+		}
+		return $compUids;
+	}
 
   /**
    * Diese Funktion stellt die UIDs der aktuell ausgewählten Spielrunde bereit.
