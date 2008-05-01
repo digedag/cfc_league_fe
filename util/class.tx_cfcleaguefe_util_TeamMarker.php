@@ -44,47 +44,56 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
    *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
    * @return String das geparste Template
    */
-  public function parseTemplate($template, &$team, &$formatter, $teamConfId, $teamMarker = 'TEAM') {
-    if(!is_object($team)) {
-      return $formatter->configurations->getLL('team_notFound');
-//      return ''; // Ohne Team kein Ergebnis
-    }
-    $this->prepareRecord($team);
-    // Es wird das MarkerArray mit den Daten des Teams gefüllt.
+	public function parseTemplate($template, &$team, &$formatter, $teamConfId, $teamMarker = 'TEAM') {
+		if(!is_object($team)) {
+			return $formatter->configurations->getLL('team_notFound');
+		}
+		$this->prepareRecord($team);
+		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
 		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $teamConfId , 0, $teamMarker.'_',$team->getColumnNames());
-    $wrappedSubpartArray = array();
-    $subpartArray = array();
-    $this->prepareLinks($team, $teamMarker, $markerArray, $subpartArray, $wrappedSubpartArray, $teamConfId, $formatter);
+		$wrappedSubpartArray = array();
+		$subpartArray = array();
+		$this->prepareLinks($team, $teamMarker, $markerArray, $subpartArray, $wrappedSubpartArray, $teamConfId, $formatter);
 
 		$markerArray['###'.$teamMarker.'_LOGO###'] = $team->getLogo($formatter, $teamConfId.'logo.');
 
 		// Jetzt die Bilder einbinden
-    $this->_addTeamPictures($subpartArray, $markerArray,$team,$formatter, $template, $teamConfId, $teamMarker);
+		$this->_addTeamPictures($subpartArray, $markerArray,$team,$formatter, $template, $teamConfId, $teamMarker);
 
-    // Die Spieler setzen
-    $subpartArray['###'.$teamMarker.'_PLAYERS###'] = $this->_addTeamProfiles($markerArray,
+		// Die Spieler setzen
+		$subpartArray['###'.$teamMarker.'_PLAYERS###'] = $this->_addTeamProfiles($markerArray,
                                    $team->getPlayers(),$formatter, 
                                    $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_PLAYERS###'),
                                    '###'.$teamMarker.'_PLAYER###', $teamConfId.'player.', $teamMarker.'_PLAYER');
 
-    // Die Trainer setzen
-    $subpartArray['###'.$teamMarker.'_COACHES###'] = $this->_addTeamProfiles($markerArray,
+		// Die Trainer setzen
+		$subpartArray['###'.$teamMarker.'_COACHES###'] = $this->_addTeamProfiles($markerArray,
                                    $team->getCoaches(),$formatter, 
                                    $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_COACHES###'),
                                    '###'.$teamMarker.'_COACH###', $teamConfId.'coach.', $teamMarker.'_COACH');
 
-    // Die Betreuer setzen
-    $subpartArray['###'.$teamMarker.'_SUPPORTERS###'] = $this->_addTeamProfiles($markerArray,
+		// Die Betreuer setzen
+		$subpartArray['###'.$teamMarker.'_SUPPORTERS###'] = $this->_addTeamProfiles($markerArray,
                                    $team->getSupporters(),$formatter, 
                                    $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_SUPPORTERS###'),
                                    '###'.$teamMarker.'_SUPPORTER###', $teamConfId.'supporter.', $teamMarker.'_SUPPORTER');
 
-    // set club data
-    $template = $this->_addClubData($template, $team->getClub(), $formatter, $teamConfId.'club.', $teamMarker.'_CLUB');
+		// set club data
+		$template = $this->_addClubData($template, $team->getClub(), $formatter, $teamConfId.'club.', $teamMarker.'_CLUB');
 
-    $out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		// Now lookout for external marker services.
+		$markerArray = array();
+		$subpartArray = array();
+		$wrappedSubpartArray = array();
+
+		$params['confid'] = $teamConfId;
+		$params['marker'] = $teamMarker;
+		$params['team'] = $team;
+		self::callModuleSubparts($template, $subpartArray, $wrappedSubpartArray, $params, $formatter);
+		self::callModuleMarkers($template, $markerArray, $params, $formatter);
+		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     
-    return $out;
   }
 
   /**
