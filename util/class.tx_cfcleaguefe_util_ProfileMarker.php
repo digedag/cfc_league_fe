@@ -49,37 +49,47 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
     return $this->prepareLabelMarkers('tx_cfcleaguefe_models_profile', $formatter, $profileConfId, $defaultMarkerArr, $profileMarker);
   }
 
-  /**
-   * @param $template das HTML-Template
-   * @param $profile das Profil
-   * @param $formatter der zu verwendente Formatter
-   * @param $confId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
-   * @param $link Link-Instanz, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-   * @param $marker Name des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
-   *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
-   * @return String das geparste Template
-   */
-  public function parseTemplate($template, &$profile, &$formatter, $confId, $marker = 'PROFILE') {
-    if(!is_object($profile)) {
-      return $formatter->configurations->getLL('profile_notFound');
-    }
+	/**
+	 * @param $template das HTML-Template
+	 * @param $profile das Profil
+	 * @param $formatter der zu verwendente Formatter
+	 * @param $confId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
+	 * @param $link Link-Instanz, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
+	 * @param $marker Name des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
+	 *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
+	 * @return String das geparste Template
+	 */
+	public function parseTemplate($template, &$profile, &$formatter, $confId, $marker = 'PROFILE') {
+		if(!is_object($profile)) {
+			return $formatter->configurations->getLL('profile_notFound');
+		}
 
-
-    // Es wird das MarkerArray mit den Daten des Spielers gefüllt.
-    $markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $confId , 0, $marker.'_',$profile->getColumnNames());
-    $markerArray['###'.$marker.'_SIGN###'] = $profile->getSign();
-    $wrappedSubpartArray = array();
-    $subpartArray = array();
-    $this->prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
+		// Es wird das MarkerArray mit den Daten des Spielers gefüllt.
+		$markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $confId , 0, $marker.'_',$profile->getColumnNames());
+		$markerArray['###'.$marker.'_SIGN###'] = $profile->getSign();
+		$wrappedSubpartArray = array();
+		$subpartArray = array();
+		$this->prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
     
-    // Jetzt die Bilder einbinden
-    $subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
+		// Jetzt die Bilder einbinden
+		$subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
 
+		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
-    $out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-//t3lib_div::debug($out , 'utl_marker');
-    return $out;
-  }
+		// Okay the normal stuff is done. Now lookout for external marker services.
+		$markerArray = array();
+		$subpartArray = array();
+		$wrappedSubpartArray = array();
+
+		$params['confid'] = $confId;
+		$params['marker'] = $marker;
+		$params['profile'] = $profile;
+		self::callModuleSubparts($template, $subpartArray, $wrappedSubpartArray, $params, $formatter);
+		self::callModuleMarkers($template, $markerArray, $params, $formatter);
+		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+    
+		return $out;
+	}
 
   /**
    * Es werden die Bilder eingebunden
@@ -145,8 +155,8 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showprofile', $marker, array('profileId' => $profile->uid));
 		}
 		else {
-		$linkMarker = $marker . '_' . strtoupper('showprofile').'LINK';
-		$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
+			$linkMarker = $marker . '_' . strtoupper('showprofile').'LINK';
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
 		}
 	}
 }
