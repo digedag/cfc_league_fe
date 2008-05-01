@@ -57,12 +57,14 @@
 			<label index="profile_notFound">Profile not found</label>
 			<label index="profile_unknownLastname">Unknown</label>
 			<label index="profile_unknownFirstname"></label>
+			<label index="match_notFound">Match not found</label>
 			<label index="team_notFound">Team not found</label>
 			<label index="teamlist_empty">No teams found.</label>
 			<label index="statistics_noTypeFound">No statistics type defined.</label>
 
-			<label index="matchcrosstable.noData">No matches found</label>
+			<label index="matchcrosstable_noData">No matches found</label>
 
+			<label index="label_matchtable">Matchtable</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -106,13 +108,13 @@
 			<label index="statistics_visitors_label_total">Total</label>
 			<label index="statistics_visitors_label_average">Schnitt</label>
 
-			<label index="profile.notFound">Person nicht gefunden</label>
-			<label index="profile.unknownLastname">unbekannt</label>
+			<label index="profile_notFound">Person nicht gefunden</label>
+			<label index="profile_unknownLastname">unbekannt</label>
 			<label index="statistics_noTypeFound">Es wurde kein Statistiktyp definiert.</label>
 			<label index="teamlist_empty">Es wurden keine Teams gefunden.</label>
 
 
-			<label index="matchcrosstable.noData">Es wurden keine Spiele gefunden.</label>
+			<label index="matchcrosstable_noData">Es wurden keine Spiele gefunden.</label>
 		</languageKey>
 	</data>
 </T3locallang>
