@@ -57,41 +57,53 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * @param $template das HTML-Template
    * @param tx_cfcleaguefe_models_match $match das Spiel
    * @param $formatter der zu verwendente Formatter
-   * @param $matchConfId Pfad der TS-Config des Spiels, z.B. 'listView.match.'
-   * @param $matchMarker Name des Markers für ein Spiel, z.B. MATCH
+   * @param $confId Pfad der TS-Config des Spiels, z.B. 'listView.match.'
+   * @param $marker Name des Markers für ein Spiel, z.B. MATCH
    * @return String das geparste Template
    */
-	public function parseTemplate($template, &$match, &$formatter, $matchConfId, $matchMarker = 'MATCH') {
+	public function parseTemplate($template, &$match, &$formatter, $confId, $marker = 'MATCH') {
 		if(!is_object($match)) {
-			return $formatter->configurations->getLL('match.notFound');
+			return $formatter->configurations->getLL('match_notFound');
 		}
 //$time = t3lib_div::milliseconds();
     
 		$this->prepareFields($match);
 		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
 		if($this->fullMode)
-			$this->addDynamicMarkers($template, $match, $formatter, $matchConfId,$matchMarker);
+			$this->addDynamicMarkers($template, $match, $formatter, $confId,$marker);
 		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
-		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $matchConfId, 0, $matchMarker.'_');
+		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $confId, 0, $marker.'_');
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
-		$this->prepareLinks($match, $matchMarker, $markerArray, $subpartArray, $wrappedSubpartArray, $matchConfId, $formatter);
+		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
 
 		// Es wird jetzt das Template verändert und die Daten der Teams eingetragen
-		$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $matchConfId.'home.', $matchMarker.'_HOME');
-		$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $matchConfId.'guest.', $matchMarker.'_GUEST');
+		$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId.'home.', $marker.'_HOME');
+		$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId.'guest.', $marker.'_GUEST');
 		if($this->fullMode) {
-			$this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
-			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $matchConfId, $matchMarker);
+			$this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $confId, $matchMarker);
+			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $confId, $matchMarker);
 		}
 		// Add competition
-		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $matchConfId.'competition.', 'MATCH_COMPETITION');
+		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
     
 		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
 //$total['total'] = t3lib_div::milliseconds() - $time;
 //if($total['total'] > 40	)
 //t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
     
+		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
+		// Now lookout for external marker services.
+		$markerArray = array();
+		$subpartArray = array();
+		$wrappedSubpartArray = array();
+    
+		$params['confid'] = $confId;
+		$params['marker'] = $marker;
+		$params['match'] = $match;
+		self::callModuleSubparts($template, $subpartArray, $wrappedSubpartArray, $params, $formatter);
+		self::callModuleMarkers($template, $markerArray, $params, $formatter);
 		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 
@@ -144,8 +156,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 
   /**
    * Die Anzeige des Spiels kann je nach Status variieren. Daher gibt es dafür verschiedene Template-Subparts.
-   * ###RESULT_STATUS_-1###, ###RESULT_STATUS_0###, ###RESULT_STATUS_1### und ###RESULT_STATUS_2###.
-   * Übersetzt bedeutet das "ungültig", "angesetzt", "läuft" und "beendet".
+   * ###RESULT_STATUS_-1###, ###RESULT_STATUS_0###, ###RESULT_STATUS_1###, ###RESULT_STATUS_2### und ###RESULT_STATUS_-10###.
+   * Übersetzt bedeutet das "ungültig", "angesetzt", "läuft", "beendet" und "verschoben".
    */
   function setMatchSubparts($template, &$markerArray, &$subpartArray, &$wrappedSubpartArray, &$match, &$formatter) {
     // Je Spielstatus wird ein anderer Subpart gefüllt
