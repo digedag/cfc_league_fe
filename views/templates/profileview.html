@@ -19,32 +19,69 @@
 
 <table class="cfcleague-profilelist-pagertable">
 <tr><td colspan="3" class="cfcleague-profilelist-pager">
-<!-- ###PAGE_BROWSER### begin-->
+<!-- ###CHARBROWSER### begin-->
 <span class="cfcleague-profilelist-pagerlink">###PB_ITEM_LINK######PB_ITEM######PB_ITEM_LINK###</span>
 <span class="cfcleague-profilelist-pagersize">###PB_ITEM_LINK###(###PB_ITEM_SIZE###)###PB_ITEM_LINK###</span>
-<!-- ###PAGE_BROWSER### end-->
+<!-- ###CHARBROWSER### end-->
 </td></tr>
 
 <!-- ###PROFILES### start-->
 <!-- ###PROFILE### start-->
 <tr>
-  <td>###PROFILE_LINK######PROFILE_LAST_NAME###, ###PROFILE_FIRST_NAME######PROFILE_LINK### ###PROFILE_FIRST_PICTURE###</td>
+  <td>###PROFILE_SHOWPROFILELINK######PROFILE_LAST_NAME###, ###PROFILE_FIRST_NAME######PROFILE_SHOWPROFILELINK### ###PROFILE_FIRST_PICTURE###</td>
   <td>###PROFILE_BIRTHDAY###</td>
   <td>###PROFILE_SUMMARY###</td>
 </tr>
 <!-- ###PROFILE### end-->
+
+<!-- ###PAGEBROWSER### START -->
+<tr><td colspan="3" class="cfcleague-profilelist-pager">
+<div class="t3sports-pagebrowser">
+###PAGEBROWSER_CURRENT_PAGE###
+Seite ###PAGEBROWSER_CURRENT_PAGE_NUMBER###
+###PAGEBROWSER_CURRENT_PAGE###
+
+###PAGEBROWSER_NORMAL_PAGE###
+###PAGEBROWSER_NORMAL_PAGE_LINK###Seite ###PAGEBROWSER_NORMAL_PAGE_NUMBER### ###PAGEBROWSER_NORMAL_PAGE_LINK###
+###PAGEBROWSER_NORMAL_PAGE###
+
+###PAGEBROWSER_PREV_PAGE###
+&nbsp;###PAGEBROWSER_PREV_PAGE_LINK###<###PAGEBROWSER_PREV_PAGE_LINK###&nbsp;
+###PAGEBROWSER_PREV_PAGE###
+
+###PAGEBROWSER_NEXT_PAGE###
+&nbsp;###PAGEBROWSER_NEXT_PAGE_LINK###>###PAGEBROWSER_NEXT_PAGE_LINK###&nbsp;
+###PAGEBROWSER_NEXT_PAGE###
+
+###PAGEBROWSER_FIRST_PAGE###
+###PAGEBROWSER_FIRST_PAGE_LINK### |< ###PAGEBROWSER_FIRST_PAGE_LINK###
+###PAGEBROWSER_FIRST_PAGE###
+
+###PAGEBROWSER_LAST_PAGE###
+###PAGEBROWSER_LAST_PAGE_LINK### >| ###PAGEBROWSER_LAST_PAGE_LINK###
+###PAGEBROWSER_LAST_PAGE###
+
+</div>
+</td></tr>
+<!-- ###PAGEBROWSER### END -->
+
 <!-- ###PROFILES### end-->
 
 <tr><td colspan="3" class="cfcleague-profilelist-pager">
-<!-- ###PAGE_BROWSER### begin-->
+<!-- ###CHARBROWSER### begin-->
 <span class="cfcleague-profilelist-pagerlink">###PB_ITEM_LINK######PB_ITEM######PB_ITEM_LINK###</span>
 <span class="cfcleague-profilelist-pagersize">###PB_ITEM_LINK###(###PB_ITEM_SIZE###)###PB_ITEM_LINK###</span>
-<!-- ###PAGE_BROWSER### end-->
+<!-- ###CHARBROWSER### end-->
 </td></tr>
 
 </table>
 </div>
 <!-- ###PROFILE_LIST### end-->
+
+
+
+
+
 
 
 <!-- ###PROFILE_VIEW### begin -->
@@ -92,7 +129,6 @@
 </table>
 <p class="bodytext">###PROFILE_SUMMARY###</p>
 <p class="bodytext">###PROFILE_DESCRIPTION###</p>
-
 
 
 </div>
