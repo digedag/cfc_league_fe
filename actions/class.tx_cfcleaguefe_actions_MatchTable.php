@@ -24,21 +24,24 @@
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_team.php');
+tx_div::load('tx_cfcleaguefe_util_ScopeController');
+tx_div::load('tx_cfcleaguefe_models_team');
+tx_div::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Controller für die Anzeige eines Spielplans
  */
-class tx_cfcleaguefe_actions_MatchTable {
+class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 
-  /**
-   *
-   */
-  function execute($parameters,$configurations){
-
-// t3lib_div::debug($T3_SERVICES['cal_event_model'], 'ac_matchtable');
-
+	/**
+	 * Handle reuest
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewdata
+	 * @return string error message
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewdata) {
 
     // Die Werte des aktuellen Scope ermitteln
     $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
@@ -67,18 +70,11 @@ class tx_cfcleaguefe_actions_MatchTable {
     
     $this->_resolveTeams($matches);
     
-    $viewData =& $configurations->getViewData();
-    $viewData->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
+    $viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
 
     // View
-    $viewType = $configurations->get('matchtable.viewType');
-    $view = ($viewType == 'HTML') ? tx_div::makeInstance('tx_cfcleaguefe_views_MatchTable') : 
-                                    tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
-
-    $view->setTemplatePath($configurations->getTemplatePath());
-    $view->setTemplateFile($configurations->get('matchTableTemplate'));
-    $out = $view->render('matchtable', $configurations);
-    return $out;
+    $this->viewType = $configurations->get('matchtable.viewType');
+    return '';
   }
 
   /**
@@ -108,6 +104,11 @@ class tx_cfcleaguefe_actions_MatchTable {
     }
     return $teamsArr;
   }
+
+	function getTemplateName() {return 'matchtable';}
+	function getViewClassName() {
+		return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchTable' : 'tx_rnbase_view_phpTemplateEngine';
+	}
 
 }
 

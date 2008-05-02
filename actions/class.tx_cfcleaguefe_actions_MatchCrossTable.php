@@ -32,13 +32,7 @@ tx_div::load('tx_cfcleaguefe_actions_MatchTable');
  */
 class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_MatchTable {
 
-  /**
-   *
-   */
-  function execute($parameters,$configurations){
-
-// t3lib_div::debug($T3_SERVICES['cal_event_model'], 'ac_matchtable');
-
+	function handleRequest(&$parameters,&$configurations, &$viewdata) {
 
     // Die Werte des aktuellen Scope ermitteln
     $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
@@ -47,14 +41,14 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
     $compUids = $scopeArr['COMP_UIDS'];
     $roundUid = $scopeArr['ROUND_UIDS'];
     $club = $scopeArr['CLUB_UIDS'];
-
     // Die Kreuztabelle wird nur für komplette Wettbewerbe erzeugt
     if(strlen($compUids) == 0) {
       $comps = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids);
-//t3lib_div::debug($comps,'act_LeagueTable');
-      if(count($comps) > 0)
+      if(count($comps) > 0) {
         $currCompetition = $comps[0];
-        // Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten. 
+        $currCompetition = $currCompetition->uid;
+        // Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten.
+      }
       else
         return $out; // Ohne Wettbewerb keine Tabelle!
     }
@@ -67,7 +61,6 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
 
     $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
     $extended = $configurations->get('matchcrosstable.allData');
-
     $matches = $matchTable->findMatches($saisonUids, $groupUids, $currCompetition, '', '', $status, $extended);
     
     $teams = $this->_resolveTeams($matches);
@@ -77,16 +70,14 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
     $viewData->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
     
     // View
-    $viewType = $configurations->get('matchtable.viewType');
-    $view = ($viewType == 'HTML') ? tx_div::makeInstance('tx_cfcleaguefe_views_MatchCrossTable') : 
-                                    tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
-
-    $view->setTemplatePath($configurations->getTemplatePath());
-    $view->setTemplateFile($configurations->get('matchCrossTableTemplate'));
-    $out = $view->render('matchcrosstable', $configurations);
-    return $out;
+    $this->viewType = $configurations->get('matchtable.viewType');
+    return '';
   }
-
+	function getTemplateName() {return 'matchcrosstable';}
+	function getViewClassName() {
+		return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchCrossTable' : 'tx_rnbase_view_phpTemplateEngine';
+	}
+  
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchCrossTable.php'])	{
