@@ -115,4 +115,7 @@ t3lib_extMgm::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleag
   )
 );
 
+$tempPath = t3lib_extMgm::extPath('cfc_league_fe');
+require_once($tempPath.'svmarker/ext_localconf.php');
+
 ?>
