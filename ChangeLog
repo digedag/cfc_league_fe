@@ -2,16 +2,14 @@
 
 Änderungen
 ----------
-v0.3.0 (??.01.2008)
+v0.3.0 (02.05.2008)
 Änderungen bei der Verlinkung von Informationen
 * Neue TS-Config für Links in Anlehnung an die typolink-Konfigration
 Unterhalb einer Datensatz-Konfiguration gibt es den neuen reservierten Typ links. Diesem folgt der Name des Links und das Ziel. Beispiel:
 [[code]]
 lib.t3sports.team {
   links {
-    team.target = 123
-    player.target = 123
-    supporter.target = 123
+    showteam.pid = 123
   }
 }
 [[code]]
@@ -21,6 +19,15 @@ Dieses Schema ist (noch) nicht voll dynamisch. Es können also noch keine eigene
 * View Teamlist: Neuer Subpartmarker ###TEAMS###
 * View Matchtable: der Subpart ###MATCH_FREE### steht jetzt innerhalb des Subparts ###MATCH###
 * Statistiken werden im Flexform dynamisch ermittelt. Es stehen alle Services mit dem Key cfcleague_statistics zur Auswahl.
+* Link-Marker für Teamansicht hat sich geändert. Alt: ###TEAM_LINK### Neu: ###TEAM_SHOWTEAMLINK###.
+* Neue Linkmarker ###TEAM_SHOWMATCHTABLELINK### mit dem man direkt auf einen Teamspielplan verlinken kann.
+* Link-Marker für Profilansicht hat sich geändert. Alt: ###TEAM_PLAYER_LINK### Neu: ###TEAM_PLAYER_SHOWPROFILELINK###. Analog bei Trainern und Betreuern.
+* Link-Marker für Spielbericht hat sich geändert. Alt: ###MATCH_LINK### Neu: ###MATCH_REPORTLINK###.
+* Personenliste überarbeitet. CharBrowser ist jetzt optional. Einige Marker und TS-Optionen haben sich geändert.
+* Neue Optionen bei der Wettbewerbsauswahl im Scope
+* Wettbewerbe im Scope werden wie im Backend sortiert
+* Es neue Marker per Service eingebunden werden. Genauere Beschreibung später in der Dokumentation
+* Neue Sprach-Marker können dynamisch angelegt werden. ###LABEL_TEST### entspricht dem Sprachwert plugin.tx_cfcleaguefe_competition.default.label_test
 
 v0.2.3 (29.01.2008)
 * Neuer View: Kreuztabelle
