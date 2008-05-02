@@ -387,7 +387,7 @@
 
         <type>array</type>
         <el>
-          <profilelistPage>
+          <profilelist.profile.links.showprofile.pid>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.teamview.profile_page</label>
@@ -399,7 +399,7 @@
                 <size>1</size>
               </config>
             </TCEforms>
-          </profilelistPage>
+          </profilelist.profile.links.showprofile.pid>
           <profilelist.options.pidlist>
             <TCEforms>
               <exclude>1</exclude>
