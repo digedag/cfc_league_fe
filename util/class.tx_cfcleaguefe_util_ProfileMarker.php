@@ -84,8 +84,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 		$params['confid'] = $confId;
 		$params['marker'] = $marker;
 		$params['profile'] = $profile;
-		self::callModuleSubparts($template, $subpartArray, $wrappedSubpartArray, $params, $formatter);
-		self::callModuleMarkers($template, $markerArray, $params, $formatter);
+		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
 		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     
 		return $out;

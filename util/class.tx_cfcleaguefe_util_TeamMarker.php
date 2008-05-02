@@ -90,8 +90,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$params['confid'] = $teamConfId;
 		$params['marker'] = $teamMarker;
 		$params['team'] = $team;
-		self::callModuleSubparts($template, $subpartArray, $wrappedSubpartArray, $params, $formatter);
-		self::callModuleMarkers($template, $markerArray, $params, $formatter);
+		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
 		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     
   }

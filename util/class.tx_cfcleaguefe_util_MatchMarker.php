@@ -35,7 +35,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 
   /**
    * Erstellt eine neue Instanz
-   * @param $$options Array with options. not used until now.
+   * @param $options Array with options. not used until now.
    */
   function tx_cfcleaguefe_util_MatchMarker(&$options = array()) {
     // Den TeamMarker erstellen
@@ -81,8 +81,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId.'home.', $marker.'_HOME');
 		$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId.'guest.', $marker.'_GUEST');
 		if($this->fullMode) {
-			$this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $confId, $matchMarker);
-			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $confId, $matchMarker);
+			$this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $confId, $marker);
+			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $confId, $marker);
 		}
 		// Add competition
 		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
@@ -91,7 +91,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //$total['total'] = t3lib_div::milliseconds() - $time;
 //if($total['total'] > 40	)
 //t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
-    
 		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
 		// Now lookout for external marker services.
@@ -102,8 +101,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$params['confid'] = $confId;
 		$params['marker'] = $marker;
 		$params['match'] = $match;
-		self::callModuleSubparts($template, $subpartArray, $wrappedSubpartArray, $params, $formatter);
-		self::callModuleMarkers($template, $markerArray, $params, $formatter);
+		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
 		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 
