@@ -709,7 +709,7 @@ plugin.tx_cfcleaguefe_report {
   templatePath   = EXT:cfc_league_fe/views/templates
   locallangFilename = EXT:cfc_league_fe/locallang.xml
 
-
+  scopeTemplate = {$plugin.tx_cfcleaguefe_competition.scopeTemplate}
   matchreportTemplate = {$plugin.tx_cfcleaguefe_report.matchreportTemplate}
   teamviewTemplate = {$plugin.tx_cfcleaguefe_report.teamviewTemplate}
   profileTemplate = {$plugin.tx_cfcleaguefe_report.profileTemplate}
