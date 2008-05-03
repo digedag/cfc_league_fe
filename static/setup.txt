@@ -199,13 +199,32 @@ lib.t3sports.teamSmall {
 
 lib.t3sports.match {
   links {
-    report.pid = {$plugin.tx_cfcleaguefe_matchreport.matchpage}
+    report.pid = {$plugin.tx_cfcleaguefe_matchreport.matchreportpage}
+    ticker.pid = {$plugin.tx_cfcleaguefe_matchreport.matchtickerpage}
   }
   competition =< lib.t3sports.competition
+  date = CASE
+  date {
+    default = TEXT
+    default.field = date
+		default.strftime = %a, %d.%m.%y Anstoss: %H:%M Uhr
+    2 = TEXT
+    2.value = -
+    key {
+      field = date
+      ifEmpty = 2
+    }
+  }
 }
 
 plugin.tx_cfcleaguefe_competition {
   teamlistTemplate = {$plugin.tx_cfcleaguefe_competition.teamlistTemplate}
+  scopeTemplate = {$plugin.tx_cfcleaguefe_competition.scopeTemplate}
+  matchtableTemplate = {$plugin.tx_cfcleaguefe_competition.matchtableTemplate}
+  matchcrosstableTemplate = {$plugin.tx_cfcleaguefe_competition.matchcrosstableTemplate}
+  leagueTableTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableTemplate}
+  statisticTemplate = {$plugin.tx_cfcleaguefe_competition.statisticTemplate}
+  tickerlistTemplate = {$plugin.tx_cfcleaguefe_competition.tickerlistTemplate}
 
   # Rendering of items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
@@ -284,19 +303,30 @@ plugin.tx_cfcleaguefe_competition {
   matchtable {
     # Ausgabe mit HTML-Template
     viewType = HTML
-    # Status der Spiele im Spielplan (0-angesetzt, 1-läuft, 2-beendet)
-#    status = 0,1,2
-    # Die Anzahl der Spiele limitieren. 0 bedeutet keine Einschränkung
-    limit = 0
+    # With fields it is possible to defined additional query options
+    # select what matches you want to show
+    fields {
+      # Limit the number of matches
+#     limit = 0
+      # Find matches by state (0-schedules, 1-running, 2-finished, -10 rescheduled)
+#     status = 0,1,2
+    }
+    # With options you can set some additional params for sql query
+    options {
+      # Show sql-query in FE (for test purposes)
+#     debug = 1
+      # Defined how to order matches
+      orderby {
+        MATCH.DATE = asc
+      }
+    }
+    # Whether or not team uids from http-request should be ignored
     acceptTeamIdFromRequest = 1
     match =< lib.t3sports.match
     match {
       roll.value = 1
       stadium.ifEmpty = Ort noch unbekannt
       stadium.wrap = (|)
-  		date = DATETIME
-      date.strftime  = %a, %d.%m.%y Anstoss: %H:%M Uhr
-      date.ifEmpty = -
 
       # Optional ein String, der zwischen den Spielen steht
 #      implode = <br />
@@ -311,9 +341,7 @@ plugin.tx_cfcleaguefe_competition {
     # aus Performancegründen nur die Basismarker des Spiels aktivieren
 		dataline.matchFullMode = 0
 		dataline.match =< lib.t3sports.match
-		dataline.match.date = DATETIME
-		dataline.match.date.strftime = %d.%m.%y
-		dataline.match.date.ifEmpty = n.a.
+		dataline.match.date.default.strftime = %d.%m.%y
 		dataline.ownmatch = <td>-</td>
 		dataline.nomatch = <td>&nbsp;</td>
 	}
@@ -390,8 +418,12 @@ plugin.tx_cfcleaguefe_competition {
   }
   # Liste der aktuell anstehenden Liveticker
   tickerlist {
+    options {
+      orderby.MATCH.DATE = asc
+    }
     # Die Anzahl der Spiele limitieren. 0 bedeutet keine Einschränkung
     limit = 0
+    match =< lib.t3sports.match
     match {
       date.strftime  = {$plugin.tx_cfcleaguefe_competition.tickerlist_format_date}
       home =< lib.t3sports.team
@@ -674,6 +706,12 @@ plugin.tx_cfcleaguefe_report {
   qualifier      = cfc_league_fe
   templatePath   = EXT:cfc_league_fe/views/templates
   locallangFilename = EXT:cfc_league_fe/locallang.xml
+
+
+  matchreportTemplate = {$plugin.tx_cfcleaguefe_report.matchreportTemplate}
+  teamviewTemplate = {$plugin.tx_cfcleaguefe_report.teamviewTemplate}
+  profileTemplate = {$plugin.tx_cfcleaguefe_report.profileTemplate}
+  profilelistTemplate = {$plugin.tx_cfcleaguefe_report.profilelistTemplate}
 
   # Angaben zur ScopeAuswahl
   scopeSelection {

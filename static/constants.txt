@@ -5,6 +5,23 @@ plugin.tx_cfcleaguefe_competition {
   # cat=T3sports (Templates)/teamlist; type=string;label=HTML Template for team list
   teamlistTemplate = EXT:cfc_league_fe/views/templates/teamlist.html
 
+  # cat=T3sports (Templates)/scope; type=string;label=HTML Template for scope selection
+  scopeTemplate = EXT:cfc_league_fe/views/templates/scopeselection.html
+
+  # cat=T3sports (Templates)/matchtable; type=string;label=HTML Template for match table
+  matchtableTemplate = EXT:cfc_league_fe/views/templates/matchtable.html
+  # cat=T3sports (Templates)/matchcrosstable; type=string;label=HTML Template for match crosstable
+  matchcrosstableTemplate = EXT:cfc_league_fe/views/templates/matchcrosstable.html
+
+  # cat=T3sports (Templates)/leaguetable; type=string;label=HTML Template for league table
+  leaguetableTemplate = EXT:cfc_league_fe/views/templates/leaguetable.html
+
+  # cat=T3sports (Templates)/statistics; type=string;label=HTML Template for statistics
+  statisticTemplate = EXT:cfc_league_fe/views/templates/statistics.html
+  # cat=T3sports (Templates)/livetickerlist; type=string;label=HTML Template for statistics
+  tickerlistTemplate = EXT:cfc_league_fe/views/templates/livetickerlist.html
+	
+
 
   # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date
   format_date = %d.%m.%Y
@@ -39,6 +56,19 @@ plugin.tx_cfcleaguefe_competition {
 }
 
 plugin.tx_cfcleaguefe_matchreport {
+  # cat=T3sports (Templates)/matchreport; type=string;label=HTML Template for match report
+  matchreportTemplate = EXT:cfc_league_fe/views/templates/matchreport.html
+  # cat=T3sports (Templates)/teamview; type=string;label=HTML Template for team view
+  teamviewTemplate = EXT:cfc_league_fe/views/templates/teamview.html
+  # cat=T3sports (Templates)/profileview; type=string;label=HTML Template for profile view
+  profileTemplate = EXT:cfc_league_fe/views/templates/profileview.html
+  # cat=T3sports (Templates)/profilelist; type=string;label=HTML Template for profile list
+  profilelistTemplate = EXT:cfc_league_fe/views/templates/profileview.html
+  
+  
+ 
+
+
   # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date
   format_date = %d.%m.%Y %H:%M Uhr
 
@@ -48,7 +78,10 @@ plugin.tx_cfcleaguefe_matchreport {
   # cat=T3sports (misc)/maxH_logo; type=int+;label=Maximum height of logos in match report
   maxH_logo = 70
 
-  # cat=T3sports (pages)/matchpage; type=int+;label=PID of page for match reports
-  matchpage = 0
+  # cat=T3sports (pages)/matchreportpage; type=int+;label=PID of page for match reports
+  matchreportpage = 0
+
+  # cat=T3sports (pages)/matchtickerpage; type=int+;label=PID of page for match live tickers
+  matchtickerpage = 0
 
 }
