@@ -31,19 +31,20 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
+ * @deprecated use tx_cfcleaguefe_utils_MatchTable
  */
 class tx_cfcleaguefe_models_matchtable{
-  var $_saison;
-  var $_team;
-  var $_competition;
-  var $_daysPast;
-  var $_daysAhead;
-  var $_ticker; // Nur Spiele mit LiveTicker laden
-  var $_limit; // Anzahl Spiele limitieren
-  var $_dateStart; // bestimmter Starttermin
-  var $_dateEnd; // bestimmter Endtermin
-  var $_pidList; // bestimmte TYPO3-Seiten
-  var $_orderDesc; // Sortierreihenfolge
+	var $_saison;
+	var $_team;
+	var $_competition;
+	var $_daysPast;
+	var $_daysAhead;
+	var $_ticker; // Nur Spiele mit LiveTicker laden
+	var $_limit; // Anzahl Spiele limitieren
+	var $_dateStart; // bestimmter Starttermin
+	var $_dateEnd; // bestimmter Endtermin
+	var $_pidList; // bestimmte TYPO3-Seiten
+	var $_orderDesc; // Sortierreihenfolge
 
   function tx_cfcleaguefe_models_matchtable() {
     $this->setOrderDesc(false);
@@ -175,12 +176,7 @@ class tx_cfcleaguefe_models_matchtable{
     if(isset($status)) {
       if(strlen($where) >0) $where .= ' AND ';
       $where .= ' tx_cfcleague_games.status IN (' . $status . ')';
-
-//t3lib_div::debug($where ,'mdl_matchtable ');
     }
-
-//      $cal = tx_div::makeInstance('tx_rnbase_util_Calendar');
-//      $cal->tests();
 
     // Wird der Zeitraum eingegrenzt?
     if(intval($this->_daysPast) || intval($this->_daysAhead)) {
