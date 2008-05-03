@@ -248,7 +248,7 @@
               </config>
             </TCEforms>
           </teamviewClub>
-          <profilePage>
+          <teamview.team.coach.links.showprofile.pid>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.teamview.coach_page</label>
@@ -260,8 +260,8 @@
                 <size>1</size>
               </config>
             </TCEforms>
-          </profilePage>
-          <playerPage>
+          </teamview.team.coach.links.showprofile.pid>
+          <teamview.team.player.links.showprofile.pid>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.teamview.player_page</label>
@@ -273,7 +273,20 @@
                 <size>1</size>
               </config>
             </TCEforms>
-          </playerPage>
+          </teamview.team.player.links.showprofile.pid>
+          <teamview.team.supporter.links.showprofile.pid>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.teamview.supporter_page</label>
+              <config>
+                <type>group</type>
+                <internal_type>db</internal_type>
+                <allowed>pages</allowed>
+                <multiple>0</multiple>
+                <size>1</size>
+              </config>
+            </TCEforms>
+          </teamview.team.supporter.links.showprofile.pid>
           <teamviewTemplate>
             <TCEforms>
               <exclude>1</exclude>
