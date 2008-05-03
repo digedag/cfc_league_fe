@@ -89,7 +89,48 @@ class tx_cfcleaguefe_search_Builder {
 		}
   	return $result;
 	}
+	/**
+	 * Search for matches by scope
+	 *
+	 * @param array $fields
+	 * @param string $scope Scope Array
+	 * @return true
+	 */
+	static function buildMatchByClub(&$fields, $clubUids) {
+
+		if(strlen(trim($clubUids))) {
+			$joined['value'] = trim($clubUids);
+			$joined['cols'] = array('TEAM1.CLUB', 'TEAM2.CLUB');
+			$joined['operator'] = OP_IN_INT;
+			$fields[SEARCH_FIELD_JOINED][] = $joined;
+			$result = true;
+		}
+	}
+	/**
+	 * Search for matches by teamUids
+	 *
+	 * @param array $fields
+	 * @param string $$teamUids comma separated uid string
+	 * @return true
+	 */
+	static function buildMatchByTeam(&$fields, $teamUids) {
+		if(strlen(trim($teamUids))) {
+			$joined['value'] = trim($teamUids);
+			$joined['cols'] = array('MATCH.HOME', 'MATCH.GUEST');
+			$joined['operator'] = OP_IN_INT;
+			$fields[SEARCH_FIELD_JOINED][] = $joined;
+			$result = true;
+		}
+	}
 	
+	public static function setField(&$fields, $field, $operator, $value) {
+		$result = false;
+		if(strlen(trim($value))) {
+			$fields[$field][$operator] = $value;
+			$result = true;
+		}
+		return $result;
+	}
 	/**
 	 * Search for teams by scope
 	 *
@@ -99,28 +140,12 @@ class tx_cfcleaguefe_search_Builder {
 	 */
 	static function buildTeamByScope(&$fields, $scope) {
 		$result = false;
-		$saisonUids = $scope['SAISON_UIDS'];
-    $groupUids = $scope['GROUP_UIDS'];
-    $compUids = $scope['COMP_UIDS'];
-    $clubUids = $scope['CLUB_UIDS'];
-		if(strlen(trim($saisonUids))) {
-	  	$fields['COMPETITION.SAISON'][OP_IN_INT] = $saisonUids;
-   		$result = true;
-		}
-		if(strlen(trim($groupUids))) {
-	  	$fields['COMPETITION.AGEGROUP'][OP_IN_INT] = $groupUids;
-   		$result = true;
-		}
-		if(strlen(trim($compUids))) {
-	  	$fields['COMPETITION.UID'][OP_IN_INT] = $compUids;
-   		$result = true;
-		}
-		if(strlen(trim($clubUids))) {
-	  	$fields['TEAM.CLUB'][OP_IN_INT] = $clubUids;
-   		$result = true;
-		}
-	  $fields['TEAM.DUMMY'][OP_EQ_INT] = 0; // Ignore dummies
-	  return true;
+		$result = self::setField($fields,'COMPETITION.SAISON', OP_IN_INT, $scope['SAISON_UIDS']) || $result;
+		$result = self::setField($fields,'COMPETITION.AGEGROUP', OP_IN_INT, $scope['GROUP_UIDS']) || $result;
+		$result = self::setField($fields,'COMPETITION.UID', OP_IN_INT, $scope['COMP_UIDS']) || $result;
+		$result = self::setField($fields,'TEAM.CLUB', OP_IN_INT, $scope['CLUB_UIDS']) || $result;
+		$fields['TEAM.DUMMY'][OP_EQ_INT] = 0; // Ignore dummies
+		return true;
 	}
 }
 
