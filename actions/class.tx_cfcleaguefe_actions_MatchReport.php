@@ -23,41 +23,42 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+tx_div::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Action für die Anzeige eines Spielberichts
  */
-class tx_cfcleaguefe_actions_MatchReport {
-  /**
-   *
-   */
-  function execute(&$parameters,&$configurations){
-    // Die MatchID ermittlen
-    // Ist sie fest definiert?
-    $matchId = intval($configurations->get('matchreportMatchUid'));
-    if(!$matchId) {
-      $matchId = intval($parameters->offsetGet('matchId'));
-      if($matchId == 0)
-        return 'No matchId found!';
-    }
+class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
+	/**
+	 * handle request
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewData
+	 * @return string
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewData) {
+		// Die MatchID ermittlen
+		// Ist sie fest definiert?
+		$matchId = intval($configurations->get('matchreportMatchUid'));
+		if(!$matchId) {
+			$matchId = intval($parameters->offsetGet('matchId'));
+			if($matchId == 0)
+				return 'No matchId found!';
+		}
 
-    // Das Spiel laden
-    $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_matchreport');
-    $matchReport = new $className($matchId, $configurations);
-    $viewData =& $configurations->getViewData();
-    $viewData->offsetSet('matchReport', $matchReport); // Den Spielreport für den View bereitstellen
+		// Das Spiel laden
+		$className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_matchreport');
+		$matchReport = new $className($matchId, $configurations);
+		$viewData->offsetSet('matchReport', $matchReport); // Den Spielreport für den View bereitstellen
 
-    // Auf das Template verzweigen
-    $viewType = $configurations->get('matchreport.viewType');
-    $view = ($viewType == 'HTML') ? tx_div::makeInstance('tx_cfcleaguefe_views_MatchReport') : 
-                                    tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
+		// Auf das Template verzweigen
+		$this->viewType = $configurations->get('matchreport.viewType');
+		return null;
+	}
 
-    $view->setTemplatePath($configurations->getTemplatePath());
-    // Das Template wird komplett angegeben
-    $view->setTemplateFile($configurations->get('matchreportTemplate'));
-    $out = $view->render('matchreport', $configurations);
-    return $out;
-  }
+	function getTemplateName() {return 'matchreport';}
+	function getViewClassName() { return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchReport' : 'tx_rnbase_view_phpTemplateEngine'; }
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchReport.php'])	{

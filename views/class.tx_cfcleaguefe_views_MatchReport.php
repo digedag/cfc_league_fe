@@ -31,27 +31,12 @@ tx_div::load('tx_rnbase_view_Base');
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
  */
 class tx_cfcleaguefe_views_MatchReport extends tx_rnbase_view_Base {
-
+  function getMainSubpart() {return '###MATCHREPORT###';}
+	
   /**
    * Erstellen des Frontend-Outputs
    */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-    // Den entscheidenden Teil herausschneiden
-    $templateCode = $cObj->getSubpart($templateCode, '###MATCHREPORT###');
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
-
-    $out = $this->_createView($templateCode, $viewData, $configurations);
-    return $out;
-  }
-
-  /**
-   * Erstellung des Outputstrings
-   */
-  function _createView($template, &$viewData, &$configurations) {
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
     $cObj =& $this->formatter->cObj;
     $matchReport = $viewData->offsetGet('matchReport');
 
@@ -63,41 +48,12 @@ class tx_cfcleaguefe_views_MatchReport extends tx_rnbase_view_Base {
     // MATCH_
 
     $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-    $matchMarker = new $markerClass($this->links);
+    $matchMarker = new $markerClass();
     $match = $matchReport->getMatch();
-
-    $matchStr = $matchMarker->parseTemplate($template, $match, $this->formatter, 'matchreport.match.', 'MATCH');
+    $matchStr = $matchMarker->parseTemplate($template, $match, $formatter, 'matchreport.match.', 'MATCH');
 
     return $matchStr;
   }
-
-  /**
-   * Vorbereitung der Link-Objekte
-   */
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
-
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
-    $this->links = array();
-
-    $reportPage = $configurations->get('reportPage');
-    if($reportPage) {
-      $link = new $linkClass;
-      $link->designatorString = $configurations->getQualifier();
-      $link->destination($reportPage); // Das Ziel der Seite vorbereiten
-      $this->links['match'] = $link;
-    }
-
-    $teamPage = $configurations->get('matchtable.teamPage');
-    if($teamPage) {
-      $linkTeam = new $linkClass;
-      $linkTeam->designatorString = $configurations->getQualifier();
-      $linkTeam->destination($teamPage); // Das Ziel der Seite vorbereiten
-
-      $this->links['team'] = $linkTeam;
-    }
-  }
-
 }
 
 
