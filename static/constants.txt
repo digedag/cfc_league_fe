@@ -55,7 +55,7 @@ plugin.tx_cfcleaguefe_competition {
 
 }
 
-plugin.tx_cfcleaguefe_matchreport {
+plugin.tx_cfcleaguefe_report {
   # cat=T3sports (Templates)/matchreport; type=string;label=HTML Template for match report
   matchreportTemplate = EXT:cfc_league_fe/views/templates/matchreport.html
   # cat=T3sports (Templates)/teamview; type=string;label=HTML Template for team view

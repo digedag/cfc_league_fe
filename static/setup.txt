@@ -155,8 +155,8 @@ lib.t3sports.team {
 
   # Formatierung des Team-Logos
   logo {
-    file.maxW = {$plugin.tx_cfcleaguefe_matchreport.maxW_logo}
-    file.maxH = {$plugin.tx_cfcleaguefe_matchreport.maxH_logo}
+    file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+    file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
     # Wenn kein Teamlogo vorhanden ist
     noLogo_stdWrap {
       if {
@@ -171,7 +171,7 @@ lib.t3sports.team {
 //        file = fileadmin/images/fussball.gif
         file = GIFBUILDER
         file {
-          XY = {$plugin.tx_cfcleaguefe_matchreport.maxW_logo},{$plugin.tx_cfcleaguefe_matchreport.maxH_logo}
+          XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
           backColor = #ffff00
           10 = TEXT
           10 {
@@ -179,7 +179,7 @@ lib.t3sports.team {
             fontSize = 14
             niceText = 1
             fontColor = #000000
-            offset = {$plugin.tx_cfcleaguefe_matchreport.maxW_logo}/2-30, {$plugin.tx_cfcleaguefe_matchreport.maxH_logo}/2+4
+            offset = {$plugin.tx_cfcleaguefe_report.maxW_logo}/2-30, {$plugin.tx_cfcleaguefe_report.maxH_logo}/2+4
           }
         }
 
@@ -199,8 +199,8 @@ lib.t3sports.teamSmall {
 
 lib.t3sports.match {
   links {
-    report.pid = {$plugin.tx_cfcleaguefe_matchreport.matchreportpage}
-    ticker.pid = {$plugin.tx_cfcleaguefe_matchreport.matchtickerpage}
+    report.pid = {$plugin.tx_cfcleaguefe_report.matchreportpage}
+    ticker.pid = {$plugin.tx_cfcleaguefe_report.matchtickerpage}
   }
   competition =< lib.t3sports.competition
   date = CASE
@@ -338,11 +338,13 @@ plugin.tx_cfcleaguefe_competition {
 	matchcrosstable {
     headline.team =< lib.t3sports.teamSmall
     dataline.team =< lib.t3sports.teamSmall
+#    dataline.implode =
     # aus Performancegründen nur die Basismarker des Spiels aktivieren
 		dataline.matchFullMode = 0
 		dataline.match =< lib.t3sports.match
 		dataline.match.date.default.strftime = %d.%m.%y
-		dataline.ownmatch = <td>-</td>
+		dataline.match.implode = <br />
+		dataline.ownmatch = <td>&bull;</td>
 		dataline.nomatch = <td>&nbsp;</td>
 	}
 
@@ -767,7 +769,7 @@ plugin.tx_cfcleaguefe_report {
       # Hier immer mit den Namen der Spalte verwenden
       visitors.ifEmpty = -
       game_report.parseFunc =< lib.parseFunc_RTE
-      date.strftime  = {$plugin.tx_cfcleaguefe_matchreport.format_date}
+      date.strftime  = {$plugin.tx_cfcleaguefe_report.format_date}
       home =< lib.t3sports.team
       guest =< lib.t3sports.team
       players_home = 1
