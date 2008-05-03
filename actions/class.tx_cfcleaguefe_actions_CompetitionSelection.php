@@ -24,38 +24,40 @@
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
+tx_div::load('tx_cfcleaguefe_util_ScopeController');
+tx_div::load('tx_rnbase_action_BaseIOC');
 
 /**
- * Controller für die Anzeige eines Spielplans
+ * Controller für die Anzeige der Scopeauswahl
  */
-class tx_cfcleaguefe_actions_CompetitionSelection {
+class tx_cfcleaguefe_actions_CompetitionSelection extends tx_rnbase_action_BaseIOC {
 
   /**
    *
    */
-  function execute($parameters,$configurations){
-
-    $viewType = $configurations->get('scopeSelection.viewType');
-
-//t3lib_div::debug($parameters,'paras');
-
-    // Die Werte des aktuellen Scope ermitteln
-    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations, $viewType == 'HTML');
-
+	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+	
+		$this->viewType = $configurations->get('scopeSelection.viewType');
+		// Die Werte des aktuellen Scope ermitteln
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations, $this->viewType == 'HTML');
+		return null;
 //t3lib_div::debug($scopeArr ,'paras act_CompSel');
 
-    $view = ($viewType == 'HTML') ? tx_div::makeInstance('tx_cfcleaguefe_views_ScopeSelection') : 
-                                    tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
-
-
-    $view->setTemplatePath($configurations->getTemplatePath());
-    // Das Template wird komplett angegeben
-    $view->setTemplateFile($configurations->get('scopeTemplate'));
-    $out = $view->render( ($viewType == 'HTML') ? 'scopeselection' : 'competitionselection', $configurations);
-
-    return $out;
+//    $view = ($viewType == 'HTML') ? tx_div::makeInstance('tx_cfcleaguefe_views_ScopeSelection') : 
+//                                    tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
+//
+//
+//    $view->setTemplatePath($configurations->getTemplatePath());
+//    // Das Template wird komplett angegeben
+//    $view->setTemplateFile($configurations->get('scopeTemplate'));
+//    $out = $view->render( ($viewType == 'HTML') ? 'scopeselection' : 'competitionselection', $configurations);
+//
+//    return $out;
   }
+	function getTemplateName() {return 'scope';}
+	function getViewClassName() {
+		return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_ScopeSelection' : 'tx_rnbase_view_phpTemplateEngine';
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_CompetitionSelection.php'])	{

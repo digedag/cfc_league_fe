@@ -34,27 +34,14 @@ tx_div::load('tx_rnbase_view_Base');
  */
 class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 
+	function getMainSubpart() {return '###SCOPE_SELECTION###';}
+	
   /**
    * Erstellen des Frontend-Outputs
    */
-  function render($view, &$configurations){
-    $this->_init($configurations);
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
     $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-    // Den entscheidenden Teil herausschneiden
-    $templateCode = $cObj->getSubpart($templateCode, '###SCOPE_SELECTION###');
 
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
-
-    $out = $this->_createView($templateCode, $viewData, $cObj, $configurations);
-    return $out;
-  }
-
-  /**
-   * Erstellung des Outputstrings
-   */
-  function _createView($template, &$viewData, &$cObj, &$configurations) {
     $out = '';
     $markerArray = array();
     $subpartArray['###SAISON_SELECTION###'] = '';
