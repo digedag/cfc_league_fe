@@ -36,46 +36,45 @@ tx_div::load('tx_cfcleaguefe_search_Builder');
 class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC {
 
 	function handleRequest(&$parameters,&$configurations, &$viewdata) {
-    // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
-  	// ggf. die Konfiguration aus der TS-Config lesen
-  	$fields = array();
-  	$options = array();
+		// Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
+		// ggf. die Konfiguration aus der TS-Config lesen
+		$fields = array();
+		$options = array();
 //  	$options['debug'] = 1;
-    $this->initSearch($fields, $options, $parameters, $configurations);
-    $listSize = 0;
-    // Soll ein PageBrowser verwendet werden
-    $this->handlePageBrowser($parameters,$configurations, $viewdata, $fields, $options);
-    $service = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();
-  	$teams = $service->search($fields, $options);
+		$this->initSearch($fields, $options, $parameters, $configurations);
+		$listSize = 0;
+		// Soll ein PageBrowser verwendet werden
+		$this->handlePageBrowser($parameters,$configurations, $viewdata, $fields, $options);
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();
+		$teams = $service->search($fields, $options);
   	
-    $this->viewType = $configurations->get('teamlist.viewType');
+		$this->viewType = $configurations->get('teamlist.viewType');
   	
-    $viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
+		$viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
 	}
 	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
-    if(is_array($configurations->get('teamlist.team.pagebrowser.'))) {
-    	$service = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();
-    	// Mit Pagebrowser benötigen wir zwei Zugriffe um die Gesamtanzahl der Teams zu ermitteln 
-  		$options['count']= 1;
-	  	$listSize = $service->search($fields, $options);
-	  	unset($options['count']);
-	  	// PageBrowser initialisieren
-	    $className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
-	    $pageBrowser = new $className('teams');
-	    $pageSize = $this->getPageSize($parameters, $configurations);
-	    //Wurde neu gesucht?
-	    if($parameters->offsetGet('NK_newsearch')) {
-	    	// Der Suchbutton wurde neu gedrückt. Der Pager muss initialisiert werden
-	    	$pageBrowser->setState(null, $listSize, $pageSize);
-	    }
-	    else {
-	    	$pageBrowser->setState($parameters, $listSize, $pageSize);
-	    }
-	    $limit = $pageBrowser->getState();
-	    $options = array_merge($options, $limit);
-	    $viewdata->offsetSet('pagebrowser', $pageBrowser);
-    }
-		
+		if(is_array($configurations->get('teamlist.team.pagebrowser.'))) {
+			$service = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();
+			// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Teams zu ermitteln
+			$options['count']= 1;
+			$listSize = $service->search($fields, $options);
+			unset($options['count']);
+			// PageBrowser initialisieren
+			$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
+			$pageBrowser = new $className('teams');
+			$pageSize = $this->getPageSize($parameters, $configurations);
+			//Wurde neu gesucht?
+			if($parameters->offsetGet('NK_newsearch')) {
+				// Der Suchbutton wurde neu gedrückt. Der Pager muss initialisiert werden
+				$pageBrowser->setState(null, $listSize, $pageSize);
+			}
+			else {
+				$pageBrowser->setState($parameters, $listSize, $pageSize);
+			}
+			$limit = $pageBrowser->getState();
+			$options = array_merge($options, $limit);
+			$viewdata->offsetSet('pagebrowser', $pageBrowser);
+		}
 	}
 
 	/**
