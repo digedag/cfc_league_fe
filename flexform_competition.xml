@@ -135,19 +135,19 @@
                 <type>select</type>
                 <items type="array">
                   <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.League</numIndex>
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_league</numIndex>
                     <numIndex index="1">1</numIndex>
                   </numIndex>
                   <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.Cup</numIndex>
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_ko</numIndex>
                     <numIndex index="1">2</numIndex>
                   </numIndex>
                   <numIndex index="2" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.Other</numIndex>
-                    <numIndex index="1">3</numIndex>
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_other</numIndex>
+                    <numIndex index="1">0</numIndex>
                   </numIndex>
                   <!-- numIndex index="3" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType.Combined</numIndex>
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_combined</numIndex>
                     <numIndex index="1">100</numIndex>
                   </numIndex-->
                 </items>
@@ -237,7 +237,7 @@
 
         <type>array</type>
         <el>
-          <reportPage>
+          <matchtable.match.links.report.pid>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.report_page</label>
@@ -249,9 +249,61 @@
                 <size>1</size>
               </config>
             </TCEforms>
-          </reportPage>
+          </matchtable.match.links.report.pid>
+          <matchtable.fields.MATCH.STATUS.OP_IN_INT>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status</label>
+              <config>
+                <type>select</type>
+                <items type="array">
+                  <numIndex index="0" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_scheduled</numIndex>
+                    <numIndex index="1">0</numIndex>
+                  </numIndex>
+                  <numIndex index="1" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_running</numIndex>
+                    <numIndex index="1">1</numIndex>
+                  </numIndex>
+                  <numIndex index="2" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_finished</numIndex>
+                    <numIndex index="1">2</numIndex>
+                  </numIndex>
+                  <numIndex index="3" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_invalid</numIndex>
+                    <numIndex index="1">-1</numIndex>
+                  </numIndex>
+                  <numIndex index="4" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_rescheduled</numIndex>
+                    <numIndex index="1">-10</numIndex>
+                  </numIndex>
+                </items>
+                <multiple>1</multiple>
+                <maxitems>10</maxitems>
+                <size>5</size>
+              </config>
+            </TCEforms>
+          </matchtable.fields.MATCH.STATUS.OP_IN_INT>
+          <matchtable.options.limit>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.limit</label>
+              <config>
+                <type>input</type>
+                <checkbox>0</checkbox>
+                <default>0</default>
+                <size>3</size>
+                <max>3</max>
+                <range>
+                  <upper>365</upper>
+                  <lower>0</lower>
+                </range>
+                <eval>int</eval>
+              </config>
+            </TCEforms>
+          </matchtable.options.limit>
 
-          <matchTableTimeRangePast>
+          <matchtable.timeRangePast>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.time_range.past</label>
@@ -268,9 +320,9 @@
                 <eval>int</eval>
               </config>
             </TCEforms>
-          </matchTableTimeRangePast>
+          </matchtable.timeRangePast>
 
-          <matchTableTimeRangeFuture>
+          <matchtable.timeRangeFuture>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.time_range.future</label>
@@ -287,9 +339,9 @@
                 <eval>int</eval>
               </config>
             </TCEforms>
-          </matchTableTimeRangeFuture>
+          </matchtable.timeRangeFuture>
 
-          <matchTableTemplate>
+          <matchtableTemplate>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
@@ -300,7 +352,16 @@
                 <eval>trim</eval>
               </config>
             </TCEforms>
-          </matchTableTemplate>
+          </matchtableTemplate>
+          <matchtable.options.debug>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </matchtable.options.debug>
 
         </el>
       </ROOT>
@@ -556,7 +617,7 @@
 
         <type>array</type>
         <el>
-          <tickerReportPage>
+          <tickerlist.match.links.ticker.pid>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tickerlist.ticker_page</label>
@@ -568,9 +629,9 @@
                 <size>1</size>
               </config>
             </TCEforms>
-          </tickerReportPage>
+          </tickerlist.match.links.ticker.pid>
 
-          <tickerReportUrl>
+          <tickerlist.match.links.ticker.fixedUrl>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tickerlist.ticker_url</label>
@@ -581,9 +642,9 @@
                 <eval>trim</eval>
               </config>
             </TCEforms>
-          </tickerReportUrl>
+          </tickerlist.match.links.ticker.fixedUrl>
 
-          <templateLiveTickerList>
+          <tickerlistTemplate>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
@@ -594,7 +655,16 @@
                 <eval>trim</eval>
               </config>
             </TCEforms>
-          </templateLiveTickerList>
+          </tickerlistTemplate>
+          <tickerlist.options.debug>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </tickerlist.options.debug>
 
         </el>
       </ROOT>

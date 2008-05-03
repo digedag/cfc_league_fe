@@ -37,6 +37,8 @@
 			<label index="plugin.competition.flexform.leaguetable.size">Number of teams to show</label>
 			<label index="plugin.competition.flexform.tablechart.clubs">Clubs on chart</label>
 			<label index="plugin.competition.flexform.tablechart.colors">Colors for clubs</label>
+			<label index="plugin.competition.flexform.matchtable.debug">Debug SQL query</label>
+			<label index="plugin.competition.flexform.matchtable.limit">Max matches to show</label>
 			<label index="plugin.competition.flexform.matchtable.report_page">Page for report</label>
 			<label index="plugin.competition.flexform.matchtable.time_range">Time range</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.past">Days before</label>
@@ -62,10 +64,6 @@
 			<label index="plugin.competition.flexform.competitionInput">Show Selectbox for competition?</label>
 
 			<label index="plugin.competition.flexform.competitionType">Competition Types</label>
-			<label index="plugin.competition.flexform.competitionType.League">League</label>
-			<label index="plugin.competition.flexform.competitionType.Cup">Cup</label>
-			<label index="plugin.competition.flexform.competitionType.Other">Single Matches</label>
-			<label index="plugin.competition.flexform.competitionType.Combined">Combined</label>
 			<label index="plugin.competition.flexform.competitionObligation">Obligation</label>
 			<label index="plugin.competition.flexform.competitionObligation.All">All</label>
 			<label index="plugin.competition.flexform.competitionObligation.Obligate">Obligate</label>
@@ -88,6 +86,7 @@
 			<label index="plugin.report.flexform.teamview.club">Club teams only</label>
 			<label index="plugin.report.flexform.teamview.profile_page">Page for profile single view</label>
 			<label index="plugin.report.flexform.teamview.coach_page">Page for coach single view</label>
+			<label index="plugin.report.flexform.teamview.supporter_page">Page for supporter single view</label>
 			<label index="plugin.report.flexform.teamview.player_page">Page for player single view</label>
 			<label index="plugin.report.flexform.profileview.profile">Player to show</label>
 			<label index="plugin.report.flexform.template">Template</label>
@@ -141,6 +140,7 @@
 			<label index="plugin.competition.flexform.tablechart.clubs">Dargestellte Vereine</label>
 			<label index="plugin.competition.flexform.tablechart.colors">Farben der Vereine</label>
 			<label index="plugin.competition.flexform.matchtable.report_page">Seite für Spielbericht</label>
+			<label index="plugin.competition.flexform.matchtable.limit">Max. Anzahl Spiele</label>
 			<label index="plugin.competition.flexform.matchtable.time_range">Zeitraum</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.past">Tage zurück</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.future">Tage im voraus</label>
@@ -161,10 +161,6 @@
 			<label index="plugin.competition.flexform.competitionInput">Selectbox für Wettbewerb?</label>
 
 			<label index="plugin.competition.flexform.competitionType">Wettbewerbstypen</label>
-			<label index="plugin.competition.flexform.competitionType.League">Liga</label>
-			<label index="plugin.competition.flexform.competitionType.Cup">Pokal</label>
-			<label index="plugin.competition.flexform.competitionType.Other">Freundschaftspiele</label>
-			<label index="plugin.competition.flexform.competitionType.Combined">Kombinierte Wettbewerbe</label>
 			<label index="plugin.competition.flexform.competitionObligation">Pflichtwettbewerbe</label>
 			<label index="plugin.competition.flexform.competitionObligation.All">Alle</label>
 			<label index="plugin.competition.flexform.competitionObligation.Obligate">Pflichtwettbewerbe</label>
@@ -186,9 +182,9 @@
 			<label index="plugin.report.flexform.teamview.team">Zeige Team</label>
 			<label index="plugin.report.flexform.teamview.club">Nur Teams des Vereins</label>
 			<label index="plugin.report.flexform.profileview.profile">Spieler anzeigen</label>
-			<label index="plugin.report.flexform.teamview.profile_page">Seite für Einzelanzeige</label>
 			<label index="plugin.report.flexform.teamview.coach_page">Seite für Trainer-Einzelanzeige</label>
 			<label index="plugin.report.flexform.teamview.player_page">Seite für Spieler-Einzelanzeige</label>
+			<label index="plugin.report.flexform.teamview.supporter_page">Seite für Betreuer-Einzelanzeige</label>
 			<label index="plugin.report.flexform.matchreport.showTicker">Zeige Ticker</label>
 			<label index="plugin.report.flexform.matchreport.matchUid">Feste Spiel-UID</label>
 
