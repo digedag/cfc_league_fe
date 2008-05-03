@@ -23,26 +23,39 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
+
+tx_div::load('tx_cfcleaguefe_util_ScopeController');
+tx_div::load('tx_rnbase_action_BaseIOC');
+tx_div::load('tx_cfcleaguefe_util_MatchTable');
 
 /**
  * Controller für die Anzeige der Spiele, für die ein LiveTicker geschaltet ist.
  */
-class tx_cfcleaguefe_actions_LiveTickerList {
+class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 
-  /**
-   * Die Spiele ermitteln und an den View weiterreichen
-   */
-  function execute($parameters,&$configurations){
-    // Die Werte des aktuellen Scope ermitteln
-    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
-    $saisonUids = $scopeArr['SAISON_UIDS'];
-    $groupUids = $scopeArr['GROUP_UIDS'];
-    $compUids = $scopeArr['COMP_UIDS'];
-    $roundUid = $scopeArr['ROUND_UIDS'];
-    $club = $scopeArr['CLUB_UIDS'];
+	/**
+	 * Handle request
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewdata
+	 * @return string error message
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+		$fields = array();
+		$options = array();
+//  	$options['debug'] = 1;
+		$this->initSearch($fields, $options, $parameters, $configurations);
+		$listSize = 0;
+		// Soll ein PageBrowser verwendet werden
+		$this->handlePageBrowser($parameters,$configurations, $viewdata, $fields, $options);
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matches = $service->search($fields, $options);
 
-//t3lib_div::debug($scopeArr , 'ac_tickerlist');
+		$viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
+
+		return '';
+/////////////
 
     $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
     $matchTable->setTimeRange($configurations->get('tickerlist.timeRangePast'),$configurations->get('tickerlist.timeRangeFuture'));
@@ -66,7 +79,71 @@ class tx_cfcleaguefe_actions_LiveTickerList {
 
     return $out;
   }
+	/**
+	 * Set search criteria
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @param array $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 */
+	protected function initSearch(&$fields, &$options, &$parameters, &$configurations) {
+		$options['distinct'] = 1;
+//  	$options['debug'] = 1;
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'tickerlist.fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'tickerlist.options.');
 
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		
+		$matchtable = $this->getMatchTable();
+		$matchtable->setScope($scopeArr);
+		$matchtable->setTeams($teamId);
+		$matchtable->setTimeRange($configurations->get('tickerlist.timeRangePast'),$configurations->get('tickerlist.timeRangeFuture'));
+    $matchtable->setLiveTicker();; // Nur Live-Tickerspiele holen
+		
+		$matchtable->getFields($fields, $options);
+	}
+	/**
+	 * @return tx_cfcleaguefe_util_MatchTable
+	 */
+	function getMatchTable() {
+		return t3lib_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
+	}
+  /**
+   * Initializes page browser
+   *
+   * @param arrayobject $parameters
+   * @param tx_rnbase_configurations $configurations
+   * @param arrayobject $viewdata
+   * @param array $fields
+   * @param array $options
+   */
+	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
+		if(is_array($configurations->get('tickerlist.match.pagebrowser.'))) {
+			$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+			// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Spiele zu ermitteln
+			$options['count']= 1;
+			$listSize = $service->search($fields, $options);
+			unset($options['count']);
+			// PageBrowser initialisieren
+			$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
+			$pageBrowser = new $className('tickerlist_' . $configurations->getPluginId());
+			$pageSize = $this->getPageSize($parameters, $configurations);
+			//Wurde neu gesucht?
+			if($parameters->offsetGet('NK_newsearch')) {
+				// Der Suchbutton wurde neu gedrückt. Der Pager muss initialisiert werden
+				$pageBrowser->setState(null, $listSize, $pageSize);
+			}
+			else {
+				$pageBrowser->setState($parameters, $listSize, $pageSize);
+			}
+			$limit = $pageBrowser->getState();
+			$options = array_merge($options, $limit);
+			$viewdata->offsetSet('pagebrowser', $pageBrowser);
+		}
+	}
+	function getTemplateName() {return 'tickerlist';}
+	function getViewClassName() {	return 'tx_cfcleaguefe_views_LiveTickerList';	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_LiveTickerList.php'])	{

@@ -32,7 +32,28 @@ tx_div::load('tx_cfcleaguefe_actions_MatchTable');
  */
 class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_MatchTable {
 
-	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+	/**
+	 * Set search criteria
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @param array $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 */
+	protected function initSearch(&$fields, &$options, &$parameters, &$configurations) {
+		$options['distinct'] = 1;
+//  	$options['debug'] = 1;
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'matchcrosstable.fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'matchcrosstable.options.');
+
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+
+		$matchtable = $this->getMatchTable();
+		$matchtable->setScope($scopeArr);
+		$matchtable->getFields($fields, $options);
+	}
+
+	function ___handleRequest(&$parameters,&$configurations, &$viewdata) {
 
     // Die Werte des aktuellen Scope ermitteln
     $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
@@ -69,14 +90,10 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
     $viewData->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
     $viewData->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
     
-    // View
-    $this->viewType = $configurations->get('matchtable.viewType');
     return '';
   }
 	function getTemplateName() {return 'matchcrosstable';}
-	function getViewClassName() {
-		return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchCrossTable' : 'tx_rnbase_view_phpTemplateEngine';
-	}
+	function getViewClassName() {	return 'tx_cfcleaguefe_views_MatchCrossTable'; }
   
 }
 

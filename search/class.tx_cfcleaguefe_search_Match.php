@@ -40,23 +40,31 @@ class tx_cfcleaguefe_search_Match extends tx_rnbase_util_SearchBase {
 	protected function getTableMappings() {
 		$tableMapping['MATCH'] = 'tx_cfcleague_games';
 		$tableMapping['COMPETITION'] = 'tx_cfcleague_competition';
+		$tableMapping['TEAM1'] = 't1';
+		$tableMapping['TEAM2'] = 't2';
 		return $tableMapping;
 	}
 
-  protected function getBaseTable() {
-  	return 'tx_cfcleague_games';
-  }
-  function getWrapperClass() {
-  	return 'tx_cfcleaguefe_models_match';
-  }
-	
-  protected function getJoins($tableAliases) {
-  	$join = '';
-    if(isset($tableAliases['COMPETITION'])) {
-    	$join .= ' JOIN tx_cfcleague_competition ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid )';
-    }
-    return $join;
-  }
+	protected function getBaseTable() {
+		return 'tx_cfcleague_games';
+	}
+	function getWrapperClass() {
+		return 'tx_cfcleaguefe_models_match';
+	}
+
+	protected function getJoins($tableAliases) {
+		$join = '';
+		if(isset($tableAliases['COMPETITION'])) {
+			$join .= ' JOIN tx_cfcleague_competition ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid ';
+		}
+		if(isset($tableAliases['TEAM1'])) {
+			$join .= ' INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid ';
+		}
+		if(isset($tableAliases['TEAM2'])) {
+			$join .= ' INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid ';
+		}
+		return $join;
+	}
 }
 
 

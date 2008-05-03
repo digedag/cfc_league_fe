@@ -32,54 +32,34 @@ tx_div::load('tx_rnbase_util_Misc');
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
  */
 class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
-
+	function getMainSubpart() {return '###CROSSTABLE###';}
+	
   /**
    * Erstellen des Frontend-Outputs
-   */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
-    if(!$templateCode)
-    	tx_rnbase_util_Misc::mayday('Template File not found: ' . $this->getTemplate($view,'.html'), 'T3sports');
-    // Den entscheidenden Teil herausschneiden
-    $templateCode = $cObj->getSubpart($templateCode, '###CROSSTABLE###');
-    if(!$templateCode)
-    	tx_rnbase_util_Misc::mayday('Subpart ###CROSSTABLE### not found in template!', 'T3sports');
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
-    $out = $this->_createView($templateCode, $viewData, $configurations);
-    return $out;
-  }
-
-  /**
-   * Erstellung des Outputstrings
    * @param string $template
    * @param array $viewData
    * @param tx_rnbase_configurations $configurations
+   * @param tx_rnbase_util_FormatUtil $formatter
    */
-  function _createView($template, &$viewData, &$configurations) {
-    $cObj =& $this->formatter->cObj;
-    $matches = $viewData->offsetGet('matches');
-    // Wir benötigen die beteiligten Teams
-    $teams = $viewData->offsetGet('teams');
-    if(!is_array($matches) || !count($matches)) {
-    	return $configurations->getLL('matchcrosstable.noData');
-    }
-    
-    $this->removeDummyTeams($teams);
-    // Mit den Teams können wir die Headline bauen
-    $headlineTemplate = $cObj->getSubpart($template, '###HEADLINE###');
-    $subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $cObj, $configurations);
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
+		$cObj =& $formatter->cObj;
+		$matches = $viewData->offsetGet('matches');
+		if(!is_array($matches) || !count($matches)) {
+			return $configurations->getLL('matchcrosstable.noData');
+		}
+		// Wir benötigen die beteiligten Teams
+		$teams = $viewData->offsetGet('teams');
+		$this->removeDummyTeams($teams);
+		// Mit den Teams können wir die Headline bauen
+		$headlineTemplate = $cObj->getSubpart($template, '###HEADLINE###');
+		$subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $cObj, $configurations);
 
-    $teamsArray = $this->generateTableData($matches, $teams);
-    $datalineTemplate = $cObj->getSubpart($template, '###DATALINE###');
-    $subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations);
-    
-
-    $markerArray = array('###MATCHCOUNT###' => count($matches), );
-    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-  }
+		$teamsArray = $this->generateTableData($matches, $teams);
+		$datalineTemplate = $cObj->getSubpart($template, '###DATALINE###');
+		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations);
+		$markerArray = array('###MATCHCOUNT###' => count($matches), );
+		return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+	}
 
   /**
    * Erstellt ein Array dessen Key die UIDs der Teams sind. Value ist ein Array
@@ -91,6 +71,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
   private function generateTableData(&$matches, &$teams) {
   	$ret = array();
 
+  	reset($matches);
   	reset($teams);
   	$teamIds = array_keys($teams);
   	$teamCnt = count($teamIds);

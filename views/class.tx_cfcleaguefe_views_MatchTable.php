@@ -28,50 +28,24 @@ tx_div::load('tx_rnbase_view_Base');
 
 
 /**
- * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
+ * Viewklasse für die Anzeige eines Spielplans mit Hilfe eines HTML-Templates.
  */
 class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base {
 
+	/**
+	 * Erstellung des Outputstrings
+	 */
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
-    $out = $this->_createView($template, $viewData, $configurations);
-    return $out;
+		$matches = $viewData->offsetGet('matches');
+		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
+		$listBuilder = new $builderClass(tx_div::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
+		$out = $listBuilder->render($matches,
+							$viewData, $template, 'tx_cfcleaguefe_util_MatchMarker',
+							'matchtable.match.', 'MATCH', $formatter);
+		return $out;
 	}
-	
-  function getMainSubpart() {return '###MATCHTABLE###';}
-	
-  /**
-   * Erstellung des Outputstrings
-   */
-  function _createView($template, &$viewData, &$configurations) {
-    $cObj =& $this->formatter->cObj;
-    $matches = $viewData->offsetGet('matches');
-	  $builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
-	  $listBuilder = new $builderClass(tx_div::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
-	  
-    $out = $listBuilder->render($matches, 
-    								$viewData, $template, 'tx_cfcleaguefe_util_MatchMarker', 
-    								'matchtable.match.', 'MATCH', $this->formatter);
-    return $out;
-  }
 
-  /**
-   * Vorbereitung der Link-Objekte
-   */
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
-
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
-    $this->links = array();
-
-    $reportPage = $configurations->get('reportPage');
-    if($reportPage) {
-      $link = new $linkClass;
-      $link->designatorString = $configurations->getQualifier();
-      $link->destination($reportPage); // Das Ziel der Seite vorbereiten
-      $this->links['match'] = $link;
-    }
-  }
-
+	function getMainSubpart() {return '###MATCHTABLE###';}
 }
 
 
