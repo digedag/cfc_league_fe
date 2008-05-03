@@ -60,7 +60,7 @@ class tx_cfcleaguefe_util_ScopeController {
 
     $ret['SAISON_UIDS'] = tx_cfcleaguefe_util_ScopeController::handleCurrentSaison($parameters,$configurations, $useObjects);
     $ret['GROUP_UIDS'] = tx_cfcleaguefe_util_ScopeController::handleCurrentGroup($parameters,$configurations, $useObjects);
-    $ret['COMP_UIDS'] = tx_cfcleaguefe_util_ScopeController::handleCurrentCompetition($parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $useObjects);
+    tx_cfcleaguefe_util_ScopeController::handleCurrentCompetition($ret, $parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $useObjects);
     $ret['CLUB_UIDS'] = tx_cfcleaguefe_util_ScopeController::handleCurrentClub($parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $ret['COMP_UIDS'], $useObjects);
 
     $ret['ROUND_UIDS'] = tx_cfcleaguefe_util_ScopeController::handleCurrentRound($parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $ret['COMP_UIDS'], $ret['CLUB_UIDS'], $useObjects);
@@ -150,7 +150,7 @@ class tx_cfcleaguefe_util_ScopeController {
    * vorbereitet und in die viewData der Config gelegt.
    * @return String Die UIDs als String
    */
-	function handleCurrentCompetition($parameters,&$configurations, $saisonUids,$groupUids, $useObjects = false) {
+	function handleCurrentCompetition(&$scopeArr, $parameters,&$configurations, $saisonUids,$groupUids, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		$compUids = $configurations->get('competitionSelection');
 
@@ -163,7 +163,7 @@ class tx_cfcleaguefe_util_ScopeController {
 			$options = array();
 			tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'scope.competition.options.');
 			tx_cfcleaguefe_search_Builder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
-      
+
 			$competitions = $compServ->search($fields, $options);
 //			$competitions = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids);
 			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($competitions,$parameters,'competition', $useObjects ? '' : 'name');
@@ -171,7 +171,13 @@ class tx_cfcleaguefe_util_ScopeController {
 			$viewData->offsetSet('competition_select', $dataArr);
 			$configurations->addKeepVar('competition',$compUids);
 		}
-		return $compUids;
+		$scopeArr['COMP_UIDS'] = $compUids;
+		// Zusätzlich noch die weiteren Einschränkungen mit in das ScopeArray legen, weil diese Infos auch
+		// von anderen Views benötigt werden
+		$value = intval($configurations->get('scope.competition.obligation'));
+		if($value) $scopeArr['COMP_OBLIGATION'] = $value; // 1 - Pflicht, 2- freie Spiele
+		$value = $configurations->get('scope.competition.type');
+		if(strlen(trim($value))) $scopeArr['COMP_TYPES'] = $value;
 	}
 
   /**
