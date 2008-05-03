@@ -56,7 +56,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 
 		$teamsArray = $this->generateTableData($matches, $teams);
 		$datalineTemplate = $cObj->getSubpart($template, '###DATALINE###');
-		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations);
+		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations, $viewData);
 		$markerArray = array('###MATCHCOUNT###' => count($matches), );
 		return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 	}
@@ -84,8 +84,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
   		for($i=0; $i < $teamCnt; $i++) {
   			if($uid == $teamIds[$i])
   				$ret[$uid][$uid] = $this->ownMatchStr; // Das Spiel gegen sich selbst
-  			else
+  			else {
 	  			$ret[$uid][$teamIds[$i]] = $this->findMatch($matches, $uid, $teamIds[$i]);
+  			}
   		}
   	}
   	return $ret;
@@ -99,12 +100,14 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    * @return tx_cfcleaguefe_models_match
    */
   private function findMatch(&$matches, $home, $guest) {
+  	$ret = array(); 
   	for($i=0, $cnt = count($matches); $i < $cnt; $i++) {
   		if($matches[$i]->record['home'] == $home && $matches[$i]->record['guest'] == $guest)
-  			return $matches[$i];
+//  			return $matches[$i];
+  			$ret[] = $matches[$i];
   	}
   	// Die Paarung gibt es nicht.
-  	return $this->noMatchStr;
+  	return count($ret) ? $ret : $this->noMatchStr;
   }
   /**
    * Erstellt die Datenzeilen der Tabelle
@@ -115,34 +118,42 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    * @param tslib_content $cObj
    * @param tx_rnbase_configurations $configurations
    */
-	private function _createDatalines($template, $datalines, &$teams, &$cObj, &$configurations) {
-		$subTemplate = $cObj->getSubpart($template, '###MATCH###');
+	private function _createDatalines($template, $datalines, &$teams, &$cObj, &$configurations, &$viewData) {
+		$subTemplate = '###MATCHS###' . $cObj->getSubpart($template, '###MATCHS###') . '###MATCHS###';
 		$freeTemplate = $cObj->getSubpart($template, '###MATCH_FREE###');
 		$rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
 
-		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-		$matchMarker = new $markerClass($this->links);
-		$matchMarker->setFullMode(intval($configurations->get('matchcrosstable.dataline.matchFullMode') != 0));
+//		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
+//		$matchMarker = new $markerClass($this->links);
+//		$matchMarker->setFullMode(intval($configurations->get('matchcrosstable.dataline.matchFullMode') != 0));
 		$teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
 		$teamMarker = new $teamMarkerClass;
-    
+
+		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
+		$listBuilder = new $builderClass(tx_div::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
+		
 		$lines = array();
 		// Über alle Zeilen iterieren
 		foreach($datalines as $uid=>$matches) {
 			$rowRollCnt = 0;
 			$parts = array();
-			foreach($matches As $match){
-				if(is_object($match)) {
-					$match->record['roll'] = $rowRollCnt;
-					$parts[] = $matchMarker->parseTemplate($match->isDummy() ? $freeTemplate : $subTemplate, $match, $this->formatter, 'matchcrosstable.dataline.match.', 'MATCH');
+			foreach($matches As $matchArr){
+				if(is_array($matchArr)) {
+					// Da sind Spiele im Array. Anzeigen mit ListMarker
+					$parts[] = $listBuilder->render($matchArr,
+										$viewData, $subTemplate, 'tx_cfcleaguefe_util_MatchMarker',
+										'matchcrosstable.dataline.match.', 'MATCH', $this->formatter);
+					
+//					$match->record['roll'] = $rowRollCnt;
+//					$parts[] = $matchMarker->parseTemplate($match->isDummy() ? $freeTemplate : $subTemplate, $match, $this->formatter, 'matchcrosstable.dataline.match.', 'MATCH');
 				}
 				else
-					$parts[] = $match;
-
+					$parts[] = $matchArr; // Sollte ein String sein...
+					
 				$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 			}
 			// Jetzt die einzelnen Teile zusammenfügen
-			$subpartArray['###MATCH###'] = implode($parts, $configurations->get('matchcrosstable.dataline.match.implode'));
+			$subpartArray['###MATCHS###'] = implode($parts, $configurations->get('matchcrosstable.dataline.implode'));
 			// Und das Team ins MarkerArray
 			$lineTemplate = $teamMarker->parseTemplate($template, $teams[$uid], $this->formatter, 'matchcrosstable.dataline.team.', 'DATALINE_TEAM');
 			$lines[] = $this->formatter->cObj->substituteMarkerArrayCached($lineTemplate, $markerArray, $subpartArray);
