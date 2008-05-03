@@ -24,8 +24,7 @@
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 tx_div::load('tx_rnbase_action_BaseIOC');
-
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
+tx_div::load('tx_cfcleaguefe_util_ScopeController');
 
 /**
  * Controller für die Anzeige eines Teams
