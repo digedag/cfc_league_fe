@@ -141,7 +141,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    */
   function isDummy(){
     // Aus Performancegründen fragen wir hier den eigenen Record ab
-    return (intval($this->record['home_dummy']) || intval($this->record['guest_dummy']));
+    return $this->getHome()->isDummy() || $this->getGuest()->isDummy();
   }
   /**
    * Liefert alle MatchNotes des Spiels als Referenz auf ein Array.
