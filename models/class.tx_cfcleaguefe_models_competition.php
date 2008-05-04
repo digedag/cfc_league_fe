@@ -28,95 +28,115 @@ tx_div::load('tx_rnbase_model_base');
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
  */
 class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
-  private static $instances = array();
-  /** array of teams */
-  private $teams;
-  /**
-   * array of matches
-   * Containes retrieved matches by state
-   */
-  private $matchesByState = array();
-  /** array of penalties */
-  private $penalties;
-  
-  function getTableName(){return 'tx_cfcleague_competition';}
+	private static $instances = array();
+	/** array of teams */
+	private $teams;
+	/**
+	 * array of matches
+	 * Containes retrieved matches by state
+	 */
+	private $matchesByState = array();
+	/** array of penalties */
+	private $penalties;
 
-  /**
-   * Liefert alle Spiele des Wettbewerbs mit einem bestimmten Status.
-   * Der Status kann sein:
-   * <ul>
-   * <li> 0 - angesetzt
-   * <li> 1 - läuft
-   * <li> 2 - beendet
-   * </ul>
-   * @param scope - 0,1,2 für alle, Hin-, Rückrunde
-   */
-  function getMatches($status, $scope=0) {
-    // Sicherstellen, dass wir eine Zahl bekommen
-    if((isset($status) && t3lib_div::testInt($status))) {
-      $status = intval($status);
-      // Wir laden die Spieldaten zunächst ohne die Teams
-      // Um die Datenmenge in Grenzen zu halten
-      $round = 0;
-      $scope = intval($scope);
-      if($scope) {
-        // Feststellen wann die Hinrunde endet: Anz Teams - 1
-        $round = count(t3lib_div::intExplode(',',$this->record['teams']));
-        $round = ($round) ? $round - 1 : $round;
-      }
-      // Check if data is already cached
-      if(!is_array($this->matchesByState[$status . '_' . $scope])) {
-        $what = '*';
-        # Die UID der Liga setzen
-        $where = 'competition="'.$this->uid.'" ';
-        switch($status) {
-          case 1:
-            $where .= ' AND status>="' . $status . '"';
-            break;
-          default:
-            $where .= ' AND status="' . $status . '"';
-        }
-  // t3lib_div::debug($round, 'md_comp');
-        if($scope && $round) {
-          switch($scope) {
-            case 1:
-              $where .= ' AND round<="' . $round . '"';
-              break;
-            case 2:
-              $where .= ' AND round>"' . $round . '"';
-              break;
-          }
-        }
-        $options['where'] = $where;
-        $options['wrapperclass'] = 'tx_cfcleaguefe_models_match';
-        // Issue 1880237: Return matches sorted by round
-        $options['orderby'] = 'round, date';
-        $this->matchesByState[$status . '_' . $scope] = tx_rnbase_util_DB::doSelect($what,'tx_cfcleague_games',$options, 0);
-      }
-      return $this->matchesByState[$status . '_' . $scope];
-    }
-  }
+	function getTableName(){return 'tx_cfcleague_competition';}
 
-  /**
-   * Set matches for a state and scope
-   *
-   * @param array $matchesArr
-   * @param int $status
-   * @param int $scope
+	/**
+	 * Liefert alle Spiele des Wettbewerbs mit einem bestimmten Status.
+	 * Der Status kann sein:
+	 * <ul>
+	 * <li> 0 - angesetzt
+	 * <li> 1 - läuft
+	 * <li> 2 - beendet
+	 * </ul>
+	 * @param scope - 0,1,2 für alle, Hin-, Rückrunde
+	 */
+	function getMatches($status, $scope=0) {
+		// Sicherstellen, dass wir eine Zahl bekommen
+		if((isset($status) && t3lib_div::testInt($status))) {
+			$status = intval($status);
+			// Wir laden die Spieldaten zunächst ohne die Teams
+			// Um die Datenmenge in Grenzen zu halten
+			$round = 0;
+			$scope = intval($scope);
+			if($scope) {
+				// Feststellen wann die Hinrunde endet: Anz Teams - 1
+				$round = count(t3lib_div::intExplode(',',$this->record['teams']));
+				$round = ($round) ? $round - 1 : $round;
+			}
+			// Check if data is already cached
+			if(!is_array($this->matchesByState[$status . '_' . $scope])) {
+				$what = '*';
+				# Die UID der Liga setzen
+				$where = 'competition="'.$this->uid.'" ';
+				switch($status) {
+					case 1:
+						$where .= ' AND status>="' . $status . '"';
+						break;
+					default:
+						$where .= ' AND status="' . $status . '"';
+				}
+				if($scope && $round) {
+					switch($scope) {
+						case 1:
+							$where .= ' AND round<="' . $round . '"';
+							break;
+						case 2:
+							$where .= ' AND round>"' . $round . '"';
+							break;
+					}
+				}
+				$options['where'] = $where;
+				$options['wrapperclass'] = 'tx_cfcleaguefe_models_match';
+				// Issue 1880237: Return matches sorted by round
+				$options['orderby'] = 'round, date';
+				$this->matchesByState[$status . '_' . $scope] = tx_rnbase_util_DB::doSelect($what,'tx_cfcleague_games',$options, 0);
+			}
+			return $this->matchesByState[$status . '_' . $scope];
+		}
+	}
+
+	/**
+	 * Set matches for a state and scope
+	 *
+	 * @param array $matchesArr
+	 * @param int $status
+	 * @param int $scope
+	 */
+	function setMatches($matchesArr, $status, $scope = 0) {
+ 		$this->matchesByState[intval($status) . '_' . intval($scope)] = is_array($matchesArr) ? $matchesArr : NULL;
+	}
+
+	/**
+	 * Whether or not this competition is type league
+	 * @return boolean
+	 */
+	function isTypeLeague() {
+		return $this->record['type'] == 1;
+	}
+	/**
+	 * Whether or not this competition is type league
+	 * @return boolean
+	 */
+	function isTypeCup() {
+		return $this->record['type'] == 2;
+	}
+	/**
+	 * Whether or not this competition is type league
+	 * @return boolean
+	 */
+	function isTypeOther() {
+		return $this->record['type'] == 0;
+	}
+	/**
+	 * Returns the number of match parts. Default is two.
+	 *
+	 * @return int
    */
-  function setMatches($matchesArr, $status, $scope = 0) {
-    $this->matchesByState[intval($status) . '_' . intval($scope)] = is_array($matchesArr) ? $matchesArr : NULL;
-  }
-  
-  /**
-   * Returns the number of match parts. Default is two.
-   *
-   * @return int
-   */
-  public function getMatchParts() {
-    $parts = intval($this->record['match_parts']);
-    return $parts > 0 ? $parts : 2;
-  }
+	public function getMatchParts() {
+		$parts = intval($this->record['match_parts']);
+		return $parts > 0 ? $parts : 2;
+	}
 	/**
 	 * Liefert ein Array mit allen Spielrunden der Liga
 	 * 
@@ -125,7 +145,6 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
 	function getRounds(){
 		# build SQL for select
 		$what = 'distinct round as uid,round AS number,round_name As name, max(status) As finished';
-    
 		# WHERE
 		# Die UID der Liga setzen
 		$where = 'competition="'.$this->uid.'"';
