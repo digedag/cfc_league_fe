@@ -41,8 +41,47 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
 	function getMarkerValue($params, $formatter) {
-		return 'Hello Chart!';
+		if(!isset($params['match'])) return false;
+		$match = $params['match'];
+		$competition = $match->getCompetition();
+		if(!$competition->isTypeLeague()) return false;
+
+		$clubs = array();
+		$clubId = $match->getHome()->record['club'];
+		if($clubId) $clubs[] = $clubId;
+		$clubId = $match->getGuest()->record['club'];
+		if($clubId) $clubs[] = $clubId;
+		if(!count($clubs)) return false; // Ohne clubs wäre der Chart leer
+
+
+		$defaults = $this->_getDefaults($competition, $clubs);
+
+		$leagueTable = tx_div::makeInstance('tx_cfcleaguefe_util_LeagueTable');
+		$xyDataset = $leagueTable->generateChartData($parameters,$defaults, $competition);
+		$tsArr = $formatter->configurations->get('chart.');
+		
+		tx_div::load('tx_cfcleaguefe_actions_TableChart');
+		tx_cfcleaguefe_actions_TableChart::createChartDataset($xyDataset, $tsArr, $formatter->configurations, $competition);
+		require_once(PATH_site.t3lib_extMgm::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
+		return tx_pbimagegraph_ts::make($tsArr);
 	}
+	/**
+	 * @return tx_cfcleaguefe_util_MatchTable
+	 */
+	function getMatchTable() {
+		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
+	}
+
+	function _getDefaults($league, $clubs) {
+		$defaults['pointsystem'] = $league->record['point_system'];
+		// Hier die beiden clubs
+		$defaults['chartclubs'] = implode(',', $clubs);
+		$defaults['tabletype'] = 0;
+		$defaults['tablescope'] = 0; // Normale Tabelle
+    $defaults['penalties'] = $league->getPenalties();
+		return $defaults;
+	}
+
 }
 
 
