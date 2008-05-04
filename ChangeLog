@@ -2,6 +2,13 @@
 
 Änderungen
 ----------
+v0.3.1 (04.05.2008)
+* TS for match date fixed
+* Many new TS contants for HTML templates
+* Some keys in flexform changed. So most probably your page plugins will fail after update. Simply resave your plugins.
+* Match cross table supports more then match against one opponent. HTML-Template changed!
+* League chart can now be displayed in match report. First working marker service!
+
 v0.3.0 (02.05.2008)
 Änderungen bei der Verlinkung von Informationen
 * Neue TS-Config für Links in Anlehnung an die typolink-Konfigration
