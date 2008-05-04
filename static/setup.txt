@@ -477,26 +477,25 @@ plugin.tx_cfcleaguefe_competition {
 }
 
 # Define a base layout for chartlines
-plugin.tx_cfcleaguefe_competition.chart.title = Tabellenfahrt der COMPETITION_NAME
-plugin.tx_cfcleaguefe_competition.chart.line = LINE
-plugin.tx_cfcleaguefe_competition.chart.line {
-  title = egal
-  lineColor = egal
-  lineStyle = solid
-  lineStyle{
-    thickness = 2
-    color = blue
-  }
-  shadow = true
-  marker = circle
-  marker {
-    fillColor = white@0.4
-    size = 3
+lib.t3sports.chart {
+  title = Tabellenfahrt der COMPETITION_NAME
+  line = LINE
+  line {
+    title = egal
+    lineColor = egal
+    lineStyle = solid
+    lineStyle{
+      thickness = 2
+      color = blue
+    }
     shadow = true
+    marker = circle
+    marker {
+      fillColor = white@0.4
+      size = 3
+      shadow = true
+    }
   }
-}
-# Define a base layout for tablecharts
-plugin.tx_cfcleaguefe_competition.chart {
   factory = png
   width = 480
   height = 300
@@ -602,6 +601,8 @@ plugin.tx_cfcleaguefe_competition.chart {
     }
   }
 }
+
+plugin.tx_cfcleaguefe_competition.chart =< lib.t3sports.chart
 
 tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_competition
 
@@ -722,6 +723,8 @@ plugin.tx_cfcleaguefe_report {
     saison.current.noLink = 1
     group.current.noLink = 1
   }
+
+  chart =< lib.t3sports.chart
 
   # Rendering of news items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
