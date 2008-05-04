@@ -41,9 +41,28 @@ class tx_cfcleaguefe_util_LeagueTable  {
     $this->_teamData = Array();
   }
 
+  /**
+   * Für die Berechnung des Daten benötigen wir die Parameter und eine Liste 
+   * von Spielen. Dadurch müssen die beteiligten Teams
+   * aus dem Spielen geholt werden. Daten für die Grund-Config müssen extra geliefert 
+   * werden
+   *
+   * @param tx_lib_parameters $parameters
+   * @param tx_rnbase_configurations $configurations
+   * @param array $matchArr
+   * @param array $defaults
+   */
+  function getTableData(&$parameters, $matchArr, $defaults) {
+    $this->_initConfig($parameters, $defaults);
+    // TODO
+  }
 
   /**
    * Für die Berechnung des Charts benötigen wir die Config, die Parameter und die Liga
+   * Statt Liga nehmen wir eine Liste von Spielen. Dadurch müssen die beteiligten Teams
+   * aus dem Spielen geholt werden. Daten für die Grund-Config müssen extra geliefert 
+   * werden
+   * 
    * Was brauchen wir für eine Tabellenfahrt?
    * - der Tabellenstand muss nach jeden Spieltag berechnet werden
    * - die Position für für jedes Team in einem Array abgelegt
@@ -53,10 +72,11 @@ class tx_cfcleaguefe_util_LeagueTable  {
    * @param tx_cfcleaguefe_models_competition $league
    */
   function generateChart(&$parameters,&$configurations, &$league) {
+  	$defaults = $this->_getDefaults($configurations, $league);
     // Wir setzen die notwendigen Einstellungen
-    $this->_initConfig($parameters, $configurations, $league);
+    $this->_initConfig($parameters, $defaults);
     // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
-    $this->_initTeams($configurations, $league);
+    $this->_initTeams($league->getTeams());
     // Hier je nach TableScope die Spiele holen
     $matches = $league->getMatches(2, $this->cfgTableScope);
     
@@ -99,10 +119,12 @@ class tx_cfcleaguefe_util_LeagueTable  {
    * @param tx_cfcleaguefe_models_competition $league
    */
   function generateTable(&$parameters,&$configurations, &$league) {
+  	$defaults = $this->_getDefaults($configurations, $league);
+t3lib_div::debug($defaults, 'tx_cfcleaguefe_util_LeagueTable'); // TODO: Remove me!
     // Wir setzen die notwendigen Einstellungen
-    $this->_initConfig($parameters, $configurations, $league);
+    $this->_initConfig($parameters, $defaults);
     // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
-    $this->_initTeams($configurations, $league);
+    $this->_initTeams($league->getTeams());
 
     // Hier je nach TableScope (Hin-/Rückrunde) die Spiele holen
     $matches = $league->getMatches(2, $this->cfgTableScope); // TODO: Status aus Config holen
@@ -338,20 +360,17 @@ class tx_cfcleaguefe_util_LeagueTable  {
 
   /**
    * Lädt die Namen der Teams in der Tabelle
-   * @param tx_rnbase_configurations $configurations
    * @param tx_cfcleaguefe_models_competition $league
    */
-  function _initTeams(&$configurations, &$league) {
+  function _initTeams(&$teams) {
     // Wir laden die Teams aus der Liga
 //    $uids = $league->record['teams'];
 //    $where = 'uid IN (' . $uids .')';
 //    $teams = tx_rnbase_util_DB::queryDB('*','tx_cfcleague_teams',$where,
 //              '','sorting','tx_cfcleaguefe_models_team',0);
 
-    $teams = $league->getTeams();
-    // Besondere Teams suchen
-    $arr = t3lib_div::intExplode(',',$configurations->get('markClubs'));
-
+		// Besondere Teams suchen
+		$arr = t3lib_div::intExplode(',',$this->cfgMarkClubs);
     foreach($teams As $team) {
       if($team->isDummy()) continue; // Ignore dummy teams
       $this->_teamData[$team->uid]['team'] = $team;
@@ -371,63 +390,73 @@ class tx_cfcleaguefe_util_LeagueTable  {
       $this->_teamData[$team->uid]['drawCount'] = 0;
       $this->_teamData[$team->uid]['loseCount'] = 0;
 
-      // Muss das Team hervorgehoben werden?
-      if($configurations->get('markClubs')) {
-        $this->_teamData[$team->uid]['markClub'] = in_array($team->record['club'], $arr) ? 1 : 0;
-      }
-    }
+			// Muss das Team hervorgehoben werden?
+			if($this->cfgMarkClubs) {
+				$this->_teamData[$team->uid]['markClub'] = in_array($team->record['club'], $arr) ? 1 : 0;
+			}
+		}
 //      t3lib_div::debug($this->_teamData,'Vereine');
+	}
+
+	function _getDefaults($configurations, $league) {
+		$defaults['pointsystem'] = $league->record['point_system'];
+		$defaults['pointsystemInput'] = $configurations->get('pointSystemSelectionInput');
+		$defaults['chartclubs'] = $configurations->get('chartClubs');
+		$defaults['markclubs'] = $configurations->get('markClubs');
+		$defaults['tabletype'] = $configurations->get('tabletype');
+		$defaults['tabletypeInput'] = $configurations->get('tabletypeSelectionInput');
+		$defaults['tablescope'] = $configurations->get('tablescope');
+		$defaults['tablescopeInput'] = $configurations->get('tablescopeSelectionInput');
+    $defaults['penalties'] = $league->getPenalties();
+		return $defaults;
   }
 
   /**
    * Initialisiert die Instanz mit den notwendigen Daten
    * @param tx_lib_parameters $parameters
-   * @param tx_rnbase_configurations $configurations
-   * @param tx_cfcleaguefe_models_competition $league
+   * @param array $defaults
    */
-  function _initConfig(&$parameters, &$configurations, &$league) {
-    // Das Punktesystem kommt aus der Liga, kann aber über einen Parameter verändert werden
-    $this->cfgPointSystem = $league->record['point_system'];
-    // Das das Punktesystem geändert werden?
-    if($configurations->get('pointSystemSelectionInput')) {
-      // Prüfen, ob der Parameter im Request liegt
-      if($parameters->offsetGet('pointsystem'))
-        $this->cfgPointSystem = intval($parameters->offsetGet('pointsystem'));
-    }
+	function _initConfig(&$parameters, &$defaults) {
+		// Das Punktesystem kommt aus der Liga, kann aber über einen Parameter verändert werden
+		$this->cfgPointSystem = $defaults['pointsystem'];
+		// Das das Punktesystem geändert werden?
+		if($defaults['pointSystemInput']) {
+			// Prüfen, ob der Parameter im Request liegt
+			if($parameters->offsetGet('pointsystem'))
+				$this->cfgPointSystem = intval($parameters->offsetGet('pointsystem'));
+		}
 
-    $this->cfgChartClubs = t3lib_div::intExplode(',',$configurations->get('chartClubs'));
-
-    $this->cfgTableType = $configurations->get('tabletype');
+		$this->cfgChartClubs = t3lib_div::intExplode(',',$defaults['chartclubs']);
+		$this->cfgMarkClubs = t3lib_div::intExplode(',',$defaults['markclubs']);
+		$this->cfgTableType = $defaults['tabletype'];
 //t3lib_div::debug($configurations);
-    // Wird der TableType per SelectBox angeboten?
-    if($configurations->get('tabletypeSelectionInput')) {
-      $this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
-    }
+		// Wird der TableType per SelectBox angeboten?
+		if($defaults['tabletypeInput']) {
+			$this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
+		}
 
-    // Der TableScope wirkt sich auf die betrachteten Spiele aus
-    $this->cfgTableScope = $configurations->get('tablescope');
-    if($configurations->get('tablescopeSelectionInput')) {
-      $this->cfgTableScope = $parameters->offsetGet('tablescope') ? $parameters->offsetGet('tablescope') : $this->cfgTableScope;
-    }
+		// Der TableScope wirkt sich auf die betrachteten Spiele aus
+		$this->cfgTableScope = $defaults['tablescope'];
+		if($defaults['tablescopeInput']) {
+			$this->cfgTableScope = $parameters->offsetGet('tablescope') ? $parameters->offsetGet('tablescope') : $this->cfgTableScope;
+		}
 
-    if($this->cfgPointSystem == '0') { // 3-Punkt
-      $this->cfgPointsDraw = 1;
-      $this->cfgPointsWin = 3;
-      $this->cfgPointsLose = 0;
-    }
-    elseif($this->cfgPointSystem == '1') { // 2-Punkt
-      $this->cfgPointsDraw = 1;
-      $this->cfgPointsWin = 2;
-      $this->cfgPointsLose = 0;
-    }
-    else {
-      t3lib_div::debug($league->record['point_system'],'Error: Unknown Pointsystem-ID');
-    }
-    // Die Ligastrafen laden
-    $this->penalties = $league->getPenalties();
-
-  }
-
+		if($this->cfgPointSystem == '0') { // 3-Punkt
+			$this->cfgPointsDraw = 1;
+			$this->cfgPointsWin = 3;
+			$this->cfgPointsLose = 0;
+		}
+		elseif($this->cfgPointSystem == '1') { // 2-Punkt
+			$this->cfgPointsDraw = 1;
+			$this->cfgPointsWin = 2;
+			$this->cfgPointsLose = 0;
+		}
+		else {
+			t3lib_div::debug($this->cfgPointSystem,'Error: Unknown Pointsystem-ID');
+		}
+		// Die Ligastrafen laden
+		$this->penalties = $defaults['penalties'];
+	}
 }
 
 /**
