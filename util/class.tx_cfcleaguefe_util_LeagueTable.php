@@ -56,7 +56,19 @@ class tx_cfcleaguefe_util_LeagueTable  {
     $this->_initConfig($parameters, $defaults);
     // TODO
   }
-
+  /**
+   * Compute chart data
+   *
+   * @param tx_lib_parameters $parameters
+   * @param tx_rnbase_configurations $configurations
+   * @param tx_cfcleaguefe_models_competition $league
+   * @return array
+   */
+  function generateChart(&$parameters,&$configurations, &$league) {
+  	$defaults = $this->_getDefaults($configurations, $league);
+  	return $this->generateChartData($parameters, $defaults, $league);
+  }
+  
   /**
    * Für die Berechnung des Charts benötigen wir die Config, die Parameter und die Liga
    * Statt Liga nehmen wir eine Liste von Spielen. Dadurch müssen die beteiligten Teams
@@ -70,9 +82,9 @@ class tx_cfcleaguefe_util_LeagueTable  {
    * @param tx_lib_parameters $parameters
    * @param tx_rnbase_configurations $configurations
    * @param tx_cfcleaguefe_models_competition $league
+   * @return array
    */
-  function generateChart(&$parameters,&$configurations, &$league) {
-  	$defaults = $this->_getDefaults($configurations, $league);
+  function generateChartData(&$parameters,&$defaults, &$league) {
     // Wir setzen die notwendigen Einstellungen
     $this->_initConfig($parameters, $defaults);
     // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
@@ -120,7 +132,6 @@ class tx_cfcleaguefe_util_LeagueTable  {
    */
   function generateTable(&$parameters,&$configurations, &$league) {
   	$defaults = $this->_getDefaults($configurations, $league);
-t3lib_div::debug($defaults, 'tx_cfcleaguefe_util_LeagueTable'); // TODO: Remove me!
     // Wir setzen die notwendigen Einstellungen
     $this->_initConfig($parameters, $defaults);
     // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
