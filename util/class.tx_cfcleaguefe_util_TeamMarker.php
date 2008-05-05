@@ -55,33 +55,48 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$subpartArray = array();
 		$this->prepareLinks($team, $teamMarker, $markerArray, $subpartArray, $wrappedSubpartArray, $teamConfId, $formatter);
 
-		$markerArray['###'.$teamMarker.'_LOGO###'] = $team->getLogo($formatter, $teamConfId.'logo.');
-
+		$this->pushTT('TeamLogo');
+		if(self::containsMarker($template, $teamMarker.'_LOGO'))
+			$markerArray['###'.$teamMarker.'_LOGO###'] = $team->getLogo($formatter, $teamConfId.'logo.');
+		$this->pullTT();
 		// Jetzt die Bilder einbinden
+		$this->pushTT('Team pictures');
 		$this->_addTeamPictures($subpartArray, $markerArray,$team,$formatter, $template, $teamConfId, $teamMarker);
-
+		$this->pullTT();
+		
 		// Die Spieler setzen
+		$this->pushTT('add player');
 		$subpartArray['###'.$teamMarker.'_PLAYERS###'] = $this->_addTeamProfiles($markerArray,
                                    $team->getPlayers(),$formatter, 
                                    $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_PLAYERS###'),
                                    '###'.$teamMarker.'_PLAYER###', $teamConfId.'player.', $teamMarker.'_PLAYER');
+		$this->pullTT();
 
 		// Die Trainer setzen
+		$this->pushTT('add coaches');
 		$subpartArray['###'.$teamMarker.'_COACHES###'] = $this->_addTeamProfiles($markerArray,
                                    $team->getCoaches(),$formatter, 
                                    $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_COACHES###'),
                                    '###'.$teamMarker.'_COACH###', $teamConfId.'coach.', $teamMarker.'_COACH');
+		$this->pullTT();
 
 		// Die Betreuer setzen
+		$this->pushTT('add supporter');
 		$subpartArray['###'.$teamMarker.'_SUPPORTERS###'] = $this->_addTeamProfiles($markerArray,
                                    $team->getSupporters(),$formatter, 
                                    $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_SUPPORTERS###'),
                                    '###'.$teamMarker.'_SUPPORTER###', $teamConfId.'supporter.', $teamMarker.'_SUPPORTER');
+		$this->pullTT();
 
 		// set club data
-		$template = $this->_addClubData($template, $team->getClub(), $formatter, $teamConfId.'club.', $teamMarker.'_CLUB');
-
+		$this->pushTT('Club data');
+		if(self::containsMarker($template, $teamMarker.'_CLUB'))
+			$template = $this->_addClubData($template, $team->getClub(), $formatter, $teamConfId.'club.', $teamMarker.'_CLUB');
+		$this->pullTT();
+    
+		$this->pushTT('substituteMarkerArrayCached');
 		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$this->pullTT();
 		// Now lookout for external marker services.
 		$markerArray = array();
 		$subpartArray = array();

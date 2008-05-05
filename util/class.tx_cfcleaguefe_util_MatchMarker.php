@@ -69,8 +69,11 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
     
 		$this->prepareFields($match);
 		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
-		if($this->fullMode)
+		if($this->fullMode) {
+			$this->pushTT('addDynamicMarkers');
 			$this->addDynamicMarkers($template, $match, $formatter, $confId,$marker);
+			$this->pullTT();
+		}
 		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
 		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $confId, 0, $marker.'_');
 		$wrappedSubpartArray = array();
@@ -78,11 +81,19 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
 
 		// Es wird jetzt das Template verändert und die Daten der Teams eingetragen
-		$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId.'home.', $marker.'_HOME');
-		$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId.'guest.', $marker.'_GUEST');
+		$this->pushTT('parse home team');
+		if($this->containsMarker($template, $marker.'_HOME'))
+			$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId.'home.', $marker.'_HOME');
+		$this->pullTT();
+		$this->pushTT('parse guest team');
+		if($this->containsMarker($template, $marker.'_GUEST'))
+			$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId.'guest.', $marker.'_GUEST');
+		$this->pullTT();
 		if($this->fullMode) {
+			$this->pushTT('add media');
 			$this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $confId, $marker);
 			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $confId, $marker);
+			$this->pullTT();
 		}
 		// Add competition
 		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
@@ -139,7 +150,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * @return string
    */
   private function addDynamicMarkers($template, &$match, &$formatter, $matchConfId, $matchMarker) {
-    $report =&$match->getMatchReport();
+  	$report =&$match->getMatchReport();
     if(!is_object($report)) return $template;
 
     $dynaMarkers = $formatter->configurations->getKeyNames($matchConfId.'dynaMarkers.');
@@ -179,10 +190,12 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * @param $firstMarkerArray
    */
   private function _addPictures(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
+  	// Prüfen, ob Marker vorhanden sind
+  	if(!(self::containsMarker($template, '###'. $baseMarker .'_FIRST_PICTURE###') && self::containsMarker($template, '###'. $baseMarker .'_PICTURES###')))
+  		return;
     // Das erste Bild ermitteln
     $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_images');
     list($uid, $filePath) = each($damPics['files']);
-
     if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
       // Alle Marker löschen
       $firstMarkerArray['###'. $baseMarker .'_FIRST_PICTURE###'] = '';
@@ -238,41 +251,41 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * @param string $baseMarker
    */
   private function _addMedia(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
-    // Das erste Bild ermitteln
-    $damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_media');
+		// Prüfen, ob Marker vorhanden sind
+		if(!self::containsMarker($template, '###'. $baseMarker .'_MEDIAS###'))
+			return;
 
-    if(count($damMedia['files']) == 0) { // Keine Daten vorhanden
-      // Alle Marker löschen
-      $gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = '';
-      return;
-    }
+		$damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_media');
+		if(count($damMedia['files']) == 0) { // Keine Daten vorhanden
+			// Alle Marker löschen
+			$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = '';
+			return;
+		}
 
-    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
-//t3lib_div::debug($formatter->cObj->data, 'match_marker');
+		$mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
     
-    // Zuerst wieder das Template laden
-    $gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_MEDIAS###');
+		// Zuerst wieder das Template laden
+		$gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_MEDIAS###');
 
-    $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_MEDIAS_2###');
-    $markerArray = array();
-    $out = '';
-    $serviceObj = t3lib_div::makeInstanceService('mediaplayer');
+		$pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_MEDIAS_2###');
+		$markerArray = array();
+		$out = '';
+		$serviceObj = t3lib_div::makeInstanceService('mediaplayer');
 
-//t3lib_div::debug($damMedia, 'utl_teammarker');
-    // Alle Daten hinzufügen
-    while(list($uid, $filePath) = each($damMedia['files'])) {
-      $media = new $mediaClass($filePath);
-      $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.',$baseMarker.'_MEDIA');
-      $markerArray['###'. $baseMarker.'_MEDIA###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
-      $out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
-    }
-    // Der String mit den Bilder ersetzt jetzt den Subpart ###MATCH_MEDIAS_2###
-    if(strlen(trim($out)) > 0) {
-      $subpartArray['###'. $baseMarker .'_MEDIAS_2###'] = $out;
-      $out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
-    }
-    $gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
-  }
+		// Alle Daten hinzufügen
+		while(list($uid, $filePath) = each($damMedia['files'])) {
+			$media = new $mediaClass($filePath);
+			$markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.',$baseMarker.'_MEDIA');
+			$markerArray['###'. $baseMarker.'_MEDIA###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
+			$out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
+		}
+		// Der String mit den Bilder ersetzt jetzt den Subpart ###MATCH_MEDIAS_2###
+		if(strlen(trim($out)) > 0) {
+			$subpartArray['###'. $baseMarker .'_MEDIAS_2###'] = $out;
+			$out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
+		}
+		$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
+	}
 
 	/**
 	 * Links vorbereiten
