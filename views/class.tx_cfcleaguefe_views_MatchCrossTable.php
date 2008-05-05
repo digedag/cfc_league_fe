@@ -52,12 +52,20 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$this->removeDummyTeams($teams);
 		// Mit den Teams können wir die Headline bauen
 		$headlineTemplate = $cObj->getSubpart($template, '###HEADLINE###');
+		$GLOBALS['TT']->push('createHeadline');
 		$subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $cObj, $configurations);
-
+		$GLOBALS['TT']->pull();
+		
+		$GLOBALS['TT']->push('generateTableData');
 		$teamsArray = $this->generateTableData($matches, $teams);
+		$GLOBALS['TT']->pull();
+
 		$datalineTemplate = $cObj->getSubpart($template, '###DATALINE###');
+		$GLOBALS['TT']->push('createDatalines');
 		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations, $viewData);
+		$GLOBALS['TT']->pull();
 		$markerArray = array('###MATCHCOUNT###' => count($matches), );
+		
 		return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 	}
 
