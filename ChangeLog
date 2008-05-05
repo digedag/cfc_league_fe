@@ -2,6 +2,10 @@
 
 Änderungen
 ----------
+v0.3.2 (05.05.2008)
+* Impoved performance in matchmarker and teammarker.
+* Performance trackings included
+
 v0.3.1 (04.05.2008)
 * TS for match date fixed
 * Many new TS contants for HTML templates
