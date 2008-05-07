@@ -9,6 +9,8 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 tx_div::load('tx_cfcleaguefe_util_ServiceRegistry');
 tx_div::load('tx_rnbase_util_SearchBase');
 
+// Hook for tt_news
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_ttnewsMarkers.php:tx_cfcleaguefe_hooks_ttnewsMarkers';
 
 $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
 
