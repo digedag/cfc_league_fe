@@ -992,3 +992,16 @@ plugin.tx_cfcleaguefe_report {
 
 tt_content.list.20.tx_cfcleaguefe_report    =< plugin.tx_cfcleaguefe_report
 
+# Prepare some links from tt_news
+plugin.tt_news {
+  external_links {
+    matchreport {
+      ext_parameters = matchId
+      pid = {$plugin.tx_cfcleaguefe_report.matchreportpage}
+    }
+    profile {
+      ext_parameters = profileId
+      pid = {$plugin.tx_cfcleaguefe_competition.playerpage}
+    }
+  }
+}
