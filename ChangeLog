@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.3.3 (07.05.2008)
+* Integration into tt_news. You can set links to T3sports views from within news records. For instance you can set a link to a match report.
+
 v0.3.2 (05.05.2008)
 * Impoved performance in matchmarker and teammarker.
 * Performance trackings included
