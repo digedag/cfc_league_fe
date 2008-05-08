@@ -267,7 +267,19 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   }
 
   /**
-   * Liefert true, wenn die Meldung den Typ entspricht
+   * Entscheidet, ob die Note angezeigt werden soll. Dies wird über die Config
+   * entschieden. Derzeit wird die Spielminute (noteMinimumMinute) und der 
+   * Typ der Meldung (noteType und noteIgnoreType) überprüft.
+   *
+   * @param array $conf
+   * @return boolean
+   */
+  function isVisible($conf) {
+    $minMinute = intval($conf['noteMinimumMinute']);
+		return $minMinute <= $this->record['minute'] && $this->isType($conf);
+  }
+  /**
+   * Liefert true, wenn die Meldung dem Typ entspricht
    * Parameter ist entweder die Typnummer oder ein Array mit den Keys 
    * noteType und noteTeam. Bei noteType kann eine Liste von Typnummern
    * angegeben werden. NoteTeam ist entweder home oder guest.

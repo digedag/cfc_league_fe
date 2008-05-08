@@ -183,7 +183,7 @@ class tx_cfcleaguefe_models_matchreport {
     $tickers = array();
     $tickerArr = $this->_getMatchTicker($conf['cron']);
     foreach($tickerArr As $ticker) {
-      if($ticker->isType($conf))
+      if($ticker->isVisible($conf))
         $tickers[] = $ticker;
     }
     return $this->_wrapTickers($tickers,$confId);

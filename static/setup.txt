@@ -95,6 +95,7 @@ lib.t3sports.team {
     showteam.pid = {$plugin.tx_cfcleaguefe_competition.teampage}
     # Link auf Spielplan
     showmatchtable.pid = {$plugin.tx_cfcleaguefe_competition.matchtablepage}
+# Das sollte falsch sein...
     player.parameter = {$plugin.tx_cfcleaguefe_competition.playerpage}
     coach.parameter = {$plugin.tx_cfcleaguefe_competition.profilepage}
     supporter.parameter = {$plugin.tx_cfcleaguefe_competition.profilepage}
@@ -858,6 +859,7 @@ plugin.tx_cfcleaguefe_report {
           noteTeam >
           noteType >
           noteIgnoreType = 200,31
+          noteMinimumMinute = 0
 		      ticker {
 		        minute >
 		        minute.cObject = COA
