@@ -224,7 +224,7 @@ plugin.tx_cfcleaguefe_competition {
   matchtableTemplate = {$plugin.tx_cfcleaguefe_competition.matchtableTemplate}
   matchcrosstableTemplate = {$plugin.tx_cfcleaguefe_competition.matchcrosstableTemplate}
   leagueTableTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableTemplate}
-  statisticTemplate = {$plugin.tx_cfcleaguefe_competition.statisticTemplate}
+  statisticsTemplate = {$plugin.tx_cfcleaguefe_competition.statisticsTemplate}
   tickerlistTemplate = {$plugin.tx_cfcleaguefe_competition.tickerlistTemplate}
 
   # Rendering of items. re-use the RTE parseFunc configuration for normal content
