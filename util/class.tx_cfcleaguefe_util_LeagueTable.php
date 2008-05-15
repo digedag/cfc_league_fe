@@ -380,8 +380,6 @@ class tx_cfcleaguefe_util_LeagueTable  {
 //    $teams = tx_rnbase_util_DB::queryDB('*','tx_cfcleague_teams',$where,
 //              '','sorting','tx_cfcleaguefe_models_team',0);
 
-		// Besondere Teams suchen
-		$arr = t3lib_div::intExplode(',',$this->cfgMarkClubs);
     foreach($teams As $team) {
       if($team->isDummy()) continue; // Ignore dummy teams
       $this->_teamData[$team->uid]['team'] = $team;
@@ -402,8 +400,8 @@ class tx_cfcleaguefe_util_LeagueTable  {
       $this->_teamData[$team->uid]['loseCount'] = 0;
 
 			// Muss das Team hervorgehoben werden?
-			if($this->cfgMarkClubs) {
-				$this->_teamData[$team->uid]['markClub'] = in_array($team->record['club'], $arr) ? 1 : 0;
+			if(count($this->cfgMarkClubs)) {
+				$this->_teamData[$team->uid]['markClub'] = in_array($team->record['club'], $this->cfgMarkClubs) ? 1 : 0;
 			}
 		}
 //      t3lib_div::debug($this->_teamData,'Vereine');
