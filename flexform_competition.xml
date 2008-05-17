@@ -547,7 +547,7 @@
                 <type>select</type>
                 <items type="array">
                 </items>
-                <itemsProcFunc>tx_cfcleaguefe_util_ServiceRegistry->lookupStatistics</itemsProcFunc>
+                <itemsProcFunc>tx_cfcleaguefe_util_serviceRegistry->lookupStatistics</itemsProcFunc>
                 <multiple>0</multiple>
                 <maxitems>10</maxitems>
                 <size>5</size>
