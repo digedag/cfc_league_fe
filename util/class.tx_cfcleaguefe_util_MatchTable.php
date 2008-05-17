@@ -46,6 +46,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 	var $_status;
 	var $_ticker;
 	var $_report;
+	var $_ignoreDummy;
 	var $_compTypes; // Wettbewerbstypen
 	var $_compObligation; // Pflichtwettbewerbe
 	
@@ -89,6 +90,10 @@ class tx_cfcleaguefe_util_MatchTable  {
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.DATE',OP_GTEQ_INT,$this->_dateStart);
 		// bestimmtes Enddatum
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.DATE',OP_LT_INT,$this->_dateEnd);
+		if($this->_ignoreDummy) {
+			tx_cfcleaguefe_search_Builder::setField($fields,'TEAM1.DUMMY',OP_EQ_INT,0);
+			tx_cfcleaguefe_search_Builder::setField($fields,'TEAM2.DUMMY',OP_EQ_INT,0);
+		}
 		// Spielstatus
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.STATUS',OP_IN_INT,$this->_status);
 		if($this->_ticker) tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.LINK_TICKER',OP_EQ_INT,1);
@@ -167,6 +172,14 @@ class tx_cfcleaguefe_util_MatchTable  {
 	 */
 	function setClubs($uids){
 		$this->_clubIds = $uids;
+	}
+	/**
+	 * Wether or not to include dummy matches
+	 *
+	 * @param boolean $flag
+	 */
+	function setIgnoreDummy($flag=true){
+		$this->_ignoreDummy = $flag;
 	}
 	/**
 	 * Search for matches of specific saisons
