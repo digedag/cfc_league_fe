@@ -50,7 +50,13 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
   function getNameWrapped($formatter, $confId = 'team.') {
     return $formatter->wrap($this->record['name'], $confId . 'teamName.');
   }
-
+  function getName() {
+  	return $this->record['name'];
+  }
+  function getNameShort() {
+  	return $this->record['short_name'];
+  }
+  
   /**
    * Liefert den Verein des Teams als Objekt
    * @return Verein als Objekt oder 0

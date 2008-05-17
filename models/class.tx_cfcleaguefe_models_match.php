@@ -35,7 +35,8 @@ tx_div::load('tx_cfcleaguefe_models_competition');
  * Model für einen Spiel. Liefert Zugriff auf die Daten eines Spiels.
  */
 class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
-  var $_profiles, $_matchNotes, $_teamHome, $_teamGuest;
+  private static $instances = array();
+	var $_profiles, $_matchNotes, $_teamHome, $_teamGuest;
   var $_report;
 
   function tx_cfcleaguefe_models_match($rowOrUid) {
@@ -49,13 +50,11 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    *
    */
   private function _init() {
-    // Wenn das Spiel noch nicht beendet ist, gibt es nichts zu tun
-//    if(!($this->isFinished() || $this->isRunning())) return;
-    
     // Um das Endergebnis zu ermitteln, muss bekannt sein, wieviele Spielabschnitte 
     // es gibt. Dies steht im Wettbewerb
     $comp = &tx_cfcleaguefe_models_competition::getInstance($this->record['competition']);
-    
+
+    $this->record['matchparts'] = $comp->getMatchParts();
     $goalsHome = $this->record['goals_home_'.$comp->getMatchParts()];
     $goalsGuest = $this->record['goals_guest_'.$comp->getMatchParts()];
     // Gab es Verländerung oder Elfmeterschiessen
@@ -69,6 +68,18 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     }
     $this->record['goals_home'] = $goalsHome;
     $this->record['goals_guest'] = $goalsGuest;
+  }
+  public function getGoalsHome($matchPart = '') {
+  	$ret = $this->record['goals_home'];
+  	if(strlen($matchPart))
+  		$ret = $this->record['goals_home_'.($matchPart == 'last') ? $this->record['matchparts'] : $matchPart ];
+  	return $ret;
+  }
+  public function getGoalsGuest($matchPart = '') {
+  	$ret = $this->record['goals_guest'];
+  	if(strlen($matchPart))
+  		$ret = $this->record['goals_guest_'.($matchPart == 'last') ? $this->record['matchparts'] : $matchPart ];
+  	return $ret;
   }
   /**
    * Returns the match report
@@ -87,7 +98,23 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
   public function setMatchReport(&$report) {
     $this->_report = $report;
   }
-  
+  public function getResult() {
+  	return $this->record['status'] > 0 ? $this->getGoalsHome() .' : ' . $this->getGoalsGuest() : '- : -';
+  }
+  /**
+   * Returns the state as string
+   *
+   * @return string
+   */
+  public function getStateName() {
+  	t3lib_div::loadTCA('tx_cfcleague_games');
+  	$items = $GLOBALS['TCA']['tx_cfcleague_games']['columns']['status']['config']['items'];
+  	foreach($items As $item) {
+  		if($item[1] == $this->record['status'])
+  			return $GLOBALS['LANG']->sL($item[0]);
+  	}
+  	return '';
+  }
   /**
    * Returns true if match is finished
    *
@@ -238,7 +265,13 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     $this->_teamGuest = isset($this->_teamGuest) ? $this->_teamGuest : $this->_getTeam($this->record['guest']);
     return $this->_teamGuest;
   }
-
+  function getHomeNameShort() {
+  	return $this->getHome()->getNameShort();
+  }
+  function getGuestNameShort() {
+  	return $this->getGuest()->getNameShort();
+  }
+  
   /**
    * Setzt das Gast-Team
    */
@@ -494,9 +527,12 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    * und 2 für einen Auswärstsieg.
    * TODO: Es gilt das Ergebnis nach Verlängerung und Elfmeterschießen
    */
-  function getToto() {
-    $goalsHome = $this->record['goals_home_2'];
-    $goalsGuest = $this->record['goals_guest_2'];
+  function getToto($matchPart = '') {
+  	$goalsHome = $this->getGoalsHome($matchPart);
+  	$goalsGuest = $this->getGoalsGuest($matchPart);
+  	
+//  	$goalsHome = $this->record['goals_home_'.$this->record['matchparts']];
+//    $goalsGuest = $this->record['goals_guest_'.$this->record['matchparts']];
     $goalsDiff = $goalsHome - $goalsGuest;
 
     if($goalsDiff == 0)
@@ -600,7 +636,22 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
          ON tx_cfcleague_games.home = t1.uid
          ON tx_cfcleague_games.guest = t2.uid', 'tx_cfcleague_games');  
 */
-  }
+	}
+	/**
+	 * Liefert die Instance mit der übergebenen UID. Die Daten werden gecached, so daß
+	 * bei zwei Anfragen für die selbe UID nur ein DB Zugriff erfolgt.
+	 *
+	 * @param int $uid
+	 * @return tx_cfcleaguefe_models_match
+	 */
+	static function getInstance($uid) {
+		$uid = intval($uid);
+		if(!uid) throw new Exception('Invalid uid for match');
+		if(!is_object(self::$instances[$uid])) {
+			self::$instances[$uid] = new tx_cfcleaguefe_models_match($uid);
+		}
+		return self::$instances[$uid];
+	}
 
 }
 
