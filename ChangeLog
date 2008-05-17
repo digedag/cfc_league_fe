@@ -2,33 +2,37 @@
 
 Änderungen
 ----------
-v0.3.3 (07.05.2008)
+v0.3.4 (17.05.2008) (not released)
+* Some internal changes for better integration of other extensions
+
+v0.3.3 (07.05.2008) (not released)
 * Integration into tt_news. You can set links to T3sports views from within news records. For instance you can set a link to a match report.
 
-v0.3.2 (05.05.2008)
+v0.3.2 (05.05.2008) (not released)
 * Impoved performance in matchmarker and teammarker.
 * Performance trackings included
 
-v0.3.1 (04.05.2008)
+v0.3.1 (04.05.2008) (not released)
 * TS for match date fixed
 * Many new TS contants for HTML templates
 * Some keys in flexform changed. So most probably your page plugins will fail after update. Simply resave your plugins.
 * Match cross table supports more then match against one opponent. HTML-Template changed!
 * League chart can now be displayed in match report. First working marker service!
 
-v0.3.0 (02.05.2008)
+v0.3.0 (02.05.2008) (not released)
 Änderungen bei der Verlinkung von Informationen
 * Neue TS-Config für Links in Anlehnung an die typolink-Konfigration
-Unterhalb einer Datensatz-Konfiguration gibt es den neuen reservierten Typ links. Diesem folgt der Name des Links und das Ziel. Beispiel:
+Unterhalb einer Datensatz-Konfiguration gibt es den neuen reservierten Typ links. Diesem folgt der Name des Links und die Zielseite. Beispiel:
 [[code]]
 lib.t3sports.team {
   links {
     showteam.pid = 123
+    showmatchtable.pid = 321
   }
 }
 [[code]]
-Aus dieser Konfiguration ergeben sich für ein Team drei Link-Marker:
-###TEAM_TEAMLINK###, ###TEAM_PLAYERLINK### und ###TEAM_SUPPORTERLINK###
+Aus dieser Konfiguration ergeben sich für ein Team zwei Link-Marker:
+###TEAM_SHOWTEAMLINK### und ###TEAM_SHOWMATCHTABLELINK###
 Dieses Schema ist (noch) nicht voll dynamisch. Es können also noch keine eigenen Links erstellt werden.
 * View Teamlist: Neuer Subpartmarker ###TEAMS###
 * View Matchtable: der Subpart ###MATCH_FREE### steht jetzt innerhalb des Subparts ###MATCH###
