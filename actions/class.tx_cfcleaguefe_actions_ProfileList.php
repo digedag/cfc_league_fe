@@ -152,7 +152,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
   	return intval($configurations->get('profilelist.profile.pagebrowser.limit'));
   }
   
-	function getTemplateName() {return 'profileview';}
+	function getTemplateName() {return 'profilelist';}
 	function getViewClassName() { return 'tx_cfcleaguefe_views_ProfileList'; }
 
 }
