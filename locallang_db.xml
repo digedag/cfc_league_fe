@@ -89,6 +89,11 @@
 			<label index="plugin.report.flexform.teamview.supporter_page">Page for supporter single view</label>
 			<label index="plugin.report.flexform.teamview.player_page">Page for player single view</label>
 			<label index="plugin.report.flexform.profileview.profile">Player to show</label>
+			<label index="plugin.report.flexform.profilelist.birthdays">Birthday list</label>
+			<label index="plugin.report.flexform.profilelist.birthdays.no">No</label>
+			<label index="plugin.report.flexform.profilelist.birthdays.day">Day</label>
+			<label index="plugin.report.flexform.profilelist.birthdays.month">Month</label>
+
 			<label index="plugin.report.flexform.template">Template</label>
 			<label index="plugin.report.flexform.matchreport.showTicker">Show ticker</label>
 			<label index="plugin.report.flexform.matchreport.matchUid">Static match UID</label>
@@ -182,6 +187,10 @@
 			<label index="plugin.report.flexform.teamview.team">Zeige Team</label>
 			<label index="plugin.report.flexform.teamview.club">Nur Teams des Vereins</label>
 			<label index="plugin.report.flexform.profileview.profile">Spieler anzeigen</label>
+			<label index="plugin.report.flexform.profilelist.birthdays">Geburtstagsliste</label>
+			<label index="plugin.report.flexform.profilelist.birthdays.no">Nein</label>
+			<label index="plugin.report.flexform.profilelist.birthdays.day">Tag</label>
+			<label index="plugin.report.flexform.profilelist.birthdays.month">Monat</label>
 			<label index="plugin.report.flexform.teamview.coach_page">Seite für Trainer-Einzelanzeige</label>
 			<label index="plugin.report.flexform.teamview.player_page">Seite für Spieler-Einzelanzeige</label>
 			<label index="plugin.report.flexform.teamview.supporter_page">Seite für Betreuer-Einzelanzeige</label>

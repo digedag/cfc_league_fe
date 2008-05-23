@@ -80,81 +80,91 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 
 		return null;
 	}
-  protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar) {
-  	// ggf. die Konfiguration aus der TS-Config lesen
-  	tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
-  	tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
+	protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar) {
+		// ggf. die Konfiguration aus der TS-Config lesen
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
+		$timeRange = $configurations->get('profilelist.birthdays');
+		if($timeRange) {
+			$timePattern = $timeRange == 'DAY' ? '%d%m' : '%m';
+			$where .= " ( (DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday),'${timePattern}') = DATE_FORMAT(CURDATE(),'${timePattern}')";
+			$where .= ' AND tx_cfcleague_profiles.birthday > 0) OR ';
+			// Variante 2 für Zeiten vor 1970
+			$where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( tx_cfcleague_profiles.birthday )),'1970-01-01')),'${timePattern}') = DATE_FORMAT(CURDATE(),'${timePattern}')";
+			$where .= ' AND tx_cfcleague_profiles.birthday < 0 ))';
+			if($fields[SEARCH_FIELD_CUSTOM]) $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
+			$fields[SEARCH_FIELD_CUSTOM] .= $where;
+		}
 
-  	if($firstChar) {
+		if($firstChar) {
 			$specials = tx_rnbase_util_SearchBase::getSpecialChars();
 			$firsts = $specials[$firstChar];
 			if($firsts) {
 				$firsts = implode('\',\'',$firsts);
 			}
 			else $firsts = $firstChar;
-  		
-  		$fields[SEARCH_FIELD_CUSTOM] = "LEFT(UCASE(last_name),1) IN ('$firsts') ";;
-  	}
-  }
+
+			if($fields[SEARCH_FIELD_CUSTOM]) $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
+			$fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(last_name),1) IN ('$firsts') ";;
+		}
+	}
 	
-  /**
-   * Wir verwenden einen alphabetischen Pager. Also muß zunächst ermittelt werden, welche
-   * Buchstaben überhaupt vorkommen.
-   * @param tx_cfcleaguefe_ProfileService $service
-   * @param tx_rnbase_configurations $configurations
-   */
-  function findPagerData(&$service, &$configurations) {
+	/**
+	 * Wir verwenden einen alphabetischen Pager. Also muß zunächst ermittelt werden, welche
+	 * Buchstaben überhaupt vorkommen.
+	 * @param tx_cfcleaguefe_ProfileService $service
+	 * @param tx_rnbase_configurations $configurations
+	 */
+	function findPagerData(&$service, &$configurations) {
 
-  	$options['what'] = 'LEFT(UCASE(last_name),1) As first_char, count(LEFT(UCASE(last_name),1)) As size';
-    $options['groupby'] = 'LEFT(UCASE(last_name),1)';
-  	$fields = array();
-  	tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
-  	tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
+		$options['what'] = 'LEFT(UCASE(last_name),1) As first_char, count(LEFT(UCASE(last_name),1)) As size';
+		$options['groupby'] = 'LEFT(UCASE(last_name),1)';
+		$fields = array();
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
 
-    $from = 'tx_cfcleague_profiles';
+		$from = 'tx_cfcleague_profiles';
+		$rows = $service->search($fields, $options);
 
-    $rows = $service->search($fields, $options);
+		$specials = tx_rnbase_util_SearchBase::getSpecialChars();
+		$wSpecials = array();
+		foreach($specials As $key => $special) {
+			foreach ($special As $char) {
+				$wSpecials[$char] = $key;
+			}
+		}
 
-    $specials = tx_rnbase_util_SearchBase::getSpecialChars();
-  	$wSpecials = array();
-  	foreach($specials As $key => $special) {
-  		foreach ($special As $char) {
-  			$wSpecials[$char] = $key;
-  		}
-  	}
-    
-  	$ret = array();
-    foreach($rows As $row) {
-      if(array_key_exists(($row['first_char']), $wSpecials)) {
-      	$ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];
-      }
-      else
-	    	$ret[$row['first_char']] = $row['size'];
-    }
-    
-    $current = 0;
-    if(count($ret)) {
-      $keys = array_keys($ret);
-      $current = $keys[0];
-    }
-    $data['list'] = $ret;
-    $data['default'] = $current;
-    return $data;
-  }
-  /**
-   * Liefert die Anzahl der Ergebnisse pro Seite
-   *
-   * @param array $parameters
-   * @param tx_rnbase_configurations $configurations
-   * @return int
-   */
-  protected function getPageSize(&$parameters, &$configurations) {
-  	return intval($configurations->get('profilelist.profile.pagebrowser.limit'));
-  }
-  
+		$ret = array();
+		foreach($rows As $row) {
+			if(array_key_exists(($row['first_char']), $wSpecials)) {
+				$ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];
+			}
+			else
+				$ret[$row['first_char']] = $row['size'];
+		}
+
+		$current = 0;
+		if(count($ret)) {
+			$keys = array_keys($ret);
+			$current = $keys[0];
+		}
+		$data['list'] = $ret;
+		$data['default'] = $current;
+		return $data;
+	}
+	/**
+	 * Liefert die Anzahl der Ergebnisse pro Seite
+	 *
+	 * @param array $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @return int
+	 */
+	protected function getPageSize(&$parameters, &$configurations) {
+		return intval($configurations->get('profilelist.profile.pagebrowser.limit'));
+	}
+
 	function getTemplateName() {return 'profilelist';}
 	function getViewClassName() { return 'tx_cfcleaguefe_views_ProfileList'; }
-
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_ProfileList.php'])	{
