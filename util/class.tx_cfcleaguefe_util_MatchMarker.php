@@ -191,7 +191,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    */
   private function _addPictures(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
   	// Prüfen, ob Marker vorhanden sind
-  	if(!(self::containsMarker($template, '###'. $baseMarker .'_FIRST_PICTURE###') && self::containsMarker($template, '###'. $baseMarker .'_PICTURES###')))
+  	if(!(self::containsMarker($template, $baseMarker .'_FIRST_PICTURE') && self::containsMarker($template, $baseMarker .'_PICTURES')))
   		return;
     // Das erste Bild ermitteln
     $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_images');
@@ -220,7 +220,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
     // Zuerst wieder das Template laden
     $gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_PICTURES###');
 
-    $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_PICTURES_2###');
+    $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_PICTURE###');
     $markerArray = array();
     $out = '';
 //    reset($damPics);
@@ -233,7 +233,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
     }
     // Der String mit den Bilder ersetzt jetzt den Subpart ###TEAM_PICTURES_2###
     if(strlen(trim($out)) > 0) {
-      $subpartArray['###'. $baseMarker .'_PICTURES_2###'] = $out;
+      $subpartArray['###'. $baseMarker .'_PICTURE###'] = $out;
       $out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
     }
     $gSubpartArray['###'. $baseMarker .'_PICTURES###'] = $out;
@@ -251,8 +251,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * @param string $baseMarker
    */
   private function _addMedia(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
-		// Prüfen, ob Marker vorhanden sind
-		if(!self::containsMarker($template, '###'. $baseMarker .'_MEDIAS###'))
+  	// Prüfen, ob Marker vorhanden sind
+		if(!self::containsMarker($template, $baseMarker .'_MEDIAS'))
 			return;
 
 		$damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_media');
@@ -267,7 +267,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		// Zuerst wieder das Template laden
 		$gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_MEDIAS###');
 
-		$pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_MEDIAS_2###');
+		$pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_MEDIA###');
 		$markerArray = array();
 		$out = '';
 		$serviceObj = t3lib_div::makeInstanceService('mediaplayer');
@@ -276,12 +276,12 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		while(list($uid, $filePath) = each($damMedia['files'])) {
 			$media = new $mediaClass($filePath);
 			$markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.',$baseMarker.'_MEDIA');
-			$markerArray['###'. $baseMarker.'_MEDIA###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
+			$markerArray['###'. $baseMarker.'_MEDIA_PLAYER###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
 			$out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
 		}
 		// Der String mit den Bilder ersetzt jetzt den Subpart ###MATCH_MEDIAS_2###
 		if(strlen(trim($out)) > 0) {
-			$subpartArray['###'. $baseMarker .'_MEDIAS_2###'] = $out;
+			$subpartArray['###'. $baseMarker .'_MEDIA###'] = $out;
 			$out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
 		}
 		$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
