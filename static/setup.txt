@@ -239,6 +239,11 @@ plugin.tx_cfcleaguefe_competition {
       }
     }
   }
+  leaguetableAllTime {
+  	fields.MATCH.STATUS.OP_IN_INT = 2
+  	
+    tablescopeSelectionInput = 0
+  }
   # Daten für die Ligatabelle
   leaguetable {
     # Ausgabe mit HTML-Template
@@ -307,13 +312,13 @@ plugin.tx_cfcleaguefe_competition {
     # With fields it is possible to defined additional query options
     # select what matches you want to show
     fields {
-      # Limit the number of matches
-#     limit = 0
       # Find matches by state (0-schedules, 1-running, 2-finished, -10 rescheduled)
-#     status = 0,1,2
+#      MATCH.STATUS.OP_IN_INT = 0,1,2
     }
     # With options you can set some additional params for sql query
     options {
+      # Limit the number of matches
+#     limit = 0
       # Show sql-query in FE (for test purposes)
 #     debug = 1
       # Defined how to order matches

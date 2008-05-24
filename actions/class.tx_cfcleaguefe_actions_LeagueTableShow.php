@@ -140,8 +140,8 @@ class tx_cfcleaguefe_actions_LeagueTableShow {
 	/**
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für den Tabellenscope
 	 */
-	function _handleSBTableScope($parameters, &$configurations, &$viewData) {
-		if($configurations->get('tablescopeSelectionInput')) {
+	function _handleSBTableScope($parameters, &$configurations, &$viewData, $confId='') {
+		if($configurations->get($confId.'tablescopeSelectionInput')) {
 			$flex =& $this->getFlexForm($configurations);
 			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable','tablescope'));
 

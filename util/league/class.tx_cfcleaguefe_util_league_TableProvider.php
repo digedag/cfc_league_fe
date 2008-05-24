@@ -87,6 +87,14 @@ interface tx_cfcleaguefe_util_league_TableProvider {
 	 * @return int
 	 */
 	function getMaxRounds();
+
+	/**
+	 * Return a unique key for a given team. This is not necessarily the uid of the team. Maybe it is 
+	 * wanted to join some team results.
+	 *
+	 * @param tx_cfcleaguefe_models_team $team
+	 */
+	function getTeamId($team);
 }
 
 

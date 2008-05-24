@@ -24,88 +24,44 @@
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
-tx_div::load('tx_rnbase_view_Base');
+tx_div::load('tx_cfcleaguefe_views_LeagueTable');
 
 
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
  */
-class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
+class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_LeagueTable {
 
-	function createOutput($template, &$viewData, &$configurations, &$formatter){
-		
-    $out = $this->_createView($template, $viewData, $configurations);
-    return $out;
-	}
-	
-  function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
-	
-  /**
-   * Erstellung des Outputstrings
-   */
-  function _createView($template, &$viewData, &$configurations) {
-    $cObj =& $configurations->getFormatter()->cObj;
+  function createOutput($template, &$viewData, &$configurations, &$formatter){
+  	
+    $cObj =& $formatter->cObj;
 
-    // Liga und Tablemarks holen
-    $league = $viewData->offsetGet('league');
-    $marks = $league->getTableMarks();
-
-    $markerArray = $this->formatter->getItemMarkerArrayWrapped($league->record, 'leaguetable.league.', 0, 'LEAGUE_');
+    $markerArray = array();
+    $marks = array();
+    $penalties = array();
 
     // Die Ligatabelle zusammenbauen
-    $penalties = array(); // Strafen sammeln
     $subpartArray['###ROW###'] = $this->_createTable($cObj->getSubpart($template, '###ROW###'), 
                              $viewData->offsetGet('tableData'), $penalties, $marks, $configurations);
 
     // Jetzt die Strafen auflisten
-    $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'), 
-                             $penalties, $configurations);
+//    $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'), 
+//                             $penalties, $configurations);
 
     // Die Tabellensteuerung
     $subpartArray['###CONTROLS###'] = $this->_createControls($cObj->getSubpart($template, '###CONTROLS###'), 
                              $viewData, $configurations);
     
     $out .= $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-
+    
     return $out;
-  }
-
-  /**
-   * Erstellt die Liste mit den Ligastrafen
-   */
-  function _createPenalties($template, &$penalties, &$configurations) {
-    if(!is_array($penalties) || count($penalties) == 0)
-      return '';
-
-    $subTemplate = $this->formatter->cObj->getSubpart($template, '###PENALTY###');
-    $parts = array();
-    foreach($penalties As $penaltyArr) {
-      foreach($penaltyArr As $penalty) {
-        $markerArray = $this->formatter->getItemMarkerArrayWrapped($penalty->record, 'leaguetable.penalty.', 0, 'PENALTY_');
-//t3lib_div::debug($markerArray , 'vw_leaguetable');
-        $parts[] = $this->formatter->cObj->substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray);
-      }
-    }
-//    return implode($parts, $configurations->get('leaguetable.penalty.implode'));
-
-    if(count($parts)) {
-      // Zum Schluß das Haupttemplate zusammenstellen
-      $markerArray = array();
-      $subpartArray['###PENALTY###'] = implode($parts, $configurations->get('leaguetable.penalty.implode'));
-      $out = $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
-    }
-    else { // Keine Strafen vorhanden, es wird ein leerer String gesendet
-      $out = '';
-    }
-    return $out;
-
   }
 
   /**
    * Erstellt die Ligatabelle.
    */
   function _createTable($template, &$tableData, &$penalties, &$marks, &$configurations) {
-    // Sollen alle Teams gezeigt werden?
+  	// Sollen alle Teams gezeigt werden?
     $tableSize = intval($configurations->get('leagueTableSize'));
     if($tableSize && $tableSize < count($tableData)) {
       // Es sollen weniger Teams gezeigt werden als vorhanden sind
@@ -172,18 +128,6 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
     }
 
     return array_slice($tableData, $idxStart, $tableSize);
-  }
-
-  /**
-   * Die Strafen müssen gesammelt und gezählt werden.
-   */
-  function _preparePenalties(&$row, &$penalties) {
-    if(is_array($row['penalties'])) {
-      $penalties[] = $row['penalties'];
-      $row['penalties'] = count($row['penalties']);
-    }
-    else
-      $row['penalties'] = 0;
   }
 
   /**
@@ -296,7 +240,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTable.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTable.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTableAllTime.php'])	{
+  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTableAllTime.php']);
 }
 ?>

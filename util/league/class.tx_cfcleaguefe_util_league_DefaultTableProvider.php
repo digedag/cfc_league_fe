@@ -38,9 +38,8 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	
 	function tx_cfcleaguefe_util_league_DefaultTableProvider($parameters, $configurations, $league, $confId='') {
 		$this->setLeague($league);
-		$this->conf = $configurations;
-		$this->parameters = $parameters;
-		$this->confId = $confId;
+		$this->setConfigurations($configurations, $confId);
+		$this->setParameters($parameters);
 		$this->init();
 	}
 
@@ -74,6 +73,10 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 
 		return $this->getLeague()->getPenalties();
 	}
+	function getTeamId($team) {
+		return $team->uid;
+	}
+	
 	function getTeams() {
 		return $this->getLeague()->getTeams();
 	}
@@ -139,7 +142,13 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	protected function getParameters() {
 		return $this->parameters;
 	}
-
+	protected function setParameters($parameters) {
+		$this->parameters = $parameters;
+	}
+	protected function setConfigurations($configurations, $confId) {
+		$this->conf = $configurations;
+		$this->confId = $confId;
+	}
 }
 
 

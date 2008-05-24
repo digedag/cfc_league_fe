@@ -38,43 +38,16 @@ class tx_cfcleaguefe_util_LeagueTable  {
   var $penalties; // Ligastrafen
 
   function tx_cfcleaguefe_util_LeagueTable() {
-    $this->_teamData = Array();
+    $this->_teamData = array();
   }
 
-  /**
-   * Für die Berechnung des Daten benötigen wir die Parameter und eine Liste 
-   * von Spielen. Dadurch müssen die beteiligten Teams
-   * aus dem Spielen geholt werden. Daten für die Grund-Config müssen extra geliefert 
-   * werden
-   *
-   * @param tx_lib_parameters $parameters
-   * @param tx_rnbase_configurations $configurations
-   * @param array $matchArr
-   * @param array $defaults
-   */
-  function getTableData(&$parameters, $matchArr, $defaults) {
-    $this->_initConfig($parameters, $defaults);
-    // TODO
-  }
-  /**
-   * Compute chart data
-   *
-   * @param tx_lib_parameters $parameters
-   * @param tx_rnbase_configurations $configurations
-   * @param tx_cfcleaguefe_models_competition $league
-   * @return array
-   */
-  function generateChart(&$parameters,&$configurations, &$league) {
-  	$defaults = $this->_getDefaults($configurations, $league);
-  	return $this->generateChartData($parameters, $defaults, $league);
-  }
 	/**
 	 * Die Berechnung der Daten für die Tabellenfahrt. Da der Rückgabewert hier eine andere
 	 * Struktur hat, läuft die Berechnung etwas anders.
-   * Was brauchen wir für eine Tabellenfahrt?
-   * - der Tabellenstand muss nach jeden Spieltag berechnet werden
-   * - die Position für für jedes Team in einem Array abgelegt
-   * - Die Punkte und Tore sind für die Ausgabe uninteressant
+	 * Was brauchen wir für eine Tabellenfahrt?
+	 * - der Tabellenstand muss nach jeden Spieltag berechnet werden
+	 * - die Position für für jedes Team in einem Array abgelegt
+	 * - Die Punkte und Tore sind für die Ausgabe uninteressant
 	 *
 	 * @param tx_cfcleaguefe_util_league_TableProvider $tableProvider
 	 */
@@ -107,57 +80,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		}
 		return $xyData;
 	}
-  
-  /**
-   * Für die Berechnung des Charts benötigen wir die Config, die Parameter und die Liga
-   * Statt Liga nehmen wir eine Liste von Spielen. Dadurch müssen die beteiligten Teams
-   * aus dem Spielen geholt werden. Daten für die Grund-Config müssen extra geliefert 
-   * werden
-   * 
-   * @param tx_lib_parameters $parameters
-   * @param tx_rnbase_configurations $configurations
-   * @param tx_cfcleaguefe_models_competition $league
-   * @return array
-   */
-  function generateChartData2(&$parameters,&$defaults, &$league) {
-    // Wir setzen die notwendigen Einstellungen
-    $this->_initConfig($parameters, $defaults);
-    // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
-    $this->_initTeams($league->getTeams());
-    // Hier je nach TableScope die Spiele holen
-    $matches = $league->getMatches(2, $this->cfgTableScope);
-    
-    // Wir berechnen die Tabelle jetzt häppchenweise für jeden Spieltag einzeln
-    // Daher zerlegen wir die Spiele zunächst in die einzelnen Spieltage
-    $rounds = array();
-    foreach($matches As $match) {
-      $rounds[$match->record['round']][] = $match;
-    }
-    $xyData = Array();
-    $this->handlePenalties();
-    foreach($rounds As $round => $roundMatches) {
-      $this->handleMatches($roundMatches);
-      // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
-      $teamData = $this->_teamData;
-      usort($teamData, 'compareTeams');
-      // Nun setzen wir die Tabellenstände
-      foreach($teamData As $position => $team) {
-        if(in_array($team['clubId'], $this->cfgChartClubs))
-          $xyData[$team['teamName']][$round] = $position +1;
-      }
-    }
-    
-		// Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
-		// Den höchsten absolvierten Spieltag ermitteln
-		$lastRound = intval(array_pop(array_keys($rounds))) + 1;
-		$maxRound = count($league->getRounds());
-		$teamName = array_pop(array_keys($xyData));
-		for( ; $lastRound <= $maxRound; $lastRound++) {
-			// Es muss nur für ein Team ein weiterer Wert hinzugefügt werden
-			$xyData[$teamName][$lastRound] = null;
-		}
-		return $xyData;
-	}
+
 	/**
 	 * Für die Berechnung der Liga benötigen wir eine Datenlieferanten
 	 * @param tx_cfcleaguefe_util_league_TableProvider $tableProvider
@@ -191,45 +114,11 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		return $this->_teamData;
 	}
 
-  /**
-   * Für die Berechnung der Liga benötigen wir die Config, die Parameter und die Liga
-   * @param tx_lib_parameters $parameters
-   * @param tx_rnbase_configurations $configurations
-   * @param tx_cfcleaguefe_models_competition $league
-   */
-  function generateTable2(&$parameters,&$configurations, &$league) {
-  	$defaults = $this->_getDefaults($configurations, $league);
-    // Wir setzen die notwendigen Einstellungen
-    $this->_initConfig($parameters, $defaults);
-    // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
-    $this->_initTeams($league->getTeams());
-
-    // Hier je nach TableScope (Hin-/Rückrunde) die Spiele holen
-    $matches = $league->getMatches(2, $this->cfgTableScope); // TODO: Status aus Config holen
-//    t3lib_div::debug($league, 'Liga');
-
-    $this->handleMatches($matches);
-    $this->handlePenalties();
-
-    
-    // Jetzt die Tabelle sortieren
-    usort($this->_teamData, 'compareTeams');
-
-    // Nun setzen wir die Tabellenstände
-    for($i=0; $i < count($this->_teamData); $i++) {
-      $this->_teamData[$i]['position'] = $i +1;
-    }
-
-//t3lib_div::debug($this->_teamData,'util_leaguetable');
-    
-    return $this->_teamData;
-  }
-
-  /**
-   * Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
-   * für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
-   */
-  function handlePenalties() {
+	/**
+	 * Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
+	 * für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
+	 */
+	function handlePenalties() {
 		$penalties = $this->getTableProvider()->getPenalties();
 
     foreach($penalties As $penalty) {
@@ -280,117 +169,122 @@ class tx_cfcleaguefe_util_LeagueTable  {
           $this->_countStandard($match, $toto);
       }
     }
+		unset($this->_teamData[0]); // Remove dummy data from teams without id
   }
 
-  /**
-   * Zählt die Punkte für eine normale Tabelle
-   */
-  function _countStandard(&$match, $toto) {
-      // Anzahl Spiele aktualisieren
-      $this->addMatchCount($match->record['home']);
-      $this->addMatchCount($match->record['guest']);
+	/**
+	 * Zählt die Punkte für eine normale Tabelle
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param int $toto
+	 */
+	function _countStandard(&$match, $toto) {
+		// Anzahl Spiele aktualisieren
+		$homeId = $this->getTableProvider()->getTeamId($match->getHome());
+		$guestId = $this->getTableProvider()->getTeamId($match->getGuest());
+		$this->addMatchCount($homeId);
+		$this->addMatchCount($guestId);
 
+		if($toto == 0) { // Unentschieden
+			$this->addPoints($homeId, $this->getTableProvider()->getPointsDraw());
+			$this->addPoints($guestId, $this->getTableProvider()->getPointsDraw());
+			if($this->getTableProvider()->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $this->getTableProvider()->getPointsDraw());
+				$this->addPoints2($guestId, $this->getTableProvider()->getPointsDraw());
+			}
 
-      if($toto == 0) { // Unentschieden
-        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsDraw());
-        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsDraw());
-        if($this->getTableProvider()->isCountLoosePoints()) {
-          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsDraw());
-          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsDraw());
-        }
+			$this->addDrawCount($homeId);
+			$this->addDrawCount($guestId);
+		}
+		elseif($toto == 1) {  // Heimsieg
+			$this->addPoints($homeId, $this->getTableProvider()->getPointsWin());
+			$this->addPoints($guestId, $this->getTableProvider()->getPointsLoose());
+			if($this->getTableProvider()->isCountLoosePoints()) {
+				$this->addPoints2($guestId, $this->getTableProvider()->getPointsWin());
+			}
 
-        $this->addDrawCount($match->record['home']);
-        $this->addDrawCount($match->record['guest']);
-      }
-      elseif($toto == 1) {  // Heimsieg
-        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsWin());
-        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsLoose());
-        if($this->getTableProvider()->isCountLoosePoints()) {
-          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsWin());
-        }
+			$this->addWinCount($homeId);
+			$this->addLoseCount($guestId);
+		}
+		else { // Auswärtssieg
+			$this->addPoints($homeId, $this->getTableProvider()->getPointsLoose());
+			$this->addPoints($guestId, $this->getTableProvider()->getPointsWin());
+			if($this->getTableProvider()->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $this->getTableProvider()->getPointsWin());
+			}
+			$this->addLoseCount($homeId);
+			$this->addWinCount($guestId);
+		}
 
-        $this->addWinCount($match->record['home']);
-        $this->addLoseCount($match->record['guest']);
-      }
-      else { // Auswärtssieg
-        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsLoose());
-        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsWin());
-        if($this->getTableProvider()->isCountLoosePoints()) {
-          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsWin());
-        }
-        $this->addLoseCount($match->record['home']);
-        $this->addWinCount($match->record['guest']);
-      }
-
-      // Jetzt die Tore summieren
-      $this->addGoals($match->record['home'], $match->record['goals_home_2'], $match->record['goals_guest_2']);
-      $this->addGoals($match->record['guest'], $match->record['goals_guest_2'], $match->record['goals_home_2']);
-  }
+		// Jetzt die Tore summieren
+		$this->addGoals($homeId, $match->record['goals_home_2'], $match->record['goals_guest_2']);
+		$this->addGoals($guestId, $match->record['goals_guest_2'], $match->record['goals_home_2']);
+	}
 
   /**
    * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
    * Heimmannschaft gewertet.
-   */
-  function _countHome(&$match, $toto) {
-      // Anzahl Spiele aktualisieren
-      $this->addMatchCount($match->record['home']);
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param int $toto
+	 */
+	function _countHome(&$match, $toto) {
+		$homeId = $this->getTableProvider()->getTeamId($match->getHome());
+		// Anzahl Spiele aktualisieren
+		$this->addMatchCount($homeId);
 
+		if($toto == 0) { // Unentschieden
+			$this->addPoints($homeId, $this->getTableProvider()->getPointsDraw());
+			if($this->getTableProvider()->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $this->getTableProvider()->getPointsDraw());
+			}
+			$this->addDrawCount($homeId);
+		}
+		elseif($toto == 1) {  // Heimsieg
+			$this->addPoints($homeId, $this->getTableProvider()->getPointsWin());
+			$this->addWinCount($homeId);
+		}
+		else { // Auswärtssieg
+			$this->addPoints($homeId, $this->getTableProvider()->getPointsLoose());
+			if($this->getTableProvider()->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $this->getTableProvider()->getPointsWin());
+			}
+			$this->addLoseCount($homeId);
+		}
+		// Jetzt die Tore summieren
+		$this->addGoals($homeId, $match->record['goals_home_2'], $match->record['goals_guest_2']);
+	}
 
-      if($toto == 0) { // Unentschieden
-        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsDraw());
-        if($this->getTableProvider()->isCountLoosePoints()) {
-          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsDraw());
-        }
-        $this->addDrawCount($match->record['home']);
-      }
-      elseif($toto == 1) {  // Heimsieg
-        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsWin());
-        $this->addWinCount($match->record['home']);
-      }
-      else { // Auswärtssieg
-        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsLoose());
-        if($this->getTableProvider()->isCountLoosePoints()) {
-          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsWin());
-        }
-        $this->addLoseCount($match->record['home']);
-      }
+	/**
+	 * Zählt die Punkte für eine normale Tabelle
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param int $toto
+	 */
+	function _countGuest(&$match, $toto) {
+		$guestId = $this->getTableProvider()->getTeamId($match->getGuest());
+		// Anzahl Spiele aktualisieren
+		$this->addMatchCount($guestId);
 
-      // Jetzt die Tore summieren
-      $this->addGoals($match->record['home'], $match->record['goals_home_2'], $match->record['goals_guest_2']);
-  }
+		if($toto == 0) { // Unentschieden
+			$this->addPoints($guestId, $this->getTableProvider()->getPointsDraw());
+			if($this->getTableProvider()->isCountLoosePoints()) {
+				$this->addPoints2($guestId, $this->getTableProvider()->getPointsDraw());
+			}
+			$this->addDrawCount($guestId);
+		}
+		elseif($toto == 1) {  // Heimsieg
+			$this->addPoints($guestId, $this->getTableProvider()->getPointsLoose());
+			if($this->getTableProvider()->isCountLoosePoints()) {
+				$this->addPoints2($guestId, $this->getTableProvider()->getPointsWin());
+			}
+			$this->addLoseCount($guestId);
+		}
+		else { // Auswärtssieg
+			$this->addPoints($guestId, $this->getTableProvider()->getPointsWin());
+			$this->addWinCount($guestId);
+		}
 
-  /**
-   * Zählt die Punkte für eine normale Tabelle
-   */
-  function _countGuest(&$match, $toto) {
-      // Anzahl Spiele aktualisieren
-      $this->addMatchCount($match->record['guest']);
-
-
-      if($toto == 0) { // Unentschieden
-        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsDraw());
-        if($this->getTableProvider()->isCountLoosePoints()) {
-          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsDraw());
-        }
-
-        $this->addDrawCount($match->record['guest']);
-      }
-      elseif($toto == 1) {  // Heimsieg
-        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsLoose());
-        if($this->getTableProvider()->isCountLoosePoints()) {
-          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsWin());
-        }
-
-        $this->addLoseCount($match->record['guest']);
-      }
-      else { // Auswärtssieg
-        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsWin());
-        $this->addWinCount($match->record['guest']);
-      }
-
-      // Jetzt die Tore summieren
-      $this->addGoals($match->record['guest'], $match->record['goals_guest_2'], $match->record['goals_home_2']);
-  }
+		// Jetzt die Tore summieren
+		$this->addGoals($guestId, $match->record['goals_guest_2'], $match->record['goals_home_2']);
+	}
 
 
   /**
@@ -448,29 +342,31 @@ class tx_cfcleaguefe_util_LeagueTable  {
   	$teams = $tableProvider->getTeams();
     foreach($teams As $team) {
       if($team->isDummy()) continue; // Ignore dummy teams
-      $this->_teamData[$team->uid]['team'] = $team;
-      $this->_teamData[$team->uid]['teamId'] = $team->uid;
-      $this->_teamData[$team->uid]['teamName'] = $team->record['name'];
-      $this->_teamData[$team->uid]['teamNameShort'] = $team->record['short_name'];
-      $this->_teamData[$team->uid]['clubId'] = $team->record['club'];
-      $this->_teamData[$team->uid]['points'] = 0;
+      $teamId = $tableProvider->getTeamId($team);
+      if(!$teamId) continue; // Ignore teams without given id
+      $this->_teamData[$teamId]['team'] = $team;
+      $this->_teamData[$teamId]['teamId'] = $teamId;
+      $this->_teamData[$teamId]['teamName'] = $team->record['name'];
+      $this->_teamData[$teamId]['teamNameShort'] = $team->record['short_name'];
+      $this->_teamData[$teamId]['clubId'] = $team->record['club'];
+      $this->_teamData[$teamId]['points'] = 0;
       // Bei 3-Punktssystem muss mit -1 initialisiert werden, damit der Marker später ersetzt wird
-      $this->_teamData[$team->uid]['points2'] = ($tableProvider->isCountLoosePoints()) ? 0 : -1;
-      $this->_teamData[$team->uid]['goals1'] = 0;
-      $this->_teamData[$team->uid]['goals2'] = 0;
-      $this->_teamData[$team->uid]['goals_diff'] = 0;
-      $this->_teamData[$team->uid]['oldposition'] = 0;
-      $this->_teamData[$team->uid]['positionchange'] = 'EQ';
+      $this->_teamData[$teamId]['points2'] = ($tableProvider->isCountLoosePoints()) ? 0 : -1;
+      $this->_teamData[$teamId]['goals1'] = 0;
+      $this->_teamData[$teamId]['goals2'] = 0;
+      $this->_teamData[$teamId]['goals_diff'] = 0;
+      $this->_teamData[$teamId]['oldposition'] = 0;
+      $this->_teamData[$teamId]['positionchange'] = 'EQ';
       
-      $this->_teamData[$team->uid]['matchCount'] = 0;
-      $this->_teamData[$team->uid]['winCount'] = 0;
-      $this->_teamData[$team->uid]['drawCount'] = 0;
-      $this->_teamData[$team->uid]['loseCount'] = 0;
+      $this->_teamData[$teamId]['matchCount'] = 0;
+      $this->_teamData[$teamId]['winCount'] = 0;
+      $this->_teamData[$teamId]['drawCount'] = 0;
+      $this->_teamData[$teamId]['loseCount'] = 0;
 
 			// Muss das Team hervorgehoben werden?
 			$markClubs = $tableProvider->getMarkClubs();
 			if(count($markClubs)) {
-				$this->_teamData[$team->uid]['markClub'] = in_array($team->record['club'], $markClubs) ? 1 : 0;
+				$this->_teamData[$teamId]['markClub'] = in_array($team->record['club'], $markClubs) ? 1 : 0;
 			}
 		}
 //      t3lib_div::debug($this->_teamData,'Vereine');
