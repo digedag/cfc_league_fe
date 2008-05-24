@@ -40,6 +40,7 @@ league_1:
         uid: 11
         home: 1
         guest: 2
+        round: 1
         status: 2
         goals_home_2: 1
         goals_guest_2: 1
@@ -51,6 +52,7 @@ league_1:
         uid: 12
         home: 3
         guest: 4
+        round: 1
         status: 2
         goals_home_2: 2
         goals_guest_2: 0
@@ -62,6 +64,7 @@ league_1:
         uid: 13
         home: 3
         guest: 1
+        round: 2
         status: 2
         goals_home_2: 1
         goals_guest_2: 0
@@ -73,6 +76,7 @@ league_1:
         uid: 14
         home: 4
         guest: 2
+        round: 2
         status: 2
         goals_home_2: 1
         goals_guest_2: 2
@@ -84,6 +88,7 @@ league_1:
         uid: 15
         home: 1
         guest: 4
+        round: 3
         status: 2
         goals_home_2: 3
         goals_guest_2: 0

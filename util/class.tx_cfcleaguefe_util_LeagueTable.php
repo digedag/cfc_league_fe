@@ -68,6 +68,45 @@ class tx_cfcleaguefe_util_LeagueTable  {
   	$defaults = $this->_getDefaults($configurations, $league);
   	return $this->generateChartData($parameters, $defaults, $league);
   }
+	/**
+	 * Die Berechnung der Daten für die Tabellenfahrt. Da der Rückgabewert hier eine andere
+	 * Struktur hat, läuft die Berechnung etwas anders.
+   * Was brauchen wir für eine Tabellenfahrt?
+   * - der Tabellenstand muss nach jeden Spieltag berechnet werden
+   * - die Position für für jedes Team in einem Array abgelegt
+   * - Die Punkte und Tore sind für die Ausgabe uninteressant
+	 *
+	 * @param tx_cfcleaguefe_util_league_TableProvider $tableProvider
+	 */
+	function generateChartData(&$tableProvider) {
+		$this->setTableProvider($tableProvider);
+		$this->_initTeams($tableProvider);
+		$this->handlePenalties(); // Strafen können direkt berechnet werden
+    $xyData = Array();
+		$rounds = $tableProvider->getRounds();
+    foreach($rounds As $round => $roundMatches) {
+			$this->handleMatches($roundMatches);
+			// Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
+			$teamData = $this->_teamData;
+			usort($teamData, array($this, 'compareTeams'));
+			// Nun setzen wir die Tabellenstände
+			reset($teamData);
+			foreach($teamData As $position => $team) {
+				if(in_array($team['clubId'], $this->getTableProvider()->getChartClubs()))
+					$xyData[$team['teamName']][$round] = $position +1;
+			}
+		}
+		// Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
+		// Den höchsten absolvierten Spieltag ermitteln
+		$lastRound = intval(array_pop(array_keys($rounds))) + 1;
+		$maxRound = $this->getTableProvider()->getMaxRounds();
+		$teamName = array_pop(array_keys($xyData));
+		for( ; $lastRound <= $maxRound; $lastRound++) {
+			// Es muss nur für ein Team ein weiterer Wert hinzugefügt werden
+			$xyData[$teamName][$lastRound] = null;
+		}
+		return $xyData;
+	}
   
   /**
    * Für die Berechnung des Charts benötigen wir die Config, die Parameter und die Liga
@@ -75,16 +114,12 @@ class tx_cfcleaguefe_util_LeagueTable  {
    * aus dem Spielen geholt werden. Daten für die Grund-Config müssen extra geliefert 
    * werden
    * 
-   * Was brauchen wir für eine Tabellenfahrt?
-   * - der Tabellenstand muss nach jeden Spieltag berechnet werden
-   * - die Position für für jedes Team in einem Array abgelegt
-   * - Die Punkte und Tore sind für die Ausgabe uninteressant
    * @param tx_lib_parameters $parameters
    * @param tx_rnbase_configurations $configurations
    * @param tx_cfcleaguefe_models_competition $league
    * @return array
    */
-  function generateChartData(&$parameters,&$defaults, &$league) {
+  function generateChartData2(&$parameters,&$defaults, &$league) {
     // Wir setzen die notwendigen Einstellungen
     $this->_initConfig($parameters, $defaults);
     // Zuerst die Namen der Teams laden und dabei alle Werte auf 0 setzen
@@ -123,6 +158,38 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		}
 		return $xyData;
 	}
+	/**
+	 * Für die Berechnung der Liga benötigen wir eine Datenlieferanten
+	 * @param tx_cfcleaguefe_util_league_TableProvider $tableProvider
+	 */
+	function generateTable(&$tableProvider) {
+		$this->setTableProvider($tableProvider);
+		$this->_initTeams($tableProvider);
+		$this->handlePenalties(); // Strafen können direkt berechnet werden
+
+		$teamData = array();
+		$rounds = $tableProvider->getRounds();
+		foreach($rounds As $round => $roundMatches) {
+			$this->handleMatches($roundMatches);
+			// Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
+			$teamData = $this->_teamData;
+			usort($teamData, array($this, 'compareTeams'));
+			// Nun setzen wir die Tabellenstände
+			reset($teamData);
+			for($i=0; $i < count($teamData); $i++) {
+				$newPosition = $i +1;
+				$team = $teamData[$i];
+				if($this->_teamData[$team['teamId']]['position']) {
+					$oldPosition = $this->_teamData[$team['teamId']]['position'];
+					$this->_teamData[$team['teamId']]['oldposition'] = $oldPosition;
+					$this->_teamData[$team['teamId']]['positionchange'] = $this->getPositionChange($oldPosition, $newPosition);
+				}
+				$this->_teamData[$team['teamId']]['position'] = $newPosition;
+			}
+		}
+		usort($this->_teamData, array($this, 'compareTeams'));
+		return $this->_teamData;
+	}
 
   /**
    * Für die Berechnung der Liga benötigen wir die Config, die Parameter und die Liga
@@ -130,7 +197,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
    * @param tx_rnbase_configurations $configurations
    * @param tx_cfcleaguefe_models_competition $league
    */
-  function generateTable(&$parameters,&$configurations, &$league) {
+  function generateTable2(&$parameters,&$configurations, &$league) {
   	$defaults = $this->_getDefaults($configurations, $league);
     // Wir setzen die notwendigen Einstellungen
     $this->_initConfig($parameters, $defaults);
@@ -163,11 +230,9 @@ class tx_cfcleaguefe_util_LeagueTable  {
    * für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
    */
   function handlePenalties() {
-    if($this->cfgTableType || $this->cfgTableScope)
-      return;
+		$penalties = $this->getTableProvider()->getPenalties();
 
-
-    foreach($this->penalties As $penalty) {
+    foreach($penalties As $penalty) {
       // Welches Team ist betroffen?
       if(array_key_exists($penalty->record['team'], $this->_teamData)) {
 //    t3lib_div::debug($penalty, 'tx_cfcleaguefe_util_LeagueTable'); // TODO: Remove me!
@@ -201,10 +266,10 @@ class tx_cfcleaguefe_util_LeagueTable  {
     foreach($matches As $match) {
       // Wie ist das Spiel ausgegangen?
       $toto = $match->getToto();
-
+      
       // Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
       // Daher rufen wir jetzt die passende Methode auf
-      switch($this->cfgTableType) {
+      switch($this->getTableProvider()->getTableType()) {
         case 1 :
           $this->_countHome($match, $toto);
           break;
@@ -227,31 +292,31 @@ class tx_cfcleaguefe_util_LeagueTable  {
 
 
       if($toto == 0) { // Unentschieden
-        $this->addPoints($match->record['home'], $this->cfgPointsDraw);
-        $this->addPoints($match->record['guest'], $this->cfgPointsDraw);
-        if($this->cfgPointSystem == 1) {
-          $this->addPoints2($match->record['home'], $this->cfgPointsDraw);
-          $this->addPoints2($match->record['guest'], $this->cfgPointsDraw);
+        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsDraw());
+        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsDraw());
+        if($this->getTableProvider()->isCountLoosePoints()) {
+          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsDraw());
+          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsDraw());
         }
 
         $this->addDrawCount($match->record['home']);
         $this->addDrawCount($match->record['guest']);
       }
       elseif($toto == 1) {  // Heimsieg
-        $this->addPoints($match->record['home'], $this->cfgPointsWin);
-        $this->addPoints($match->record['guest'], $this->cfgPointsLose);
-        if($this->cfgPointSystem == 1) {
-          $this->addPoints2($match->record['guest'], $this->cfgPointsWin);
+        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsWin());
+        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsLoose());
+        if($this->getTableProvider()->isCountLoosePoints()) {
+          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsWin());
         }
 
         $this->addWinCount($match->record['home']);
         $this->addLoseCount($match->record['guest']);
       }
       else { // Auswärtssieg
-        $this->addPoints($match->record['home'], $this->cfgPointsLose);
-        $this->addPoints($match->record['guest'], $this->cfgPointsWin);
-        if($this->cfgPointSystem == 1) {
-          $this->addPoints2($match->record['home'], $this->cfgPointsWin);
+        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsLoose());
+        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsWin());
+        if($this->getTableProvider()->isCountLoosePoints()) {
+          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsWin());
         }
         $this->addLoseCount($match->record['home']);
         $this->addWinCount($match->record['guest']);
@@ -272,20 +337,20 @@ class tx_cfcleaguefe_util_LeagueTable  {
 
 
       if($toto == 0) { // Unentschieden
-        $this->addPoints($match->record['home'], $this->cfgPointsDraw);
-        if($this->cfgPointSystem == 1) {
-          $this->addPoints2($match->record['home'], $this->cfgPointsDraw);
+        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsDraw());
+        if($this->getTableProvider()->isCountLoosePoints()) {
+          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsDraw());
         }
         $this->addDrawCount($match->record['home']);
       }
       elseif($toto == 1) {  // Heimsieg
-        $this->addPoints($match->record['home'], $this->cfgPointsWin);
+        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsWin());
         $this->addWinCount($match->record['home']);
       }
       else { // Auswärtssieg
-        $this->addPoints($match->record['home'], $this->cfgPointsLose);
-        if($this->cfgPointSystem == 1) {
-          $this->addPoints2($match->record['home'], $this->cfgPointsWin);
+        $this->addPoints($match->record['home'], $this->getTableProvider()->getPointsLoose());
+        if($this->getTableProvider()->isCountLoosePoints()) {
+          $this->addPoints2($match->record['home'], $this->getTableProvider()->getPointsWin());
         }
         $this->addLoseCount($match->record['home']);
       }
@@ -303,23 +368,23 @@ class tx_cfcleaguefe_util_LeagueTable  {
 
 
       if($toto == 0) { // Unentschieden
-        $this->addPoints($match->record['guest'], $this->cfgPointsDraw);
-        if($this->cfgPointSystem == 1) {
-          $this->addPoints2($match->record['guest'], $this->cfgPointsDraw);
+        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsDraw());
+        if($this->getTableProvider()->isCountLoosePoints()) {
+          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsDraw());
         }
 
         $this->addDrawCount($match->record['guest']);
       }
       elseif($toto == 1) {  // Heimsieg
-        $this->addPoints($match->record['guest'], $this->cfgPointsLose);
-        if($this->cfgPointSystem == 1) {
-          $this->addPoints2($match->record['guest'], $this->cfgPointsWin);
+        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsLoose());
+        if($this->getTableProvider()->isCountLoosePoints()) {
+          $this->addPoints2($match->record['guest'], $this->getTableProvider()->getPointsWin());
         }
 
         $this->addLoseCount($match->record['guest']);
       }
       else { // Auswärtssieg
-        $this->addPoints($match->record['guest'], $this->cfgPointsWin);
+        $this->addPoints($match->record['guest'], $this->getTableProvider()->getPointsWin());
         $this->addWinCount($match->record['guest']);
       }
 
@@ -371,15 +436,16 @@ class tx_cfcleaguefe_util_LeagueTable  {
 
   /**
    * Lädt die Namen der Teams in der Tabelle
-   * @param tx_cfcleaguefe_models_competition $league
+   * @param tx_cfcleaguefe_models_competition $tableProvider
    */
-  function _initTeams(&$teams) {
+  function _initTeams(tx_cfcleaguefe_util_league_TableProvider $tableProvider) {
     // Wir laden die Teams aus der Liga
 //    $uids = $league->record['teams'];
 //    $where = 'uid IN (' . $uids .')';
 //    $teams = tx_rnbase_util_DB::queryDB('*','tx_cfcleague_teams',$where,
 //              '','sorting','tx_cfcleaguefe_models_team',0);
 
+  	$teams = $tableProvider->getTeams();
     foreach($teams As $team) {
       if($team->isDummy()) continue; // Ignore dummy teams
       $this->_teamData[$team->uid]['team'] = $team;
@@ -389,7 +455,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
       $this->_teamData[$team->uid]['clubId'] = $team->record['club'];
       $this->_teamData[$team->uid]['points'] = 0;
       // Bei 3-Punktssystem muss mit -1 initialisiert werden, damit der Marker später ersetzt wird
-      $this->_teamData[$team->uid]['points2'] = ($this->cfgPointSystem == '1') ? 0 : -1;
+      $this->_teamData[$team->uid]['points2'] = ($tableProvider->isCountLoosePoints()) ? 0 : -1;
       $this->_teamData[$team->uid]['goals1'] = 0;
       $this->_teamData[$team->uid]['goals2'] = 0;
       $this->_teamData[$team->uid]['goals_diff'] = 0;
@@ -400,12 +466,24 @@ class tx_cfcleaguefe_util_LeagueTable  {
       $this->_teamData[$team->uid]['loseCount'] = 0;
 
 			// Muss das Team hervorgehoben werden?
-			if(count($this->cfgMarkClubs)) {
-				$this->_teamData[$team->uid]['markClub'] = in_array($team->record['club'], $this->cfgMarkClubs) ? 1 : 0;
+			$markClubs = $tableProvider->getMarkClubs();
+			if(count($markClubs)) {
+				$this->_teamData[$team->uid]['markClub'] = in_array($team->record['club'], $markClubs) ? 1 : 0;
 			}
 		}
 //      t3lib_div::debug($this->_teamData,'Vereine');
 	}
+	/**
+	 * Returns position change, either UP or DOWN or EQ.
+	 *
+	 * @param int $oldPosition
+	 * @param int $newPosition
+	 * @return string UP, DOWN or EQ
+	 */
+	protected function getPositionChange($oldPosition, $newPosition) {
+		return $oldPosition == $newPosition ? 'EQ' : ($oldPosition > $newPosition ? 'UP' : 'DOWN');
+	}
+	
 
 	function _getDefaults($configurations, $league) {
 		$defaults['pointsystem'] = $league->record['point_system'];
@@ -466,40 +544,50 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		// Die Ligastrafen laden
 		$this->penalties = $defaults['penalties'];
 	}
-}
-
-/**
- * Funktion zur Sortierung der Tabellenzeilen
- */
-function compareTeams($t1, $t2) {
-  // Zwangsabstieg prüfen
-  if($t1['last_place']) return 1;
-  if($t2['last_place']) return -1;
-
-  if($t1['points'] == $t2['points']) {
-    // Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
-    // da sie im 3-PM immer identisch sein sollten, können wir immer testen
-    if($t1['points2'] == $t2['points2']) {
-      // Jetzt die Tordifferenz prüfen
-      $t1diff = $t1['goals1'] - $t1['goals2'];
-      $t2diff = $t2['goals1'] - $t2['goals2'];
-      if($t1diff == $t2diff) {
-        // Jetzt zählen die mehr geschossenen Tore
-        if($t1['goals1'] == $t2['goals1'])
-          return 0; // Punkt und Torgleich
-        return $t1['goals1'] > $t2['goals1'] ? -1 : 1;
-      }
-      return $t1diff > $t2diff ? -1 : 1;
-    }
-    // Bei den Minuspunkten ist weniger mehr
-    return $t1['points2'] < $t2['points2'] ? -1 : 1;
+  function setTableProvider(&$tableProvider) {
+  	$this->tableProvider = $tableProvider;
   }
-  return $t1['points'] > $t2['points'] ? -1 : 1;
-}
+  /**
+   * The data provider
+   *
+   * @return tx_cfcleaguefe_util_league_TableProvider
+   */
+  function getTableProvider() {
+  	return $this->tableProvider;
+  }
 
+	/**
+	 * Funktion zur Sortierung der Tabellenzeilen
+	 */
+	function compareTeams($t1, $t2) {
+		// Zwangsabstieg prüfen
+		if($t1['last_place']) return 1;
+		if($t2['last_place']) return -1;
+	
+		if($t1['points'] == $t2['points']) {
+			// Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
+			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
+			if($t1['points2'] == $t2['points2']) {
+				// Jetzt die Tordifferenz prüfen
+				$t1diff = $t1['goals1'] - $t1['goals2'];
+				$t2diff = $t2['goals1'] - $t2['goals2'];
+				if($t1diff == $t2diff) {
+					// Jetzt zählen die mehr geschossenen Tore
+					if($t1['goals1'] == $t2['goals1'])
+						return 0; // Punkt und Torgleich
+					return $t1['goals1'] > $t2['goals1'] ? -1 : 1;
+				}
+				return $t1diff > $t2diff ? -1 : 1;
+			}
+			// Bei den Minuspunkten ist weniger mehr
+			return $t1['points2'] < $t2['points2'] ? -1 : 1;
+		}
+		return $t1['points'] > $t2['points'] ? -1 : 1;
+	}
+}
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_LeagueTable.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_LeagueTable.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_LeagueTable.php']);
 }
 
 ?>

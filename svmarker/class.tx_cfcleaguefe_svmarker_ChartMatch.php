@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2008 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,8 +24,6 @@
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
-tx_div::load('tx_rnbase_util_DB');
-
 
 /**
  * Service to output a chart to compare two match opponents
@@ -46,18 +44,11 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 		$competition = $match->getCompetition();
 		if(!$competition->isTypeLeague()) return false;
 
-		$clubs = array();
-		$clubId = $match->getHome()->record['club'];
-		if($clubId) $clubs[] = $clubId;
-		$clubId = $match->getGuest()->record['club'];
-		if($clubId) $clubs[] = $clubId;
-		if(!count($clubs)) return false; // Ohne clubs wäre der Chart leer
-
-
-		$defaults = $this->_getDefaults($competition, $clubs);
+		$clazz = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_SingleMatchTableProvider');
+		$tableProvider = new $clazz($competition,$match);
 
 		$leagueTable = tx_div::makeInstance('tx_cfcleaguefe_util_LeagueTable');
-		$xyDataset = $leagueTable->generateChartData($parameters,$defaults, $competition);
+		$xyDataset = $leagueTable->generateChartData($tableProvider);
 		$tsArr = $formatter->configurations->get('chart.');
 		
 		tx_div::load('tx_cfcleaguefe_actions_TableChart');
@@ -71,17 +62,6 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 	function getMatchTable() {
 		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
-
-	function _getDefaults($league, $clubs) {
-		$defaults['pointsystem'] = $league->record['point_system'];
-		// Hier die beiden clubs
-		$defaults['chartclubs'] = implode(',', $clubs);
-		$defaults['tabletype'] = 0;
-		$defaults['tablescope'] = 0; // Normale Tabelle
-    $defaults['penalties'] = $league->getPenalties();
-		return $defaults;
-	}
-
 }
 
 

@@ -28,7 +28,7 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 tx_div::load('tx_rnbase_configurations');
 tx_div::load('tx_rnbase_util_Spyc');
 //tx_div::load('tx_cfcleaguefe_models_team');
-//tx_div::load('tx_cfcleaguefe_models_match');
+tx_div::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
 tx_div::load('tx_cfcleaguefe_models_competition');
 tx_div::load('tx_cfcleaguefe_util_LeagueTable');
 
@@ -41,13 +41,14 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
     $params = tx_div::makeInstance('tx_lib_spl_arrayObject');
     $config = new tx_rnbase_configurations();
     $config->_dataStore->offsetSet('tableType', '0');
+    $prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
 
     $leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-    $result = $leagueTable->generateTable($params, $config, $league);
+    $result = $leagueTable->generateTable($prov);
 //    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
     
     $this->assertTrue(is_array($result), 'Got no result array');
-    $this->assertEquals(4, count($result), 'Table should contain 4 teams');
+    $this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: ' . count($result));
 
     // Tabelle 2-P.
     // T3 - 2 3:0 4:0
@@ -69,9 +70,10 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
     $params = tx_div::makeInstance('tx_lib_spl_arrayObject');
     $config = new tx_rnbase_configurations();
     $config->_dataStore->offsetSet('tableType', '0');
-
+    $prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
+    
     $leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-    $result = $leagueTable->generateTable($params, $config, $league);
+    $result = $leagueTable->generateTable($prov);
 //    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
     
     // Tabelle 3-P.
@@ -80,7 +82,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
     // T2 - 2 3:2 4
     // T4 - 3 1:7 0
     $this->assertTrue(is_array($result), 'Got no result array');
-    $this->assertEquals(4, count($result), 'Table should contain 4 teams');
+    $this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: ' . count($result));
     $this->assertEquals(3, $result[0]['teamId'], 'Team 3 should be 1. place');
     $this->assertEquals(1, $result[1]['teamId'], 'Team 1 should be 2. place');
     $this->assertEquals(2, $result[2]['teamId'], 'Team 2 should be 3. place');

@@ -30,7 +30,7 @@ require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe
 
 
 /**
- * Controller für die Anzeige eines Spielplans
+ * Controller für die Anzeige einer Tabellenfahrt
  */
 class tx_cfcleaguefe_actions_TableChart {
 
@@ -72,10 +72,7 @@ class tx_cfcleaguefe_actions_TableChart {
       }
     }
 
-//t3lib_div::debug($tsArr , 'ac_chart');
-
     // Okay, es ist eine Liga
-
     $viewData =& $configurations->getViewData();
     $viewData->offsetSet('plot', $this->generateGraph($parameters, $configurations,$currCompetition)); // Die Testplot für den View bereitstellen
 
@@ -83,18 +80,20 @@ class tx_cfcleaguefe_actions_TableChart {
     $view = tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
     $view->setTemplatePath($configurations->getTemplatePath());
     $out = $view->render('tablechart', $configurations);
-    return $out;
-  }
+		return $out;
+	}
 
-  /**
-   * Erzeugt den Graphen
-   */
-  function generateGraph(&$parameters, &$configurations, &$league) {
+	/**
+	 * Erzeugt den Graphen
+	 */
+	function generateGraph(&$parameters, &$configurations, &$league) {
+		$clazz = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_DefaultTableProvider');
+		$tableProvider = new $clazz($parameters,$configurations, $league);
 
-    $leagueTable = new tx_cfcleaguefe_util_LeagueTable;
-    $xyDataset = $leagueTable->generateChart($parameters,$configurations, $league);
+		$leagueTable = new tx_cfcleaguefe_util_LeagueTable;
+		$xyDataset = $leagueTable->generateChartData($tableProvider);
 
-    $tsArr = $configurations->get('chart.');
+		$tsArr = $configurations->get('chart.');
 /*
     $xyDataset = Array(
       'CFC' => Array('1' => '3', '2' => '3', '3' => '1'),
@@ -102,14 +101,9 @@ class tx_cfcleaguefe_actions_TableChart {
       'Cottbus' => Array('1' => '1', '2' => '1', '3' => '2')
     );
 */
-    $this->createChartDataset($xyDataset, $tsArr, $configurations, $league);
-
-
-
-    return tx_pbimagegraph_ts::make($tsArr);
-//t3lib_div::debug($strOutput, 'ac_MatchTable');
-
-  }
+		$this->createChartDataset($xyDataset, $tsArr, $configurations, $league);
+		return tx_pbimagegraph_ts::make($tsArr);
+	}
 
   /**
    * Fügt in das TS-Array die zusätzlichen Daten ein
@@ -159,15 +153,11 @@ class tx_cfcleaguefe_actions_TableChart {
       $seriesCnt += 10;
       $seriesIdx++;
     }
-
-//    t3lib_div::debug($tsArr ,'ac_chart');
-
   }
-
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_TableChart.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_TableChart.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_TableChart.php']);
 }
 
 ?>

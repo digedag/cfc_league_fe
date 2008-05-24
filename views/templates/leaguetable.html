@@ -34,6 +34,8 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 ###ROW_MARKCLUB### Marker zur Markierung von ausgewählten Teams. Dies sollte eine CSS-Klasse sein
 ###ROW_MARK### Marker zur Markierung von bestimmten Tabellenpositionen. Der Inhalt wird aus dem Wettbewerbsdatensatz geholt.
 ###ROW_POSITION### Marker für Tabellenplatz
+###ROW_POSITIONCHANGE### Marker für Tabellenplatzänderung
+###ROW_OLDPOSITION### Marker für Tabellenplatz des vorherigen Spieltags
 ###ROW_...### Marker für Werte aus dem Teamdatensatz
 ###ROW_LINK### Subpart für Link auf die Teamdarstellung
 ###ROW_MATCHCOUNT### Marker für Anzahl der Spiele
@@ -77,7 +79,7 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 
 ###ROW###
 <tr class="cfcleague-leaguetable-row###ROW_ROLL### ###ROW_MARKCLUB### cfcleague-leaguetable-row_###ROW_MARK###">
-  <td>###ROW_POSITION###.</td>
+  <td>###ROW_POSITION###. (###ROW_OLDPOSITION###)</td>
   <td>###ROW_LOGO### ###ROW_SHOWTEAMLINK######ROW_NAME######ROW_PENALTIES######ROW_SHOWTEAMLINK### (###ROW_SHOWMATCHTABLELINK######LABEL_MATCHTABLE######ROW_SHOWMATCHTABLELINK###)</td>
   <td>###ROW_MATCHCOUNT###</td>
   <td>###ROW_WINCOUNT###</td>

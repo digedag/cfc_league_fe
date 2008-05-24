@@ -3,6 +3,12 @@
 Änderungen
 ----------
 v0.3.5 (??.05.2008) (not released)
+* A complete refactoring of util_LeagueTable that makes it much more flexible.
+* New markers for leaguetable template:
+** ###ROW_OLDPOSITION### - position on previous round
+** ###ROW_POSITIONCHANGE### - returns either UP, DOWN or EQ. Useable for CSS classes.
+
+v0.3.5 (22.05.2008) (not released)
 * Profilelist with new option to show a list of profiles with birthday in current day or month
 
 v0.3.4 (17.05.2008) (not released)
