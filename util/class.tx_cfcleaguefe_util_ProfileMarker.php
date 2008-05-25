@@ -101,7 +101,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
     if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
       // Alle Marker löschen
     	
-    	$firstMarkerArray['###'.$profileMarker.'_FIRST_PICTURE###'] = $formatter->dataStdWrap($profile->record, '', $profileConfId.'firstImage.dummy.');
+    	$firstMarkerArray['###'.$profileMarker.'_FIRST_PICTURE_IMGTAG###'] = $formatter->dataStdWrap($profile->record, '', $profileConfId.'firstImage.dummy.');
 //      $gSubpartArray['###'. $profileMarker .'_PICTURES###'] = '';
       tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
                         tx_rnbase_util_FormatUtil::getDAMColumns(), $profileMarker.'_FIRST_PICTURE_');

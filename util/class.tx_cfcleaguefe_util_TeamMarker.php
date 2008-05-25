@@ -181,7 +181,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 
     if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
       // Alle Marker löschen
-      $firstMarkerArray['###'. $teamMarker .'_FIRST_PICTURE###'] = '';
+      $firstMarkerArray['###'. $teamMarker .'_FIRST_PICTURE_IMGTAG###'] = '';
       $gSubpartArray['###'. $teamMarker .'_PICTURES###'] = '';
       tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
                         tx_rnbase_util_FormatUtil::getDAMColumns(), $teamMarker.'_FIRST_PICTURE_');
