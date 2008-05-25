@@ -41,7 +41,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
    *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
    * @return String das geparste Template
    */
-  public function parseTemplate($template, &$club, &$formatter, $confId, $links=0, $clubMarker = 'CLUB') {
+  public function parseTemplate($template, &$club, &$formatter, $confId, $clubMarker = 'CLUB') {
     if(!is_object($club)) {
     	// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
     	$club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
@@ -52,7 +52,6 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 
     // Es wird das MarkerArray mit den Daten des Teams gefüllt.
     $markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , 0, $clubMarker.'_',$club->getColumnNames());
-
     // Die Adressdaten setzen
     $template = $this->_addAddress($template, $club->getAddress(), $formatter, $confId.'address.', $clubMarker.'_ADDRESS');
 

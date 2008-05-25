@@ -128,7 +128,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
    */
   protected function _addClubData($template, &$club, &$formatter, $clubConf, $markerPrefix) {
     $clubMarker = tx_div::makeInstance('tx_cfcleaguefe_util_ClubMarker');
-    $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, null, $markerPrefix);
+    $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
   	return $template;
   }
   /**
