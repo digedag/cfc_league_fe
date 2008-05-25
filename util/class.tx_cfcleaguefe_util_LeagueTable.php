@@ -339,29 +339,30 @@ class tx_cfcleaguefe_util_LeagueTable  {
 //    $teams = tx_rnbase_util_DB::queryDB('*','tx_cfcleague_teams',$where,
 //              '','sorting','tx_cfcleaguefe_models_team',0);
 
-  	$teams = $tableProvider->getTeams();
-    foreach($teams As $team) {
-      if($team->isDummy()) continue; // Ignore dummy teams
-      $teamId = $tableProvider->getTeamId($team);
-      if(!$teamId) continue; // Ignore teams without given id
-      $this->_teamData[$teamId]['team'] = $team;
-      $this->_teamData[$teamId]['teamId'] = $teamId;
-      $this->_teamData[$teamId]['teamName'] = $team->record['name'];
-      $this->_teamData[$teamId]['teamNameShort'] = $team->record['short_name'];
-      $this->_teamData[$teamId]['clubId'] = $team->record['club'];
-      $this->_teamData[$teamId]['points'] = 0;
-      // Bei 3-Punktssystem muss mit -1 initialisiert werden, damit der Marker später ersetzt wird
-      $this->_teamData[$teamId]['points2'] = ($tableProvider->isCountLoosePoints()) ? 0 : -1;
-      $this->_teamData[$teamId]['goals1'] = 0;
-      $this->_teamData[$teamId]['goals2'] = 0;
-      $this->_teamData[$teamId]['goals_diff'] = 0;
-      $this->_teamData[$teamId]['oldposition'] = 0;
-      $this->_teamData[$teamId]['positionchange'] = 'EQ';
-      
-      $this->_teamData[$teamId]['matchCount'] = 0;
-      $this->_teamData[$teamId]['winCount'] = 0;
-      $this->_teamData[$teamId]['drawCount'] = 0;
-      $this->_teamData[$teamId]['loseCount'] = 0;
+		$teams = $tableProvider->getTeams();
+		foreach($teams As $team) {
+			$teamId = $tableProvider->getTeamId($team);
+			if(!$teamId) continue; // Ignore teams without given id
+//			if($team->isDummy()) continue; // Ignore dummy teams
+			if(array_key_exists($teamId, $this->_teamData)) continue;
+			$this->_teamData[$teamId]['team'] = $team;
+			$this->_teamData[$teamId]['teamId'] = $teamId;
+			$this->_teamData[$teamId]['teamName'] = $team->record['name'];
+			$this->_teamData[$teamId]['teamNameShort'] = $team->record['short_name'];
+			$this->_teamData[$teamId]['clubId'] = $team->record['club'];
+			$this->_teamData[$teamId]['points'] = 0;
+			// Bei 3-Punktssystem muss mit -1 initialisiert werden, damit der Marker später ersetzt wird
+			$this->_teamData[$teamId]['points2'] = ($tableProvider->isCountLoosePoints()) ? 0 : -1;
+			$this->_teamData[$teamId]['goals1'] = 0;
+			$this->_teamData[$teamId]['goals2'] = 0;
+			$this->_teamData[$teamId]['goals_diff'] = 0;
+			$this->_teamData[$teamId]['oldposition'] = 0;
+			$this->_teamData[$teamId]['positionchange'] = 'EQ';
+
+			$this->_teamData[$teamId]['matchCount'] = 0;
+			$this->_teamData[$teamId]['winCount'] = 0;
+			$this->_teamData[$teamId]['drawCount'] = 0;
+			$this->_teamData[$teamId]['loseCount'] = 0;
 
 			// Muss das Team hervorgehoben werden?
 			$markClubs = $tableProvider->getMarkClubs();

@@ -16,10 +16,6 @@
 ###CONTROL_TABLETYPE_HOME_LINK### Subpart für Link auf Tabellentyp Heim
 ###CONTROL_TABLETYPE_AWAY_LINK### Subpart für Link auf Tabellentyp Auswärts
 
-###CONTROL_TABLETYPE_NORMAL_LINK_URL### Marker für URL auf Tabellentyp normal
-###CONTROL_TABLETYPE_HOME_LINK_URL### Marker für URL auf Tabellentyp Heim
-###CONTROL_TABLETYPE_AWAY_LINK_URL### Marker für URL auf Tabellentyp Auswärts
-
 ###CONTROL_TABLESCOPE_NORMAL_LINK### Subpart für Link auf Tabellenscope normal
 ###CONTROL_TABLESCOPE_FIRST_LINK### Subpart für Link auf Tabellenscope Hinrunde
 ###CONTROL_TABLESCOPE_SECOND_LINK### Subpart für Link auf Tabellenscope Rückrunde
@@ -37,7 +33,8 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 ###ROW_POSITIONCHANGE### Marker für Tabellenplatzänderung
 ###ROW_OLDPOSITION### Marker für Tabellenplatz des vorherigen Spieltags
 ###ROW_...### Marker für Werte aus dem Teamdatensatz
-###ROW_LINK### Subpart für Link auf die Teamdarstellung
+###ROW_SHOWTEAMLINK### Subpart für Link auf die Teamdarstellung
+###ROW_SHOWMATCHTABLELINK### Subpart für Link auf Teamspielplan
 ###ROW_MATCHCOUNT### Marker für Anzahl der Spiele
 </pre>
 
@@ -71,6 +68,7 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 </div>
 <!-- ###CONTROLS### end -->
 
+###ROWS###
 <div class="cfcleague-leaguetable">
 <table cellspacing="0" cellpadding="0" class="cfcleague-leaguetable">
 <tr>
@@ -91,6 +89,7 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 </tr>
 ###ROW###
 </table>
+###ROWS###
 
 <!-- ###PENALTIES### start -->
 <div class="cfcleague-leaguetable-comments">

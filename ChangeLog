@@ -9,6 +9,9 @@ v0.3.5 (??.05.2008) (not released)
 ** ###ROW_POSITIONCHANGE### - returns either UP, DOWN or EQ. Useable for CSS classes.
 * HTML-Markers for match media changed to common structure: Subpart ###MATCH_MEDIAS_2### is now ###MATCH_MEDIA###. ###MATCH_MEDIA### is now ###MATCH_MEDIA_PLAYER###
 * HTML-Markers for match pictures changed to common structure: Subpart ###MATCH_PICTURES_2### is now ###MATCH_PICTURE###. ###MATCH_PICTURE### is now ###MATCH_PICTURE_IMGTAG###. ###MATCH_FIRST_PICTURE### is now ###MATCH_FIRST_PICTURE_IMGTAG###
+* New view for a special all-time-leaguetable. It creates a table from all found matches in scope. So you can join competitions.
+* New subpart-marker ###ROWS### necessary for leaguetable output
+
 
 v0.3.5 (22.05.2008) (not released)
 * Profilelist with new option to show a list of profiles with birthday in current day or month

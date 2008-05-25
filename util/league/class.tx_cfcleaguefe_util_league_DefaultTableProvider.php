@@ -78,7 +78,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	}
 	
 	function getTeams() {
-		return $this->getLeague()->getTeams();
+		return $this->getLeague()->getTeams(true);
 	}
 	function getMatches() {
     return $this->getLeague()->getMatches(2, $this->cfgTableScope);

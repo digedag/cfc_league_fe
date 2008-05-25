@@ -32,68 +32,66 @@ tx_div::load('tx_cfcleaguefe_views_LeagueTable');
  */
 class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_LeagueTable {
 
-  function createOutput($template, &$viewData, &$configurations, &$formatter){
+	function createOutput($template, &$viewData, &$configurations, &$formatter){
   	
-    $cObj =& $formatter->cObj;
+		$cObj =& $formatter->cObj;
+		$markerArray = array();
+		$marks = array();
+		$penalties = array();
 
-    $markerArray = array();
-    $marks = array();
-    $penalties = array();
-
-    // Die Ligatabelle zusammenbauen
-    $subpartArray['###ROW###'] = $this->_createTable($cObj->getSubpart($template, '###ROW###'), 
-                             $viewData->offsetGet('tableData'), $penalties, $marks, $configurations);
+		// Die Ligatabelle zusammenbauen
+		$subpartArray['###ROWS###'] = $this->_createTable($cObj->getSubpart($template, '###ROWS###'),
+							$viewData, $penalties, $marks, $configurations);
 
     // Jetzt die Strafen auflisten
 //    $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'), 
 //                             $penalties, $configurations);
 
-    // Die Tabellensteuerung
-    $subpartArray['###CONTROLS###'] = $this->_createControls($cObj->getSubpart($template, '###CONTROLS###'), 
-                             $viewData, $configurations);
-    
-    $out .= $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-    
-    return $out;
-  }
+		// Die Tabellensteuerung
+		$subpartArray['###CONTROLS###'] = $this->_createControls($cObj->getSubpart($template, '###CONTROLS###'),
+							$viewData, $configurations);
 
-  /**
-   * Erstellt die Ligatabelle.
-   */
-  function _createTable($template, &$tableData, &$penalties, &$marks, &$configurations) {
-  	// Sollen alle Teams gezeigt werden?
-    $tableSize = intval($configurations->get('leagueTableSize'));
-    if($tableSize && $tableSize < count($tableData)) {
-      // Es sollen weniger Teams gezeigt werden als vorhanden sind
-      // Diesen Ausschnitt müssen wir jetzt ermitteln
-      $tableData = $this->_cropTable($tableData, $tableSize);
-    }
+		$out .= $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+		return $out;
+	}
 
-    $rowRoll = intval($configurations->get('leaguetable.table.roll.value'));
-//t3lib_div::debug($rowRoll , 'roll vw_leaguetable');
-    $parts = array();
-    // Die einzelnen Zeilen zusammenbauen
-    $rowRollCnt = 0;
-    $position = 1;
-    foreach($tableData As $row){
-      $row['roll'] = $rowRollCnt;
-      // Die Marks für die Zeile setzen
-      $this->_setMark($row, $marks);
-      // auf Strafen prüfen
-      $this->_preparePenalties($row, $penalties);
+	/**
+	 * Erstellt die Ligatabelle.
+	 */
+	function _createTable($templateList, &$viewData, &$penalties, &$marks, &$configurations) {
+		$tableData = $viewData->offsetGet('tableData');
+		// Sollen alle Teams gezeigt werden?
+		$tableSize = intval($configurations->get('leagueTableSize'));
+		if($tableSize && $tableSize < count($tableData)) {
+			// Es sollen weniger Teams gezeigt werden als vorhanden sind
+			// Diesen Ausschnitt müssen wir jetzt ermitteln
+			$tableData = $this->_cropTable($tableData, $tableSize);
+		}
+		// Den ClubMarker erstellen
+		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ClubMarker');
+		$clubMarker = new $markerClass;
+		$templateEntry = $configurations->getCObj()->getSubpart($templateList,'###ROW###');
 
-      $team = $row['team'];
-      unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-      $team->record = t3lib_div::array_merge($row, $team->record);
-
-      $parts[] = $this->teamMarker->parseTemplate($template, $team, $this->formatter, 'leaguetable.table.', 'ROW');
-
-      $position++;
-      $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
-    }
-    // Jetzt die einzelnen Teile zusammenfügen
-    return implode($parts, $configurations->get('leaguetable.table.implode'));
-  }
+		$parts = array();
+		$rowRoll = intval($configurations->get('leaguetableAllTime.table.roll.value'));
+		$rowRollCnt = 0;
+		foreach($tableData As $row){
+			$row['roll'] = $rowRollCnt;
+			// Die Marks für die Zeile setzen
+			$this->_setMark($row, $marks);
+			// auf Strafen prüfen
+//			$this->_preparePenalties($row, $penalties);
+			$team = $row['team'];
+			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
+			$team->record = t3lib_div::array_merge($row, $team->record);
+			$parts[] = $clubMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), 'leaguetableAllTime.table.', 'ROW');
+			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
+		}
+		// Jetzt die einzelnen Teile zusammenfügen
+    $markerArray = array();
+    $subpartArray['###ROW###'] = implode($parts, $configurations->get('leaguetableAllTime.table.implode'));
+		return $configurations->getCObj()->substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
+	}
 
   /**
    * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
@@ -231,11 +229,6 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
     $this->link = new $linkClass;
     $this->link->designatorString = $configurations->getQualifier();
     $this->link->destination($pid); // Das Ziel der Seite vorbereiten
-
-    // Den TeamMarker erstellen
-    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $this->teamMarker = new $teamMarkerClass;
-
   }
 }
 

@@ -239,11 +239,6 @@ plugin.tx_cfcleaguefe_competition {
       }
     }
   }
-  leaguetableAllTime {
-  	fields.MATCH.STATUS.OP_IN_INT = 2
-  	
-    tablescopeSelectionInput = 0
-  }
   # Daten für die Ligatabelle
   leaguetable {
     # Ausgabe mit HTML-Template
@@ -303,6 +298,12 @@ plugin.tx_cfcleaguefe_competition {
         1.override = POINT3
       }
     }
+  }
+  leaguetableAllTime {
+  	fields.MATCH.STATUS.OP_IN_INT = 2
+  	table < plugin.tx_cfcleaguefe_competition.leaguetable.table
+  	table =< lib.t3sports.club
+    tablescopeSelectionInput = 0
   }
 
   # Daten für den Spielplan-View

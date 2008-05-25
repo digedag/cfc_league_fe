@@ -43,9 +43,10 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 	}
 
 	/**
-	 * Return all teams of given matches
+	 * Return all clubs of given matches. Since this is an alltime table, teams are useless. It exists one saison
+	 * only! Thats why we return clubs. 
 	 *
-	 * @return array
+	 * @return array[tx_cfcleaguefe_models_club]
 	 */
 	function getTeams() {
 		if(is_array($this->teams))
@@ -53,10 +54,16 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 		$this->teams = array();
 		for($i=0, $cnt = count($this->matches); $i < $cnt; $i++) {
 			$match = $this->matches[$i];
-			$team = $match->getHome();
-			$this->teams[$team->uid] = $team;
-			$team = $match->getGuest();
-			$this->teams[$team->uid] = $team;
+			$club = $match->getHome()->getClub();
+			if($club->uid && !array_key_exists($club->uid, $this->teams)) {
+				$club->record['club'] = $club->uid; // necessary for mark clubs
+				$this->teams[$club->uid] = $club;
+			}
+			$club = $match->getGuest()->getClub();
+			if($club->uid && !array_key_exists($club->uid, $this->teams)) {
+				$club->record['club'] = $club->uid; // necessary for mark clubs
+				$this->teams[$club->uid] = $club;
+			}
 		}
 		return $this->teams;
 	}
