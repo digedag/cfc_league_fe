@@ -2,7 +2,7 @@
 
 Änderungen
 ----------
-v0.3.5 (??.05.2008) (not released)
+v0.3.5 (25.05.2008) (not released)
 * A complete refactoring of util_LeagueTable that makes it much more flexible.
 * New markers for leaguetable template:
 ** ###ROW_OLDPOSITION### - position on previous round
