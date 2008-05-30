@@ -78,6 +78,13 @@ plugin.tx_cfcleaguefe_report {
   # cat=T3sports (misc)/maxH_logo; type=int+;label=Maximum height of logos in match report
   maxH_logo = 70
 
+  # cat=T3sports (misc)/chartcolors; type=string;label=Colors used in tablechart
+  chartcolors = blue,#FF1144
+  # cat=T3sports (misc)/chartwidth; type=int+;label=Width of tablechart image
+  chartwidth = 480
+  # cat=T3sports (misc)/chartheight; type=int+;label=Height of tablechart image
+  chartheight = 350
+
   # cat=T3sports (pages)/matchreportpage; type=int+;label=PID of page for match reports
   matchreportpage = 0
 

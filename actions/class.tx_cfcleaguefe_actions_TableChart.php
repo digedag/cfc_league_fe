@@ -108,14 +108,14 @@ class tx_cfcleaguefe_actions_TableChart {
   /**
    * Fügt in das TS-Array die zusätzlichen Daten ein
    */
-  function createChartDataset($xyDataset, &$tsArr, &$configurations, &$league) {
+  function createChartDataset($xyDataset, &$tsArr, &$configurations, &$league, $confId = 'chart.') {
 
-    $defaultLine = $configurations->get('chart.line');
-    $defaultLineArr = $configurations->get('chart.line.');
+    $defaultLine = $configurations->get($confId.'defaults.line');
+    $defaultLineArr = $configurations->get($confId.'defaults.line.');
 
-    $colors = t3lib_div::trimExplode(',',$configurations->get('chartColors'));
+    $colors = t3lib_div::trimExplode(',',$configurations->get($confId.'defaults.colors'));
 
-    $title = $configurations->get('chart.title');
+    $title = $configurations->get($confId.'defaults.title');
 //    t3lib_div::debug($title ,'ac_chart');
     if($tsArr['10.']['10.']['text']) {
       if($title) {

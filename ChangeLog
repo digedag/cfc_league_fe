@@ -2,6 +2,11 @@
 
 Änderungen
 ----------
+v0.3.6 (25.05.2008) (not released)
+- Configuration of charts was changed. You have to set colors in flexform again. TS key changed from plugin.tx_cfcleaguefe_competition.chartColors to plugin.tx_cfcleaguefe_competition.chart.defaults.colors
+- Chart in matchreport is now really configureable. See plugin.tx_cfcleaguefe_report.matchreport.svChartMatch
+- Some constants for chart size and colors
+
 v0.3.5 (25.05.2008) (not released)
 * A complete refactoring of util_LeagueTable that makes it much more flexible.
 * New markers for leaguetable template:
@@ -23,7 +28,7 @@ v0.3.3 (07.05.2008) (not released)
 * Integration into tt_news. You can set links to T3sports views from within news records. For instance you can set a link to a match report.
 
 v0.3.2 (05.05.2008) (not released)
-* Impoved performance in matchmarker and teammarker.
+* Improved performance in matchmarker and teammarker.
 * Performance trackings included
 
 v0.3.1 (04.05.2008) (not released)

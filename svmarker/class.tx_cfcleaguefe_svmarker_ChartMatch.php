@@ -42,17 +42,17 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 		if(!isset($params['match'])) return false;
 		$match = $params['match'];
 		$competition = $match->getCompetition();
-		if(!$competition->isTypeLeague()) return false;
+		if(!$competition->isTypeLeague()) return '';
 
 		$clazz = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_SingleMatchTableProvider');
 		$tableProvider = new $clazz($competition,$match);
 
 		$leagueTable = tx_div::makeInstance('tx_cfcleaguefe_util_LeagueTable');
 		$xyDataset = $leagueTable->generateChartData($tableProvider);
-		$tsArr = $formatter->configurations->get('chart.');
+		$tsArr = $formatter->configurations->get('matchreport.svChartMatch.');
 		
 		tx_div::load('tx_cfcleaguefe_actions_TableChart');
-		tx_cfcleaguefe_actions_TableChart::createChartDataset($xyDataset, $tsArr, $formatter->configurations, $competition);
+		tx_cfcleaguefe_actions_TableChart::createChartDataset($xyDataset, $tsArr, $formatter->configurations, $competition,'matchreport.svChartMatch.');
 		require_once(PATH_site.t3lib_extMgm::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
 		return tx_pbimagegraph_ts::make($tsArr);
 	}

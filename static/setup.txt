@@ -485,27 +485,36 @@ plugin.tx_cfcleaguefe_competition {
 
 # Define a base layout for chartlines
 lib.t3sports.chart {
-  title = Tabellenfahrt der COMPETITION_NAME
-  line = LINE
-  line {
-    title = egal
-    lineColor = egal
-    lineStyle = solid
-    lineStyle{
-      thickness = 2
-      color = blue
-    }
-    shadow = true
-    marker = circle
-    marker {
-      fillColor = white@0.4
-      size = 3
+  # defaults is used for T3sports settings
+  defaults {
+    # The chart title
+    title = Tabellenfahrt der COMPETITION_NAME
+    # The is a line definition. Some part are replace dynamically
+    line = LINE
+    line {
+      # title is replaced with team name so don't care
+      title = egal
+      # The color is used from defaults.colors
+      lineColor = egal
+      lineStyle = solid
+      lineStyle{
+        thickness = 2
+        color = blue
+      }
       shadow = true
+      marker = circle
+      marker {
+        fillColor = white@0.4
+        size = 3
+        shadow = true
+      }
     }
+    colors = {$plugin.tx_cfcleaguefe_report.chartcolors}
   }
+
   factory = png
-  width = 480
-  height = 300
+  width = {$plugin.tx_cfcleaguefe_report.chartwidth}
+  height = {$plugin.tx_cfcleaguefe_report.chartheight}
   antialias = native
   font.default = typo3conf/ext/cfc_league_fe/res/nimbus.ttf
 #  font.default = fileadmin/fonts/nimbus.ttf
@@ -731,8 +740,6 @@ plugin.tx_cfcleaguefe_report {
     group.current.noLink = 1
   }
 
-  chart =< lib.t3sports.chart
-
   # Rendering of news items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
     parseFunc =< lib.parseFunc_RTE
@@ -773,6 +780,9 @@ plugin.tx_cfcleaguefe_report {
   matchreport {
     # Ausgabe mit HTML-Template
     viewType = HTML
+
+    # This configures the chart in match report
+    svChartMatch =< lib.t3sports.chart
 
     # Anweisungen für den Spieldatensatz
     match {
