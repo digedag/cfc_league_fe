@@ -298,19 +298,23 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
 	private function prepareLinks(&$match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+		$linkId = 'report';
 		if($match->hasReport()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'report', $marker, array('matchId' => $match->uid));
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid));
 		}
 		else {
-			$linkMarker = $marker . '_' . strtoupper('report').'LINK';
-			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
+			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
+		$linkId = 'ticker';
 		if($match->isTicker()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'ticker', $marker, array('matchId' => $match->uid));
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid));
 		}
 		else {
-			$linkMarker = $marker . '_' . strtoupper('ticker').'LINK';
-			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
+			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 	}
 }
