@@ -59,7 +59,7 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
   
   /**
    * Liefert den Verein des Teams als Objekt
-   * @return Verein als Objekt oder 0
+   * @return tx_cfcleaguefe_models_club Verein als Objekt oder 0
    */
   function getClub() {
     if(!$this->record['club']) return 0;
