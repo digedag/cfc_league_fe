@@ -139,29 +139,27 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
     //    t3lib_div::debug($match->record['lineup_home'], 'tx_cfcleaguefe_util_MatchMarker');
   }
 
-  /**
-   * Add dynamic defined markers for profiles and matchnotes
-   *
-   * @param string $template
-   * @param tx_cfcleaguefe_models_match $match
-   * @param tx_rnbase_util_FormatUtil unknown_type $formatter
-   * @param string $matchConfId
-   * @param string $matchMarker
-   * @return string
-   */
-  private function addDynamicMarkers($template, &$match, &$formatter, $matchConfId, $matchMarker) {
-  	$report =&$match->getMatchReport();
-    if(!is_object($report)) return $template;
+	/**
+	 * Add dynamic defined markers for profiles and matchnotes
+	 *
+	 * @param string $template
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param tx_rnbase_util_FormatUtil unknown_type $formatter
+	 * @param string $matchConfId
+	 * @param string $matchMarker
+	 * @return string
+	 */
+	private function addDynamicMarkers($template, &$match, &$formatter, $matchConfId, $matchMarker) {
+		$report =&$match->getMatchReport();
+		if(!is_object($report)) return $template;
 
-    $dynaMarkers = $formatter->configurations->getKeyNames($matchConfId.'dynaMarkers.');
-    
-    for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
-      $typeArr = $formatter->configurations->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
-
-      $match->record[$dynaMarkers[$i]] = $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
+		$dynaMarkers = $formatter->configurations->getKeyNames($matchConfId.'dynaMarkers.');
+		for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
+			$typeArr = $formatter->configurations->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
+			$match->record[$dynaMarkers[$i]] = $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
 //      t3lib_div::debug($typeArr, '#'. $dynaMarkers[$i] . '# tx_cfcleaguefe_util_MatchMarker');
-    }
-  }
+		}
+	}
 
   /**
    * Die Anzeige des Spiels kann je nach Status variieren. Daher gibt es dafür verschiedene Template-Subparts.
