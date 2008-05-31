@@ -207,29 +207,29 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     else
       return $this->_matchNoteTypes[intval($type)];
   }
-  /**
-   * Lädt die MatchNotes dieses Spiels. Sollten sie schon geladen sein, dann
-   * wird nix gemacht.
-   */
-  function _resolveMatchNotes($orderBy = 'asc') {
-    if(isset($this->_matchNotes)) return; // Die Ticker sind schon geladen
+	/**
+	 * Lädt die MatchNotes dieses Spiels. Sollten sie schon geladen sein, dann
+	 * wird nix gemacht.
+	 */
+	function _resolveMatchNotes($orderBy = 'asc') {
+		if(isset($this->_matchNotes)) return; // Die Ticker sind schon geladen
 
-    
-    $what = '*';
-    $from = 'tx_cfcleague_match_notes';
-    $where = 'game = ' .$this->uid;
+		$what = '*';
+		$from = 'tx_cfcleague_match_notes';
+		$options['where'] = 'game = ' .$this->uid;
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_match_note';
+		// HINT: Die Sortierung nach dem Typ ist für die Auswechslungen wichtig.
+		$options['orderby'] = 'minute asc, extra_time asc, type asc, uid asc';
+		$this->_matchNotes = tx_rnbase_util_DB::doSelect($what, $from, $options,0);
 
-    $this->_matchNotes = tx_rnbase_util_DB::queryDB($what, $from, $where,
-              '','minute asc, extra_time asc, uid asc, type asc','tx_cfcleaguefe_models_match_note','',0);
-
-    // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
-    $anz = count($this->_matchNotes);
-    for($i=0; $i<$anz; $i++) {
-      $this->_matchNotes[$i]->setMatch($this);
-          // Zusätzlich die Notes nach ihrem Typ sortieren
-      $this->_matchNoteTypes[intval($this->_matchNotes[$i]->record['type'])][] = $this->_matchNotes[$i];
-    }
-  }
+		// Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
+		$anz = count($this->_matchNotes);
+		for($i=0; $i<$anz; $i++) {
+			$this->_matchNotes[$i]->setMatch($this);
+			// Zusätzlich die Notes nach ihrem Typ sortieren
+			$this->_matchNoteTypes[intval($this->_matchNotes[$i]->record['type'])][] = $this->_matchNotes[$i];
+		}
+	}
 
   /**
    * Returns the competition
