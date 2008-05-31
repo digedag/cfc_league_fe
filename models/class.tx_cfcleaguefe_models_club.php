@@ -49,6 +49,14 @@ class tx_cfcleaguefe_models_club extends tx_rnbase_model_base {
 		return $address;
   }
   /**
+   * Whether or not this is a favorite club
+   *
+   * @return boolean
+   */
+  function isFavorite() {
+  	return intval($this->record['favorite']) > 0;
+  }
+  /**
    * Liefert die Teams dieses Vereins
    * @param $saisonIds commaseperated saison-uids
    * @param $agegroups commaseperated agegroup-uids
