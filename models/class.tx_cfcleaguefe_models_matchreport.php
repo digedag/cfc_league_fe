@@ -410,7 +410,7 @@ class tx_cfcleaguefe_models_matchreport {
   function _initMatchTicker() {
     if(!is_array($this->_tickerArr)){
       // Der Ticker wird immer chronologisch ermittelt
-      $this->_tickerArr =& tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match, 0, 1);
+      $this->_tickerArr =& tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
       // Jetzt die Tickermeldungen noch den Spielern zuordnen
       $playersHome = $this->match->getPlayersHome(1);
       $playersGuest = $this->match->getPlayersGuest(1);
@@ -437,31 +437,29 @@ class tx_cfcleaguefe_models_matchreport {
   }
 
 
-  /**
-   * Liefert die gewrappten Namen einer Profilliste
-   * @param array $profiles Array mit den Personen. Kann auch direkt ein Profil sein.
-   * @param string $confIdAll TS-Config String. Sollte einen Eintrag profile. enthalten
-   * @return einen String mit allen Namen
-   */
-  function _getNames2($profiles, $confIdAll) {
-    $conf = $this->_configurations->get($confIdAll);
-    $ret = $this->_wrapProfiles($profiles, $conf['profile.']);
-
-    // Jetzt noch die einzelnen Strings verbinden 
-    // Der Seperator sollte mit zwei Pipes eingeschlossen sein
-    $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
-    $ret = implode($sep, $ret);
-    // Jetzt noch ein Wrap über alles
-    return $this->_formatter->stdWrap($ret, $conf);
-//    return $ret;
-  }
+	/**
+	 * Liefert die gewrappten Namen einer Profilliste
+	 * @param array $profiles Array mit den Personen. Kann auch direkt ein Profil sein.
+	 * @param string $confIdAll TS-Config String. Sollte einen Eintrag profile. enthalten
+	 * @return einen String mit allen Namen
+	 */
+	function _getNames2($profiles, $confIdAll) {
+		$ret = $this->_wrapProfiles($profiles, $confIdAll.'profile.');
+		// Jetzt noch die einzelnen Strings verbinden
+		// Der Seperator sollte mit zwei Pipes eingeschlossen sein
+		$sep = $this->_configurations->get($confIdAll.'seperator');
+		$sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
+		$ret = implode($sep, $ret);
+		// Jetzt noch ein Wrap über alles
+		return $this->_formatter->stdWrap($ret, $this->_configurations->get($confIdAll));
+	}
 
   /**
    * Erstellt die Wrapps für ein Array von Profiles. Der übergebene Parameter kann aber
    * auch ein einzelnes Profile sein. Das Ergebnis ist aber in jedem Fall ein Array von Strings.
    * @return Array of Strings or an empty array
    */
-  function _wrapProfiles($profiles, $conf) {
+  function _wrapProfiles($profiles, $confId) {
     $ret = array();
     if(!is_array($profiles)) {
       if(is_object($profiles))
@@ -472,7 +470,7 @@ class tx_cfcleaguefe_models_matchreport {
 
     foreach($profiles As $profile) {
       if(is_object($profile)) {
-        $name = tx_cfcleaguefe_models_profile::wrap($this->_formatter, $conf, $profile);
+        $name = tx_cfcleaguefe_models_profile::wrap($this->_formatter, $confId, $profile);
         if(strlen($name) > 0)
           $ret[] =  $name;
       }
@@ -485,25 +483,30 @@ class tx_cfcleaguefe_models_matchreport {
 
   /**
    * Wrappt alle übergebenen Tickermeldungen
+   * @param array $tickerArr
+   * @param string $confIdAll
    */
   function _wrapTickers(&$tickerArr, $confIdAll) {
-    $conf = $this->_configurations->get($confIdAll);
+//    $conf = $this->_configurations->get($confIdAll);
+//t3lib_div::debug($conf, $confIdAll.' - tx_cfcleaguefe_models_matchreport'); // TODO: Remove me!
+		foreach($tickerArr As $ticker) {
+			$ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $confIdAll.'ticker.', $ticker);
+//    	$ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $conf['ticker.'], $ticker, $this->_configurations);
+		}
+		// Die einzelnen Meldungen verbinden
+		if(count($ret)) {
+			$sep = $this->_configurations->get($confIdAll.'seperator');
 
-    foreach($tickerArr As $ticker) {
-      $ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $conf['ticker.'], $ticker, $this->_configurations);
-    }
-    // Die einzelnen Meldungen verbinden
-    if(count($ret)) {
-      $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
-      $ret = implode($sep, $ret);
-    }
-    else $ret = null;
+			$sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
+			$ret = implode($sep, $ret);
+		}
+		else $ret = null;
 
 // t3lib_div::debug($ret,'ret mdl_report');
 
-    // Jetzt noch ein Wrap über alles
-    return $this->_formatter->stdWrap($ret, $conf);
-  }
+		// Jetzt noch ein Wrap über alles
+		return $this->_formatter->stdWrap($ret, $conf);
+	}
 
   /**
    * Liefert den Namen der Spieler in der Startaufstellung eines Teams

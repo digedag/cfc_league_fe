@@ -63,127 +63,102 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
             '] player_home[' . $this->record['player_home'] . 
             '] player_guest[' . $this->record['player_guest'] . 
             '])';
-  }
+	}
 
-  /**
-   * Formatiert die Ausgabe der Note über TS. Die Note besteht aus insgesamt
-   * fünf Teilen:
-   * <ul><li>Die Spielminute TS: ticker.minute
-   * <li>der Typ TS: ticker.type
-   * <li>der Spieler TS: ticker.profile und ticker.profile2
-   * <li>der Kommentar TS: ticker.comment
-   * <li>der Spielstand zum Zeitpunkt der Note TS: ticker.score
-   * </ul>
-   * Für jedes Element kann ein "weight" gesetzt werden, womit die Reihenfolge bestimmt wird.
-   * Das Element mit dem höchsten Gewicht wird zuletzt dargestellt.
-   * Die Config wird benötigt, wenn die Typnamen angezeigt werden sollen.
-   * TODO: Die Config aus dem Formatter holen!
-   */
-  function wrap($formatter, $conf, $ticker, $configurations = 0) {
-    if($conf['hide'] == '1') // Die Meldung soll nicht gezeigt werden
-      return '';
+	/**
+	 * Formatiert die Ausgabe der Note über TS. Die Note besteht aus insgesamt
+	 * fünf Teilen:
+	 * <ul><li>Die Spielminute TS: ticker.minute
+	 * <li>der Typ TS: ticker.type
+	 * <li>der Spieler TS: ticker.profile und ticker.profile2
+	 * <li>der Kommentar TS: ticker.comment
+	 * <li>der Spielstand zum Zeitpunkt der Note TS: ticker.score
+	 * </ul>
+	 * Für jedes Element kann ein "weight" gesetzt werden, womit die Reihenfolge bestimmt wird.
+	 * Das Element mit dem höchsten Gewicht wird zuletzt dargestellt.
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 * @param tx_cfcleaguefe_models_match_note $ticker
+	 */
+	function wrap($formatter, $confId, $ticker) {
+		if($formatter->configurations->get($confId.'hide') == '1') // Die Meldung soll nicht gezeigt werden
+			return '';
 
 //  t3lib_div::debug($ticker->uid, 'arr mdl_note');
+		// Wenn der Ticker für den eigene Vereins ist, einen Eintrag im Register setzen
+		$GLOBALS['TSFE']->register['T3SPORTS_NOTE_FAVCLUB'] = $ticker->isFavClub(); // XXX: Access to image size by TS
 
-    $arr = array();
-    // Angezeigt wird ein Spieler, sobald etwas im TS steht
-    if($conf['profile.'] && is_object($ticker)) {
-      // Bei einem Wechsel ist profile für den ausgewechselten Spieler
-      if($ticker->isChange()) {
-        $player = $ticker->getPlayerChangeOut();
-      }
-      else {
-        $player = $ticker->getPlayer();
-      }
+		$arr = array();
+		$conf = $formatter->configurations->get($confId.'profile.');
+		// Angezeigt wird ein Spieler, sobald etwas im TS steht
+		if($conf && is_object($ticker)) {
+			// Bei einem Wechsel ist profile für den ausgewechselten Spieler
+			if($ticker->isChange()) {
+				$player = $ticker->getPlayerChangeOut();
+			}
+			else {
+				$player = $ticker->getPlayer();
+			}
 //      $value = $player->wrap($formatter, $conf['profile.']);
-      $value = tx_cfcleaguefe_models_profile::wrap($formatter, $conf['profile.'], $player);
-      if(strlen($value) > 0) {
-        $arr[] = array($value, $weights[] = $conf['profile.']['s_weight'] ? intval($conf['profile.']['s_weight']) : 0);
-        $value = '';
-      }
-    }
+			$value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId.'profile.', $player);
+			if(strlen($value) > 0) {
+				$arr[] = array($value, $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0);
+				$value = '';
+			}
+		}
 
-    // Bei Spielerwechseln gibt es noch ein zweites Profil
-    if($conf['profile2.'] && is_object($ticker) && $ticker->isChange()) {
-      $player2 = $ticker->getPlayerChangeIn();
-      if(!is_object($player2)) {
-        // Hier liegt vermutlich ein Fehler bei der Dateneingabe vor
-        // Es wird ein Hinweistext gezeigt
-        $value = 'ERROR!';
-      }
-      else {
-        $value = tx_cfcleaguefe_models_profile::wrap($formatter, $conf['profile2.'], $player2);
-      }
- //        $value = $player2->wrap($formatter, $conf['profile2.']);
-      if(strlen($value) > 0) {
-        $arr[] = array($value, $weights[] = $conf['profile2.']['s_weight'] ? intval($conf['profile2.']['s_weight']) : 0);
-        $value = '';
-      }
-    }
+		// Bei Spielerwechseln gibt es noch ein zweites Profil
+		$conf = $formatter->configurations->get($confId.'profile2.');
+		if($conf && is_object($ticker) && $ticker->isChange()) {
+			$player2 = $ticker->getPlayerChangeIn();
+			if(!is_object($player2)) {
+				// Hier liegt vermutlich ein Fehler bei der Dateneingabe vor
+				// Es wird ein Hinweistext gezeigt
+				$value = 'ERROR!';
+			}
+			else {
+				$value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId.'profile2.', $player2);
+			}
+//			$value = $player2->wrap($formatter, $conf['profile2.']);
+			if(strlen($value) > 0) {
+				$arr[] = array($value, $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0);
+				$value = '';
+			}
+		}
 //if($ticker->uid == 1455)
 //  t3lib_div::debug($ticker->record, 'tx_cfcleaguefe_models_match_note');
+		$cObj = $formatter->configurations->getCObj(1);
+		$cObj->data = $ticker->record;
+		foreach($ticker->record AS $key => $val) {
+			$conf = $formatter->configurations->get($confId.$key.'.');
+			if($conf) {
+				$cObj->setCurrentVal($ticker->record[$key]);
+				$value = $cObj->stdWrap($ticker->record[$key],$conf);
+				//$value = $cObj->stdWrap($ticker->record[$key],$conf[$key.'.']);
+				if(strlen($value) > 0) {
+					$arr[] = array($value, $conf['s_weight'] ? intval($conf['s_weight']) : 0);
+					$value = '';
+				}
+			}
+		}
 
-    foreach($ticker->record AS $key => $val) {
-#      if($key == 'type') continue; // TODO type in Typoscript implementieren
-      if($conf[$key] || $conf[$key.'.']) {
-        $value = $formatter->stdWrap($ticker->record[$key],$conf[$key.'.'], $ticker->record);
-        if(strlen($value) > 0) {
-          $arr[] = array($value, $conf[$key.'.']['s_weight'] ? intval($conf[$key.'.']['s_weight']) : 0);
-          $value = '';
-        }
-      }
-    }
-/*
-    if(($conf['type'] || $conf['type.'])) {
-      // Mögliche Arten:
-      // Filtern auf bestimmte Typenname
-      // Anzeige über CASE
-      // Anzeige des Namens
-      // Anzeige der Typ-ID
+		// Jetzt die Teile sortieren
+		usort($arr, 'cmpWeight');
+		$ret = array();
+		// Jetzt die Strings extrahieren
+		foreach($arr As $val) {
+			$ret[] = $val[0];
+		}
 
-      // Mit showOnly werden nur bestimmte Typen angezeigt
-      if(tx_cfcleaguefe_models_match_note::_isShowTicker($conf['type.'], $ticker)) {
-        // Haben wir ein CASE
-        if($conf['type'] == 'CASE') {
-          $value = $formatter->casefunc($conf['type.'], $ticker->record, 'myCObj');
-        }
-        else{
-          if($conf['type.']['showName'])
-            $value = $formatter->stdWrap($ticker->getTypeName($formatter->configurations), $conf['type.'], $ticker->record);
-          else
-            $value = $formatter->stdWrap($ticker->record['type'], $conf['type.'], $ticker->record);
-        }
-      }
-
-//if($ticker->isPenalty())
-//t3lib_div::debug($conf, 'val mdl_note');
-
-      if(strlen($value) > 0) {
-//t3lib_div::debug($conf['type.'], 'w mdl_note');
-        $arr[] = array($value, $conf['type.']['s_weight'] ? intval($conf['type.']['s_weight']) : 0);
-        $value = '';
-      }
-    }
-*/
-
-
-    // Jetzt die Teile sortieren
-    usort($arr, 'cmpWeight');
-    $ret = array();
-    // Jetzt die Strings extrahieren
-    foreach($arr As $val) {
-      $ret[] = $val[0];
-    }
-
-    // Der Seperator sollte mit zwei Pipes eingeschlossen sein
-    $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
-    $ret = implode($sep, $ret);
-
+		// Der Seperator sollte mit zwei Pipes eingeschlossen sein
+		$sep = $formatter->configurations->get($confId.'seperator');
+		$sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
+		$ret = implode($sep, $ret);
 
     // Abschließend nochmal den Ergebnisstring wrappen
 //t3lib_div::debug($arr, 'arr mdl_note');
-    return $formatter->stdWrap($ret, $conf, $ticker->record);
-  }
+		return $formatter->wrap($ret, $confId, $ticker->record);
+	}
 
   /**
    * Liefert bei einem Wechsel den eingewechselten Spieler.
@@ -471,11 +446,20 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   /**
    * Zur Abfrage von Zusatzinfos wird Zugriff auf das zugehörige Spiel benötigt.
    * Diese muss vorher mit dieser Methode bekannt gemacht werden.
+   * @param tx_cfcleaguefe_models_match $match
    */
   function setMatch(&$match) {
     $this->match = $match;
   }
-
+  /**
+   * Liefert das Spiel
+   *
+   * @return tx_cfcleaguefe_models_match
+   */
+  function getMatch() {
+  	return $this->match;
+  }
+  
   /**
    * Ermittelt für die übergebenen Spiele die MatchNotes. Wenn $types = 1 dann
    * werden nur die Notes mit dem Typ < 100 geliefert. Die MatchNotes werden direkt
@@ -555,37 +539,56 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   function _getItemsArrayFromFlexForm($flexArr, $sheetName, $valueName) {
     return $flexArr['sheets'][$sheetName]['ROOT']['el'][$valueName]['TCEforms']['config']['items'];
   }
+	/**
+	 * Whether or not the match note is for favorite club
+	 *
+	 * @return int 0/1
+	 */
+	private function isFavClub() {
+		// Zuerst das Team holen
+		$team = null;
+		$match = $this->getMatch();
+		if($this->isHome()) {
+			$team = $match->getHome();
+		}
+		elseif($this->isGuest()) {
+			$team = $match->getGuest();
+		}
+		if(!is_object($team)) return 0;
+		$club = $team->getClub();
+		if(!is_object($club)) return 0;
+		return $club->isFavorite() ? 1 : 0;
+	}
 
-  /**
-   * Liefert den ausgewechselten Spieler, wenn der Tickertyp ein Wechsel ist
-   * @param int $type 0 liefert den eingewechselten Spieler, 1 den ausgewechselten
-   */
-  function _getPlayerChange($type) {
-    // Ist es ein Wechsel?
-    if($this->isChange()) {
+	/**
+	 * Liefert den ausgewechselten Spieler, wenn der Tickertyp ein Wechsel ist
+	 * @param int $type 0 liefert den eingewechselten Spieler, 1 den ausgewechselten
+	 */
+	function _getPlayerChange($type) {
+		// Ist es ein Wechsel?
+		if($this->isChange()) {
 
-      // Heim oder Gast?
-      if($this->record['player_home']) {
-        $players = $this->match->getPlayersHome(1);
+			// Heim oder Gast?
+			if($this->record['player_home']) {
+				$players = $this->match->getPlayersHome(1);
 //if($this->uid == 1466)
 //  t3lib_div::debug($players, 'chg home mdl_note');
-        if($this->record['type'] == '80') { // Einwechslung
-          return $players[$this->record[$type ? 'player_home' : 'player_home_2']];
-        } else {
-          return $players[$this->record[$type ? 'player_home_2' : 'player_home']];
-        }
-      }
-      elseif($this->record['player_guest']) {
-        $players = $this->match->getPlayersGuest(1);
+				if($this->record['type'] == '80') { // Einwechslung
+					return $players[$this->record[$type ? 'player_home' : 'player_home_2']];
+				} else {
+					return $players[$this->record[$type ? 'player_home_2' : 'player_home']];
+				}
+			}
+			elseif($this->record['player_guest']) {
+				$players = $this->match->getPlayersGuest(1);
 //t3lib_div::debug($players, 'chg guest mdl_note');
-        if($this->record['type'] == '80') { // Einwechslung
-          return $players[$this->record[$type ? 'player_guest' : 'player_guest_2']];
-        }
-        return $players[$this->record[$type ? 'player_guest_2' : 'player_guest']];
-      }
-    }
-  }
-
+				if($this->record['type'] == '80') { // Einwechslung
+					return $players[$this->record[$type ? 'player_guest' : 'player_guest_2']];
+				}
+				return $players[$this->record[$type ? 'player_guest_2' : 'player_guest']];
+			}
+		}
+	}
 }
 
 /**

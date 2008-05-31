@@ -633,43 +633,55 @@ tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_compet
 ##############################################################
 includeLibs.tx_cfcleaguefe_controllers_report = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_report.php
 
-# icon for related news
-temp.penaltyicon = IMAGE
-temp.penaltyicon {
+lib.t3sports.matchreport.imgcard = IMAGE
+lib.t3sports.matchreport.imgcard {
   file = EXT:cfc_league_fe/res/gelbe-karte.gif
   file.width = 7
   file.height = 10
   params = class="cfcleague-card"
 }
+lib.t3sports.matchreport.imggoal = IMAGE
+lib.t3sports.matchreport.imggoal {
+  file = EXT:cfc_league_fe/res/goal.gif
+  file.width = 18
+  file.height = 16
+  params = class="t3sports-goal"
+}
 
 # CASE Anweisung für eine Spielstrafe
-temp.penaltyType = CASE
-temp.penaltyType {
+lib.t3sports.matchreport.penaltyType.cObject = CASE
+lib.t3sports.matchreport.penaltyType.cObject {
   key.field = type
   default = TEXT
   default.value = 
   # Die Nummern entsprechen der ID des Tickertyps
-  70 < temp.penaltyicon
-  70.file = EXT:cfc_league_fe/res/gelbe-karte.gif
-  71 < temp.penaltyicon
+  70 =< lib.t3sports.matchreport.imgcard
+  71 < .70
   71.file = EXT:cfc_league_fe/res/gelbrote-karte.gif
-  72 < temp.penaltyicon
+  72 < .70
   72.file = EXT:cfc_league_fe/res/rote-karte.gif
 #          noTrimWrap = | (|)|
 }
 # Jetzt noch ein CASE für alle anderen Tickertypen
-temp.tickerType < temp.penaltyType
-temp.tickerType {
-#  100 = TEXT
-#  100.value = Meldung
-  10 = TEXT
-  10.value = Tor:&nbsp;
-  11 = TEXT
-  11.value = Kopfball:&nbsp;
-  12 = TEXT
-  12.value = Elfmeter:&nbsp;
-  30 = TEXT
-  30.value = Eigentor:&nbsp;
+lib.t3sports.matchreport.tickerType < lib.t3sports.matchreport.penaltyType
+lib.t3sports.matchreport.tickerType.cObject {
+  10 = CASE
+  10 {
+    key.data = register:T3SPORTS_NOTE_FAVCLUB
+    1 = COA
+    1.10 =< lib.t3sports.matchreport.imggoal
+    1.20 = TEXT
+    1.20.value = &nbsp;Toooooooooor durch&nbsp;
+    default =< lib.t3sports.matchreport.imggoal
+  }
+
+
+  11 < .10
+  12 < .10
+  30 = COA
+  30.10 =< lib.t3sports.matchreport.tickerType.cObject.10
+  30.20 = TEXT
+  30.20.value = Eigentor:&nbsp;
   32 = TEXT
   32.value = Elfmeter verschossen:&nbsp;
   33 = TEXT
@@ -677,7 +689,7 @@ temp.tickerType {
 }
 
 # Standardanzeige für Personen
-temp.profiles {
+lib.t3sports.matchreport.profiles {
   ifEmpty = unbekannt
   seperator = |, |
   profile {
@@ -690,8 +702,8 @@ temp.profiles {
 }
 
 # Spieler im Spielbericht
-temp.reportPlayers < temp.profiles
-temp.reportPlayers.profile {
+lib.t3sports.matchreport.reportPlayers < lib.t3sports.matchreport.profiles
+lib.t3sports.matchreport.reportPlayers.profile {
   first_name >
   # Den Nachnamen des Teamcaptains formatieren
   last_name.cObject = COA
@@ -712,7 +724,7 @@ temp.reportPlayers.profile {
   ifPenalty {
     s_weight = 3
     ticker {
-      type.cObject < temp.penaltyType
+      type =< lib.t3sports.matchreport.penaltyType
     }
   }
 }
@@ -830,7 +842,7 @@ plugin.tx_cfcleaguefe_report {
           noteTeam = home
           noteType = 10,11,12,30
 #          noteIgnoreType = ??
-          implode = <br />
+#          implode = <br />
 		      seperator = |<br/>|
 		      ticker {
 		        minute.s_weight = 0
@@ -851,7 +863,7 @@ plugin.tx_cfcleaguefe_report {
 		        }
 		        type.required = 1
 		        type.wrap = &nbsp;(|)
-		        profile < temp.profiles.profile
+		        profile =< lib.t3sports.matchreport.profiles.profile
 		        profile.s_weight = 2
 		        # Spielstandsanzeige
 		        goals_home >
@@ -867,15 +879,15 @@ plugin.tx_cfcleaguefe_report {
 		      }
         }
         # Beim Gastteam ändern wir nur ein Attribut
-        scorerGuest < plugin.tx_cfcleaguefe_report.matchreport.match.dynaMarkers.scorerHome
+        scorerGuest =< plugin.tx_cfcleaguefe_report.matchreport.match.dynaMarkers.scorerHome
         scorerGuest.noteTeam = guest
-        # Der MatchTicker kann auch dynamisch erstellt werden
-        tickerlist < plugin.tx_cfcleaguefe_report.matchreport.match.dynaMarkers.scorerHome
+
+        # Der MatchTicker wird dynamisch erstellt
         tickerlist {
-          noteTeam >
-          noteType >
+		      cron = 1
           noteIgnoreType = 200,31
           noteMinimumMinute = 0
+		      seperator = |<br/>|
 		      ticker {
 		        minute >
 		        minute.cObject = COA
@@ -910,23 +922,26 @@ plugin.tx_cfcleaguefe_report {
 		        }
 
 		        # Anzeige des Typs
-		        type.cObject < temp.tickerType
+		        type =< lib.t3sports.matchreport.tickerType
 		        # Typ vor dem Spieler anzeigen
 		        type.s_weight = 7
 		        type.required = 1
 		        type.wrap >
 
+		        profile =< lib.t3sports.matchreport.profiles.profile
 		        profile.s_weight = 10
 						# Bei Auswechslungen auch den zweiten Spieler zeigen
-						profile2 < temp.reportPlayers.profile
-		        profile2.s_weight = 9
-		        profile2.first_name {
+						profile2 =< lib.t3sports.matchreport.reportPlayers.profile
+		        profile2 {
+		          s_weight = 9
+		          first_name {
+		            required = 1
+   		          wrap = |&nbsp;
+		          }
+		          wrap = |&nbsp;kommt f&uuml;r&nbsp;
+              ifPenalty >
 		          required = 1
-		          wrap = |&nbsp;
 		        }
-		        profile2.wrap = |&nbsp;kommt f&uuml;r&nbsp;
-            profile2.ifPenalty >
-		        profile2.required = 1
 
 		        comment.s_weight = 100
 		        comment.wrap = <br /><span class="cfcleague-ticker-comment">|</span></div>
@@ -940,8 +955,8 @@ plugin.tx_cfcleaguefe_report {
     # werden vom System vorgegeben. Zusätzlich können im Match über die dynaMarkers
     # eigene Listen erstellt werden
 
-    coachnames < temp.profiles
-    lineup < temp.reportPlayers
+    coachnames =< lib.t3sports.matchreport.profiles
+    lineup =< lib.t3sports.matchreport.reportPlayers
     lineup.profile {
       # Bei Auswechslungen einen Tickerwrap setzen
       ifChangedOut {
@@ -950,7 +965,7 @@ plugin.tx_cfcleaguefe_report {
         ticker {
           minute.wrap = |.&nbsp;
           profile >
-          profile2 < temp.reportPlayers.profile
+          profile2 =< lib.t3sports.matchreport.reportPlayers.profile
           profile2 {
             s_weight = 2
             # Falls der eingewechselte Spieler wieder raus muss
@@ -958,7 +973,7 @@ plugin.tx_cfcleaguefe_report {
               s_weight = 4
               ticker {
                 minute.wrap = |.&nbsp;
-                profile2 < temp.reportPlayers.profile
+                profile2 =< lib.t3sports.matchreport.reportPlayers.profile
                 noTrimWrap = |, ||
               }
             }
@@ -970,21 +985,21 @@ plugin.tx_cfcleaguefe_report {
       }
     }
 
-    substnames < temp.profiles
+    substnames =< lib.t3sports.matchreport.profiles
     substnames.profile {
       first_name >
       # Die Karten einblenden
       ifPenalty {
         s_weight = 3
         ticker {
-          type.cObject < temp.penaltyType
+          type =< lib.t3sports.matchreport.penaltyType
         }
       }
 #      seperator = |, |
     }
     
 
-    refereenames < temp.profiles
+    refereenames =< lib.t3sports.matchreport.profiles
     refereenames.profile {
       # Heimatstadt des Schiedsrichters anzeigen
       home_town {
@@ -994,7 +1009,7 @@ plugin.tx_cfcleaguefe_report {
       }
     }
 
-    assistsnames < temp.profiles
+    assistsnames =< lib.t3sports.matchreport.profiles
     assistsnames{
       seperator = | und |
       profile {

@@ -51,53 +51,54 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
    * @param tx_rnbase_util_FormatUtil $formatter
    * @param array $conf Configuration array
    */
-  function wrap($formatter, $conf, $profile) {
+  function wrap($formatter, $confId, $profile) {
     if(!is_object($profile)) {
       // Es wurde kein Profil übergeben, also gibt es nicht weiter zu tun
-      return $formatter->stdWrap('',$conf);
+      return $formatter->wrap('',$confId);
     }
     if(intval($profile->uid) < 0) {
       // Bei unbekannten Profilen holen wir den Namen aus der Config
       $profile->record['last_name'] = $formatter->configurations->getLL('profile_unknownLastname');
       $profile->record['first_name'] = $formatter->configurations->getLL('profile_unknownFirstname');
-//      t3lib_div::debug($formatter->configurations->getLL('player.unknownLastname'),'mdl_profile');
     }
 // TODO Das sollte dynamisch gestaltet werden, damit alle Daten der Tabelle verwendet
 // werden können. 
 //t3lib_div::debug(tx_rnbase_configurations::getUniqueKeysNames($conf), 'tx_cfcleaguefe_models_profile');
-
+		$conf = $formatter->configurations->get($confId);
     $arr = array();
     // Über alle Felder im record iterieren
     foreach($profile->record AS $key => $val) {
       if($conf[$key] || $conf[$key.'.']) {
-        $value = $formatter->stdWrap($profile->record[$key],$conf[$key.'.'], $profile->record);
+        $value = $formatter->wrap($profile->record[$key],$confId.$key.'.', $profile->record);
         if(strlen($value) > 0) {
-          $arr[] = array($value, $conf[$key.'.']['s_weight'] ? intval($conf[$key.'.']['s_weight']) : 0);
-          $value = '';
-        }
-      }
-    }
+					$weight = intval($formatter->configurations->get($confId.$key.'.s_weight'));
+					$arr[] = array($value, $weight);
+					$value = '';
+				}
+			}
+		}
 
-    $ticker = $profile->isChangedOut();
-    if(is_object($ticker) && $conf['ifChangedOut.']['ticker.']) {
-      $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $conf['ifChangedOut.']['ticker.'], $ticker);
-      if(strlen($value) > 0) {
-        $arr[] = array($value, $conf['ifChangedOut.']['s_weight'] ? intval($conf['ifChangedOut.']['s_weight']) : 0);
-        $value = '';
-      }
-    }
+		$ticker = $profile->isChangedOut();
+		if(is_object($ticker) && $conf['ifChangedOut.']['ticker.']) {
+			$value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId.'ifChangedOut.ticker.', $ticker);
+			if(strlen($value) > 0) {
+				$weight = intval($formatter->configurations->get($confId.'ifChangedOut.s_weight'));
+				$arr[] = array($value, $weight);
+				$value = '';
+			}
+		}
 
-    $ticker = $profile->isPenalty();
-    if(is_object($ticker) && $conf['ifPenalty.']['ticker.']) {
-      $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $conf['ifPenalty.']['ticker.'], $ticker);
-      if(strlen($value) > 0) {
-        $arr[] = array($value, $conf['ifPenalty.']['s_weight'] ? intval($conf['ifPenalty.']['s_weight']) : 0);
-        $value = '';
-      }
-    }
-
+		$ticker = $profile->isPenalty();
+		if(is_object($ticker) && $conf['ifPenalty.']['ticker.']) {
+			$value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId.'ifPenalty.ticker.', $ticker);
+			if(strlen($value) > 0) {
+				$weight = intval($formatter->configurations->get($confId.'ifPenalty.s_weight'));
+				$arr[] = array($value, $weight);
+				$value = '';
+			}
+		}
     if(!count($arr)) // Wenn das Array leer ist, wird nix gezeigt
-      return $formatter->stdWrap('', $conf, $profile->record);
+      return $formatter->wrap('', $confId, $profile->record);
 
     // Jetzt die Teile sortieren
     usort($arr, 'cmpWeight');
@@ -110,8 +111,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     $ret = implode($sep, $ret);
 
     // Abschließend nochmal den Ergebnisstring wrappen
-//t3lib_div::debug($arr, 'arr mdl_note');
-    return $formatter->stdWrap($ret, $conf, $profile->record);
+    return $formatter->wrap($ret, $confId, $profile->record);
 
   }
 
