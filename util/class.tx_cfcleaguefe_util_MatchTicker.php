@@ -73,6 +73,8 @@ class tx_cfcleaguefe_util_MatchTicker {
 
   /**
    * Liefert die TickerInfos für einzelne Spiele
+   * @param tx_cfcleaguefe_models_match $match
+   * @param mixed $types unused!
    */
   function &getTicker4Match(&$match, $types = 0) {
     $arr =& $match->getMatchNotes();
@@ -121,104 +123,95 @@ class tx_cfcleaguefe_util_MatchTicker {
 
   }
 
-  /**
-   * Ein- und Auswechslungen werden durch Aufruf dieser Methode zusammengefasst. Die beiden
-   * betroffenen Spieler werden dabei in der ersten Tickermeldung zusammengefasst. Der zweite
-   * Spieler wird unter dem Key 'player_home_2' bzw. 'player_guest_2' abgelegt.
-   * Der zweite Datensatz wird aus dem Ergebnisarray entfernt.
-   * @param array $ret Referenz auf Array mit den bisher gefundenen Ticker-Daten
-   * @param tx_cfcleaguefe_models_match_note $ticker der zuletzt hinzugefügte Ticker
-   */
-  function _handleChange(&$ret, &$ticker) {
-    if(!$ticker->isChange()) 
-      return;
+	/**
+	 * Ein- und Auswechslungen werden durch Aufruf dieser Methode zusammengefasst. Die beiden
+	 * betroffenen Spieler werden dabei in der ersten Tickermeldung zusammengefasst. Der zweite
+	 * Spieler wird unter dem Key 'player_home_2' bzw. 'player_guest_2' abgelegt.
+	 * Der zweite Datensatz wird aus dem Ergebnisarray entfernt.
+	 * @param array $ret Referenz auf Array mit den bisher gefundenen Ticker-Daten
+	 * @param tx_cfcleaguefe_models_match_note $ticker der zuletzt hinzugefügte Ticker
+	 */
+	function _handleChange(&$ret, &$ticker) {
+		if(!$ticker->isChange())
+			return;
 
-    // 1. Ein- und Auswechslungen zusammenfassen
-    static $changeInHome, $changeInGuest; // Hier liegen die IDX von Einwechslungen im Zielarray
-    static $changeOutHome, $changeOutGuest; // Hier die AUswechslungen
-    
-    // Bevor es losgeht, müssen einmalig die Arrays initialisiert werden
-    if(!is_object($changeInHome)) {
-      $changeInHome = tx_div::makeInstance('tx_rnbase_util_Queue');
-      $changeOutHome = tx_div::makeInstance('tx_rnbase_util_Queue');
-      $changeInGuest = tx_div::makeInstance('tx_rnbase_util_Queue');
-      $changeOutGuest = tx_div::makeInstance('tx_rnbase_util_Queue');
-    }
+		// 1. Ein- und Auswechslungen zusammenfassen
+		static $changeInHome, $changeInGuest; // Hier liegen die IDX von Einwechslungen im Zielarray
+		static $changeOutHome, $changeOutGuest; // Hier die AUswechslungen
 
-    if($ticker->isHome()) {
+		// Bevor es losgeht, müssen einmalig die Arrays initialisiert werden
+		if(!is_object($changeInHome)) {
+			$changeInHome = tx_div::makeInstance('tx_rnbase_util_Queue');
+			$changeOutHome = tx_div::makeInstance('tx_rnbase_util_Queue');
+			$changeInGuest = tx_div::makeInstance('tx_rnbase_util_Queue');
+			$changeOutGuest = tx_div::makeInstance('tx_rnbase_util_Queue');
+		}
 
-          if($ticker->record['type'] == '81') { // Wenn Einwechslung
-            // Gibt es schon die Auswechslung?
-            if(!$changeOutHome->isEmpty()) {
-              $change =& $changeOutHome->get();
-              $change->record['player_home_2'] = $ticker->record['player_home'];
+		if($ticker->isHome()) {
+			if($ticker->record['type'] == '81') { // Wenn Einwechslung
+				// Gibt es schon die Auswechslung?
+				if(!$changeOutHome->isEmpty()) {
+					$change =& $changeOutHome->get();
+					$change->record['player_home_2'] = $ticker->record['player_home'];
+					// Die aktuelle Meldung wieder aus dem Ticker löschen
+					array_pop($ret);
+				}
+				else {
+					// Einwechslung ablegen
+					$changeInHome->put($ticker);
+				}
+			}
 
-              // Die aktuelle Meldung wieder aus dem Ticker löschen
-              array_pop($ret);
-            }
-            else {
-              // Einwechslung ablegen
-              $changeInHome->put($ticker);
-            }
-          }
+			if($ticker->record['type'] == '80') { // Wenn Auswechslung
+				// Gibt es schon die Einwechslung?
+				if(!$changeInHome->isEmpty()) {
+					// Wartet schon so ein Wechsel
+					$change =& $changeInHome->get();
+					$change->record['player_home_2'] = $ticker->record['player_home'];
+					// Die aktuelle Meldung wieder aus dem Ticker löschen
+					array_pop($ret);
+				}
+				else {
+					//t3lib_div::debug($ticker->record, 'Ausw ablegen util_match_ticker');
+					// Auswechselung ablegen
+					$changeOutHome->put($ticker);
+				}
+			}
+		} // end if HOME
+		elseif($ticker->isGuest()) {
 
-          if($ticker->record['type'] == '80') { // Wenn Auswechslung
-            // Gibt es schon die Einwechslung?
-            if(!$changeInHome->isEmpty()) {
-              // Wartet schon so ein Wechsel
-              $change =& $changeInHome->get();
-              $change->record['player_home_2'] = $ticker->record['player_home'];
-
-              // Die aktuelle Meldung wieder aus dem Ticker löschen
-              array_pop($ret);
-            }
-            else {
-//t3lib_div::debug($ticker->record, 'Ausw ablegen util_match_ticker');
-              // Auswechselung ablegen
-              $changeOutHome->put($ticker);
-            }
-          }
-    } // end if HOME
-    elseif($ticker->isGuest()) {
-
-          if($ticker->record['type'] == '81') { // Ist Einwechslung
-            // Gibt es schon die Auswechslung?
-            if(!$changeOutGuest->isEmpty()) {
+			if($ticker->record['type'] == '81') { // Ist Einwechslung
+				// Gibt es schon die Auswechslung?
+				if(!$changeOutGuest->isEmpty()) {
 //t3lib_div::debug($ticker->record, 'Einwechslung ablegen util_match_ticker');
-              // Die Auswechslung holen
-              $change =& $changeOutGuest->get();
-              $change->record['player_guest_2'] = $ticker->record['player_guest'];
-
-              // Die aktuelle Meldung wieder aus dem Ticker löschen
-              array_pop($ret);
-            }
-            else {
-              // Einwechslung ablegen
-              $changeInGuest->put($ticker);
-            }
-          }
-
-          if($ticker->record['type'] == '80') { // Auswechslung
-            // Gibt es schon die Einwechslung?
-            if(!$changeInGuest->isEmpty()) {
-              // Wartet schon so ein Wechsel
+					// Die Auswechslung holen
+					$change =& $changeOutGuest->get();
+					$change->record['player_guest_2'] = $ticker->record['player_guest'];
+					// Die aktuelle Meldung wieder aus dem Ticker löschen
+					array_pop($ret);
+				}
+				else {
+					// Einwechslung ablegen
+					$changeInGuest->put($ticker);
+				}
+			}
+			if($ticker->record['type'] == '80') { // Auswechslung
+				// Gibt es schon die Einwechslung?
+				if(!$changeInGuest->isEmpty()) {
+					// Wartet schon so ein Wechsel
  // FIX: PHP Warning:  Illegal offset type in cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTicker.php on line 204
-              $change =& $changeInGuest->get();
-//              $change =& $ret[$changeIdx];
-              $change->record['player_guest_2'] = $ticker->record['player_guest'];
-
-              // Die aktuelle Meldung wieder aus dem Ticker löschen
-              array_pop($ret);
-            }
-            else {
-              // Auswechselung ablegen
-              $changeOutGuest->put($ticker);
-            }
-          }
-    } // end if GUEST
-
-
-  }
+					$change =& $changeInGuest->get();
+					$change->record['player_guest_2'] = $ticker->record['player_guest'];
+					// Die aktuelle Meldung wieder aus dem Ticker löschen
+					array_pop($ret);
+				}
+				else {
+					// Auswechselung ablegen
+					$changeOutGuest->put($ticker);
+				}
+			}
+		} // end if GUEST
+	}
 
 /*
 Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.ticker", '100'),
