@@ -7,15 +7,15 @@
 <pre>
 Verfügbare Tags für Bilder:
 
-###TEAM_FIRST_PICTURE### Das erste Bild in der Bildliste
+###TEAM_FIRST_PICTURE_IMGTAG### Das erste Bild in der Bildliste
 ###TEAM_FIRST_PICTURE_CAPTION### Der Infotext des Bilds
 ###TEAM_FIRST_PICTURE_DESCRIPTION### Beschreibung des Bilds
-###TEAM_PLAYER_FIRST_PICTURE### Das erste Bild des Spielers
+###TEAM_PLAYER_FIRST_PICTURE_IMGTAG### Das erste Bild des Spielers
 ###TEAM_PLAYER_PICTURES### Subpart für weitere Bilder der Spieler
 ###TEAM_PLAYER_PICTURES_2### Subpart für ein weiteres Bild des Spielers innerhalb der weiteren Bilder
 ###TEAM_PLAYER_PICTURE### Marker für ein weiteres Bild innerhalb von ###PLAYER_PICTURES_2###
-###TEAM_COACH_FIRST_PICTURE### Das erste Bild des Trainers
-###TEAM_SUPPORTER_FIRST_PICTURE### Das erste Bild eines Betreuers
+###TEAM_COACH_FIRST_PICTURE_IMGTAG### Das erste Bild des Trainers
+###TEAM_SUPPORTER_FIRST_PICTURE_IMGTAG### Das erste Bild eines Betreuers
 Für weitere Team-, Trainer- und Betreuerbilder gelten die gleichen Regeln wie bei den Spielern.
 
 Alle Daten des Teams sind über die Spaltennamen verfügbar und können bei Bedarf auch per TS 
@@ -34,7 +34,7 @@ formatiert werden. Beispiele:
 
   <h1>###TEAM_FIRST_PICTURE_TITLE###</h1>
 
-<p class="cfcleague-teamview-firstpic">###TEAM_FIRST_PICTURE###</p>
+<p class="cfcleague-teamview-firstpic">###TEAM_FIRST_PICTURE_IMGTAG###</p>
 <p class="cfcleague-teamview-firstpic-creator">###TEAM_FIRST_PICTURE_CREATOR###</p>
 <p class="cfcleague-teamview-firstpic-description">###TEAM_FIRST_PICTURE_DESCRIPTION###</p>
 
@@ -53,7 +53,7 @@ formatiert werden. Beispiele:
    </tr>
     <!-- ###TEAM_PLAYER### begin -->
    <tr class="cfcleaguefe-teamview-player">
-    <td>###TEAM_PLAYER_POSITION### ###TEAM_PLAYER_FIRST_PICTURE###</td>
+    <td>###TEAM_PLAYER_POSITION### ###TEAM_PLAYER_FIRST_PICTURE_IMGTAG###</td>
     <td>###TEAM_PLAYER_SHOWPROFILELINK######TEAM_PLAYER_LAST_NAME###, ###TEAM_PLAYER_FIRST_NAME######TEAM_PLAYER_SHOWPROFILELINK### (###TEAM_PLAYER_UID###)</td>
     <td>###TEAM_PLAYER_BIRTHDAY###</td>
     <td>###TEAM_PLAYER_HEIGHT###</td>
