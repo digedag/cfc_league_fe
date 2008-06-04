@@ -311,7 +311,7 @@
 
         <type>array</type>
         <el>
-          <profile>
+          <profileview.fields.PROFILE.UID.OP_EQ_INT>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.profileview.profile</label>
@@ -323,8 +323,8 @@
                 <size>1</size>
               </config>
             </TCEforms>
-          </profile>
-          <profilePages>
+          </profileview.fields.PROFILE.UID.OP_EQ_INT>
+          <profileview.options.pidlist>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:lang/locallang_general.php:LGL.startingpoint</label>
@@ -338,8 +338,8 @@
                 <show_thumbs>1</show_thumbs>
               </config>
             </TCEforms>
-          </profilePages>
-          <profileRecursive>
+          </profileview.options.pidlist>
+          <profileview.options.recursive>
             <TCEforms>
               <label>LLL:EXT:lang/locallang_general.php:LGL.recursive</label>
               <config>
@@ -375,7 +375,15 @@
                  <size>1</size>
               </config>
             </TCEforms>
-          </profileRecursive>
+          </profileview.options.recursive>
+          <profileview.options.orderby.RAND>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.profileview.rand</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </profileview.options.orderby.RAND>
           <profileTemplate>
             <TCEforms>
               <exclude>1</exclude>

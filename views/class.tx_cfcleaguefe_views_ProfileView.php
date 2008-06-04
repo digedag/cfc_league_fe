@@ -34,41 +34,36 @@ tx_div::load('tx_rnbase_view_Base');
  * Viewklasse für die Anzeige eines Personenprofils
  */
 class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
-  /**
-   * Erstellen des Frontend-Outputs
-   */
-  function render($view, &$configurations){
-    $this->_init($configurations);
-    $cObj =& $configurations->getCObj(0);
-    $templateCode = $cObj->fileResource($this->getTemplate($view,'.html'));
+	/**
+	 * Erstellen des Frontend-Outputs
+	 */
+	function createOutput($template, &$viewData, &$configurations, &$formatter) {
+		$cObj =& $configurations->getCObj(0);
 
-    $template = $cObj->getSubpart($templateCode,'###PROFILE_VIEW###');
+		// Die ViewData bereitstellen
+		$viewData =& $configurations->getViewData();
 
-    // Die ViewData bereitstellen
-    $viewData =& $configurations->getViewData();
+		$profile =& $viewData->offsetGet('profile');
+		if(is_object($profile))
+			$out = $this->_createView($template, $profile, $formatter);
+		else
+			$out = 'Sorry, profile not found...';
+		return $out;
+	}
 
-    $profile =& $viewData->offsetGet('profile');
-    if(is_object($profile))
-      $out = $this->_createView($template, $profile, $cObj, $configurations);
-    else
-      $out = 'Sorry, profile not found...';
-    return $out;
-  }
+	function _createView($template, &$profile, &$formatter) {
+		$out = '';
+		$profileMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ProfileMarker');
+		$profileMarker = new $profileMarkerClass;
+		$out .= $profileMarker->parseTemplate($template, $profile, $formatter, 'profileview.profile.');
+		return $out;
+	}
 
-  function _createView($template, &$profile, &$cObj, &$configurations) {
-    $out = '';
 
-    $profileMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ProfileMarker');
-    $profileMarker = new $profileMarkerClass;
-
-    $out .= $profileMarker->parseTemplate($template, $profile, $this->formatter, 'profileview.profile.');
-    return $out;
-  }
-
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
-  }
-
+	function getMainSubpart(&$viewData) {
+		return '###PROFILE_VIEW###';
+	}
+  
 //t3lib_div::debug($damPics['files'][603] , 'view_teamview');
 //t3lib_div::debug($media, 'view_teamview');
 
@@ -77,6 +72,6 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php'])
 {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php']);
 }
 ?>

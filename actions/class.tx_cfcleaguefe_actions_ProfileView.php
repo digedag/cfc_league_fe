@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-08 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,63 +23,63 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+tx_div::load('tx_rnbase_action_BaseIOC');
 
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
+//require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
 
 /**
  * Controller für die Anzeige eines Personenprofils
  */
-class tx_cfcleaguefe_actions_ProfileView {
+class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC {
+	static $exclude = array();
 
-  /**
-   *
-   */
-  function execute($parameters,&$configurations){
+	/**
+	 * handle request
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewData
+	 * @return string
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewData) {
 
-// t3lib_div::debug($parameters,'ac_matchtable');
+		$fields = array();
+		$options = array();
+		$this->initSearch($fields, $options, $parameters, $configurations, $firstChar);
 
-    $profileId = intval($configurations->get('profile'));
-    if(!$profileId) {
-      // Aus dem Request benötigen wir die UID des Profils
-      $profileId = intval($parameters->offsetGet('profileId'));
-      if($profileId == 0)
-        return 'No profileId found!';
-    }
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+		$profiles = $service->search($fields, $options);
+		$profile = count($profiles) ? $profiles[0] : null;
+		if(!$profile)
+			return 'No profile found!';
 
-    $profile = $this->findProfile($profileId, $configurations);
+		$viewData->offsetSet('profile', $profile);
+		return $out;
+	}
 
-//t3lib_div::debug($profile, 'act_profile');
+	protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar) {
+		// ggf. die Konfiguration aus der TS-Config lesen
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profileview.fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profileview.options.');
 
-    $viewData =& $configurations->getViewData();
-    $viewData->offsetSet('profile', $profile);
+		$options['limit'] = 1;
+		if(intval($configurations->get('profileview.excludeAlreadyDisplayed'))) {
+			// Doppelte Anzeige von Personen vermeiden
+			if(count(self::$exclude)) {
+				$fields['COMPANY.UID'][OP_NOTIN_INT] = implode(',', self::$exclude);
+			}
+		}
+		else {
+			// Parameter prüfen
+			$value = $parameters->offsetGet('profileId');
+			if(intval($value)) {
+				$fields['PROFILE.UID'][OP_EQ_INT] = intval($value);
+			}
+		}
+	}
 
-    // View
-    $view = tx_div::makeInstance('tx_cfcleaguefe_views_ProfileView');
-    $view->setTemplatePath($configurations->getTemplatePath());
-    // Das Template wird komplett angegeben
-    $view->setTemplateFile($configurations->get('profileTemplate'));
-    $out = $view->render('profileview', $configurations);
-    return $out;
-  }
-
-  /**
-   * Sucht den Spieler, der gezeigt werden soll.
-   */
-  function findProfile($profileId, &$configurations) {
-
-    $what = '*';
-    $from = 'tx_cfcleague_profiles';
-    $options['where'] = 'uid = ' .$profileId . ' ';
-    $options['pidlist'] = $configurations->get('profilePages');
-    $options['recursive'] = $configurations->get('profileRecursive');
-    $options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
-
-    $rows = tx_rnbase_util_DB::doSelect($what,$from,$options,0);
-//    $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_profile');
-
-    $profile = $rows[0];
-    return $profile;
-  }
+	function getTemplateName() {return 'profile';}
+	function getViewClassName() { return 'tx_cfcleaguefe_views_ProfileView'; }
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_ProfileView.php'])	{

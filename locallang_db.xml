@@ -90,6 +90,7 @@
 			<label index="plugin.report.flexform.teamview.supporter_page">Page for supporter single view</label>
 			<label index="plugin.report.flexform.teamview.player_page">Page for player single view</label>
 			<label index="plugin.report.flexform.profileview.profile">Player to show</label>
+			<label index="plugin.report.flexform.profileview.rand">Show randomized Player</label>
 			<label index="plugin.report.flexform.profilelist.birthdays">Birthday list</label>
 			<label index="plugin.report.flexform.profilelist.birthdays.no">No</label>
 			<label index="plugin.report.flexform.profilelist.birthdays.day">Day</label>
@@ -189,6 +190,7 @@
 			<label index="plugin.report.flexform.teamview.team">Zeige Team</label>
 			<label index="plugin.report.flexform.teamview.club">Nur Teams des Vereins</label>
 			<label index="plugin.report.flexform.profileview.profile">Spieler anzeigen</label>
+			<label index="plugin.report.flexform.profileview.rand">Zeige zufällige Person</label>
 			<label index="plugin.report.flexform.profilelist.birthdays">Geburtstagsliste</label>
 			<label index="plugin.report.flexform.profilelist.birthdays.no">Nein</label>
 			<label index="plugin.report.flexform.profilelist.birthdays.day">Tag</label>
