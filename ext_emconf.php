@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'FE-Plugins von T3sports. Enthält u.a. Views für Spielplan, Spielbericht, Tabellen, Team- und Spieleransicht. FE plugins for T3sports. Contains views for matchtable, leaguetable, matchreport, team and player reports and many more. Requires PHP5!',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '0.3.6',
+	'version' => '0.3.7',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
@@ -35,13 +35,13 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.0.0-0.0.0',
-			'div' => '0.0.11-0.0.0',
+			'div' => '0.1.0-0.0.0',
 			'lib' => '0.1.0-0.0.0',
-			'rn_base' => '0.1.4-0.0.0',
+			'rn_base' => '0.2.1-0.0.0',
 			'rn_memento' => '',
 			'pbimagegraph' => '1.1.1-0.0.0',
 			'dam' => '1.0.11-0.0.0',
-			'cfc_league' => '0.2.6-0.0.0',
+			'cfc_league' => '0.3.4-0.0.0',
 		),
 		'conflicts' => array(
 		),

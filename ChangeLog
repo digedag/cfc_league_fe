@@ -2,6 +2,12 @@
 
 Änderungen
 ----------
+v0.3.7 (06.06.2008) (not released)
+* TS-Options for profile view changed. Reset your defined storage folder in plugins.
+* Randomizes profiles are possible with profile view.
+* Birthday list is ordered now by month-day
+* Bugfix: Sorting of players with german umlauts was wrong in statistics
+
 v0.3.6 (31.05.2008) (not released)
 * Redesign of match ticker. Better support of TS-References.
 * New TS-Register register:T3SPORTS_NOTE_FAVCLUB for match notes. It can be used to make special outputs for favorite team. Example for goals is included.
