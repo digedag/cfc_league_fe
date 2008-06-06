@@ -94,8 +94,14 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 			$where .= ' AND tx_cfcleague_profiles.birthday < 0 ))';
 			if($fields[SEARCH_FIELD_CUSTOM]) $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
 			$fields[SEARCH_FIELD_CUSTOM] .= $where;
+			
+			// Sortierung nach Datum
+			$sort = array('DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday),\'%m%d\')' => 'asc');
+			if(is_array($options['orderby']))
+			  $options['orderby'] = array_merge($sort, $options['orderby']);
+			else
+				$options['orderby'] = $sort;
 		}
-
 		if($firstChar) {
 			$specials = tx_rnbase_util_SearchBase::getSpecialChars();
 			$firsts = $specials[$firstChar];
