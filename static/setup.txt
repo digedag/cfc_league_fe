@@ -385,6 +385,7 @@ plugin.tx_cfcleaguefe_competition {
 	    goals_all_after_minutes.number_format.dontCheckFloat = 1
 	    goals_home.ifEmpty = -
 	    goals_away.ifEmpty = -
+	    goals_own.ifEmpty = -
 	    goals_head.ifEmpty = -
 	    goals_head_per_match.wrap = (|)
 	    goals_head_per_match.number_format.decimal = 2
