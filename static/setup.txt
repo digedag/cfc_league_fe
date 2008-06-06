@@ -362,9 +362,6 @@ plugin.tx_cfcleaguefe_competition {
      headline,player,assists
     )
     assistlist.profile =< lib.t3sports.profile
-    scorerlist.profile {
-	    assists.ifEmpty = -
-	  }
 	  ####
     # Liste der Torschützen
     scorerlist.labels (
@@ -374,6 +371,7 @@ plugin.tx_cfcleaguefe_competition {
     )
     scorerlist.profile =< lib.t3sports.profile
     scorerlist.profile {
+	    assists.ifEmpty = -
 	    goals_all.ifEmpty = -
 	    goals_all_per_match {
 	      wrap = (|)
@@ -412,6 +410,7 @@ plugin.tx_cfcleaguefe_competition {
 	    card_yellowred.ifEmpty = -
 	    card_red.ifEmpty = -
 	    goals_all.ifEmpty = -
+	    goals_own.ifEmpty = -
 	    changed_in.ifEmpty = -
 	    changed_out.ifEmpty = -
 	    goals_assist.ifEmpty = -
