@@ -47,7 +47,7 @@ class tx_cfcleaguefe_models_group extends tx_rnbase_model_base {
    * Liefert die Instance eines Landes
    *
    * @param int $uid
-   * @return tx_dsagbase_models_land
+   * @return tx_cfcleaguefe_models_group
    */
   static public function getInstance($uid) {
   	self::_init();
