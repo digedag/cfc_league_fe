@@ -26,6 +26,8 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
 tx_div::load('tx_cfcleaguefe_util_StatisticsHelper');
 
+tx_div::load('tx_rnbase_util_Misc');
+
 /**
  * Service for player statistics
  * 
@@ -372,8 +374,10 @@ static $total = 0;
 function playerStatsCmpPlayer($a, $b) {
   $player1 = $a['player'];
   $player2 = $b['player'];
-
-  return strcmp(strtoupper($player1->getName(1)), strtoupper($player2->getName(1)));
+  
+//t3lib_div::debug(strtoupper($player1->getName(1)), 'no_class_scope'); // TODO: Remove me!
+  return strcmp(tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))), 
+  							tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1))));
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerStatistics.php']) {
