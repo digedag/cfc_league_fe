@@ -223,7 +223,7 @@ plugin.tx_cfcleaguefe_competition {
   scopeTemplate = {$plugin.tx_cfcleaguefe_competition.scopeTemplate}
   matchtableTemplate = {$plugin.tx_cfcleaguefe_competition.matchtableTemplate}
   matchcrosstableTemplate = {$plugin.tx_cfcleaguefe_competition.matchcrosstableTemplate}
-  leagueTableTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableTemplate}
+  leaguetableTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableTemplate}
   statisticsTemplate = {$plugin.tx_cfcleaguefe_competition.statisticsTemplate}
   tickerlistTemplate = {$plugin.tx_cfcleaguefe_competition.tickerlistTemplate}
 

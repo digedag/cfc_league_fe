@@ -94,7 +94,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow {
 								tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
 
 		$view->setTemplatePath($configurations->getTemplatePath());
-		$view->setTemplateFile($configurations->get('leagueTableTemplate'));
+		$view->setTemplateFile($configurations->get('leaguetableTemplate'));
 		$out = $view->render('leaguetable', $configurations);
 		return $out;
 	}
