@@ -115,6 +115,7 @@
 
 
 			<label index="matchcrosstable_noData">Es wurden keine Spiele gefunden.</label>
+			<label index="label_matchtable">Spielplan</label>
 		</languageKey>
 	</data>
 </T3locallang>
