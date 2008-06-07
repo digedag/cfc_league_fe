@@ -222,6 +222,10 @@ lib.t3sports.match {
       ifEmpty = 2
     }
   }
+  liveticker_author.wrap = Das Spielstenogramm von&nbsp;|
+  liveticker_author.required = 1
+  game_report_author.wrap = Der Spielbericht von&nbsp;|
+  game_report_author.required = 1
 }
 
 plugin.tx_cfcleaguefe_competition {
@@ -803,6 +807,7 @@ plugin.tx_cfcleaguefe_report {
     svChartMatch =< lib.t3sports.chart
 
     # Anweisungen für den Spieldatensatz
+    match =< lib.t3sports.match
     match {
       # Hier immer mit den Namen der Spalte verwenden
       visitors.ifEmpty = -
