@@ -173,6 +173,8 @@ lib.t3sports.team {
         file = GIFBUILDER
         file {
           XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
+          maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+          maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
           backColor = #ffff00
           10 = TEXT
           10 {
@@ -194,7 +196,11 @@ lib.t3sports.teamSmall {
 	logo{
     file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
     file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    noLogo_stdWrap.cObject.file {
+      XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+      maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+      maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+    }
   }
 }
 
