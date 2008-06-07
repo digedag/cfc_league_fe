@@ -545,15 +545,8 @@ class tx_cfcleaguefe_models_matchreport {
    */
   function _loadMatch($matchId) {
     // Wir holen gleich einige Zusatzinfos mit
-    $what = tx_cfcleaguefe_models_match::getWhatFull(1);
-    $from = tx_cfcleaguefe_models_match::getFromFull();
-    $where = 'tx_cfcleague_games.uid = ' . intval($matchId);
-
-    $rows = tx_rnbase_util_DB::queryDB($what,$from,$where,
-              '','','tx_cfcleaguefe_models_match',0);
-    // Wir finden wahrscheinlich nur genau ein Spiel...
-    return count($rows) ? $rows[0] : 0;
-
+    $match = tx_cfcleaguefe_models_match::getInstance($matchId);
+    return $match->isValid() ? $match : 0;
   }
 
   /**
