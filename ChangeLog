@@ -2,6 +2,10 @@
 
 Änderungen
 ----------
+v0.3.8 (07.06.2008) (not released)
+* Some small fixed for new release
+* Documentation updated
+
 v0.3.7 (06.06.2008) (not released)
 * TS-Options for profile view changed. Reset your defined storage folder in plugins.
 * Randomizes profiles are possible with profile view.
