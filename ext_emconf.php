@@ -41,7 +41,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'rn_memento' => '',
 			'pbimagegraph' => '1.1.1-0.0.0',
 			'dam' => '1.0.11-0.0.0',
-			'cfc_league' => '0.3.4-0.0.0',
+			'cfc_league' => '0.4.0-0.0.0',
 		),
 		'conflicts' => array(
 		),
