@@ -689,7 +689,7 @@ lib.t3sports.matchreport.tickerType.cObject {
   11 < .10
   12 < .10
   30 = COA
-  30.10 =< lib.t3sports.matchreport.tickerType.cObject.10
+#  30.10 =< lib.t3sports.matchreport.tickerType.cObject.10
   30.20 = TEXT
   30.20.value = Eigentor:&nbsp;
   32 = TEXT
