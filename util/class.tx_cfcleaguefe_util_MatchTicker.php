@@ -134,7 +134,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 	function _handleChange(&$ret, &$ticker) {
 		if(!$ticker->isChange())
 			return;
-
+// TODO: Es muss immer die Auswechslung erhalten bleiben! 
 		// 1. Ein- und Auswechslungen zusammenfassen
 		static $changeInHome, $changeInGuest; // Hier liegen die IDX von Einwechslungen im Zielarray
 		static $changeOutHome, $changeOutGuest; // Hier die AUswechslungen
@@ -159,6 +159,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 				else {
 					// Einwechslung ablegen
 					$changeInHome->put($ticker);
+					array_pop($ret); // Die Einwechslung fliegt aus dem Ticker
 				}
 			}
 
@@ -167,9 +168,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 				if(!$changeInHome->isEmpty()) {
 					// Wartet schon so ein Wechsel
 					$change =& $changeInHome->get();
-					$change->record['player_home_2'] = $ticker->record['player_home'];
-					// Die aktuelle Meldung wieder aus dem Ticker löschen
-					array_pop($ret);
+					$ticker->record['player_home_2'] = $ticker->record['player_home'];
 				}
 				else {
 					//t3lib_div::debug($ticker->record, 'Ausw ablegen util_match_ticker');
@@ -183,7 +182,6 @@ class tx_cfcleaguefe_util_MatchTicker {
 			if($ticker->record['type'] == '81') { // Ist Einwechslung
 				// Gibt es schon die Auswechslung?
 				if(!$changeOutGuest->isEmpty()) {
-//t3lib_div::debug($ticker->record, 'Einwechslung ablegen util_match_ticker');
 					// Die Auswechslung holen
 					$change =& $changeOutGuest->get();
 					$change->record['player_guest_2'] = $ticker->record['player_guest'];
@@ -193,17 +191,16 @@ class tx_cfcleaguefe_util_MatchTicker {
 				else {
 					// Einwechslung ablegen
 					$changeInGuest->put($ticker);
+					// Die Einwechslung fliegt immer aus dem Array. Wir warten auf die Auswechslung.
+					array_pop($ret);
 				}
 			}
 			if($ticker->record['type'] == '80') { // Auswechslung
 				// Gibt es schon die Einwechslung?
 				if(!$changeInGuest->isEmpty()) {
-					// Wartet schon so ein Wechsel
- // FIX: PHP Warning:  Illegal offset type in cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTicker.php on line 204
-					$change =& $changeInGuest->get();
-					$change->record['player_guest_2'] = $ticker->record['player_guest'];
-					// Die aktuelle Meldung wieder aus dem Ticker löschen
-					array_pop($ret);
+					// Es muss immer die Auswechslung erhalten bleiben
+					$changeIn =& $changeInGuest->get();
+					$ticker->record['player_guest_2'] = $changeIn->record['player_guest'];
 				}
 				else {
 					// Auswechselung ablegen

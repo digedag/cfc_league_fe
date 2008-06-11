@@ -219,7 +219,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 		$options['where'] = 'game = ' .$this->uid;
 		$options['wrapperclass'] = 'tx_cfcleaguefe_models_match_note';
 		// HINT: Die Sortierung nach dem Typ ist für die Auswechslungen wichtig.
-		$options['orderby'] = 'minute asc, extra_time asc, type asc, uid asc';
+		$options['orderby'] = 'minute asc, extra_time asc, uid asc';
 		$this->_matchNotes = tx_rnbase_util_DB::doSelect($what, $from, $options,0);
 
 		// Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
