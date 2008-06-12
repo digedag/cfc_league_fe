@@ -1,6 +1,5 @@
 # TS Setup
 
-#require // tslib_fe->getConfigArray // t3lib_TStemplate->start // t3lib_pageSelect->storeHash // t3lib_DB->exec_INSERTquery // t3lib_DB->debug
 
 # #####
 # Competition-Plugin
@@ -812,7 +811,7 @@ plugin.tx_cfcleaguefe_report {
       # Hier immer mit den Namen der Spalte verwenden
       visitors.ifEmpty = -
       game_report.parseFunc =< lib.parseFunc_RTE
-      date.strftime  = {$plugin.tx_cfcleaguefe_report.format_date}
+      date.default.strftime  = {$plugin.tx_cfcleaguefe_report.format_date}
       home =< lib.t3sports.team
       guest =< lib.t3sports.team
       players_home = 1
