@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2006 Rene Nitzsche
+ *  (c) 2006-2008 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -24,6 +24,7 @@
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
 tx_div::load('tx_rnbase_util_SearchBase');
+tx_div::load('tx_rnbase_util_Misc');
 
 define('MATCHSRV_FIELD_MATCH_COMPETITION', 'MATCH.COMPETITION');
 define('MATCHSRV_FIELD_MATCH_ROUND', 'MATCH.ROUND');
