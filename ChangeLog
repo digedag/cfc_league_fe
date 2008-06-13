@@ -2,6 +2,11 @@
 
 Änderungen
 ----------
+v0.4.1 (13.06.2008)
+* small changes in TS-Config
+* missing include in search_match fixed
+* Sort order of match notes changed (is now always as same as in backend)
+
 v0.4.0 (08.06.2008)
 * Logo size for teamSmall fixed
 
