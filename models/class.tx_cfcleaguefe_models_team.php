@@ -123,50 +123,46 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
   }
 
 
-  /**
-   * Liefert das Logo des Teams. Es ist entweder das zugeordnete Logo des Teams oder 
-   * das Logo des Vereins.
-   * @param tx_rnbase_util_FormatUtil $formatter
-   * @param string $confId
-   */
-  function getLogo(&$formatter, $confId) {
-    $image = false;
-    // Hinweis: Die TCA-Definition ist im Team und im Club verschieden. Im Team ist es eine 1-n Relation
-    // Und im Club eine n-m-Beziehung. Daher muss der Zugriff unterschiedlich erfolgen.
-    // Grund dafür gibt es keinen...
+	/**
+	 * Liefert das Logo des Teams. Es ist entweder das zugeordnete Logo des Teams oder 
+	 * das Logo des Vereins.
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 */
+	function getLogo(&$formatter, $confId) {
+		$image = false;
+		// Hinweis: Die TCA-Definition ist im Team und im Club verschieden. Im Team ist es eine 1-n Relation
+		// Und im Club eine n-m-Beziehung. Daher muss der Zugriff unterschiedlich erfolgen.
+		// Grund dafür gibt es keinen...
 
-    // Vorrang hat das Teamlogo
-    if($this->record['dam_logo']) {
-      $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_teams', $this->uid, 'relation_field_or_other_ident');
-      if(list($uid, $filePath) = each($damPics['files'])) {
-        // Das Bild muss mit einem alternativen cObj erzeugt werden, damit Gallerie nicht aktiviert wird
+		// Vorrang hat das Teamlogo
+		if($this->record['dam_logo']) {
+			$damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_teams', $this->uid, 'relation_field_or_other_ident');
+			if(list($uid, $filePath) = each($damPics['files'])) {
+				// Das Bild muss mit einem alternativen cObj erzeugt werden, damit Gallerie nicht aktiviert wird
 //        $image = $formatter->getDAMImage($filePath, 'matchreport.logo.', 'cfc_league', 'cObjLogo');
-        $image = $formatter->getDAMImage($filePath, $confId, 'cfc_league', 'cObjLogo');
-      }
-    }
-    if(!$image) {
-      // Wir suchen den Verein
-      $club = $this->getClub();
-      // Ist ein Logo vorhanden?
-      if(is_object($club) && $club->record['dam_logo']) {
-        $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_club', $club->uid, 'dam_images');
-        if(list($uid, $filePath) = each($damPics['files'])) {
-          // Das Bild muss mit einem alternativen cObj erzeugt werden, damit Gallerie nicht aktiviert wird
-          $image = $formatter->getDAMImage($filePath, $confId, 'cfc_league', 'cObjLogo');
-        }
-      }
-    }
-    // Es ist kein Logo vorhanden    
-    if(!$image) {
-//      $conf = $this->_configurations->get('matchreport.logo.noLogo_stdWrap.');
-      $conf = $formatter->configurations->get($confId . 'noLogo_stdWrap.');
-//      $image = $formatter->configurations->getCObj(0)->stdWrap('', $conf);
-//if($this->isDummy())
-//  t3lib_div::debug($conf, 'tx_cfcleaguefe_models_team');
-      $image = $formatter->dataStdWrap($this->record, '', $confId . 'noLogo_stdWrap.');
-    }
-    return $image;
-  }
+				$image = $formatter->getDAMImage($filePath, $confId, 'cfc_league', 'cObjLogo');
+			}
+		}
+		if(!$image) {
+			// Wir suchen den Verein
+			$club = $this->getClub();
+			// Ist ein Logo vorhanden?
+			if(is_object($club) && $club->record['dam_logo']) {
+				$damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_club', $club->uid, 'dam_images');
+				if(list($uid, $filePath) = each($damPics['files'])) {
+					// Das Bild muss mit einem alternativen cObj erzeugt werden, damit Gallerie nicht aktiviert wird
+					$image = $formatter->getDAMImage($filePath, $confId, 'cfc_league', 'cObjLogo');
+				}
+			}
+		}
+		// Es ist kein Logo vorhanden
+		if(!$image) {
+			$conf = $formatter->configurations->get($confId . 'noLogo_stdWrap.');
+			$image = $formatter->dataStdWrap($this->record, '', $confId . 'noLogo_stdWrap.');
+		}
+		return $image;
+	}
 
   /**
    * Liefert true, wenn für das Team eine Einzelansicht verlinkt werden kann.
@@ -239,45 +235,46 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
   function isDummy(){
     return intval($this->record['dummy']) != 0;
   }
-  /**
-   * Return all teams by an array of uids.
-   * @param mixed $teamIds
-   * @return array of tx_cfcleaguefe_models_team
-   */
-  function getTeamsByUid($teamIds) {
-    if(!is_array($teamIds)) {
-      $teamIds = t3lib_div::intExplode(',',$teamIds);
-    }
-    if(!count($teamIds))
-      return array();
-    $teamIds = implode($teamIds, ',');
-    $what = tx_cfcleaguefe_models_team::getWhat();
-    $from = 'tx_cfcleague_teams';
-    $options['where'] = 'tx_cfcleague_teams.uid IN (' . $teamIds . ') ';
-    $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
+	/**
+	 * Return all teams by an array of uids.
+	 * @param mixed $teamIds
+	 * @return array of tx_cfcleaguefe_models_team
+	 */
+	function getTeamsByUid($teamIds) {
+		if(!is_array($teamIds)) {
+			$teamIds = t3lib_div::intExplode(',',$teamIds);
+		}
+		if(!count($teamIds))
+			return array();
+		$teamIds = implode($teamIds, ',');
+		$what = '*';
+		$from = 'tx_cfcleague_teams';
+		$options['where'] = 'tx_cfcleague_teams.uid IN (' . $teamIds . ') ';
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
 
-    return tx_rnbase_util_DB::doSelect($what,$from,$options,0);
-  }
+		return tx_rnbase_util_DB::doSelect($what,$from,$options,0);
+	}
 
-  /**
-   * Returns Teams by competition and club. This method can be used static.
-   * TODO: Als static deklarieren
-   */
-  function getTeams($competitionIds, $clubIds) {
-    $competitionIds = implode(t3lib_div::intExplode(',',$competitionIds), ',');
-    $clubIds = implode(t3lib_div::intExplode(',',$clubIds), ',');
+	/**
+	 * Returns Teams by competition and club. This method can be used static.
+	 * TODO: Als static deklarieren
+	 */
+	function getTeams($competitionIds, $clubIds) {
+		$competitionIds = implode(t3lib_div::intExplode(',',$competitionIds), ',');
+		$clubIds = implode(t3lib_div::intExplode(',',$clubIds), ',');
 
-    $what = tx_cfcleaguefe_models_team::getWhat();
-    $from = Array('
-       tx_cfcleague_teams 
-         JOIN tx_cfcleague_competition ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )', 
-         'tx_cfcleague_teams');
+//    $what = tx_cfcleaguefe_models_team::getWhat();
+		$what = '*';
+		$from = Array('
+			tx_cfcleague_teams
+				JOIN tx_cfcleague_competition ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )',
+				'tx_cfcleague_teams');
 
-    $options['where'] = 'tx_cfcleague_teams.club IN (' . $clubIds . ') AND ';
-    $options['where'] .= 'tx_cfcleague_competition.uid IN (' . $competitionIds . ') ';
-    $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
+		$options['where'] = 'tx_cfcleague_teams.club IN (' . $clubIds . ') AND ';
+		$options['where'] .= 'tx_cfcleague_competition.uid IN (' . $competitionIds . ') ';
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
 
-    return tx_rnbase_util_DB::doSelect($what,$from,$options,0);
+		return tx_rnbase_util_DB::doSelect($what,$from,$options,0);
 
 /*
 SELECT tx_cfcleague_teams.uid, tx_cfcleague_teams.name, tx_cfcleague_competition.uid AS comp_uid, tx_cfcleague_competition.name AS comp_name, tx_cfcleague_competition.teams AS comp_teams
@@ -286,11 +283,12 @@ JOIN tx_cfcleague_competition ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleag
 WHERE tx_cfcleague_teams.club =1
 AND tx_cfcleague_competition.uid =1
 */
-  }
+	}
 
   /**
    * Liefert alle Spalten des Teams
    * TODO: Über TCA dynamisch gestalten
+   * @deprecated Should be removed
    */
   function getWhat() {
     return '
