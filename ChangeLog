@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.4.3 (16.06.2008)
+* Bugfix: Logos set in team record were ignored in matchtable
+
 v0.4.2 (16.06.2008)
 * key fixed for league table template in flexform
 
