@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.4.2 (16.06.2008)
+* key fixed for league table template in flexform
+
 v0.4.1 (13.06.2008)
 * small changes in TS-Config
 * missing include in search_match fixed
