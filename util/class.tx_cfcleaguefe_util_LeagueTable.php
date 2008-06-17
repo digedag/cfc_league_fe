@@ -356,6 +356,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			$this->_teamData[$teamId]['goals1'] = 0;
 			$this->_teamData[$teamId]['goals2'] = 0;
 			$this->_teamData[$teamId]['goals_diff'] = 0;
+			$this->_teamData[$teamId]['position'] = 0;
 			$this->_teamData[$teamId]['oldposition'] = 0;
 			$this->_teamData[$teamId]['positionchange'] = 'EQ';
 
