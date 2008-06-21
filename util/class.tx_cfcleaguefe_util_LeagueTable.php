@@ -250,7 +250,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			$this->addLoseCount($homeId);
 		}
 		// Jetzt die Tore summieren
-		$this->addGoals($homeId, $match->record['goals_home_2'], $match->record['goals_guest_2']);
+		$this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
 	}
 
 	/**
