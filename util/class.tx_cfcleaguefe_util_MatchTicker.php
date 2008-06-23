@@ -71,69 +71,69 @@ class tx_cfcleaguefe_util_MatchTicker {
   }
 
 
-  /**
-   * Liefert die TickerInfos für einzelne Spiele
-   * @param tx_cfcleaguefe_models_match $match
-   * @param mixed $types unused!
-   */
-  function &getTicker4Match(&$match, $types = 0) {
-    $arr =& $match->getMatchNotes();
+	/**
+	 * Liefert die TickerInfos für einzelne Spiele
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param mixed $types unused!
+	 */
+	function &getTicker4Match(&$match, $types = 0) {
+		$arr =& $match->getMatchNotes();
 
-    // Die Notes werden jetzt noch einmal aufbereitet
-    $ret = array();
-    $anz = count($arr);
+		// Die Notes werden jetzt noch einmal aufbereitet
+		$ret = array();
+		$anz = count($arr);
 
-    for($i = 0; $i<$anz; $i++) {
-      $ticker = $arr[$i];
-      // Datensatz im Zielarray ablegen
-      $ret[] = $ticker;
-      
-      tx_cfcleaguefe_util_MatchTicker::_handleChange($ret, $ticker);
-      tx_cfcleaguefe_util_MatchTicker::_handleResult($ret[count($ret)-1]);
-//   t3lib_div::debug($t->getStanding(),'util_ticker');
-    }
+		for($i = 0; $i<$anz; $i++) {
+			$ticker = $arr[$i];
+			// Datensatz im Zielarray ablegen
+			$ret[] = $ticker;
 
+			$tickerRemoved = tx_cfcleaguefe_util_MatchTicker::_handleChange($ret, $ticker);
+			if(!$tickerRemoved) {
+				tx_cfcleaguefe_util_MatchTicker::_handleResult($ret[count($ret)-1]);
+			}
+		}
+		return $ret;
+	}
 
-    return $ret;
-  }
+	/**
+	 * Trägt den Spielstand im Ticker ein. Dies funktioniert natürlich nur, wenn die Meldungen
+	 * in chronologischer Reihenfolge ankommen.
+	 */
+	function _handleResult(&$ticker) {
+		static $goals_home, $goals_guest;
+		if (!isset($goals_home)) {
+			$goals_home = 0;
+			$goals_guest = 0;
+		}
+		// Ist die Meldung ein Heimtor?
+		if($ticker->isGoalHome()) {
+			$goals_home = $goals_home + 1;
+		}
+		// Ist die Meldung ein Gasttor?
+		elseif($ticker->isGoalGuest()) {
+			$goals_guest = $goals_guest + 1;
+		}
 
-  /**
-   * Trägt den Spielstand im Ticker ein. Dies funktioniert natürlich nur, wenn die Meldungen
-   * in chronologischer Reihenfolge ankommen.
-   */
-  function _handleResult(&$ticker) {
-    static $goals_home, $goals_guest;
-    if (!isset($goals_home)) {
-      $goals_home = 0;
-      $goals_guest = 0;
-//   t3lib_div::debug('Init Test','util_ticker');
-    }
-    // Ist die Meldung ein Heimtor?
-    if($ticker->isGoalHome()) {
-      $goals_home = $goals_home + 1;
-    }
-    // Ist die Meldung ein Gasttor?
-    elseif($ticker->isGoalGuest()) {
-      $goals_guest = $goals_guest + 1;
-    }
+		// Stand speichern
+		$ticker->record['goals_home'] = $goals_home;
+		$ticker->record['goals_guest'] = $goals_guest;
 
-    // Stand speichern
-    $ticker->record['goals_home'] = $goals_home;
-    $ticker->record['goals_guest'] = $goals_guest;
-
-  }
+	}
 
 	/**
 	 * Ein- und Auswechslungen werden durch Aufruf dieser Methode zusammengefasst. Die beiden
-	 * betroffenen Spieler werden dabei in der ersten Tickermeldung zusammengefasst. Der zweite
+	 * betroffenen Spieler werden dabei in der Tickermeldung der Auswechslung zusammengefasst. Der zweite
 	 * Spieler wird unter dem Key 'player_home_2' bzw. 'player_guest_2' abgelegt.
 	 * Der zweite Datensatz wird aus dem Ergebnisarray entfernt.
 	 * @param array $ret Referenz auf Array mit den bisher gefundenen Ticker-Daten
 	 * @param tx_cfcleaguefe_models_match_note $ticker der zuletzt hinzugefügte Ticker
+	 * @return boolean wether or not the ticker record was removed 
 	 */
 	function _handleChange(&$ret, &$ticker) {
+		$isRemoved = false;
 		if(!$ticker->isChange())
-			return;
+			return $isRemoved;
 // TODO: Es muss immer die Auswechslung erhalten bleiben! 
 		// 1. Ein- und Auswechslungen zusammenfassen
 		static $changeInHome, $changeInGuest; // Hier liegen die IDX von Einwechslungen im Zielarray
@@ -153,14 +153,13 @@ class tx_cfcleaguefe_util_MatchTicker {
 				if(!$changeOutHome->isEmpty()) {
 					$change =& $changeOutHome->get();
 					$change->record['player_home_2'] = $ticker->record['player_home'];
-					// Die aktuelle Meldung wieder aus dem Ticker löschen
-					array_pop($ret);
 				}
 				else {
 					// Einwechslung ablegen
 					$changeInHome->put($ticker);
-					array_pop($ret); // Die Einwechslung fliegt aus dem Ticker
 				}
+				array_pop($ret); // Die Einwechslung fliegt aus dem Ticker
+				$isRemoved = true;
 			}
 
 			if($ticker->record['type'] == '80') { // Wenn Auswechslung
@@ -168,7 +167,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 				if(!$changeInHome->isEmpty()) {
 					// Wartet schon so ein Wechsel
 					$change =& $changeInHome->get();
-					$ticker->record['player_home_2'] = $ticker->record['player_home'];
+					$ticker->record['player_home_2'] = $change->record['player_home'];
 				}
 				else {
 					//t3lib_div::debug($ticker->record, 'Ausw ablegen util_match_ticker');
@@ -185,15 +184,13 @@ class tx_cfcleaguefe_util_MatchTicker {
 					// Die Auswechslung holen
 					$change =& $changeOutGuest->get();
 					$change->record['player_guest_2'] = $ticker->record['player_guest'];
-					// Die aktuelle Meldung wieder aus dem Ticker löschen
-					array_pop($ret);
 				}
 				else {
 					// Einwechslung ablegen
 					$changeInGuest->put($ticker);
-					// Die Einwechslung fliegt immer aus dem Array. Wir warten auf die Auswechslung.
-					array_pop($ret);
 				}
+				array_pop($ret); // Die Einwechslung fliegt aus dem Ticker
+				$isRemoved = true;
 			}
 			if($ticker->record['type'] == '80') { // Auswechslung
 				// Gibt es schon die Einwechslung?
@@ -208,6 +205,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 				}
 			}
 		} // end if GUEST
+		return $isRemoved;
 	}
 
 /*
