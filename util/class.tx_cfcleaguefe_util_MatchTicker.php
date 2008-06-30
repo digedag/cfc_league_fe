@@ -99,6 +99,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 	/**
 	 * Trägt den Spielstand im Ticker ein. Dies funktioniert natürlich nur, wenn die Meldungen
 	 * in chronologischer Reihenfolge ankommen.
+	 * @param tx_cfcleaguefe_models_match_note $ticker der zuletzt hinzugefügte Ticker
 	 */
 	function _handleResult(&$ticker) {
 		static $goals_home, $goals_guest;

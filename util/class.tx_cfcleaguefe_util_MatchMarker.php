@@ -56,7 +56,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
   /**
    * @param $template das HTML-Template
    * @param tx_cfcleaguefe_models_match $match das Spiel
-   * @param $formatter der zu verwendente Formatter
+   * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
    * @param $confId Pfad der TS-Config des Spiels, z.B. 'listView.match.'
    * @param $marker Name des Markers für ein Spiel, z.B. MATCH
    * @return String das geparste Template
@@ -144,7 +144,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	 *
 	 * @param string $template
 	 * @param tx_cfcleaguefe_models_match $match
-	 * @param tx_rnbase_util_FormatUtil unknown_type $formatter
+	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $matchConfId
 	 * @param string $matchMarker
 	 * @return string
