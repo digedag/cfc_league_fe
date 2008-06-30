@@ -55,21 +55,13 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 		// Dieses cObj wird dem Controller von T3 übergeben
 		$this->configurations->init($ttnews->conf, $ttnews->cObj, $t3sportsContr->extensionKey, $t3sportsContr->qualifier);
 		$this->linkConf = $this->configurations->get('external_links.');
-//		$regExpr1 =  "/\[(google|local) ([[:graph:]]+) (nolink)\]/";
-//		$regExpr1 =  "/\[(google|local) ([[:graph:]]+) ([[:print:]]+)\]/";
 		$regExpr[] = "/\[t3sports:([\w]*):(\w+) (.*?)]/";
 		$markerNames = array('CONTENT', 'SUBHEADER');
 		foreach($markerNames As $markerName) {
 			$markerArray['###NEWS_'.$markerName.'###'] = $this->handleMarker($markerArray['###NEWS_'.$markerName.'###'], $regExpr);
-
 		}
-
 //  	$GLOBALS['TSFE']->register['SECTION_FRAME'] = $pObj->cObj->data['section_frame']; // Access to section_frame by TS
-//    $markerArray['###NEWS_'. strtoupper('tx_sv98news_tickertext') .'###' ] = $ttnews->local_cObj->stdWrap($row['tx_sv98news_tickertext'],$lConf['tx_sv98news_tickertext.']);
-//    $markerArray['###NEWS_'. strtoupper('tx_sv98news_title') .'###' ] = $ttnews->local_cObj->stdWrap($row['tx_sv98news_title'],$lConf['tx_sv98news_title.']);
-//t3lib_div::debug($markerArray['###NEWS_CATEGORY###'], 'tx_sv98news_hooks_extraMarkers');
     return $markerArray;
-//    t3lib_div::debug($row['tx_sv98news_tickertext'], 'tx_sv98news_hooks_extraMarkers');
 	}
 
 	function handleMarker($marker, $expr) {
@@ -84,6 +76,20 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 		$paramValues = t3lib_div::trimExplode(',', $match[2]);
 		for($i=0, $cnt = count($params); $i < $cnt; $i++) {
 			$linkParams[$params[$i]] = $paramValues[$i];
+		}
+
+		// Wenn ein Spiel im Link ist, dann suchen setzen wir die Altersgruppe als Registerwert
+		if(array_key_exists('matchId', array_flip($params))) {
+			$uid = $linkParams['matchId'];
+			try {
+				tx_div::load('tx_cfcleaguefe_models_match');
+				$t3match = tx_cfcleaguefe_models_match::getInstance($uid);
+				$competition = $t3match->getCompetition();
+				$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->record['agegroup'];
+			}
+			catch(Exception $e) {
+				$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = 0;
+			}
 		}
 
 		$wrappedSubpartArray = array();
