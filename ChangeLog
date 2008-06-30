@@ -2,6 +2,12 @@
 
 Änderungen
 ----------
+v0.4.4 (30.06.2008)
+* Bugfix: leaguetable used goals from second matchpart only
+* Bugs 2000153 and 2000137
+* Support for team notes implemented
+* tt_news: register:T3SPORTS_GROUP with current age group is available for matchreport link
+
 v0.4.3 (16.06.2008)
 * Bugfix: Logos set in team record were ignored in matchtable
 
