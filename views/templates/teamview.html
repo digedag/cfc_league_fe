@@ -27,12 +27,19 @@ formatiert werden. Beispiele:
 ###TEAM_COACHES_COMMENT### Bemerkung zu Betreuern
 ###TEAM_COMMENT### Bemerkung zum Team
 ###TEAM_LOGO### Logo des Teams
+
+Die Marker für die Teamnotizen haben folgenden Aufbau:
+###TEAM_PLAYER_TN[Markername]###
+
+Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser Marker:
+###TEAM_PLAYER_TNPOSITION###
+
 </pre>
 
 <!-- ###TEAM_VIEW### begin-->
 <div id="cfcleague-teamview">
 
-  <h1>###TEAM_FIRST_PICTURE_TITLE###</h1>
+  <h1>###TEAM_FIRST_PICTURE_TITLE### (###LABEL_team###)</h1>
 
 <p class="cfcleague-teamview-firstpic">###TEAM_FIRST_PICTURE_IMGTAG###</p>
 <p class="cfcleague-teamview-firstpic-creator">###TEAM_FIRST_PICTURE_CREATOR###</p>
@@ -44,7 +51,8 @@ formatiert werden. Beispiele:
   <h2>Das Aufgebot</h2>
   <table style="width:483px">
    <tr>
-    <th>Position</th>
+    <th>Bild</th>
+    <th>Position / Trikot</th>
     <th>Name,Vorname</th>
     <th>geb.am</th>
     <th>Größe</th>
@@ -53,7 +61,8 @@ formatiert werden. Beispiele:
    </tr>
     <!-- ###TEAM_PLAYER### begin -->
    <tr class="cfcleaguefe-teamview-player">
-    <td>###TEAM_PLAYER_POSITION### ###TEAM_PLAYER_FIRST_PICTURE_IMGTAG###</td>
+    <td>###TEAM_PLAYER_FIRST_PICTURE_IMGTAG###</td>
+    <td>###TEAM_PLAYER_TNPOSITION### / ###TEAM_PLAYER_TNTRIKOT###</td>
     <td>###TEAM_PLAYER_SHOWPROFILELINK######TEAM_PLAYER_LAST_NAME###, ###TEAM_PLAYER_FIRST_NAME######TEAM_PLAYER_SHOWPROFILELINK### (###TEAM_PLAYER_UID###)</td>
     <td>###TEAM_PLAYER_BIRTHDAY###</td>
     <td>###TEAM_PLAYER_HEIGHT###</td>

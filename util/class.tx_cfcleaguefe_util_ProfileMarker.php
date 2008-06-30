@@ -32,11 +32,13 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_BaseM
  */
 class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
   private $defaultMarkerArr;
+  private $options;
 
   /**
    * Initialisiert den Marker Array. 
    */
-  function tx_cfcleaguefe_util_ProfileMarker(){
+  function tx_cfcleaguefe_util_ProfileMarker(&$options = array()){
+  	$this->options = $options;
   }
 
   /**
@@ -51,10 +53,9 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 
 	/**
 	 * @param $template das HTML-Template
-	 * @param $profile das Profil
-	 * @param $formatter der zu verwendente Formatter
+	 * @param tx_cfcleaguefe_models_profile $profile das Profil
+	 * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
 	 * @param $confId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
-	 * @param $link Link-Instanz, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
 	 * @param $marker Name des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
 	 *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
 	 * @return String das geparste Template
@@ -63,7 +64,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 		if(!is_object($profile)) {
 			return $formatter->configurations->getLL('profile_notFound');
 		}
-
+		$profile->addTeamNotes($this->options['team']);
 		// Es wird das MarkerArray mit den Daten des Spielers gefüllt.
 		$markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $confId , 0, $marker.'_',$profile->getColumnNames());
 		$markerArray['###'.$marker.'_SIGN###'] = $profile->getSign();
@@ -75,7 +76,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 		$subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
 
 		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
+		
 		// Okay the normal stuff is done. Now lookout for external marker services.
 		$markerArray = array();
 		$subpartArray = array();
@@ -89,7 +90,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
     
 		return $out;
 	}
-
+	
   /**
    * Es werden die Bilder eingebunden
    */

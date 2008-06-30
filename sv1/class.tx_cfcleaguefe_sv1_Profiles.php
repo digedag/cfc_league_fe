@@ -27,7 +27,8 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
 tx_div::load('tx_rnbase_util_DB');
 
 interface tx_cfcleaguefe_ProfileService {
-  function search($fields, $options);
+	function getTeamNotes(&$profile, &$team);
+	function search($fields, $options);
 }
 
 /**
@@ -36,6 +37,22 @@ interface tx_cfcleaguefe_ProfileService {
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_sv1_Profiles extends t3lib_svbase implements tx_cfcleaguefe_ProfileService  {
+
+	/**
+	 * Find team notes for a profile
+	 *
+	 * @param tx_cfcleaguefe_models_profile $profile
+	 * @param tx_cfcleaguefe_models_team $team
+	 */
+	function getTeamNotes(&$profile, &$team) {
+		$what = '*';
+		$from = 'tx_cfcleague_team_notes';
+		$options['where'] = 'player = ' .$profile->uid . ' AND team = '. $team->uid;
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_teamNote';
+//		$options['orderby'] = 'minute asc, extra_time asc, uid asc';
+		$teamNotes = tx_rnbase_util_DB::doSelect($what, $from, $options,0);
+		return $teamNotes;
+	}
 
 	/**
 	 * Search database for teams

@@ -116,6 +116,15 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
   }
 
   /**
+   * Returns the team notes for this player
+   *
+   * @param tx_cfcleaguefe_models_team $team
+   */
+  function getTeamNotes(&$team) {
+  	$srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+  	return $srv->getTeamNotes($this, $team);
+  }
+  /**
    * Liefert den kompletten Namen der Person
    * @param $reverse Wenn 1 dann ist die Form <Nachname, Vorname>
    */
@@ -226,6 +235,28 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     return $formatter->stdWrap($name, $conf);
   }
 
+	public function addTeamNotes(&$team) {
+		if(is_object($team)) {
+			// Zunächst alle Daten initialisieren
+			tx_div::load('tx_cfcleaguefe_models_teamNoteType');
+			$types = tx_cfcleaguefe_models_teamNoteType::getAll();
+			for($i=0, $cnt=count($types); $i < $cnt; $i++) {
+				$type = $types[$i];
+				$this->record['tn'.$type->getMarker()] = '';
+				$this->record['tn'.$type->getMarker().'_type'] = '0';
+			}
+
+			// Mit Team können die TeamNotes geholt werden
+			$notes = $this->getTeamNotes($team);
+			for($i=0, $cnt=count($notes); $i < $cnt; $i++ ) {
+				$note = $notes[$i];
+				$noteType = $note->getType();
+				$this->record['tn'.$noteType->getMarker()] = $note->uid;
+				//$this->record['tn'.$noteType->getMarker()] = $note->getValue();
+				$this->record['tn'.$noteType->getMarker().'_type'] = $note->record['mediatype'];
+			}
+		}
+  }
   /**
    * Liefert true, wenn für den Spieler eine Einzelansicht verlinkt werden soll.
    */
