@@ -451,7 +451,7 @@ class tx_cfcleaguefe_models_matchreport {
 		$sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
 		$ret = implode($sep, $ret);
 		// Jetzt noch ein Wrap über alles
-		return $this->_formatter->stdWrap($ret, $this->_configurations->get($confIdAll));
+		return $this->_formatter->stdWrap($ret, $this->_configurations->get($confIdAll), $this->match->record);
 	}
 
   /**
@@ -537,7 +537,8 @@ class tx_cfcleaguefe_models_matchreport {
     $ret = implode(' - ', $partArr);
 
     // Jetzt noch ein Wrap über alles
-    return $this->_formatter->stdWrap($ret, $conf);
+//t3lib_div::debug($conf, $confId.' - tx_cfcleaguefe_models_matchreport'); // TODO: remove me
+    return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
   }
 
   /**

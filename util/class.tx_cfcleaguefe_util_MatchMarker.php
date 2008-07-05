@@ -128,10 +128,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
     $report =&$match->getMatchReport();
     if(!is_object($report)) return;
     // Die Aufstellungen setzen
-    $match->record['lineup_home'] = $report->getLineupHome('matchreport.lineup.');
-    $match->record['lineup_guest'] = $report->getLineupGuest('matchreport.lineup.');
-    $match->record['substnames_home'] = $report->getSubstituteNamesHome('matchreport.substnames.');
-    $match->record['substnames_guest'] = $report->getSubstituteNamesGuest('matchreport.substnames.');
+    $match->record['lineup_home'] = $report->getLineupHome('matchreport.lineuphome.');
+    $match->record['lineup_guest'] = $report->getLineupGuest('matchreport.lineupguest.');
+    $match->record['substnames_home'] = $report->getSubstituteNamesHome('matchreport.substnameshome.');
+    $match->record['substnames_guest'] = $report->getSubstituteNamesGuest('matchreport.substnamesguest.');
     $match->record['coachnames_home'] = $report->getCoachNameHome('matchreport.coachnames.');
     $match->record['coachnames_guest'] = $report->getCoachNameGuest('matchreport.coachnames.');
     $match->record['refereenames'] = $report->getRefereeName('matchreport.refereenames.');

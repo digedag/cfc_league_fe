@@ -745,28 +745,29 @@ lib.t3sports.matchreport.profiles {
 
 # Spieler im Spielbericht
 lib.t3sports.matchreport.reportPlayers < lib.t3sports.matchreport.profiles
-lib.t3sports.matchreport.reportPlayers.profile {
-  first_name >
-  # Den Nachnamen des Teamcaptains formatieren
-  last_name.cObject = COA
-  last_name.cObject {
-    1 = TEXT
-    1.value = <b>
-    1.if.value = 0
-    1.if.isGreaterThan.field = teamCaptain
-    2 = TEXT
-    2.field = last_name
-    3 = TEXT
-    3.value = (C)</b>
-    3.if.value = 0
-    3.if.isGreaterThan.field = teamCaptain
-  }
-
-  # Die Karten einblenden
-  ifPenalty {
-    s_weight = 3
-    ticker {
-      type =< lib.t3sports.matchreport.penaltyType
+lib.t3sports.matchreport.reportPlayers {
+  profile {
+    first_name >
+    # Den Nachnamen des Teamcaptains formatieren
+    last_name.cObject = COA
+    last_name.cObject {
+      1 = TEXT
+      1.value = <b>
+      1.if.value = 0
+      1.if.isGreaterThan.field = teamCaptain
+      2 = TEXT
+      2.field = last_name
+      3 = TEXT
+      3.value = (C)</b>
+      3.if.value = 0
+      3.if.isGreaterThan.field = teamCaptain
+    }
+    # Die Karten einblenden
+    ifPenalty {
+      s_weight = 3
+      ticker {
+        type =< lib.t3sports.matchreport.penaltyType
+      }
     }
   }
 }
@@ -999,8 +1000,17 @@ plugin.tx_cfcleaguefe_report {
     # eigene Listen erstellt werden
 
     coachnames =< lib.t3sports.matchreport.profiles
-    lineup =< lib.t3sports.matchreport.reportPlayers
-    lineup.profile {
+#    lineuphome =< lib.t3sports.matchreport.profiles
+#    lineuphome =< lib.t3sports.matchreport.reportPlayers
+    lineuphome {
+		  seperator = |, |
+      profile < lib.t3sports.matchreport.reportPlayers.profile
+      ifEmpty.cObject = HTML
+      ifEmpty.cObject.value.field = players_home_stat
+      ifEmpty.cObject.value.ifEmpty = unbekannt
+    }
+    lineuphome.profile {
+      first_name >
       # Bei Auswechslungen einen Tickerwrap setzen
       ifChangedOut {
         # Position des ChangeOut-Tickers
@@ -1027,20 +1037,33 @@ plugin.tx_cfcleaguefe_report {
         }
       }
     }
-
-    substnames =< lib.t3sports.matchreport.profiles
-    substnames.profile {
-      first_name >
-      # Die Karten einblenden
-      ifPenalty {
-        s_weight = 3
-        ticker {
-          type =< lib.t3sports.matchreport.penaltyType
-        }
-      }
-#      seperator = |, |
+    lineupguest =< plugin.tx_cfcleaguefe_report.matchreport.lineuphome
+    lineupguest {
+      ifEmpty.cObject = HTML
+      ifEmpty.cObject.value.field = players_guest_stat
+      ifEmpty.cObject.value.ifEmpty = unbekannt
     }
-    
+
+    substnameshome {
+		  seperator = |, |
+      profile < lib.t3sports.matchreport.reportPlayers.profile
+      ifEmpty.cObject = HTML
+      ifEmpty.cObject.value.field = substitutes_home_stat
+      ifEmpty.cObject.value.ifEmpty = unbekannt
+      profile {
+        first_name >
+        # Die Karten einblenden
+        ifPenalty {
+          s_weight = 3
+          ticker {
+            type =< lib.t3sports.matchreport.penaltyType
+          }
+        }
+#        seperator = |, |
+      }
+    }
+    substnamesguest =< plugin.tx_cfcleaguefe_report.matchreport.substnameshome
+    substnamesguest.ifEmpty.cObject.value.field = substitutes_guest_stat
 
     refereenames =< lib.t3sports.matchreport.profiles
     refereenames.profile {
