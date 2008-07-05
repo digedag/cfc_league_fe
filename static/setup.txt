@@ -881,7 +881,10 @@ plugin.tx_cfcleaguefe_report {
         # Die Heimtorschützen anzeigen
         scorerHome {
 		      cron = 1
-		      ifEmpty = Fehlanzeige
+          ifEmpty.cObject = HTML
+          ifEmpty.cObject.value.field = scorer_home_stat
+          ifEmpty.cObject.value.ifEmpty = Fehlanzeige
+          ifEmpty.cObject.value.br = 1
           # Possible values are home and guest. Empty for both
           noteTeam = home
           noteType = 10,11,12,30
@@ -925,6 +928,7 @@ plugin.tx_cfcleaguefe_report {
         # Beim Gastteam ändern wir nur ein Attribut
         scorerGuest =< plugin.tx_cfcleaguefe_report.matchreport.match.dynaMarkers.scorerHome
         scorerGuest.noteTeam = guest
+        scorerGuest.ifEmpty.cObject.value.field = scorer_guest_stat
 
         # Der MatchTicker wird dynamisch erstellt
         tickerlist {

@@ -160,6 +160,7 @@ class tx_cfcleaguefe_models_matchreport {
 
   /**
    * Liefert die Tickermeldunge der Heimtorschützen
+   * @deprecated to be deleted
    */
   function getScorerHome() {
     $conf = $this->_configurations->get('matchreport.scorer.');
@@ -190,6 +191,7 @@ class tx_cfcleaguefe_models_matchreport {
   }
   /**
    * Liefert die Tickermeldunge der Gasttorschützen
+   * @deprecated to be deleted
    */
   function getScorerGuest() {
     $conf = $this->_configurations->get('matchreport.scorer.');
@@ -487,11 +489,8 @@ class tx_cfcleaguefe_models_matchreport {
    * @param string $confIdAll
    */
   function _wrapTickers(&$tickerArr, $confIdAll) {
-//    $conf = $this->_configurations->get($confIdAll);
-//t3lib_div::debug($conf, $confIdAll.' - tx_cfcleaguefe_models_matchreport'); // TODO: Remove me!
 		foreach($tickerArr As $ticker) {
 			$ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $confIdAll.'ticker.', $ticker);
-//    	$ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $conf['ticker.'], $ticker, $this->_configurations);
 		}
 		// Die einzelnen Meldungen verbinden
 		if(count($ret)) {
@@ -502,10 +501,11 @@ class tx_cfcleaguefe_models_matchreport {
 		}
 		else $ret = null;
 
-// t3lib_div::debug($ret,'ret mdl_report');
 
+    $conf = $this->_configurations->get($confIdAll);
+//t3lib_div::debug($conf, $confIdAll.' - tx_cfcleaguefe_models_matchreport'); // TODO: Remove me!
 		// Jetzt noch ein Wrap über alles
-		return $this->_formatter->stdWrap($ret, $conf);
+		return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
 	}
 
   /**
