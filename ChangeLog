@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.4.5 (06.07.2008)
+* Support for plain text lineups, substitutes and scorers
+
 v0.4.4 (30.06.2008)
 * Bugfix: leaguetable used goals from second matchpart only
 * Bugs 2000153 and 2000137
