@@ -68,7 +68,7 @@ static $total = 0;
     // Wir betrachten nur die Spieler des gesetzten Clubs
     $team = $match->getHome();
     if($team->record['club'] == $clubId || !$clubId) {
-      $players = $match->getPlayersHome(1); // All Spieler des Heimteams holen
+      $players = $this->getPlayer($match,true); // All Spieler des Heimteams holen
 
     if(is_array($players)) 
         foreach($players As $player) {
@@ -79,35 +79,50 @@ static $total = 0;
     }
     $team = $match->getGuest();
     if($team->record['club'] == $clubId || !$clubId) {
-      // Nochmal die Spieler des Auswärstteams
-      $players = $match->getPlayersGuest(1); // All Spieler des Gastteams holen
-
+      // Nochmal die Spieler des Auswärtsteams
+      $players = $this->getPlayer($match, false); // All Spieler des Gastteams holen
       if(is_array($players)) 
         foreach($players As $player) {
           // Jeden Spieler aktualisieren
           $this->_countMatch4Player($player, $match, $this->playersArr);
         }
     }
-
-//t3lib_div::debug( self::$total, 'total sv2_playerstatistics');
-    
+//t3lib_div::debug( self::$total, 'total sv2_playerstatistics');  
   }
-  public function getResult() {
-    // Die Spieler vorher noch sortieren
-    // Is there exactly one team?
-    $teams = $this->getTeams($this->getScopeArray());
+	/**
+	 * Liefert die Spieler eines beteiligten Teams.
+	 *
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param boolean $home true, wenn das Heimteam geholt werden soll
+	 * @return array[tx_cfcleaguefe_models_profile]
+	 */
+	protected function getPlayer($match, $home) {
+		$players = $home ? $match->getPlayersHome(1) : $match->getPlayersGuest(1);
+		// Fehlerhafte Spieler entfernen
+		foreach($players As $key => $player) {
+			if(!is_object($player)) {
+				t3lib_div::debug('Player with UID ' . $key . ' not found. Probably the profile was deleted, but still has references.', 'tx_cfcleaguefe_sv2_PlayerStatistics'); // TODO: remove me
+				unset($players[$key]);
+			}
+		}
+		reset($players);
+		return $players;
+	}
+	public function getResult() {
+		// Die Spieler vorher noch sortieren
+		// Is there exactly one team?
+		$teams = $this->getTeams($this->getScopeArray());
 
-    if(count($teams) == 1 && intval($this->configurations->get('statistics.player.profileSortOrder')) == 1) {
-      // sort by team members
-      $this->playersArr = $this->_sortPlayer($this->playersArr, $teams[0]);
-    }
-    else {
-      // Die Spieler alphabetisch sortieren
-      usort($this->playersArr, 'playerStatsCmpPlayer');
-    }
-                         
-    return $this->playersArr;
-  }
+		if(count($teams) == 1 && intval($this->configurations->get('statistics.player.profileSortOrder')) == 1) {
+			// sort by team members
+			$this->playersArr = $this->_sortPlayer($this->playersArr, $teams[0]);
+		}
+		else {
+			// Die Spieler alphabetisch sortieren
+			usort($this->playersArr, 'playerStatsCmpPlayer');
+		}
+		return $this->playersArr;
+	}
 
   /**
    * Returns the marker instance to map result data to HTML markers
