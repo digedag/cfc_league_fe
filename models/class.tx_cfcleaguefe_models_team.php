@@ -264,7 +264,7 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
 		$clubIds = implode(t3lib_div::intExplode(',',$clubIds), ',');
 
 //    $what = tx_cfcleaguefe_models_team::getWhat();
-		$what = '*';
+		$what = 'tx_cfcleague_teams.*';
 		$from = Array('
 			tx_cfcleague_teams
 				JOIN tx_cfcleague_competition ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )',
