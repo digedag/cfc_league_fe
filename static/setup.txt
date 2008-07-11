@@ -1012,6 +1012,7 @@ plugin.tx_cfcleaguefe_report {
       ifEmpty.cObject = HTML
       ifEmpty.cObject.value.field = players_home_stat
       ifEmpty.cObject.value.ifEmpty = unbekannt
+      ifEmpty.cObject.value.br = 1
     }
     lineuphome.profile {
       first_name >
@@ -1046,6 +1047,7 @@ plugin.tx_cfcleaguefe_report {
       ifEmpty.cObject = HTML
       ifEmpty.cObject.value.field = players_guest_stat
       ifEmpty.cObject.value.ifEmpty = unbekannt
+      ifEmpty.cObject.value.br = 1
     }
 
     substnameshome {
@@ -1054,6 +1056,7 @@ plugin.tx_cfcleaguefe_report {
       ifEmpty.cObject = HTML
       ifEmpty.cObject.value.field = substitutes_home_stat
       ifEmpty.cObject.value.ifEmpty = unbekannt
+      ifEmpty.cObject.value.br = 1
       profile {
         first_name >
         # Die Karten einblenden
