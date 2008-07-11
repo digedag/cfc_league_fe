@@ -2,6 +2,11 @@
 
 Änderungen
 ----------
+v0.4.6 (11.07.2008)
+* Statistics: avoid php errors if profiles were deleted from database.
+* getTeams() failed with some mysql versions
+* Show addinfo in matchtable template
+
 v0.4.5 (06.07.2008)
 * Support for plain text lineups, substitutes and scorers
 
