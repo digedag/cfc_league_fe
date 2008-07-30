@@ -116,28 +116,38 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 
-  /**
-   * Im folgenden werden einige Personenliste per TS aufbereitet. Jede dieser Listen 
-   * ist über einen einzelnen Marker im FE verfügbar. Bei der Ausgabe der Personen
-   * werden auch vorhandene MatchNotes berücksichtigt, so daß ein Spieler mit gelber 
-   * Karte diese z.B. neben seinem Namen angezeigt bekommt.
-   *
-   * @param tx_cfcleaguefe_models_match $match
-   */
-  private function prepareFields(&$match) {
-    $report =&$match->getMatchReport();
-    if(!is_object($report)) return;
-    // Die Aufstellungen setzen
-    $match->record['lineup_home'] = $report->getLineupHome('matchreport.lineuphome.');
-    $match->record['lineup_guest'] = $report->getLineupGuest('matchreport.lineupguest.');
-    $match->record['substnames_home'] = $report->getSubstituteNamesHome('matchreport.substnameshome.');
-    $match->record['substnames_guest'] = $report->getSubstituteNamesGuest('matchreport.substnamesguest.');
-    $match->record['coachnames_home'] = $report->getCoachNameHome('matchreport.coachnames.');
-    $match->record['coachnames_guest'] = $report->getCoachNameGuest('matchreport.coachnames.');
-    $match->record['refereenames'] = $report->getRefereeName('matchreport.refereenames.');
-    $match->record['assistsnames'] = $report->getAssistNames('matchreport.assistsnames.');
-    //    t3lib_div::debug($match->record['lineup_home'], 'tx_cfcleaguefe_util_MatchMarker');
-  }
+	/**
+	 * Im folgenden werden einige Personenlisten per TS aufbereitet. Jede dieser Listen 
+	 * ist über einen einzelnen Marker im FE verfügbar. Bei der Ausgabe der Personen
+	 * werden auch vorhandene MatchNotes berücksichtigt, so daß ein Spieler mit gelber 
+	 * Karte diese z.B. neben seinem Namen angezeigt bekommt.
+	 *
+	 * @param tx_cfcleaguefe_models_match $match
+	 */
+	private function prepareFields(&$match) {
+		// Zuerst einen REGISTER-Wert für die Altergruppe setzen. Dieser kann bei der
+		// Linkerstellung verwendet werden.
+		try {
+			$competition = $match->getCompetition();
+			$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->record['agegroup'];
+		}
+		catch(Exception $e) {
+			$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = 0;
+		}
+
+		$report =&$match->getMatchReport();
+		if(!is_object($report)) return;
+		// Die Aufstellungen setzen
+		$match->record['lineup_home'] = $report->getLineupHome('matchreport.lineuphome.');
+		$match->record['lineup_guest'] = $report->getLineupGuest('matchreport.lineupguest.');
+		$match->record['substnames_home'] = $report->getSubstituteNamesHome('matchreport.substnameshome.');
+		$match->record['substnames_guest'] = $report->getSubstituteNamesGuest('matchreport.substnamesguest.');
+		$match->record['coachnames_home'] = $report->getCoachNameHome('matchreport.coachnames.');
+		$match->record['coachnames_guest'] = $report->getCoachNameGuest('matchreport.coachnames.');
+		$match->record['refereenames'] = $report->getRefereeName('matchreport.refereenames.');
+		$match->record['assistsnames'] = $report->getAssistNames('matchreport.assistsnames.');
+		//    t3lib_div::debug($match->record['lineup_home'], 'tx_cfcleaguefe_util_MatchMarker');
+	}
 
 	/**
 	 * Add dynamic defined markers for profiles and matchnotes
