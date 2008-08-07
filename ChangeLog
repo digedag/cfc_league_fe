@@ -2,6 +2,10 @@
 
 Änderungen
 ----------
+v0.4.8 (07.08.2008)
+* News typoscript fields in flexform
+* Some modifications for cal integration
+
 v0.4.7 (31.07.2008)
 * It is possible to output the agegroup for a match again: ###MATCH_COMPETITION_GROUP_NAME###
 * The register T3SPORTS_GROUP is available in matchtable. So you can configure the target page for matchreport by agegroup with typoscript.
