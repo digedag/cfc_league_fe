@@ -7,6 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 
+			<label index="plugin.competition.flexform.tab.TSSetup">Typoscript</label>
 			<label index="plugin.competition.flexform.tab.Common">Common</label>
 			<label index="plugin.competition.flexform.tab.MatchTable">Match table</label>
 			<label index="plugin.competition.flexform.tab.LeagueTable">League Table</label>
@@ -74,6 +75,7 @@
 			<label index="plugin.competition.flexform.group">Age group</label>
 			<label index="plugin.competition.flexform.club">Club</label>
 			<label index="plugin.competition.flexform.clubInput">Show Selectbox for Club</label>
+			<label index="plugin.competition.flexform.tssetup">plugin.tx_cfcleaguefe_competition.</label>
 
 			<label index="plugin.report.label">T3sports: Reports</label>
 			<label index="plugin.report.flexform.action.MatchReport">Match report</label>
@@ -113,6 +115,7 @@
 			<label index="plugin.report.sign.scorpio">Scorpio</label>
 			<label index="plugin.report.sign.sagittarius">Sagittarius</label>
 			<label index="plugin.report.flexform.charbrowser">Characterbrowser</label>
+			<label index="plugin.report.flexform.tssetup">plugin.tx_cfcleaguefe_report.</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
