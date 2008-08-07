@@ -69,15 +69,20 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     $configurations->init($this->conf, $cObj, 'cfc_league_fe', 'cfc_league_fe');
     $this->formatter = &$configurations->getFormatter();
 
-    $markerArray = $this->formatter->getItemMarkerArrayWrapped($this->_match->record, 'view.cfc_league_events.match.', 0, 'MATCH_');
+//    $markerArray = $this->formatter->getItemMarkerArrayWrapped($this->_match->record, 'view.cfc_league_events.match.', 0, 'MATCH_');
 
-    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $teamMarker = new $teamMarkerClass;
-
-    $template = $teamMarker->parseTemplate($template, $this->_match->getHome(), $this->formatter, 'view.cfc_league_events.match.home.', null, 'MATCH_HOME');
-    $template = $teamMarker->parseTemplate($template, $this->_match->getGuest(), $this->formatter, 'view.cfc_league_events.match.guest.', null, 'MATCH_GUEST');
+		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
+    $matchMarker = new $markerClass;
+    $template = $matchMarker->parseTemplate($template, $this->_match, $this->formatter, 'view.cfc_league_events.match.', 'MATCH');
+    
+//    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
+//    $teamMarker = new $teamMarkerClass;
+//
+//    $template = $teamMarker->parseTemplate($template, $this->_match->getHome(), $this->formatter, 'view.cfc_league_events.match.home.', 'MATCH_HOME');
+//    $template = $teamMarker->parseTemplate($template, $this->_match->getGuest(), $this->formatter, 'view.cfc_league_events.match.guest.', 'MATCH_GUEST');
 
     // Die Original-Marker von Cal mit einbinden
+    $markerArray = array();
     $rems = array ();
 		$wrapped = array();
 		$this->getMarker($template, $markerArray, $rems, $wrapped, $this->conf['view']);

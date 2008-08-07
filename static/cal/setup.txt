@@ -12,7 +12,8 @@ plugin.tx_cal_controller {
       prefix = Match:&nbsp;
 
       # Wir übernehmen zur Formatierung des Spiels als Vorlage die Config aus dem Spielplan
-      match < plugin.tx_cfcleaguefe_competition.matchtable.match
+#      match < plugin.tx_cfcleaguefe_competition.matchtable.match
+      match < lib.t3sports.match
       # Im Kalender reicht die Uhrzeit
       match.date.strftime  = %H:%M Uhr
 
