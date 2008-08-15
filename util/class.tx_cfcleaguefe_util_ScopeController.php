@@ -83,11 +83,10 @@ class tx_cfcleaguefe_util_ScopeController {
     // Soll eine SelectBox für Saison gezeigt werden?
     if($configurations->get('saisonSelectionInput')) {
 
-      // Die UIDs der Saisons in Objekte umwandeln um eine Selectbox zu bauen
+      // Die UIDs der Saisons in Objekte umwandeln, um eine Selectbox zu bauen
       // TODO: Es sollten zusätzliche Kriterien zur Ermittlung der Saisons herangezogen werden
       // Einfach alle Saisons zu zeigen führt zu vielen leeren Seiten 
       $saisons = tx_cfcleaguefe_models_saison::findItems($saisonUids);
-      // TODO: Alternativ sollte auch Anzeige von Links möglich sein
       $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($saisons,$parameters, 'saison', $useObjects ? '' : 'name');
       $saisonUids = $dataArr[1];
       $viewData->offsetSet('saison_select', $dataArr);
@@ -128,12 +127,10 @@ class tx_cfcleaguefe_util_ScopeController {
   function handleCurrentClub($parameters,&$configurations, $saisonUids,$groupUids,$compUids, $useObjects = false) {
     $viewData =& $configurations->getViewData();
     $clubUids = $configurations->get('clubSelection');
-//t3lib_div::debug($clubUids, 'utl_scope');
 
     // Soll eine SelectBox für den Verein gezeigt werden?
     // Das machen wir nur, wenn mindestens ein Verein konfiguriert wurde
     if($configurations->get('clubSelectionInput')){ // && strlen($clubUids) > 0) {
-    // TODO: Das funktioniert noch nicht!!
       // Die UIDs der Vereine in Objekte umwandeln, um eine Selectbox zu bauen
       $clubs = tx_cfcleaguefe_models_club::findAll($clubUids, $saisonUids,$groupUids,$compUids);
       $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($clubs,$parameters,'club', $useObjects ? '' : 'name');
@@ -155,7 +152,9 @@ class tx_cfcleaguefe_util_ScopeController {
 		$compUids = $configurations->get('competitionSelection');
 
 		// Soll eine SelectBox für Wettkämpfe gezeigt werden?
-		if($configurations->get('competitionSelectionInput')) {
+		// Wenn die RoundSelection aktiviert ist, dann wird die Wettbewerbs-Selection automatisch mit aktiviert
+		if($configurations->get('competitionSelectionInput') || 
+			($configurations->get('roundSelectionInput') && !t3lib_div::testInt($compUids)) ) {
 			// Die UIDs der Wettkämpfe in Objekte umwandeln, um eine Selectbox zu bauen
 			// Suche der Wettbewerbe über den Service
 			$compServ = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
