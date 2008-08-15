@@ -35,6 +35,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	private $parameters;
 	private $conf;
 	private $confId;
+	private $currRound;
 	
 	function tx_cfcleaguefe_util_league_DefaultTableProvider($parameters, $configurations, $league, $confId='') {
 		$this->setLeague($league);
@@ -81,7 +82,35 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		return $this->getLeague()->getTeams(true);
 	}
 	function getMatches() {
-    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
+		$matchTable = $this->getMatchTable();
+		$matchTable->setStatus($this->cfgLiveTable ? '1,2' : 2); //Status der Spiele
+		$matchTable->setCompetitions($this->getLeague()->uid);
+		$fields = array();
+		$options = array();
+		$matchTable->getFields($fields, $options);
+		// Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
+		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
+		// Haben wir eine $currRound
+		if($this->cfgTableScope) {
+			$round = count(t3lib_div::intExplode(',',$this->getLeague()->record['teams']));
+			$round = ($round) ? $round - 1 : $round;
+			if($round) {
+				// Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
+				$joined['value'] = $round;
+				$joined['cols'] = array('MATCH.ROUND');
+				$joined['operator'] = $this->cfgTableScope==1 ? OP_LTEQ_INT : OP_GT_INT;
+				$fields[SEARCH_FIELD_JOINED][] = $joined;
+			}
+		}
+		if($this->currRound) {
+			// Nur bis zum Spieltag anzeigen
+			$fields['MATCH.ROUND'][OP_LTEQ_INT] = $this->currRound;
+		}
+//		$options['debug'] = 1;
+		$matchSrv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matches = $matchSrv->search($fields, $options);
+//    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
+		return $matches;
 	}
 	function getRounds() {
     $rounds = array();
@@ -114,6 +143,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		if($this->getConfigurations()->get($this->confId.'pointSystemSelectionInput')) {
 			$this->cfgPointSystem = $parameters->offsetGet('pointsystem') ? $parameters->offsetGet('pointsystem') : $this->cfgPointSystem;
 		}
+		$this->cfgLiveTable = intval($this->getConfigurations()->get($this->confId.'showLiveTable'));
 	}
 
 	/**
@@ -148,6 +178,17 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	protected function setConfigurations($configurations, $confId) {
 		$this->conf = $configurations;
 		$this->confId = $confId;
+	}
+	public function setCurrentRound($round) {
+		$this->currRound = $round;
+	}
+	/**
+	 * Returns a new matchtable instance
+	 *
+	 * @return tx_cfcleaguefe_util_MatchTable
+	 */
+	private function getMatchTable() {
+		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
 }
 
