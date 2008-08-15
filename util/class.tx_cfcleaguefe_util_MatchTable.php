@@ -49,6 +49,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 	var $_ignoreDummy;
 	var $_compTypes; // Wettbewerbstypen
 	var $_compObligation; // Pflichtwettbewerbe
+	var $_pidList;
 	
 	public function tx_cfcleaguefe_util_MatchTable() {
 	}
@@ -112,6 +113,8 @@ class tx_cfcleaguefe_util_MatchTable  {
 			$options['limit'] = intval($this->_limit);
 		if($this->_orderbyDate)
 			$options['orderby']['MATCH']['DATE'] = $this->_orderbyDateDesc ? 'DESC' : 'ASC';
+		if($this->_pidList)
+			$options['pidlist'] = $this->_pidList;
 	}
 
 	/**
@@ -257,6 +260,12 @@ class tx_cfcleaguefe_util_MatchTable  {
 	 */
 	function setCompetitionTypes($value){
 		$this->_compTypes = $value;
+	}
+	/**
+	 * Findet nur Spiele von bestimmten Seiten
+	 */
+	function setPidList($pidList){
+		$this->_pidList = $pidList;
 	}
 }
 
