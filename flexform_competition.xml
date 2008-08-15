@@ -455,6 +455,14 @@
               </config>
             </TCEforms>
           </pointSystemSelectionInput>
+          <leaguetable.useRoundFromScope>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.UseRoundFromScope</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </leaguetable.useRoundFromScope>
           <showLiveTable>
             <TCEforms>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.ShowLiveTable</label>

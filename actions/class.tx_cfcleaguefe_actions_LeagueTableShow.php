@@ -49,9 +49,6 @@ class tx_cfcleaguefe_actions_LeagueTableShow {
 		$groupUids = $scopeArr['GROUP_UIDS'];
 		$compUids = $scopeArr['COMP_UIDS'];
 		$roundUid = $scopeArr['ROUND_UIDS'];
-
-		$prov = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_DefaultTableProvider');
-
 		// TODO: der folgende Block ist für die Darstellung der Tabellenfahrt identisch und wird ggf. doppelt ausgeführt
 		$out = '';
 		// Sollte kein Wettbewerb ausgewählt bzw. konfiguriert worden sein, dann suchen wir eine
@@ -78,7 +75,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow {
 		}
 
 		// Okay, es ist eine Liga
-		$dataArr = $this->buildTable($parameters,$configurations, $currCompetition);
+		$dataArr = $this->buildTable($parameters,$configurations, $currCompetition, $roundUid);
 		$viewData =& $configurations->getViewData();
 		$viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
 		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
@@ -182,9 +179,12 @@ class tx_cfcleaguefe_actions_LeagueTableShow {
 	/**
 	 * Sammelt die Daten für die Erstellung der Tabelle
 	 */
-	function buildTable($parameters,&$configurations, &$league) {
+	function buildTable($parameters,&$configurations, &$league, $roundUid) {
 		$clazz = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_DefaultTableProvider');
 		$tableProvider = new $clazz($parameters,$configurations, $league);
+		// Tabelle nur bis bestimmten Spieltag anzeigen
+		if(intval($configurations->get('leaguetable.useRoundFromScope')))
+			$tableProvider->setCurrentRound($roundUid);
 
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable;
 		$arr = Array(

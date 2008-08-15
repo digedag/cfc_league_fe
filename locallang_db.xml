@@ -35,6 +35,7 @@
 			<label index="plugin.competition.flexform.tablescope.SecondHalf">Second Round</label>
 			<label index="plugin.competition.flexform.TableScopeInput">Show Selectbox for table scope</label>
 			<label index="plugin.competition.flexform.PointSystemInput">Show Selectbox for point system</label>
+			<label index="plugin.competition.flexform.leaguetable.UseRoundFromScope">Keep table in sync with selected round from scope</label>
 			<label index="plugin.competition.flexform.leaguetable.clubs">Emphasize clubs</label>
 			<label index="plugin.competition.flexform.leaguetable.size">Number of teams to show</label>
 			<label index="plugin.competition.flexform.tablechart.clubs">Clubs on chart</label>
@@ -146,6 +147,7 @@
 			<label index="plugin.competition.flexform.tablescope.SecondHalf">Rückrunde</label>
 			<label index="plugin.competition.flexform.TableScopeInput">Selectbox für Tabellenscope anzeigen</label>
 			<label index="plugin.competition.flexform.PointSystemInput">Selectbox für Punktsystem anzeigen</label>
+			<label index="plugin.competition.flexform.leaguetable.UseRoundFromScope">Die Tabelle passend zum ausgewählten Spieltag anzeigen</label>
 			<label index="plugin.competition.flexform.leaguetable.clubs">Vereine hervorheben</label>
 			<label index="plugin.competition.flexform.leaguetable.size">Maximal sichtbare Teams</label>
 			<label index="plugin.competition.flexform.tablechart.clubs">Dargestellte Vereine</label>
