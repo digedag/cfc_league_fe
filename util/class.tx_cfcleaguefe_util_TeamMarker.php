@@ -252,7 +252,8 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper('showteam').'LINK';
-			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 	}
 }
