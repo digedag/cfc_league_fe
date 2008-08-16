@@ -2,6 +2,10 @@
 
 Änderungen
 ----------
+v0.4.10 (16.08.2008)
+* Debug output in matchtable removed
+* Link to team now with option removeIfDisabled
+
 v0.4.9 (15.08.2008)
 * Cal integration uses now sv1_Matches. It is possible to debug sql statement with view.cfc_league_events.debug = 1 in cal plugin.
 * Creation of league table changed. It is now possible to sync league table with selected round.
