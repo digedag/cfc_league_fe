@@ -90,7 +90,7 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
 				$options['wrapperclass'] = 'tx_cfcleaguefe_models_match';
 				// Issue 1880237: Return matches sorted by round
 				$options['orderby'] = 'round, date';
-				$this->matchesByState[$status . '_' . $scope] = tx_rnbase_util_DB::doSelect($what,'tx_cfcleague_games',$options, 1);
+				$this->matchesByState[$status . '_' . $scope] = tx_rnbase_util_DB::doSelect($what,'tx_cfcleague_games',$options, 0);
 			}
 			return $this->matchesByState[$status . '_' . $scope];
 		}
