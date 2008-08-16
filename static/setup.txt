@@ -172,6 +172,7 @@ lib.t3sports.team {
     	parameter.field = www
     }
     www.ifBlank = -
+    address.br = 1
   }
 
   comment.parseFunc =< lib.parseFunc_RTE
