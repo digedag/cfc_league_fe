@@ -653,6 +653,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 		return self::$instances[$uid];
 	}
 
+	static function addInstance(&$match) {
+		self::$instances[$match->uid] = $match;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_match.php']) {
