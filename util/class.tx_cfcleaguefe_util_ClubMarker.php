@@ -31,51 +31,37 @@ tx_div::load('tx_rnbase_util_BaseMarker');
  */
 class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 
-  /**
-   * @param string $template das HTML-Template
-   * @param tx_cfcleaguefe_models_club $club der Verein
-   * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
-   * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
-   * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-   * @param string $clubMarker Name des Markers für den Club, z.B. CLUB
-   *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
-   * @return String das geparste Template
-   */
-  public function parseTemplate($template, &$club, &$formatter, $confId, $clubMarker = 'CLUB') {
-    if(!is_object($club)) {
-    	// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
-    	$club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
-//      return $formatter->configurations->getLL('team.notFound');
-    }
+	/**
+	 * @param string $template das HTML-Template
+	 * @param tx_cfcleaguefe_models_club $club der Verein
+	 * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
+	 * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
+	 * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
+	 * @param string $clubMarker Name des Markers für den Club, z.B. CLUB
+	 *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
+	 * @return String das geparste Template
+	 */
+	public function parseTemplate($template, &$club, &$formatter, $confId, $marker = 'CLUB') {
+		if(!is_object($club)) {
+			// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
+			$club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
+		}
 
-//t3lib_div::debug($team->record , 'utl_teammarker');
+		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
+		$markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , 0, $marker.'_',$club->getColumnNames());
+		// Die Adressdaten setzen
+		if($this->containsMarker($template, $marker.'_ADDRESS'))
+			$template = $this->_addAddress($template, $club->getAddress(), $formatter, $confId.'address.', $marker.'_ADDRESS');
 
-    // Es wird das MarkerArray mit den Daten des Teams gefüllt.
-    $markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , 0, $clubMarker.'_',$club->getColumnNames());
-    // Die Adressdaten setzen
-    $template = $this->_addAddress($template, $club->getAddress(), $formatter, $confId.'address.', $clubMarker.'_ADDRESS');
+		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		return $out;
+	}
 
-    $out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
-    return $out;
-  }
-
-  protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
-    $addressMarker = tx_div::makeInstance('tx_cfcleaguefe_util_AddressMarker');
-    $template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
-  	return $template;
-  }
-  
-  /**
-   * Initialisiert die Labels für die Club-Klasse
-   *
-   * @param tx_rnbase_util_FormatUtil $formatter
-   * @param array $defaultMarkerArr
-   */
-  public function initLabelMarkers(&$formatter, $confId, $defaultMarkerArr = 0, $marker = 'CLUB') {
-    return $this->prepareLabelMarkers('tx_cfcleaguefe_models_club', $formatter, $confId, $defaultMarkerArr, $marker);
-  }
-  
+	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
+		$addressMarker = tx_div::makeInstance('tx_cfcleaguefe_util_AddressMarker');
+		$template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
+		return $template;
+	}
 }
 
 

@@ -31,40 +31,27 @@ tx_div::load('tx_rnbase_util_BaseMarker');
  */
 class tx_cfcleaguefe_util_AddressMarker extends tx_rnbase_util_BaseMarker {
 
-  /**
-   * @param string $template das HTML-Template
-   * @param tx_cfcleaguefe_models_address $address die Adresse
-   * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
-   * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
-   * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-   * @param string $clubMarker Name des Markers für den Club, z.B. CLUB
-   *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
-   * @return String das geparste Template
-   */
-  public function parseTemplate($template, &$address, &$formatter, $confId, $links=0, $addressMarker = 'ADDRESS') {
-    if(!is_object($address)) {
-    	// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
-    	$address = self::getEmptyInstance('tx_cfcleaguefe_models_address');
-//      return $formatter->configurations->getLL('team.notFound');
-    }
-    // Es wird das MarkerArray mit den Daten des Teams gefüllt.
-    $markerArray = $formatter->getItemMarkerArrayWrapped($address->record, $confId , 0, $addressMarker.'_',$address->getColumnNames());
-
-    $out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
-    return $out;
-  }
- 
-  /**
-   * Initialisiert die Labels für die Club-Klasse
-   *
-   * @param tx_rnbase_util_FormatUtil $formatter
-   * @param array $defaultMarkerArr
-   */
-  public function initLabelMarkers(&$formatter, $confId, $defaultMarkerArr = 0, $marker = 'CLUB') {
-    return $this->prepareLabelMarkers('tx_cfcleaguefe_models_address', $formatter, $confId, $defaultMarkerArr, $marker);
-  }
-  
+	/**
+	 * @param string $template das HTML-Template
+	 * @param tx_cfcleaguefe_models_address $address die Adresse
+	 * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
+	 * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
+	 * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
+	 * @param string $clubMarker Name des Markers für den Club, z.B. CLUB
+	 *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
+	 * @return String das geparste Template
+	 */
+	public function parseTemplate($template, &$address, &$formatter, $confId, $links=0, $addressMarker = 'ADDRESS') {
+		if(!is_object($address)) {
+			// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
+			$address = self::getEmptyInstance('tx_cfcleaguefe_models_address');
+		}
+		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
+		$markerArray = $formatter->getItemMarkerArrayWrapped($address->record, $confId , 0, $addressMarker.'_',$address->getColumnNames());
+		
+		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		return $out;
+	}
 }
 
 

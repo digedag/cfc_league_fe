@@ -119,6 +119,26 @@ lib.t3sports.profile {
   }
 }
 
+lib.t3sports.club {
+  name.blank = -
+  email.typolink {
+  	target = _BLANK
+  	parameter.field = email
+  }
+  email.ifBlank = -
+  www.typolink {
+  	target = _BLANK
+  	parameter.field = www
+  }
+  www.ifBlank = -
+  shortinfo.br = 1
+  info.parseFunc =< lib.parseFunc_RTE
+
+  address.email =< lib.t3sports.club.email
+  address.www =< lib.t3sports.club.www
+  address.address.br = 1
+  
+}
 
 # Allgemeines Formatierungsangaben für ein Team
 lib.t3sports.team {
@@ -160,20 +180,8 @@ lib.t3sports.team {
   supporter =< lib.t3sports.profile
   supporter.birthday.strftime = %d.%m.%y
   supporter.links.showprofile.pid = {$plugin.tx_cfcleaguefe_competition.profilepage}
-  club.address {
-    name.blank = -
-    email.typolink {
-    	target = _BLANK
-    	parameter.field = email
-    }
-    email.ifBlank = -
-    www.typolink {
-    	target = _BLANK
-    	parameter.field = www
-    }
-    www.ifBlank = -
-    address.br = 1
-  }
+
+  club =< lib.t3sports.club
 
   comment.parseFunc =< lib.parseFunc_RTE
   coaches_comment.parseFunc =< lib.parseFunc_RTE
