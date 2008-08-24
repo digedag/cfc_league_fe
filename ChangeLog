@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.4.11 (24.08.2008)
+* Support for new fields in club record
+
 v0.4.10 (16.08.2008)
 * Debug output in matchtable removed
 * Link to team now with option removeIfDisabled
