@@ -153,6 +153,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
   function handleMatches(&$matches) {
     // Wir laufen jetzt über alle Spiele und legen einen Punktespeicher für jedes Team an
     foreach($matches As $match) {
+    	if($match->isDummy()) continue; // Ignore Dummy-Matches
       // Wie ist das Spiel ausgegangen?
       $toto = $match->getToto();
       
