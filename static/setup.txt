@@ -277,6 +277,7 @@ plugin.tx_cfcleaguefe_competition {
   leaguetableTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableTemplate}
   statisticsTemplate = {$plugin.tx_cfcleaguefe_competition.statisticsTemplate}
   tickerlistTemplate = {$plugin.tx_cfcleaguefe_competition.tickerlistTemplate}
+  leaguetableAllTimeTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableAllTimeTemplate}
 
   # Rendering of items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
