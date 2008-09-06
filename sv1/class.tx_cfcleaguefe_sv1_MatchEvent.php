@@ -58,6 +58,10 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 		$end_date = is_object($end_date) ? $end_date->getTime() : $end_date;
 		$matchTable->setDateRange($start_date, $end_date);
 		$matchTable->setPidList($pidList);
+		$matchTable->setSaisons($saisons);
+		$matchTable->setAgeGroups($groups);
+		$matchTable->setCompetitions($competitions);
+		$matchTable->setClubs($club);
 
 		$fields = array();
 		$options = array();
