@@ -36,6 +36,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	private $conf;
 	private $confId;
 	private $currRound;
+	private $matches;
 	
 	function tx_cfcleaguefe_util_league_DefaultTableProvider($parameters, $configurations, $league, $confId='') {
 		$this->setLeague($league);
@@ -82,6 +83,8 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		return $this->getLeague()->getTeams(true);
 	}
 	function getMatches() {
+		if(is_array($this->matches))
+			return $this->matches;
 		$matchTable = $this->getMatchTable();
 		$matchTable->setStatus($this->cfgLiveTable ? '1,2' : 2); //Status der Spiele
 		$matchTable->setCompetitions($this->getLeague()->uid);
@@ -108,9 +111,9 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		}
 //		$options['debug'] = 1;
 		$matchSrv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
-		$matches = $matchSrv->search($fields, $options);
+		$this->matches = $matchSrv->search($fields, $options);
 //    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
-		return $matches;
+		return $this->matches;
 	}
 	function getRounds() {
     $rounds = array();
@@ -181,6 +184,14 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	}
 	public function setCurrentRound($round) {
 		$this->currRound = $round;
+	}
+	/**
+	 * Set matches to use. Useful for unit testing. 
+	 *
+	 * @param array[tx_cfcleaguefe_models_match] $matches
+	 */
+	public function setMatches($matches) {
+		$this->matches = $matches;
 	}
 	/**
 	 * Returns a new matchtable instance

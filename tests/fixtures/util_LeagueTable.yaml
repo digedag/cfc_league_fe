@@ -94,4 +94,100 @@ league_1:
         goals_guest_2: 0
         goals_home: 3
         goals_guest: 0
+league_2: 
+  # Diese Liga besteht aus vier Teams wobei Team 2 Spielfrei ist und fünf absolvierten Spielen
+  clazz: tx_cfcleaguefe_models_competition
+  record: 
+    uid: 1
+    teams: 1,2,3,4
+    point_system: 1
+  teams: 
+    clazz: tx_cfcleaguefe_models_team
+    - 
+      record: 
+        uid: 1
+        name: Team 1
+        short_name: Team 1
+        club: 1
+    - 
+      record: 
+        uid: 2
+        name: Team 2
+        short_name: Team 2
+        club: 2
+        dummy: 1
+    - 
+      record: 
+        uid: 3
+        name: Team 3
+        short_name: Team 3
+        club: 3
+    - 
+      record: 
+        uid: 4
+        name: Team 4
+        short_name: Team 4
+        club: 4
+  matches: 
+    clazz: tx_cfcleaguefe_models_match
+    - 
+      # T1-T2 - 1:1 - Spielfrei
+      record: 
+        uid: 11
+        home: 1
+        guest: 2
+        round: 1
+        status: 2
+        goals_home_2: 1
+        goals_guest_2: 1
+        goals_home: 1
+        goals_guest: 1
+    - 
+      # T3-T4 - 2:0
+      record: 
+        uid: 12
+        home: 3
+        guest: 4
+        round: 1
+        status: 2
+        goals_home_2: 2
+        goals_guest_2: 0
+        goals_home: 2
+        goals_guest: 0
+    - 
+      # T3-T1 - 1:0
+      record: 
+        uid: 13
+        home: 3
+        guest: 1
+        round: 2
+        status: 2
+        goals_home_2: 1
+        goals_guest_2: 0
+        goals_home: 1
+        goals_guest: 0
+    - 
+      # T4-T2 - 1:2 - Spielfrei
+      record: 
+        uid: 14
+        home: 4
+        guest: 2
+        round: 2
+        status: 2
+        goals_home_2: 1
+        goals_guest_2: 2
+        goals_home: 1
+        goals_guest: 2
+    - 
+      # T1-T4 - 3:0
+      record: 
+        uid: 15
+        home: 1
+        guest: 4
+        round: 3
+        status: 2
+        goals_home_2: 3
+        goals_guest_2: 0
+        goals_home: 3
+        goals_guest: 0
  

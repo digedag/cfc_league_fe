@@ -186,6 +186,9 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
     }
     return self::$instances[$uid];
   }
+	static function addInstance(&$team) {
+		self::$instances[$team->uid] = $team;
+	}
   /**
    * Liefert Mitglieder des Teams als Array. Teammitglieder sind Spieler, Trainer und Betreuer.
    * Die gefundenen Profile werden sortiert in der Reihenfolge im Team geliefert.
