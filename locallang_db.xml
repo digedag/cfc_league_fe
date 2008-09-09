@@ -7,6 +7,8 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 
+			<label index="plugin.competition.label">T3sports: League Management</label>
+			<label index="plugin.competition.description">This plugins contains views for: matchtable, league table, table chart, match crosstable, team list, statistics</label>
 			<label index="plugin.competition.flexform.tab.TSSetup">Typoscript</label>
 			<label index="plugin.competition.flexform.tab.Common">Common</label>
 			<label index="plugin.competition.flexform.tab.MatchTable">Match table</label>
@@ -58,7 +60,6 @@
 			<label index="plugin.competition.flexform.template">Template</label>
 			<label index="plugin.competition.flexform.scopeTemplate">Scope template</label>
 
-			<label index="plugin.competition.label">T3sports: League Management</label>
 			<label index="plugin.competition.flexform.saison">Saison</label>
 			<label index="plugin.competition.flexform.saisonInput">Show Selectbox for saison?</label>
 			<label index="plugin.competition.flexform.group">Age Group</label>
@@ -79,6 +80,7 @@
 			<label index="plugin.competition.flexform.tssetup">plugin.tx_cfcleaguefe_competition.</label>
 
 			<label index="plugin.report.label">T3sports: Reports</label>
+			<label index="plugin.report.description">This plugin contains views: match report, team view, profile list, profile view</label>
 			<label index="plugin.report.flexform.action.MatchReport">Match report</label>
 			<label index="plugin.report.flexform.action.TeamView">Team view</label>
 			<label index="plugin.report.flexform.action.ProfileView">Profile view</label>
@@ -120,6 +122,8 @@
 
 		</languageKey>
 		<languageKey index="de" type="array">
+			<label index="plugin.competition.label">T3sports: Ligaverwaltung</label>
+			<label index="plugin.competition.description">Dieses Plugin enthält Darstellungen für: Spielplan, Ligatabelle, Tabellenfahrt, Kreuztabelle, Teamliste, Statistiken</label>
 			<label index="plugin.competition.flexform.tab.Common">Allgemein</label>
 			<label index="plugin.competition.flexform.tab.MatchTable">Spielplan</label>
 			<label index="plugin.competition.flexform.tab.LeagueTable">Ligatabelle</label>
@@ -166,7 +170,6 @@
 			<label index="plugin.competition.flexform.tickerlist.ticker_page">Seite für Liveticker</label>
 			<label index="plugin.competition.flexform.tickerlist.ticker_url">Feste Url für Liveticker</label>
 
-			<label index="plugin.competition.label">T3sports: Ligaverwaltung</label>
 			<label index="plugin.competition.flexform.saisonInput">Selectbox für Saison?</label>
 			<label index="plugin.competition.flexform.group">Altersklasse</label>
 			<label index="plugin.competition.flexform.groupInput">Selectbox for Altersklasse?</label>
@@ -186,6 +189,7 @@
 			<label index="plugin.competition.flexform.clubInput">Selectbox für Verein?</label>
 
 			<label index="plugin.report.label">T3sports: Berichte</label>
+			<label index="plugin.report.description">Dieses Plugin enthält Darstellungen für: Spielbericht, Teamdarstellung, Personenliste, Personendarstellung</label>
 			<label index="plugin.report.flexform.tab.MatchReport">Spielberichte</label>
 			<label index="plugin.report.flexform.action.MatchReport">Spielbericht</label>
 			<label index="plugin.report.flexform.action.TeamView">Teamdarstellung</label>

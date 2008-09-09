@@ -51,10 +51,11 @@ $TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']
 t3lib_extMgm::addPiFlexFormValue('tx_cfcleaguefe_report','FILE:EXT:'.$_EXTKEY.'/flexform_report.xml');
 t3lib_extMgm::addPlugin(Array('LLL:EXT:'.$_EXTKEY.'/locallang_db.php:plugin.report.label','tx_cfcleaguefe_report'));
 
+# Add plugin wizards
+if (TYPO3_MODE=='BE')	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_cfcleaguefe_controllers_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'controllers/class.tx_cfcleaguefe_controllers_wizicon.php';
 
 // list static templates in templates selection
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/', 'T3sports');
-
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/cal/','T3sports cal-events');
 
 ?>
