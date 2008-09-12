@@ -2,6 +2,11 @@
 
 Änderungen
 ----------
+v0.5.0 (12.09.2008)
+* Wizicon for plugins
+* Bugfix: League table for competitions with dummy teams failed. This is fixed and also a new unit test was written.
+* Bugfix: Set match table parameters from TS in Calendar Base integration
+
 v0.4.11 (24.08.2008)
 * Support for new fields in club record
 
