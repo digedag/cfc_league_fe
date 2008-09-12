@@ -96,6 +96,15 @@ class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
 		}
 	}
 
+	function getName() {
+		return $this->record['name'];
+	}
+	function getInternalName() {
+		$ret = $this->record['internal_name'];
+		$ret = strlen($ret) ? $ret : $this->record['short_name'];
+		$ret = strlen($ret) ? $ret : $this->record['name'];
+		return $ret;
+	}
 	/**
 	 * Set matches for a state and scope
 	 *
