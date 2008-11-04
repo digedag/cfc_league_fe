@@ -98,6 +98,7 @@ static $total = 0;
 	 */
 	protected function getPlayer($match, $home) {
 		$players = $home ? $match->getPlayersHome(1) : $match->getPlayersGuest(1);
+		$players = is_array($players) ? $players : array(); // Bug 2220269
 		// Fehlerhafte Spieler entfernen
 		foreach($players As $key => $player) {
 			if(!is_object($player)) {
