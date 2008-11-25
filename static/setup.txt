@@ -850,8 +850,7 @@ plugin.tx_cfcleaguefe_report {
     svChartMatch =< lib.t3sports.chart
     # This configures historic 
     historic {
-      options.orderby.MATCH.DATE = asc
-      template = {$plugin.tx_cfcleaguefe_report.matchreportTemplate}
+      options.orderby.MATCH.DATE = desc
       match =< lib.t3sports.match
     }
 
