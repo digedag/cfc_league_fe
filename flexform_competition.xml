@@ -226,6 +226,20 @@
                 <size>24</size>
                 <max>256</max>
                 <eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
               </config>
             </TCEforms>
           </scopeTemplate>
@@ -354,6 +368,20 @@
                 <size>24</size>
                 <max>256</max>
                 <eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
               </config>
             </TCEforms>
           </matchtableTemplate>
@@ -495,6 +523,20 @@
                 <size>24</size>
                 <max>256</max>
                 <eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
               </config>
             </TCEforms>
           </leaguetableTemplate>
@@ -613,6 +655,20 @@
                 <size>24</size>
                 <max>256</max>
                 <eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
               </config>
             </TCEforms>
           </statisticTemplate>
@@ -665,6 +721,20 @@
                 <size>24</size>
                 <max>256</max>
                 <eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
               </config>
             </TCEforms>
           </tickerlistTemplate>
