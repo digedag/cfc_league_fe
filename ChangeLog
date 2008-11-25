@@ -2,6 +2,12 @@
 
 Änderungen
 ----------
+v0.5.1 (25.11.2008)
+* Bugfix for t3sportsbet: Methods getGoalsHome() and getGoalsGuest() fixed for extratime and penalty
+* Wizard for html template in flexforms
+* Bug 2220269: Avoid warnings in player statistics
+* New Modul-Marker ###MARKERMODULE__MATCHHISTORY### for matchreport to show other matches of opponents. Have a look at matchreport.html.
+
 v0.5.0 (12.09.2008)
 * Wizicon for plugins
 * Bugfix: League table for competitions with dummy teams failed. This is fixed and also a new unit test was written.
