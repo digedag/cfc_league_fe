@@ -848,6 +848,12 @@ plugin.tx_cfcleaguefe_report {
 
     # This configures the chart in match report
     svChartMatch =< lib.t3sports.chart
+    # This configures historic 
+    historic {
+      options.orderby.MATCH.DATE = asc
+      template = {$plugin.tx_cfcleaguefe_report.matchreportTemplate}
+      match =< lib.t3sports.match
+    }
 
     # Anweisungen für den Spieldatensatz
     match =< lib.t3sports.match

@@ -12,5 +12,14 @@ t3lib_extMgm::addService($_EXTKEY,  'markermodule' /* sv type */,  'tx_cfcleague
   )
 );
 
+t3lib_extMgm::addService($_EXTKEY,  'markermodule' /* sv type */,  'tx_cfcleaguefe_svmarker_MatchHistory' /* sv key */,
+  array(
+    'title' => 'Historic match list', 'description' => 'List of historic matches', 'subtype' => 'MATCHHISTORY',
+    'available' => TRUE, 'priority' => 50, 'quality' => 50,
+    'os' => '', 'exec' => '',
+    'classFile' => t3lib_extMgm::extPath($_EXTKEY).'svmarker/class.tx_cfcleaguefe_svmarker_MatchHistory.php',
+    'className' => 'tx_cfcleaguefe_svmarker_MatchHistory',
+  )
+);
 
 ?>

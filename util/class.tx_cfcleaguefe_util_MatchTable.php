@@ -34,6 +34,8 @@ class tx_cfcleaguefe_util_MatchTable  {
 	var $_compIds;
 	var $_roundIds;
 	var $_clubIds;
+	var $_homeClubIds;
+	var $_guestClubIds;
 
 	var $_teamIds;
 	var $_daysPast;
@@ -64,7 +66,9 @@ class tx_cfcleaguefe_util_MatchTable  {
 		tx_cfcleaguefe_search_Builder::setField($fields,'COMPETITION.AGEGROUP', OP_IN_INT, $this->_groupIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.COMPETITION', OP_IN_INT, $this->_compIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.ROUND', OP_IN_INT, $this->_roundIds);
-
+		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM1.CLUB', OP_IN_INT, $this->_homeClubIds);
+		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM2.CLUB', OP_IN_INT, $this->_guestClubIds);
+		
 		tx_cfcleaguefe_search_Builder::buildMatchByClub($fields, $this->_clubIds);
 		tx_cfcleaguefe_search_Builder::buildMatchByTeam($fields, $this->_teamIds);
 		// Wird der Zeitraum eingegrenzt?
@@ -175,6 +179,22 @@ class tx_cfcleaguefe_util_MatchTable  {
 	 */
 	function setClubs($uids){
 		$this->_clubIds = $uids;
+	}
+  /**
+	 * Search for home matches of specific clubs
+	 *
+	 * @param string $uids
+	 */
+	function setHomeClubs($uids){
+		$this->_homeClubIds = $uids;
+	}
+  /**
+	 * Search for guest matches of specific clubs
+	 *
+	 * @param string $uids
+	 */
+	function setGuestClubs($uids){
+		$this->_guestClubIds = $uids;
 	}
 	/**
 	 * Wether or not to include dummy matches
