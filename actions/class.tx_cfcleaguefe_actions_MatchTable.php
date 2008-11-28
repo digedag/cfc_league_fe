@@ -51,6 +51,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		// ggf. die Konfiguration aus der TS-Config lesen
 		$fields = array();
 		$options = array();
+return "text";
 //  	$options['debug'] = 1;
 		$this->initSearch($fields, $options, $parameters, $configurations);
 		$listSize = 0;
@@ -139,7 +140,16 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		}
 	}
 
-
+	/**
+	 * Liefert die Anzahl der Ergebnisse pro Seite
+	 *
+	 * @param array $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @return int
+	 */
+	protected function getPageSize(&$parameters, &$configurations) {
+		return intval($configurations->get('matchtable.match.pagebrowser.limit'));
+	}
 
 	function _handleRequest(&$parameters,&$configurations, &$viewdata) {
 
