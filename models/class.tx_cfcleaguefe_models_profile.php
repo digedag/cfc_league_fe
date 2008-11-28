@@ -51,7 +51,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
    * @param tx_rnbase_util_FormatUtil $formatter
    * @param array $conf Configuration array
    */
-  function wrap($formatter, $confId, $profile) {
+  function wrap(&$formatter, $confId, $profile) {
     if(!is_object($profile)) {
       // Es wurde kein Profil übergeben, also gibt es nicht weiter zu tun
       return $formatter->wrap('',$confId);
@@ -61,6 +61,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
       $profile->record['last_name'] = $formatter->configurations->getLL('profile_unknownLastname');
       $profile->record['first_name'] = $formatter->configurations->getLL('profile_unknownFirstname');
     }
+    self::prepareLinks($formatter, $confId, $profile);
 // TODO Das sollte dynamisch gestaltet werden, damit alle Daten der Tabelle verwendet
 // werden können. 
 //t3lib_div::debug(tx_rnbase_configurations::getUniqueKeysNames($conf), 'tx_cfcleaguefe_models_profile');
@@ -114,6 +115,22 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     return $formatter->wrap($ret, $confId, $profile->record);
 
   }
+  /**
+   * Bereitet Links im Spielbericht vor. Da hier keine Marker verwendet werden, muss für die Verlinkung der
+   * normale typolink im TS verwendet werden. Die Zusatz-Parameter müssen hier als String vorbereitet und 
+   * in ein Register gelegt werden.
+   *
+   * @param tx_rnbase_util_FormatUtil $formatter
+   * @param string $confId
+   * @param tx_cfcleaguefe_models_profile $profile
+   */
+	static function prepareLinks(&$formatter, $confId, &$profile) {
+		$link = $formatter->configurations->createLink();
+		$link->destination($GLOBALS['TSFE']->id);
+		$link->parameters(array('refereeId' => $profile->uid));
+		$cfg = $link->_makeConfig('url');
+		$GLOBALS['TSFE']->register['T3SPORTS_PARAMS_REFEREE_MATCHES'] = $cfg['additionalParams'];
+	}
 
   /**
    * Returns the team notes for this player

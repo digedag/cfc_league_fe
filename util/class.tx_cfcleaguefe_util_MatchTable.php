@@ -36,6 +36,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 	var $_clubIds;
 	var $_homeClubIds;
 	var $_guestClubIds;
+	var $_refereeIds;
 
 	var $_teamIds;
 	var $_daysPast;
@@ -68,6 +69,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.ROUND', OP_IN_INT, $this->_roundIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM1.CLUB', OP_IN_INT, $this->_homeClubIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM2.CLUB', OP_IN_INT, $this->_guestClubIds);
+		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.REFEREE', OP_IN_INT, $this->_refereeIds);
 		
 		tx_cfcleaguefe_search_Builder::buildMatchByClub($fields, $this->_clubIds);
 		tx_cfcleaguefe_search_Builder::buildMatchByTeam($fields, $this->_teamIds);
@@ -220,7 +222,15 @@ class tx_cfcleaguefe_util_MatchTable  {
   function setTeams($teamUids){
     $this->_teamIds = $teamUids;
   }
-	/**
+  /**
+	 * Search for matches of specific referees
+	 *
+	 * @param string $refUids
+	 */
+  function setReferees($refUids){
+    $this->_refereeIds = $refUids;
+  }
+  /**
 	 * Grenzt den Zeitraum für den Spielplan auf genaue Termine ein
 	 * @param $start_date int Timestamp des Startdatums
 	 * @param $end_date int Timestamp des Enddatum

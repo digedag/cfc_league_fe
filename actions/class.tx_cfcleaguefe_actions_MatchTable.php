@@ -62,7 +62,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 
 		$viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
 		$viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
-		
+
 		// View
 		$this->viewType = $configurations->get('matchtable.viewType');
 		return '';
@@ -88,11 +88,14 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		if($configurations->get('matchtable.acceptTeamIdFromRequest')) {
 			$teamId = $parameters->offsetGet('teamId');
 		}
-		
+
 		$matchtable = $this->getMatchTable();
 		$matchtable->setScope($scopeArr);
 		$matchtable->setTeams($teamId);
 		$matchtable->setTimeRange($configurations->get('matchtable.timeRangePast'),$configurations->get('matchtable.timeRangeFuture'));
+		if($configurations->get('matchtable.acceptRefereeIdFromRequest')) {
+			$matchtable->setReferees($parameters->offsetGet('refereeId'));
+		}
 
 		$matchtable->getFields($fields, $options);
 	}
