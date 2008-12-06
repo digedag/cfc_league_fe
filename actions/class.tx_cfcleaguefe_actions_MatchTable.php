@@ -51,7 +51,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		// ggf. die Konfiguration aus der TS-Config lesen
 		$fields = array();
 		$options = array();
-return "text";
+
 //  	$options['debug'] = 1;
 		$this->initSearch($fields, $options, $parameters, $configurations);
 		$listSize = 0;
