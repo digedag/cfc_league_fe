@@ -2,6 +2,12 @@
 
 Änderungen
 ----------
+v0.5.3 (06.12.2008)
+* Due to an error the modulmarker ###MARKERMODULE__MATCHHISTORY### was switched back to a simple marker. The subpart is now outside of ###MATCHREPORT###. Have a look at matchreport.html
+* New link ###PROFILE_REFEREEMATCHESLINK### for profile.
+* With new config matchtable.fixedOpponentClub it is possible to matches of clubs against each other
+* PageBrowser added to matchtable. Default pagesize is 50 entries.
+
 v0.5.2 (28.11.2008)
 * Modulmarker ###MARKERMODULE__MATCHHISTORY### changed to use subparts. HTML template changed.
 * Matchtable-View can be used to search for matches of a referee
