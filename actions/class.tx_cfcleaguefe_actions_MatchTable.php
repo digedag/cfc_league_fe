@@ -93,6 +93,17 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		$matchtable = $this->getMatchTable();
 		$matchtable->setScope($scopeArr);
 		$matchtable->setTeams($teamId);
+		$clubId = $configurations->get('matchtable.fixedOpponentClub');
+		if($clubId) {
+			// Show matches against a defined club
+			$scopeClub = $matchtable->getClubs();
+			$matchtable->setClubs('');
+			if($scopeClub)
+				$clubId .= ','.$scopeClub;
+			$matchtable->setHomeClubs($clubId);
+			$matchtable->setGuestClubs($clubId);
+		}
+		
 		$matchtable->setTimeRange($configurations->get('matchtable.timeRangePast'),$configurations->get('matchtable.timeRangeFuture'));
 		if($configurations->get('matchtable.acceptRefereeIdFromRequest')) {
 			$matchtable->setReferees($parameters->offsetGet('refereeId'));

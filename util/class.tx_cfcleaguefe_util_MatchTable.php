@@ -182,6 +182,14 @@ class tx_cfcleaguefe_util_MatchTable  {
 	function setClubs($uids){
 		$this->_clubIds = $uids;
 	}
+	/**
+	 * Returns clubs ids
+	 *
+	 * @return string
+	 */
+	function getClubs() {
+		return $this->_clubIds;
+	}
   /**
 	 * Search for home matches of specific clubs
 	 *
