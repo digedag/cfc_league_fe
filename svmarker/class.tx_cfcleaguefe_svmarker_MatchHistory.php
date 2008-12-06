@@ -94,6 +94,11 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 	function getMatchTable() {
 		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
+	function parseTemplate($templateCode, $params, $formatter) {
+		$match = $this->getMatch($params);
+		if(!is_object($match)) return false; // The call is not for us
+	  return '<h2>Not implemented. This is a single marker module!</h2>';
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/svmarker/class.tx_cfcleaguefe_svmarker_MatchHistory.php']) {
