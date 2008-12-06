@@ -148,7 +148,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	private function prepareLinks(&$profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+	protected function prepareLinks(&$profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
 
 //		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
 		if($profile->hasReport()) {
@@ -158,6 +158,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 			$linkMarker = $marker . '_' . strtoupper('showprofile').'LINK';
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
 		}
+		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'refereematches', $marker, array('refereeId' => $profile->uid));
 	}
 }
 

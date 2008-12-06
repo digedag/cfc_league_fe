@@ -47,7 +47,7 @@ lib.t3sports.teamnote {
 }
 
 lib.t3sports.pagebrowser {
-  limit = 15
+  limit = 50
   maxPages = 11
   pagefloat = CENTER
 }
@@ -66,6 +66,7 @@ lib.t3sports.profile {
 
   links {
     showprofile.pid = {$plugin.tx_cfcleaguefe_competition.playerpage}
+    refereematches.pid = {$plugin.tx_cfcleaguefe_competition.matchtablepage}
   }
   description.parseFunc =< lib.parseFunc_RTE
   summary.parseFunc =< lib.parseFunc_RTE
@@ -381,8 +382,10 @@ plugin.tx_cfcleaguefe_competition {
     }
     # Whether or not team uids from http-request should be ignored
     acceptTeamIdFromRequest = 1
+    acceptRefereeIdFromRequest = 1
     match =< lib.t3sports.match
     match {
+      pagebrowser =< lib.t3sports.pagebrowser
       roll.value = 1
       stadium.ifEmpty = Ort noch unbekannt
       stadium.wrap = (|)
@@ -851,6 +854,7 @@ plugin.tx_cfcleaguefe_report {
     # This configures historic 
     historic {
       options.orderby.MATCH.DATE = desc
+      template = {$plugin.tx_cfcleaguefe_report.matchreportTemplate}
       match =< lib.t3sports.match
     }
 
