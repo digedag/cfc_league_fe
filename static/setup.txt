@@ -50,6 +50,7 @@ lib.t3sports.pagebrowser {
   limit = 50
   maxPages = 11
   pagefloat = CENTER
+  hideIfSinglePage = 1
 }
 lib.t3sports.competition {
   short_name.crop = 5 | ... | 1
