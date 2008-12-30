@@ -144,7 +144,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 
 		$this->cfgPointSystem = $this->getLeague()->record['point_system'];
 		if($this->getConfigurations()->get($this->confId.'pointSystemSelectionInput')) {
-			$this->cfgPointSystem = $parameters->offsetGet('pointsystem') ? $parameters->offsetGet('pointsystem') : $this->cfgPointSystem;
+			$this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
 		}
 		$this->cfgLiveTable = intval($this->getConfigurations()->get($this->confId.'showLiveTable'));
 	}

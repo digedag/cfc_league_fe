@@ -111,7 +111,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow {
 			// Wir bereiten die Selectbox vor
 			$arr = Array();
 			$arr[0] = $items;
-			$arr[1] = $parameters->offsetGet('pointsystem') ? $parameters->offsetGet('pointsystem') : 0;
+			$arr[1] = $viewData->offsetGet('tablePointSystem');
 			$viewData->offsetSet('pointsystem_select', $arr);
 			$configurations->addKeepVar('pointsystem', $arr[1]);
 		}
