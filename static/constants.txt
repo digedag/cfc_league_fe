@@ -20,7 +20,7 @@ plugin.tx_cfcleaguefe_competition {
 
   # cat=T3sports (Templates)/statistics; type=string;label=HTML Template for statistics
   statisticsTemplate = EXT:cfc_league_fe/views/templates/statistics.html
-  # cat=T3sports (Templates)/livetickerlist; type=string;label=HTML Template for statistics
+  # cat=T3sports (Templates)/livetickerlist; type=string;label=HTML Template for liveticker list
   tickerlistTemplate = EXT:cfc_league_fe/views/templates/livetickerlist.html
 	
 
