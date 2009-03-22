@@ -464,12 +464,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    * Liefert das Team als Objekt
    */
   function _getTeam($uid) {
-//    $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
-//    $team = new $className($uid);
-//t3lib_div::debug($uid, 'new tx_cfcleaguefe_models_match');
+		if(!$uid) throw new Exception('Invalid match with uid ' . $this->getUid() . ': At least one team is not set.');
     $teamClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
     $team = call_user_func(array($teamClass,'getInstance'), $uid);
-    
     return $team;
   }
 
