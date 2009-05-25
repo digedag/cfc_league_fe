@@ -68,9 +68,8 @@
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.saison</label>
               <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_saison</allowed>
+                <type>select</type>
+                <foreign_table>tx_cfcleague_saison</foreign_table>
                 <multiple>0</multiple>
                 <maxitems>200</maxitems>
                 <size>10</size>
@@ -91,9 +90,8 @@
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.group</label>
               <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_group</allowed>
+                <type>select</type>
+                <foreign_table>tx_cfcleague_group</foreign_table>
                 <multiple>0</multiple>
                 <maxitems>20</maxitems>
                 <size>5</size>
@@ -200,9 +198,9 @@
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.club</label>
               <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_club</allowed>
+                <type>select</type>
+                <foreign_table>tx_cfcleague_club</foreign_table>
+                <foreign_table_where>ORDER BY name</foreign_table_where>
                 <multiple>0</multiple>
                 <maxitems>20</maxitems>
                 <size>5</size>
