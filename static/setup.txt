@@ -55,6 +55,13 @@ lib.t3sports.pagebrowser {
 lib.t3sports.competition {
   short_name.crop = 5 | ... | 1
   short_name.ifEmpty.field = name
+  logo = IMAGE
+  logo.file.import.cObject = USER
+  logo.file.import.cObject {
+    userFunc=tx_dam_tsfe->fetchFileList
+    refField=logo
+    refTable=tx_cfcleague_competition
+  }
 }
 
 # Allgemeines Formatierungsangaben für Personen
@@ -142,6 +149,85 @@ lib.t3sports.club {
   
 }
 
+lib.t3sports.teamLogo {
+  big = CASE
+  big {
+    # Bild im Verein suchen
+    0 = CASE
+    0 {
+      # Dummy-Logo rendern
+      0 = IMAGE
+      0 {
+//        file = fileadmin/images/fussball.gif
+        file = GIFBUILDER
+        file {
+          XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
+					maxWidth = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+					maxHeight = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+          backColor = #FFFFFF
+        }
+      }
+      # Vereinslogo rendern
+      default = RECORDS
+      default {
+        source.field = club
+        tables =  tx_cfcleague_club
+        conf.tx_cfcleague_club = CASE
+				conf.tx_cfcleague_club {
+					key.field = dam_logo
+					0 =< lib.t3sports.teamLogo.big.0.0
+					default = IMAGE
+					default.file {
+						import.cObject = USER
+						import.cObject {
+							userFunc=tx_dam_tsfe->fetchFileList
+							refField=dam_images
+							refTable=tx_cfcleague_club
+						}
+						maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+						maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+					}
+        }
+      }
+      key.field = club
+    }
+
+    # Logo des Teams rendern
+	  default = IMAGE
+	  default.file {
+			import.cObject = USER
+      import.cObject {
+				userFunc=tx_dam_tsfe->fetchFileList
+				refField=relation_field_or_other_ident
+				refTable=tx_cfcleague_teams
+			}
+			maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+			maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+	  }
+    key.field = dam_logo
+    if {
+	    # Nix zeigen, wenn es ein Dummy-Team ist
+	    value = 0
+	    equals.field = dummy
+    }
+  }
+
+  small =< lib.t3sports.teamLogo.big
+  small {
+    default.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    default.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.0.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    0.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.default.conf.tx_cfcleague_club.default.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.default.conf.tx_cfcleague_club.default.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    0.default.conf.tx_cfcleague_club.default.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.default.conf.tx_cfcleague_club.0.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.default.conf.tx_cfcleague_club.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    0.default.conf.tx_cfcleague_club.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+  }
+}
+
 # Allgemeines Formatierungsangaben für ein Team
 lib.t3sports.team {
   pagebrowser =< lib.t3sports.pagebrowser
@@ -198,53 +284,12 @@ lib.t3sports.team {
   short_name < lib.t3sports.team.name
 
   # Formatierung des Team-Logos
-  logo {
-    file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-    file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-    # Wenn kein Teamlogo vorhanden ist
-    noLogo_stdWrap {
-      if {
-		    # Nix zeigen, wenn es ein Dummy-Team ist
-		    value = 0
-		    equals.field = dummy
-      }
-      cObject = IMAGE
-      cObject {
-        wrap =
-        
-//        file = fileadmin/images/fussball.gif
-        file = GIFBUILDER
-        file {
-          XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
-          maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-          maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-          backColor = #ffff00
-          10 = TEXT
-          10 {
-            text = Kein Logo
-            fontSize = 14
-            niceText = 1
-            fontColor = #000000
-            offset = {$plugin.tx_cfcleaguefe_report.maxW_logo}/2-30, {$plugin.tx_cfcleaguefe_report.maxH_logo}/2+4
-          }
-        }
-
-      }
-    }
-  }
+  logo =< lib.t3sports.teamLogo.big
 }
 # Team Small is used in matchtable etc.
 lib.t3sports.teamSmall < lib.t3sports.team
 lib.t3sports.teamSmall {
-	logo{
-    file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
-    file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    noLogo_stdWrap.cObject.file {
-      XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-      maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
-      maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    }
-  }
+  logo =< lib.t3sports.teamLogo.small
 }
 
 lib.t3sports.match {
@@ -317,11 +362,7 @@ plugin.tx_cfcleaguefe_competition {
         if.value = -1
         if.isGreaterThan.field = points2
       }
-      logo {
-        file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
-        file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-        noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-      }
+      logo =< lib.t3sports.teamLogo.small
       # Optional ein String, der zwischen den Zeilen steht
 #      implode = <br />
     }
@@ -727,7 +768,7 @@ lib.t3sports.matchreport.tickerType.cObject {
     1 = COA
     1.10 =< lib.t3sports.matchreport.imggoal
     1.20 = TEXT
-    1.20.value = &nbsp;Toooooooooor durch&nbsp;
+    1.20.value = &nbsp;Tooor durch&nbsp;
     default =< lib.t3sports.matchreport.imggoal
   }
 
@@ -750,10 +791,25 @@ lib.t3sports.matchreport.profiles {
   seperator = |, |
   profile {
     reverse = 0
+    # Show name. Either first lastname or stage name
     last_name = 1
     last_name.s_weight = 2
-    first_name.noTrimWrap = || |
-    first_name.s_weight = 1
+    last_name.cObject = CASE
+    last_name.cObject {
+      default = TEXT
+      default.field = stage_name
+      -1 = COA
+      -1 {
+        10 = TEXT
+        10.field = first_name
+        10.noTrimWrap = || |
+        10.required = 1
+        20 = TEXT
+        20.field = last_name
+      }
+      key.field = stage_name
+      key.ifEmpty = -1
+    }
   }
 }
 
@@ -761,20 +817,12 @@ lib.t3sports.matchreport.profiles {
 lib.t3sports.matchreport.reportPlayers < lib.t3sports.matchreport.profiles
 lib.t3sports.matchreport.reportPlayers {
   profile {
-    first_name >
     # Den Nachnamen des Teamcaptains formatieren
-    last_name.cObject = COA
     last_name.cObject {
-      1 = TEXT
-      1.value = <b>
-      1.if.value = 0
-      1.if.isGreaterThan.field = teamCaptain
-      2 = TEXT
-      2.field = last_name
-      3 = TEXT
-      3.value = (C)</b>
-      3.if.value = 0
-      3.if.isGreaterThan.field = teamCaptain
+      stdWrap.outerWrap = <b>|(C)</b>
+      stdWrap.outerWrap.fieldRequired = teamCaptain
+      # Vorname weg
+      -1.10 >
     }
     # Die Karten einblenden
     ifPenalty {
@@ -903,7 +951,7 @@ plugin.tx_cfcleaguefe_report {
 		      cron = 1
           ifEmpty.cObject = HTML
           ifEmpty.cObject.value.field = scorer_home_stat
-          ifEmpty.cObject.value.ifEmpty = Fehlanzeige
+          ifEmpty.cObject.value.ifEmpty = -
           ifEmpty.cObject.value.br = 1
           # Possible values are home and guest. Empty for both
           noteTeam = home
@@ -999,15 +1047,10 @@ plugin.tx_cfcleaguefe_report {
 		        profile =< lib.t3sports.matchreport.profiles.profile
 		        profile.s_weight = 10
 						# Bei Auswechslungen auch den zweiten Spieler zeigen
-						profile2 =< lib.t3sports.matchreport.reportPlayers.profile
+						profile2 =< lib.t3sports.matchreport.profiles.profile
 		        profile2 {
 		          s_weight = 9
-		          first_name {
-		            required = 1
-   		          wrap = |&nbsp;
-		          }
-		          wrap = |&nbsp;kommt f&uuml;r&nbsp;
-              ifPenalty >
+		          noTrimWrap = || kommt f&uuml;r |
 		          required = 1
 		        }
 
