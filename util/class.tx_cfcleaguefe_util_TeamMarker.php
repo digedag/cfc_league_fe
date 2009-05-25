@@ -44,54 +44,47 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
    *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
    * @return String das geparste Template
    */
-	public function parseTemplate($template, &$team, &$formatter, $teamConfId, $teamMarker = 'TEAM') {
+	public function parseTemplate($template, &$team, &$formatter, $confId, $marker = 'TEAM') {
 		if(!is_object($team)) {
 			return $formatter->configurations->getLL('team_notFound');
 		}
 		$this->prepareRecord($team);
 		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
-		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $teamConfId , 0, $teamMarker.'_',$team->getColumnNames());
+		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $confId , 0, $marker.'_',$team->getColumnNames());
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
-		$this->prepareLinks($team, $teamMarker, $markerArray, $subpartArray, $wrappedSubpartArray, $teamConfId, $formatter);
-
+		$this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
 		$this->pushTT('TeamLogo');
-		if(self::containsMarker($template, $teamMarker.'_LOGO'))
-			$markerArray['###'.$teamMarker.'_LOGO###'] = $team->getLogo($formatter, $teamConfId.'logo.');
+//		if(self::containsMarker($template, $marker.'_LOGO'))
+//			$markerArray['###'.$marker.'_LOGO###'] = $team->getLogo($formatter, $confId.'logo.');
 		$this->pullTT();
 		// Jetzt die Bilder einbinden
 		$this->pushTT('Team pictures');
-		$this->_addTeamPictures($subpartArray, $markerArray,$team,$formatter, $template, $teamConfId, $teamMarker);
+		$this->_addTeamPictures($subpartArray, $markerArray,$team,$formatter, $template, $confId, $marker);
 		$this->pullTT();
 		
 		// Die Spieler setzen
 		$this->pushTT('add player');
-		$subpartArray['###'.$teamMarker.'_PLAYERS###'] = $this->_addTeamProfiles($markerArray,
-                                   $team->getPlayers(), $team, $formatter, 
-                                   $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_PLAYERS###'),
-                                   '###'.$teamMarker.'_PLAYER###', $teamConfId.'player.', $teamMarker.'_PLAYER');
+		if($this->containsMarker($template, $marker.'_PLAYERS'))
+			$template = $this->_addProfiles($template, $team, $formatter, $confId.'player.', $marker.'_PLAYER','players');
 		$this->pullTT();
 
 		// Die Trainer setzen
 		$this->pushTT('add coaches');
-		$subpartArray['###'.$teamMarker.'_COACHES###'] = $this->_addTeamProfiles($markerArray,
-                                   $team->getCoaches(), $team, $formatter, 
-                                   $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_COACHES###'),
-                                   '###'.$teamMarker.'_COACH###', $teamConfId.'coach.', $teamMarker.'_COACH');
+		if($this->containsMarker($template, $marker.'_COACHS'))
+			$template = $this->_addProfiles($template, $team, $formatter, $confId.'coach.', $marker.'_COACH','coaches');
 		$this->pullTT();
 
 		// Die Betreuer setzen
 		$this->pushTT('add supporter');
-		$subpartArray['###'.$teamMarker.'_SUPPORTERS###'] = $this->_addTeamProfiles($markerArray,
-                                   $team->getSupporters(), $team, $formatter, 
-                                   $formatter->cObj->getSubpart($template,'###'.$teamMarker.'_SUPPORTERS###'),
-                                   '###'.$teamMarker.'_SUPPORTER###', $teamConfId.'supporter.', $teamMarker.'_SUPPORTER');
+		if($this->containsMarker($template, $marker.'_SUPPORTERS'))
+			$template = $this->_addProfiles($template, $team, $formatter, $confId.'supporter.', $marker.'_SUPPORTER','supporters');
 		$this->pullTT();
 
 		// set club data
 		$this->pushTT('Club data');
-		if(self::containsMarker($template, $teamMarker.'_CLUB'))
-			$template = $this->_addClubData($template, $team->getClub(), $formatter, $teamConfId.'club.', $teamMarker.'_CLUB');
+		if(self::containsMarker($template, $marker.'_CLUB'))
+			$template = $this->_addClubData($template, $team->getClub(), $formatter, $confId.'club.', $marker.'_CLUB');
 		$this->pullTT();
     
 		$this->pushTT('substituteMarkerArrayCached');
@@ -101,9 +94,9 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$markerArray = array();
 		$subpartArray = array();
 		$wrappedSubpartArray = array();
-
-		$params['confid'] = $teamConfId;
-		$params['marker'] = $teamMarker;
+		
+		$params['confid'] = $confId;
+		$params['marker'] = $marker;
 		$params['team'] = $team;
 		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
 		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -118,6 +111,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
   private function prepareRecord(&$team) {
   	$group = $team->getAgeGroup();
   	$team->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
+  	$team->record['logo'] = $team->record['dam_logo'];
   }
   
   /**
@@ -131,47 +125,36 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
     $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
   	return $template;
   }
-  /**
-   * Hinzufügen der Spieler des Teams.
-   * @param array $firstMarkerArray
-   * @param array $profiles
-   * @param tx_cfcleaguefe_models_team $team
-   * @param tx_rnbase_util_FormatUtil $formatter
-   * @param $template HTML-Template für die Profile
-   * @param $profileMarker Name des Markers für den Abschnitt eines Profils
-   * @param $profileConf Config-String für den Wrap der Profile
-   * @param $markerPrefix Prefix für die Daten des Profile-Records
-   */
-  private function _addTeamProfiles(&$firstMarkerArray, &$profiles, &$team, &$formatter, $template, $profileMarker, $profileConf, $markerPrefix) {
-    // Ohne Template gibt es nichts zu tun!
+	/**
+	 * Hinzufügen der Spieler des Teams.
+	 * @param string $template HTML-Template für die Profile
+	 * @param tx_cfcleaguefe_models_team $team
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId Config-String für den Wrap der Profile
+	 * @param string $markerPrefix Prefix für die Daten des Profile-Records
+	 * @param string $joinCol Name der Teamspalte mit den Profilen players, coaches, supporters
+	 */
+	private function _addProfiles($template, &$team, &$formatter, $confId, $markerPrefix, $joinCol) {
+  	// Ohne Template gibt es nichts zu tun!
     if(strlen(trim($template)) == 0) return '';
 
-//t3lib_div::debug($template, 'utl_marker');
+		//$srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
+    $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+		$fields['PROFILE.UID'][OP_IN_INT] = $team->record[$joinCol];
+		$options = array();
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
+		$children = $srv->search($fields, $options);
 
-    $playerTemplate = $formatter->cObj->getSubpart($template,$profileMarker);
-
+		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
     $options['team'] = $team;
-    $profileMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ProfileMarker');
-    $profileMarkerObj = new $profileMarkerClass($options);
-
-    $out = '';
-
-    for($i = 0; $i < count($profiles); $i++) {
-      $profile = $profiles[$i];
-      // Jetzt für jedes Profile das Template parsen
-      $out .= $profileMarkerObj->parseTemplate($playerTemplate, $profile, $formatter, $profileConf, $markerPrefix);
-    }
-
-    if(count($profiles)) {
-      $subpartArray[$profileMarker] = $out;
-      $out = $formatter->cObj->substituteMarkerArrayCached($template, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
-    }
-    else { // Keine Spieler vorhanden, es wird ein leerer String gesendet
-      $out = '';
-    }
-
-    return $out;
-  }
+		
+		$listBuilder = new $builderClass();
+		$out = $listBuilder->render($children,
+						tx_div::makeInstance('tx_lib_spl_arrayObject'), $template, 'tx_cfcleaguefe_util_ProfileMarker',
+						$confId, $markerPrefix, $formatter, $options);
+		return $out;
+	}
 
   /**
    * Hinzufügen der Bilder des Teams. Das erste Bild wird gesondert gemarkert, die restlichen 
