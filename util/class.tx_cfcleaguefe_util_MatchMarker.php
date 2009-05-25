@@ -88,6 +88,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$this->pushTT('parse guest team');
 		if($this->containsMarker($template, $marker.'_GUEST'))
 			$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId.'guest.', $marker.'_GUEST');
+		$this->pushTT('parse arena');
+		if($this->containsMarker($template, $marker.'_ARENA_'))
+			$template = $this->_addArena($template, $match, $formatter, $confId.'arena.', $marker.'_ARENA');
+		
 		$this->pullTT();
 		if($this->fullMode) {
 			$this->pushTT('add media');
@@ -114,6 +118,28 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$params['match'] = $match;
 		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
 		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+	}
+
+	/**
+	 * Bindet die Arena ein
+	 *
+	 * @param string $template
+	 * @param tx_cfcleaguefe_models_match $item
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 * @param string $markerPrefix
+	 * @return string
+	 */
+	protected function _addArena($template, &$item, &$formatter, $confId, $markerPrefix) {
+		$sub = $item->getArena();
+		if(!$sub) {
+			// Kein Stadium vorhanden. Leere Instanz anlegen und altname setzen
+			$sub = tx_rnbase_util_BaseMarker::getEmptyInstance('tx_cfcleague_models_Stadium');
+		}
+		$sub->record['altname'] = $item->record['stadium'];
+		$marker = tx_div::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
+		$template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
+		return $template;
 	}
 
 	/**
@@ -196,6 +222,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * werden als Liste behandelt.
    * @param $gSubPartArray globales Subpart-Array, welches die Ergebnisse aufnimmt
    * @param $firstMarkerArray
+   * @deprecated use templates based picture output from rn_base
    */
   private function _addPictures(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
   	// Prüfen, ob Marker vorhanden sind

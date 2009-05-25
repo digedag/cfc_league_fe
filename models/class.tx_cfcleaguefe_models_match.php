@@ -483,6 +483,16 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 //    return $this->_formatter->stdWrap($this->match->record['date'],$this->_configurations->get('report.date.'));
   }
 
+	/**
+	 * Liefert das Stadion
+	 * @return tx_cfcleague_models_Stadium Arena as object or false
+	 */
+	function getArena() {
+		if(!intval($this->record['arena'])) return false;
+		tx_div::load('tx_cfcleague_models_Stadium');
+		return tx_cfcleague_models_Stadium::getInstance($this->record['arena']);
+	}
+
   function getStadium($formatter=0, $configKey = 'match.stadium.') {
     if($formatter)
       return $formatter->wrap($this->record['stadium'], $configKey);
