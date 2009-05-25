@@ -38,7 +38,11 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 ###ROW_MATCHCOUNT### Marker für Anzahl der Spiele
 </pre>
 
+
+
+
 <!-- ###LEAGUE_TABLE### start -->
+
 
 <!-- ###CONTROLS### start -->
 <div class="cfcleague-scopeselection">
@@ -67,6 +71,9 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 
 </div>
 <!-- ###CONTROLS### end -->
+
+
+
 
 ###ROWS###
 <div class="cfcleague-leaguetable">
@@ -105,5 +112,75 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 
 <!-- ###LEAGUE_TABLE### end -->
 
+
+
+
+<h2>Alternativ Table-Scope-Selection based an Select-Boxes</h2>
+<p>Use this HTML-Code to show the Scope-Selection with Select-Boxes. To make it work, you have to 
+change your Typoscript-Setup as well:
+</p>
+<pre>
+plugin.tx_cfcleaguefe_competition.leaguetable {
+  controls {
+    tabletype {
+      current.wrap = selected="selected" value="/|"
+      normal.wrap = value="/|"
+    }
+    tablescope {
+      current.wrap = selected="selected" value="/|"
+      normal.wrap = value="/|"
+    }
+    pointsystem {
+      current.wrap = selected="selected" value="/|"
+      normal.wrap = value="/|"
+    }
+  }
+}
+</pre>
+
+
+
+<!-- ###CONTROLS### start -->
+<form action="dummy.php" method="get">
+
+<table class="t3s-tctrl" style="width:100%">
+<tr>
+###CONTROL_TABLETYPE###
+<td class="t3s-tctrl-label"><span>Heim/Auswärts</span></td><td class="t3s-tctrl-value">
+<select name="action" onchange="window.location=(this.options[this.selectedIndex].value);">
+  <option ###CONTROL_TABLETYPE_NORMAL_LINKURL###>Normal</option>
+  <option ###CONTROL_TABLETYPE_HOME_LINKURL###>Heimtabelle</option>
+  <option ###CONTROL_TABLETYPE_AWAY_LINKURL###>Auswärtstabelle</option>
+</select>
+</td>
+###CONTROL_TABLETYPE###
+
+
+###CONTROL_TABLESCOPE###
+<td class="t3s-tctrl-label"><span>Hin-/Rückrunde</span></td><td class="t3s-tctrl-value">
+
+<select name="action" onchange="window.location=(this.options[this.selectedIndex].value);">
+  <option ###CONTROL_TABLESCOPE_NORMAL_LINKURL###>Saison</option>
+  <option ###CONTROL_TABLESCOPE_FIRST_LINKURL###>Hinrunde</option>
+  <option ###CONTROL_TABLESCOPE_SECOND_LINKURL###>Rückrunde</option>
+</select>
+</td>
+###CONTROL_TABLESCOPE###
+
+###CONTROL_POINTSYSTEM###
+<td class="t3s-tctrl-label"><span>Punkte</span></td><td class="t3s-tctrl-value">
+<select name="action" onchange="window.location=(this.options[this.selectedIndex].value);">
+  <option ###CONTROL_POINTSYSTEM_POINT3_LINKURL###>2-Punkte-Regel</option>
+  <option ###CONTROL_POINTSYSTEM_POINT2_LINKURL###>3-Punkte-Regel</option>
+</select>
+###CONTROL_POINTSYSTEM###
+</td>
+</tr>
+</table>
+</form>
+<!-- ###CONTROLS### end -->
+
 </body>
 </html>
+
+

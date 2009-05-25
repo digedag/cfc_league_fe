@@ -33,7 +33,7 @@ tx_div::load('tx_rnbase_view_Base');
 class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
-		
+		$this->formatter = &$configurations->getFormatter();
     $out = $this->_createView($template, $viewData, $configurations);
     return $out;
 	}
@@ -131,7 +131,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
 			$team->record = t3lib_div::array_merge($row, $team->record);
 
-			$parts[] = $this->teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), 'leaguetable.table.', 'ROW');
+			$parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), 'leaguetable.table.', 'ROW');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 		}
 		// Jetzt die einzelnen Teile zusammenfügen
@@ -206,20 +206,25 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
    * Erstellt das Steuerungspanel für die Tabelle.
    */
   function _createControls($template, &$viewData, &$configurations) {
-    $subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'',);
+		// Der Link für die Controls
+		$link = $configurations->createLink();
+		$pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
+		$link->destination($pid); // Das Ziel der Seite vorbereiten
+
+		$subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'',);
     if($viewData->offsetGet('tabletype_select')) {
       $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLETYPE###'), 
-                    $viewData->offsetGet('tabletype_select'), $this->link, 'TABLETYPE', $configurations);
+                    $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
     }
 
     if($viewData->offsetGet('tablescope_select')) {
       $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLESCOPE###'), 
-                    $viewData->offsetGet('tablescope_select'), $this->link, 'TABLESCOPE', $configurations);
+                    $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
     }
 
     if($viewData->offsetGet('pointsystem_select')) {
       $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_POINTSYSTEM###'), 
-                    $viewData->offsetGet('pointsystem_select'), $this->link, 'POINTSYSTEM', $configurations);
+                    $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
     }
 
     $out = $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
@@ -227,73 +232,60 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 //    return implode($parts, $configurations->get('leaguetable.controls.implode'));
   }
 
-  /**
-   * Die Auswahl für Tabellentyp, Tabellenscope und Punktesystem.
-   * @param string $template HTML- Template
-   * @param array &$itemsArr Datensätze für die Auswahl
-   * @param tx_lib_link &$link Linkobjekt
-   * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
-   * @param tx_rnbase_configurations &$configurations Konfig-Objekt
-   */
-  function _fillControlTemplate($template, &$itemsArr, &$link, $markerName, &$configurations) {
-    $items = $itemsArr[0];
-    $currItem = $itemsArr[1];
-    $confName = strtolower($markerName); // Konvention
-    $noLink = array('','');
+	/**
+	 * Die Auswahl für Tabellentyp, Tabellenscope und Punktesystem.
+	 * @param string $template HTML- Template
+	 * @param array &$itemsArr Datensätze für die Auswahl
+	 * @param tx_lib_link &$link Linkobjekt
+	 * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
+	 * @param tx_rnbase_configurations &$configurations Konfig-Objekt
+	 */
+	function _fillControlTemplate($template, &$itemsArr, &$link, $markerName, &$configurations) {
+		$items = $itemsArr[0];
+		$currItem = $itemsArr[1];
+		$confName = strtolower($markerName); // Konvention
+		$noLink = array('','');
+		$formatter = $configurations->getFormatter();
 
-    // Aus den KeepVars den aktuellen Wert entfernen
-    $keepVars = $configurations->getKeepVars()->getArrayCopy();
-    unset($keepVars[$confName]);
-//t3lib_div::debug($itemsArr, 'vw_leaguetable');
+		// Aus den KeepVars den aktuellen Wert entfernen
+		$keepVars = $configurations->getKeepVars()->getArrayCopy();
+		unset($keepVars[$confName]);
 
-    if($link) {
-      $token = md5(microtime());
-      $link->label($token);
-    }
+		if($link) {
+			$token = md5(microtime());
+			$link->label($token);
+		}
+		
+		$currentNoLink = intval($configurations->get('leaguetable.controls.'. $confName .'.current.noLink'));
 
-    $currentNoLink = intval($configurations->get('leaguetable.controls.'. $confName .'.current.noLink'));
+		$markerArray = array();
+		// Jetzt über die vorhandenen Items iterieren
+		while( list($key, $value) = each($itemsArr[0])) {
+			$keepVars[$confName] = $key;
+			$link->parameters($keepVars);
+			$isCurrent = ($key == $currItem);
 
-    $markerArray = array();
+			$markerLabel = $formatter->wrap($key, 'leaguetable.controls.'. $confName .'.'.$key.'.');
 
-    // Jetzt über die vorhandenen Items iterieren
-    while( list($key, $value) = each($itemsArr[0])) {
-      $keepVars[$confName] = $key;
-      $link->parameters($keepVars);
+			$data['iscurrent'] = $isCurrent ? 1 : 0;
+			$data['value'] = $value;
+	
+			$tempArray = $formatter->getItemMarkerArrayWrapped($data, 'leaguetable.controls.'. $confName.'.', 0, 'CONTROL_'.$markerName.'_'. $markerLabel.'_');
+			$tempArray['###CONTROL_'. $markerName .'_'. $markerLabel .'###'] = $tempArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_VALUE###'];
+			$markerArray = array_merge($markerArray, $tempArray);
+			$url = $formatter->wrap($link->makeUrl(false), 'leaguetable.controls.'. $confName . ($isCurrent ? '.current.' : '.normal.'));
+			$markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_LINK_URL###'] = $url;
+			$markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_LINKURL###'] = $url;
 
-      $markerLabel = $this->formatter->wrap($key, 'leaguetable.controls.'. $confName .'.'.$key.'.');
+			$linkStr = ($currentNoLink && $key == $currItem) ? $token : $link->makeTag();
+			// Einen zusätzliche Wrap um das generierte Element inkl. Link
+			$linkStr = $formatter->wrap($linkStr, 'leaguetable.controls.'. $confName . ($isCurrent ? '.current.' : '.normal.') );
+			$wrappedSubpartArray['###CONTROL_'.$markerName.'_'. $markerLabel .'_LINK###'] = explode($token, $linkStr);
+		}
+		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		return $out;
+	}
 
-      $markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'###'] = $this->formatter->wrap($value, 'leaguetable.controls.'. $confName .'.value.');
-      $markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_LINK_URL###'] = $this->formatter->wrap($link->makeUrl(false), 'leaguetable.controls.'. $confName . (($key == $currItem) ? '.current.' : '.normal.') );
-
-      $linkStr = ($currentNoLink && $key == $currItem) ? $token : $link->makeTag();
-      // Ein zusätzliche Wrap um das generierte Element inkl. Link
-      $linkStr = $this->formatter->wrap($linkStr, 'leaguetable.controls.'. $confName . (($key == $currItem) ? '.current.' : '.normal.') );
-      $wrappedSubpartArray['###CONTROL_'.$markerName.'_'. $markerLabel .'_LINK###'] = explode($token, $linkStr);
-    }
-    $out = $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-    return $out;
-  }
-
-  /**
-   * Vorbereitung der Link-Objekte
-   */
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
-
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
-    $this->links = array();
-
-    // Der Link für die Controls
-    $pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
-    $this->link = new $linkClass;
-    $this->link->designatorString = $configurations->getQualifier();
-    $this->link->destination($pid); // Das Ziel der Seite vorbereiten
-
-    // Den TeamMarker erstellen
-    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $this->teamMarker = new $teamMarkerClass;
-
-  }
 }
 
 
