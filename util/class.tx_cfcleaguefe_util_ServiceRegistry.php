@@ -24,6 +24,7 @@
 
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+tx_div::load('tx_rnbase_util_Misc');
 
 /**
  * Keine echte Registry, aber eine zentrale Klasse für den Zugriff auf verschiedene
@@ -51,7 +52,7 @@ class tx_cfcleaguefe_util_ServiceRegistry {
 	 * @return tx_cfcleaguefe_ProfileService
 	 */
 	static function getProfileService() {
-		return self::getService('cfcleague_data', 'profile');
+		return tx_rnbase_util_Misc::getService('cfcleague_data', 'profile');
 	}
 	
 	/**
@@ -59,23 +60,28 @@ class tx_cfcleaguefe_util_ServiceRegistry {
 	 * @return tx_cfcleaguefe_MatchService
 	 */
 	static function getMatchService() {
-		return self::getService('cfcleague_data', 'match');
+		return tx_rnbase_util_Misc::getService('cfcleague_data', 'match');
 	}
 	/**
 	 * Liefert den Team-Service
 	 * @return tx_cfcleaguefe_TeamService
 	 */
 	static function getTeamService() {
-		return self::getService('cfcleague_data', 'team');
+		return tx_rnbase_util_Misc::getService('cfcleague_data', 'team');
 	}
 	/**
 	 * Liefert den Wettbewerbsservice
 	 * @return tx_cfcleaguefe_CompetitionService
 	 */
 	static function getCompetitionService() {
-		return self::getService('cfcleague_data', 'competition');
+		return tx_rnbase_util_Misc::getService('cfcleague_data', 'competition');
 	}
-	
+
+	/**
+	 *
+	 * @deprecated
+	 * @see tx_rnbase_util_Misc::getService
+	 */
 	static function getService($type, $subType) {
     $srv = t3lib_div::makeInstanceService($type, $subType);
     if(!is_object($srv)) {
@@ -88,6 +94,8 @@ class tx_cfcleaguefe_util_ServiceRegistry {
 	 * Returns an array with all subtypes for given service key.
 	 *
 	 * @param string $type
+	 * @deprecated
+	 * @see tx_rnbase_util_Misc::lookupServices
 	 */
 	static function lookupServices($serviceType) {
 		global $T3_SERVICES;
