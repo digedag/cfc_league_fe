@@ -6,14 +6,17 @@
 # #####
 
 # TODO rename controller
-includeLibs.tx_cfcleaguefe_controllers_competition = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_matchtable.php
+#includeLibs.tx_cfcleaguefe_controllers_competition = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_matchtable.php
+includeLibs.tx_rnbase_controller = EXT:rn_base/class.tx_rnbase_controller.php
 includeLibs.tx_t3sports_dam = EXT:dam/lib/class.tx_dam_tsfe.php
+includeLibs.tx_t3sports_dam2 = EXT:rn_base/util/class.tx_rnbase_util_TSDAM.php
 
 plugin.tx_cfcleaguefe_competition                = USER
 plugin.tx_cfcleaguefe_competition.flexform       = flexform_competition.xml
-plugin.tx_cfcleaguefe_competition.userFunc       = tx_cfcleaguefe_controllers_matchtable->main
+plugin.tx_cfcleaguefe_competition.userFunc       = tx_rnbase_controller->main
 plugin.tx_cfcleaguefe_competition.defaultAction  = tx_cfcleaguefe_actions_MatchTable
 plugin.tx_cfcleaguefe_competition.qualifier      = cfc_league_fe
+plugin.tx_cfcleaguefe_competition.extensionKey   = cfc_league_fe
 plugin.tx_cfcleaguefe_competition.templatePath   = EXT:cfc_league_fe/views/templates
 plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallang.xml
 
@@ -21,6 +24,12 @@ plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallan
 # If you have defined a team note with html marker picture, make this setting in your typoscript
 # template:
 #  lib.t3sports.profile.tnpicture =< lib.t3sports.teamnote
+
+lib.t3sports.stadium {
+  name = TEXT
+  name.current = 1
+  name.ifEmpty.field = altname
+}
 
 lib.t3sports.teamnote = RECORDS
 lib.t3sports.teamnote {
@@ -242,7 +251,7 @@ lib.t3sports.team {
   }
   roll.value = 1
   listinfo.llkeyEmpty = teamlist_empty
-  
+
   firstImage {
     file.maxW = 480
     file.maxH = 500
@@ -728,7 +737,7 @@ tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_compet
 # Das Report Plugin
 # #####
 ##############################################################
-includeLibs.tx_cfcleaguefe_controllers_report = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_report.php
+#includeLibs.tx_cfcleaguefe_controllers_report = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_report.php
 
 lib.t3sports.matchreport.imgcard = IMAGE
 lib.t3sports.matchreport.imgcard {
@@ -837,9 +846,10 @@ lib.t3sports.matchreport.reportPlayers {
 plugin.tx_cfcleaguefe_report   = USER
 plugin.tx_cfcleaguefe_report {
   flexform       = flexform_report.xml
-  userFunc       = tx_cfcleaguefe_controllers_report->main
+  userFunc       = tx_rnbase_controller->main
   defaultAction  = tx_cfcleaguefe_actions_MatchReport
   qualifier      = cfc_league_fe
+  extensionKey   = cfc_league_fe
   templatePath   = EXT:cfc_league_fe/views/templates
   locallangFilename = EXT:cfc_league_fe/locallang.xml
 
@@ -912,12 +922,27 @@ plugin.tx_cfcleaguefe_report {
     match {
       # Hier immer mit den Namen der Spalte verwenden
       visitors.ifEmpty = -
+      arena =< lib.t3sports.stadium
       game_report.parseFunc =< lib.parseFunc_RTE
       date.default.strftime  = {$plugin.tx_cfcleaguefe_report.format_date}
       home =< lib.t3sports.team
       guest =< lib.t3sports.team
       players_home = 1
       players_guest = 1
+
+      dam_images = USER
+      dam_images {
+        userFunc = tx_rnbase_util_TSDAM->printImages
+        refField = dam_images
+        refTable = tx_cfcleague_games
+        template = EXT:rn_base/res/simplegallery.html
+        media {
+          file = IMAGE
+          file.file.import.field = file
+          file.file.maxH = 100
+          file.file.maxW = 100
+        }
+      }
 
 		  firstImage {
 		    file.maxW = 100
