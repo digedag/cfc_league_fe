@@ -128,6 +128,7 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
 	 * das Logo des Vereins.
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $confId
+	 * @deprecated Das Logo wird per Typoscript ermittelt
 	 */
 	function getLogo(&$formatter, $confId) {
 		$image = false;
@@ -156,6 +157,7 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
 				}
 			}
 		}
+
 		// Es ist kein Logo vorhanden
 		if(!$image) {
 			$conf = $formatter->configurations->get($confId . 'noLogo_stdWrap.');
