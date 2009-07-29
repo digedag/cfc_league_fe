@@ -252,6 +252,10 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     return $formatter->stdWrap($name, $conf);
   }
 
+	/**
+	 * Fügt die TeamNotes für den Spieler hinzu. Wird kein Team übergeben, dann passiert nichts.
+	 * @param tx_cfcleaguefe_models_team $team
+	 */
 	public function addTeamNotes(&$team) {
 		if(is_object($team)) {
 			// Zunächst alle Daten initialisieren
@@ -273,20 +277,20 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 				$this->record['tn'.$noteType->getMarker().'_type'] = $note->record['mediatype'];
 			}
 		}
-  }
-  /**
-   * Liefert true, wenn für den Spieler eine Einzelansicht verlinkt werden soll.
-   */
-  function hasReport() {
-    return intval($this->record['link_report']);
-  }
-  /**
-   * Liefert das Sternzeichen der Person.
-   */
-  function getSign() {
-    $signs = Signs::getInstance();
-    return intval($this->record['birthday']) != 0 ? $signs->getSign($this->record['birthday']) : '';
-  }
+	}
+	/**
+	 * Liefert true, wenn für den Spieler eine Einzelansicht verlinkt werden soll.
+	 */
+	function hasReport() {
+		return intval($this->record['link_report']);
+	}
+	/**
+	 * Liefert das Sternzeichen der Person.
+	 */
+	function getSign() {
+		$signs = Signs::getInstance();
+		return intval($this->record['birthday']) != 0 ? $signs->getSign($this->record['birthday']) : '';
+	}
 }
 
 /**
