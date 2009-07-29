@@ -27,7 +27,7 @@
  *
  * @author	René Nitzsche <rene[at]system25.de>
  */
-class tx_cfcleaguefe_controllers_wizicon {
+class tx_cfcleaguefe_util_wizicon {
 	/**
 	 * Adds the T3sports report plugin wizard icon
 	 *
@@ -62,7 +62,7 @@ class tx_cfcleaguefe_controllers_wizicon {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_wizicon.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_wizicon.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_wizicon.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_wizicon.php']);
 }
 ?>

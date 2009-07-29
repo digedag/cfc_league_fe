@@ -52,7 +52,7 @@ t3lib_extMgm::addPiFlexFormValue('tx_cfcleaguefe_report','FILE:EXT:'.$_EXTKEY.'/
 t3lib_extMgm::addPlugin(Array('LLL:EXT:'.$_EXTKEY.'/locallang_db.php:plugin.report.label','tx_cfcleaguefe_report'));
 
 # Add plugin wizards
-if (TYPO3_MODE=='BE')	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_cfcleaguefe_controllers_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'controllers/class.tx_cfcleaguefe_controllers_wizicon.php';
+if (TYPO3_MODE=='BE')	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_cfcleaguefe_util_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'util/class.tx_cfcleaguefe_util_wizicon.php';
 
 // list static templates in templates selection
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/', 'T3sports');
