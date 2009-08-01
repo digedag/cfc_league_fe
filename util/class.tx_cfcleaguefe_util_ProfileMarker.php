@@ -65,6 +65,8 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 			return $formatter->configurations->getLL('profile_notFound');
 		}
 		$profile->addTeamNotes($this->options['team']);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_initRecord', array('item' => &$profile, 'template'=>&$template), $this);
+		
 		// Es wird das MarkerArray mit den Daten des Spielers gefüllt.
 		$markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $confId , 0, $marker.'_',$profile->getColumnNames());
 		$markerArray['###'.$marker.'_SIGN###'] = $profile->getSign();
@@ -76,6 +78,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 		$subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
 
 		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_afterSubst', array('item' => &$profile, 'template'=>&$template), $this);
 		
 		// Okay the normal stuff is done. Now lookout for external marker services.
 		$markerArray = array();
