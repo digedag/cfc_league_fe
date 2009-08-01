@@ -41,18 +41,6 @@ class tx_cfcleaguefe_actions_CompetitionSelection extends tx_rnbase_action_BaseI
 		// Die Werte des aktuellen Scope ermitteln
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations, $this->viewType == 'HTML');
 		return null;
-//t3lib_div::debug($scopeArr ,'paras act_CompSel');
-
-//    $view = ($viewType == 'HTML') ? tx_div::makeInstance('tx_cfcleaguefe_views_ScopeSelection') : 
-//                                    tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
-//
-//
-//    $view->setTemplatePath($configurations->getTemplatePath());
-//    // Das Template wird komplett angegeben
-//    $view->setTemplateFile($configurations->get('scopeTemplate'));
-//    $out = $view->render( ($viewType == 'HTML') ? 'scopeselection' : 'competitionselection', $configurations);
-//
-//    return $out;
   }
 	function getTemplateName() {return 'scope';}
 	function getViewClassName() {
