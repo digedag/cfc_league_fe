@@ -56,7 +56,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 */
 	public static function handleCurrentScope($parameters,&$configurations, $useObjects = false) {
 		$cObjUid = $configurations->cObj->data['uid'];
-		if(!isset(self::$_cObjectUID[$cObjUid])) {
+		if(!isset(self::$_cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
 			// Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
 			$ret = Array();
 			$ret['SAISON_UIDS'] = self::handleCurrentSaison($parameters,$configurations, $useObjects);
