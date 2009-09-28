@@ -103,15 +103,17 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
     
   }
 
-  /**
-   * Prepare team record before rendering
-   *
-   * @param tx_cfcleaguefe_models_team $team
-   */
-  private function prepareRecord(&$team) {
-  	$group = $team->getAgeGroup();
-  	$team->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
-  	$team->record['logo'] = $team->record['dam_logo'];
+	/**
+	 * Prepare team record before rendering
+	 *
+	 * @param tx_cfcleaguefe_models_team $team
+	 */
+	private function prepareRecord(&$team) {
+		$group = $team->getAgeGroup();
+		$GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->uid : 0;
+
+		$team->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
+		$team->record['logo'] = $team->record['dam_logo'];
   }
   
   /**
