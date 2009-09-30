@@ -81,7 +81,7 @@ class tx_cfcleaguefe_search_Builder {
 	 */
 	static function buildCompetitionByTeam(&$fields, $teamUids, $obligateOnly = 'false') {
 		$result = false;
-		if(strlen(trim($memberUids))) {
+		if(strlen(trim($teamUids))) {
 	  	$fields['TEAM.UID'][OP_EQ_INT] = $teamUids;
 	  	if($obligateOnly)
 		  	$fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = '1';
