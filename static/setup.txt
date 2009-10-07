@@ -161,44 +161,73 @@ lib.t3sports.club {
 lib.t3sports.teamLogo {
   big = CASE
   big {
+    # Bild im Feld logo suchen
     # Bild im Verein suchen
     0 = CASE
     0 {
-      # Dummy-Logo rendern
-      0 = IMAGE
+      0 = CASE
       0 {
-//        file = fileadmin/images/fussball.gif
-        file = GIFBUILDER
-        file {
-          XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
-					maxWidth = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-					maxHeight = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-          backColor = #FFFFFF
+        # Dummy-Logo rendern
+        0 = IMAGE
+        0 {
+#          file = fileadmin/images/fussball.gif
+          file = GIFBUILDER
+          file {
+            XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
+		  			maxWidth = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+			  		maxHeight = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+            backColor = #FFFFFF
+          }
         }
+        # Vereinslogo rendern
+        default = RECORDS
+        default {
+          source.field = club
+          tables =  tx_cfcleague_club
+          conf.tx_cfcleague_club = CASE
+	   			conf.tx_cfcleague_club {
+			      key.field = dam_logo
+  					0 =< lib.t3sports.teamLogo.big.0.0
+
+            default = USER
+            default {
+              userFunc=tx_rnbase_util_TSDAM->printImages
+              refField=dam_images
+              refTable=tx_cfcleague_club
+              template = EXT:cfc_league_fe/res/clublogo.html
+              limit = 1
+              media {
+                file = IMAGE
+                file.file.import.field = file
+				   	    file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+  						  file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+              }
+            }
+          }
+        }
+        key.field = club
       }
-      # Vereinslogo rendern
+      # DAM-Bild anzeigen
       default = RECORDS
       default {
-        source.field = club
-        tables =  tx_cfcleague_club
-        conf.tx_cfcleague_club = CASE
-				conf.tx_cfcleague_club {
-					key.field = dam_logo
-					0 =< lib.t3sports.teamLogo.big.0.0
-					default = IMAGE
-					default.file {
-						import.cObject = USER
-						import.cObject {
-							userFunc=tx_dam_tsfe->fetchFileList
-							refField=dam_images
-							refTable=tx_cfcleague_club
-						}
-						maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-						maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-					}
+        source.field = logo
+        tables =  tx_dam
+        conf.tx_dam = IMAGE
+        conf.tx_dam {
+          file.import.cObject = COA
+          file.import.cObject {
+            10 = TEXT
+            10.field=file_path
+            20 = TEXT
+            20.value = /
+            30 = TEXT
+            30.field = file_name
+          }
+          file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+          file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
         }
       }
-      key.field = club
+      key.field = logo
     }
 
     # Logo des Teams rendern
@@ -223,18 +252,23 @@ lib.t3sports.teamLogo {
 
   small =< lib.t3sports.teamLogo.big
   small {
+    # Logo des Teams
     default.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
     default.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    0.0.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    0.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
-    0.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    0.default.conf.tx_cfcleague_club.default.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    0.default.conf.tx_cfcleague_club.default.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
-    0.default.conf.tx_cfcleague_club.default.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    0.default.conf.tx_cfcleague_club.0.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    0.default.conf.tx_cfcleague_club.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
-    0.default.conf.tx_cfcleague_club.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    # Dummy-Logo
+    0.0.0.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.0.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    0.0.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    # Logo aus Verein
+    0.0.default.conf.tx_cfcleague_club.default.media.file.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.0.default.conf.tx_cfcleague_club.default.media.file.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    0.0.default.conf.tx_cfcleague_club.default.media.file.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    # Logo im Team (Select-Box)
+    0.default.conf.tx_dam.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.default.conf.tx_dam.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    0.default.conf.tx_dam.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
   }
+
 }
 
 # Allgemeines Formatierungsangaben für ein Team
