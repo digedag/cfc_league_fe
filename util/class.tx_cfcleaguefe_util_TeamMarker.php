@@ -50,11 +50,13 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		}
 		$this->prepareRecord($team);
 		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
-		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $confId , 0, $marker.'_',$team->getColumnNames());
+		$ignore = self::findUnusedCols($team->record, $template, $marker);
+		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $confId , $ignore, $marker.'_',$team->getColumnNames());
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
-		$this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
+		$this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 		$this->pushTT('TeamLogo');
+		// Die Einbindung des Team-Logos erfolgt jetzt per TS.
 //		if(self::containsMarker($template, $marker.'_LOGO'))
 //			$markerArray['###'.$marker.'_LOGO###'] = $team->getLogo($formatter, $confId.'logo.');
 		$this->pullTT();
@@ -111,9 +113,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	private function prepareRecord(&$team) {
 		$group = $team->getAgeGroup();
 		$GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->uid : 0;
-
 		$team->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
-		$team->record['logo'] = $team->record['dam_logo'];
   }
   
   /**
@@ -230,10 +230,10 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	protected function prepareLinks(&$team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
-		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
+	protected function prepareLinks(&$team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
+		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid), $template);
 		if($team->hasReport()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showteam', $marker, array('teamId' => $team->uid));
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showteam', $marker, array('teamId' => $team->uid), $template);
 		}
 		else {
 			$linkId = 'showteam';

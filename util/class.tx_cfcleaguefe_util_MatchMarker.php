@@ -75,10 +75,11 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			$this->pullTT();
 		}
 		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
-		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $confId, 0, $marker.'_');
+		$ignore = self::findUnusedCols($match->record, $template, $marker);
+		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $confId, $ignore, $marker.'_');
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
-		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
+		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
 		// Es wird jetzt das Template verändert und die Daten der Teams eingetragen
 		$this->pushTT('parse home team');
@@ -333,10 +334,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	private function prepareLinks(&$match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+	private function prepareLinks(&$match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
 		$linkId = 'report';
 		if($match->hasReport()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid));
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid), $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
@@ -345,7 +346,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		}
 		$linkId = 'ticker';
 		if($match->isTicker()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid));
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid), $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
