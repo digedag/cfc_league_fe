@@ -65,17 +65,23 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
     if(!$this->record['club']) return 0;
     return tx_cfcleaguefe_models_club::getInstance($this->record['club']);
   }
-  /**
-   * Returns the teams age group. This value is retrieved from the teams competitions. So 
-   * the first competition found, decides about the age group.
-   * @return tx_cfcleaguefe_models_group or null
-   */
-  function getAgeGroup() {
-  	$comps = $this->getCompetitions(true);
-  	for($i=0, $cnt = count($comps); $i < $cnt; $i++) {
-  		if(is_object($comps[$i]->getGroup())) return $comps[$i]->getGroup();
-  	}
-  	return null;
+	var $agegroup = null;
+	/**
+	 * Returns the teams age group. This value is retrieved from the teams competitions. So 
+	 * the first competition found, decides about the age group.
+	 * @return tx_cfcleaguefe_models_group or null
+	 */
+	function getAgeGroup() {
+		if(!$this->agegroup) {
+			$comps = $this->getCompetitions(true);
+			for($i=0, $cnt = count($comps); $i < $cnt; $i++) {
+				if(is_object($comps[$i]->getGroup())) {
+					$this->agegroup = $comps[$i]->getGroup();
+					break;
+				}
+			}
+		}
+		return $this->agegroup;
   }
   /**
    * Returns the competitons of this team
