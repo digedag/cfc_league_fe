@@ -35,6 +35,35 @@ usw.
 ###TEMPLATE_PHPICALENDAR_EVENT_MONTH###
 
 
+###TEMPLATE_PHPICALENDAR_EVENT_RSS###
+		<item>
+			<title>###MATCH_HOME_SHORT_NAME### - ###MATCH_GUEST_SHORT_NAME###</title>
+			<link>###EVENT_URL###</link>
+			<guid>###EVENT_URL###</guid>
+			<pubDate>###CREATE_DATE###</pubDate>
+			<content:encoded>
+			<![CDATA[
+				###CATEGORY###
+				###STARTDATE### ###STARTTIME###
+				###ENDDATE### ###ENDTIME###
+				###LOCATION###
+				###ORGANIZER###
+				###DESCRIPTION### <!-- ###EVENT_LINK### start -->###MORE_LABEL###<!-- ###EVENT_LINK### end -->
+			]]>
+			</content:encoded>
+			<description><![CDATA[
+				###CATEGORY###
+				###MATCH_DATE###
+				###STARTDATE### ###STARTTIME###
+				###ENDDATE### ###ENDTIME###
+				###LOCATION###
+				###ORGANIZER###
+				###DESCRIPTION_STRIPTAGS### <!-- ###EVENT_LINK### start -->###MORE_LABEL###<!-- ###EVENT_LINK### end -->
+				<hr/>
+				]]>
+			</description>
+		</item>
+###TEMPLATE_PHPICALENDAR_EVENT_RSS###
 
 
 <!-- Das Template für die Wochenansicht des Kalenders -->
