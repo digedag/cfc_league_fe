@@ -31,10 +31,10 @@ plugin.tx_cfcleaguefe_competition {
   # cat=T3sports (misc)/tickerlist_format_date; type=string;label=Formatter-String for match date in ticker list
   tickerlist_format_date = %d. %B ab %H:%M Uhr
 
-  # cat=T3sports (misc)/maxW_logo_matchtable; type=int+;label=Maximum width of logos in matchtable
+  # cat=T3sports (misc)/maxW_logo_matchtable; type=int+;label=Maximum width of team logos in matchtable
   maxW_logo_matchtable = 20
 
-  # cat=T3sports (misc)/maxH_logo_matchtable; type=int+;label=Maximum height of logos in matchtable
+  # cat=T3sports (misc)/maxH_logo_matchtable; type=int+;label=Maximum height of team logos in matchtable
   maxH_logo_matchtable = 20
 
   # cat=T3sports (misc)/maxW_logo_teamlist; type=int+;label=Maximum width of logos in teamlist
@@ -42,6 +42,12 @@ plugin.tx_cfcleaguefe_competition {
 
   # cat=T3sports (misc)/maxH_logo_teamlist; type=int+;label=Maximum height of logos in teamlist
   maxH_logo_teamlist = 40
+
+  # cat=T3sports (misc)/maxW_complogo; type=int+;label=Maximum width of competition logos
+  maxW_complogo = 20
+
+  # cat=T3sports (misc)/maxH_complogo; type=int+;label=Maximum height of competition logos
+  maxH_complogo = 20
 
   # cat=T3sports (pages)/teampage; type=int+;label=PID of page for teamview
   teampage = 0

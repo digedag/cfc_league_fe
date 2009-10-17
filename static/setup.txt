@@ -71,6 +71,8 @@ lib.t3sports.competition {
     refField=logo
     refTable=tx_cfcleague_competition
   }
+  logo.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
+  logo.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_complogo}
 }
 
 # Allgemeines Formatierungsangaben für Personen
