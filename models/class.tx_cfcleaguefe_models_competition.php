@@ -23,11 +23,12 @@
 ***************************************************************/
 
 tx_div::load('tx_rnbase_model_base');
+tx_div::load('tx_cfcleague_models_Competition');
 
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
  */
-class tx_cfcleaguefe_models_competition extends tx_rnbase_model_base {
+class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition {
 	private static $instances = array();
 	/** array of teams */
 	private $teams;
