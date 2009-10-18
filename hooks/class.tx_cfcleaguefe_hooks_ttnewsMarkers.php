@@ -25,7 +25,6 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
 
 tx_div::load('tx_rnbase_util_BaseMarker');
-tx_div::load('tx_cfcleaguefe_controllers_report');
 
 
 /**
@@ -51,9 +50,8 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 	 */
 	function extraItemMarkerProcessor($markerArray, $row, $lConf, $ttnews) {
 		$this->configurations = tx_div::makeInstance('tx_rnbase_configurations');
-		$t3sportsContr = tx_div::makeInstance('tx_cfcleaguefe_controllers_report');
 		// Dieses cObj wird dem Controller von T3 übergeben
-		$this->configurations->init($ttnews->conf, $ttnews->cObj, $t3sportsContr->extensionKey, $t3sportsContr->qualifier);
+		$this->configurations->init($ttnews->conf, $ttnews->cObj, 'cfc_league_fe', 'cfc_league_fe');
 		$this->linkConf = $this->configurations->get('external_links.');
 		$regExpr[] = "/\[t3sports:([\w]*):(\w+) (.*?)]/";
 		$markerNames = array('CONTENT', 'SUBHEADER');
