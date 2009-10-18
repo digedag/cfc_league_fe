@@ -2,6 +2,23 @@
 
 Änderungen
 ----------
+
+v0.5.4 (18.10.2009) (not released)
+* Some issues with pointsystem control fixed in league table
+* There is a new HTML-Template example in leaguetable.html to show TableScope-Controls as Select-Boxes.
+* Output of profiles in Team-View changed. This is now full configureable. This is how to change sorting:
+[[code]]
+teamview.team.player.options.orderby.PROFILE.LAST_NAME = asc
+[[code]]
+** Notice: the Subpart-Marker for coach-list changed from ###TEAM_COACHES### to ###TEAM_COACHS###
+* Output of competition logo
+* Matchreport: Output of player names with support of stage_name
+* Matchreport: New marker ###MATCH_DAM_IMAGES### for picture output.
+* Scope will be cached in plugin. New register-value T3SPORTS_SCOPEPARAMS with current Scopevalues. Set scope.noCache=1 to disable this caching.
+* Rendering of team logos changed. Have a look at lib.t3sports.teamLogo
+* Bug 2840858: Agegroup was wrong
+* Some performance improvements
+
 v0.5.3 (06.12.2008)
 * Due to an error the modulmarker ###MARKERMODULE__MATCHHISTORY### was switched back to a simple marker. The subpart is now outside of ###MATCHREPORT###. Have a look at matchreport.html
 * New link ###PROFILE_REFEREEMATCHESLINK### for profile.
