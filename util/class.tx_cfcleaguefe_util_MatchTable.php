@@ -64,7 +64,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 	 */
 	public function getFields(&$fields, &$options) {
 		tx_cfcleaguefe_search_Builder::setField($fields,'COMPETITION.SAISON', OP_IN_INT, $this->_saisonIds);
-		tx_cfcleaguefe_search_Builder::setField($fields,'COMPETITION.AGEGROUP', OP_IN_INT, $this->_groupIds);
+		tx_cfcleaguefe_search_Builder::setField($fields,'COMPETITION.AGEGROUP', OP_INSET_INT, $this->_groupIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.COMPETITION', OP_IN_INT, $this->_compIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.ROUND', OP_IN_INT, $this->_roundIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM1.CLUB', OP_IN_INT, $this->_homeClubIds);
