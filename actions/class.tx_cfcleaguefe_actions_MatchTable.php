@@ -103,6 +103,10 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 			$matchtable->setHomeClubs($clubId);
 			$matchtable->setGuestClubs($clubId);
 		}
+		$teamAgeGroupIds = $configurations->get('matchtable.teamGroup');
+		if($teamAgeGroupIds) {
+			$matchtable->setTeamAgeGroups($teamAgeGroupIds);
+		}
 		
 		$matchtable->setTimeRange($configurations->get('matchtable.timeRangePast'),$configurations->get('matchtable.timeRangeFuture'));
 		if($configurations->get('matchtable.acceptRefereeIdFromRequest')) {

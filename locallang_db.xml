@@ -48,6 +48,7 @@
 			<label index="plugin.competition.flexform.matchtable.time_range">Time range</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.past">Days before</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.future">Days ahead</label>
+			<label index="plugin.competition.flexform.matchtable.teamgroup">Age group defined in team record</label>
 			<label index="plugin.competition.flexform.statistics.type">Type of statistics</label>
 			<label index="plugin.competition.flexform.statistics.type.player">Player</label>
 			<label index="plugin.competition.flexform.statistics.type.scorerlist">Scorer</label>
@@ -62,7 +63,7 @@
 
 			<label index="plugin.competition.flexform.saison">Saison</label>
 			<label index="plugin.competition.flexform.saisonInput">Show Selectbox for saison?</label>
-			<label index="plugin.competition.flexform.group">Age Group</label>
+			<label index="plugin.competition.flexform.group">Age Group of competition</label>
 			<label index="plugin.competition.flexform.groupInput">Show Selectbox for age group?</label>
 			<label index="plugin.competition.flexform.competition">Competition</label>
 			<label index="plugin.competition.flexform.competitionInput">Show Selectbox for competition?</label>
@@ -161,6 +162,7 @@
 			<label index="plugin.competition.flexform.matchtable.time_range">Zeitraum</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.past">Tage zurück</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.future">Tage im voraus</label>
+			<label index="plugin.competition.flexform.matchtable.teamgroup">Altersklasse des Teams</label>
 			<label index="plugin.competition.flexform.statistics.type">Art der Statistik</label>
 			<label index="plugin.competition.flexform.statistics.type.player">Spieler</label>
 			<label index="plugin.competition.flexform.statistics.type.scorerlist">Torschützenliste</label>
@@ -171,7 +173,7 @@
 			<label index="plugin.competition.flexform.tickerlist.ticker_url">Feste Url für Liveticker</label>
 
 			<label index="plugin.competition.flexform.saisonInput">Selectbox für Saison?</label>
-			<label index="plugin.competition.flexform.group">Altersklasse</label>
+			<label index="plugin.competition.flexform.group">Altersklasse des Wettbewerbs</label>
 			<label index="plugin.competition.flexform.groupInput">Selectbox for Altersklasse?</label>
 			<label index="plugin.competition.flexform.competition">Wettbewerb</label>
 			<label index="plugin.competition.flexform.competitionInput">Selectbox für Wettbewerb?</label>

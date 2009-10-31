@@ -93,7 +93,7 @@ class tx_cfcleaguefe_search_Builder {
 	 * Search for matches by scope
 	 *
 	 * @param array $fields
-	 * @param string $scope Scope Array
+	 * @param string $clubUids club uids
 	 * @return true
 	 */
 	static function buildMatchByClub(&$fields, $clubUids) {
@@ -110,7 +110,7 @@ class tx_cfcleaguefe_search_Builder {
 	 * Search for matches by teamUids
 	 *
 	 * @param array $fields
-	 * @param string $$teamUids comma separated uid string
+	 * @param string $teamUids comma separated uid string
 	 * @return true
 	 */
 	static function buildMatchByTeam(&$fields, $teamUids) {
@@ -122,7 +122,24 @@ class tx_cfcleaguefe_search_Builder {
 			$result = true;
 		}
 	}
-	
+
+	/**
+	 * Search for matches by agegroup of teams
+	 *
+	 * @param array $fields
+	 * @param string $groupUids comma separated uid string
+	 * @return true
+	 */
+	static function buildMatchByTeamAgeGroup(&$fields, $groupUids) {
+		if(strlen(trim($groupUids))) {
+			$joined['value'] = trim($groupUids);
+			$joined['cols'] = array('TEAM1.AGEGROUP', 'TEAM2.AGEGROUP');
+			$joined['operator'] = OP_IN_INT;
+			$fields[SEARCH_FIELD_JOINED][] = $joined;
+			$result = true;
+		}
+	}
+
 	public static function setField(&$fields, $field, $operator, $value) {
 		$result = false;
 		if(strlen(trim($value))) {

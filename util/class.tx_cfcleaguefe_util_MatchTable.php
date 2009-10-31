@@ -31,6 +31,7 @@ tx_div::load('tx_cfcleaguefe_search_Builder');
 class tx_cfcleaguefe_util_MatchTable  {
 	var $_saisonIds;
 	var $_groupIds;
+	var $_teamgroupIds;
 	var $_compIds;
 	var $_roundIds;
 	var $_clubIds;
@@ -70,9 +71,10 @@ class tx_cfcleaguefe_util_MatchTable  {
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM1.CLUB', OP_IN_INT, $this->_homeClubIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM2.CLUB', OP_IN_INT, $this->_guestClubIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.REFEREE', OP_IN_INT, $this->_refereeIds);
-		
+
 		tx_cfcleaguefe_search_Builder::buildMatchByClub($fields, $this->_clubIds);
 		tx_cfcleaguefe_search_Builder::buildMatchByTeam($fields, $this->_teamIds);
+		tx_cfcleaguefe_search_Builder::buildMatchByTeamAgeGroup($fields, $this->_teamgroupIds);
 		// Wird der Zeitraum eingegrenzt?
 		if(intval($this->_daysPast) || intval($this->_daysAhead)) {
 			// Wenn in eine Richtung eingegrenzt wird und in der anderen Richtung kein
@@ -151,21 +153,29 @@ class tx_cfcleaguefe_util_MatchTable  {
   	$this->_scopeArr = $scope;
   }
 	/**
-	 * Search for matches of specific age groups
+	 * Search for matches of competitions with a specific age groups
 	 *
 	 * @param string $uids
 	 */
-  function setAgeGroups($uids){
-    $this->_groupIds = $uids;
-  }
+	function setAgeGroups($uids){
+		$this->_groupIds = $uids;
+	}
+	/**
+	 * Search for matches of teams with a specific age groups
+	 *
+	 * @param string $uids
+	 */
+	function setTeamAgeGroups($uids){
+		$this->_teamgroupIds = $uids;
+	}
 	/**
 	 * Search for matches of specific competitions
 	 *
 	 * @param string $uids
 	 */
-  function setCompetitions($uids){
-    $this->_compIds = $uids;
-  }
+	function setCompetitions($uids){
+		$this->_compIds = $uids;
+	}
 	/**
 	 * Search for matches of specific competition rounds
 	 *
