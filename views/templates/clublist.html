@@ -1,0 +1,69 @@
+<html>
+<head>
+ <title>cfc_league_fe: Template for TeamView</title>
+</head>
+<body>
+
+<pre>
+Einige verfügbare Tags:
+
+###CLUB_NAME### Vereinsname
+###CLUB_EMAIL### Mailadresse
+###CLUB_WWW### Webadresse
+
+</pre>
+
+<!-- ###CLUB_LIST### begin-->
+
+<!-- ###CLUBS### begin entry for team list -->
+
+<!-- ###CHARBROWSER### begin-->
+<span class="cfcleague-profilelist-pagerlink">###PB_ITEM_LINK######PB_ITEM######PB_ITEM_LINK###</span>
+<span class="cfcleague-profilelist-pagersize">###PB_ITEM_LINK###(###PB_ITEM_SIZE###)###PB_ITEM_LINK###</span>
+<!-- ###CHARBROWSER### end-->
+
+<!-- ###CLUB### begin entry for single team -->
+<div id="cfcleague-teamview">
+  <h2>###CLUB_LOGO### ###CLUB_NAME###</h2>
+  <p>Webseite: ###CLUB_WWW###<br />
+  Mail: ###CLUB_EMAIL###<br />
+  </p>
+
+</div>
+<!-- ###CLUB### end -->
+
+
+<!-- ###PAGEBROWSER### START -->
+<div class="t3sports-pagebrowser">
+###PAGEBROWSER_CURRENT_PAGE###
+Seite ###PAGEBROWSER_CURRENT_PAGE_NUMBER###
+###PAGEBROWSER_CURRENT_PAGE###
+
+###PAGEBROWSER_NORMAL_PAGE###
+###PAGEBROWSER_NORMAL_PAGE_LINK###Seite ###PAGEBROWSER_NORMAL_PAGE_NUMBER### ###PAGEBROWSER_NORMAL_PAGE_LINK###
+###PAGEBROWSER_NORMAL_PAGE###
+
+###PAGEBROWSER_PREV_PAGE###
+&nbsp;###PAGEBROWSER_PREV_PAGE_LINK###<###PAGEBROWSER_PREV_PAGE_LINK###&nbsp;
+###PAGEBROWSER_PREV_PAGE###
+
+###PAGEBROWSER_NEXT_PAGE###
+&nbsp;###PAGEBROWSER_NEXT_PAGE_LINK###>###PAGEBROWSER_NEXT_PAGE_LINK###&nbsp;
+###PAGEBROWSER_NEXT_PAGE###
+
+###PAGEBROWSER_FIRST_PAGE###
+###PAGEBROWSER_FIRST_PAGE_LINK### |< ###PAGEBROWSER_FIRST_PAGE_LINK###
+###PAGEBROWSER_FIRST_PAGE###
+
+###PAGEBROWSER_LAST_PAGE###
+###PAGEBROWSER_LAST_PAGE_LINK### >| ###PAGEBROWSER_LAST_PAGE_LINK###
+###PAGEBROWSER_LAST_PAGE###
+
+</div>
+<!-- ###PAGEBROWSER### END -->
+
+<!-- ###CLUBS### end -->
+
+<!-- ###CLUB_LIST### end -->
+</body>
+</html>

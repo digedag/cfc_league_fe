@@ -86,6 +86,7 @@
 			<label index="plugin.report.flexform.action.TeamView">Team view</label>
 			<label index="plugin.report.flexform.action.ProfileView">Profile view</label>
 			<label index="plugin.report.flexform.action.ProfileList">Profile list</label>
+			<label index="plugin.report.flexform.action.ClubList">Club list</label>
 			<label index="plugin.report.flexform.tab.Common">Common</label>
 			<label index="plugin.report.flexform.tab.MatchReport">Match Report</label>
 			<label index="plugin.report.flexform.tickerType">Hide types in Ticker</label>
@@ -197,6 +198,7 @@
 			<label index="plugin.report.flexform.action.TeamView">Teamdarstellung</label>
 			<label index="plugin.report.flexform.action.ProfileView">Personenprofil</label>
 			<label index="plugin.report.flexform.action.ProfileList">Personenliste</label>
+			<label index="plugin.report.flexform.action.ClubList">Vereinsliste</label>
 			<label index="plugin.report.flexform.tickerType">Verstecke Typen im Ticker</label>
 			<label index="plugin.report.flexform.teamview.team">Zeige Team</label>
 			<label index="plugin.report.flexform.teamview.club">Nur Teams des Vereins</label>

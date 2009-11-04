@@ -115,6 +115,23 @@ lib.t3sports.profile {
   }
   weight.ifEmpty = -
   height.ifEmpty = -
+
+  dcfirstpicture = USER
+  dcfirstpicture {
+    userFunc = tx_rnbase_util_TSDAM->printImages
+    refField = dam_images
+    refTable = tx_cfcleague_profiles
+    limit = 1
+    template = EXT:cfc_league_fe/res/profilepics.html
+    subpartName = ###PROFILE_SINGLE###
+    media {
+      file = IMAGE
+      file.file.import.field = file
+	    file.file.maxW = 100
+	    file.file.maxH = 100
+    }
+  }
+
   firstImage {
     file.maxW = 100
     file.maxH = 100
@@ -140,6 +157,7 @@ lib.t3sports.profile {
 }
 
 lib.t3sports.club {
+  pagebrowser =< lib.t3sports.pagebrowser
   name.blank = -
   email.typolink {
   	target = _BLANK
@@ -894,6 +912,7 @@ plugin.tx_cfcleaguefe_report {
   teamviewTemplate = {$plugin.tx_cfcleaguefe_report.teamviewTemplate}
   profileTemplate = {$plugin.tx_cfcleaguefe_report.profileTemplate}
   profilelistTemplate = {$plugin.tx_cfcleaguefe_report.profilelistTemplate}
+  clublistTemplate = {$plugin.tx_cfcleaguefe_report.clublistTemplate}
 
   # Angaben zur ScopeAuswahl
   scopeSelection {
@@ -935,6 +954,16 @@ plugin.tx_cfcleaguefe_report {
     }
 
   }
+  clublist {
+  	charbrowser = 0
+    club =< lib.t3sports.club
+    club.logo {
+    }
+    options.orderby {
+      CLUB.NAME = asc
+    }
+  }
+
   # View TeamView
   teamview {
     team =< lib.t3sports.team
