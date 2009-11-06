@@ -60,14 +60,21 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends t3lib_svbase {
   }
   
 static $total = 0; 
-  public function handleMatch(&$match, $clubId) {
+	/**
+	 * Ein einzelnes Spiel auswerten
+	 *
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param int $clubId
+	 */
+	public function handleMatch(&$match, $clubId) {
 
     // Zunächst müssen alle Spieler des Spiels ermittelt werden
     // Jeder Spieler, der am Spiel beteiligt ist, steht in der Aufstellung oder als
     // Wechselspieler im Match.
     // Wir betrachten nur die Spieler des gesetzten Clubs
     $team = $match->getHome();
-    if($team->record['club'] == $clubId || !$clubId) {
+    if($this->isObservedTeam($team)) {
+    //&if($team->record['club'] == $clubId || !$clubId) {
       $players = $this->getPlayer($match,true); // All Spieler des Heimteams holen
 
     if(is_array($players)) 
@@ -78,7 +85,7 @@ static $total = 0;
         }
     }
     $team = $match->getGuest();
-    if($team->record['club'] == $clubId || !$clubId) {
+    if($this->isObservedTeam($team)) {
       // Nochmal die Spieler des Auswärtsteams
       $players = $this->getPlayer($match, false); // All Spieler des Gastteams holen
       if(is_array($players)) 
@@ -89,6 +96,19 @@ static $total = 0;
     }
 //t3lib_div::debug( self::$total, 'total sv2_playerstatistics');  
   }
+  /**
+   * Entscheidet, ob die Spieler des Teams in die Statistik eingehen
+   *
+   * @param tx_cfcleaguefe_models_team $team
+   * @return boolean
+   */
+	protected function isObservedTeam($team) {
+		$clubId = $this->scopeArr['CLUB_UIDS'];
+		$ret = $team->record['club'] == $clubId || !$clubId;
+		$groupId = $this->scopeArr['TEAMGROUP_UIDS'];
+		$ret = $ret && ($team->record['agegroup'] == $groupId || !$groupId);
+		return $ret;
+	}
 	/**
 	 * Liefert die Spieler eines beteiligten Teams.
 	 *
