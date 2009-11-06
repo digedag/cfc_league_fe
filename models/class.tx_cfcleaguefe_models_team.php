@@ -23,13 +23,17 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 // Die Datenbank-Klasse
 require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
 
-tx_div::load('tx_cfcleaguefe_models_club');
-tx_div::load('tx_cfcleaguefe_search_Builder');
+tx_rnbase::load('tx_cfcleaguefe_models_club');
+tx_rnbase::load('tx_cfcleaguefe_search_Builder');
+tx_rnbase::load('tx_cfcleaguefe_models_group');
+
+
 
 /**
  * Model für ein Team.
