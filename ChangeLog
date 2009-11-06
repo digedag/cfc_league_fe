@@ -3,6 +3,15 @@
 Änderungen
 ----------
 
+v0.5.5 (06.11.2009) (not released)
+* New view for club list
+* Markers changed for profile images from ###PROFILE_FIRST_PICTURE_IMGTAG### to ###PROFILE_FIRSTPICTURE###
+* To show all pictures of a profile use ###PROFILE_PICTURES###
+* Markers changed for match pictures. You have to use ###MATCH_PICTURES### and ###MATCH_FIRSTPICTURE### now.
+* Examples for image output with Lightbox 2 and Galleriffic
+* Competitions: It is now possible to add more then one age group to a competition
+* Teams: It is now possible to set an age group for a team
+
 v0.5.4 (18.10.2009) (not released)
 * Some issues with pointsystem control fixed in league table
 * There is a new HTML-Template example in leaguetable.html to show TableScope-Controls as Select-Boxes.
