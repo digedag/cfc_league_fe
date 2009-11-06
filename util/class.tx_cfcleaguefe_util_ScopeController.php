@@ -60,7 +60,8 @@ class tx_cfcleaguefe_util_ScopeController {
 			// Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
 			$ret = Array();
 			$ret['SAISON_UIDS'] = self::handleCurrentSaison($parameters,$configurations, $useObjects);
-			$ret['GROUP_UIDS'] = self::handleCurrentGroup($parameters,$configurations, $useObjects);
+			$ret['GROUP_UIDS'] = self::handleCurrentCompetitionGroup($parameters,$configurations, $useObjects);
+			$ret['TEAMGROUP_UIDS'] = self::handleCurrentTeamGroup($parameters,$configurations, $useObjects);
 			self::handleCurrentCompetition($ret, $parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $useObjects);
 			$ret['CLUB_UIDS'] = self::handleCurrentClub($parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $ret['COMP_UIDS'], $useObjects);
 			$ret['ROUND_UIDS'] = self::handleCurrentRound($parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $ret['COMP_UIDS'], $ret['CLUB_UIDS'], $useObjects);
@@ -117,28 +118,51 @@ class tx_cfcleaguefe_util_ScopeController {
 		return $saisonUids;
 	}
 
-  /**
-   * Diese Funktion stellt die UIDs der aktuell ausgewählten Alterklasse bereit.
-   * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
-   * vorbereitet und in die viewData der Config gelegt.
-   * @return String Die UIDs als String
-   */
-  private function handleCurrentGroup($parameters,&$configurations, $useObjects = false) {
-    $viewData =& $configurations->getViewData();
-    $groupUids = $configurations->get('groupSelection');
+	/**
+	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Alterklasse für einen Wettbewerb bereit.
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * vorbereitet und in die viewData der Config gelegt.
+	 * @return String Die UIDs als String
+	 */
+	private function handleCurrentCompetitionGroup($parameters,&$configurations, $useObjects = false) {
+		$viewData =& $configurations->getViewData();
+		$groupUids = $configurations->get('groupSelection');
 
-    // Soll eine SelectBox für Altersgruppe gezeigt werden?
-    if($configurations->get('groupSelectionInput')) {
-      // Die UIDs der Wettkämpfe in Objekte umwandeln um eine Selectbox zu bauen
-      $groups = tx_cfcleaguefe_models_group::findAll($groupUids);
-      $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups,$parameters,'group', $useObjects ? '' : 'name');
-      $groupUids = $dataArr[1];
-      $viewData->offsetSet('group_select', $dataArr);
-      $configurations->addKeepVar('group',$groupUids);
+		// Soll eine SelectBox für Altersgruppe gezeigt werden?
+		if($configurations->get('groupSelectionInput')) {
+			// Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
+			$groups = tx_cfcleaguefe_models_group::findAll($groupUids);
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups,$parameters,'group', $useObjects ? '' : 'name');
+			$groupUids = $dataArr[1];
+			$viewData->offsetSet('group_select', $dataArr);
+			$configurations->addKeepVar('group',$groupUids);
 			self::$_scopeParams['group'] = $groupUids;
-    }
-    return $groupUids;
-  }
+		}
+		return $groupUids;
+	}
+
+	/**
+	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Alterklasse für einen Wettbewerb bereit.
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * vorbereitet und in die viewData der Config gelegt.
+	 * @return String Die UIDs als String
+	 */
+	private function handleCurrentTeamGroup($parameters,&$configurations, $useObjects = false) {
+		$viewData =& $configurations->getViewData();
+		$groupUids = $configurations->get('scope.teamGroup');
+
+		// Soll eine SelectBox für Altersgruppe gezeigt werden?
+		if($configurations->get('scope.teamGroupSelectionInput')) {
+			// Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
+			$groups = tx_cfcleaguefe_models_group::findAll($groupUids);
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups,$parameters,'group', $useObjects ? '' : 'name');
+			$groupUids = $dataArr[1];
+			$viewData->offsetSet('teamgroup_select', $dataArr);
+			$configurations->addKeepVar('teamgroup',$groupUids);
+			self::$_scopeParams['teamgroup'] = $groupUids;
+		}
+		return $groupUids;
+	}
 
 	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Vereine bereit.

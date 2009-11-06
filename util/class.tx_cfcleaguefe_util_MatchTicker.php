@@ -48,27 +48,30 @@ require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
  */
 class tx_cfcleaguefe_util_MatchTicker {
 
-  /**
-   * Liefert alle Spiele des Scopes mit den geladenen Tickermeldungen.
-   */
-  function &getMatches4Scope($scopeArr, $types = 0) {
+	/**
+	 * Liefert alle Spiele des Scopes mit den geladenen Tickermeldungen.
+	 */
+	function &getMatches4Scope($scopeArr, $types = 0) {
 // Wir liefern alle Spiele des Scopes mit den zugehörigen Tickermeldungen
 //    $time = t3lib_div::milliseconds();
-    // Die Spiele bekommen wir über die Matchtable
-    $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
-    // Uns interessieren nur beendete Spiele
-    $matches = $matchTable->findMatches($scopeArr['SAISON_UIDS'], 
-                                        $scopeArr['GROUP_UIDS'],
-                                        $scopeArr['COMP_UIDS'],
-                                        $scopeArr['CLUB_UIDS'],
-                                        $scopeArr['ROUND_UIDS'], '2', 1);
-    // Jetzt holen wir die Tickermeldungen für diese Spiele
-    $matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
+		// Die Spiele bekommen wir über die Matchtable
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matchtable = $service->getMatchTable();
+		$matchtable->setScope($scopeArr);
+		$matchtable->setStatus(2);
+		$fields = array();
+		$options = array();
+		$options['orderby']['MATCH.DATE'] = 'asc';
+		$matchtable->getFields($fields, $options);
+		$matches = $service->search($fields, $options);
+
+		// Jetzt holen wir die Tickermeldungen für diese Spiele
+		$matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
 
 //    t3lib_div::debug( t3lib_div::milliseconds() - $time, 'util_ticker');
 
-    return $matches;
-  }
+		return $matches;
+	}
 
 
 	/**

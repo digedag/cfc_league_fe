@@ -28,6 +28,7 @@ tx_div::load('tx_rnbase_util_DB');
 
 interface tx_cfcleaguefe_MatchService {
   function search($fields, $options);
+  function getMatchTable();
 }
 
 /**
@@ -37,19 +38,25 @@ interface tx_cfcleaguefe_MatchService {
  */
 class tx_cfcleaguefe_sv1_Matches extends t3lib_svbase implements tx_cfcleaguefe_MatchService  {
 
-  /**
-   * Search database for matches
-   *
-   * @param array $fields
-   * @param array $options
-   * @return array of tx_cfcleaguefe_models_match
-   */
-  function search($fields, $options) {
-  	tx_div::load('tx_rnbase_util_SearchBase');
+	/**
+	 * Search database for matches
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @return array of tx_cfcleaguefe_models_match
+	 */
+	function search($fields, $options) {
+		tx_div::load('tx_rnbase_util_SearchBase');
 		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Match');
 		return $searcher->search($fields, $options);
-  }
-  
+	}
+	/**
+	 * @return tx_cfcleaguefe_util_MatchTable
+	 */
+	function getMatchTable() {
+		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv1/class.tx_cfcleaguefe_sv1_Matches.php']) {

@@ -130,6 +130,7 @@ class tx_cfcleaguefe_models_matchtable{
    * @param $status Status der Spiele (0-angesetzt, 1-läuft, 2-beendet) als String
    * @param $extended Optional kann das Spiel mit allen verfügbaren Daten geladen werden
    * @return array of tx_cfcleaguefe_models_match
+   * @deprecated use tx_cfcleaguefe_util_MatchTable instead
    */
   function findMatches($saison, $groups, $competitions, $club, $round, $status = '0,1,2', $extended = 0){
 

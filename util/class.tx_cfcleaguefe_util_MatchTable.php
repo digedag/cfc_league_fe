@@ -148,6 +148,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 		$this->setClubs($scope['CLUB_UIDS']);
 		$this->setCompetitionObligation($scope['COMP_OBLIGATION']);
 		$this->setCompetitionTypes($scope['COMP_TYPES']);
+		$this->setTeamAgeGroups($scope['TEAMGROUP_UIDS']);
 
 		// Maybe we need it later...
   	$this->_scopeArr = $scope;

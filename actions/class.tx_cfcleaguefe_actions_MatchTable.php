@@ -90,7 +90,8 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 			$teamId = $parameters->offsetGet('teamId');
 		}
 
-		$matchtable = $this->getMatchTable();
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matchtable = $service->getMatchTable();
 		$matchtable->setScope($scopeArr);
 		$matchtable->setTeams($teamId);
 		$clubId = $configurations->get('matchtable.fixedOpponentClub');
@@ -103,10 +104,6 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 			$matchtable->setHomeClubs($clubId);
 			$matchtable->setGuestClubs($clubId);
 		}
-		$teamAgeGroupIds = $configurations->get('matchtable.teamGroup');
-		if($teamAgeGroupIds) {
-			$matchtable->setTeamAgeGroups($teamAgeGroupIds);
-		}
 		
 		$matchtable->setTimeRange($configurations->get('matchtable.timeRangePast'),$configurations->get('matchtable.timeRangeFuture'));
 		if($configurations->get('matchtable.acceptRefereeIdFromRequest')) {
@@ -114,12 +111,6 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		}
 
 		$matchtable->getFields($fields, $options);
-	}
-	/**
-	 * @return tx_cfcleaguefe_util_MatchTable
-	 */
-	function getMatchTable() {
-		return t3lib_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
   /**
    * Initializes page browser

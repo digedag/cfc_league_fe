@@ -48,7 +48,6 @@
 			<label index="plugin.competition.flexform.matchtable.time_range">Time range</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.past">Days before</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.future">Days ahead</label>
-			<label index="plugin.competition.flexform.matchtable.teamgroup">Age group defined in team record</label>
 			<label index="plugin.competition.flexform.statistics.type">Type of statistics</label>
 			<label index="plugin.competition.flexform.statistics.type.player">Player</label>
 			<label index="plugin.competition.flexform.statistics.type.scorerlist">Scorer</label>
@@ -75,7 +74,7 @@
 			<label index="plugin.competition.flexform.competitionObligation.Free">free</label>
 
 			<label index="plugin.competition.flexform.roundInput">Show Selectbox for competition rounds?</label>
-			<label index="plugin.competition.flexform.group">Age group</label>
+			<label index="plugin.competition.flexform.group">Age group of competition</label>
 			<label index="plugin.competition.flexform.club">Club</label>
 			<label index="plugin.competition.flexform.clubInput">Show Selectbox for Club</label>
 			<label index="plugin.competition.flexform.tssetup">plugin.tx_cfcleaguefe_competition.</label>
@@ -163,7 +162,6 @@
 			<label index="plugin.competition.flexform.matchtable.time_range">Zeitraum</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.past">Tage zurück</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.future">Tage im voraus</label>
-			<label index="plugin.competition.flexform.matchtable.teamgroup">Altersklasse des Teams</label>
 			<label index="plugin.competition.flexform.statistics.type">Art der Statistik</label>
 			<label index="plugin.competition.flexform.statistics.type.player">Spieler</label>
 			<label index="plugin.competition.flexform.statistics.type.scorerlist">Torschützenliste</label>
