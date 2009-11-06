@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Simple Template example for DAM images</title>
+</head>
+<body>
+
+Vorlagen für die Bildausgabe bei Personen, Spielen, Teams usw.
+Die Ausgabe der Bilder erfolgt über TSDAM. Der Subpart FIRSTPICTURE wird für das erste Bild 
+verwendet. Alle anderen Bilder werden über den Subpart PICTURES gerendert.
+Dieses Template ist für die Verwendung mit Lightbox vorbereitet.
+
+http://www.huddletogether.com/projects/lightbox2/
+
+Die notwendigen JS und CSS-Dateien müssen aber manuell in die Seite eingebunden werden.
+
+###FIRSTPICTURE###
+###MEDIAS######MEDIA###<a href="###MEDIA_FILE###" rel="lightbox[pictures]">###MEDIA_THUMBNAIL###</a> ###MEDIA######MEDIAS###
+###FIRSTPICTURE###
+
+###PICTURES###
+###MEDIAS######MEDIA###<a href="###MEDIA_FILE###" rel="lightbox[pictures]">###MEDIA_THUMBNAIL###</a>###MEDIA######MEDIAS###
+###PICTURES###
+
+
+###TEAM_FIRSTPICTURE###
+###MEDIAS######MEDIA###
+  <h1>###MEDIA_TITLE### (###LABEL_team###)</h1>
+
+<a href="###MEDIA_FILE###" rel="lightbox[pictures]">###MEDIA_THUMBNAIL###</a>
+
+<p class="cfcleague-teamview-firstpic-creator">###MEDIA_CREATOR###</p>
+<p class="cfcleague-teamview-firstpic-description">###MEDIA_DESCRIPTION###</p>
+###MEDIA######MEDIAS###
+###TEAM_FIRSTPICTURE###
+
+</body>
+</html>

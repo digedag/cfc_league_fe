@@ -65,82 +65,74 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 			return $formatter->configurations->getLL('profile_notFound');
 		}
 		$profile->addTeamNotes($this->options['team']);
+		$this->prepareRecord($profile);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_initRecord', array('item' => &$profile, 'template'=>&$template), $this);
 		
 		// Es wird das MarkerArray mit den Daten des Spielers gefüllt.
-		$markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $confId , 0, $marker.'_',$profile->getColumnNames());
+		$ignore = self::findUnusedCols($profile->record, $template, $marker);
+		$markerArray = $formatter->getItemMarkerArrayWrapped($profile->record, $confId , $ignore, $marker.'_',$profile->getColumnNames());
 		$markerArray['###'.$marker.'_SIGN###'] = $profile->getSign();
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
-		$this->prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
+		$this->prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
     
-		// Jetzt die Bilder einbinden
-		$subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
+//		// Jetzt die Bilder einbinden
+//		$subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
 
 		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_afterSubst', array('item' => &$profile, 'template'=>&$template), $this);
-		
-		// Okay the normal stuff is done. Now lookout for external marker services.
-		$markerArray = array();
-		$subpartArray = array();
-		$wrappedSubpartArray = array();
-
-		$params['confid'] = $confId;
-		$params['marker'] = $marker;
-		$params['profile'] = $profile;
-		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
-		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-    
-		return $out;
+		return $template;
 	}
-	
+	private function prepareRecord($item) {
+		$item->record['firstpicture'] = $item->record['dam_images'];
+		$item->record['pictures'] = $item->record['dam_images'];
+	}
   /**
    * Es werden die Bilder eingebunden
    */
-  private function _addProfilePictures(&$firstMarkerArray,$profile, $formatter, $template, $profileConfId, $profileMarker) {
-    // Das erste Bild ermitteln
-    $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_profiles', $profile->uid, 'dam_images');
-    list($uid, $filePath) = each($damPics['files']);
-
-    if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
-      // Alle Marker löschen
-    	
-    	$firstMarkerArray['###'.$profileMarker.'_FIRST_PICTURE_IMGTAG###'] = $formatter->dataStdWrap($profile->record, '', $profileConfId.'firstImage.dummy.');
-//      $gSubpartArray['###'. $profileMarker .'_PICTURES###'] = '';
-      tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
-                        tx_rnbase_util_FormatUtil::getDAMColumns(), $profileMarker.'_FIRST_PICTURE_');
-//t3lib_div::debug($firstMarkerArray, 'view_profile');
-      return '';
-    }
-
-    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
-    $media = new $mediaClass($filePath);
-		// Check DAM-Version
-		if(method_exists($media, 'fetchFullMetaData'))
-			$media->fetchFullMetaData();
-		else
-			$media->fetchFullIndex();
-    
-    $markerFirst = $formatter->getItemMarkerArray4DAM($media, $profileConfId.'firstImage.',$profileMarker.'_FIRST_PICTURE');
-    $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
-    
-    // Jetzt ersetzen wir die weiteren Bilder
-    // Das Template holen wir aus dem übergebenen Template
-    $pictureTemplate = $formatter->cObj->getSubpart($template,'###'.$profileMarker.'_PICTURES###');
-    if(!$pictureTemplate) { // Ohne Template binden wir auch keine Bilder ein
-      return '';
-    }
-
-    // Diese werden sofort durch das Template gejagt
-    $markerArray = array();
-
-    while(list($uid, $filePath) = each($damPics['files'])) {
-      $media = new $mediaClass($filePath);
-      $markerArray = $this->formatter->getItemMarkerArray4DAM($media, $profileConfId.'images.',$profileMarker.'_PICTURE');
-      $out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
-    }
-    return $out;
-  }
+//  private function _addProfilePictures(&$firstMarkerArray,$profile, $formatter, $template, $profileConfId, $profileMarker) {
+//    // Das erste Bild ermitteln
+//    $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_profiles', $profile->uid, 'dam_images');
+//    list($uid, $filePath) = each($damPics['files']);
+//
+//    if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
+//      // Alle Marker löschen
+//    	
+//    	$firstMarkerArray['###'.$profileMarker.'_FIRST_PICTURE_IMGTAG###'] = $formatter->dataStdWrap($profile->record, '', $profileConfId.'firstImage.dummy.');
+////      $gSubpartArray['###'. $profileMarker .'_PICTURES###'] = '';
+//      tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
+//                        tx_rnbase_util_FormatUtil::getDAMColumns(), $profileMarker.'_FIRST_PICTURE_');
+////t3lib_div::debug($firstMarkerArray, 'view_profile');
+//      return '';
+//    }
+//
+//    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
+//    $media = new $mediaClass($filePath);
+//		// Check DAM-Version
+//		if(method_exists($media, 'fetchFullMetaData'))
+//			$media->fetchFullMetaData();
+//		else
+//			$media->fetchFullIndex();
+//    
+//    $markerFirst = $formatter->getItemMarkerArray4DAM($media, $profileConfId.'firstImage.',$profileMarker.'_FIRST_PICTURE');
+//    $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
+//    
+//    // Jetzt ersetzen wir die weiteren Bilder
+//    // Das Template holen wir aus dem übergebenen Template
+//    $pictureTemplate = $formatter->cObj->getSubpart($template,'###'.$profileMarker.'_PICTURES###');
+//    if(!$pictureTemplate) { // Ohne Template binden wir auch keine Bilder ein
+//      return '';
+//    }
+//
+//    // Diese werden sofort durch das Template gejagt
+//    $markerArray = array();
+//    while(list($uid, $filePath) = each($damPics['files'])) {
+//      $media = new $mediaClass($filePath);
+//      $markerArray = $formatter->getItemMarkerArray4DAM($media, $profileConfId.'images.',$profileMarker.'_PICTURE');
+//      $out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
+//    }
+//    return $out;
+//  }
 	/**
 	 * Links vorbereiten
 	 *
@@ -151,17 +143,17 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	protected function prepareLinks(&$profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+	protected function prepareLinks(&$profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
 
 //		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
 		if($profile->hasReport()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showprofile', $marker, array('profileId' => $profile->uid));
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showprofile', $marker, array('profileId' => $profile->uid), $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper('showprofile').'LINK';
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
 		}
-		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'refereematches', $marker, array('refereeId' => $profile->uid));
+		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'refereematches', $marker, array('refereeId' => $profile->uid), $template);
 	}
 }
 

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Simple Template example for DAM images</title>
+</head>
+<body>
+
+Alternative Vorlage für die Bildausgabe mit der JS-Gallerie Galleriffic. Da Galleriffic nur bei der 
+Ausgabe von mehreren Bildern sinnvoll ist, wird hier nur der Subpart PICTURES vorbereitet.
+
+http://www.twospy.com/galleriffic/
+
+Die notwendigen JS und CSS-Dateien müssen aber manuell in die Seite eingebunden werden.
+
+###PICTURES###
+###MEDIAS###
+<div id="controls"></div>
+<div id="loading"></div>
+<div id="slideshow"></div>
+<div id="caption"></div>
+<div id="thumbs">
+<ul class="thumbs noscript">
+###MEDIA###
+	<li>
+    <a class="thumb" name="IMG_###MEDIA_UID###" href="###MEDIA_FILE###" title="###MEDIA_TITLE###">
+        ###MEDIA_THUMBNAIL###
+    </a>
+    <div class="caption">
+        ###MEDIA_DESCRIPTION###
+    </div>
+	</li>
+###MEDIA###
+</ul>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+				// We only want these styles applied when javascript is enabled
+				$('div.navigation').css({'width' : '300px', 'float' : 'left'});
+				$('div.content').css('display', 'block');
+
+				// Initially set opacity on thumbs and add
+				// additional styling for hover effect on thumbs
+				var onMouseOutOpacity = 0.67;
+				$('#thumbs ul.thumbs li').opacityrollover({
+					mouseOutOpacity:   onMouseOutOpacity,
+					mouseOverOpacity:  1.0,
+					fadeSpeed:         'fast',
+					exemptionSelector: '.selected'
+				});
+				
+				// Initialize Advanced Galleriffic Gallery
+				var gallery = $('#thumbs').galleriffic({
+					delay:                     2500,
+					numThumbs:                 15,
+					preloadAhead:              10,
+					enableTopPager:            true,
+					enableBottomPager:         true,
+					maxPagesToShow:            7,
+					imageContainerSel:         '#slideshow',
+					controlsContainerSel:      '#controls',
+					captionContainerSel:       '#caption',
+					loadingContainerSel:       '#loading',
+					renderSSControls:          true,
+					renderNavControls:         true,
+					playLinkText:              'Play Slideshow',
+					pauseLinkText:             'Pause Slideshow',
+					prevLinkText:              '&lsaquo; Previous Photo',
+					nextLinkText:              'Next Photo &rsaquo;',
+					nextPageLinkText:          'Next &rsaquo;',
+					prevPageLinkText:          '&lsaquo; Prev',
+					enableHistory:             false,
+					autoStart:                 false,
+					syncTransitions:           true,
+					defaultTransitionDuration: 900
+				});
+});
+
+</script>
+
+###MEDIAS###
+###PICTURES###
+
+
+
+</body>
+</html>

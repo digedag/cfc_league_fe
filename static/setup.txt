@@ -75,6 +75,23 @@ lib.t3sports.competition {
   logo.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_complogo}
 }
 
+lib.t3sports.dummyImage = IMAGE
+lib.t3sports.dummyImage {
+  file = GIFBUILDER
+  file {
+    XY = 70,100
+    backColor = #ffff00
+    10 = TEXT
+    10 {
+      text = Kein Bild
+      fontSize = 14
+      niceText = 1
+      fontColor = #000000
+      offset = 5, 43
+    }
+  }
+}
+
 # Allgemeines Formatierungsangaben für Personen
 lib.t3sports.profile {
   pagebrowser =< lib.t3sports.pagebrowser
@@ -116,43 +133,33 @@ lib.t3sports.profile {
   weight.ifEmpty = -
   height.ifEmpty = -
 
-  dcfirstpicture = USER
-  dcfirstpicture {
+  pictures = USER
+  pictures {
     userFunc = tx_rnbase_util_TSDAM->printImages
     refField = dam_images
     refTable = tx_cfcleague_profiles
-    limit = 1
-    template = EXT:cfc_league_fe/res/profilepics.html
-    subpartName = ###PROFILE_SINGLE###
+    template = EXT:cfc_league_fe/res/lightboxpics.html
+    offset = 1
+    subpartName = ###PICTURES###
     media {
-      file = IMAGE
+      file = IMG_RESOURCE
       file.file.import.field = file
-	    file.file.maxW = 100
-	    file.file.maxH = 100
+      file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_profilePicture}
+      file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_profilePicture}
+      thumbnail < .file
+      thumbnail = IMAGE
+      thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_profileThumb}
+      thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_profileThumb}
+      thumbnail.params = border="0"
+      thumbnail.titleText.field = title
+#      thumbnail.altText.field = description
     }
   }
-
-  firstImage {
-    file.maxW = 100
-    file.maxH = 100
-    # Dummy is used if no image is given
-    dummy.cObject = IMAGE
-    dummy.cObject {
-      file = GIFBUILDER
-	    file {
-	      XY = 70,100
-        backColor = #ffff00
-        10 = TEXT
-        10 {
-          text = Kein Bild
-          fontSize = 14
-          niceText = 1
-          fontColor = #000000
-          offset = 5, 43
-        }
-
-      }
-    }
+  firstpicture =< lib.t3sports.profile.pictures
+  firstpicture {
+    limit = 1
+    offset = 0
+    subpartName = ###FIRSTPICTURE###
   }
 }
 
@@ -306,20 +313,41 @@ lib.t3sports.team {
   roll.value = 1
   listinfo.llkeyEmpty = teamlist_empty
 
-  firstImage {
-    file.maxW = 480
-    file.maxH = 500
-    file_ctime.strftime = %d-%b-%y
-    file_ctime.wrap = Letzte Änderung:&nbsp;
-    imageLinkWrap < tt_content.image.20.1.imageLinkWrap
-    description.parseFunc =< lib.parseFunc_RTE
-    creator.wrap = Foto:&nbsp; |
-    creator.ifEmpty = -
+  pictures = USER
+  pictures {
+    userFunc = tx_rnbase_util_TSDAM->printImages
+    refField = dam_images
+    refTable = tx_cfcleague_teams
+    template = EXT:cfc_league_fe/res/lightboxpics.html
+    offset = 1
+    subpartName = ###PICTURES###
+    media {
+      file = IMG_RESOURCE
+      file.file.import.field = file
+      file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
+      file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
+      thumbnail < .file
+      thumbnail = IMAGE
+      thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamThumb}
+      thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamThumb}
+      thumbnail.params = border="0"
+      thumbnail.titleText.field = title
+    }
   }
-  images {
-    file.maxW = 100
-    file.maxH = 100
-    imageLinkWrap < tt_content.image.20.1.imageLinkWrap
+  firstpicture =< lib.t3sports.team.pictures
+  firstpicture {
+    limit = 1
+    offset = 0
+    subpartName = ###TEAM_FIRSTPICTURE###
+    media {
+      description.br = 1
+      creator.wrap = Foto:&nbsp; |
+      creator.ifEmpty = -
+      thumbnail {
+        file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
+        file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
+      }
+    }
   }
   # Formatierung der Spieler-, Trainer-, Betreuerdatensätze
   player =< lib.t3sports.profile
@@ -377,6 +405,34 @@ lib.t3sports.match {
   liveticker_author.required = 1
   game_report_author.wrap = Der Spielbericht von&nbsp;|
   game_report_author.required = 1
+
+  pictures = USER
+  pictures {
+    userFunc = tx_rnbase_util_TSDAM->printImages
+    refField = dam_images
+    refTable = tx_cfcleague_games
+    template = EXT:cfc_league_fe/res/lightboxpics.html
+#    template = EXT:cfc_league_fe/res/gallerifficpics.html
+    subpartName = ###PICTURES###
+    media {
+      file = IMG_RESOURCE
+      file.file.import.field = file
+      file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_matchPicture}
+      file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_matchPicture}
+      thumbnail < .file
+      thumbnail = IMAGE
+      thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_matchThumb}
+      thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_matchThumb}
+      thumbnail.params = border="0"
+      thumbnail.titleText.field = title
+    }
+  }
+  firstpicture =< lib.t3sports.match.pictures
+  firstpicture {
+    limit = 1
+    offset = 0
+    subpartName = ###FIRSTPICTURE###
+  }
 }
 
 plugin.tx_cfcleaguefe_competition {

@@ -96,7 +96,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$this->pullTT();
 		if($this->fullMode) {
 			$this->pushTT('add media');
-			$this->_addPictures($subpartArray, $markerArray,$match,$formatter, $template, $confId, $marker);
 			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $confId, $marker);
 			$this->pullTT();
 		}
@@ -162,6 +161,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = 0;
 		}
 
+		$match->record['pictures'] = $match->record['dam_images'];
+		$match->record['firstpicture'] = $match->record['dam_images'];
+		
 		$report =&$match->getMatchReport();
 		if(!is_object($report)) return;
 		// Die Aufstellungen setzen
@@ -225,56 +227,56 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * @param $firstMarkerArray
    * @deprecated use templates based picture output from rn_base
    */
-  private function _addPictures(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
-  	// Prüfen, ob Marker vorhanden sind
-  	if(!(self::containsMarker($template, $baseMarker .'_FIRST_PICTURE') && self::containsMarker($template, $baseMarker .'_PICTURES')))
-  		return;
-    // Das erste Bild ermitteln
-    $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_images');
-    list($uid, $filePath) = each($damPics['files']);
-    if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
-      // Alle Marker löschen
-      $firstMarkerArray['###'. $baseMarker .'_FIRST_PICTURE###'] = '';
-      $firstMarkerArray['###'. $baseMarker .'_FIRST_PICTURE_IMGTAG###'] = '';
-      $gSubpartArray['###'. $baseMarker .'_PICTURES###'] = '';
-      tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
-                        tx_rnbase_util_FormatUtil::getDAMColumns(), $baseMarker.'_FIRST_PICTURE_');
-      return;
-    }
-
-    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
-    $media = new $mediaClass($filePath);
-		// Check DAM-Version
-		if(method_exists($media, 'fetchFullMetaData'))
-			$media->fetchFullMetaData();
-		else
-			$media->fetchFullIndex();
-    $markerFirst = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'firstImage.', $baseMarker.'_FIRST_PICTURE');
-    $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
-//t3lib_div::debug($formatter->cObj->data, 'match_marker');
-    
-    // Jetzt ersetzen wir die weiteren Bilder
-    // Zuerst wieder das Template laden
-    $gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_PICTURES###');
-
-    $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_PICTURE###');
-    $markerArray = array();
-    $out = '';
-//    reset($damPics);
-
-		// Alle Bilder hinzufügen
-    while(list($uid, $filePath) = each($damPics['files'])) {
-      $media = new $mediaClass($filePath);
-      $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'images.',$baseMarker.'_PICTURE');
-      $out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
-    }
-    // Der String mit den Bilder ersetzt jetzt den Subpart ###TEAM_PICTURES_2###
-    if(strlen(trim($out)) > 0) {
-      $subpartArray['###'. $baseMarker .'_PICTURE###'] = $out;
-      $out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
-    }
-    $gSubpartArray['###'. $baseMarker .'_PICTURES###'] = $out;
-  }
+//  private function _addPictures(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
+//  	// Prüfen, ob Marker vorhanden sind
+//  	if(!(self::containsMarker($template, $baseMarker .'_FIRST_PICTURE') && self::containsMarker($template, $baseMarker .'_PICTURES')))
+//  		return;
+//    // Das erste Bild ermitteln
+//    $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_images');
+//    list($uid, $filePath) = each($damPics['files']);
+//    if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
+//      // Alle Marker löschen
+//      $firstMarkerArray['###'. $baseMarker .'_FIRST_PICTURE###'] = '';
+//      $firstMarkerArray['###'. $baseMarker .'_FIRST_PICTURE_IMGTAG###'] = '';
+//      $gSubpartArray['###'. $baseMarker .'_PICTURES###'] = '';
+//      tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
+//                        tx_rnbase_util_FormatUtil::getDAMColumns(), $baseMarker.'_FIRST_PICTURE_');
+//      return;
+//    }
+//
+//    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
+//    $media = new $mediaClass($filePath);
+//		// Check DAM-Version
+//		if(method_exists($media, 'fetchFullMetaData'))
+//			$media->fetchFullMetaData();
+//		else
+//			$media->fetchFullIndex();
+//    $markerFirst = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'firstImage.', $baseMarker.'_FIRST_PICTURE');
+//    $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
+////t3lib_div::debug($formatter->cObj->data, 'match_marker');
+//    
+//    // Jetzt ersetzen wir die weiteren Bilder
+//    // Zuerst wieder das Template laden
+//    $gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_PICTURES###');
+//
+//    $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_PICTURE###');
+//    $markerArray = array();
+//    $out = '';
+////    reset($damPics);
+//
+//		// Alle Bilder hinzufügen
+//    while(list($uid, $filePath) = each($damPics['files'])) {
+//      $media = new $mediaClass($filePath);
+//      $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'images.',$baseMarker.'_PICTURE');
+//      $out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
+//    }
+//    // Der String mit den Bilder ersetzt jetzt den Subpart ###TEAM_PICTURES_2###
+//    if(strlen(trim($out)) > 0) {
+//      $subpartArray['###'. $baseMarker .'_PICTURE###'] = $out;
+//      $out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
+//    }
+//    $gSubpartArray['###'. $baseMarker .'_PICTURES###'] = $out;
+//  }
 
   /**
    * Die vorhandenen Mediadateien hinzufügen
