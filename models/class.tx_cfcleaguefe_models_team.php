@@ -73,11 +73,15 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
 	 */
 	function getAgeGroup() {
 		if(!$this->agegroup) {
-			$comps = $this->getCompetitions(true);
-			for($i=0, $cnt = count($comps); $i < $cnt; $i++) {
-				if(is_object($comps[$i]->getGroup())) {
-					$this->agegroup = $comps[$i]->getGroup();
-					break;
+			if(intval($this->record['agegroup']))
+				$this->agegroup = tx_cfcleaguefe_models_group::getInstance($this->record['agegroup']);
+			if(!$this->agegroup) {
+				$comps = $this->getCompetitions(true);
+				for($i=0, $cnt = count($comps); $i < $cnt; $i++) {
+					if(is_object($comps[$i]->getGroup())) {
+						$this->agegroup = $comps[$i]->getGroup();
+						break;
+					}
 				}
 			}
 		}
