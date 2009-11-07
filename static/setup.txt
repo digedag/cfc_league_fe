@@ -1051,31 +1051,6 @@ plugin.tx_cfcleaguefe_report {
       players_home = 1
       players_guest = 1
 
-      dam_images = USER
-      dam_images {
-        userFunc = tx_rnbase_util_TSDAM->printImages
-        refField = dam_images
-        refTable = tx_cfcleague_games
-        template = EXT:rn_base/res/simplegallery.html
-        media {
-          file = IMAGE
-          file.file.import.field = file
-          file.file.maxH = 100
-          file.file.maxW = 100
-        }
-      }
-
-		  firstImage {
-		    file.maxW = 100
-		    file.maxH = 100
-	      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
-		  }
-	    images {
-	      file.maxW = 100
-	      file.maxH = 100
-	      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
-	    }
-	
 	    media {
 	      mp3 {
 	        player {
