@@ -4,6 +4,7 @@
 ----------
 v0.6.0 (07.11.2009)
  * Bugfix for Task #3
+ * View club list: New marker ###CLUBMAP### to show clubs in a GoogleMap. Extension wec_map required!
 
 v0.5.6 (06.11.2009) (not released)
  * Player statistics supports agegroup in team

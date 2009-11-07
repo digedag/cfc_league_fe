@@ -65,6 +65,7 @@
 			<label index="matchcrosstable_noData">No matches found</label>
 
 			<label index="label_matchtable">Matchtable</label>
+			<label index="label_mapnotavailable">Map not available. Please install extension wec_map to enable this feature.</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -96,7 +97,7 @@
 			<label index="statistics_player_label_assists">Assists</label>
 			<label index="statistics_player_label_goals_own">ET</label>
 			<label index="statistics_player_label_change">Wechsel</label>
-			<label index="statistics_player_label_change_in">Einw.</label>
+			<label index="statistics_player_labellabel_change_in">Einw.</label>
 			<label index="statistics_player_label_change_out">Ausw.</label>
 			<label index="statistics_player_label_matchcount">Anz.</label>
 <!-- Labels der Zuschauerstatistik -->
@@ -116,6 +117,7 @@
 
 			<label index="matchcrosstable_noData">Es wurden keine Spiele gefunden.</label>
 			<label index="label_matchtable">Spielplan</label>
+			<label index="label_mapnotavailable">Kartenansicht nicht verfügbar. Die Extension wec_map muss für dieses Feature installiert werden.</label>
 		</languageKey>
 	</data>
 </T3locallang>

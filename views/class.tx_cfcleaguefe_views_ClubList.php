@@ -23,9 +23,13 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
-tx_div::load('tx_rnbase_view_Base');
+tx_rnbase::load('tx_rnbase_view_Base');
+tx_rnbase::load('tx_rnbase_maps_Factory');
+tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+
 
 
 /**
@@ -50,6 +54,20 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 										$markerArray,
 										$pagerData,
 										$charPointer, $configurations);
+		try {
+			$map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $this->getController()->getConfId().'map.');
+
+			foreach($items As $item) {
+				$marker = new tx_rnbase_maps_DefaultMarker();
+				$marker->setTitle($item->getName());
+				$marker->setCity($item->getCity());
+				$map->addMarker($marker);
+			}
+			$markerArray['###CLUBMAP###'] = $map->draw();
+		} catch (Exception $e) {
+			$markerArray['###CLUBMAP###'] = '###LABEL_mapNotAvailable###';
+		}
+
 		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
 		return $out;
 	}

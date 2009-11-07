@@ -1018,6 +1018,10 @@ plugin.tx_cfcleaguefe_report {
     options.orderby {
       CLUB.NAME = asc
     }
+    map {
+      width = 300
+      height = 300
+    }
   }
 
   # View TeamView
