@@ -28,7 +28,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_maps_Factory');
-tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 
 
@@ -54,24 +54,65 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 										$markerArray,
 										$pagerData,
 										$charPointer, $configurations);
-		try {
-			$map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $this->getController()->getConfId().'map.');
 
-			foreach($items As $item) {
-				$marker = new tx_rnbase_maps_DefaultMarker();
-				$marker->setTitle($item->getName());
-				$marker->setCity($item->getCity());
-				$map->addMarker($marker);
-			}
-			$markerArray['###CLUBMAP###'] = $map->draw();
-		} catch (Exception $e) {
-			$markerArray['###CLUBMAP###'] = '###LABEL_mapNotAvailable###';
-		}
+		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'CLUBMAP'))
+			$markerArray['###CLUBMAP###'] = $this->getMap($items, $configurations);
 
 		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
 		return $out;
 	}
 
+	private function getMap($items, $configurations) {
+		$ret = '###LABEL_mapNotAvailable###';
+		try {
+			$map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $this->getController()->getConfId().'map.');
+
+			tx_rnbase::load('tx_rnbase_maps_google_Icon');
+			tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+			foreach($items As $item) {
+				if(!$item->getCity() && !$item->getZip()) continue;
+
+				$marker = new tx_rnbase_maps_DefaultMarker();
+				$marker->setTitle($item->getName());
+				$marker->setCity($item->getCity());
+				$marker->setZip($item->getZip());
+				$marker->setStreet($item->getStreet());
+				$marker->setDescription('<br />'.$item->record['shortinfo']);
+				$this->addIcon($map, $marker, $item, $configurations);
+				$map->addMarker($marker);
+			}
+			$ret = $map->draw();
+		} catch (Exception $e) {
+			$ret = '###LABEL_mapNotAvailable###';
+		}
+		return $ret;
+	}
+	/**
+	 * Setzt ein Icon für die Map
+	 *
+	 * @param tx_rnbase_maps_DefaultMarker $marker
+	 * @param tx_cfcleague_models_Club $club
+	 * @param tx_rnbase_configurations $configurations
+	 */
+	private function addIcon($map, &$marker, $club, $configurations) {
+		$logo = $club->getFirstLogo();
+		if($logo) {
+			$imgConf = $configurations->get($this->getController()->getConfId().'map.icon.clublogo.');
+			$imgConf['file'] = $logo;
+			$url = $configurations->getCObj()->IMG_RESOURCE($imgConf);
+			$icon = new tx_rnbase_maps_google_Icon($map);
+			$icon->setName('club_'.$club->getUid());
+
+			$height = intval($imgConf['file.']['maxH']);
+			$width = intval($imgConf['file.']['maxW']);
+			$height = $height ? $height : 20;
+			$width = $width ? $width : 20;
+			$icon->setImage($url,$width,$height);
+			$icon->setShadow($url,$width,$height);
+			$icon->setAnchorPoint($width/2,$height/2);
+			$marker->setIcon($icon);
+		}
+	}
 	/**
 	 * Liefert den Pagerstring
 	 */

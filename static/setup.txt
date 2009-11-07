@@ -849,6 +849,21 @@ tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_compet
 ##############################################################
 #includeLibs.tx_cfcleaguefe_controllers_report = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_report.php
 
+# Defaultsettings for GoogleMaps
+lib.t3sports.map {
+  width = {$plugin.tx_cfcleaguefe_report.map_width}
+  height = {$plugin.tx_cfcleaguefe_report.map_height}
+  # Possible Controls: largeMap,smallMap,smallZoom,scale,mapType,overviewMap
+  google.controls = {$plugin.tx_cfcleaguefe_report.map_controls}
+  google.forcejs = {$plugin.tx_cfcleaguefe_report.map_forceinit}
+  # Possible values: RNMAP_MAPTYPE_STREET,RNMAP_MAPTYPE_SATELLITE,RNMAP_MAPTYPE_HYBRID,RNMAP_MAPTYPE_PHYSICAL
+  maptype = RNMAP_MAPTYPE_STREET
+  icon.clublogo {
+    file.maxH = 20
+    file.maxW = 20
+  }
+}
+
 lib.t3sports.matchreport.imgcard = IMAGE
 lib.t3sports.matchreport.imgcard {
   file = EXT:cfc_league_fe/res/gelbe-karte.gif
@@ -1018,10 +1033,7 @@ plugin.tx_cfcleaguefe_report {
     options.orderby {
       CLUB.NAME = asc
     }
-    map {
-      width = 300
-      height = 300
-    }
+    map =< lib.t3sports.map
   }
 
   # View TeamView

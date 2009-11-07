@@ -82,6 +82,15 @@ plugin.tx_cfcleaguefe_report {
   # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date in match report
   format_date = %d.%m.%Y %H:%M Uhr
 
+  # cat=T3sports (misc)/map_width; type=int+;label=Width of GoogleMap
+  map_width = 500
+  # cat=T3sports (misc)/map_height; type=int+;label=Heigth of GoogleMap
+  map_height = 400
+  # cat=T3sports (misc)/map_controls; type=string;label=Controls to show. Possible values are largeMap,smallMap,smallZoom,scale,mapType,overviewMap
+  map_controls = largeMap,mapType
+  # cat=T3sports (misc)/map_forceinit; type=boolean;label=Force JavaScript-Initialisation of GoogleMap. Useful if Map doesn't start.
+  map_forceinit = 1
+
   # cat=T3sports (misc)/maxW_profilePicture; type=int+;label=Maximum width of profile images
   maxW_profilePicture = 500
   # cat=T3sports (misc)/maxH_profilePicture; type=int+;label=Maximum heigth of profile images
