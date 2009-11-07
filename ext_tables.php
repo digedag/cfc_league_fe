@@ -32,7 +32,8 @@ t3lib_extMgm::addPlugin(Array('LLL:EXT:'.$_EXTKEY.'/locallang_db.php:plugin.comp
 // Unnötige Felder ausblenden
 $TCA['tt_content']['types']['list']['subtypes_excludelist']['tx_cfcleaguefe_report']='layout,select_key,pages';
 // Das tt_content-Feld pi_flexform einblenden
-$TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']='pi_flexform,imagewidth;;13, --palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgLinks;7, --palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgOptions;11,tx_hldamgallery_displaypage';
+$TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']='pi_flexform';
+//$TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']='pi_flexform,imagewidth;;13, --palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgLinks;7, --palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgOptions;11,tx_hldamgallery_displaypage';
 
 // Die Felder für die Bildbearbeitung einblenden
 //$TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']='imagewidth'
