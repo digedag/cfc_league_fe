@@ -22,12 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// Die Datenbank-Klasse
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php'); // Prüfen!!
-//require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_base.php');
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_Queue.php');
-
 require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
+tx_rnbase::load('tx_cfcleague_util_Cache');
+tx_rnbase::load('tx_rnbase_util_Queue');
 
 
 /**
@@ -80,6 +79,9 @@ class tx_cfcleaguefe_util_MatchTicker {
 	 * @param mixed $types unused!
 	 */
 	function &getTicker4Match(&$match, $types = 0) {
+		$arr = tx_cfcleague_util_Cache::get('matchnotes_'.$match->getUid());
+		if($arr) return $arr;
+
 		$arr =& $match->getMatchNotes();
 
 		// Die Notes werden jetzt noch einmal aufbereitet
@@ -96,6 +98,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 				tx_cfcleaguefe_util_MatchTicker::_handleResult($ret[count($ret)-1]);
 			}
 		}
+		tx_cfcleague_util_Cache::add('matchnotes_'.$match->getUid(), $ret);
 		return $ret;
 	}
 

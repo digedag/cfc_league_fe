@@ -2,6 +2,8 @@
 
 Änderungen
 ----------
+v0.6.0 (07.11.2009)
+ * Bugfix for Task #3
 
 v0.5.6 (06.11.2009) (not released)
  * Player statistics supports agegroup in team
@@ -15,142 +17,142 @@ v0.5.5 (06.11.2009) (not released)
  * Teams: It is now possible to set an age group for a team
 
 v0.5.4 (18.10.2009) (not released)
-* Some issues with pointsystem control fixed in league table
-* There is a new HTML-Template example in leaguetable.html to show TableScope-Controls as Select-Boxes.
-* Output of profiles in Team-View changed. This is now full configureable. This is how to change sorting:
+ * Some issues with pointsystem control fixed in league table
+ * There is a new HTML-Template example in leaguetable.html to show TableScope-Controls as Select-Boxes.
+ * Output of profiles in Team-View changed. This is now full configureable. This is how to change sorting:
 [[code]]
 teamview.team.player.options.orderby.PROFILE.LAST_NAME = asc
 [[code]]
-** Notice: the Subpart-Marker for coach-list changed from ###TEAM_COACHES### to ###TEAM_COACHS###
-* Output of competition logo
-* Matchreport: Output of player names with support of stage_name
-* Matchreport: New marker ###MATCH_DAM_IMAGES### for picture output.
-* Scope will be cached in plugin. New register-value T3SPORTS_SCOPEPARAMS with current Scopevalues. Set scope.noCache=1 to disable this caching.
-* Rendering of team logos changed. Have a look at lib.t3sports.teamLogo
-* Bug 2840858: Agegroup was wrong
-* Some performance improvements
+ ** Notice: the Subpart-Marker for coach-list changed from ###TEAM_COACHES### to ###TEAM_COACHS###
+ * Output of competition logo
+ * Matchreport: Output of player names with support of stage_name
+ * Matchreport: New marker ###MATCH_DAM_IMAGES### for picture output.
+ * Scope will be cached in plugin. New register-value T3SPORTS_SCOPEPARAMS with current Scopevalues. Set scope.noCache=1 to disable this caching.
+ * Rendering of team logos changed. Have a look at lib.t3sports.teamLogo
+ * Bug 2840858: Agegroup was wrong
+ * Some performance improvements
 
 v0.5.3 (06.12.2008)
-* Due to an error the modulmarker ###MARKERMODULE__MATCHHISTORY### was switched back to a simple marker. The subpart is now outside of ###MATCHREPORT###. Have a look at matchreport.html
-* New link ###PROFILE_REFEREEMATCHESLINK### for profile.
-* With new config matchtable.fixedOpponentClub it is possible to matches of clubs against each other
-* PageBrowser added to matchtable. Default pagesize is 50 entries.
+ * Due to an error the modulmarker ###MARKERMODULE__MATCHHISTORY### was switched back to a simple marker. The subpart is now outside of ###MATCHREPORT###. Have a look at matchreport.html
+ * New link ###PROFILE_REFEREEMATCHESLINK### for profile.
+ * With new config matchtable.fixedOpponentClub it is possible to matches of clubs against each other
+ * PageBrowser added to matchtable. Default pagesize is 50 entries.
 
 v0.5.2 (28.11.2008)
-* Modulmarker ###MARKERMODULE__MATCHHISTORY### changed to use subparts. HTML template changed.
-* Matchtable-View can be used to search for matches of a referee
-* In MatchReport there is a new register T3SPORTS_PARAMS_REFEREE_MATCHES. It contains necessary url params to link to a matchtable view with all matches of the referee.
+ * Modulmarker ###MARKERMODULE__MATCHHISTORY### changed to use subparts. HTML template changed.
+ * Matchtable-View can be used to search for matches of a referee
+ * In MatchReport there is a new register T3SPORTS_PARAMS_REFEREE_MATCHES. It contains necessary url params to link to a matchtable view with all matches of the referee.
 
 v0.5.1 (25.11.2008) (not released)
-* Bugfix for t3sportsbet: Methods getGoalsHome() and getGoalsGuest() fixed for extratime and penalty
-* Wizard for html template in flexforms
-* Bug 2220269: Avoid warnings in player statistics
-* New Modul-Marker ###MARKERMODULE__MATCHHISTORY### for matchreport to show other matches of opponents. Have a look at matchreport.html.
+ * Bugfix for t3sportsbet: Methods getGoalsHome() and getGoalsGuest() fixed for extratime and penalty
+ * Wizard for html template in flexforms
+ * Bug 2220269: Avoid warnings in player statistics
+ * New Modul-Marker ###MARKERMODULE__MATCHHISTORY### for matchreport to show other matches of opponents. Have a look at matchreport.html.
 
 v0.5.0 (12.09.2008)
-* Wizicon for plugins
-* Bugfix: League table for competitions with dummy teams failed. This is fixed and also a new unit test was written.
-* Bugfix: Set match table parameters from TS in Calendar Base integration
+ * Wizicon for plugins
+ * Bugfix: League table for competitions with dummy teams failed. This is fixed and also a new unit test was written.
+ * Bugfix: Set match table parameters from TS in Calendar Base integration
 
 v0.4.11 (24.08.2008)
-* Support for new fields in club record
+ * Support for new fields in club record
 
 v0.4.10 (16.08.2008)
-* Debug output in matchtable removed
-* Link to team now with option removeIfDisabled
+ * Debug output in matchtable removed
+ * Link to team now with option removeIfDisabled
 
 v0.4.9 (15.08.2008)
-* Cal integration uses now sv1_Matches. It is possible to debug sql statement with view.cfc_league_events.debug = 1 in cal plugin.
-* Creation of league table changed. It is now possible to sync league table with selected round.
+ * Cal integration uses now sv1_Matches. It is possible to debug sql statement with view.cfc_league_events.debug = 1 in cal plugin.
+ * Creation of league table changed. It is now possible to sync league table with selected round.
 
 v0.4.8 (07.08.2008)
-* News typoscript fields in flexform
-* Some modifications for cal integration
+ * News typoscript fields in flexform
+ * Some modifications for cal integration
 
 v0.4.7 (31.07.2008)
-* It is possible to output the agegroup for a match again: ###MATCH_COMPETITION_GROUP_NAME###
-* The register T3SPORTS_GROUP is available in matchtable. So you can configure the target page for matchreport by agegroup with typoscript.
+ * It is possible to output the agegroup for a match again: ###MATCH_COMPETITION_GROUP_NAME###
+ * The register T3SPORTS_GROUP is available in matchtable. So you can configure the target page for matchreport by agegroup with typoscript.
 
 v0.4.6 (11.07.2008)
-* Statistics: avoid php errors if profiles were deleted from database.
-* getTeams() failed with some mysql versions
-* Show addinfo in matchtable template
+ * Statistics: avoid php errors if profiles were deleted from database.
+ * getTeams() failed with some mysql versions
+ * Show addinfo in matchtable template
 
 v0.4.5 (06.07.2008)
-* Support for plain text lineups, substitutes and scorers
+ * Support for plain text lineups, substitutes and scorers
 
 v0.4.4 (30.06.2008)
-* Bugfix: leaguetable used goals from second matchpart only
-* Bugs 2000153 and 2000137
-* Support for team notes implemented
-* tt_news: register:T3SPORTS_GROUP with current age group is available for matchreport link
+ * Bugfix: leaguetable used goals from second matchpart only
+ * Bugs 2000153 and 2000137
+ * Support for team notes implemented
+ * tt_news: register:T3SPORTS_GROUP with current age group is available for matchreport link
 
 v0.4.3 (16.06.2008)
-* Bugfix: Logos set in team record were ignored in matchtable
+ * Bugfix: Logos set in team record were ignored in matchtable
 
 v0.4.2 (16.06.2008)
-* key fixed for league table template in flexform
+ * key fixed for league table template in flexform
 
 v0.4.1 (13.06.2008)
-* small changes in TS-Config
-* missing include in search_match fixed
-* Sort order of match notes changed (is now always as same as in backend)
+ * small changes in TS-Config
+ * missing include in search_match fixed
+ * Sort order of match notes changed (is now always as same as in backend)
 
 v0.4.0 (08.06.2008)
-* Logo size for teamSmall fixed
+ * Logo size for teamSmall fixed
 
 v0.3.8 (07.06.2008) (not released)
-* Some small fixed for new release
-* Documentation updated
+ * Some small fixed for new release
+ * Documentation updated
 
 v0.3.7 (06.06.2008) (not released)
-* TS-Options for profile view changed. Reset your defined storage folder in plugins.
-* Randomizes profiles are possible with profile view.
-* Birthday list is ordered now by month-day
-* Bugfix: Sorting of players with german umlauts was wrong in statistics
+ * TS-Options for profile view changed. Reset your defined storage folder in plugins.
+ * Randomizes profiles are possible with profile view.
+ * Birthday list is ordered now by month-day
+ * Bugfix: Sorting of players with german umlauts was wrong in statistics
 
 v0.3.6 (31.05.2008) (not released)
-* Redesign of match ticker. Better support of TS-References.
-* New TS-Register register:T3SPORTS_NOTE_FAVCLUB for match notes. It can be used to make special outputs for favorite team. Example for goals is included.
-* New link option removeIfDisabled for match and ticker link
-* Configuration of charts was changed. You have to set colors in flexform again. TS key changed from plugin.tx_cfcleaguefe_competition.chartColors to plugin.tx_cfcleaguefe_competition.chart.defaults.colors
-* Chart in matchreport is now really configureable. See plugin.tx_cfcleaguefe_report.matchreport.svChartMatch
-* Some constants for chart size and colors
+ * Redesign of match ticker. Better support of TS-References.
+ * New TS-Register register:T3SPORTS_NOTE_FAVCLUB for match notes. It can be used to make special outputs for favorite team. Example for goals is included.
+ * New link option removeIfDisabled for match and ticker link
+ * Configuration of charts was changed. You have to set colors in flexform again. TS key changed from plugin.tx_cfcleaguefe_competition.chartColors to plugin.tx_cfcleaguefe_competition.chart.defaults.colors
+ * Chart in matchreport is now really configureable. See plugin.tx_cfcleaguefe_report.matchreport.svChartMatch
+ * Some constants for chart size and colors
 
 v0.3.5 (25.05.2008) (not released)
-* A complete refactoring of util_LeagueTable that makes it much more flexible.
-* New markers for leaguetable template:
-** ###ROW_OLDPOSITION### - position on previous round
-** ###ROW_POSITIONCHANGE### - returns either UP, DOWN or EQ. Useable for CSS classes.
-* HTML-Markers for match media changed to common structure: Subpart ###MATCH_MEDIAS_2### is now ###MATCH_MEDIA###. ###MATCH_MEDIA### is now ###MATCH_MEDIA_PLAYER###
-* HTML-Markers for match pictures changed to common structure: Subpart ###MATCH_PICTURES_2### is now ###MATCH_PICTURE###. ###MATCH_PICTURE### is now ###MATCH_PICTURE_IMGTAG###. ###MATCH_FIRST_PICTURE### is now ###MATCH_FIRST_PICTURE_IMGTAG###
-* New view for a special all-time-leaguetable. It creates a table from all found matches in scope. So you can join competitions.
-* New subpart-marker ###ROWS### necessary for leaguetable output
+ * A complete refactoring of util_LeagueTable that makes it much more flexible.
+ * New markers for leaguetable template:
+  * ###ROW_OLDPOSITION### - position on previous round
+  * ###ROW_POSITIONCHANGE### - returns either UP, DOWN or EQ. Useable for CSS classes.
+ * HTML-Markers for match media changed to common structure: Subpart ###MATCH_MEDIAS_2### is now ###MATCH_MEDIA###. ###MATCH_MEDIA### is now ###MATCH_MEDIA_PLAYER###
+ * HTML-Markers for match pictures changed to common structure: Subpart ###MATCH_PICTURES_2### is now ###MATCH_PICTURE###. ###MATCH_PICTURE### is now ###MATCH_PICTURE_IMGTAG###. ###MATCH_FIRST_PICTURE### is now ###MATCH_FIRST_PICTURE_IMGTAG###
+ * New view for a special all-time-leaguetable. It creates a table from all found matches in scope. So you can join competitions.
+ * New subpart-marker ###ROWS### necessary for leaguetable output
 
 
 v0.3.5 (22.05.2008) (not released)
-* Profilelist with new option to show a list of profiles with birthday in current day or month
+ * Profilelist with new option to show a list of profiles with birthday in current day or month
 
 v0.3.4 (17.05.2008) (not released)
-* Some internal changes for better integration of other extensions
+ * Some internal changes for better integration of other extensions
 
 v0.3.3 (07.05.2008) (not released)
-* Integration into tt_news. You can set links to T3sports views from within news records. For instance you can set a link to a match report.
+ * Integration into tt_news. You can set links to T3sports views from within news records. For instance you can set a link to a match report.
 
 v0.3.2 (05.05.2008) (not released)
-* Improved performance in matchmarker and teammarker.
-* Performance trackings included
+ * Improved performance in matchmarker and teammarker.
+ * Performance trackings included
 
 v0.3.1 (04.05.2008) (not released)
-* TS for match date fixed
-* Many new TS contants for HTML templates
-* Some keys in flexform changed. So most probably your page plugins will fail after update. Simply resave your plugins.
-* Match cross table supports more then match against one opponent. HTML-Template changed!
-* League chart can now be displayed in match report. First working marker service!
+ * TS for match date fixed
+ * Many new TS contants for HTML templates
+ * Some keys in flexform changed. So most probably your page plugins will fail after update. Simply resave your plugins.
+ * Match cross table supports more then match against one opponent. HTML-Template changed!
+ * League chart can now be displayed in match report. First working marker service!
 
 v0.3.0 (02.05.2008) (not released)
 Änderungen bei der Verlinkung von Informationen
-* Neue TS-Config für Links in Anlehnung an die typolink-Konfigration
+ * Neue TS-Config für Links in Anlehnung an die typolink-Konfigration
 Unterhalb einer Datensatz-Konfiguration gibt es den neuen reservierten Typ links. Diesem folgt der Name des Links und die Zielseite. Beispiel:
 [[code]]
 lib.t3sports.team {
@@ -163,61 +165,61 @@ lib.t3sports.team {
 Aus dieser Konfiguration ergeben sich für ein Team zwei Link-Marker:
 ###TEAM_SHOWTEAMLINK### und ###TEAM_SHOWMATCHTABLELINK###
 Dieses Schema ist (noch) nicht voll dynamisch. Es können also noch keine eigenen Links erstellt werden.
-* View Teamlist: Neuer Subpartmarker ###TEAMS###
-* View Matchtable: der Subpart ###MATCH_FREE### steht jetzt innerhalb des Subparts ###MATCH###
-* Statistiken werden im Flexform dynamisch ermittelt. Es stehen alle Services mit dem Key cfcleague_statistics zur Auswahl.
-* Link-Marker für Teamansicht hat sich geändert. Alt: ###TEAM_LINK### Neu: ###TEAM_SHOWTEAMLINK###.
-* Neue Linkmarker ###TEAM_SHOWMATCHTABLELINK### mit dem man direkt auf einen Teamspielplan verlinken kann.
-* Link-Marker für Profilansicht hat sich geändert. Alt: ###TEAM_PLAYER_LINK### Neu: ###TEAM_PLAYER_SHOWPROFILELINK###. Analog bei Trainern und Betreuern.
-* Link-Marker für Spielbericht hat sich geändert. Alt: ###MATCH_LINK### Neu: ###MATCH_REPORTLINK###.
-* Personenliste überarbeitet. CharBrowser ist jetzt optional. Einige Marker und TS-Optionen haben sich geändert.
-* Neue Optionen bei der Wettbewerbsauswahl im Scope
-* Wettbewerbe im Scope werden wie im Backend sortiert
-* Es neue Marker per Service eingebunden werden. Genauere Beschreibung später in der Dokumentation
-* Neue Sprach-Marker können dynamisch angelegt werden. ###LABEL_TEST### entspricht dem Sprachwert plugin.tx_cfcleaguefe_competition.default.label_test
+ * View Teamlist: Neuer Subpartmarker ###TEAMS###
+ * View Matchtable: der Subpart ###MATCH_FREE### steht jetzt innerhalb des Subparts ###MATCH###
+ * Statistiken werden im Flexform dynamisch ermittelt. Es stehen alle Services mit dem Key cfcleague_statistics zur Auswahl.
+ * Link-Marker für Teamansicht hat sich geändert. Alt: ###TEAM_LINK### Neu: ###TEAM_SHOWTEAMLINK###.
+ * Neue Linkmarker ###TEAM_SHOWMATCHTABLELINK### mit dem man direkt auf einen Teamspielplan verlinken kann.
+ * Link-Marker für Profilansicht hat sich geändert. Alt: ###TEAM_PLAYER_LINK### Neu: ###TEAM_PLAYER_SHOWPROFILELINK###. Analog bei Trainern und Betreuern.
+ * Link-Marker für Spielbericht hat sich geändert. Alt: ###MATCH_LINK### Neu: ###MATCH_REPORTLINK###.
+ * Personenliste überarbeitet. CharBrowser ist jetzt optional. Einige Marker und TS-Optionen haben sich geändert.
+ * Neue Optionen bei der Wettbewerbsauswahl im Scope
+ * Wettbewerbe im Scope werden wie im Backend sortiert
+ * Es neue Marker per Service eingebunden werden. Genauere Beschreibung später in der Dokumentation
+ * Neue Sprach-Marker können dynamisch angelegt werden. ###LABEL_TEST### entspricht dem Sprachwert plugin.tx_cfcleaguefe_competition.default.label_test
 
 v0.2.3 (29.01.2008)
-* Neuer View: Kreuztabelle
-* Bug 1864071 - Gelbe Karten nur zählen, wenn nicht Gelbrot erhalten
-* Integration tt_address für Vereine
-* Bug 1864066: Rote Karte wird auch für Auswechselspieler in Statistik gewertet
-* Für die Tabellenfahrt wird ein Font mitgeliefert
-* Bug 1880237: Chart zeigt falschen Verlauf
-* Liste der Liveticker um weitere TS-Config erweitert (limit, orderby und timeRange)
-* Neuer View: Teamliste
-* Anpassungen für Cal Version 0.16
-* Templatevariable des ScopeView von competitionSelectionTemplate auf scopeTemplate geändert. Dadurch funktioniert jetzt die Zuordnung im Flexform.
-* Der Spielplan akzeptiert jetzt auch UIDs von Teams aus dem Request. Dies kann man mit der Einstellung matchtable.acceptTeamIdFromRequest wieder deaktivieren.
+ * Neuer View: Kreuztabelle
+ * Bug 1864071 - Gelbe Karten nur zählen, wenn nicht Gelbrot erhalten
+ * Integration tt_address für Vereine
+ * Bug 1864066: Rote Karte wird auch für Auswechselspieler in Statistik gewertet
+ * Für die Tabellenfahrt wird ein Font mitgeliefert
+ * Bug 1880237: Chart zeigt falschen Verlauf
+ * Liste der Liveticker um weitere TS-Config erweitert (limit, orderby und timeRange)
+ * Neuer View: Teamliste
+ * Anpassungen für Cal Version 0.16
+ * Templatevariable des ScopeView von competitionSelectionTemplate auf scopeTemplate geändert. Dadurch funktioniert jetzt die Zuordnung im Flexform.
+ * Der Spielplan akzeptiert jetzt auch UIDs von Teams aus dem Request. Dies kann man mit der Einstellung matchtable.acceptTeamIdFromRequest wieder deaktivieren.
 
 v0.2.2 (12.11.2007)
-* Bugfix: Bei Wettbewerbsstrafen wurden Niederlagen nicht korrigiert
-* Nicht verwendete Kontrollelemente der Ligatabelle werden jetzt automatisch ausgeblendet. Vorher waren immer noch die Marker sichtbar.
-* Bugfix: alle unnötigen Leerzeichen außerhalb von <?php ?> entfernt
-* Bugfix: In der PlayerSummary-Statistik konnte es zu DB-Fehlern kommen, wenn keine Teams gefunden wurden.
-* Bugfix: Bei den Auswechslungen wurden die Ticker in einem Fall nicht zusammengefasst.
-* Bugfix: CalendarService liefert bei der Suche jetzt keine Warnungen mehr. Aber auch noch keine Ergebnisse!
-* Spielbericht jetzt auf Basis von HTML-Template
-* Bei den Ticker- und Profile-Wraps wird ist jetzt das Datenarray gesetzt und kann verwendet werden. Damit ergeben sich erheblich mehr Möglichkeiten bei der TS-Konfiguration.
-* Bugfix: im Profile-Wrap wurde der Vorname nicht ausgeben.
-* Bugfix ID-0001: Ligatabelle wurde im 2-Punktemodus falsch berechnet
-* Zuschauer-Statistik: Sortierung nach Durchschnittswerten ist jetzt möglich
-* Scopeauswahl: Es kann jetzt auch nach Vereinen eingeschränkt werden.
-* Spielbericht: Ein eingewechselter Spieler, der wieder ausgewechselt wird, wird nun korrekt dargestellt.
-* Ein erster Unittest wurde erstellt. Hier gibt es aber noch viel Arbeit...
+ * Bugfix: Bei Wettbewerbsstrafen wurden Niederlagen nicht korrigiert
+ * Nicht verwendete Kontrollelemente der Ligatabelle werden jetzt automatisch ausgeblendet. Vorher waren immer noch die Marker sichtbar.
+ * Bugfix: alle unnötigen Leerzeichen außerhalb von <?php ?> entfernt
+ * Bugfix: In der PlayerSummary-Statistik konnte es zu DB-Fehlern kommen, wenn keine Teams gefunden wurden.
+ * Bugfix: Bei den Auswechslungen wurden die Ticker in einem Fall nicht zusammengefasst.
+ * Bugfix: CalendarService liefert bei der Suche jetzt keine Warnungen mehr. Aber auch noch keine Ergebnisse!
+ * Spielbericht jetzt auf Basis von HTML-Template
+ * Bei den Ticker- und Profile-Wraps wird ist jetzt das Datenarray gesetzt und kann verwendet werden. Damit ergeben sich erheblich mehr Möglichkeiten bei der TS-Konfiguration.
+ * Bugfix: im Profile-Wrap wurde der Vorname nicht ausgeben.
+ * Bugfix ID-0001: Ligatabelle wurde im 2-Punktemodus falsch berechnet
+ * Zuschauer-Statistik: Sortierung nach Durchschnittswerten ist jetzt möglich
+ * Scopeauswahl: Es kann jetzt auch nach Vereinen eingeschränkt werden.
+ * Spielbericht: Ein eingewechselter Spieler, der wieder ausgewechselt wird, wird nun korrekt dargestellt.
+ * Ein erster Unittest wurde erstellt. Hier gibt es aber noch viel Arbeit...
 
 Die Veränderungen im Spielbericht sind diesmal recht massiv. Vor allem weil sich auch viele
 Einstellungen im TS-Setup geändert haben. Diese Umstellungen habe ich durchgeführt, um bei der
 Erstellung des Layouts maximale Freiheiten zu gewähren. Ein Blick in das TS-Setup der Extension 
 ist bei Anpassungswünschen sehr zu empfehlen. Das sind auch einige zusätzliche Hinweise drin.
 
-* Version rn_base 0.0.8 notwendig
+ * Version rn_base 0.0.8 notwendig
 
 v0.2.1 (29.09.2007)
-* Bugfix: Parameterübergabe im Scope funktionierte nicht mehr
-* Bessere Formatierung der Control-Elemente der Ligatabelle und des Scopes möglich. Hier sind jetzt Wraps um die erzeugten Links möglich, wobei zwischen dem aktiven und den nicht aktiven Elementen unterschieden werden kann. Außerdem gibt es einen neuen Marker der nur die URL ausgibt.
-* Spieltagsanzeige erfolgt nicht mehr automatisch, sondern über Einstellung im Flexform.
-* Neu: Zuschauer-Statistik
-* Performance bei Spielerstatistik um Faktor 3 verbessert
+ * Bugfix: Parameterübergabe im Scope funktionierte nicht mehr
+ * Bessere Formatierung der Control-Elemente der Ligatabelle und des Scopes möglich. Hier sind jetzt Wraps um die erzeugten Links möglich, wobei zwischen dem aktiven und den nicht aktiven Elementen unterschieden werden kann. Außerdem gibt es einen neuen Marker der nur die URL ausgibt.
+ * Spieltagsanzeige erfolgt nicht mehr automatisch, sondern über Einstellung im Flexform.
+ * Neu: Zuschauer-Statistik
+ * Performance bei Spielerstatistik um Faktor 3 verbessert
 
 v0.2.0 (27.09.2007)
 Man beachte den Sprung auf Version 0.2.0. Grund ist eine größere Umstellung der Statistiken.
@@ -236,23 +238,23 @@ ist aus dem Flexform ins TS-Setup gewandert:
   Die Cache-Funktionalität der Statistikergebnisse wurde vorerst deaktivert. Daher ist es
   dringend zu empfehlen im Livebetrieb das Plugin für die Statistik als USER laufen zu
   lassen. (Bei der Standardinstallation ist dies der Fall.) 
-   
-* Bei Berechnung der Tabelle werden die erweiterten Korrekturmöglichkeiten der Wettbewerbsstrafen berücksichtigt.
-* Spielfreie Mannschaften werden im Spielplan und in der Ligatabelle korrekt behandelt. Im Spielplan ist man in der Art der Darstellung recht frei. Hierzu bitte einen Blick ins HTML-Template und in die setup.txt der Extension werfen.
-* Die Dokumentation wurde aktualisiert
+
+ * Bei Berechnung der Tabelle werden die erweiterten Korrekturmöglichkeiten der Wettbewerbsstrafen berücksichtigt.
+ * Spielfreie Mannschaften werden im Spielplan und in der Ligatabelle korrekt behandelt. Im Spielplan ist man in der Art der Darstellung recht frei. Hierzu bitte einen Blick ins HTML-Template und in die setup.txt der Extension werfen.
+ * Die Dokumentation wurde aktualisiert
 
 v0.1.8 (18.09.2007)
-* Bugfix Teaser Ligatabelle: Der Tabellenstand sollte jetzt immer stimmen.
-* Für die Darstellung der Spiele wurde eine eigene Markerklasse erstellt. Diese wird im Spielplan und in der Liste der Liveticker verwendet. Dadurch ist jetzt in beiden Views die volle Funktionalität verfügbar.
-* Für die Liste der Liveticker kann das Template jetzt im Flexform des Plugins gesetzt werden
-* In der Liste der Liveticker hat sich der Marker für den Link auf die Liveticker-Seite geändert: ###MATCH_TICKER_LINK###
-* Bugfix: der rowroll des Spielplans verwendete bisher die TS-Config der Ligatabelle
-* Änderung im Spielplan. Bei zeitlicher Eingrenzung wird jetzt für die nicht gesetzte "Gegenrichtung" immer das aktuelle Datum verwendet. Bei der Anweisung 10 Tage im voraus lautet, dann bedeutet das 10 Tage inklusive dem aktuellen Tag. Bisher wurde in diesem Fall die Vergangenheit nicht begrenzt.
-* Bugfix Spielerstatistik: Die Sortierung der Assists-Tabelle stimmt jetzt
-* In der Ligatabelle ist jetzt die volle Funktionalität verfügbar. Es können also auch Logos angezeigt werden. Allerdings haben sich die Marker nochmal geändert: aus ###ROW_TEAM_NAME### wird jetzt ###ROW_NAME###. Das "TEAM_" fällt also weg. Der Marker des Logos lautet entsprechend ###ROW_LOGO###.
+ * Bugfix Teaser Ligatabelle: Der Tabellenstand sollte jetzt immer stimmen.
+ * Für die Darstellung der Spiele wurde eine eigene Markerklasse erstellt. Diese wird im Spielplan und in der Liste der Liveticker verwendet. Dadurch ist jetzt in beiden Views die volle Funktionalität verfügbar.
+ * Für die Liste der Liveticker kann das Template jetzt im Flexform des Plugins gesetzt werden
+ * In der Liste der Liveticker hat sich der Marker für den Link auf die Liveticker-Seite geändert: ###MATCH_TICKER_LINK###
+ * Bugfix: der rowroll des Spielplans verwendete bisher die TS-Config der Ligatabelle
+ * Änderung im Spielplan. Bei zeitlicher Eingrenzung wird jetzt für die nicht gesetzte "Gegenrichtung" immer das aktuelle Datum verwendet. Bei der Anweisung 10 Tage im voraus lautet, dann bedeutet das 10 Tage inklusive dem aktuellen Tag. Bisher wurde in diesem Fall die Vergangenheit nicht begrenzt.
+ * Bugfix Spielerstatistik: Die Sortierung der Assists-Tabelle stimmt jetzt
+ * In der Ligatabelle ist jetzt die volle Funktionalität verfügbar. Es können also auch Logos angezeigt werden. Allerdings haben sich die Marker nochmal geändert: aus ###ROW_TEAM_NAME### wird jetzt ###ROW_NAME###. Das "TEAM_" fällt also weg. Der Marker des Logos lautet entsprechend ###ROW_LOGO###.
 
 v0.1.7 (08.09.2007)
-* Beim Spielplan kann die Anzahl Spiele per TS begrenzt werden. Beispiel für Teaser:
+ * Beim Spielplan kann die Anzahl Spiele per TS begrenzt werden. Beispiel für Teaser:
 [[code]]
 temp.nextMatch < plugin.tx_cfcleaguefe_competition
 temp.nextMatch {
@@ -277,7 +279,7 @@ temp.nextMatch {
   }
 }
 [[code]]
-* Änderung der Marker und TS-Config im TeamView!
+ * Änderung der Marker und TS-Config im TeamView!
   Bei allen Markern ist jetzt ein TEAM_ vorangestellt.
   Vorher: ###PLAYERS### Neu: ###TEAM_PLAYERS###
   Gleiches Prinzip in der TS-Config
@@ -286,12 +288,12 @@ temp.nextMatch {
 
   Vorteil dieser Änderung ist der einheitliche Zugriff in allen Views
 
-* Im Spielplan ist der Zugriff auf alle Daten der Teams möglich also auch Logo, Bilder, Spieler usw. (Wer's brauch... ;)
-* Bugfix: Bei Eigentoren wird der Spielstand im Stenogramm jetzt aktualisiert
-* Die Eigentore werden jetzt extra in der Spielerstatistik gezählt
-* In der Spielerstatistik kann man jetzt einer Extra-Tabelle die besten Vorlagengeber anzeigen
-* Die Plugins wurden von USER_INT auf USER umgestellt. Dadurch werden die Ausgaben von TYPO3 im Cache abgelegt. Wer noch Selectboxen verwendet, muss das wieder umstellen.
-* NEU: Die Spiele können jetzt als Termine in die Kalender der Extension cal aufgenommen werden.
+ * Im Spielplan ist der Zugriff auf alle Daten der Teams möglich also auch Logo, Bilder, Spieler usw. (Wer's brauch... ;)
+ * Bugfix: Bei Eigentoren wird der Spielstand im Stenogramm jetzt aktualisiert
+ * Die Eigentore werden jetzt extra in der Spielerstatistik gezählt
+ * In der Spielerstatistik kann man jetzt einer Extra-Tabelle die besten Vorlagengeber anzeigen
+ * Die Plugins wurden von USER_INT auf USER umgestellt. Dadurch werden die Ausgaben von TYPO3 im Cache abgelegt. Wer noch Selectboxen verwendet, muss das wieder umstellen.
+ * NEU: Die Spiele können jetzt als Termine in die Kalender der Extension cal aufgenommen werden.
   Dafür muss das Static-Template "League Management cal-events (cfc_league_fe)" in die TS-Config 
   eingebunden werden. Dieses unbedingt NACH dem normalen Static-Template von cfc_league_fe, da es
   sich auf deren Angaben bezieht.
@@ -326,16 +328,16 @@ temp.nextMatch {
   
 
 v0.1.6 (28.08.2007)
-* fehlenden include für tx_cfcleaguefe_models_club in ScopeController ergänzt
+ * fehlenden include für tx_cfcleaguefe_models_club in ScopeController ergänzt
 
 v0.1.5 (28.08.2007)
-* In der Scopeauswahl kann man mit TS einen String zwischen den einzelnen Links setzen
-* Ligatabelle und Spielplan auf HTML-Views umgestellt. 
+ * In der Scopeauswahl kann man mit TS einen String zwischen den einzelnen Links setzen
+ * Ligatabelle und Spielplan auf HTML-Views umgestellt. 
 Die PHP-Views können aber per TS wieder aktiviert werden:
   plugin.tx_cfcleaguefe_competition.leaguetable.viewType = PHP
 bzw.
   plugin.tx_cfcleaguefe_competition.matchtable.viewType = PHP
-* Der Teamview kann jetzt auch per Parameter initialisiert werden. Damit sind Links auf Teams von anderen Views möglich (Spielplan oder Ligatabelle). Um nicht auf alle Teams zu verlinken, gibt es im Teamdatensatz das neue Feld "Link auf Teamseite möglich".
+ * Der Teamview kann jetzt auch per Parameter initialisiert werden. Damit sind Links auf Teams von anderen Views möglich (Spielplan oder Ligatabelle). Um nicht auf alle Teams zu verlinken, gibt es im Teamdatensatz das neue Feld "Link auf Teamseite möglich".
   Im Spielplan und der Ligatabelle muss die PID der Zielseite per TS definiert werden:
   plugin.tx_cfcleaguefe_competition.matchtable.teamPage = 123
   plugin.tx_cfcleaguefe_competition.leaguetable.teamPage = 123
@@ -343,10 +345,10 @@ bzw.
 
 
 v0.1.4 (23.08.2007)
-* Im Spielstenogramm werden jetzt auch Nachspielminuten angezeigt
-* Zugeordnete Team-Logos werden nun auch im Spielbericht verwendet
-* Bilder auf Klick vergrößern ist jetzt für so ziemlich alle Bilder verfügbar (siehe TS-Setup)
-* Die Scopeauswahl ist auf HTML-Template umgestellt. Alternativ kann aber immer noch das alte PHP-Template verwendet werden. Umstellung mit folgender TS-Anweisung:
+ * Im Spielstenogramm werden jetzt auch Nachspielminuten angezeigt
+ * Zugeordnete Team-Logos werden nun auch im Spielbericht verwendet
+ * Bilder auf Klick vergrößern ist jetzt für so ziemlich alle Bilder verfügbar (siehe TS-Setup)
+ * Die Scopeauswahl ist auf HTML-Template umgestellt. Alternativ kann aber immer noch das alte PHP-Template verwendet werden. Umstellung mit folgender TS-Anweisung:
 
   plugin.tx_cfcleaguefe_competition.scopeSelection.viewType = PHP
 bzw.
@@ -354,26 +356,26 @@ bzw.
 
 
 v0.1.3 (15.8.2007)
-* einige Bugfixes in util_statistics
-* Prüfung auf Variable $mark in template/leaguetable.php um NPE zu vermeiden
-* In der Liste der Liveticker kann jetzt die Seite mit dem Ticker konfiguriert werden
-* Im Flexform des Spielbericht-View kann jetzt optional auch die UID eines Spiels direkt angegeben werden.
+ * einige Bugfixes in util_statistics
+ * Prüfung auf Variable $mark in template/leaguetable.php um NPE zu vermeiden
+ * In der Liste der Liveticker kann jetzt die Seite mit dem Ticker konfiguriert werden
+ * Im Flexform des Spielbericht-View kann jetzt optional auch die UID eines Spiels direkt angegeben werden.
 
 v0.1.2 (9.8.2007)
-* Auswahl Person im Flexform für Profileview korrigiert
-* Marker und TS für Bilder im Teamview geändert
-* Im Flexform des Teamviews kann jetzt ein Team auch direkt ausgewählt werden
+ * Auswahl Person im Flexform für Profileview korrigiert
+ * Marker und TS für Bilder im Teamview geändert
+ * Im Flexform des Teamviews kann jetzt ein Team auch direkt ausgewählt werden
 
 Vielen Dank an Daniel Mross für die gemeldeten Fehler!
 
 v0.1.1 (8.8.2007)
-* Max Anzahl Zeichen für Pfadangaben der Templates hochgesetzt
-* NPE im Teamview bei fehlendem Spieler entfernt (alternativ wird neuer Language-Marker angezeigt)
-* Im View der Liga-Tabelle kann jetzt auch ein Template angegeben werden
-* Umstellung der Profil-Anzeige
-** Templates für Profile sind jetzt einheitlich im Teamview, ProfileList und ProfileView
-** Marker für FIRST_PICTURE geändert in PROFILE_FIRST_PICTURE
-** TS für Bilder der Personen geändert (sind jetzt "profile" zugeordnet)
+ * Max Anzahl Zeichen für Pfadangaben der Templates hochgesetzt
+ * NPE im Teamview bei fehlendem Spieler entfernt (alternativ wird neuer Language-Marker angezeigt)
+ * Im View der Liga-Tabelle kann jetzt auch ein Template angegeben werden
+ * Umstellung der Profil-Anzeige
+  * Templates für Profile sind jetzt einheitlich im Teamview, ProfileList und ProfileView
+  * Marker für FIRST_PICTURE geändert in PROFILE_FIRST_PICTURE
+  * TS für Bilder der Personen geändert (sind jetzt "profile" zugeordnet)
 [[code]]
 plugin.tx_cfcleaguefe_report {
   profilelist {
@@ -393,7 +395,7 @@ plugin.tx_cfcleaguefe_report {
   }
 }
 [[code]]
-* Umstellungen im Matchview
-** Es lassen sich mehr Werte per Typoscript formatieren
-** TS für Spieldatum und Spielbericht wurde matchreport.match zugeordnet
-** Neue Methoden für die formatierte Ausgabe im Template vorhanden
+ * Umstellungen im Matchview
+  * Es lassen sich mehr Werte per Typoscript formatieren
+  * TS für Spieldatum und Spielbericht wurde matchreport.match zugeordnet
+  * Neue Methoden für die formatierte Ausgabe im Template vorhanden
