@@ -80,7 +80,7 @@
 			<label index="plugin.competition.flexform.tssetup">plugin.tx_cfcleaguefe_competition.</label>
 
 			<label index="plugin.report.label">T3sports: Reports</label>
-			<label index="plugin.report.description">This plugin contains views: match report, team view, profile list, profile view</label>
+			<label index="plugin.report.description">This plugin contains views: match report, team view, profile list, profile view, club list</label>
 			<label index="plugin.report.flexform.action.MatchReport">Match report</label>
 			<label index="plugin.report.flexform.action.TeamView">Team view</label>
 			<label index="plugin.report.flexform.action.ProfileView">Profile view</label>
@@ -190,7 +190,7 @@
 			<label index="plugin.competition.flexform.clubInput">Selectbox für Verein?</label>
 
 			<label index="plugin.report.label">T3sports: Berichte</label>
-			<label index="plugin.report.description">Dieses Plugin enthält Darstellungen für: Spielbericht, Teamdarstellung, Personenliste, Personendarstellung</label>
+			<label index="plugin.report.description">Dieses Plugin enthält Darstellungen für: Spielbericht, Teamdarstellung, Personenliste, Personendarstellung, Vereinsliste</label>
 			<label index="plugin.report.flexform.tab.MatchReport">Spielberichte</label>
 			<label index="plugin.report.flexform.action.MatchReport">Spielbericht</label>
 			<label index="plugin.report.flexform.action.TeamView">Teamdarstellung</label>
