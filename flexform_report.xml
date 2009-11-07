@@ -335,6 +335,68 @@
         </el>
       </ROOT>
     </s_teamview>
+    <s_clublist>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.action.ClubList</sheetTitle>
+        </TCEforms>
+
+        <type>array</type>
+        <el>
+          <clublist.club.charbrowser>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_charbrowser</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </clublist.club.charbrowser>
+          <clublist.options.orderby.RAND>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_random</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </clublist.options.orderby.RAND>
+          <clublist.options.debug>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_debug</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </clublist.options.debug>
+          <clublistTemplate>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.template</label>
+              <config>
+                <type>input</type>
+                <size>24</size>
+                <max>256</max>
+                <eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+              </config>
+            </TCEforms>
+          </clublistTemplate>
+        </el>
+      </ROOT>
+    </s_clublist>
     <s_profileview>
       <ROOT>
         <TCEforms>
@@ -521,7 +583,7 @@
           </profilelist.options.recursive>
           <profilelist.charbrowser>
             <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.charbrowser</label>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_charbrowser</label>
               <config>
                 <type>check</type>
               </config>

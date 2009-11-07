@@ -118,8 +118,11 @@
 			<label index="plugin.report.sign.libra">Libra</label>
 			<label index="plugin.report.sign.scorpio">Scorpio</label>
 			<label index="plugin.report.sign.sagittarius">Sagittarius</label>
-			<label index="plugin.report.flexform.charbrowser">Characterbrowser</label>
 			<label index="plugin.report.flexform.tssetup">plugin.tx_cfcleaguefe_report.</label>
+
+			<label index="plugin_common_random">randomized ordering</label>
+			<label index="plugin_common_debug">Debug</label>
+			<label index="plugin_common_charbrowser">Show character browser</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
