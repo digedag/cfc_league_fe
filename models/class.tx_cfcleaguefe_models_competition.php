@@ -198,13 +198,22 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
   }
 
   /**
-   * Returns the age croup of this competition
+   * Returns the age croup of this competition.
+   * Since version 0.6.0 there are multiple agegroups possible. For backward compatibility this
+   * method returns the first competition per default.
    *
    * @return tx_cfcleaguefe_models_group
    */
-  function getGroup() {
+  function getGroup($all=false) {
 		tx_div::load('tx_cfcleaguefe_models_group');
-  	return tx_cfcleaguefe_models_group::getInstance($this->record['agegroup']);
+		$groupIds = t3lib_div::intExplode(',',$this->record['agegroup']);
+		if(!count($groupIds)) return null;
+		if(!$all) return tx_cfcleaguefe_models_group::getInstance($groupIds[0]);
+		$ret = array();
+		foreach($groupIds As $groupId) {
+			$ret[] = tx_cfcleaguefe_models_group::getInstance($groupId);
+		}
+  	return $ret;
   }
   /**
    * Returns all team participating this competition.
