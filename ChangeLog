@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.6.1 (08.11.2009)
+* #11: tx_cfcleaguefe_models_competitions::getGroup() fixed
+
 v0.6.0 (07.11.2009)
  * Bugfix for Task #3
  * View club list: New marker ###CLUBMAP### to show clubs in a GoogleMap. Extension wec_map required!
