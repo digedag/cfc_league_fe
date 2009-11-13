@@ -1285,13 +1285,6 @@ plugin.tx_cfcleaguefe_report {
     assistsnames =< lib.t3sports.matchreport.profiles
     assistsnames{
       seperator = | und |
-      profile {
-        reverse = 1
-        first_name.wrap = ,&nbsp;|
-        first_name.s_weight = 2
-        last_name.s_weight = 1
-      }
-#      wrap = |<br/>
     }
   }
 }
