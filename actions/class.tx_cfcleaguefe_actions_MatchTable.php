@@ -80,13 +80,13 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 	protected function initSearch(&$fields, &$options, &$parameters, &$configurations) {
 		$options['distinct'] = 1;
 //  	$options['debug'] = 1;
-		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'matchtable.fields.');
-		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'matchtable.options.');
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
 
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
 		// Spielplan für ein Team
-		$teamId = $configurations->get('matchtable.teamId');
-		if($configurations->get('matchtable.acceptTeamIdFromRequest')) {
+		$teamId = $configurations->get($this->getConfId().'teamId');
+		if($configurations->get($this->getConfId().'acceptTeamIdFromRequest')) {
 			$teamId = $parameters->offsetGet('teamId');
 		}
 
@@ -94,7 +94,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		$matchtable = $service->getMatchTable();
 		$matchtable->setScope($scopeArr);
 		$matchtable->setTeams($teamId);
-		$clubId = $configurations->get('matchtable.fixedOpponentClub');
+		$clubId = $configurations->get($this->getConfId().'fixedOpponentClub');
 		if($clubId) {
 			// Show matches against a defined club
 			$scopeClub = $matchtable->getClubs();
@@ -105,8 +105,8 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 			$matchtable->setGuestClubs($clubId);
 		}
 		
-		$matchtable->setTimeRange($configurations->get('matchtable.timeRangePast'),$configurations->get('matchtable.timeRangeFuture'));
-		if($configurations->get('matchtable.acceptRefereeIdFromRequest')) {
+		$matchtable->setTimeRange($configurations->get($this->getConfId().'timeRangePast'),$configurations->get('matchtable.timeRangeFuture'));
+		if($configurations->get($this->getConfId().'acceptRefereeIdFromRequest')) {
 			$matchtable->setReferees($parameters->offsetGet('refereeId'));
 		}
 
@@ -122,12 +122,17 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
    * @param array $options
    */
 	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
-		if(is_array($configurations->get('matchtable.match.pagebrowser.'))) {
-			$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
-			// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Spiele zu ermitteln
-			$options['count']= 1;
-			$listSize = $service->search($fields, $options);
-			unset($options['count']);
+		if(is_array($configurations->get($this->getConfId().'match.pagebrowser.'))) {
+			// Die Gesamtzahl der Items ist entweder im Limit gesetzt oder muss ermittelt werden
+			$listSize = intval($options['limit']);
+			if(!$listSize) {
+				$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+				// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Spiele zu ermitteln
+				$options['count']= 1;
+				$listSize = $service->search($fields, $options);
+				unset($options['count']);
+			}
+
 			// PageBrowser initialisieren
 			$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
 			$pageBrowser = new $className('matchtable_' . $configurations->getPluginId());
@@ -154,7 +159,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 	 * @return int
 	 */
 	protected function getPageSize(&$parameters, &$configurations) {
-		return intval($configurations->get('matchtable.match.pagebrowser.limit'));
+		return intval($configurations->get($this->getConfId().'match.pagebrowser.limit'));
 	}
 
 	function _handleRequest(&$parameters,&$configurations, &$viewdata) {
