@@ -48,7 +48,8 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
 
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
 
-		$matchtable = $this->getMatchTable();
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matchtable = $service->getMatchTable();
 		$matchtable->setScope($scopeArr);
 		$matchtable->getFields($fields, $options);
 	}
