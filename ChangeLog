@@ -2,6 +2,10 @@
 
 Änderungen
 ----------
+v0.6.2 (??.11.2009)
+* #15: League table fixed
+* #14: Limit in matchtable works now
+
 v0.6.1 (08.11.2009)
 * #11: tx_cfcleaguefe_models_competitions::getGroup() fixed
 

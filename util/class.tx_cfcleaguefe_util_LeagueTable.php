@@ -217,8 +217,8 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		}
 
 		// Jetzt die Tore summieren
-		$this->addGoals($homeId, $match->record['goals_home_2'], $match->record['goals_guest_2']);
-		$this->addGoals($guestId, $match->record['goals_guest_2'], $match->record['goals_home_2']);
+		$this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
+		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
 	}
 
   /**
@@ -284,7 +284,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		}
 
 		// Jetzt die Tore summieren
-		$this->addGoals($guestId, $match->record['goals_guest_2'], $match->record['goals_home_2']);
+		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
 	}
 
 
