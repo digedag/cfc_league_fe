@@ -2,13 +2,15 @@
 
 Änderungen
 ----------
-v0.6.2 (??.11.2009)
+v0.6.2 (22.11.2009)
  * #15: League table fixed
  * #14: Limit in matchtable works now
  * #16: Fatal error in match crosstable
+ * #17: New relation from stadium to tt_address
+ * #18: Fix logos in club list
 
 v0.6.1 (08.11.2009)
-* #11: tx_cfcleaguefe_models_competitions::getGroup() fixed
+ * #11: tx_cfcleaguefe_models_competitions::getGroup() fixed
 
 v0.6.0 (07.11.2009)
  * Bugfix for Task #3

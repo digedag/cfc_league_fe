@@ -182,7 +182,22 @@ lib.t3sports.club {
   address.email =< lib.t3sports.club.email
   address.www =< lib.t3sports.club.www
   address.address.br = 1
-  
+
+  logo = USER
+  logo {
+    userFunc = tx_rnbase_util_TSDAM->printImages
+    refField = dam_images
+    refTable = tx_cfcleague_club
+    template = EXT:cfc_league_fe/res/clublogo.html
+    limit = 1
+    media {
+      file = IMAGE
+      file.file.import.field = file
+      file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+      file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+    }
+  }
+  dam_logo =< lib.t3sports.club.logo
 }
 
 lib.t3sports.teamLogo {

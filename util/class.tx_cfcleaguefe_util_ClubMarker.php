@@ -46,6 +46,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 			// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
 			$club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
 		}
+		$this->prepareRecord($club);
 
 		// Es wird das MarkerArray mit Daten gefüllt
 		$ignore = self::findUnusedCols($club->record, $template, $marker);
@@ -58,6 +59,9 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		return $out;
 	}
 
+	protected function prepareRecord(&$item) {
+		$item->record['logo'] = $item->record['dam_logo'];
+	}
 	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
 		$addressMarker = tx_div::makeInstance('tx_cfcleaguefe_util_AddressMarker');
 		$template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
