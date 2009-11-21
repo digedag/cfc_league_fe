@@ -72,6 +72,8 @@ class tx_cfcleaguefe_util_MatchTable  {
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM2.CLUB', OP_IN_INT, $this->_guestClubIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.REFEREE', OP_IN_INT, $this->_refereeIds);
 
+		$this->handleClubInternals($fields);
+
 		tx_cfcleaguefe_search_Builder::buildMatchByClub($fields, $this->_clubIds);
 		tx_cfcleaguefe_search_Builder::buildMatchByTeam($fields, $this->_teamIds);
 		tx_cfcleaguefe_search_Builder::buildMatchByTeamAgeGroup($fields, $this->_teamgroupIds);
@@ -135,6 +137,20 @@ class tx_cfcleaguefe_util_MatchTable  {
 		$this->_orderbyDateDesc = $asc;
 	}
 
+	/**
+	 * Wenn Spiele unterschiedlicher Vereine gesucht werden, dann müssen vereinsinterne
+	 * Duelle ausgeschlossen werden.
+	 * @param $fields
+	 */
+	private function handleClubInternals(&$fields) {
+		$homeClubs = t3lib_div::intExplode(',', $this->_homeClubIds);
+		$clubs = array_merge($homeClubs, t3lib_div::intExplode(',', $this->_guestClubIds));
+		$clubs = array_unique($clubs);
+		if(count($clubs) > 1) {
+			// Interne Spiele der Vereine ausschließen
+			$fields[SEARCH_FIELD_CUSTOM] = 't1.club != t2.club';
+		}
+	}
 	/**
 	 * Find matches by given scope array
 	 *
