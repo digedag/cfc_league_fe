@@ -86,7 +86,10 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 	function handleCharBrowser(&$parameters,&$configurations, &$viewData, &$fields, &$options) {
 		if($configurations->get($this->getConfId().'club.charbrowser')) {
 			$srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
-			$pagerData = $this->findPagerData($srv, $configurations);
+			$colName = $configurations->get($this->getConfId().'club.charbrowser.column');
+			$colName = $colName ? $colName : 'name';
+
+			$pagerData = $this->findPagerData($srv, $configurations, $colName);
 			$firstChar = $parameters->offsetGet('charpointer');
 			$firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar,0,1) : $pagerData['default'];
 			$viewData->offsetSet('pagerData', $pagerData);
@@ -103,8 +106,9 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 			}
 			else $firsts = $firstChar;
 
+
 			if($fields[SEARCH_FIELD_CUSTOM]) $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
-			$fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(name),1) IN ('$firsts') ";;
+			$fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(".$colName."),1) IN ('$firsts') ";;
 		}
 	}
 	
@@ -114,10 +118,10 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 	 * @param tx_cfcleague_services_Teams $service
 	 * @param tx_rnbase_configurations $configurations
 	 */
-	function findPagerData(&$service, &$configurations) {
+	function findPagerData(&$service, &$configurations, $colName) {
 
-		$options['what'] = 'LEFT(UCASE(name),1) As first_char, count(LEFT(UCASE(name),1)) As size';
-		$options['groupby'] = 'LEFT(UCASE(name),1)';
+		$options['what'] = 'LEFT(UCASE('.$colName.'),1) As first_char, count(LEFT(UCASE('.$colName.'),1)) As size';
+		$options['groupby'] = 'LEFT(UCASE('.$colName.'),1)';
 		$fields = array();
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
