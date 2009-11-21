@@ -47,7 +47,8 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 			$club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
 		}
 
-		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
+		// Es wird das MarkerArray mit Daten gefüllt
+		$ignore = self::findUnusedCols($club->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , 0, $marker.'_',$club->getColumnNames());
 		// Die Adressdaten setzen
 		if($this->containsMarker($template, $marker.'_ADDRESS'))

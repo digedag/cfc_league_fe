@@ -45,16 +45,26 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 			$item = self::getEmptyInstance('tx_cfcleague_models_Stadium');
 		}
 
-		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
+		// Es wird das MarkerArray mit Daten gefüllt
+		$ignore = self::findUnusedCols($item->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , 0, $marker.'_',$item->getColumnNames());
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
 
+		// Die Adressdaten setzen
+		if($this->containsMarker($template, $marker.'_ADDRESS'))
+			$template = $this->_addAddress($template, $item->getAddress(), $formatter, $confId.'address.', $marker.'_ADDRESS');
 
 		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
 		return $out;
+	}
+
+	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
+		$addressMarker = tx_div::makeInstance('tx_cfcleaguefe_util_AddressMarker');
+		$template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
+		return $template;
 	}
 
 	/**

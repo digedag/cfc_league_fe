@@ -38,15 +38,14 @@ class tx_cfcleaguefe_models_club extends tx_rnbase_model_base {
 
   /**
    * Returns address dataset or null
-   * @return tx_cfcleaguefe_models_address or null
+   * @return tx_cfcleague_models_Address or null
    */
   function getAddress() {
   	if(!$this->record['address'])
   		return null;
-		tx_div::load('tx_cfcleaguefe_models_address');
-    $classname = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_address');
+    $classname = tx_div::makeInstanceClassName('tx_cfcleague_models_Address');
     $address = new $classname($this->record['address']);
-		return $address;
+		return $address->isValid() ? $address : null;
   }
   /**
    * Whether or not this is a favorite club
