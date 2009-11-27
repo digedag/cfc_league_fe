@@ -31,7 +31,20 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
+	function addMatches($params, $parent) {
 
+		$template = $params['template'];
+		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__MATCHHISTORY') ||
+			tx_rnbase_util_BaseMarker::containsMarker($template, 'MATCHHISTORY')) {
+				
+			$formatter = $params['formatter'];
+			$matches = $this->getMarkerValue($params, $formatter);
+			$markerArray['###MARKERMODULE__MATCHHISTORY###'] = $matches; // backward
+			$markerArray['###MATCHHISTORY###'] = $matches;
+			$params['template'] = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		}
+	}
+	
 	/**
 	 * Generate chart
 	 *
@@ -51,10 +64,13 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 		if(!$guest) return '<!-- Guest has no club defined -->';
 
 		$fields = array();
+		$options = array();
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, 'matchreport.historic.fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, 'matchreport.historic.options.');
 
-		$matchTable = $this->getMatchTable();
+		$srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matchTable = $srv->getMatchTable();
+
 		if(!intval($formatter->configurations->get('matchreport.historic.ignoreAgeGroup')))
 			$matchTable->setAgeGroups($group->uid);
 		$matchTable->setHomeClubs($home->uid . ',' . $guest->uid);
@@ -87,12 +103,6 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 	function getMatch($params){
 		if(!isset($params['match'])) return false;
 		return $params['match'];
-	}
-	/**
-	 * @return tx_cfcleaguefe_util_MatchTable
-	 */
-	function getMatchTable() {
-		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
 	function parseTemplate($templateCode, $params, $formatter) {
 		$match = $this->getMatch($params);

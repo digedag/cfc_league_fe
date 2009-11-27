@@ -68,6 +68,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //$time = t3lib_div::milliseconds();
     
 		$this->prepareFields($match);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','matchMarker_initRecord', 
+			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
+
 		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
 		if($this->fullMode) {
 			$this->pushTT('addDynamicMarkers');
@@ -107,17 +110,20 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //if($total['total'] > 40	)
 //t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
 		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','matchMarker_afterSubst', 
+			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
+		return $template;
 
 		// Now lookout for external marker services.
-		$markerArray = array();
-		$subpartArray = array();
-		$wrappedSubpartArray = array();
-    
-		$params['confid'] = $confId;
-		$params['marker'] = $marker;
-		$params['match'] = $match;
-		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
-		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+//		$markerArray = array();
+//		$subpartArray = array();
+//		$wrappedSubpartArray = array();
+//    
+//		$params['confid'] = $confId;
+//		$params['marker'] = $marker;
+//		$params['match'] = $match;
+//		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
+//		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 
 	/**
