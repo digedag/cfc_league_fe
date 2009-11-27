@@ -28,6 +28,9 @@ tx_div::load('tx_rnbase_util_DB');
 
 interface tx_cfcleaguefe_MatchService {
   function search($fields, $options);
+	/**
+	 * @return tx_cfcleaguefe_util_MatchTable
+	 */
   function getMatchTable();
 }
 
