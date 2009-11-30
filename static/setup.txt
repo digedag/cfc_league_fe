@@ -205,6 +205,9 @@ lib.t3sports.profile {
 
 lib.t3sports.club {
   pagebrowser =< lib.t3sports.pagebrowser
+  links {
+    show.pid = {$plugin.tx_cfcleaguefe_report.clubpage}
+  }
   name.blank = -
   email.typolink {
   	target = _BLANK
@@ -238,6 +241,7 @@ lib.t3sports.club {
     }
   }
   dam_logo =< lib.t3sports.club.logo
+  stadium =< lib.t3sports.stadium
 }
 
 lib.t3sports.teamLogo {
@@ -1038,6 +1042,7 @@ plugin.tx_cfcleaguefe_report {
   teamviewTemplate = {$plugin.tx_cfcleaguefe_report.teamviewTemplate}
   profileTemplate = {$plugin.tx_cfcleaguefe_report.profileTemplate}
   profilelistTemplate = {$plugin.tx_cfcleaguefe_report.profilelistTemplate}
+  clubviewTemplate = {$plugin.tx_cfcleaguefe_report.clubviewTemplate}
   clublistTemplate = {$plugin.tx_cfcleaguefe_report.clublistTemplate}
   stadiumviewTemplate = {$plugin.tx_cfcleaguefe_report.stadiumviewTemplate}
 
@@ -1080,6 +1085,9 @@ plugin.tx_cfcleaguefe_report {
       imageLinkWrap < tt_content.image.20.1.imageLinkWrap
     }
 
+  }
+  clubview {
+    club =< lib.t3sports.club
   }
   clublist {
   	charbrowser = 0

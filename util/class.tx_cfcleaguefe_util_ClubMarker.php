@@ -51,9 +51,12 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		// Es wird das MarkerArray mit Daten gefüllt
 		$ignore = self::findUnusedCols($club->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , 0, $marker.'_',$club->getColumnNames());
+		$this->prepareLinks($club, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 		// Die Adressdaten setzen
 		if($this->containsMarker($template, $marker.'_ADDRESS'))
 			$template = $this->_addAddress($template, $club->getAddress(), $formatter, $confId.'address.', $marker.'_ADDRESS');
+		if($this->containsMarker($template, $marker.'_STADIUMS'))
+			$template = $this->addStadiums($template, $club, $formatter, $confId.'stadium.', $marker.'_STADIUM');
 
 		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
@@ -66,6 +69,52 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		$addressMarker = tx_div::makeInstance('tx_cfcleaguefe_util_AddressMarker');
 		$template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
 		return $template;
+	}
+	/**
+	 * Hinzufügen der Stadien.
+	 * @param string $template HTML-Template für die Profile
+	 * @param tx_cfcleaguefe_models_club $item
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId Config-String
+	 * @param string $markerPrefix
+	 */
+	private function addStadiums($template, &$item, &$formatter, $confId, $markerPrefix) {
+    $srv = tx_cfcleague_util_ServiceRegistry::getStadiumService();
+		$fields = array();
+    $fields['STADIUMMM.UID_FOREIGN'][OP_IN_INT] = $item->getUid();
+		$options = array();
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
+		$children = $srv->search($fields, $options);
+
+		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
+		$listBuilder = new $builderClass();
+		$out = $listBuilder->render($children,
+						tx_div::makeInstance('tx_lib_spl_arrayObject'), $template, 'tx_cfcleaguefe_util_StadiumMarker',
+						$confId, $markerPrefix, $formatter, $options);
+		return $out;
+	}
+
+	/**
+	 * Links vorbereiten
+	 *
+	 * @param tx_cfcleague_models_Club $item
+	 * @param string $marker
+	 * @param array $markerArray
+	 * @param array $wrappedSubpartArray
+	 * @param string $confId
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 */
+	protected function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
+		$linkId = 'show';
+		if($item->isPersisted()) {
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('club' => $item->uid), $template);
+		}
+		else {
+			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
+		}
 	}
 }
 
