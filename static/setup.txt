@@ -29,6 +29,46 @@ lib.t3sports.stadium {
   name = TEXT
   name.current = 1
   name.ifEmpty.field = altname
+  links {
+    show.pid = {$plugin.tx_cfcleaguefe_report.stadiumpage}
+  }
+  capacity.number_format {
+    dontCheckFloat = 1
+    thousands_sep = .
+    decimal = 0
+  }
+  logo = IMAGE
+  logo.file.import.cObject = USER
+  logo.file.import.cObject {
+    userFunc=tx_dam_tsfe->fetchFileList
+    refField=logo
+    refTable=tx_cfcleague_stadiums
+  }
+  description.parseFunc =< lib.parseFunc_RTE
+  description2.parseFunc =< lib.parseFunc_RTE
+
+  logo.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_teamlogo}
+  logo.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_teamlogo}
+  pictures = USER
+  pictures {
+    userFunc = tx_rnbase_util_TSDAM->printImages
+    refField = pictures
+    refTable = tx_cfcleague_stadiums
+    template = EXT:cfc_league_fe/res/lightboxpics.html
+    subpartName = ###PICTURES###
+    media {
+      file = IMG_RESOURCE
+      file.file.import.field = file
+      file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_profilePicture}
+      file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_profilePicture}
+      thumbnail < .file
+      thumbnail = IMAGE
+      thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_profileThumb}
+      thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_profileThumb}
+      thumbnail.params = border="0"
+      thumbnail.titleText.field = title
+    }
+  }
 }
 
 lib.t3sports.teamnote = RECORDS
@@ -999,6 +1039,7 @@ plugin.tx_cfcleaguefe_report {
   profileTemplate = {$plugin.tx_cfcleaguefe_report.profileTemplate}
   profilelistTemplate = {$plugin.tx_cfcleaguefe_report.profilelistTemplate}
   clublistTemplate = {$plugin.tx_cfcleaguefe_report.clublistTemplate}
+  stadiumviewTemplate = {$plugin.tx_cfcleaguefe_report.stadiumviewTemplate}
 
   # Angaben zur ScopeAuswahl
   scopeSelection {
@@ -1301,6 +1342,10 @@ plugin.tx_cfcleaguefe_report {
     assistsnames{
       seperator = | und |
     }
+  }
+
+  stadiumview {
+    stadium =< lib.t3sports.stadium
   }
 }
 

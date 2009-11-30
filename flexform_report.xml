@@ -41,6 +41,10 @@
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.action.ClubList</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_ClubList</numIndex>
                   </numIndex>
+                  <numIndex index="30" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.flexform.action.StadiumView</numIndex>
+                    <numIndex index="1">tx_cfcleaguefe_actions_StadiumView</numIndex>
+                  </numIndex>
                 </items>
                 <multiple>0</multiple>
                 <maxitems>10</maxitems>

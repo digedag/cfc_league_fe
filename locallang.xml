@@ -66,6 +66,8 @@
 
 			<label index="label_matchtable">Matchtable</label>
 			<label index="label_mapnotavailable">Map not available. Please install extension wec_map to enable this feature.</label>
+			<label index="label_capacity">Capacity</label>
+			<label index="label_pictures">Pictures</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -118,6 +120,8 @@
 			<label index="matchcrosstable_noData">Es wurden keine Spiele gefunden.</label>
 			<label index="label_matchtable">Spielplan</label>
 			<label index="label_mapnotavailable">Kartenansicht nicht verfügbar. Die Extension wec_map muss für dieses Feature installiert werden.</label>
+			<label index="label_capacity">Kapazität</label>
+			<label index="label_pictures">Bilder</label>
 		</languageKey>
 	</data>
 </T3locallang>

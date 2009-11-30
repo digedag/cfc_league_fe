@@ -64,6 +64,8 @@ plugin.tx_cfcleaguefe_competition {
 }
 
 plugin.tx_cfcleaguefe_report {
+  # cat=T3sports (Templates)/stadiumview; type=string;label=HTML Template for stadium view
+  stadiumviewTemplate = EXT:cfc_league_fe/views/templates/stadiums.html
   # cat=T3sports (Templates)/matchreport; type=string;label=HTML Template for match report
   matchreportTemplate = EXT:cfc_league_fe/views/templates/matchreport.html
   # cat=T3sports (Templates)/clublist; type=string;label=HTML Template for club list
@@ -134,9 +136,10 @@ plugin.tx_cfcleaguefe_report {
   # cat=T3sports (misc)/chartheight; type=int+;label=Height of tablechart image
   chartheight = 350
 
+  # cat=T3sports (pages)/stadiumpage; type=int+;label=PID of page for stadium details
+  stadiumpage = 0
   # cat=T3sports (pages)/matchreportpage; type=int+;label=PID of page for match reports
   matchreportpage = 0
-
   # cat=T3sports (pages)/matchtickerpage; type=int+;label=PID of page for match live tickers
   matchtickerpage = 0
 

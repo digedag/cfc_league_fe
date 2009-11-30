@@ -50,7 +50,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , 0, $marker.'_',$item->getColumnNames());
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
-		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter);
+		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
 		// Die Adressdaten setzen
 		if($this->containsMarker($template, $marker.'_ADDRESS'))
@@ -70,14 +70,23 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 	/**
 	 * Links vorbereiten
 	 *
-	 * @param tx_netfewo_models_Buchung $item
+	 * @param tx_cfcleague_models_Stadium $item
 	 * @param string $marker
 	 * @param array $markerArray
 	 * @param array $wrappedSubpartArray
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+	protected function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
+		$linkId = 'show';
+		if($item->isPersisted()) {
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('stadium' => $item->uid), $template);
+		}
+		else {
+			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
+		}
 	}
 }
 
