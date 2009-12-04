@@ -33,6 +33,12 @@ require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe
 
 /**
  * Controller für die Anzeige eines Liga-Tabelle
+ * TODO: Umstellung der Tabellenerzeugung:
+ * Zur Berechnung einer Tabelle werden zunächst die gewünschten Spiele benötigt. Diese können über die MatchTable bereitgestellt 
+ * werden. Die Spiele werden dann einem LeagueTableProvider übergeben. Dieser kann die Spiele für die berechnung der Tabelle aufbereiten.
+ * 
+ * Dann muss über alle Spiele iteriert werden. Jedes Spiel wird einer Visitorklasse 
+ * übergeben, die die Punkte ermittelt. Diese Visitorklasse wird vom Wettbewerb bereitgestellt und hängt von der Sportart ab.
  */
 class tx_cfcleaguefe_actions_LeagueTableShow {
 

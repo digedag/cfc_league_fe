@@ -61,14 +61,22 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
   	return $this->record['short_name'];
   }
   
-  /**
-   * Liefert den Verein des Teams als Objekt
-   * @return tx_cfcleaguefe_models_club Verein als Objekt oder 0
-   */
-  function getClub() {
-    if(!$this->record['club']) return 0;
-    return tx_cfcleaguefe_models_club::getInstance($this->record['club']);
-  }
+	/**
+	 * Liefert den Verein des Teams als Objekt
+	 * @return tx_cfcleaguefe_models_club Verein als Objekt oder 0
+	 */
+	function getClub() {
+		if(!$this->record['club']) return 0;
+		return tx_cfcleaguefe_models_club::getInstance($this->record['club']);
+	}
+	/**
+	 * Returns the UID of club
+	 * @return int
+	 */
+	function getClubUid() {
+		return $this->record['club'];
+	}
+
 	var $agegroup = null;
 	/**
 	 * Returns the teams age group. This value is retrieved from the teams competitions. So 

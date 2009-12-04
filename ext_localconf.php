@@ -11,6 +11,8 @@ tx_div::load('tx_rnbase_util_SearchBase');
 
 // Hook for tt_news
 $GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_ttnewsMarkers.php:tx_cfcleaguefe_hooks_ttnewsMarkers';
+// LeagueTable in Match
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_TableMatchMarker.php:tx_cfcleaguefe_hooks_TableMatchMarker->addLeagueTable';
 
 $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
 

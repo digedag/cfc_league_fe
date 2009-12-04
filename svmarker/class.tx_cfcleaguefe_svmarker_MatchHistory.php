@@ -33,14 +33,15 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
 class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 	function addMatches($params, $parent) {
 
+		$marker = $params['marker'];
 		$template = $params['template'];
 		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__MATCHHISTORY') ||
-			tx_rnbase_util_BaseMarker::containsMarker($template, 'MATCHHISTORY')) {
+			tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_MATCHHISTORY')) {
 				
 			$formatter = $params['formatter'];
 			$matches = $this->getMarkerValue($params, $formatter);
 			$markerArray['###MARKERMODULE__MATCHHISTORY###'] = $matches; // backward
-			$markerArray['###MATCHHISTORY###'] = $matches;
+			$markerArray['###'.$marker.'_MATCHHISTORY###'] = $matches;
 			$params['template'] = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		}
 	}

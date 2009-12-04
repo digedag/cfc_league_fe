@@ -33,13 +33,14 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
 class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 
 	function addChart($params, $parent) {
+		$marker = $params['marker'];
 		$template = $params['template'];
 		if(!tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
-			!tx_rnbase_util_BaseMarker::containsMarker($template, 'CHARTMATCH')) return;
+			!tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) return;
 		$formatter = $params['formatter'];
 		$chart = $this->getMarkerValue($params, $formatter);
 		$markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
-		$markerArray['###CHARTMATCH###'] = $chart;
+		$markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
 		$params['template'] = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 	/**

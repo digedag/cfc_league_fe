@@ -37,6 +37,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	private $confId;
 	private $currRound;
 	private $matches;
+	private $markClubs = null;
 	
 	function tx_cfcleaguefe_util_league_DefaultTableProvider($parameters, $configurations, $league, $confId='') {
 		$this->setLeague($league);
@@ -60,10 +61,13 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	}
 	function getChartClubs(){
 		return t3lib_div::intExplode(',',$this->getConfigurations()->get($this->confId.'chartClubs'));
-	} 
+	}
 	function getMarkClubs(){
-		return t3lib_div::intExplode(',',$this->getConfigurations()->get($this->confId.'markClubs'));
-	} 
+		return $this->markClubs ? $this->markClubs : t3lib_div::intExplode(',',$this->getConfigurations()->get($this->confId.'markClubs'));
+	}
+	public function setMarkClubs($clubUids) {
+		$this->markClubs = $clubUids;
+	}
 	function getTableType() {
 		return $this->cfgTableType;
 	}
@@ -85,9 +89,14 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	function getMatches() {
 		if(is_array($this->matches))
 			return $this->matches;
-		$matchTable = $this->getMatchTable();
+		$matchSrv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matchTable = $matchSrv->getMatchTable();
 		$matchTable->setStatus($this->cfgLiveTable ? '1,2' : 2); //Status der Spiele
 		$matchTable->setCompetitions($this->getLeague()->uid);
+		if($this->currRound) {
+			// Nur bis zum Spieltag anzeigen
+			$matchTable->setMaxRound($this->currRound);
+		}
 		$fields = array();
 		$options = array();
 		$matchTable->getFields($fields, $options);
@@ -105,12 +114,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 				$fields[SEARCH_FIELD_JOINED][] = $joined;
 			}
 		}
-		if($this->currRound) {
-			// Nur bis zum Spieltag anzeigen
-			$fields['MATCH.ROUND'][OP_LTEQ_INT] = $this->currRound;
-		}
 //		$options['debug'] = 1;
-		$matchSrv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$this->matches = $matchSrv->search($fields, $options);
 //    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
 		return $this->matches;
@@ -192,14 +196,6 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	 */
 	public function setMatches($matches) {
 		$this->matches = $matches;
-	}
-	/**
-	 * Returns a new matchtable instance
-	 *
-	 * @return tx_cfcleaguefe_util_MatchTable
-	 */
-	private function getMatchTable() {
-		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
 }
 

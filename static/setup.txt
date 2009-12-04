@@ -1260,6 +1260,10 @@ plugin.tx_cfcleaguefe_report {
 		      }
         }
       }
+      leaguetable {
+        template = EXT:cfc_league_fe/views/templates/leaguetable_teaser.html
+        subpartName = ###LEAGUE_TABLE###
+      }
     }
 
     # Im Report werden Listen von Personen und Ticker gezeigt. Diese basieren nicht auf

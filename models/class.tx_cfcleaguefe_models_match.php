@@ -545,11 +545,14 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 			return 0;
 		return ($goalsDiff < 0) ? 2 : 1;
 	}
-	function getWhatMinimal() {
+	/**
+	 * Returns the match round
+	 * @return int
+	 */
+	function getRound() {
+		return intval($this->record['round']);
 	}
 
-	function getFromMinimal() {
-	}
 
   /**
    * Liefert keine Daten zum Wettbewerb

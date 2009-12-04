@@ -71,6 +71,8 @@ class tx_cfcleaguefe_util_MatchTable  {
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM1.CLUB', OP_IN_INT, $this->_homeClubIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'TEAM2.CLUB', OP_IN_INT, $this->_guestClubIds);
 		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.REFEREE', OP_IN_INT, $this->_refereeIds);
+		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.ROUND', OP_LTEQ_INT, $this->_maxRound);
+		tx_cfcleaguefe_search_Builder::setField($fields,'MATCH.ROUND', OP_GTEQ_INT, $this->_minRound);
 
 		$this->handleClubInternals($fields);
 
@@ -200,6 +202,22 @@ class tx_cfcleaguefe_util_MatchTable  {
 	 */
   function setRounds($uids){
     $this->_roundIds = $uids;
+  }
+  /**
+   * Search for matches up to a specific matchround (including)
+   *
+   * @param int $round
+   */
+  function setMaxRound($round){
+    $this->_maxRound = $round;
+  }
+  /**
+   * Search for matches from a specific matchround (including)
+   *
+   * @param int $round
+   */
+  function setMinRound($round){
+    $this->_minRound = $round;
   }
   /**
 	 * Search for matches of specific clubs
