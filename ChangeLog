@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.6.2 (??.12.2009)
+ * #23: New marker ###MATCH_LEAGUETABLE### to show a leaguetable within a matchreport
+
 v0.6.2 (22.11.2009)
  * #15: League table fixed
  * #14: Limit in matchtable works now
