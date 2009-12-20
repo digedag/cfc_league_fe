@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 <T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
   <sheets>
     <sDEF>
       <ROOT>
@@ -203,7 +206,7 @@
                 <foreign_table_where>ORDER BY name</foreign_table_where>
                 <multiple>0</multiple>
                 <maxitems>20</maxitems>
-                <autoSizeMax>10</autoSizeMax>
+                <autoSizeMax>30</autoSizeMax>
                 <size>5</size>
               </config>
             </TCEforms>
