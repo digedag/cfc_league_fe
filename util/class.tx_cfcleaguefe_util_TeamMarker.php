@@ -22,10 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
-tx_div::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich
@@ -49,17 +49,13 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 			return $formatter->configurations->getLL('team_notFound');
 		}
 		$this->prepareRecord($team);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_initRecord', array('item' => &$team, 'template'=>&$template), $this);
 		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
 		$ignore = self::findUnusedCols($team->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $confId , $ignore, $marker.'_',$team->getColumnNames());
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-		$this->pushTT('TeamLogo');
-		// Die Einbindung des Team-Logos erfolgt jetzt per TS.
-//		if(self::containsMarker($template, $marker.'_LOGO'))
-//			$markerArray['###'.$marker.'_LOGO###'] = $team->getLogo($formatter, $confId.'logo.');
-		$this->pullTT();
 		
 		// Die Spieler setzen
 		$this->pushTT('add player');
@@ -84,21 +80,10 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		if(self::containsMarker($template, $marker.'_CLUB'))
 			$template = $this->_addClubData($template, $team->getClub(), $formatter, $confId.'club.', $marker.'_CLUB');
 		$this->pullTT();
-    
-		$this->pushTT('substituteMarkerArrayCached');
-		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-		$this->pullTT();
-		// Now lookout for external marker services.
-		$markerArray = array();
-		$subpartArray = array();
-		$wrappedSubpartArray = array();
-		
-		$params['confid'] = $confId;
-		$params['marker'] = $marker;
-		$params['team'] = $team;
-		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
-		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-    
+
+		$template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_afterSubst', array('item' => &$team, 'template'=>&$template), $this);
+		return $template;
   }
 
 	/**
@@ -121,7 +106,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
    * @param tx_cfcleaguefe_models_club $club
    */
   protected function _addClubData($template, &$club, &$formatter, $clubConf, $markerPrefix) {
-    $clubMarker = tx_div::makeInstance('tx_cfcleaguefe_util_ClubMarker');
+    $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
     $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
   	return $template;
   }
@@ -146,68 +131,32 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
 		$children = $srv->search($fields, $options);
 
-		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
-    $options['team'] = $team;
-		
-		$listBuilder = new $builderClass();
+		if(!array_key_exists('orderby', $options)) // Default sorting
+			$children = $this->sortProfiles($children, $team->record[$joinCol]);
+
+		$options['team'] = $team;
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($children,
-						tx_div::makeInstance('tx_lib_spl_arrayObject'), $template, 'tx_cfcleaguefe_util_ProfileMarker',
+						tx_rnbase::makeInstance('tx_lib_spl_arrayObject'), $template, 'tx_cfcleaguefe_util_ProfileMarker',
 						$confId, $markerPrefix, $formatter, $options);
 		return $out;
 	}
-
-  /**
-   * Hinzufügen der Bilder des Teams. Das erste Bild wird gesondert gemarkert, die restlichen 
-   * werden als Liste behandelt.
-   * @param $gSubPartArray globales Subpart-Array, welches die Ergebnisse aufnimmt
-   * @param $firstMarkerArray
-   */
-//  private function _addTeamPictures(&$gSubpartArray, &$firstMarkerArray, $team, $formatter, $template, $teamConfId, $teamMarker) {
-//    // Das erste Bild ermitteln
-//    $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_teams', $team->uid, 'dam_images');
-//    list($uid, $filePath) = each($damPics['files']);
-//
-//    if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
-//      // Alle Marker löschen
-//      $firstMarkerArray['###'. $teamMarker .'_FIRST_PICTURE_IMGTAG###'] = '';
-//      $gSubpartArray['###'. $teamMarker .'_PICTURES###'] = '';
-//      tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
-//                        tx_rnbase_util_FormatUtil::getDAMColumns(), $teamMarker.'_FIRST_PICTURE_');
-//      return;
-//    }
-//
-//    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
-//    $media = new $mediaClass($filePath);
-//		// Check DAM-Version
-//		if(method_exists($media, 'fetchFullMetaData'))
-//			$media->fetchFullMetaData();
-//		else
-//			$media->fetchFullIndex();
-//    $markerFirst = $formatter->getItemMarkerArray4DAM($media, $teamConfId.'firstImage.', $teamMarker.'_FIRST_PICTURE');
-//    $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
-//
-//    // Jetzt ersetzen wir die weiteren Bilder
-//    // Zuerst wieder das Template laden
-//    $gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $teamMarker .'_PICTURES###');
-//
-//    $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $teamMarker .'_PICTURES_2###');
-//    $markerArray = array();
-//    $out = '';
-//
-////t3lib_div::debug($gPictureTemplate, 'utl_teammarker');
-//    // Alle Bilder hinzufügen
-//    while(list($uid, $filePath) = each($damPics['files'])) {
-//      $media = new $mediaClass($filePath);
-//      $markerArray = $formatter->getItemMarkerArray4DAM($media, $teamConfId.'images.',$teamMarker.'_PICTURE');
-//      $out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
-//    }
-//    // Der String mit den Bilder ersetzt jetzt den Subpart ###TEAM_PICTURES_2###
-//    if(strlen(trim($out)) > 0) {
-//      $subpartArray['###'. $teamMarker .'_PICTURES_2###'] = $out;
-//      $out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
-//    }
-//    $gSubpartArray['###'. $teamMarker .'_PICTURES###'] = $out;
-//  }
+	/**
+	 * Sortiert die Profile nach der Reihenfolge im Team
+	 *
+	 * @param array $profiles
+	 * @param string $sortArr
+	 * @return array
+	 */
+	function sortProfiles(&$profiles, $sortArr) {
+		$sortArr = array_flip(t3lib_div::intExplode(',', $sortArr));
+		foreach($profiles As $profile) 
+			$sortArr[$profile->uid] = $profile;
+		$ret = array();
+		foreach($sortArr As $profile)
+			$ret[] = $profile;
+		return $ret;
+	}
 
   /**
    * Initialisiert die Labels für die Team-Klasse
