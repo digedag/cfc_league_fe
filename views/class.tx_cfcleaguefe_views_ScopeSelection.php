@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_view_Base');
+tx_rnbase::load('tx_rnbase_util_Templates');
 
-tx_div::load('tx_rnbase_view_Base');
 
 
 /**
@@ -38,10 +39,16 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 	
   /**
    * Erstellen des Frontend-Outputs
+   * @param string $template
+   * @param ArrayObject $viewData
+   * @param tx_rnbase_configurations $configurations
+   * @param tx_rnbase_util_FormatUtil $formatter
    */
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
     $cObj =& $configurations->getCObj(0);
 
+    $link = $configurations->createLink();
+    $link->destination($GLOBALS['TSFE']->id); // Das Ziel der Seite vorbereiten
     $out = '';
     $markerArray = array();
     $subpartArray['###SAISON_SELECTION###'] = '';
@@ -57,7 +64,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 
       $items = $viewData->offsetGet('saison_select');
       $subpartArray['###SAISON_SELECTION###'] = 
-          $this->_fillTemplate($subTemplate, $items, $this->link, 'SAISON', $configurations);
+          $this->_fillTemplate($subTemplate, $items, $link, 'SAISON', $configurations);
     }
 
     // Wenn Altersklasse gezeigt werden soll, dann Abschnitt erstellen
@@ -67,7 +74,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 
       $items = $viewData->offsetGet('group_select');
       $subpartArray['###GROUP_SELECTION###'] = 
-          $this->_fillTemplate($subTemplate, $items, $this->link, 'GROUP', $configurations);
+          $this->_fillTemplate($subTemplate, $items, $link, 'GROUP', $configurations);
     }
 
     // Wenn Wettbewerb gezeigt werden soll, dann Abschnitt erstellen
@@ -77,7 +84,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 
       $items = $viewData->offsetGet('competition_select');
       $subpartArray['###COMPETITION_SELECTION###'] = 
-          $this->_fillTemplate($subTemplate, $items, $this->link, 'COMPETITION', $configurations);
+          $this->_fillTemplate($subTemplate, $items, $link, 'COMPETITION', $configurations);
     }
     // Wenn Spieltag gezeigt werden soll, dann Abschnitt erstellen
     if($viewData->offsetGet('round_select')) {
@@ -86,7 +93,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 
       $items = $viewData->offsetGet('round_select');
       $subpartArray['###ROUND_SELECTION###'] = 
-          $this->_fillTemplate($subTemplate, $items, $this->link, 'ROUND', $configurations);
+          $this->_fillTemplate($subTemplate, $items, $link, 'ROUND', $configurations);
     }
     // Wenn Verein gezeigt werden soll, dann Abschnitt erstellen
     if($viewData->offsetGet('club_select')) {
@@ -94,7 +101,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $subTemplate = $cObj->getSubpart($template, '###CLUB_SELECTION###');
       $items = $viewData->offsetGet('club_select');
       $subpartArray['###CLUB_SELECTION###'] = 
-          $this->_fillTemplate($subTemplate, $items, $this->link, 'CLUB', $configurations);
+          $this->_fillTemplate($subTemplate, $items, $link, 'CLUB', $configurations);
     }
     
     $out .= $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
@@ -110,7 +117,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
    * @param string $markerName Name des Markers (SAISON, ROUND usw.)
    * @param tx_rnbase_configurations &$configurations Config-Objekt
    */
-  function _fillTemplate($template, &$itemsArr, &$link, $markerName, &$configurations) {
+  function _fillTemplate($template, &$itemsArr, $link, $markerName, $configurations) {
     $items = $itemsArr[0];
     $currItem = $items[$itemsArr[1]];
     $confName = strtolower($markerName); // Konvention
@@ -126,7 +133,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
     }
 
     // Das Template für die einzelnen Datensätze
-    $subTemplate = $this->formatter->cObj->getSubpart($template, '###' . $markerName . '_SELECTION_2###');
+    $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###' . $markerName . '_SELECTION_2###');
 
     $currentNoLink = intval($configurations->get('scopeSelection.'. $confName .'.current.noLink'));
 
@@ -138,13 +145,13 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $isCurrent = ($item->uid == $currItem->uid);
       $item->record['isCurrent'] = $isCurrent ? 1 : 0;
 //t3lib_div::debug($itemConfId, 'tx_cfcleaguefe_views_ScopeSelection');
-      $markerArray = $this->formatter->getItemMarkerArrayWrapped($item->record, 'scopeSelection.'. $confName.'.', 0, $markerName.'_',$item->getColumnNames());
+      $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->record, 'scopeSelection.'. $confName.'.', 0, $markerName.'_',$item->getColumnNames());
 //      $markerArray['###'. $markerName .'_LINK_URL###'] = $this->formatter->wrap($link->makeUrl(false), 'scopeSelection.'. $confName . ($isCurrent ? '.current.' : '.normal.') );
       $markerArray['###'. $markerName .'_LINK_URL###'] = $link->makeUrl(false);
 
       $linkStr = ($currentNoLink && $isCurrent) ? $token : $link->makeTag();
       // Ein zusätzliche Wrap um das generierte Element inkl. Link
-      $linkStr = $this->formatter->wrap($linkStr, 'scopeSelection.'. $confName . (($item->uid == $currItem->uid) ? '.current.' : '.normal.') );
+      $linkStr = $configurations->getFormatter()->wrap($linkStr, 'scopeSelection.'. $confName . (($item->uid == $currItem->uid) ? '.current.' : '.normal.') );
       $wrappedSubpartArray['###'.$markerName.'_LINK###'] = explode($token, $linkStr);
       
 //      if($currentNoLink && $item->uid == $currItem->uid)
@@ -152,42 +159,25 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 //      else
 //        $wrappedSubpartArray['###'.$markerName.'_LINK###'] = explode($token, $link->makeTag());
       
-      $parts[] = $this->formatter->cObj->substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
+      $parts[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
       unset($keepVars[strtolower($markerName)]);
     }
     // Jetzt die einzelnen Teile zusammenfügen
     $out = implode($parts, $configurations->get('scopeSelection.'. $confName .'.implode'));
 
     // Im Haupttemplate stellen wir die ausgewählte Saison als Marker zur Verfügung
-    $markerArray = $this->formatter->getItemMarkerArrayWrapped($currItem->record, $itemConfId, 0, $markerName.'_',$currItem->getColumnNames());
+    $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->record, $itemConfId, 0, $markerName.'_',$currItem->getColumnNames());
     $subpartArray['###' . $markerName . '_SELECTION_2###'] = $out;
     
-    $out = $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+    $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
    
     return $out;
   }
-
-  /**
-   * Vorbereitung der Link-Objekte
-   */
-  function _init(&$configurations) {
-    $this->formatter = &$configurations->getFormatter();
-
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
-    // Die Zielseite ist entweder eine TYPO3 Seite oder eine externe URL
-    $pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
-
-    $this->link = new $linkClass;
-    $this->link->designatorString = $configurations->getQualifier();
-    $this->link->destination($pid); // Das Ziel der Seite vorbereiten
-
-  }
-
 }
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ScopeSelection.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ScopeSelection.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ScopeSelection.php']);
 }
 ?>

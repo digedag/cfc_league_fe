@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-
-tx_div::load('tx_rnbase_view_Base');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_view_Base');
+tx_rnbase::load('tx_rnbase_util_Templates');
 
 
 /**
@@ -32,25 +32,22 @@ tx_div::load('tx_rnbase_view_Base');
  */
 class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
+  /**
+   * Erstellen des Frontend-Outputs
+   * @param string $template
+   * @param ArrayObject $viewData
+   * @param tx_rnbase_configurations $configurations
+   * @param tx_rnbase_util_FormatUtil $formatter
+   */
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
 		$this->formatter = &$configurations->getFormatter();
-    $out = $this->_createView($template, $viewData, $configurations);
-    return $out;
-	}
-	
-  function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
-	
-  /**
-   * Erstellung des Outputstrings
-   */
-  function _createView($template, &$viewData, &$configurations) {
     $cObj =& $configurations->getFormatter()->cObj;
 
     // Liga und Tablemarks holen
     $league = $viewData->offsetGet('league');
     $marks = $league->getTableMarks();
 
-    $markerArray = $this->formatter->getItemMarkerArrayWrapped($league->record, 'leaguetable.league.', 0, 'LEAGUE_');
+    $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($league->record, 'leaguetable.league.', 0, 'LEAGUE_');
 
     // Die Ligatabelle zusammenbauen
     $penalties = array(); // Strafen sammeln
@@ -65,10 +62,13 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
     $subpartArray['###CONTROLS###'] = $this->_createControls($cObj->getSubpart($template, '###CONTROLS###'), 
                              $viewData, $configurations);
     
-    $out .= $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+    $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+		return $out;
+	}
+	
+  function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
+	
 
-    return $out;
-  }
 
   /**
    * Erstellt die Liste mit den Ligastrafen
@@ -77,12 +77,12 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
     if(!is_array($penalties) || count($penalties) == 0)
       return '';
 
-    $subTemplate = $this->formatter->cObj->getSubpart($template, '###PENALTY###');
+    $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###PENALTY###');
     $parts = array();
     foreach($penalties As $penaltyArr) {
       foreach($penaltyArr As $penalty) {
         $markerArray = $this->formatter->getItemMarkerArrayWrapped($penalty->record, 'leaguetable.penalty.', 0, 'PENALTY_');
-        $parts[] = $this->formatter->cObj->substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray);
+        $parts[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray);
       }
     }
 
@@ -90,7 +90,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
       // Zum Schluß das Haupttemplate zusammenstellen
       $markerArray = array();
       $subpartArray['###PENALTY###'] = implode($parts, $configurations->get('leaguetable.penalty.implode'));
-      $out = $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
+      $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
     }
     else { // Keine Strafen vorhanden, es wird ein leerer String gesendet
       $out = '';
@@ -112,9 +112,8 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 			$tableData = $this->_cropTable($tableData, $tableSize);
 		}
 		// Den TeamMarker erstellen
-		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-		$teamMarker = new $markerClass;
-		$templateEntry = $configurations->getCObj()->getSubpart($templateList,'###ROW###');
+		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+		$templateEntry = tx_rnbase_util_Templates::getSubpart($templateList,'###ROW###');
 		
 		$parts = array();
 		// Die einzelnen Zeilen zusammenbauen
@@ -137,7 +136,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 		// Jetzt die einzelnen Teile zusammenfügen
     $markerArray = array();
     $subpartArray['###ROW###'] = implode($parts, $configurations->get('leaguetable.table.implode'));
-		return $configurations->getCObj()->substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
 	}
 
   /**
@@ -227,7 +226,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
                     $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
     }
 
-    $out = $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+    $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     return $out;
 //    return implode($parts, $configurations->get('leaguetable.controls.implode'));
   }
@@ -282,7 +281,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 			$linkStr = $formatter->wrap($linkStr, 'leaguetable.controls.'. $confName . ($isCurrent ? '.current.' : '.normal.') );
 			$wrappedSubpartArray['###CONTROL_'.$markerName.'_'. $markerLabel .'_LINK###'] = explode($token, $linkStr);
 		}
-		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
 	}
 
@@ -290,6 +289,6 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTable.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTable.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTable.php']);
 }
 ?>

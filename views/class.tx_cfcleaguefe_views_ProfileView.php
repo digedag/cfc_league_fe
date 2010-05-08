@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,12 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
-tx_div::load('tx_rnbase_view_Base');
-//tx_div::load('tx_dam_db');
-//tx_div::load('tx_dam_media');
+tx_rnbase::load('tx_rnbase_view_Base');
 
 
 /**
@@ -53,8 +51,7 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 
 	function _createView($template, &$profile, &$formatter) {
 		$out = '';
-		$profileMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ProfileMarker');
-		$profileMarker = new $profileMarkerClass;
+		$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
 		$out .= $profileMarker->parseTemplate($template, $profile, $formatter, 'profileview.profile.');
 		return $out;
 	}

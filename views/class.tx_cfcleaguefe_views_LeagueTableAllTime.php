@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-
-tx_div::load('tx_cfcleaguefe_views_LeagueTable');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_cfcleaguefe_views_LeagueTable');
 
 
 /**
@@ -68,7 +67,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 			$tableData = $this->_cropTable($tableData, $tableSize);
 		}
 		// Den ClubMarker erstellen
-		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_ClubMarker');
+		$markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_ClubMarker');
 		$clubMarker = new $markerClass;
 		$templateEntry = $configurations->getCObj()->getSubpart($templateList,'###ROW###');
 
@@ -219,9 +218,10 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
    * Vorbereitung der Link-Objekte
    */
   function _init(&$configurations) {
+  	throw new Exception('deprecated!');
     $this->formatter = &$configurations->getFormatter();
 
-    $linkClass = tx_div::makeInstanceClassName('tx_lib_link');
+    $linkClass = tx_rnbase::makeInstanceClassName('tx_lib_link');
     $this->links = array();
 
     // Der Link für die Controls

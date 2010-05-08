@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-
-tx_div::load('tx_rnbase_view_Base');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_view_Base');
 
 
 /**
@@ -47,8 +46,7 @@ class tx_cfcleaguefe_views_MatchReport extends tx_rnbase_view_Base {
     // HOME_, GUEST_
     // MATCH_
 
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-    $matchMarker = new $markerClass();
+    $matchMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarker');
     $match = $matchReport->getMatch();
     $matchStr = $matchMarker->parseTemplate($template, $match, $formatter, 'matchreport.match.', 'MATCH');
 

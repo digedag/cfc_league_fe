@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,10 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-
-tx_div::load('tx_rnbase_view_Base');
-tx_div::load('tx_rnbase_util_Misc');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_view_Base');
+tx_rnbase::load('tx_rnbase_util_Misc');
 
 
 /**
@@ -131,14 +130,12 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$freeTemplate = $cObj->getSubpart($template, '###MATCH_FREE###');
 		$rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
 
-//		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
+//		$markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
 //		$matchMarker = new $markerClass($this->links);
 //		$matchMarker->setFullMode(intval($configurations->get('matchcrosstable.dataline.matchFullMode') != 0));
-		$teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-		$teamMarker = new $teamMarkerClass;
+		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 
-		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
-		$listBuilder = new $builderClass(tx_div::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
 		
 		$lines = array();
 		// Über alle Zeilen iterieren
@@ -178,8 +175,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 	 */
 	private function _createHeadline($template, &$teams, &$cObj, &$configurations) {
 		// Im Prinzip eine normale Teamliste...
-		$teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-		$teamMarker = new $teamMarkerClass;
+		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$subTemplate = $cObj->getSubpart($template, '###TEAM###');
 		$rowRoll = intval($configurations->get('matchcrosstable.headline.team.roll.value'));
 		$rowRollCnt = 0;

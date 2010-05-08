@@ -2,8 +2,11 @@
 
 Änderungen
 ----------
-v0.6.2 (??.12.2009)
+v0.6.3 (??.05.2009)
  * #23: New marker ###MATCH_LEAGUETABLE### to show a leaguetable within a matchreport
+ * All references to extension div removed
+ * LeagueTable: support for php view removed
+ * Compatibility for TYPO3 4.3 and PHP 5.3 improved
 
 v0.6.2 (22.11.2009)
  * #15: League table fixed

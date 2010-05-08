@@ -36,8 +36,7 @@ class tx_cfcleaguefe_views_ClubView extends tx_rnbase_view_Base {
 		if(!is_object($item)) return 'Sorry, no item found...';
 
 		$out = '';
-		$markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_ClubMarker');
-		$marker = new $markerClass();
+		$marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
 		$out .= $marker->parseTemplate($template, $item, $formatter, 'clubview.club.', 'CLUB');
 		return $out;
 	}
