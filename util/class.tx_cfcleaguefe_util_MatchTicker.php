@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,11 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleague_util_Cache');
 tx_rnbase::load('tx_rnbase_util_Queue');
+require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
+
 
 
 /**
@@ -148,10 +149,10 @@ class tx_cfcleaguefe_util_MatchTicker {
 
 		// Bevor es losgeht, müssen einmalig die Arrays initialisiert werden
 		if(!is_object($changeInHome)) {
-			$changeInHome = tx_div::makeInstance('tx_rnbase_util_Queue');
-			$changeOutHome = tx_div::makeInstance('tx_rnbase_util_Queue');
-			$changeInGuest = tx_div::makeInstance('tx_rnbase_util_Queue');
-			$changeOutGuest = tx_div::makeInstance('tx_rnbase_util_Queue');
+			$changeInHome = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
+			$changeOutHome = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
+			$changeInGuest = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
+			$changeOutGuest = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
 		}
 
 		if($ticker->isHome()) {

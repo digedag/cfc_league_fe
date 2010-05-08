@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,8 +23,8 @@
 ***************************************************************/
 
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_rnbase_util_Misc');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_Misc');
 
 /**
  * Keine echte Registry, aber eine zentrale Klasse für den Zugriff auf verschiedene
@@ -85,7 +85,7 @@ class tx_cfcleaguefe_util_ServiceRegistry {
 	static function getService($type, $subType) {
     $srv = t3lib_div::makeInstanceService($type, $subType);
     if(!is_object($srv)) {
-    	tx_div::load('tx_rnbase_util_Misc');
+    	tx_rnbase::load('tx_rnbase_util_Misc');
       return tx_rnbase_util_Misc::mayday('Service ' . $type . ' - ' . $subType . ' not found!');;
     }
     return $srv;

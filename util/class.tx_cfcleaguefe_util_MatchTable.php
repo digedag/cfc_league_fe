@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_cfcleaguefe_search_Builder');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_cfcleaguefe_search_Builder');
 
 /**
  * This is a facade to build search queries for matches from database.
@@ -84,7 +84,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 			// Wenn in eine Richtung eingegrenzt wird und in der anderen Richtung kein
 			// Wert gesetzt wurde, dann wird dafür das aktuelle Datum verwendet.
 			// Auf jeden Fall wird immer in beide Richtungen eingegrenzt
-			$cal = tx_div::makeInstance('tx_rnbase_util_Calendar');
+			$cal = tx_rnbase::makeInstance('tx_rnbase_util_Calendar');
 			$cal->clear(CALENDAR_SECOND);
 			$cal->clear(CALENDAR_HOUR);
 			$cal->clear(CALENDAR_MINUTE);
@@ -92,7 +92,7 @@ class tx_cfcleaguefe_util_MatchTable  {
 			$fields['MATCH.DATE'][OP_GTEQ_INT] = $cal->getTime();
 //			$where .= ' tx_cfcleague_games.date >= ' . $cal->getTime();
 
-			$cal = tx_div::makeInstance('tx_rnbase_util_Calendar');
+			$cal = tx_rnbase::makeInstance('tx_rnbase_util_Calendar');
 			$cal->clear(CALENDAR_SECOND);
 			$cal->clear(CALENDAR_HOUR);
 			$cal->clear(CALENDAR_MINUTE);

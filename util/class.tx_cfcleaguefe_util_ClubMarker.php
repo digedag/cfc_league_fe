@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-
-tx_div::load('tx_rnbase_util_BaseMarker');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Vereine verantwortlich
@@ -66,7 +65,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		$item->record['logo'] = $item->record['dam_logo'];
 	}
 	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
-		$addressMarker = tx_div::makeInstance('tx_cfcleaguefe_util_AddressMarker');
+		$addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
 		$template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
 		return $template;
 	}
@@ -87,10 +86,9 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
 		$children = $srv->search($fields, $options);
 
-		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
-		$listBuilder = new $builderClass();
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($children,
-						tx_div::makeInstance('tx_lib_spl_arrayObject'), $template, 'tx_cfcleaguefe_util_StadiumMarker',
+						false, $template, 'tx_cfcleaguefe_util_StadiumMarker',
 						$confId, $markerPrefix, $formatter, $options);
 		return $out;
 	}

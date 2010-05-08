@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,10 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_BaseMarker');
 require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_BaseMarker.php');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich
@@ -106,7 +105,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 //      return '';
 //    }
 //
-//    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
+//    $mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
 //    $media = new $mediaClass($filePath);
 //		// Check DAM-Version
 //		if(method_exists($media, 'fetchFullMetaData'))

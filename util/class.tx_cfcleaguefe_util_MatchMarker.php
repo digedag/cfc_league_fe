@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,10 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
-tx_div::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich
@@ -39,9 +39,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    */
   function tx_cfcleaguefe_util_MatchMarker(&$options = array()) {
     // Den TeamMarker erstellen
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
+    $markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
     $this->teamMarker = new $markerClass;
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_CompetitionMarker');
+    $markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_CompetitionMarker');
     $this->competitionMarker = new $markerClass;
   }
 
@@ -143,7 +143,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			$sub = tx_rnbase_util_BaseMarker::getEmptyInstance('tx_cfcleague_models_Stadium');
 		}
 		$sub->record['altname'] = $item->record['stadium'];
-		$marker = tx_div::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
+		$marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
 		$template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
 		return $template;
 	}
@@ -250,7 +250,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //      return;
 //    }
 //
-//    $mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
+//    $mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
 //    $media = new $mediaClass($filePath);
 //		// Check DAM-Version
 //		if(method_exists($media, 'fetchFullMetaData'))
@@ -307,7 +307,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			return;
 		}
 
-		$mediaClass = tx_div::makeInstanceClassName('tx_dam_media');
+		$mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
     
 		// Zuerst wieder das Template laden
 		$gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_MEDIAS###');

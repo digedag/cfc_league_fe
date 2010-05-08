@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
 
 /**
@@ -88,10 +88,9 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 		$templateCode = $formatter->configurations->getCObj()->getSubpart($templateCode,$subpartName);
 		if(!$templateCode) return '<!-- NO SUBPART '.$subpartName.' FOUND -->';
 
-		$builderClass = tx_div::makeInstanceClassName('tx_rnbase_util_ListBuilder');
-		$listBuilder = new $builderClass();
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($matches,
-						tx_div::makeInstance('tx_lib_spl_arrayObject'), $templateCode, 'tx_cfcleaguefe_util_MatchMarker',
+						new ArrayObject(), $templateCode, 'tx_cfcleaguefe_util_MatchMarker',
 						'matchreport.historic.match.', 'MATCH', $formatter);
 		return $out;
 	}

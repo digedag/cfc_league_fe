@@ -22,15 +22,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
-tx_div::load('tx_rnbase_configurations');
-tx_div::load('tx_rnbase_util_Spyc');
-//tx_div::load('tx_cfcleaguefe_models_team');
-tx_div::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
-tx_div::load('tx_cfcleaguefe_models_competition');
-tx_div::load('tx_cfcleaguefe_util_LeagueTable');
+tx_rnbase::load('tx_rnbase_configurations');
+tx_rnbase::load('tx_rnbase_util_Spyc');
+//tx_rnbase::load('tx_cfcleaguefe_models_team');
+tx_rnbase::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
+tx_rnbase::load('tx_cfcleaguefe_models_competition');
+tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
 
 class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 	function test_dummyTeam() {
@@ -41,7 +41,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$league->setTeams(array_values($teams));
 		$matches = $league->getMatches(2);
 
-		$params = tx_div::makeInstance('tx_lib_spl_arrayObject');
+		$params = tx_rnbase::makeInstance('tx_lib_spl_arrayObject');
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$league = $this->prepareLeague('league_1');
 //    t3lib_div::debug($league, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
 
-		$params = tx_div::makeInstance('tx_lib_spl_arrayObject');
+		$params = tx_rnbase::makeInstance('tx_lib_spl_arrayObject');
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
@@ -85,7 +85,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$league = $this->prepareLeague('league_1');
 		$league->record['point_system'] = 0; // Punktsystem umstellen
 
-		$params = tx_div::makeInstance('tx_lib_spl_arrayObject');
+		$params = tx_rnbase::makeInstance('tx_lib_spl_arrayObject');
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
@@ -119,7 +119,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 	}
 	function makeInstances($yamlData, $clazzName) {
 		// Sicherstellen, daß die Klasse geladen wurde
-		tx_div::load($clazzName);
+		tx_rnbase::load($clazzName);
 		foreach($yamlData As $arr) {
 			if(is_array($arr['record']))
 				$ret[] = new $clazzName($arr['record']);

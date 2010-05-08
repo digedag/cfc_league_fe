@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_rnbase_util_ListBuilderInfo');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
 /**
  * 
@@ -31,7 +31,7 @@ tx_div::load('tx_rnbase_util_ListBuilderInfo');
 class tx_cfcleaguefe_util_MatchMarkerBuilderInfo extends tx_rnbase_util_ListBuilderInfo {
 
 	function getListMarkerInfo() {
-		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchMarkerListInfo');
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerListInfo');
 	}
 	
   
