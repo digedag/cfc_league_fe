@@ -22,8 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_rnbase_action_BaseIOC');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 require_once(t3lib_extMgm::extPath('rn_memento') . 'sv1/class.tx_rnmemento_sv1.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_Spyc.php');
@@ -110,19 +110,15 @@ class PlayerStatsMemento extends tx_cfcleaguefe_util_Memento {
   }
 
   function array2Data($arr) {
-    $profileClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_profile');
     $ret = array();
-
     foreach($arr['player_data'] as $data) {
       // Die Profile müssen wieder instanziiert werden
       if(is_array($data)) {
         $ret['player_data'][$data['player']] = $data;
-        $ret['player_data'][$data['player']]['player'] = new $profileClass($data['player']);
+        $ret['player_data'][$data['player']]['player'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile',$data['player']);
       }
     }
     $ret['add_data'] = $arr['add_data'];
-
-
     return $ret;
   }
 

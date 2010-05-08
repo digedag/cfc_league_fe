@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,11 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
-require_once(PATH_site.t3lib_extMgm::siteRelPath("pbimagegraph").'class.tx_pbimagegraph_ts.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_LeagueTable.php');
+tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
+tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
+
+require_once(PATH_t3lib.'error/class.t3lib_error_exception.php');
 
 
 /**
@@ -77,7 +78,7 @@ class tx_cfcleaguefe_actions_TableChart {
     $viewData->offsetSet('plot', $this->generateGraph($parameters, $configurations,$currCompetition)); // Die Testplot für den View bereitstellen
 
     // View
-    $view = tx_div::makeInstance('tx_rnbase_view_phpTemplateEngine');
+    $view = tx_rnbase::makeInstance('tx_rnbase_view_phpTemplateEngine');
     $view->setTemplatePath($configurations->getTemplatePath());
     $out = $view->render('tablechart', $configurations);
 		return $out;
@@ -87,10 +88,9 @@ class tx_cfcleaguefe_actions_TableChart {
 	 * Erzeugt den Graphen
 	 */
 	function generateGraph(&$parameters, &$configurations, &$league) {
-		$clazz = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_DefaultTableProvider');
-		$tableProvider = new $clazz($parameters,$configurations, $league);
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider',$parameters,$configurations, $league);
 
-		$leagueTable = new tx_cfcleaguefe_util_LeagueTable;
+		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$xyDataset = $leagueTable->generateChartData($tableProvider);
 
 		$tsArr = $configurations->get('chart.');
@@ -102,7 +102,14 @@ class tx_cfcleaguefe_actions_TableChart {
     );
 */
 		$this->createChartDataset($xyDataset, $tsArr, $configurations, $league);
-		return tx_pbimagegraph_ts::make($tsArr);
+		try {
+			require_once(PATH_site.t3lib_extMgm::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
+			$chart = tx_pbimagegraph_ts::make($tsArr);
+		}
+		catch(Exception $e) {
+			$chart = 'Not possible';
+		}
+		return $chart;
 	}
 
   /**

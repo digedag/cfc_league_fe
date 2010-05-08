@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_rnbase_action_BaseIOC');
-tx_div::load('tx_cfcleaguefe_util_ScopeController');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_action_BaseIOC');
+tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 
 /**
  * Controller für die Anzeige eines Teams
@@ -65,13 +65,11 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC {
 				return 'Error: No club defined.';
 			}
 
-			$className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_club');
-			$club = new $className($club);
+			$club = tx_rnbase::makeInstance('tx_cfcleaguefe_models_club', $club);
 			$teams = $club->getTeams($saisonUids, $groupUids);
 		}
 		else {
-			$className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
-			$team = new $className($teamId);
+			$team = tx_rnbase::makeInstance('tx_cfcleaguefe_models_team', $teamId);
 			$teams[] = $team;
 		}
 

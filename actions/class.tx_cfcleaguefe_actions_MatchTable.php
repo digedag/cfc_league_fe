@@ -22,14 +22,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-tx_div::load('tx_cfcleaguefe_util_ScopeController');
-tx_div::load('tx_cfcleaguefe_models_team');
-tx_div::load('tx_rnbase_action_BaseIOC');
+tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
+tx_rnbase::load('tx_cfcleaguefe_models_team');
+tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
-tx_div::load('tx_cfcleaguefe_util_MatchTable');
-tx_div::load('tx_cfcleaguefe_search_Builder');
+tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
+tx_rnbase::load('tx_cfcleaguefe_search_Builder');
 
 
 /**
@@ -134,8 +134,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 			}
 
 			// PageBrowser initialisieren
-			$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
-			$pageBrowser = new $className('matchtable_' . $configurations->getPluginId());
+			$pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'matchtable_' . $configurations->getPluginId());
 			$pageSize = $this->getPageSize($parameters, $configurations);
 			//Wurde neu gesucht?
 			if($parameters->offsetGet('NK_newsearch')) {
@@ -172,7 +171,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
     $roundUid = $scopeArr['ROUND_UIDS'];
     $club = $scopeArr['CLUB_UIDS'];
 
-    $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
+    $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
     $matchTable->setTimeRange($configurations->get('matchTableTimeRangePast'),$configurations->get('matchTableTimeRangeFuture'));
     $matchTable->setLimit($configurations->get('matchtable.limit'));
     $matchTable->setOrderDesc($configurations->get('matchtable.orderDesc') ? true : false );

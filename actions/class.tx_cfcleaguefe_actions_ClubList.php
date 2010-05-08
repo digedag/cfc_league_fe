@@ -22,10 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-tx_div::load('tx_rnbase_action_BaseIOC');
-tx_div::load('tx_rnbase_filter_BaseFilter');
+tx_rnbase::load('tx_rnbase_action_BaseIOC');
+tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
 
 /**
@@ -74,8 +74,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 			$listSize = $service->searchClubs($fields, $options);
 			unset($options['count']);
 			// PageBrowser initialisieren
-			$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
-			$pageBrowser = new $className('org');
+			$pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'club');
 	  	$pageSize = intval($configurations->get($this->getConfId().'club.pagebrowser.limit'));
 			$pageBrowser->setState($parameters, $listSize, $pageSize);
 			$limit = $pageBrowser->getState();

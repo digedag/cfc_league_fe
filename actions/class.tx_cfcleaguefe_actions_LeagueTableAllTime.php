@@ -22,12 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-tx_div::load('tx_cfcleaguefe_actions_LeagueTableShow');
-tx_div::load('tx_cfcleaguefe_util_ScopeController');
-tx_div::load('tx_cfcleaguefe_util_LeagueTable');
-tx_div::load('tx_cfcleaguefe_util_MatchTable');
+tx_rnbase::load('tx_cfcleaguefe_actions_LeagueTableShow');
+tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
+tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
+tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
 
 /**
  * Controller für die Anzeige eines unbegrenzten Liga-Tabelle
@@ -56,7 +56,7 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
     $this->_handleSBPointSystem($parameters, $configurations, $viewData);
     $this->_handleSBTableScope($parameters, $configurations, $viewData, 'leaguetableAllTime');
 
-    $view = tx_div::makeInstance('tx_cfcleaguefe_views_LeagueTableAllTime');
+    $view = tx_rnbase::makeInstance('tx_cfcleaguefe_views_LeagueTableAllTime');
 
     $view->setTemplatePath($configurations->getTemplatePath());
     $view->setTemplateFile($configurations->get('leaguetableAllTimeTemplate'));
@@ -97,8 +97,7 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
 	 * Sammelt die Daten für die Erstellung der Tabelle
 	 */
 	function buildTable($parameters,&$configurations, &$matches) {
-		$clazz = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_AllTimeTableProvider');
-		$tableProvider = new $clazz($parameters,$configurations, $matches, 'leaguetableAllTime.');
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_AllTimeTableProvider', $parameters,$configurations, $matches, 'leaguetableAllTime.');
 
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable;
 		$arr = Array(

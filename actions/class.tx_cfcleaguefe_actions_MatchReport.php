@@ -22,8 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_rnbase_action_BaseIOC');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Action für die Anzeige eines Spielberichts
@@ -48,8 +48,7 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 		}
 
 		// Das Spiel laden
-		$className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_matchreport');
-		$matchReport = new $className($matchId, $configurations);
+		$matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $matchId, $configurations);
 		$viewData->offsetSet('matchReport', $matchReport); // Den Spielreport für den View bereitstellen
 
 		// Auf das Template verzweigen

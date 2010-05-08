@@ -22,11 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-tx_div::load('tx_cfcleaguefe_util_ScopeController');
-tx_div::load('tx_rnbase_action_BaseIOC');
-tx_div::load('tx_cfcleaguefe_util_MatchTable');
+tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
+tx_rnbase::load('tx_rnbase_action_BaseIOC');
+tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
 
 /**
  * Controller für die Anzeige der Spiele, für die ein LiveTicker geschaltet ist.
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 		return '';
 /////////////
 
-    $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
+    $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
     $matchTable->setTimeRange($configurations->get('tickerlist.timeRangePast'),$configurations->get('tickerlist.timeRangeFuture'));
     $matchTable->setLimit($configurations->get('tickerlist.limit'));
     $matchTable->setOrderDesc($configurations->get('tickerlist.orderDesc') ? true : false );
@@ -71,7 +71,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 // t3lib_div::debug($viewData,'ac_tickerlist');
 
     // View
-    $view = tx_div::makeInstance('tx_cfcleaguefe_views_LiveTickerList');
+    $view = tx_rnbase::makeInstance('tx_cfcleaguefe_views_LiveTickerList');
     $view->setTemplatePath($configurations->getTemplatePath());
     // Das Template wird komplett angegeben
     $view->setTemplateFile($configurations->get('templateLiveTickerList'));
@@ -126,8 +126,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 			$listSize = $service->search($fields, $options);
 			unset($options['count']);
 			// PageBrowser initialisieren
-			$className = tx_div::makeInstanceClassName('tx_rnbase_util_PageBrowser');
-			$pageBrowser = new $className('tickerlist_' . $configurations->getPluginId());
+			$pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'tickerlist_' . $configurations->getPluginId());
 			$pageSize = $this->getPageSize($parameters, $configurations);
 			//Wurde neu gesucht?
 			if($parameters->offsetGet('NK_newsearch')) {

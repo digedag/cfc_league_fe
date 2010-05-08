@@ -22,10 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-tx_div::load('tx_cfcleaguefe_util_ScopeController');
-tx_div::load('tx_cfcleaguefe_actions_MatchTable');
+tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
+tx_rnbase::load('tx_cfcleaguefe_actions_MatchTable');
 
 /**
  * Controller für die Anzeige eines Spielplans als Kreuztabelle
@@ -81,7 +81,7 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
 
 //t3lib_div::debug($scopeArr, 'ac_MatchTable');
 
-    $matchTable = tx_div::makeInstance('tx_cfcleaguefe_models_matchtable');
+    $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
     $extended = $configurations->get('matchcrosstable.allData');
     $matches = $matchTable->findMatches($saisonUids, $groupUids, $currCompetition, '', '', $status, $extended);
     
