@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,13 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// Die Datenbank-Klasse
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
-require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
-
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_model_base');
 require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
 
-tx_div::load('tx_cfcleaguefe_models_competition');
+tx_rnbase::load('tx_cfcleaguefe_models_competition');
 
 
 /**
@@ -465,7 +463,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    */
   function _getTeam($uid) {
 		if(!$uid) throw new Exception('Invalid match with uid ' . $this->getUid() . ': At least one team is not set.');
-    $teamClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
+    $teamClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_models_team');
     $team = call_user_func(array($teamClass,'getInstance'), $uid);
     return $team;
   }
@@ -489,7 +487,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 	 */
 	function getArena() {
 		if(!intval($this->record['arena'])) return false;
-		tx_div::load('tx_cfcleague_models_Stadium');
+		tx_rnbase::load('tx_cfcleague_models_Stadium');
 		return tx_cfcleague_models_Stadium::getInstance($this->record['arena']);
 	}
 

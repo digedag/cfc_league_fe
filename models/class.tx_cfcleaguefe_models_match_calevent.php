@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -65,21 +65,14 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     	return 'could not find the -'.$marker[1].'- subpart-marker in view.cfc_league_events.template: '.$this->conf['view.']['cfc_league_events.']['template'];
     }
 
-    $configurations = tx_div::makeInstance('tx_rnbase_configurations');
+    $configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
     $configurations->init($this->conf, $cObj, 'cfc_league_fe', 'cfc_league_fe');
     $this->formatter = &$configurations->getFormatter();
 
 //    $markerArray = $this->formatter->getItemMarkerArrayWrapped($this->_match->record, 'view.cfc_league_events.match.', 0, 'MATCH_');
 
-		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-    $matchMarker = new $markerClass;
+		$matchMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarker');
     $template = $matchMarker->parseTemplate($template, $this->_match, $this->formatter, 'view.cfc_league_events.match.', 'MATCH');
-    
-//    $teamMarkerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-//    $teamMarker = new $teamMarkerClass;
-//
-//    $template = $teamMarker->parseTemplate($template, $this->_match->getHome(), $this->formatter, 'view.cfc_league_events.match.home.', 'MATCH_HOME');
-//    $template = $teamMarker->parseTemplate($template, $this->_match->getGuest(), $this->formatter, 'view.cfc_league_events.match.guest.', 'MATCH_GUEST');
 
     // Die Original-Marker von Cal mit einbinden
     $markerArray = array();

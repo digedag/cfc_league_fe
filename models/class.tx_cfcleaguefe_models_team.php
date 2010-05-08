@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,13 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
-// Die Datenbank-Klasse
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
-require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
-
+tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_cfcleaguefe_models_club');
 tx_rnbase::load('tx_cfcleaguefe_search_Builder');
 tx_rnbase::load('tx_cfcleaguefe_models_group');
@@ -205,8 +200,7 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
     $uid = intval($teamUid);
     if(!$uid) throw new Exception('Team uid expected. Was: >' . $teamUid . '<', -1);
     if(! self::$instances[$uid]) {
-      $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
-      self::$instances[$uid] = new $className($teamUid);
+      self::$instances[$uid] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_team', $teamUid);
     }
     return self::$instances[$uid];
   }

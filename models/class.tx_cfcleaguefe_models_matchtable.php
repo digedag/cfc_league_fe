@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,12 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// Die Datenbank-Klasse
-//require_once(t3lib_extMgm::extPath('cfc_league') . 'class.tx_cfcleague_db.php');
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_DB');
+tx_rnbase::load('tx_cfcleaguefe_models_match');
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
 
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
@@ -187,7 +185,7 @@ class tx_cfcleaguefe_models_matchtable{
 
 
       if(strlen($where) >0) $where .= ' AND ';
-      $cal = tx_div::makeInstance('tx_rnbase_util_Calendar');
+      $cal = tx_rnbase::makeInstance('tx_rnbase_util_Calendar');
       $cal->clear(CALENDAR_SECOND);
       $cal->clear(CALENDAR_HOUR);
       $cal->clear(CALENDAR_MINUTE);
@@ -195,7 +193,7 @@ class tx_cfcleaguefe_models_matchtable{
       $where .= ' tx_cfcleague_games.date >= ' . $cal->getTime();
 
       if(strlen($where) >0) $where .= ' AND ';
-      $cal = tx_div::makeInstance('tx_rnbase_util_Calendar');
+      $cal = tx_rnbase::makeInstance('tx_rnbase_util_Calendar');
       $cal->clear(CALENDAR_SECOND);
       $cal->clear(CALENDAR_HOUR);
       $cal->clear(CALENDAR_MINUTE);

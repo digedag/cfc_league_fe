@@ -64,8 +64,7 @@ class tx_cfcleaguefe_hooks_TableMatchMarker {
 //		t3lib_div::debug($tableData, 'tx_cfcleaguefe_hooks_TableMatchMarkers :: addLeagueTable'); // TODO: remove me
 	}
 	private function getTableData($configurations, $confId, $competition, $match) {
-		$clazz = tx_div::makeInstanceClassname('tx_cfcleaguefe_util_league_DefaultTableProvider');
-		$tableProvider = new $clazz($configurations->getParameters(),$configurations, $competition);
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $configurations->getParameters(),$configurations, $competition);
 		if(intval($configurations->get($confId.'leaguetable.useRoundFromMatch')))
 			$tableProvider->setCurrentRound($match->getRound());
 
@@ -77,7 +76,7 @@ class tx_cfcleaguefe_hooks_TableMatchMarker {
 		if($clubUid) $clubMarks[] = $clubUid; 
 		$tableProvider->setMarkClubs($clubMarks);
 		
-		$leagueTable = tx_div::makeInstance('tx_cfcleaguefe_util_LeagueTable');
+		$leagueTable = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTable');
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$tableData = $leagueTable->generateTable($tableProvider);
 		return $tableData;

@@ -22,9 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// Die Datenbank-Klasse
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php'); // Prüfen
-require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_model_base');
 
 
 /**
@@ -43,7 +42,7 @@ class tx_cfcleaguefe_models_club extends tx_rnbase_model_base {
   function getAddress() {
   	if(!$this->record['address'])
   		return null;
-    $classname = tx_div::makeInstanceClassName('tx_cfcleague_models_Address');
+    $classname = tx_rnbase::makeInstanceClassName('tx_cfcleague_models_Address');
     $address = new $classname($this->record['address']);
 		return $address->isValid() ? $address : null;
   }
@@ -155,8 +154,7 @@ AND tx_cfcleague_competition.agegroup = 1
     $uid = intval($clubUid);
     if(!$uid) throw new Exception('Club uid expected. Was: >' . $clubUid . '<', -1);
     if(! self::$instances[$uid]) {
-      $className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_club');
-      self::$instances[$uid] = new $className($clubUid);
+      self::$instances[$uid] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_club', $clubUid);
     }
     return self::$instances[$uid];
   }

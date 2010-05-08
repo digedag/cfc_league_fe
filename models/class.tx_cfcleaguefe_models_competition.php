@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_div::load('tx_rnbase_model_base');
-tx_div::load('tx_cfcleague_models_Competition');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_model_base');
+tx_rnbase::load('tx_cfcleague_models_Competition');
 
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
@@ -205,7 +206,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
    * @return tx_cfcleaguefe_models_group
    */
   function getGroup($all=false) {
-		tx_div::load('tx_cfcleaguefe_models_group');
+		tx_rnbase::load('tx_cfcleaguefe_models_group');
 		$groupIds = t3lib_div::intExplode(',',$this->record['agegroup']);
 		if(!count($groupIds)) return null;
 		if(!$all) return tx_cfcleaguefe_models_group::getInstance($groupIds[0]);

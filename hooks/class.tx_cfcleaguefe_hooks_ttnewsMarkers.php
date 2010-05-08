@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008 Rene Nitzsche
+ *  (c) 2008-2010 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,10 +21,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
-tx_div::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 
 /**
@@ -49,7 +49,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 	 * @param tx_ttnews $ttnews tt_news plugin instance
 	 */
 	function extraItemMarkerProcessor($markerArray, $row, $lConf, $ttnews) {
-		$this->configurations = tx_div::makeInstance('tx_rnbase_configurations');
+		$this->configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
 		// Dieses cObj wird dem Controller von T3 übergeben
 		$this->configurations->init($ttnews->conf, $ttnews->cObj, 'cfc_league_fe', 'cfc_league_fe');
 		$this->linkConf = $this->configurations->get('external_links.');
@@ -80,7 +80,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 		if(array_key_exists('matchId', array_flip($params))) {
 			$uid = $linkParams['matchId'];
 			try {
-				tx_div::load('tx_cfcleaguefe_models_match');
+				tx_rnbase::load('tx_cfcleaguefe_models_match');
 				$t3match = tx_cfcleaguefe_models_match::getInstance($uid);
 				$competition = $t3match->getCompetition();
 				$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->record['agegroup'];

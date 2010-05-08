@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// Die Datenbank-Klasse
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php');
-require_once(t3lib_extMgm::extPath('rn_base') . 'model/class.tx_rnbase_model_base.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_model_base');
 
 
 /**
@@ -368,8 +367,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
    */
   function &getUnknownPlayer() {
     if(!is_object(tx_cfcleaguefe_models_match_note::$unknownPlayer)) {
-      $profileClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_profile');
-      tx_cfcleaguefe_models_match_note::$unknownPlayer = new $profileClass('-1');
+      tx_cfcleaguefe_models_match_note::$unknownPlayer = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', '-1');
     }
     return tx_cfcleaguefe_models_match_note::$unknownPlayer;
   }
@@ -381,8 +379,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
    */
   function &getNotFoundProfile() {
     if(!is_object(tx_cfcleaguefe_models_match_note::$notFoundProfile)) {
-      $profileClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_profile');
-      tx_cfcleaguefe_models_match_note::$notFoundProfile = new $profileClass('-2');
+      tx_cfcleaguefe_models_match_note::$notFoundProfile = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', '-2');
     }
     return tx_cfcleaguefe_models_match_note::$notFoundProfile;
   }
