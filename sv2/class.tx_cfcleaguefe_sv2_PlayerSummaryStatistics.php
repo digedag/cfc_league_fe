@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,7 +23,8 @@
 ***************************************************************/
 
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
-tx_div::load('tx_cfcleaguefe_sv2_PlayerStatistics');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
 
 /**
  * Service for summery of player statistics
@@ -60,10 +61,10 @@ class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_Play
    * Returns the marker instance to map result data to HTML markers
    *
    * @param tx_rnbase_configurations $configurations
+   * @return tx_cfcleaguefe_sv2_PlayerSummaryStatisticsMarker
    */
   public function getMarker($configurations) {
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_sv2_PlayerSummaryStatisticsMarker');
-    return new $markerClass();
+    return tx_rnbase::makeInstance('tx_cfcleaguefe_sv2_PlayerSummaryStatisticsMarker');
   }
   
   /**
@@ -76,9 +77,8 @@ class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_Play
     $this->result['numberOfMatches'] = 0;
 //    $compUid = t3lib_div::intExplode(',', $scopeArr['COMP_UIDS']);
 //    if(count($compUid) == 1) {
-    $compClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_competition');
     foreach($compUids As $compUid) {
-      $comp = new $compClass($compUid);
+      $comp = tx_rnbase::makeInstance('tx_cfcleaguefe_models_competition', $compUid);
       // Gesucht: Anzahl Spiele der Teams gesamt und beendet
       // Spiele gesamt holen wir über getRounds
       $teamIds = array();

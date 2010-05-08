@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_DB');
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
-tx_div::load('tx_rnbase_util_DB');
 
 interface tx_cfcleaguefe_MatchService {
   function search($fields, $options);
@@ -49,7 +49,7 @@ class tx_cfcleaguefe_sv1_Matches extends t3lib_svbase implements tx_cfcleaguefe_
 	 * @return array of tx_cfcleaguefe_models_match
 	 */
 	function search($fields, $options) {
-		tx_div::load('tx_rnbase_util_SearchBase');
+		tx_rnbase::load('tx_rnbase_util_SearchBase');
 		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Match');
 		return $searcher->search($fields, $options);
 	}
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_sv1_Matches extends t3lib_svbase implements tx_cfcleaguefe_
 	 * @return tx_cfcleaguefe_util_MatchTable
 	 */
 	function getMatchTable() {
-		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
 
 }

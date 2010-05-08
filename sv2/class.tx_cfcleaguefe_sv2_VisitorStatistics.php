@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,8 +23,7 @@
 ***************************************************************/
 
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
-//t3lib_div::debug('Bin hier', 'no_class_scope');
-
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
 /**
@@ -104,14 +103,14 @@ class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
     }
   }
 
-  /**
-   * Returns the marker instance to map result data to HTML markers
-   *
-   * @param tx_rnbase_configurations $configurations
-   */
+	/**
+	 * Returns the marker instance to map result data to HTML markers
+	 *
+	 * @param tx_rnbase_configurations $configurations
+	 * @return tx_cfcleaguefe_sv2_TeamStatisticsMarker
+	 */
 	public function getMarker($configurations) {
-		$markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_sv2_TeamStatisticsMarker');
-		return new $markerClass();
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_sv2_TeamStatisticsMarker');
 	}
   
   /**

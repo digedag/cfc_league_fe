@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,11 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
-tx_div::load('tx_cfcleaguefe_util_StatisticsHelper');
+tx_rnbase::load('tx_cfcleaguefe_util_StatisticsHelper');
 
-tx_div::load('tx_rnbase_util_Misc');
+tx_rnbase::load('tx_rnbase_util_Misc');
 
 /**
  * Service for player statistics
@@ -150,7 +150,7 @@ static $total = 0;
    * @param tx_rnbase_configurations $configurations
    */
   public function getMarker($configurations) {
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_sv2_PlayerStatisticsMarker');
+    $markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_sv2_PlayerStatisticsMarker');
     return new $markerClass();
   }
 
@@ -168,21 +168,20 @@ static $total = 0;
    * @param array $scopeArr
    * @return array of tx_cfcleagefe_models_team
    */
-  protected function getTeams($scopeArr){
-    $teamClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
-    $teams = call_user_func(array($teamClass,"getTeams"), 
-                         $scopeArr['COMP_UIDS'], 
-                         $scopeArr['CLUB_UIDS']);
-    return $teams;
-  }
-  /**
-   * Kindklassen Zugriff auf das Scopearray bieten
-   * @return array
-   */
-  protected function getScopeArray(){
-    return $this->scopeArr;
-  }
-  
+	protected function getTeams($scopeArr){
+		$teams = call_user_func(array('tx_cfcleaguefe_models_team',"getTeams"), 
+					$scopeArr['COMP_UIDS'], 
+					$scopeArr['CLUB_UIDS']);
+		return $teams;
+	}
+	/**
+	 * Kindklassen Zugriff auf das Scopearray bieten
+	 * @return array
+	 */
+	protected function getScopeArray(){
+		return $this->scopeArr;
+	}
+
   /**
    * Prüft, ob der Spieler im aktuellen Spiel beteiligt war. Folgende Daten
    * werden aktualisiert:<pre>

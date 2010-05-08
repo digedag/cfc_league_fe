@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,6 +21,8 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 require_once(t3lib_extMgm::extPath('cal').'service/class.tx_cal_event_service.php');
 require_once(t3lib_extMgm::extPath('cfc_league_fe').'models/class.tx_cfcleaguefe_models_match_calevent.php');
@@ -85,7 +87,7 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 	 * @return tx_cfcleaguefe_util_MatchTable
 	 */
 	private function getMatchTable() {
-		return tx_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
 	/**
 	 *  Finds a single event.
@@ -94,8 +96,7 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 	 */	
 	function find($uid, $pidList) {
 		$this->_init();
-		$className = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_match');
-		$match = new $className($uid);
+		$match = tx_rnbase::makeInstance('tx_cfcleaguefe_models_match', $uid);
 		$event = $this->createEvent($match, false);
 /*
     $events = array();

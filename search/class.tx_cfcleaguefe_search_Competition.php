@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008 Rene Nitzsche
+ *  (c) 2008-2010 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,9 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-
-tx_div::load('tx_rnbase_util_SearchBase');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 define('COMPSRV_FIELD_COMP_NAME', 'COMP.NAME');
 define('COMPSRV_FIELD_TEAM_NAME', 'TEAM.NAME');

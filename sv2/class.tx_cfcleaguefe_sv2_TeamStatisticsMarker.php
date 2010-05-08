@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_rnbase_util_BaseMarker');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Marker class for player statistics
@@ -38,8 +38,7 @@ class tx_cfcleaguefe_sv2_TeamStatisticsMarker extends tx_rnbase_util_BaseMarker 
     $template = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_TEAM###');
 
     // Es wird der TeamMarker verwendet
-    $markerClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $markerObj = new $markerClass;
+    $markerObj = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
     $markerObj->initLabelMarkers($formatter, $statsConfId.'team.', $statsMarker.'_TEAM');
     $markerArray = $markerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
     
@@ -48,8 +47,8 @@ class tx_cfcleaguefe_sv2_TeamStatisticsMarker extends tx_rnbase_util_BaseMarker 
     $parts = array();
     foreach ($stats as $teamStat) {
 			try {
-				$teamClass = tx_div::makeInstanceClassName('tx_cfcleaguefe_models_team');
-				$team = call_user_func(array($teamClass,'getInstance'), $teamStat['team']);
+				tx_rnbase::load('tx_cfcleaguefe_models_team');
+				$team = call_user_func(array('tx_cfcleaguefe_models_team','getInstance'), $teamStat['team']);
 			}
 			catch (Exception $e) {
 				continue; // Ohne Team wird auch nix gezeigt
