@@ -27,7 +27,8 @@ tx_rnbase::load('tx_cfcleaguefe_models_match');
 tx_rnbase::load('tx_cfcleaguefe_models_profile');
 tx_rnbase::load('tx_cfcleaguefe_util_MatchTicker');
 
-require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
+if(t3lib_extMgm::isLoaded('dam'))
+	require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
 
 /**
@@ -46,14 +47,13 @@ class tx_cfcleaguefe_models_matchreport {
    *
    * @param $matchId UID eines Spiels
    */
-  function tx_cfcleaguefe_models_matchreport($matchId, &$configurations) {
+  function __construct($matchId, &$configurations) {
     // Laden des Spiels
-    $this->match = tx_cfcleaguefe_models_matchreport::_loadMatch($matchId);
+    $this->match = self::_loadMatch($matchId);
     $this->match->setMatchReport($this);
     $this->_configurations = $configurations;
 
     $this->_formatter =& $configurations->getFormatter();
-
     // Die MatchNotes laden
     $this->_initMatchTicker();
   }
@@ -71,7 +71,9 @@ class tx_cfcleaguefe_models_matchreport {
    * @return HTML-String for match pictures
    */
   function getPictures() {
-    $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_images');
+  	if(!t3lib_extMgm::isLoaded('dam')) return '';
+  	
+  	$damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_images');
     $out = '';
 //t3lib_div::debug($this->_formatter->cObj->data, 'mdl_report');
     while(list($uid, $filePath) = each($damPics['files'])) {
@@ -86,7 +88,8 @@ class tx_cfcleaguefe_models_matchreport {
    * @return array of string
    */
   function getMedia() {
-    $arr = array();
+  	if(!t3lib_extMgm::isLoaded('dam')) return '';
+  	$arr = array();
     $damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_media');
     if (is_object($serviceObj = t3lib_div::makeInstanceService('mediaplayer'))) {
 
@@ -552,8 +555,9 @@ class tx_cfcleaguefe_models_matchreport {
   /**
    * Liefert das Logo eines Teams. Es ist entweder das zugeordnete Logo des Teams oder 
    * das Logo des Vereins.
+   * @param tx_cfcleaguefe_models_team
    */
-  function _getLogo(&$team) {
+  function _getLogo($team) {
     return $team->getLogo($this->_formatter, 'matchreport.logo.');
   }
 

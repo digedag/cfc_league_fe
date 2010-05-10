@@ -23,7 +23,6 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
@@ -37,12 +36,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * Erstellt eine neue Instanz
    * @param $options Array with options. not used until now.
    */
-  function tx_cfcleaguefe_util_MatchMarker(&$options = array()) {
+  function __construct(&$options = array()) {
     // Den TeamMarker erstellen
-    $markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-    $this->teamMarker = new $markerClass;
-    $markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_CompetitionMarker');
-    $this->competitionMarker = new $markerClass;
+  	$this->teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+  	$this->competitionMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
   }
 
   /**
@@ -66,7 +63,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			return $formatter->configurations->getLL('match_notFound');
 		}
 //$time = t3lib_div::milliseconds();
-    
+
 		$this->prepareFields($match);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','matchMarker_initRecord', 
 			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
@@ -80,10 +77,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
 		$ignore = self::findUnusedCols($match->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $confId, $ignore, $marker.'_');
+
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-
 		// Es wird jetzt das Template verändert und die Daten der Teams eingetragen
 		$this->pushTT('parse home team');
 		if($this->containsMarker($template, $marker.'_HOME'))
@@ -225,65 +222,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
                                                $markerArray, $subpartArray, $wrappedSubpartArray);
   }
 
-  
-  /**
-   * Hinzufügen der Bilder des Spiels. Das erste Bild wird gesondert gemarkert, die restlichen 
-   * werden als Liste behandelt.
-   * @param $gSubPartArray globales Subpart-Array, welches die Ergebnisse aufnimmt
-   * @param $firstMarkerArray
-   * @deprecated use templates based picture output from rn_base
-   */
-//  private function _addPictures(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
-//  	// Prüfen, ob Marker vorhanden sind
-//  	if(!(self::containsMarker($template, $baseMarker .'_FIRST_PICTURE') && self::containsMarker($template, $baseMarker .'_PICTURES')))
-//  		return;
-//    // Das erste Bild ermitteln
-//    $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_images');
-//    list($uid, $filePath) = each($damPics['files']);
-//    if(count($damPics['files']) == 0) { // Keine Bilder vorhanden
-//      // Alle Marker löschen
-//      $firstMarkerArray['###'. $baseMarker .'_FIRST_PICTURE###'] = '';
-//      $firstMarkerArray['###'. $baseMarker .'_FIRST_PICTURE_IMGTAG###'] = '';
-//      $gSubpartArray['###'. $baseMarker .'_PICTURES###'] = '';
-//      tx_rnbase_util_FormatUtil::fillEmptyMarkers($firstMarkerArray, 
-//                        tx_rnbase_util_FormatUtil::getDAMColumns(), $baseMarker.'_FIRST_PICTURE_');
-//      return;
-//    }
-//
-//    $mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
-//    $media = new $mediaClass($filePath);
-//		// Check DAM-Version
-//		if(method_exists($media, 'fetchFullMetaData'))
-//			$media->fetchFullMetaData();
-//		else
-//			$media->fetchFullIndex();
-//    $markerFirst = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'firstImage.', $baseMarker.'_FIRST_PICTURE');
-//    $firstMarkerArray = array_merge($firstMarkerArray, $markerFirst);
-////t3lib_div::debug($formatter->cObj->data, 'match_marker');
-//    
-//    // Jetzt ersetzen wir die weiteren Bilder
-//    // Zuerst wieder das Template laden
-//    $gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_PICTURES###');
-//
-//    $pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_PICTURE###');
-//    $markerArray = array();
-//    $out = '';
-////    reset($damPics);
-//
-//		// Alle Bilder hinzufügen
-//    while(list($uid, $filePath) = each($damPics['files'])) {
-//      $media = new $mediaClass($filePath);
-//      $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'images.',$baseMarker.'_PICTURE');
-//      $out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
-//    }
-//    // Der String mit den Bilder ersetzt jetzt den Subpart ###TEAM_PICTURES_2###
-//    if(strlen(trim($out)) > 0) {
-//      $subpartArray['###'. $baseMarker .'_PICTURE###'] = $out;
-//      $out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
-//    }
-//    $gSubpartArray['###'. $baseMarker .'_PICTURES###'] = $out;
-//  }
-
   /**
    * Die vorhandenen Mediadateien hinzufügen
    *
@@ -299,7 +237,12 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
   	// Prüfen, ob Marker vorhanden sind
 		if(!self::containsMarker($template, $baseMarker .'_MEDIAS'))
 			return;
-
+		if(!t3lib_extMgm::isLoaded('dam')) {
+			// Not supported without DAM!
+			$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
+			return;
+		}
+		
 		$damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_media');
 		if(count($damMedia['files']) == 0) { // Keine Daten vorhanden
 			// Alle Marker löschen
@@ -366,6 +309,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchMarker.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchMarker.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchMarker.php']);
 }
 ?>

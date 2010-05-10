@@ -23,7 +23,6 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
@@ -31,7 +30,7 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
  * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich
  */
 class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
-	function tx_cfcleaguefe_util_TeamMarker(&$options = null) {
+	function __construct(&$options = null) {
 	}
 
   /**
@@ -44,7 +43,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
    *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
    * @return String das geparste Template
    */
-	public function parseTemplate($template, &$team, &$formatter, $confId, $marker = 'TEAM') {
+	public function parseTemplate($template, $team, $formatter, $confId, $marker = 'TEAM') {
 		if(!is_object($team)) {
 			return $formatter->configurations->getLL('team_notFound');
 		}
@@ -56,7 +55,6 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-		
 		// Die Spieler setzen
 		$this->pushTT('add player');
 		if($this->containsMarker($template, $marker.'_PLAYERS'))
@@ -193,6 +191,6 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_TeamMarker.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_TeamMarker.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_TeamMarker.php']);
 }
 ?>
