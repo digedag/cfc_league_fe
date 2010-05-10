@@ -58,5 +58,6 @@ if (TYPO3_MODE=='BE')	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']
 // list static templates in templates selection
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/', 'T3sports');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/cal/','T3sports cal-events');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/nodam/','T3sports without DAM');
 
 ?>
