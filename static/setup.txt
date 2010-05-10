@@ -521,7 +521,7 @@ plugin.tx_cfcleaguefe_competition {
     # Ausgabe mit HTML-Template
     viewType = HTML
     # Angabe zur Tabelle
-    table =< lib.t3sports.team
+    table =< lib.t3sports.teamSmall
     table {
       roll.value = 1
 #      team.name.wrap = -|-
@@ -540,7 +540,6 @@ plugin.tx_cfcleaguefe_competition {
         if.value = -1
         if.isGreaterThan.field = points2
       }
-      logo =< lib.t3sports.teamLogo.small
       # Optional ein String, der zwischen den Zeilen steht
 #      implode = <br />
     }
