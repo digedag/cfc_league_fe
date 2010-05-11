@@ -45,7 +45,7 @@ class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base{
 		}
 		else
 			$options['where'] = '1';
-		$options['oderby'] = 'sorting';
+		$options['orderby'] = 'sorting';
 		$options['wrapperclass'] = 'tx_cfcleaguefe_models_saison';
 //		SELECT * FROM tx_cfcleague_saison WHERE uid IN ($uid)
 
