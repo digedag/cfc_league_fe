@@ -168,6 +168,7 @@ static $total = 0;
    * @return array of tx_cfcleagefe_models_team
    */
 	protected function getTeams($scopeArr){
+		tx_rnbase::load('tx_cfcleaguefe_models_team');
 		$teams = call_user_func(array('tx_cfcleaguefe_models_team',"getTeams"), 
 					$scopeArr['COMP_UIDS'], 
 					$scopeArr['CLUB_UIDS']);
