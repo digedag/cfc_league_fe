@@ -115,22 +115,6 @@ lib.t3sports.competition {
   logo.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_complogo}
 }
 
-lib.t3sports.dummyImage = IMAGE
-lib.t3sports.dummyImage {
-  file = GIFBUILDER
-  file {
-    XY = 70,100
-    backColor = #ffff00
-    10 = TEXT
-    10 {
-      text = Kein Bild
-      fontSize = 14
-      niceText = 1
-      fontColor = #000000
-      offset = 5, 43
-    }
-  }
-}
 
 # Allgemeines Formatierungsangaben für Personen
 lib.t3sports.profile {
@@ -244,6 +228,35 @@ lib.t3sports.club {
   stadium =< lib.t3sports.stadium
 }
 
+lib.t3sports.dummyImage = IMAGE
+lib.t3sports.dummyImage {
+  file = GIFBUILDER
+  file {
+    XY = 70,100
+    backColor = #ffff00
+    10 = TEXT
+    10 {
+      text = Kein Bild
+      fontSize = 14
+      niceText = 1
+      fontColor = #000000
+      offset = 5, 43
+    }
+  }
+}
+
+lib.t3sports.dummyLogo = IMAGE
+lib.t3sports.dummyLogo {
+#  file = fileadmin/images/fussball.jpg
+  file = GIFBUILDER
+  file {
+    XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
+		maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+		maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+    backColor = #FFFFFF
+  }
+}
+
 lib.t3sports.teamLogo {
   big = CASE
   big {
@@ -253,18 +266,9 @@ lib.t3sports.teamLogo {
     0 {
       0 = CASE
       0 {
-        # Dummy-Logo rendern
-        0 = IMAGE
-        0 {
-#          file = fileadmin/images/fussball.gif
-          file = GIFBUILDER
-          file {
-            XY = {$plugin.tx_cfcleaguefe_report.maxW_logo},{$plugin.tx_cfcleaguefe_report.maxH_logo}
-		  			maxWidth = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-			  		maxHeight = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-            backColor = #FFFFFF
-          }
-        }
+        # Dummy-Logo if no club found
+        0 =< lib.t3sports.dummyLogo
+
         # Vereinslogo rendern
         default = RECORDS
         default {
@@ -273,7 +277,8 @@ lib.t3sports.teamLogo {
           conf.tx_cfcleague_club = CASE
 	   			conf.tx_cfcleague_club {
 			      key.field = dam_logo
-  					0 =< lib.t3sports.teamLogo.big.0.0
+			      # Dummy-Logo if no logo in club found
+  					0 =< lib.t3sports.dummyLogo
 
             default = USER
             default {
@@ -293,7 +298,7 @@ lib.t3sports.teamLogo {
         }
         key.field = club
       }
-      # DAM-Bild anzeigen
+      # DAM-Bild anzeigen (Select-Box im Team)
       default = RECORDS
       default {
         source.field = logo
@@ -341,10 +346,14 @@ lib.t3sports.teamLogo {
     # Logo des Teams
     default.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
     default.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
-    # Dummy-Logo
+    # Dummy-Logo wenn kein Verein vorhanden ist
     0.0.0.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
     0.0.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
     0.0.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    # Dummy-Logo wenn kein Logo im Verein 
+    0.0.default.conf.tx_cfcleague_club.0.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+    0.0.default.conf.tx_cfcleague_club.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
+    0.0.default.conf.tx_cfcleague_club.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
     # Logo aus Verein
     0.0.default.conf.tx_cfcleague_club.default.media.file.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
     0.0.default.conf.tx_cfcleague_club.default.media.file.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
