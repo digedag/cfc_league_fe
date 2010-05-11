@@ -157,10 +157,14 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 		# build SQL for select
 		$what = 'distinct round as uid,round AS number,round_name As name, max(status) As finished';
 		# WHERE
+		$options = array();
 		# Die UID der Liga setzen
-		$where = 'competition="'.$this->uid.'"';
-
-		return tx_rnbase_util_DB::queryDB($what,'tx_cfcleague_games',$where, 'round,round_name','round','tx_cfcleaguefe_models_competition_round');
+		$options['where'] = 'competition="'.$this->uid.'"';
+		$options['groupby'] = 'round,round_name';
+		$options['orderby'] = 'round';
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_competition_round';
+		
+		return tx_rnbase_util_DB::doSelect($what, 'tx_cfcleague_games', $options);
 	}
 	/**
 	 * Liefert die Spiele einer bestimmten Spielrunde
