@@ -38,7 +38,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $marker Name des Markers
 	 * @return String das geparste Template
 	 */
-	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ARENA') {
+	public function parseTemplate($template, $item, $formatter, $confId, $marker = 'ARENA') {
 		if(!is_object($item)) {
 			// Ist kein Item vorhanden wird ein leeres Objekt verwendet.
 			$item = self::getEmptyInstance('tx_cfcleague_models_Stadium');
@@ -46,7 +46,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 
 		// Es wird das MarkerArray mit Daten gefüllt
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
-		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , 0, $marker.'_',$item->getColumnNames());
+		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$item->getColumnNames());
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);

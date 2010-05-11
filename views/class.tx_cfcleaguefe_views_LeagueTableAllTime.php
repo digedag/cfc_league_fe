@@ -67,8 +67,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 			$tableData = $this->_cropTable($tableData, $tableSize);
 		}
 		// Den ClubMarker erstellen
-		$markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_ClubMarker');
-		$clubMarker = new $markerClass;
+		$clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
 		$templateEntry = $configurations->getCObj()->getSubpart($templateList,'###ROW###');
 
 		$parts = array();

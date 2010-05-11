@@ -55,8 +55,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter  {
 			$tableData = $this->_cropTable($tableData, $tableSize);
 		}
 		// Den TeamMarker erstellen
-		$markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_TeamMarker');
-		$teamMarker = new $markerClass;
+		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$templateEntry = t3lib_parsehtml::getSubpart($templateList,'###ROW###');
 		
 		$parts = array();

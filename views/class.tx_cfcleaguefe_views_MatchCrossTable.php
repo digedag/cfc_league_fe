@@ -130,11 +130,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$freeTemplate = $cObj->getSubpart($template, '###MATCH_FREE###');
 		$rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
 
-//		$markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_MatchMarker');
-//		$matchMarker = new $markerClass($this->links);
-//		$matchMarker->setFullMode(intval($configurations->get('matchcrosstable.dataline.matchFullMode') != 0));
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
 		
 		$lines = array();

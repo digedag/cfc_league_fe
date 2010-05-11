@@ -48,9 +48,7 @@ class tx_cfcleaguefe_actions_StadiumView extends tx_rnbase_action_BaseIOC {
 			$itemId = intval($parameters->offsetGet('stadium'));
 		}
 
-		$className = tx_rnbase::makeInstanceClassName('tx_cfcleague_models_Stadium');
-		$item = new $className($itemId);
-		$teams[] = $item;
+		$item = tx_rnbase::makeInstance('tx_cfcleague_models_Stadium', $itemId);
 		$viewData->offsetSet('item', $item);
 
 		return null;

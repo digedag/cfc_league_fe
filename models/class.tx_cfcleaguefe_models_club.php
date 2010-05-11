@@ -42,8 +42,7 @@ class tx_cfcleaguefe_models_club extends tx_rnbase_model_base {
   function getAddress() {
   	if(!$this->record['address'])
   		return null;
-    $classname = tx_rnbase::makeInstanceClassName('tx_cfcleague_models_Address');
-    $address = new $classname($this->record['address']);
+    $address = tx_rnbase::makeInstance('tx_cfcleague_models_Address', $this->record['address']);
 		return $address->isValid() ? $address : null;
   }
   /**

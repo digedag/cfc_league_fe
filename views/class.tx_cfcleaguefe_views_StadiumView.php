@@ -36,8 +36,7 @@ class tx_cfcleaguefe_views_StadiumView extends tx_rnbase_view_Base {
 		if(!is_object($item)) return 'Sorry, no item found...';
 
 		$out = '';
-		$markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_util_StadiumMarker');
-		$marker = new $markerClass();
+		$marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
 		$out .= $marker->parseTemplate($template, $item, $formatter, 'stadiumview.stadium.', 'STADIUM');
 		return $out;
 	}
@@ -47,6 +46,6 @@ class tx_cfcleaguefe_views_StadiumView extends tx_rnbase_view_Base {
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_StadiumView.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_StadiumView.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_StadiumView.php']);
 }
 ?>

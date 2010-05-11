@@ -150,8 +150,7 @@ static $total = 0;
    * @param tx_rnbase_configurations $configurations
    */
   public function getMarker($configurations) {
-    $markerClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_sv2_PlayerStatisticsMarker');
-    return new $markerClass();
+    return tx_rnbase::makeInstance('tx_cfcleaguefe_sv2_PlayerStatisticsMarker');
   }
 
   /**

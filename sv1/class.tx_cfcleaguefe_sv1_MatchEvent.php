@@ -109,8 +109,7 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 	}
 
 	function createEvent($match, $isException){
-		$event_model = &t3lib_div::makeInstanceClassName('tx_cfcleaguefe_models_match_calevent');
-		$event = &new $event_model($this->controller, $match, $isException, $this->getServiceKey());
+		$event = tx_rnbase::makeInstance('tx_cfcleaguefe_models_match_calevent', $this->controller, $match, $isException, $this->getServiceKey());
 		return $event;
 	}
 

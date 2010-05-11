@@ -37,8 +37,8 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 	var $_profiles, $_matchNotes, $_teamHome, $_teamGuest;
 	var $_report;
 
-	function tx_cfcleaguefe_models_match($rowOrUid) {
-		parent::tx_rnbase_model_base($rowOrUid);
+	function __construct($rowOrUid) {
+		parent::__construct($rowOrUid);
 		$this->_init();
 	}
 	function getTableName(){return 'tx_cfcleague_games';}
@@ -51,7 +51,6 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 		// Um das Endergebnis zu ermitteln, muss bekannt sein, wieviele Spielabschnitte
 		// es gibt. Dies steht im Wettbewerb
 		$comp = &tx_cfcleaguefe_models_competition::getInstance($this->record['competition']);
-
 		$this->record['matchparts'] = $comp->getMatchParts();
 		$goalsHome = $this->record['goals_home_'.$comp->getMatchParts()];
 		$goalsGuest = $this->record['goals_guest_'.$comp->getMatchParts()];
@@ -463,8 +462,8 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    */
   function _getTeam($uid) {
 		if(!$uid) throw new Exception('Invalid match with uid ' . $this->getUid() . ': At least one team is not set.');
-    $teamClass = tx_rnbase::makeInstanceClassName('tx_cfcleaguefe_models_team');
-    $team = call_user_func(array($teamClass,'getInstance'), $uid);
+    tx_rnbase::load('tx_cfcleaguefe_models_team');
+    $team = tx_cfcleaguefe_models_team::getInstance($uid);
     return $team;
   }
 

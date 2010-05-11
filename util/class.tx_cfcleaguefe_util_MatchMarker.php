@@ -250,7 +250,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			return;
 		}
 
-		$mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
+//		$mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
     
 		// Zuerst wieder das Template laden
 		$gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_MEDIAS###');
@@ -262,7 +262,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 
 		// Alle Daten hinzufügen
 		while(list($uid, $filePath) = each($damMedia['files'])) {
-			$media = new $mediaClass($filePath);
+			$media = tx_rnbase::makeInstance('tx_dam_media', $filePath);
+//			$media = new $mediaClass($filePath);
 			$markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.',$baseMarker.'_MEDIA');
 			$markerArray['###'. $baseMarker.'_MEDIA_PLAYER###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
 			$out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
