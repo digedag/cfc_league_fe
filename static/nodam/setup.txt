@@ -11,8 +11,12 @@ lib.t3sports.match.pictures =< tt_content.image.20
 lib.t3sports.match.pictures {
   imgList.field = t3images
   imgPath = uploads/tx_cfcleague/
-  maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
-  maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
+  # Zoom aktivieren
+  1.imageLinkWrap.enable.field = 
+  1.imageLinkWrap.enable = 1
+  # Anzahl Bilder nebeneinander
+  cols.field = 
+  cols = 4
 }
 
 lib.t3sports.match.firstpicture =< tt_content.image.20
@@ -20,6 +24,9 @@ lib.t3sports.match.firstpicture {
   imgList.field = t3images
   imgMax = 1
   imgPath = uploads/tx_cfcleague/
+  # Zoom aktivieren
+  1.imageLinkWrap.enable.field = 
+  1.imageLinkWrap.enable = 1
   maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
   maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
 }
@@ -34,8 +41,12 @@ lib.t3sports.profile.pictures =< tt_content.image.20
 lib.t3sports.profile.pictures {
   imgList.field = t3images
   imgPath = uploads/tx_cfcleague/
-  maxH = {$plugin.tx_cfcleaguefe_report.maxH_profilePicture}
-  maxW = {$plugin.tx_cfcleaguefe_report.maxW_profilePicture}
+  # Zoom aktivieren
+  1.imageLinkWrap.enable.field = 
+  1.imageLinkWrap.enable = 1
+  # Anzahl Bilder nebeneinander
+  cols.field = 
+  cols = 4
 }
 
 lib.t3sports.profile.firstpicture =< tt_content.image.20
@@ -45,6 +56,9 @@ lib.t3sports.profile.firstpicture {
   imgPath = uploads/tx_cfcleague/
   maxH = {$plugin.tx_cfcleaguefe_report.maxH_profilePicture}
   maxW = {$plugin.tx_cfcleaguefe_report.maxW_profilePicture}
+  # Zoom aktivieren
+  1.imageLinkWrap.enable.field = 
+  1.imageLinkWrap.enable = 1
 }
 
 
@@ -81,8 +95,12 @@ lib.t3sports.team.pictures =< tt_content.image.20
 lib.t3sports.team.pictures {
   imgList.field = t3images
   imgPath = uploads/tx_cfcleague/
-  maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
-  maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
+  # Zoom aktivieren
+  1.imageLinkWrap.enable.field = 
+  1.imageLinkWrap.enable = 1
+  # Anzahl Bilder nebeneinander
+  cols.field = 
+  cols = 4
 }
 
 
@@ -104,8 +122,12 @@ lib.t3sports.stadium.pictures =< tt_content.image.20
 lib.t3sports.stadium.pictures {
   imgList.field = t3pictures
   imgPath = uploads/tx_cfcleague/
-  maxH = {$plugin.tx_cfcleaguefe_report.maxH_profilePicture}
-  maxW = {$plugin.tx_cfcleaguefe_report.maxW_profilePicture}
+  # Zoom aktivieren
+  1.imageLinkWrap.enable.field = 
+  1.imageLinkWrap.enable = 1
+  # Anzahl Bilder nebeneinander
+  cols.field = 
+  cols = 4
 }
 
 
