@@ -35,34 +35,32 @@ tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
  */
 class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_LeagueTableShow {
 
-  /**
-   * Zeigt die Tabelle für eine Liga. Die Tabelle wird nur dann berechnet, wenn auf der
-   * aktuellen Seite genau ein Wettbewerb ausgewählt ist und dieser Wettbewerb eine Liga ist.
-   */
-	function execute($parameters,$configurations){
+	/**
+	 * Zeigt die Tabelle für eine Liga. Die Tabelle wird nur dann berechnet, wenn auf der
+	 * aktuellen Seite genau ein Wettbewerb ausgewählt ist und dieser Wettbewerb eine Liga ist.
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewData){
 		// Die Werte des aktuellen Scope ermitteln
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
 		$this->initSearch($fields, $options, $parameters, $configurations);
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matches = $service->search($fields, $options);
-		
+
 		$dataArr = $this->buildTable($parameters,$configurations, $matches);
-    $viewData =& $configurations->getViewData();
-    $viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
-    $viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
+		$viewData =& $configurations->getViewData();
+		$viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
+		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
 
-    // Müssen zusätzliche Selectboxen gezeigt werden?
-    $this->_handleSBTableType($parameters, $configurations, $viewData);
-    $this->_handleSBPointSystem($parameters, $configurations, $viewData);
-    $this->_handleSBTableScope($parameters, $configurations, $viewData, 'leaguetableAllTime');
+		// Müssen zusätzliche Selectboxen gezeigt werden?
+		$this->_handleSBTableType($parameters, $configurations, $viewData);
+		$this->_handleSBPointSystem($parameters, $configurations, $viewData);
+		$this->_handleSBTableScope($parameters, $configurations, $viewData, 'leaguetableAllTime');
 
-    $view = tx_rnbase::makeInstance('tx_cfcleaguefe_views_LeagueTableAllTime');
+		return '';
+	}
 
-    $view->setTemplatePath($configurations->getTemplatePath());
-    $view->setTemplateFile($configurations->get('leaguetableAllTimeTemplate'));
-    $out = $view->render('leaguetableAllTime', $configurations);
-    return $out;
-  }
+	function getTemplateName() { return 'leaguetableAllTime';}
+	function getViewClassName() { return 'tx_cfcleaguefe_views_LeagueTableAllTime';}
 
 	/**
 	 * Set search criteria
@@ -106,7 +104,6 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
 		);
 		return $arr;
 	}
-
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_LeagueTableAllTime.php'])	{

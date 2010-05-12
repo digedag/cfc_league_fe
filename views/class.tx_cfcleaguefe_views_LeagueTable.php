@@ -41,63 +41,59 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
    */
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
 		$this->formatter = &$configurations->getFormatter();
-    $cObj =& $configurations->getFormatter()->cObj;
 
-    // Liga und Tablemarks holen
-    $league = $viewData->offsetGet('league');
-    $marks = $league->getTableMarks();
+		// Liga und Tablemarks holen
+		$league = $viewData->offsetGet('league');
+		$marks = $league->getTableMarks();
 
-    $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($league->record, 'leaguetable.league.', 0, 'LEAGUE_');
+		$markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($league->record, 'leaguetable.league.', 0, 'LEAGUE_');
 
-    // Die Ligatabelle zusammenbauen
-    $penalties = array(); // Strafen sammeln
-    $subpartArray['###ROWS###'] = $this->_createTable($cObj->getSubpart($template, '###ROWS###'), 
-                             $viewData, $penalties, $marks, $configurations);
+		// Die Ligatabelle zusammenbauen
+		$penalties = array(); // Strafen sammeln
+		$subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), 
+				$viewData, $penalties, $marks, $configurations);
 
-    // Jetzt die Strafen auflisten
-    $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'), 
-                             $penalties, $configurations);
+		// Jetzt die Strafen auflisten
+		$subpartArray['###PENALTIES###'] = $this->_createPenalties(tx_rnbase_util_Templates::getSubpart($template, '###PENALTIES###'),
+				$penalties, $configurations);
 
-    // Die Tabellensteuerung
-    $subpartArray['###CONTROLS###'] = $this->_createControls($cObj->getSubpart($template, '###CONTROLS###'), 
-                             $viewData, $configurations);
-    
-    $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+		// Die Tabellensteuerung
+		$subpartArray['###CONTROLS###'] = $this->_createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'),
+				$viewData, $configurations);
+
+		$out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 		return $out;
 	}
-	
-  function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
-	
 
+	function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
 
-  /**
-   * Erstellt die Liste mit den Ligastrafen
-   */
-  function _createPenalties($template, &$penalties, &$configurations) {
-    if(!is_array($penalties) || count($penalties) == 0)
-      return '';
+	/**
+	 * Erstellt die Liste mit den Ligastrafen
+	 */
+	function _createPenalties($template, &$penalties, $configurations) {
+		if(!is_array($penalties) || count($penalties) == 0)
+			return '';
 
-    $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###PENALTY###');
-    $parts = array();
-    foreach($penalties As $penaltyArr) {
-      foreach($penaltyArr As $penalty) {
-        $markerArray = $this->formatter->getItemMarkerArrayWrapped($penalty->record, 'leaguetable.penalty.', 0, 'PENALTY_');
-        $parts[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray);
-      }
-    }
+		$subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###PENALTY###');
+		$parts = array();
+		foreach($penalties As $penaltyArr) {
+			foreach($penaltyArr As $penalty) {
+				$markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($penalty->record, 'leaguetable.penalty.', 0, 'PENALTY_');
+				$parts[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray);
+			}
+		}
 
-    if(count($parts)) {
-      // Zum Schluß das Haupttemplate zusammenstellen
-      $markerArray = array();
-      $subpartArray['###PENALTY###'] = implode($parts, $configurations->get('leaguetable.penalty.implode'));
-      $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
-    }
-    else { // Keine Strafen vorhanden, es wird ein leerer String gesendet
-      $out = '';
-    }
-    return $out;
-
-  }
+		if(count($parts)) {
+			// Zum Schluß das Haupttemplate zusammenstellen
+			$markerArray = array();
+			$subpartArray['###PENALTY###'] = implode($parts, $configurations->get('leaguetable.penalty.implode'));
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
+		}
+		else { // Keine Strafen vorhanden, es wird ein leerer String gesendet
+			$out = '';
+		}
+		return $out;
+	}
 
 	/**
 	 * Erstellt die Ligatabelle.
