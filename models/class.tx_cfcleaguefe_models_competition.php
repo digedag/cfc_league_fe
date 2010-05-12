@@ -295,8 +295,11 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
     SELECT * FROM tx_cfcleague_competition WHERE uid IN ($uid)
     */
 
-    return tx_rnbase_util_DB::queryDB('*','tx_cfcleague_competition',$where,
-              '','sorting','tx_cfcleaguefe_models_competition',0);
+		$options = array();
+		$options['where'] = $where;
+		$options['orderby'] = 'sorting';
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_competition';
+		return tx_rnbase_util_DB::doSelect('*','tx_cfcleague_competition', $options);
   }
 
   /**
@@ -323,27 +326,28 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
     return $ret;
   }
 
-  /**
-   * Liefert die verhängten Strafen für Teams des Wettbewerbs.
-   */
-  function getPenalties() {
-    if(!is_array($this->penalties)) {
-      # Die UID der Liga setzen
-      $where = 'competition="'.$this->uid.'" ';
-  
-      $this->penalties = tx_rnbase_util_DB::queryDB('*','tx_cfcleague_competition_penalty',$where,
-                     '','sorting','tx_cfcleaguefe_models_competition_penalty',0);
-    }
-    return $this->penalties;
-  }
-  /**
-   * Set penalties
-   *
-   * @param array $penalties
-   */
-  function setPenalties($penalties) {
-    $this->penalties = is_array($penalties) ? $penalties : NULL;
-  }
+	/**
+	 * Liefert die verhängten Strafen für Teams des Wettbewerbs.
+	 */
+	function getPenalties() {
+		if(!is_array($this->penalties)) {
+			$options = array();
+			# Die UID der Liga setzen
+			$options['where'] = 'competition="'.$this->uid.'" ';
+			$options['orderby'] = 'sorting';
+			$options['wrapperclass'] = 'tx_cfcleaguefe_models_competition_penalty';
+			$this->penalties = tx_rnbase_util_DB::doSelect('*','tx_cfcleague_competition_penalty', $options);
+		}
+		return $this->penalties;
+	}
+	/**
+	 * Set penalties
+	 *
+	 * @param array $penalties
+	 */
+	function setPenalties($penalties) {
+		$this->penalties = is_array($penalties) ? $penalties : NULL;
+	}
 }
 
 /**
@@ -354,7 +358,7 @@ class tx_cfcleaguefe_models_competition_round extends tx_rnbase_model_base {
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition.php']);
 }
 
 ?>
