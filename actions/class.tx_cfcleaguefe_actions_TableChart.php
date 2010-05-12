@@ -26,8 +26,10 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
+tx_rnbase::load('tx_rnbase_util_TYPO3');
 
-require_once(PATH_t3lib.'error/class.t3lib_error_exception.php');
+if(tx_rnbase_util_TYPO3::isTYPO43OrHigher())
+	require_once(PATH_t3lib.'error/class.t3lib_error_exception.php');
 
 
 /**
