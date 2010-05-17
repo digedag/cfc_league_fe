@@ -110,6 +110,8 @@ class tx_cfcleaguefe_actions_TableChart {
 		}
 		catch(Exception $e) {
 			$chart = 'Not possible';
+			tx_rnbase::load('tx_rnbase_util_Logger');
+			tx_rnbase_util_Logger::warn('Chart creation failed!', 'cfc_league_fe', array('Exception' => $e->getMessage()));
 		}
 		return $chart;
 	}
