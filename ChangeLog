@@ -2,7 +2,13 @@
 
 Änderungen
 ----------
-v0.6.5 (11.05.2009)
+v0.7.0 (17.05.2010)
+ * Saison-Selection: Sorting fixed
+ * PlayerStatistics: Missing include fixed
+ * LeagueTableAllTime: some deprecated calls removed
+ * Pictures without DAM: zoom activated
+
+v0.6.5 (11.05.2010) (not released)
  * #23: New marker ###MATCH_LEAGUETABLE### to show a leaguetable within a matchreport
  * All references to extension div removed
  * LeagueTable: support for php view removed
