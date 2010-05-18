@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,9 +23,9 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
-
 tx_rnbase::load('tx_rnbase_view_Base');
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 
 
 /**
@@ -42,16 +42,15 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 	 * @return string
 	 */
 	function createOutput($template, &$viewData, &$configurations, &$formatter) {
-		$cObj =& $configurations->getCObj(0);
 		$markerArray = array(); // Eventuell später für allgemeine Daten oder Labels
 
 		$pagerData = $viewData->offsetGet('pagerData');
 		$charPointer = $viewData->offsetGet('charpointer');
 		$subpartArray['###CHARBROWSER###'] = $this->_createPager(
-													$cObj->getSubpart($template,'###CHARBROWSER###'),
+													tx_rnbase_util_Templates::getSubpart($template,'###CHARBROWSER###'),
 													$markerArray,
 													$pagerData,
-													$charPointer ,$cObj, $configurations);
+													$charPointer, $configurations);
 
 		$listCnt =& $viewData->offsetGet('listsize');
 		$profiles =& $viewData->offsetGet('profiles');
@@ -62,7 +61,7 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 						'profilelist.profile.', 'PROFILE', $formatter);
 
 		// Zum Schluß das Haupttemplate zusammenstellen
-		$out = $cObj->substituteMarkerArrayCached($out, $markerArray, $subpartArray); //, $wrappedSubpartArray);
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray); //, $wrappedSubpartArray);
 
 		return $out ;
 	}
@@ -72,7 +71,7 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 	 * Liefert den Pagerstring
 	 * TODO: Hier müssen noch Formatierungen eingebaut werden!
 	 */
-	function _createPager($template, $markerArray, &$pagerData, $curr_pointer , &$cObj, &$configurations) {
+	function _createPager($template, $markerArray, &$pagerData, $curr_pointer, &$configurations) {
     $out = array();
 		$link = $configurations->createLink(); // Link auf die eigene Seite
 		$link->destination($GLOBALS['TSFE']->id); // Das Ziel der Seite vorbereiten
@@ -93,7 +92,7 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 			}
 			else
 				$wrappedSubpartArray['###PB_ITEM_LINK###'] = $emptyArr;
-			$out[] = $cObj->substituteMarkerArrayCached($template, $myMarkerArray, $emptyArray, $wrappedSubpartArray);
+			$out[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $myMarkerArray, $emptyArray, $wrappedSubpartArray);
 		}
 
 		return implode($configurations->get('profilelist.charbrowser.implode'),$out);
@@ -107,6 +106,6 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileList.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileList.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileList.php']);
 }
 ?>
