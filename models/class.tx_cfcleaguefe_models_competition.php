@@ -234,8 +234,6 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
       $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
       $options['orderby'] = 'sorting';
       $this->teams = tx_rnbase_util_DB::doSelect('*','tx_cfcleague_teams',$options, 0);
-//    $teams = tx_rnbase_util_DB::queryDB('*','tx_cfcleague_teams',$where,
-//              '','sorting','tx_cfcleaguefe_models_team',0);
     }
     return $this->teams;
   }

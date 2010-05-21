@@ -423,39 +423,40 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     return $ret;
   }
 
-  /**
-   * Erstellt für alle Personen des Spiels die passenden Objekte. Dies wird aber nur gemacht
-   * wenn die entsprechenden IDs noch nicht geladen sind.
-   * @return Array Key ist UID, Value ist Profile als Object
-   */
-  function _resolveProfiles() {
-    if(isset($this->_profiles)) return; // Die Profile sind schon geladen
-    // Wir sammeln zunächst die UIDs zusammen
-    $uids = array();
-    if($this->record['referee']) $uids[] = $this->record['referee'];
-    if($this->record['assists']) $uids[] = $this->record['assists'];
-    if($this->record['coach_home']) $uids[] = $this->record['coach_home'];
-    if($this->record['coach_guest']) $uids[] = $this->record['coach_guest'];
-    if($this->record['players_home']) $uids[] = $this->record['players_home'];
-    if($this->record['players_guest']) $uids[] = $this->record['players_guest'];
-    if($this->record['substitutes_home']) $uids[] = $this->record['substitutes_home'];
-    if($this->record['substitutes_guest']) $uids[] = $this->record['substitutes_guest'];
+	/**
+	 * Erstellt für alle Personen des Spiels die passenden Objekte. Dies wird aber nur gemacht
+	 * wenn die entsprechenden IDs noch nicht geladen sind.
+	 * @return Array Key ist UID, Value ist Profile als Object
+	 */
+	function _resolveProfiles() {
+		if(isset($this->_profiles)) return; // Die Profile sind schon geladen
+		// Wir sammeln zunächst die UIDs zusammen
+		$uids = array();
+		if($this->record['referee']) $uids[] = $this->record['referee'];
+		if($this->record['assists']) $uids[] = $this->record['assists'];
+		if($this->record['coach_home']) $uids[] = $this->record['coach_home'];
+		if($this->record['coach_guest']) $uids[] = $this->record['coach_guest'];
+		if($this->record['players_home']) $uids[] = $this->record['players_home'];
+		if($this->record['players_guest']) $uids[] = $this->record['players_guest'];
+		if($this->record['substitutes_home']) $uids[] = $this->record['substitutes_home'];
+		if($this->record['substitutes_guest']) $uids[] = $this->record['substitutes_guest'];
 
-    $uids = implode($uids, ',');
-    
-    $what = '*';
-    $from = 'tx_cfcleague_profiles';
-    $where = 'uid IN (' .$uids . ')';
+		$uids = implode($uids, ',');
 
-    $rows = tx_rnbase_util_DB::queryDB($what,$from,$where,
-              '','','tx_cfcleaguefe_models_profile','',0);
-    $this->_profiles = array();
-    // Wir erstellen jetzt ein Array dessen Key die UID des Profiles ist
-    foreach($rows As $profile) {
-      $this->_profiles[$profile->uid] = $profile;
-      $this->_profiles2[$profile->uid] = $profile;
-    }
-  }
+		$what = '*';
+		$from = 'tx_cfcleague_profiles';
+		$options['where'] = 'uid IN (' .$uids . ')';
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
+
+		$rows = tx_rnbase_util_DB::doSelect($what,$from,$options);
+
+		$this->_profiles = array();
+		// Wir erstellen jetzt ein Array dessen Key die UID des Profiles ist
+		foreach($rows As $profile) {
+			$this->_profiles[$profile->uid] = $profile;
+			$this->_profiles2[$profile->uid] = $profile;
+		}
+	}
 
   /**
    * Liefert das Team als Objekt

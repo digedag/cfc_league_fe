@@ -457,50 +457,50 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   	return $this->match;
   }
   
-  /**
-   * Ermittelt für die übergebenen Spiele die MatchNotes. Wenn $types = 1 dann
-   * werden nur die Notes mit dem Typ < 100 geliefert. Die MatchNotes werden direkt
-   * in den übergebenen Matches gesetzt.
-   * Die ermittelten MatchNotes haben keine Referenz auf das zugehörige Match!
-   */
-  function &retrieveMatchNotes(&$matches, $types='1') {
-    if(!count($matches))
-      return $matches;
-    // Die Spiele in einen Hash legen, damit wir sofort Zugriff auf ein Spiel haben
-    $matchesHash = Array();
-    $matchIds = Array();
-    $anz = count($matches);
-    for($i=0; $i<$anz; $i++) {
-      $matchesHash[$matches[$i]->uid] =& $matches[$i];
-      $matchIds[] = $matches[$i]->uid;
-    }
-    
+	/**
+	 * Ermittelt für die übergebenen Spiele die MatchNotes. Wenn $types = 1 dann
+	 * werden nur die Notes mit dem Typ < 100 geliefert. Die MatchNotes werden direkt
+	 * in den übergebenen Matches gesetzt.
+	 * Die ermittelten MatchNotes haben keine Referenz auf das zugehörige Match!
+	 */
+	function &retrieveMatchNotes(&$matches, $types='1') {
+		if(!count($matches))
+			return $matches;
+		// Die Spiele in einen Hash legen, damit wir sofort Zugriff auf ein Spiel haben
+		$matchesHash = Array();
+		$matchIds = Array();
+		$anz = count($matches);
+		for($i=0; $i<$anz; $i++) {
+			$matchesHash[$matches[$i]->uid] =& $matches[$i];
+			$matchIds[] = $matches[$i]->uid;
+		}
+
 //  t3lib_div::debug($matches[i]->uid, 'mdl_note');
-    $matchIds = implode(',', $matchIds); // ID-String erstellen
+		$matchIds = implode(',', $matchIds); // ID-String erstellen
 
+		$what = '*';
+		$from = 'tx_cfcleague_match_notes';
+		$options['where'] = 'game IN (' .$matchIds . ')';
+		if($types) {
+			$options['where'] .= ' AND type < 100';
+		}
+		$options['orderby'] = 'game asc, minute asc';
+		$options['wrapperclass'] = 'tx_cfcleaguefe_models_match_note';
 
-    $what = '*';
-    $from = 'tx_cfcleague_match_notes';
-    $where = 'game IN (' .$matchIds . ')';
-    if($types) {
-      $where .= ' AND type < 100';
-    }
+		$matchNotes = tx_rnbase_util_DB::doSelect($what, $from, $options);
 
-    $matchNotes = tx_rnbase_util_DB::queryDB($what, $from, $where,
-              '','game,minute asc','tx_cfcleaguefe_models_match_note','',0);
-
-    // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
-    $anz = count($matchNotes);
-    for($i=0; $i<$anz; $i++) {
-      // Hier darf nur mit Referenzen gearbeitet werden
+		// Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
+		$anz = count($matchNotes);
+		for($i=0; $i<$anz; $i++) {
+			// Hier darf nur mit Referenzen gearbeitet werden
 //      $matchNotes[$i]->setMatch($matchesHash[$matchNotes[$i]->record['game']]);
-      $matchesHash[$matchNotes[$i]->record['game']]->addMatchNote($matchNotes[$i]);
-    }
+			$matchesHash[$matchNotes[$i]->record['game']]->addMatchNote($matchNotes[$i]);
+		}
 
 //  t3lib_div::debug($matchesHash[172], 'mdl_note');
 //  t3lib_div::debug($matches[19], 'mdl_note');
-    return $matches;
-  }
+		return $matches;
+	}
 
   /**
    * Prüft die TS-Anweisung showOnly für eine MatchNote.
