@@ -70,7 +70,7 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 		catch(Exception $e) {
 			$chart = 'Chart not possible. Check devlog';
 			tx_rnbase::load('tx_rnbase_util_Logger');
-			tx_rnbase_util_Logger::warn('Error on chart creation.', 'cfc_league_fe', array('Exception' => $e, 'Match'=>$match->record));
+			tx_rnbase_util_Logger::warn('Error on chart creation.', 'cfc_league_fe', array('Exception' => $e->getMessage(), 'Match'=>$match->getUid()));
 		}
 		return $chart;
 	}
