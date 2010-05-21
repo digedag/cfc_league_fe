@@ -90,7 +90,9 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 * @param tx_cfcleaguefe_models_team $item
 	 */
 	private function prepareRecord(&$item) {
-		$group = $item->getAgeGroup();
+		$srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
+		$group = $srv->getAgeGroup($item);
+//		$group = $item->getAgeGroup();
 		$GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->uid : 0;
 		$item->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
 		$item->record['firstpicture'] = $item->record['dam_images'];
@@ -135,7 +137,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$options['team'] = $team;
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($children,
-						tx_rnbase::makeInstance('tx_lib_spl_arrayObject'), $template, 'tx_cfcleaguefe_util_ProfileMarker',
+						new ArrayObject(), $template, 'tx_cfcleaguefe_util_ProfileMarker',
 						$confId, $markerPrefix, $formatter, $options);
 		return $out;
 	}
@@ -177,6 +179,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 */
 	protected function prepareLinks(&$team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
 		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid), $template);
+t3lib_div::debug($team->hasReport(), 'class.tx_cfcleaguefe_util_TeamMarker.php '); // TODO: remove me
 		if($team->hasReport()) {
 			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showteam', $marker, array('teamId' => $team->uid), $template);
 		}

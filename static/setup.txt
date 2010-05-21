@@ -226,6 +226,7 @@ lib.t3sports.club {
   }
   dam_logo =< lib.t3sports.club.logo
   stadium =< lib.t3sports.stadium
+  team =< lib.t3sports.team
 }
 
 lib.t3sports.dummyImage = IMAGE
@@ -784,7 +785,7 @@ lib.t3sports.chart {
         thickness = 2
         color = blue
       }
-      shadow = true
+#      shadow = true
       marker = circle
       marker {
         fillColor = white@0.4
