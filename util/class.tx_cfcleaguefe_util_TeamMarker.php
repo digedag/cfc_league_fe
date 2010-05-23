@@ -179,7 +179,6 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 */
 	protected function prepareLinks(&$team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
 		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid), $template);
-t3lib_div::debug($team->hasReport(), 'class.tx_cfcleaguefe_util_TeamMarker.php '); // TODO: remove me
 		if($team->hasReport()) {
 			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showteam', $marker, array('teamId' => $team->uid), $template);
 		}
