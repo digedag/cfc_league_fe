@@ -30,7 +30,9 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
  * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich
  */
 class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
-	function __construct(&$options = null) {
+	private $options = null;
+	function __construct($options = null) {
+		$this->options = $options;
 	}
 
   /**
@@ -188,6 +190,9 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
+	}
+	public function getOptions() {
+		return $this->options;
 	}
 }
 
