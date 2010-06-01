@@ -61,6 +61,19 @@ lib.t3sports.profile.firstpicture {
   1.imageLinkWrap.enable = 1
 }
 
+########
+# Vereine
+########
+lib.t3sports.club.dam_logo >
+lib.t3sports.club.logo >
+lib.t3sports.club.logo = IMAGE
+lib.t3sports.club.logo {
+  file.import.field = logo
+  file.import = uploads/tx_cfcleague/
+  file.maxH = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+  file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+}
+lib.t3sports.club.dam_logo =< lib.t3sports.club.logo
 
 ########
 # Teams

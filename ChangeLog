@@ -5,6 +5,7 @@
 v0.7.1 (??.05.2010)
  * It is possible to output all teams of a club.
  * T3-Register T3SPORTS_GROUP in match is filled preferred with teams agegroup
+ * Bugfix: club logos without DAM
 
 v0.7.1 (18.05.2010)
  * DAM includes removed in team list and profile list

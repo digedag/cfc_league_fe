@@ -46,10 +46,9 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 			$club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
 		}
 		$this->prepareRecord($club);
-
 		// Es wird das MarkerArray mit Daten gefüllt
 		$ignore = self::findUnusedCols($club->record, $template, $marker);
-		$markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , 0, $marker.'_',$club->getColumnNames());
+		$markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , $ignore, $marker.'_',$club->getColumnNames());
 		$this->prepareLinks($club, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 		// Die Adressdaten setzen
 		if($this->containsMarker($template, $marker.'_ADDRESS'))
@@ -64,7 +63,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 	}
 
 	protected function prepareRecord(&$item) {
-		$item->record['logo'] = $item->record['dam_logo'];
+//		$item->record['logo'] = $item->record['dam_logo'];
 	}
 	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
 		$addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
