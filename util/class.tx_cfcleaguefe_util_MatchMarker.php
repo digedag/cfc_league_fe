@@ -157,8 +157,15 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		// Zuerst einen REGISTER-Wert für die Altergruppe setzen. Dieser kann bei der
 		// Linkerstellung verwendet werden.
 		try {
-			$competition = $match->getCompetition();
-			$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->record['agegroup'];
+			// Zuerst die Teams prüfen
+			$groupId = $match->getHome()->getAgeGroupUid();
+			$groupId = $groupId ? $groupId : $match->getGuest()->getAgeGroupUid();
+			if(!$groupId) {
+				$competition = $match->getCompetition();
+				$group = $competition->getGroup(false);
+				$groupId = $group ? $group->getUid() : 0;
+			}
+			$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $groupId;
 		}
 		catch(Exception $e) {
 			$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = 0;

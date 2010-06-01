@@ -78,7 +78,7 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
 	 * the first competition found, decides about the age group.
 	 * @return tx_cfcleaguefe_models_group or null
 	 */
-	function getAgeGroup() {
+	public function getAgeGroup() {
 		if(!$this->agegroup) {
 			if(intval($this->record['agegroup']))
 				$this->agegroup = tx_cfcleaguefe_models_group::getInstance($this->record['agegroup']);
@@ -94,6 +94,13 @@ class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
 		}
 		return $this->agegroup;
   }
+  /**
+   * Returns the group uid set in team. This may be 0.
+   * @return int
+   */
+	public function getAgeGroupUid() {
+		return $this->record['agegroup'];
+	}
   /**
    * Returns the competitons of this team
    * @param boolean $obligateOnly if true, only obligate competitions are returned
