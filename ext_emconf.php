@@ -39,7 +39,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'lib' => '0.1.0-0.0.0',
 			'rn_base' => '0.8.0-0.0.0',
 			'rn_memento' => '',
-			'pbimagegraph' => '1.1.1-0.0.0',
+			'pbimagegraph' => '2.0.0-0.0.0',
 			'cfc_league' => '0.7.0-0.0.0',
 		),
 		'conflicts' => array(
