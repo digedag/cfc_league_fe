@@ -26,6 +26,7 @@ plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallan
 #  lib.t3sports.profile.tnpicture =< lib.t3sports.teamnote
 
 lib.t3sports.stadium {
+  pagebrowser =< lib.t3sports.pagebrowser
   name = TEXT
   name.current = 1
   name.ifEmpty.field = altname
@@ -513,6 +514,7 @@ plugin.tx_cfcleaguefe_competition {
   statisticsTemplate = {$plugin.tx_cfcleaguefe_competition.statisticsTemplate}
   tickerlistTemplate = {$plugin.tx_cfcleaguefe_competition.tickerlistTemplate}
   leaguetableAllTimeTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableAllTimeTemplate}
+  stadiumlistTemplate = {$plugin.tx_cfcleaguefe_competition.stadiumlistTemplate}
 
   # Rendering of items. re-use the RTE parseFunc configuration for normal content
   general_stdWrap {
@@ -764,6 +766,10 @@ plugin.tx_cfcleaguefe_competition {
         TEAM.NAME = asc
       }
     }
+  }
+  stadiumlist {
+    stadium =< lib.t3sports.stadium
+    filter = tx_cfcleaguefe_filter_Stadium
   }
 }
 

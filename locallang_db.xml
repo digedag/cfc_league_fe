@@ -25,6 +25,7 @@
 			<label index="plugin.competition.flexform.action.LiveTickerList">Live Ticker List</label>
 			<label index="plugin.competition.flexform.action.Statistics">Statistics</label>
 			<label index="plugin.competition.flexform.action.TeamList">Team List</label>
+			<label index="plugin.competition.flexform.action.StadiumList">Stadium List</label>
 			<label index="plugin.competition.flexform.TableType">Table type</label>
 			<label index="plugin.competition.flexform.tabletype.Normal">Standard Table</label>
 			<label index="plugin.competition.flexform.tabletype.Home">Home Table</label>
@@ -125,6 +126,7 @@
 			<label index="plugin_common_random">randomized ordering</label>
 			<label index="plugin_common_debug">Debug</label>
 			<label index="plugin_common_charbrowser">Show character browser</label>
+			<label index="plugin_common_detailspage">Details page</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -145,6 +147,7 @@
 			<label index="plugin.competition.flexform.action.LiveTickerList">Liste der Live-Ticker</label>
 			<label index="plugin.competition.flexform.action.Statistics">Statistiken</label>
 			<label index="plugin.competition.flexform.action.TeamList">Teamliste</label>
+			<label index="plugin.competition.flexform.action.StadiumList">Stadionliste</label>
 			<label index="plugin.competition.flexform.TableType">Tabellentyp</label>
 			<label index="plugin.competition.flexform.tabletype.Normal">Normal</label>
 			<label index="plugin.competition.flexform.tabletype.Home">Heimtabelle</label>
@@ -233,6 +236,7 @@
 			<label index="plugin.report.sign.sagittarius">Schütze</label>
 
 			<label index="plugin.report.flexform.charbrowser">Buchstaben-Menu</label>
+			<label index="plugin_common_detailspage">Detailseite</label>
 
 		</languageKey>
 	</data>

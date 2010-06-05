@@ -53,6 +53,10 @@
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.MatchCrossTable</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_MatchCrossTable</numIndex>
                   </numIndex>
+                  <numIndex index="10" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.StadiumList</numIndex>
+                    <numIndex index="1">tx_cfcleaguefe_actions_StadiumList</numIndex>
+                  </numIndex>
                   <numIndex index="20" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LeagueTableAllTime</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_LeagueTableAllTime</numIndex>
@@ -61,7 +65,7 @@
                 </items>
                 <multiple>0</multiple>
                 <maxitems>10</maxitems>
-                <size>6</size>
+                <size>10</size>
               </config>
             </TCEforms>
           </action>
@@ -678,7 +682,68 @@
         </el>
       </ROOT>
     </s_statistics>
+    <s_stadiumlist>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.StadiumList</sheetTitle>
+        </TCEforms>
 
+        <type>array</type>
+        <el>
+          <stadiumlist.stadium.links.show.pid>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_detailspage</label>
+              <config>
+                <type>group</type>
+                <internal_type>db</internal_type>
+                <allowed>pages</allowed>
+                <multiple>0</multiple>
+                <size>1</size>
+              </config>
+            </TCEforms>
+          </stadiumlist.stadium.links.show.pid>
+
+
+          <stadiumlistTemplate>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
+              <config>
+                <type>input</type>
+                <size>24</size>
+                <max>256</max>
+                <eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+              </config>
+            </TCEforms>
+          </stadiumlistTemplate>
+          <stadiumlist.options.debug>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </stadiumlist.options.debug>
+
+        </el>
+      </ROOT>
+    </s_stadiumlist>
     <s_tickerlist>
       <ROOT>
         <TCEforms>

@@ -55,7 +55,7 @@
                 </items>
                 <multiple>0</multiple>
                 <maxitems>10</maxitems>
-                <size>5</size>
+                <size>10</size>
               </config>
             </TCEforms>
           </action>
