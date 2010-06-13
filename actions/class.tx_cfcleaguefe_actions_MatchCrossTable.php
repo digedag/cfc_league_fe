@@ -25,12 +25,47 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_cfcleaguefe_actions_MatchTable');
+tx_rnbase::load('tx_rnbase_action_BaseIOC');
+tx_rnbase::load('tx_cfcleaguefe_models_team');
 
 /**
  * Controller für die Anzeige eines Spielplans als Kreuztabelle
  */
-class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_MatchTable {
+class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
+
+	/**
+	 * Handle request
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewdata
+	 * @return string error 	/**
+	 * Handle request
+	 *
+	 * @param arrayobject $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param arrayobject $viewdata
+	 * @return string error message
+	 */
+	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+		// Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
+		// ggf. die Konfiguration aus der TS-Config lesen
+		$fields = array();
+		$options = array();
+
+//  	$options['debug'] = 1;
+		$this->initSearch($fields, $options, $parameters, $configurations);
+		$listSize = 0;
+
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matches = $service->search($fields, $options);
+		$teams = $this->_resolveTeams($matches);
+		$viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
+		$viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
+		
+		return '';
+	}
+
 
 	/**
 	 * Set search criteria
@@ -53,6 +88,34 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_cfcleaguefe_actions_Matc
 		$matchtable->setScope($scopeArr);
 		$matchtable->getFields($fields, $options);
 	}
+
+  /**
+   * Lädt alle Teams der Spiele und verknüpft sie mit den jeweiligen Spielen.
+   */
+  function _resolveTeams(&$matches) {
+    // Einmal über alle Matches iterieren und die UIDs sammeln
+    $mCnt = count($matches);
+    if(!$mCnt) return; // Ohne Spiele gibt es nix zu tun
+    $uids = array();
+    for($i=0; $i < $mCnt; $i++) {
+      $uids[] = $matches[$i]->record['home'];
+      $uids[] = $matches[$i]->record['guest'];
+    }
+    $uids = array_unique($uids);
+    $teams = tx_cfcleaguefe_models_team::getTeamsByUid($uids);
+    $teamsArr = array();
+    for($i=0; $i < count($teams); $i++) {
+      $teamsArr[$teams[$i]->uid] = $teams[$i];
+    }
+
+//t3lib_div::debug($teamsArr, 'vw_matchtable');
+
+    for($i=0; $i < $mCnt; $i++) {
+      $matches[$i]->setHome( $teamsArr[$matches[$i]->record['home']]);
+      $matches[$i]->setGuest( $teamsArr[$matches[$i]->record['guest']]);
+    }
+    return $teamsArr;
+  }
 
 	function ___handleRequest(&$parameters,&$configurations, &$viewdata) {
 
