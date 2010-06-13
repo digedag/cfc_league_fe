@@ -25,6 +25,7 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_Misc');
+tx_rnbase::load('tx_rnbase_util_Templates');
 
 
 /**
@@ -50,7 +51,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$teams = $viewData->offsetGet('teams');
 		$this->removeDummyTeams($teams);
 		// Mit den Teams können wir die Headline bauen
-		$headlineTemplate = $cObj->getSubpart($template, '###HEADLINE###');
+		$headlineTemplate = tx_rnbase_util_Templates::getSubpart($template, '###HEADLINE###');
 		$GLOBALS['TT']->push('tx_cfcleaguefe_views_MatchCrossTable', 'createHeadline');
 		$subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $cObj, $configurations);
 		$GLOBALS['TT']->pull();
@@ -59,13 +60,13 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$teamsArray = $this->generateTableData($matches, $teams);
 		$GLOBALS['TT']->pull();
 
-		$datalineTemplate = $cObj->getSubpart($template, '###DATALINE###');
+		$datalineTemplate = tx_rnbase_util_Templates::getSubpart($template, '###DATALINE###');
 		$GLOBALS['TT']->push('tx_cfcleaguefe_views_MatchCrossTable', 'createDatalines');
 		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations, $viewData);
 		$GLOBALS['TT']->pull();
 		$markerArray = array('###MATCHCOUNT###' => count($matches), );
 		
-		return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 	}
 
   /**
@@ -127,7 +128,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    */
 	private function _createDatalines($template, $datalines, &$teams, &$cObj, &$configurations, &$viewData) {
 		$subTemplate = '###MATCHS###' . $cObj->getSubpart($template, '###MATCHS###') . '###MATCHS###';
-		$freeTemplate = $cObj->getSubpart($template, '###MATCH_FREE###');
+		$freeTemplate = tx_rnbase_util_Templates::getSubpart($template, '###MATCH_FREE###');
 		$rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
 
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
@@ -157,7 +158,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 			$subpartArray['###MATCHS###'] = implode($parts, $configurations->get('matchcrosstable.dataline.implode'));
 			// Und das Team ins MarkerArray
 			$lineTemplate = $teamMarker->parseTemplate($template, $teams[$uid], $this->formatter, 'matchcrosstable.dataline.team.', 'DATALINE_TEAM');
-			$lines[] = $this->formatter->cObj->substituteMarkerArrayCached($lineTemplate, $markerArray, $subpartArray);
+			$lines[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($lineTemplate, $markerArray, $subpartArray);
 		}
 		return  implode($lines, $configurations->get('matchcrosstable.dataline.implode'));
 	}
@@ -172,7 +173,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 	private function _createHeadline($template, &$teams, &$cObj, &$configurations) {
 		// Im Prinzip eine normale Teamliste...
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-		$subTemplate = $cObj->getSubpart($template, '###TEAM###');
+		$subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###TEAM###');
 		$rowRoll = intval($configurations->get('matchcrosstable.headline.team.roll.value'));
 		$rowRollCnt = 0;
 		$parts = array();
@@ -188,7 +189,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$subpartArray['###TEAM###'] = implode($parts, $configurations->get('matchcrosstable.headline.team.implode'));
 		$markerArray = array('###TEAMCOUNT###' => count($teams), );
     
-		return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 	}
   private function removeDummyTeams(&$teams) {
   	// Das Team 'Spielfrei' vorher entfernen
