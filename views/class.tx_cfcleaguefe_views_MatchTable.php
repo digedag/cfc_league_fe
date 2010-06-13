@@ -35,11 +35,13 @@ class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base {
 	 * Erstellung des Outputstrings
 	 */
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
-		$matches = $viewData->offsetGet('matches');
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
-		$out = $listBuilder->render($matches,
+
+		$prov = $viewData->offsetGet('provider');
+		$out = $listBuilder->renderEach($prov,
 							$viewData, $template, 'tx_cfcleaguefe_util_MatchMarker',
 							'matchtable.match.', 'MATCH', $formatter);
+
 		return $out;
 	}
 

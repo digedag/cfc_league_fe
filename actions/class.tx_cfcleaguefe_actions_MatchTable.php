@@ -58,11 +58,10 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		// Soll ein PageBrowser verwendet werden
 		$this->handlePageBrowser($parameters,$configurations, $viewdata, $fields, $options);
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
-		$matches = $service->search($fields, $options);
-		$teams = $this->_resolveTeams($matches);
 
-		$viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
-		$viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
+		$prov = tx_rnbase::makeInstance('tx_rnbase_util_ListProvider');
+		$prov->initBySearch(array($service, 'search'), $fields, $options);
+		$viewdata->offsetSet('provider', $prov);
 
 		// View
 		$this->viewType = $configurations->get('matchtable.viewType');
