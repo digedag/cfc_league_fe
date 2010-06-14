@@ -42,7 +42,6 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    * @param tx_rnbase_util_FormatUtil $formatter
    */
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
-		$cObj =& $formatter->cObj;
 		$matches = $viewData->offsetGet('matches');
 		if(!is_array($matches) || !count($matches)) {
 			return $configurations->getLL('matchcrosstable.noData');
@@ -52,18 +51,18 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$this->removeDummyTeams($teams);
 		// Mit den Teams können wir die Headline bauen
 		$headlineTemplate = tx_rnbase_util_Templates::getSubpart($template, '###HEADLINE###');
-		$GLOBALS['TT']->push('tx_cfcleaguefe_views_MatchCrossTable', 'createHeadline');
-		$subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $cObj, $configurations);
-		$GLOBALS['TT']->pull();
+		tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'createHeadline');
+		$subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $configurations);
+		tx_rnbase_util_Misc::pullTT();
 		
-		$GLOBALS['TT']->push('tx_cfcleaguefe_views_MatchCrossTable', 'generateTableData');
+		tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'generateTableData');
 		$teamsArray = $this->generateTableData($matches, $teams);
-		$GLOBALS['TT']->pull();
+		tx_rnbase_util_Misc::pullTT();
 
 		$datalineTemplate = tx_rnbase_util_Templates::getSubpart($template, '###DATALINE###');
-		$GLOBALS['TT']->push('tx_cfcleaguefe_views_MatchCrossTable', 'createDatalines');
-		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $cObj, $configurations, $viewData);
-		$GLOBALS['TT']->pull();
+		tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'createDatalines');
+		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $configurations, $viewData);
+		tx_rnbase_util_Misc::pullTT();
 		$markerArray = array('###MATCHCOUNT###' => count($matches), );
 		
 		return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
@@ -126,8 +125,8 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    * @param tslib_content $cObj
    * @param tx_rnbase_configurations $configurations
    */
-	private function _createDatalines($template, $datalines, &$teams, &$cObj, &$configurations, &$viewData) {
-		$subTemplate = '###MATCHS###' . $cObj->getSubpart($template, '###MATCHS###') . '###MATCHS###';
+	private function _createDatalines($template, $datalines, &$teams, $configurations, $viewData) {
+		$subTemplate = '###MATCHS###' . tx_rnbase_util_Templates::getSubpart($template, '###MATCHS###') . '###MATCHS###';
 		$freeTemplate = tx_rnbase_util_Templates::getSubpart($template, '###MATCH_FREE###');
 		$rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
 
@@ -145,9 +144,6 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 					$parts[] = $listBuilder->render($matchArr,
 										$viewData, $subTemplate, 'tx_cfcleaguefe_util_MatchMarker',
 										'matchcrosstable.dataline.match.', 'MATCH', $this->formatter);
-					
-//					$match->record['roll'] = $rowRollCnt;
-//					$parts[] = $matchMarker->parseTemplate($match->isDummy() ? $freeTemplate : $subTemplate, $match, $this->formatter, 'matchcrosstable.dataline.match.', 'MATCH');
 				}
 				else
 					$parts[] = $matchArr; // Sollte ein String sein...
@@ -170,7 +166,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 	 * @param tslib_content $cObj
 	 * @param tx_rnbase_configurations $configurations
 	 */
-	private function _createHeadline($template, &$teams, &$cObj, &$configurations) {
+	private function _createHeadline($template, &$teams, $configurations) {
 		// Im Prinzip eine normale Teamliste...
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###TEAM###');
@@ -178,13 +174,13 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$rowRollCnt = 0;
 		$parts = array();
 
-		$GLOBALS['TT']->push('tx_cfcleaguefe_views_MatchCrossTable', 'include teams');
+		tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'include teams');
 		while (list($uid,$team)=each($teams))	{
 			$team->record['roll'] = $rowRollCnt;
 			$parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'matchcrosstable.headline.team.', 'TEAM');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 		}
-		$GLOBALS['TT']->pull();
+		tx_rnbase_util_Misc::pullTT();
 
 		$subpartArray['###TEAM###'] = implode($parts, $configurations->get('matchcrosstable.headline.team.implode'));
 		$markerArray = array('###TEAMCOUNT###' => count($teams), );
