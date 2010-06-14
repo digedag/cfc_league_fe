@@ -48,35 +48,40 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 		$pagerData = $viewData->offsetGet('pagerData');
 		$charPointer = $viewData->offsetGet('charpointer');
 		$subpartArray['###CHARBROWSER###'] = $this->_createPager(
-										$formatter->cObj->getSubpart($template,'###CHARBROWSER###'),
+										tx_rnbase_util_Templates::getSubpart($template,'###CHARBROWSER###'),
 										$markerArray,
 										$pagerData,
 										$charPointer, $configurations);
 
 		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'CLUBMAP'))
-			$markerArray['###CLUBMAP###'] = $this->getMap($items, $configurations);
+			$markerArray['###CLUBMAP###'] = $this->getMap($items, $configurations, $this->getController()->getConfId().'map.', 'CLUB');
 
-		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
 		return $out;
 	}
 
-	private function getMap($items, $configurations) {
+	private function getMap($items, $configurations, $confId, $markerPrefix) {
 		$ret = '###LABEL_mapNotAvailable###';
 		try {
-			$map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $this->getController()->getConfId().'map.');
+			$map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $confId);
 
+			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
+			$template = tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###CLUB_MAP_MARKER###');
+			$itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
 			tx_rnbase::load('tx_rnbase_maps_google_Icon');
 			tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
 			foreach($items As $item) {
 				if(!$item->getCity() && !$item->getZip()) continue;
 
 				$marker = new tx_rnbase_maps_DefaultMarker();
-				$marker->setTitle($item->getName());
 				$marker->setCity($item->getCity());
 				$marker->setZip($item->getZip());
 				$marker->setStreet($item->getStreet());
-				$marker->setDescription('<br />'.$item->record['shortinfo']);
-				$this->addIcon($map, $marker, $item, $configurations);
+				$bubble = $itemMarker->parseTemplate($template, $item, $configurations->getFormatter(), $confId.'club.', $markerPrefix);
+				$marker->setDescription($bubble);
+				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, 
+					$this->getController()->getConfId().'map.icon.clublogo.', $marker, 'club_'.$item->getUid(), $item->getFirstLogo());
+				//$this->addIcon($map, $marker, $item, $configurations);
 				$map->addMarker($marker);
 			}
 			$ret = $map->draw();

@@ -26,6 +26,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_ListBuilder');
+tx_rnbase::load('tx_rnbase_maps_Factory');
 
 
 /**
@@ -38,13 +39,53 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base {
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
 
 		// Die ViewData bereitstellen
-		$teams =& $viewData->offsetGet('items');
+		$items =& $viewData->offsetGet('items');
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
-		$out = $listBuilder->render($teams, 
+		$template = $listBuilder->render($items, 
 						$viewData, $template, 'tx_cfcleaguefe_util_StadiumMarker',
-						'stadiumlist.stadium.', 'STADIUM', $formatter);
+						$this->getController()->getConfId().'stadium.', 'STADIUM', $formatter);
+
+		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'STADIUMMAP'))
+			$markerArray['###STADIUMMAP###'] = $this->getMap($items, $configurations, $this->getController()->getConfId().'map.', 'STADIUM');
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray); //, $wrappedSubpartArray);
 		return $out;
+	}
+
+	private function getMap($items, $configurations, $confId, $markerPrefix) {
+		$ret = '###LABEL_mapNotAvailable###';
+		try {
+			$map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $confId);
+
+			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
+			$template = tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###STADIUM_MAP_MARKER###');
+			$itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
+			tx_rnbase::load('tx_rnbase_maps_google_Icon');
+			tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+			foreach($items As $item) {
+				if(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute() ) continue;
+				
+				$marker = new tx_rnbase_maps_DefaultMarker();
+				if($item->getLongitute() || $item->getLatitute()) {
+					$marker->setCoords($item->getCoords());
+				}
+				else {
+					$marker->setCity($item->getCity());
+					$marker->setZip($item->getZip());
+					$marker->setStreet($item->getStreet());
+				}
+				//$marker->setTitle($item->getName());
+				$bubble = $itemMarker->parseTemplate($template, $item, $configurations->getFormatter(), $confId.'stadium.', $markerPrefix);
+				$marker->setDescription($bubble);
+				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, 
+					$this->getController()->getConfId().'map.icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
+				$map->addMarker($marker);
+			}
+			$ret = $map->draw();
+		} catch (Exception $e) {
+			$ret = '###LABEL_mapNotAvailable###';
+		}
+		return $ret;
 	}
 
 	function getMainSubpart() {return '###STADIUM_LIST###';}
