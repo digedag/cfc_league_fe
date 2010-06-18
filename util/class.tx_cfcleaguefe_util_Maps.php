@@ -23,6 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_Templates');
+tx_rnbase::load('tx_rnbase_maps_google_Icon');
 
 /**
  * Utility methods for google maps integration

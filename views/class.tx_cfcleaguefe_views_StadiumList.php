@@ -60,23 +60,9 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base {
 			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
 			$template = tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###STADIUM_MAP_MARKER###');
 			$itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
-			tx_rnbase::load('tx_rnbase_maps_google_Icon');
-			tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
 			foreach($items As $item) {
-				if(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute() ) continue;
-				
-				$marker = new tx_rnbase_maps_DefaultMarker();
-				if($item->getLongitute() || $item->getLatitute()) {
-					$marker->setCoords($item->getCoords());
-				}
-				else {
-					$marker->setCity($item->getCity());
-					$marker->setZip($item->getZip());
-					$marker->setStreet($item->getStreet());
-				}
-				//$marker->setTitle($item->getName());
-				$bubble = $itemMarker->parseTemplate($template, $item, $configurations->getFormatter(), $confId.'stadium.', $markerPrefix);
-				$marker->setDescription($bubble);
+				$marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'stadium.', $markerPrefix);
+				if(!$marker) continue;
 				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, 
 					$this->getController()->getConfId().'map.icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
 				$map->addMarker($marker);
