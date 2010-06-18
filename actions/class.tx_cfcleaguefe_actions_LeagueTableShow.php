@@ -56,7 +56,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 		$compUids = $scopeArr['COMP_UIDS'];
 		$roundUid = $scopeArr['ROUND_UIDS'];
 		// TODO: der folgende Block ist für die Darstellung der Tabellenfahrt identisch und wird ggf. doppelt ausgeführt
-		$out = '';
+		$out = ' ';
 		// Sollte kein Wettbewerb ausgewählt bzw. konfiguriert worden sein, dann suchen wir eine
 		// passende Liga
 		if(strlen($compUids) == 0) {
@@ -71,7 +71,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 		else {
 			// Die Tabelle wird berechnet, wenn der aktuelle Scope auf eine Liga zeigt
 			if(!(isset($compUids) && t3lib_div::testInt($compUids))) {
-				return "";
+				return $out;
 			}
 			// Wir müssen den Typ des Wettbewerbs ermitteln.
 			$currCompetition = new tx_cfcleaguefe_models_competition($compUids);
