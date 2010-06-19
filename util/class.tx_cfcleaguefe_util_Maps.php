@@ -64,6 +64,7 @@ class tx_cfcleaguefe_util_Maps {
 			$icon->setImage($url,$width,$height);
 			$icon->setShadow($url,$width,$height);
 			$icon->setAnchorPoint($width/2,$height/2);
+			$icon->setInfoWindowAnchorPoint($width/2,$height/2);
 			$marker->setIcon($icon);
 		}
 	}
