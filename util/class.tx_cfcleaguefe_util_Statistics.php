@@ -26,12 +26,74 @@
 //require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_DB.php'); // Prüfen!!
 //require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_base.php');
 
+tx_rnbase::load('tx_cfcleaguefe_models_match_note');
 
 /**
  * Erstellung von Statistiken.
  *
  */
 class tx_cfcleaguefe_util_Statistics {
+	/**
+	 * Returns a new instance
+	 * @return tx_cfcleaguefe_util_Statistics
+	 */
+	public static function createInstance() {
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_Statistics');
+	}
+
+	public function createStatisticsCallback($scopeArr, &$services, &$configuration, &$parameters) {
+		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		$matchtable = $service->getMatchTable();
+		$matchtable->setScope($scopeArr);
+		$matchtable->setStatus(2);
+		$fields = array();
+		$options = array();
+		$options['orderby']['MATCH.DATE'] = 'asc';
+//		$options['debug'] = 1;
+		$matchtable->getFields($fields, $options);
+		$prov = tx_rnbase::makeInstance('tx_rnbase_util_ListProvider');
+		$prov->initBySearch(array($service, 'search'), $fields, $options);
+
+		$this->initServices($services, $scopeArr, $configuration, $parameters);
+		$prov->iterateAll(array($this, 'handleMatch'));
+//		t3lib_div::debug($this, 'class.tx_cfcleaguefe_util_Statistics.php'); // TODO: remove me
+		$ret = $this->collectData();
+		return $ret;
+	}
+	private function initServices($services, $scopeArr, $configuration, $parameters) {
+		$this->clubId = $scopeArr['CLUB_UIDS'];
+		$this->servicesArr = array_values($services);
+		$this->serviceKeys = array_keys($services);
+		$this->servicesArrCnt = count($this->servicesArr);
+		for($i=0; $i < $servicesArrCnt; $i++) {
+			$service =& $servicesArr[$i];
+			$service->prepare($scopeArr, $configuration, $parameters);
+		}
+
+	}
+	/**
+	 * Callback methode
+	 * @param tx_cfcleague_models_Match $match
+	 */
+	public function handleMatch($match) {
+		$matches = array($match);
+		$matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
+
+		for($i=0; $i < $this->servicesArrCnt; $i++) {
+			$time = t3lib_div::milliseconds();
+			$service =& $this->servicesArr[$i];
+			$service->handleMatch($match, $this->clubId);
+		}
+	}
+	private function collectData() {
+		// Abschließend die Daten zusammenpacken
+		$ret = array();
+		for($i=0; $i < $this->servicesArrCnt; $i++) {
+			$service =& $this->servicesArr[$i];
+			$ret[$this->serviceKeys[$i]] = $service->getResult();
+		}
+		return $ret;
+	}
 
 	/**
 	 * Start creation of statistical data
@@ -40,7 +102,7 @@ class tx_cfcleaguefe_util_Statistics {
 	 * @param array $scopeArr
 	 * @param array $services
 	 */
-	function createStatistics(&$matches, $scopeArr, &$services, &$configuration, &$parameters) {
+	public static function createStatistics(&$matches, $scopeArr, &$services, &$configuration, &$parameters) {
 		$clubId = $scopeArr['CLUB_UIDS'];
 		$servicesArr = array_values($services);
 		$serviceKeys = array_keys($services);

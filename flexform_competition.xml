@@ -651,6 +651,14 @@
               </config>
             </TCEforms>
           </playerStatsTimeout-->
+          <statistic.callbackmode>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.callbackmode</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </statistic.callbackmode>
 
           <statisticTemplate>
             <TCEforms>

@@ -49,6 +49,7 @@
 			<label index="plugin.competition.flexform.matchtable.time_range">Time range</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.past">Days before</label>
 			<label index="plugin.competition.flexform.matchtable.time_range.future">Days ahead</label>
+			<label index="plugin.competition.flexform.statistics.callbackmode">Callback mode</label>
 			<label index="plugin.competition.flexform.statistics.type">Type of statistics</label>
 			<label index="plugin.competition.flexform.statistics.type.player">Player</label>
 			<label index="plugin.competition.flexform.statistics.type.scorerlist">Scorer</label>

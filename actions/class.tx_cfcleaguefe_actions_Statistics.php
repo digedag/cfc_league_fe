@@ -76,10 +76,17 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC {
 			if(is_object($service))
 				$services[$type] = $service;
 		}
-		$matches =& tx_cfcleaguefe_util_MatchTicker::getMatches4Scope($scopeArr);
-    
+		$mode = $configurations->get('statistic.callbackmode');
+		if($mode) {
+			$stats = tx_cfcleaguefe_util_Statistics::createInstance();
+			$data = $stats->createStatisticsCallback($scopeArr, $services, $configurations, $parameters);
+		}
+		else {
+			$matches =& tx_cfcleaguefe_util_MatchTicker::getMatches4Scope($scopeArr);
+			$data = tx_cfcleaguefe_util_Statistics::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
+		}
+
 		// Aufruf der Statistik
-		$data = tx_cfcleaguefe_util_Statistics::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
 		$viewData->offsetSet('data', $data); // Services bereitstellen
 
 		return null;
