@@ -757,8 +757,9 @@ plugin.tx_cfcleaguefe_competition {
 #    club.isCurrent.override = selected="selected"
   }
   teamlist {
-    viewType = HTML
+    filter = tx_cfcleaguefe_filter_Team
     team =< lib.t3sports.team
+    team.pagebrowser.limit = 4
     team.logo{
       file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist}
       file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}

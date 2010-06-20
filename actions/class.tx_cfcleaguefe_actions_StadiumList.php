@@ -47,6 +47,7 @@ class tx_cfcleaguefe_actions_StadiumList extends tx_rnbase_action_BaseIOC {
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
 
 		$fields = array();
+		$options = array();
 		$filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 
 		// Soll ein PageBrowser verwendet werden
