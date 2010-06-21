@@ -23,7 +23,7 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_rnbase_model_base');
+tx_rnbase::load('tx_cfcleague_models_Team');
 tx_rnbase::load('tx_cfcleaguefe_models_club');
 tx_rnbase::load('tx_cfcleaguefe_search_Builder');
 tx_rnbase::load('tx_cfcleaguefe_models_group');
@@ -33,14 +33,13 @@ tx_rnbase::load('tx_cfcleaguefe_models_group');
 /**
  * Model für ein Team.
  */
-class tx_cfcleaguefe_models_team extends tx_rnbase_model_base {
+class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
   var $_players;
   var $_coaches;
   var $_supporters;
   /** Array with loaded team instances */
   private static $instances;
 
-  function getTableName(){return 'tx_cfcleague_teams';}
 
   /**
    * Liefert den Namen des Teams
@@ -329,7 +328,7 @@ AND tx_cfcleague_competition.uid =1
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_team.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_team.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_team.php']);
 }
 
 ?>

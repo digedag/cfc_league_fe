@@ -24,17 +24,16 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_model_base');
+tx_rnbase::load('tx_cfcleague_models_Club');
 
 
 /**
  * Model für einen Verein.
  */
-class tx_cfcleaguefe_models_club extends tx_rnbase_model_base {
+class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club {
   /** Array with loaded club instances */
   private static $instances;
 	
-  function getTableName(){return 'tx_cfcleague_club';}
-
   /**
    * Returns address dataset or null
    * @return tx_cfcleague_models_Address or null
@@ -161,7 +160,7 @@ AND tx_cfcleague_competition.agegroup = 1
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_club.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_club.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_club.php']);
 }
 
 ?>
