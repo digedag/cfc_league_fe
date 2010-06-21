@@ -26,6 +26,8 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_ListBuilder');
+tx_rnbase::load('tx_rnbase_maps_Factory');
+tx_rnbase::load('tx_rnbase_util_Templates');
 
 
 /**
@@ -42,14 +44,39 @@ class tx_cfcleaguefe_views_TeamList extends tx_rnbase_view_Base {
 		$teams =& $viewData->offsetGet('teams');
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
-		$out = $listBuilder->render($teams, 
+		$template = $listBuilder->render($teams, 
 						$viewData, $template, 'tx_cfcleaguefe_util_TeamMarker',
 						'teamlist.team.', 'TEAM', $formatter);
+		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'TEAMMAP'))
+			$markerArray['###TEAMMAP###'] = $this->getMap($teams, $configurations, $this->getController()->getConfId().'map.', 'TEAM');
+
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray); //, $wrappedSubpartArray);
 		return $out;
 	}
 
 	function getMainSubpart() {return '###TEAM_LIST###';}
-  
+
+	private function getMap($items, $configurations, $confId, $markerPrefix) {
+		$ret = '###LABEL_mapNotAvailable###';
+		try {
+			$map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $confId);
+
+			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
+			$template = tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###TEAM_MAP_MARKER###');
+			$itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+			foreach($items As $item) {
+				$marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'team.', $markerPrefix);
+				if(!$marker) continue;
+				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, 
+					$this->getController()->getConfId().'map.icon.teamlogo.', $marker, 'team_'.$item->getUid(), $item->getLogoPath());
+				$map->addMarker($marker);
+			}
+			$ret = $map->draw();
+		} catch (Exception $e) {
+			$ret = '###LABEL_mapNotAvailable###';
+		}
+		return $ret;
+	}
 }
 
 

@@ -119,6 +119,31 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 	}
 
 	/**
+	 * Create a marker for GoogleMaps. This can be done if the club has address data.
+	 * @param string $template
+	 * @param tx_cfcleague_models_Team $item
+	 */
+	public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix) {
+		if(!$item->getCity() && !$item->getZip()) return false;
+//		if(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute() ) return false;
+		tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+		
+		$marker = new tx_rnbase_maps_DefaultMarker();
+//		if($item->getLongitute() || $item->getLatitute()) {
+//			$marker->setCoords($item->getCoords());
+//		}
+//		else {
+			$marker->setCity($item->getCity());
+			$marker->setZip($item->getZip());
+			$marker->setStreet($item->getStreet());
+//		}
+		//$marker->setTitle($item->getName());
+		$bubble = $this->parseTemplate($template, $item, $formatter, $confId, $markerPrefix);
+		$marker->setDescription($bubble);
+		return $marker;
+	}
+
+	/**
 	 * Links vorbereiten
 	 *
 	 * @param tx_cfcleague_models_Club $item

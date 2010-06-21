@@ -35,16 +35,16 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$this->options = $options;
 	}
 
-  /**
-   * @param string $template das HTML-Template
-   * @param tx_cfcleaguefe_models_team $team das Team
-   * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
-   * @param string $teamConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
-   * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-   * @param string $teamMarker Name des Markers für das Team, z.B. TEAM, MATCH_HOME usw.
-   *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
-   * @return String das geparste Template
-   */
+	/**
+	 * @param string $template das HTML-Template
+	 * @param tx_cfcleaguefe_models_team $team das Team
+ 	 * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
+	 * @param string $teamConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
+	 * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
+	 * @param string $teamMarker Name des Markers für das Team, z.B. TEAM, MATCH_HOME usw.
+	 *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
+	 * @return String das geparste Template
+	 */
 	public function parseTemplate($template, $team, $formatter, $confId, $marker = 'TEAM') {
 		if(!is_object($team)) {
 			return $formatter->configurations->getLL('team_notFound');
@@ -84,7 +84,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_afterSubst', array('item' => &$team, 'template'=>&$template), $this);
 		return $template;
-  }
+	}
 
 	/**
 	 * Prepare team record before rendering
@@ -101,17 +101,17 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$item->record['pictures'] = $item->record['dam_images'];
 	}
   
-  /**
-   * Hinzufügen der Daten des Vereins
-   *
-   * @param array $firstMarkerArray
-   * @param tx_cfcleaguefe_models_club $club
-   */
-  protected function _addClubData($template, &$club, &$formatter, $clubConf, $markerPrefix) {
-    $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
-    $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
-  	return $template;
-  }
+	/**
+	 * Hinzufügen der Daten des Vereins
+	 *
+	 * @param array $firstMarkerArray
+	 * @param tx_cfcleaguefe_models_club $club
+	 */
+	protected function _addClubData($template, $club, $formatter, $clubConf, $markerPrefix) {
+		$clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
+		$template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
+		return $template;
+	}
 	/**
 	 * Hinzufügen der Spieler des Teams.
 	 * @param string $template HTML-Template für die Profile
@@ -160,15 +160,39 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		return $ret;
 	}
 
-  /**
-   * Initialisiert die Labels für die Team-Klasse
-   *
-   * @param tx_rnbase_util_FormatUtil $formatter
-   * @param array $defaultMarkerArr
-   */
-  public function initLabelMarkers(&$formatter, $confId, $defaultMarkerArr = 0, $marker = 'TEAM') {
-    return $this->prepareLabelMarkers('tx_cfcleaguefe_models_team', $formatter, $confId, $defaultMarkerArr, $marker);
-  }
+	/**
+	 * Initialisiert die Labels für die Team-Klasse
+	 *
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param array $defaultMarkerArr
+	 */
+	public function initLabelMarkers(&$formatter, $confId, $defaultMarkerArr = 0, $marker = 'TEAM') {
+		return $this->prepareLabelMarkers('tx_cfcleaguefe_models_team', $formatter, $confId, $defaultMarkerArr, $marker);
+	}
+
+	/**
+	 * @return tx_cfcleaguefe_util_ClubMarker
+	 */
+	private function getClubMarker() {
+		if(!$this->clubMarker) {
+			$this->clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
+		}
+		return $this->clubMarker;
+	}
+	/**
+	 * Create a marker for GoogleMaps. This can be done if the team has a club with address data.
+	 * @param string $template
+	 * @param tx_cfcleague_models_Team $item
+	 */
+	public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix) {
+		$club = $item->getClub();
+		if(!$club) return false;
+
+		$template = $this->parseTemplate($template, $item, $formatter, $confId, $markerPrefix);
+		$marker = $this->getClubMarker()->createMapMarker($template, $club, $formatter, $confId, $markerPrefix);
+		return $marker;
+	}
+
 	/**
 	 * Links vorbereiten
 	 *

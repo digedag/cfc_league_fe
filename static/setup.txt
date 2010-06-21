@@ -758,18 +758,15 @@ plugin.tx_cfcleaguefe_competition {
   }
   teamlist {
     filter = tx_cfcleaguefe_filter_Team
-    team =< lib.t3sports.team
-    team.pagebrowser.limit = 4
-    team.logo{
-      file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist}
-      file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}
-      noLogo_stdWrap.cObject.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_teamlist},{$plugin.tx_cfcleaguefe_competition.maxH_logo_teamlist}
-    }
+    team =< lib.t3sports.teamSmall
     options {
       orderby {
         TEAM.NAME = asc
       }
     }
+    map =< lib.t3sports.map
+    map.template = {$plugin.tx_cfcleaguefe_competition.teamlistTemplate}
+    map.team =< lib.t3sports.teamSmall
   }
   stadiumlist {
     stadium =< lib.t3sports.stadium
