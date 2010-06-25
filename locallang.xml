@@ -68,6 +68,8 @@
 			<label index="label_mapnotavailable">Map not available. Please install extension wec_map to enable this feature.</label>
 			<label index="label_capacity">Capacity</label>
 			<label index="label_pictures">Pictures</label>
+			<label index="label_currentround">Current round</label>
+			<label index="label_matchstatus_10">postponed</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -122,6 +124,8 @@
 			<label index="label_mapnotavailable">Kartenansicht nicht verfügbar. Die Extension wec_map muss für dieses Feature installiert werden.</label>
 			<label index="label_capacity">Kapazität</label>
 			<label index="label_pictures">Bilder</label>
+			<label index="label_currentround">Aktueller Spieltag</label>
+			<label index="label_matchstatus_10">Verlegt</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -1132,10 +1132,17 @@ plugin.tx_cfcleaguefe_report {
 
     # This configures the chart in match report
     svChartMatch =< lib.t3sports.chart
-    # This configures historic 
+    # This configures historic matches
     historic {
       options.orderby.MATCH.DATE = desc
       template = {$plugin.tx_cfcleaguefe_report.matchreportTemplate}
+      match =< lib.t3sports.match
+    }
+    # This configures matches of current round
+    mtcurrentround {
+      options.orderby.MATCH.DATE = asc
+      template = {$plugin.tx_cfcleaguefe_report.matchreportTemplate}
+      subpartName = ###CURRENTROUND_MATCHES###
       match =< lib.t3sports.match
     }
 

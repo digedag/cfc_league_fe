@@ -9,6 +9,7 @@ v0.7.2 (??.05.2010)
  * New view stadium list with GoogleMaps integration
  * Stadium details with GoogleMaps integration
  * Team list with GoogleMaps integration
+ * MatchReport: New marker ###MATCH_MTCURRENTROUND### to show other matches of current round.
 
 v0.7.1 (18.05.2010)
  * DAM includes removed in team list and profile list

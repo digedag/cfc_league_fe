@@ -98,6 +98,8 @@
 
 ###MATCH_MATCHHISTORY###
 
+###MATCH_MTCURRENTROUND###
+
 ###MATCHREPORT###
 
 
@@ -125,7 +127,7 @@
 <!-- ###RESULT_STATUS_0### Ergebnis vor dem Spiel -->
 
 <!-- ###RESULT_STATUS_-10### Ergebnis bei Spielverlegung -->
-verlegt
+###LABEL_MATCHSTATUS_10###
 <!-- ###RESULT_STATUS_-10### Ergebnis bei Spielverlegung -->
 
 <!-- ###RESULT_STATUS_1### Ergebnis während des Spiels -->
@@ -144,5 +146,45 @@ verlegt
 
 ###HISTORIC_MATCHES###
 
+
+<h2>Subpart for matches of current round</h2>
+
+###CURRENTROUND_MATCHES###
+###MATCHS###
+<h2>###LABEL_CURRENTROUND###: ###MATCH_ROUND_NAME###</h2>
+<table cellspacing="0" cellpadding="0" class="cfcleague-matchtable">
+###MATCH###
+<tr class="cfcleague-matchtable-row###MATCH_ROLL### cfcleague-matchtable-rowinfo">
+<td colspan="10">###MATCH_DATE###</td>
+</tr>
+<tr class="cfcleague-matchtable-row###MATCH_ROLL### cfcleague-matchtable-rowmatch">
+<td>###MATCH_HOME_SHOWTEAMLINK######MATCH_HOME_NAME######MATCH_HOME_SHOWTEAMLINK###</td>
+<td>-</td>
+<td>###MATCH_GUEST_SHOWTEAMLINK######MATCH_GUEST_NAME######MATCH_GUEST_SHOWTEAMLINK### </td>
+<td class="cfcleague-matchtable-result">
+
+<!-- ###RESULT_STATUS_0### Ergebnis vor dem Spiel -->
+-&nbsp;:&nbsp;-
+<!-- ###RESULT_STATUS_0### Ergebnis vor dem Spiel -->
+
+<!-- ###RESULT_STATUS_-10### Ergebnis bei Spielverlegung -->
+###LABEL_MATCHSTATUS_10###
+<!-- ###RESULT_STATUS_-10### Ergebnis bei Spielverlegung -->
+
+<!-- ###RESULT_STATUS_1### Ergebnis während des Spiels -->
+###MATCH_GOALS_HOME###&nbsp;:&nbsp;###MATCH_GOALS_GUEST###
+<!-- ###RESULT_STATUS_1### Ergebnis während des Spiels -->
+
+<!-- ###RESULT_STATUS_2### Ergebnis nach Spielende -->
+###MATCH_REPORTLINK######MATCH_GOALS_HOME###&nbsp;:&nbsp;###MATCH_GOALS_GUEST######MATCH_REPORTLINK###
+<!-- ###RESULT_STATUS_2### Ergebnis nach Spielende -->
+<br />###MATCH_ADDINFO###
+</td>
+</tr>
+###MATCH###
+</table>
+###MATCHS###
+
+###CURRENTROUND_MATCHES###
 </body>
 </html> 

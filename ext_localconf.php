@@ -5,14 +5,16 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 // Spiele als Ereignisse für die Extension cal bereitstellen
 
-require_once(t3lib_extMgm::extPath('div') . 'class.tx_div.php');
-tx_div::load('tx_cfcleaguefe_util_ServiceRegistry');
-tx_div::load('tx_rnbase_util_SearchBase');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_cfcleaguefe_util_ServiceRegistry');
+tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 // Hook for tt_news
 $GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_ttnewsMarkers.php:tx_cfcleaguefe_hooks_ttnewsMarkers';
 // LeagueTable in Match
 $GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_TableMatchMarker.php:tx_cfcleaguefe_hooks_TableMatchMarker->addLeagueTable';
+// Matchtable current round in Match
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_initRecord'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_TableMatchMarker.php:tx_cfcleaguefe_hooks_TableMatchMarker->addCurrentRound';
 
 $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
 
