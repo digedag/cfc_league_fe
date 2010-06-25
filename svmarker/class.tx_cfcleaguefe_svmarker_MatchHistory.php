@@ -24,6 +24,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
+tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Service to output historic matches of two match opponents
@@ -31,8 +32,12 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
-	function addMatches($params, $parent) {
-
+	/**
+	 * Add historic matches
+	 * @param $params
+	 * @param $parent
+	 */
+	public function addMatches($params, $parent) {
 		$marker = $params['marker'];
 		$template = $params['template'];
 		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__MATCHHISTORY') ||
@@ -42,7 +47,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 			$matches = $this->getMarkerValue($params, $formatter);
 			$markerArray['###MARKERMODULE__MATCHHISTORY###'] = $matches; // backward
 			$markerArray['###'.$marker.'_MATCHHISTORY###'] = $matches;
-			$params['template'] = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+			$params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		}
 	}
 	
@@ -52,7 +57,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 	 * @param array $params
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	function getMarkerValue($params, $formatter) {
+	private function getMarkerValue($params, $formatter) {
 	//function parseTemplate($templateCode, $params, $formatter) {
 		$match = $this->getMatch($params);
 		if(!is_object($match)) return false; // The call is not for us
@@ -64,34 +69,34 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 		$guest = $match->getGuest()->getClub();
 		if(!$guest) return '<!-- Guest has no club defined -->';
 
+		$confId = 'matchreport.historic.';
 		$fields = array();
 		$options = array();
-		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, 'matchreport.historic.fields.');
-		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, 'matchreport.historic.options.');
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
 
 		$srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matchTable = $srv->getMatchTable();
 
-		if(!intval($formatter->configurations->get('matchreport.historic.ignoreAgeGroup')))
+		if(!intval($formatter->configurations->get($confId.'ignoreAgeGroup')))
 			$matchTable->setAgeGroups($group->uid);
 		$matchTable->setHomeClubs($home->uid . ',' . $guest->uid);
 		$matchTable->setGuestClubs($home->uid . ',' . $guest->uid);
 		$matchTable->getFields($fields, $options);
-		$srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matches = $srv->search($fields, $options);
 
 		// Wir brauchen das Template
-		$templateCode = $formatter->configurations->getCObj()->fileResource($formatter->configurations->get('matchreport.historic.template'));
+		$templateCode = $formatter->configurations->getCObj()->fileResource($formatter->configurations->get($confId.'template'));
 		if(!$templateCode) return '<!-- NO TEMPLATE FOUND -->';
-		$subpartName = $formatter->configurations->get('subpartName');
+		$subpartName = $formatter->configurations->get($confId.'subpartName');
 		$subpartName = $subpartName ? $subpartName : '###HISTORIC_MATCHES###';
-		$templateCode = $formatter->configurations->getCObj()->getSubpart($templateCode,$subpartName);
+		$templateCode = tx_rnbase_util_Templates::getSubpart($templateCode,$subpartName);
 		if(!$templateCode) return '<!-- NO SUBPART '.$subpartName.' FOUND -->';
 
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($matches,
-						new ArrayObject(), $templateCode, 'tx_cfcleaguefe_util_MatchMarker',
-						'matchreport.historic.match.', 'MATCH', $formatter);
+						false, $templateCode, 'tx_cfcleaguefe_util_MatchMarker',
+						$confId.'match.', 'MATCH', $formatter);
 		return $out;
 	}
 	/**
@@ -100,7 +105,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 	 * @param array $params
 	 * @return tx_cfcleaguefe_models_match or false
 	 */
-	function getMatch($params){
+	private function getMatch($params){
 		if(!isset($params['match'])) return false;
 		return $params['match'];
 	}
