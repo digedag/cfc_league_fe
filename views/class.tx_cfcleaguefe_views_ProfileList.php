@@ -50,7 +50,7 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 													tx_rnbase_util_Templates::getSubpart($template,'###CHARBROWSER###'),
 													$markerArray,
 													$pagerData,
-													$charPointer, $configurations);
+													$charPointer, $configurations, $this->getController()->getConfId().'profile.charbrowser.');
 
 		$listCnt =& $viewData->offsetGet('listsize');
 		$profiles =& $viewData->offsetGet('profiles');
@@ -70,11 +70,13 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 	/**
 	 * Liefert den Pagerstring
 	 * TODO: Hier müssen noch Formatierungen eingebaut werden!
+	 * @param tx_rnbase_configurations $configurations
 	 */
-	function _createPager($template, $markerArray, &$pagerData, $curr_pointer, &$configurations) {
+	function _createPager($template, $markerArray, $pagerData, $curr_pointer, $configurations, $confId) {
     $out = array();
 		$link = $configurations->createLink(); // Link auf die eigene Seite
-		$link->destination($GLOBALS['TSFE']->id); // Das Ziel der Seite vorbereiten
+		$link->initByTS($configurations, $confId.'link.', array());
+//		$link->destination($GLOBALS['TSFE']->id); // Das Ziel der Seite vorbereiten
    	$token = md5(microtime());
     $link->label($token);
     $emptyArr = array();
