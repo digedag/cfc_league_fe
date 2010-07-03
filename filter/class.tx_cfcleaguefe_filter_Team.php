@@ -50,8 +50,8 @@ class tx_cfcleaguefe_filter_Team extends tx_rnbase_filter_BaseFilter {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/search/class.tx_cfcleaguefe_filter_Team.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/search/class.tx_cfcleaguefe_filter_Team.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/filter/class.tx_cfcleaguefe_filter_Team.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/filter/class.tx_cfcleaguefe_filter_Team.php']);
 }
 
 ?>
