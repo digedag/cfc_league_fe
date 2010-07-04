@@ -938,6 +938,14 @@ lib.t3sports.map {
   # Possible values: RNMAP_MAPTYPE_STREET,RNMAP_MAPTYPE_SATELLITE,RNMAP_MAPTYPE_HYBRID,RNMAP_MAPTYPE_PHYSICAL
   maptype = RNMAP_MAPTYPE_STREET
   icon.clublogo {
+#  	file = GIFBUILDER
+#  	file {
+#  		XY = 22,22
+#      backColor = #FFFFFF
+#  		4 = IMAGE 
+#      4.file.import.data = register:T3SPORTS_MAPICON
+#      4.offset = 2,2
+#  	}
     file.maxH = 20
     file.maxW = 20
   }

@@ -102,6 +102,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 			$marker->setCity($item->getCity());
 			$marker->setZip($item->getZip());
 			$marker->setStreet($item->getStreet());
+			$marker->setCountry($item->getCountryCode());
 		}
 		//$marker->setTitle($item->getName());
 		$bubble = $this->parseTemplate($template, $item, $formatter, $confId, $markerPrefix);

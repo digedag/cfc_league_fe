@@ -50,9 +50,10 @@ class tx_cfcleaguefe_util_Maps {
 	 * @param string $shadow image path to shadow, not supported yet!
 	 */
 	public static function addIcon($map, $configurations, $confId, $marker, $iconName, $logo, $shadow = '') {
+		$GLOBALS['TSFE']->register['T3SPORTS_MAPICON'] = $logo;
 		if($logo) {
 			$imgConf = $configurations->get($confId);
-			$imgConf['file'] = $logo;
+			$imgConf['file'] = $imgConf['file'] ? $imgConf['file'] : $logo;
 			$url = $configurations->getCObj()->IMG_RESOURCE($imgConf);
 			$icon = new tx_rnbase_maps_google_Icon($map);
 			$icon->setName($iconName);
