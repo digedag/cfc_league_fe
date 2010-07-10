@@ -928,6 +928,19 @@ tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_compet
 ##############################################################
 #includeLibs.tx_cfcleaguefe_controllers_report = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_report.php
 
+lib.t3sports.mapIcon {
+  file = GIFBUILDER
+  file {
+    XY = 22,22
+    backColor = #ffffff
+    4 = IMAGE 
+    4.file.import.data = register:T3SPORTS_MAPICON
+    4.offset = 1,1
+    4.file.maxW = 20
+    4.file.maxH = 20
+  }
+}
+
 # Defaultsettings for GoogleMaps
 lib.t3sports.map {
   width = {$plugin.tx_cfcleaguefe_report.map_width}
@@ -937,18 +950,8 @@ lib.t3sports.map {
   google.forcejs = {$plugin.tx_cfcleaguefe_report.map_forceinit}
   # Possible values: RNMAP_MAPTYPE_STREET,RNMAP_MAPTYPE_SATELLITE,RNMAP_MAPTYPE_HYBRID,RNMAP_MAPTYPE_PHYSICAL
   maptype = RNMAP_MAPTYPE_STREET
-  icon.clublogo {
-#  	file = GIFBUILDER
-#  	file {
-#  		XY = 22,22
-#      backColor = #FFFFFF
-#  		4 = IMAGE 
-#      4.file.import.data = register:T3SPORTS_MAPICON
-#      4.offset = 2,2
-#  	}
-    file.maxH = 20
-    file.maxW = 20
-  }
+  icon.teamlogo =< lib.t3sports.mapIcon
+  icon.clublogo =< lib.t3sports.mapIcon
 }
 
 lib.t3sports.matchreport.imgcard = IMAGE
