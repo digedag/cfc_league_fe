@@ -69,6 +69,31 @@ class tx_cfcleaguefe_util_Maps {
 			$marker->setIcon($icon);
 		}
 	}
+
+	/**
+	 * Calculate distance for two long/lat-points
+	 * @param double $lat1
+	 * @param double $lon1
+	 * @param double $lat2
+	 * @param double $lon2
+	 * @param string $distanceType
+	 */
+	public static function calculateDistance($lat1, $lon1, $lat2, $lon2, $distanceType='K') {
+		$theta = $lon1 - $lon2;
+		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+		$dist = rad2deg(acos($dist));
+		$miles = $dist * 60 * 1.1515;
+
+		if (strtoupper($distanceType) == 'K') {
+			//return distance in kilometers
+			return ($miles * 1.609344);
+		}
+		else {
+			//return distance in miles
+			return $miles;
+		}
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_Maps.php'])	{
