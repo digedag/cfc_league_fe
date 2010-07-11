@@ -933,11 +933,13 @@ lib.t3sports.mapIcon {
   file {
     XY = 22,22
     backColor = #ffffff
-    4 = IMAGE 
-    4.file.import.data = register:T3SPORTS_MAPICON
-    4.offset = 1,1
-    4.file.maxW = 20
-    4.file.maxH = 20
+    10 = IMAGE
+    10.offset = 22-[10.w]/2,22-[10.h]/2
+    10.file {
+      import.data = register:T3SPORTS_MAPICON
+      maxW = 20
+      maxH = 20
+    }
   }
 }
 
@@ -952,6 +954,7 @@ lib.t3sports.map {
   maptype = RNMAP_MAPTYPE_STREET
   icon.teamlogo =< lib.t3sports.mapIcon
   icon.clublogo =< lib.t3sports.mapIcon
+  icon.stadiumlogo =< lib.t3sports.mapIcon
 }
 
 lib.t3sports.matchreport.imgcard = IMAGE
