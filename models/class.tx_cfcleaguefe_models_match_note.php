@@ -252,55 +252,55 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
     $minMinute = intval($conf['noteMinimumMinute']);
 		return $minMinute <= $this->record['minute'] && $this->isType($conf);
   }
-  /**
-   * Liefert true, wenn die Meldung dem Typ entspricht
-   * Parameter ist entweder die Typnummer oder ein Array mit den Keys 
-   * noteType und noteTeam. Bei noteType kann eine Liste von Typnummern
-   * angegeben werden. NoteTeam ist entweder home oder guest.
-   * @param array $typeNumberOrArray
-   */
-  function isType($typeNumberOrArray) {
-    $ret = false;
-    if(is_array($typeNumberOrArray)) {
-      $typeArr = $typeNumberOrArray;
-      // Wenn es ein Array ist, dann zunächst die Typen ermitteln
-      // Keine Typen bedeutet, daß alle verwendet werden
-      $types = $typeArr['noteType'] ? t3lib_div::intExplode(',', $typeArr['noteType']) : array();
-      $ignoreTypes = $typeArr['noteIgnoreType'] ? t3lib_div::intExplode(',', $typeArr['noteIgnoreType']) : array();
-//t3lib_div::debug($types, 'ignore tx_cfcleaguefe_models_match_note');
-      
-      // Wenn Typen definiert sind, dann wird ignoreType nicht betrachtet
-      if(in_array($this->getType(), $types) || 
-         (!count($types) && !count($ignoreTypes)) ||
-         (!in_array($this->getType(), $ignoreTypes) && count($ignoreTypes)) ) {
+	/**
+	 * Liefert true, wenn die Meldung dem Typ entspricht
+	 * Parameter ist entweder die Typnummer oder ein Array mit den Keys 
+	 * noteType und noteTeam. Bei noteType kann eine Liste von Typnummern
+	 * angegeben werden. NoteTeam ist entweder home oder guest.
+	 * @param array $typeNumberOrArray
+	 */
+	function isType($typeNumberOrArray) {
+		$ret = false;
+		if(is_array($typeNumberOrArray)) {
+			$typeArr = $typeNumberOrArray;
+			// Wenn es ein Array ist, dann zunächst die Typen ermitteln
+			// Keine Typen bedeutet, daß alle verwendet werden
+			$types = $typeArr['noteType'] ? t3lib_div::intExplode(',', $typeArr['noteType']) : array();
+			$ignoreTypes = $typeArr['noteIgnoreType'] ? t3lib_div::intExplode(',', $typeArr['noteIgnoreType']) : array();
 
-        // Wird nach Home/Guest unterschieden?
-        if(array_key_exists('noteTeam', $typeArr) && strlen($typeArr['noteTeam'])) {
-          if(strtoupper($typeArr['noteTeam']) == 'HOME' && $this->isHome()) {
-            $ret = true;
-          }
-          elseif(strtoupper($typeArr['noteTeam']) == 'GUEST' && $this->isGuest()) {
-            $ret = true;
-          }
-        }
-        else
-          $ret = true;
-      }
-    }
-    else {
-      $type = intval($this->record['type']);
-      $ret = ($type == intval($typeNumberOrArray));
-    }
-    return $ret;
-  }
+			// Wenn Typen definiert sind, dann wird ignoreType nicht betrachtet
+			if(in_array($this->getType(), $types) || 
+				(!count($types) && !count($ignoreTypes)) ||
+				(!in_array($this->getType(), $ignoreTypes) && count($ignoreTypes)) ) {
 
-  /**
-   * Liefert den Typ der Meldung
-   * @return int den Typ der Meldung
-   */
-  function getType() {
-    return intval($this->record['type']);
-  }
+				// Wird nach Home/Guest unterschieden?
+				if(array_key_exists('noteTeam', $typeArr) && strlen($typeArr['noteTeam'])) {
+					// Eigentore beim jeweils anderen Team zeigen
+					if(strtoupper($typeArr['noteTeam']) == 'HOME' && ($this->isGoalOwn() ? $this->isGuest() : $this->isHome())) {
+						$ret = true;
+					}
+					elseif(strtoupper($typeArr['noteTeam']) == 'GUEST' && ($this->isGoalOwn() ? $this->isHome() : $this->isGuest())) {
+						$ret = true;
+					}
+				}
+				else
+					$ret = true;
+			}
+		}
+		else {
+			$type = intval($this->record['type']);
+			$ret = ($type == intval($typeNumberOrArray));
+		}
+		return $ret;
+	}
+
+	/**
+	 * Liefert den Typ der Meldung
+	 * @return int den Typ der Meldung
+	 */
+	function getType() {
+		return intval($this->record['type']);
+	}
 
   /**
    * Liefert den Namen des Tickertyps. Dafür ist die aktuelle Config notwendig,
