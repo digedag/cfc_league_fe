@@ -24,6 +24,8 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Vereine verantwortlich
@@ -45,7 +47,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 			// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
 			$club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
 		}
-		$this->prepareRecord($club);
+		$this->prepareRecord($club, $template, $formatter->getConfigurations(), $confId, $marker);
 		// Es wird das MarkerArray mit Daten gefüllt
 		$ignore = self::findUnusedCols($club->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($club->record, $confId , $ignore, $marker.'_',$club->getColumnNames());
@@ -58,12 +60,21 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		if($this->containsMarker($template, $marker.'_TEAMS'))
 			$template = $this->addTeams($template, $club, $formatter, $confId.'team.', $marker.'_TEAM');
 
-		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
 	}
 
-	protected function prepareRecord(&$item) {
-//		$item->record['logo'] = $item->record['dam_logo'];
+	protected function prepareRecord(&$item, $template, $configurations, $confId, $marker) {
+		if($this->containsMarker($template, $marker.'_DISTANCE')) {
+			$lng = doubleval($configurations->get('basePosition.longitute'));
+			$lat = doubleval($configurations->get('basePosition.latitute'));
+			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
+			$coord = tx_cfcleaguefe_util_Maps::lookupAddress($item->getStreet(),$item->getCity(),'',$item->getZip(), $item->getCountryCode());
+			t3lib_div::debug(array($lng,$lat,$coord, $configurations->get('basePosition.longitute')), 'class.tx_cfcleaguefe_util_ClubMarker.php '); // TODO: remove me
+			$distance = tx_cfcleaguefe_util_Maps::calculateDistance($lat,$lng, $coord->getLatitude(), $coord->getLongitude());
+			$item->record['distance'] = $distance;
+		}
+		//		$item->record['logo'] = $item->record['dam_logo'];
 	}
 	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
 		$addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');

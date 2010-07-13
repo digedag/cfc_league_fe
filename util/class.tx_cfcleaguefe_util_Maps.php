@@ -94,6 +94,37 @@ class tx_cfcleaguefe_util_Maps {
 		}
 	}
 
+	/**
+	 * Address lookup
+	 * 
+	 * @param string $street
+	 * @param string $city
+	 * @param string $state
+	 * @param string $zip
+	 * @param string $country
+	 * @return tx_rnbase_maps_ICoord or false
+	 */
+	public static function lookupAddress($street, $city, $state, $zip, $country) {
+		if(!t3lib_extMgm::isLoaded('wec_map')) return false;
+		require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
+
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, self::getKey());
+
+		$coord = tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
+		$coord->setLongitude($latlong['long']);
+		$coord->setLatitude($latlong['lat']);
+		return $coord;
+	}
+	private static $key = false;
+	private static function getKey() {
+		if(!self::$key) {
+			require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
+			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
+			self::$key = $domainmgr->getKey();
+		}
+		return self::$key;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_Maps.php'])	{
