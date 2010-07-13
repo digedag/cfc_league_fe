@@ -47,7 +47,7 @@ class tx_cfcleaguefe_util_CompetitionMarker extends tx_rnbase_util_BaseMarker {
 
     // Es wird das MarkerArray mit Daten gefüllt.
     $markerArray = $formatter->getItemMarkerArrayWrapped($competition->record, $confId , 0, $marker.'_',$competition->getColumnNames());
-    $template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+    $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
     if($this->containsMarker($template, $marker.'_GROUP'))
 			$template = $this->getGroupMarker()->parseTemplate($template, $competition->getGroup(), $formatter, $confId.'group.', $marker.'_GROUP');

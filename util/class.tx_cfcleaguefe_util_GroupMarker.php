@@ -45,7 +45,7 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker {
 		}
 		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
 		$markerArray = $formatter->getItemMarkerArrayWrapped($group->record, $confId , 0, $marker.'_',$group->getColumnNames());
-		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
 	}
 }

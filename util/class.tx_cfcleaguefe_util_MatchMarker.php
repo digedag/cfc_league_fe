@@ -106,7 +106,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //$total['total'] = t3lib_div::milliseconds() - $time;
 //if($total['total'] > 40	)
 //t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
-		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','matchMarker_afterSubst', 
 			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		return $template;
