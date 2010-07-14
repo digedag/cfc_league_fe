@@ -44,6 +44,8 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 			$item = self::getEmptyInstance('tx_cfcleague_models_Stadium');
 		}
 
+		$this->prepareRecord($item, $template, $formatter->getConfigurations(), $confId, $marker);
+
 		// Es wird das MarkerArray mit Daten gefüllt
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$item->getColumnNames());
@@ -88,6 +90,16 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 		$map->addMarker($marker);
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array('###'.$markerPrefix.'###' => $map->draw()));
 		return $out;
+	}
+
+	protected function prepareRecord(&$item, $template, $configurations, $confId, $marker) {
+		$item->record['distance'] = '';
+		if($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
+			$lat = doubleval($configurations->get($confId.'_basePosition.latitude'));
+			$lng = doubleval($configurations->get($confId.'_basePosition.longitude'));
+			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
+			$item->record['distance'] = tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng);
+		}
 	}
 
 	public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix) {
@@ -136,6 +148,9 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
+	}
+	private static function hasGeoData($item) {
+		return !(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute());
 	}
 }
 

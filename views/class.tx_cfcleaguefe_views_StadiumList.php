@@ -68,6 +68,17 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base {
 					$this->getController()->getConfId().'map.icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
 				$map->addMarker($marker);
 			}
+			if($configurations->get($confId.'showBasePoint')) {
+				$lng = doubleval($configurations->get($confId.'stadium._basePosition.longitude'));
+				$lat = doubleval($configurations->get($confId.'stadium._basePosition.latitude'));
+				$coords = tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
+				$coords->setLongitude($lng);
+				$coords->setLatitude($lat);
+				$marker = tx_rnbase::makeInstance('tx_rnbase_maps_DefaultMarker');
+				$marker->setCoords($coords);
+				$marker->setDescription('###LABEL_BASEPOINT###');
+				$map->addMarker($marker);
+			}
 			$ret = $map->draw();
 		} catch (Exception $e) {
 			$ret = '###LABEL_mapNotAvailable###';

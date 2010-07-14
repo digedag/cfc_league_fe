@@ -72,6 +72,7 @@
 			<label index="label_matchstatus_10">postponed</label>
 
 			<label index="label_basepoint">Base point for distance calculation</label>
+			<label index="label_distance">Distance</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -130,6 +131,7 @@
 			<label index="label_matchstatus_10">Verlegt</label>
 
 			<label index="label_basepoint">Ausgangspunkt für Entfernungsberechnung</label>
+			<label index="label_distance">Entfernung</label>
 		</languageKey>
 	</data>
 </T3locallang>

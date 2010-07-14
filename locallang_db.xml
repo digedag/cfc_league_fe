@@ -61,6 +61,8 @@
 
 			<label index="plugin.competition.flexform.template">Template</label>
 			<label index="plugin.competition.flexform.scopeTemplate">Scope template</label>
+			<label index="plugin.competition.flexform.showDistanceBasePoint">Show base point for distance calculation in map</label>
+
 
 			<label index="plugin.competition.flexform.saison">Saison</label>
 			<label index="plugin.competition.flexform.saisonInput">Show Selectbox for saison?</label>
@@ -179,6 +181,8 @@
 			<label index="plugin.competition.flexform.statistics.type.visitors">Zuschauer</label>
 			<label index="plugin.competition.flexform.tickerlist.ticker_page">Seite für Liveticker</label>
 			<label index="plugin.competition.flexform.tickerlist.ticker_url">Feste Url für Liveticker</label>
+
+			<label index="plugin.competition.flexform.showDistanceBasePoint">Zeige Ausgangspunkt für Entfernungsberechnung in Karte</label>
 
 			<label index="plugin.competition.flexform.saisonInput">Selectbox für Saison?</label>
 			<label index="plugin.competition.flexform.group">Altersklasse des Wettbewerbs</label>
