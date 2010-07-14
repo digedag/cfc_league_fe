@@ -29,6 +29,10 @@ plugin.tx_cfcleaguefe_competition {
 
 
   # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date in matchtable
+  basePosition_latitude = 52.523405
+  basePosition_longitude = 13.4114
+
+  # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date in matchtable
   format_date = %d.%m.%Y
 
   # cat=T3sports (misc)/tickerlist_format_date; type=string;label=Formatter-String for match date in ticker list

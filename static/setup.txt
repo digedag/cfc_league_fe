@@ -73,6 +73,9 @@ lib.t3sports.stadium {
   map =< lib.t3sports.map
   map.template = {$plugin.tx_cfcleaguefe_competition.stadiumlistTemplate}
   map.stadium =< lib.t3sports.stadium
+  # Used as base for distance calculation
+  _basePosition.latitude = {$plugin.tx_cfcleaguefe_competition.basePosition_latitude}
+  _basePosition.longitude = {$plugin.tx_cfcleaguefe_competition.basePosition_longitude}
 }
 
 lib.t3sports.teamnote = RECORDS
@@ -232,6 +235,9 @@ lib.t3sports.club {
   dam_logo =< lib.t3sports.club.logo
   stadium =< lib.t3sports.stadium
   team =< lib.t3sports.team
+  # Used as base for distance calculation
+  _basePosition.latitude = {$plugin.tx_cfcleaguefe_competition.basePosition_latitude}
+  _basePosition.longitude = {$plugin.tx_cfcleaguefe_competition.basePosition_longitude}
 }
 
 lib.t3sports.dummyImage = IMAGE

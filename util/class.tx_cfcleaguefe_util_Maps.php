@@ -71,29 +71,36 @@ class tx_cfcleaguefe_util_Maps {
 	}
 
 	/**
-	 * Calculate distance for two long/lat-points
+	 * Calculate distance for two long/lat-points.
+	 * Method used from wec_map
 	 * @param double $lat1
 	 * @param double $lon1
 	 * @param double $lat2
 	 * @param double $lon2
 	 * @param string $distanceType
+	 * @return double
 	 */
 	public static function calculateDistance($lat1, $lon1, $lat2, $lon2, $distanceType='K') {
-		$theta = $lon1 - $lon2;
-		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-		$dist = rad2deg(acos($dist));
-		$miles = $dist * 60 * 1.1515;
-
-		if (strtoupper($distanceType) == 'K') {
-			//return distance in kilometers
-			return ($miles * 1.609344);
-		}
-		else {
-			//return distance in miles
-			return $miles;
-		}
+		$l1 = deg2rad ($lat1);
+    $l2 = deg2rad ($lat2);
+    $o1 = deg2rad ($lon1);
+    $o2 = deg2rad ($lon2);
+		$radius = $distanceType == 'K' ? 6372.795 : 3959.8712;
+		$distance = 2 * $radius * asin(min(1, sqrt( pow(sin(($l2-$l1)/2), 2) + cos($l1)*cos($l2)* pow(sin(($o2-$o1)/2), 2) )));
+		return $distance;
 	}
 
+	public static function getDistance($item, $lat, $lng, $distanceType='K') {
+		if($item->getLongitute() || $item->getLatitute()) {
+			$coord = $item->getCoords();
+		}
+		else {
+			$coord = self::lookupAddress($item->getStreet(),$item->getCity(),'',$item->getZip(), $item->getCountryCode());
+		}
+		$distance = self::calculateDistance($coord->getLatitude(), $coord->getLongitude(), $lat,$lng);
+		return $distance;
+	}
+	
 	/**
 	 * Address lookup
 	 * 

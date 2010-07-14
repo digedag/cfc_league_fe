@@ -71,6 +71,8 @@
 			<label index="label_currentround">Current round</label>
 			<label index="label_matchstatus_10">postponed</label>
 
+			<label index="label_basepoint">Base point for distance calculation</label>
+
 		</languageKey>
 		<languageKey index="de" type="array">
 
@@ -126,6 +128,8 @@
 			<label index="label_pictures">Bilder</label>
 			<label index="label_currentround">Aktueller Spieltag</label>
 			<label index="label_matchstatus_10">Verlegt</label>
+
+			<label index="label_basepoint">Ausgangspunkt für Entfernungsberechnung</label>
 		</languageKey>
 	</data>
 </T3locallang>

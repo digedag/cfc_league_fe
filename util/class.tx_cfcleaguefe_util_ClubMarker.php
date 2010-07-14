@@ -65,16 +65,13 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 	}
 
 	protected function prepareRecord(&$item, $template, $configurations, $confId, $marker) {
-		if($this->containsMarker($template, $marker.'_DISTANCE')) {
-			$lng = doubleval($configurations->get('basePosition.longitute'));
-			$lat = doubleval($configurations->get('basePosition.latitute'));
+		$item->record['distance'] = '';
+		if($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
+			$lat = doubleval($configurations->get($confId.'_basePosition.latitude'));
+			$lng = doubleval($configurations->get($confId.'_basePosition.longitude'));
 			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
-			$coord = tx_cfcleaguefe_util_Maps::lookupAddress($item->getStreet(),$item->getCity(),'',$item->getZip(), $item->getCountryCode());
-			t3lib_div::debug(array($lng,$lat,$coord, $configurations->get('basePosition.longitute')), 'class.tx_cfcleaguefe_util_ClubMarker.php '); // TODO: remove me
-			$distance = tx_cfcleaguefe_util_Maps::calculateDistance($lat,$lng, $coord->getLatitude(), $coord->getLongitude());
-			$item->record['distance'] = $distance;
+			$item->record['distance'] = tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng);
 		}
-		//		$item->record['logo'] = $item->record['dam_logo'];
 	}
 	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
 		$addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
@@ -129,13 +126,16 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		return $out;
 	}
 
+	private static function hasGeoData($item) {
+		return !(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute());
+	}
 	/**
 	 * Create a marker for GoogleMaps. This can be done if the club has address data.
 	 * @param string $template
-	 * @param tx_cfcleague_models_Team $item
+	 * @param tx_cfcleague_models_Club $item
 	 */
 	public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix) {
-		if(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute() ) return false;
+		if(!self::hasGeoData($item)) return false;
 		tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
 		
 		$marker = new tx_rnbase_maps_DefaultMarker();
