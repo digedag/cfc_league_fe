@@ -71,7 +71,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 			tx_rnbase::load('tx_rnbase_maps_google_Icon');
 			tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
 			foreach($items As $item) {
-				$marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'stadium.', $markerPrefix);
+				$marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'club.', $markerPrefix);
 				if(!$marker) continue;
 
 				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, 
@@ -79,6 +79,18 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 				//$this->addIcon($map, $marker, $item, $configurations);
 				$map->addMarker($marker);
 			}
+			if($configurations->get($confId.'showBasePoint')) {
+				$lng = doubleval($configurations->get($confId.'club._basePosition.longitude'));
+				$lat = doubleval($configurations->get($confId.'club._basePosition.latitude'));
+				$coords = tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
+				$coords->setLongitude($lng);
+				$coords->setLatitude($lat);
+				$marker = tx_rnbase::makeInstance('tx_rnbase_maps_DefaultMarker');
+				$marker->setCoords($coords);
+				$marker->setDescription('###LABEL_BASEPOINT###');
+				$map->addMarker($marker);
+			}
+			
 			$ret = $map->draw();
 		} catch (Exception $e) {
 			$ret = '###LABEL_mapNotAvailable###';
