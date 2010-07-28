@@ -28,8 +28,9 @@ plugin.tx_cfcleaguefe_competition {
 	
 
 
-  # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date in matchtable
+  # cat=T3sports (misc)/basePosition_latitude; type=string;label=Base position for distance calculation (latitude)
   basePosition_latitude = 52.523405
+  # cat=T3sports (misc)/basePosition_longitude; type=string;label=Base position for distance calculation (longitude)
   basePosition_longitude = 13.4114
 
   # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date in matchtable
