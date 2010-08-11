@@ -76,7 +76,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 		$mapTemplate = tx_cfcleaguefe_util_Maps::getMapTemplate($formatter->getConfigurations(), $confId, '###STADIUM_MAP_MARKER###');
 		$marker = $this->createMapMarker($mapTemplate, $item, $formatter, $confId.'stadium.', 'STADIUM');
 		if(!$marker) {
-			$item->record['map'] = '';
+			return '';
 		}
 
 		tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
