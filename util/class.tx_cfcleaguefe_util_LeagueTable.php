@@ -403,7 +403,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 
   /**
    * Initialisiert die Instanz mit den notwendigen Daten
-   * @param tx_lib_parameters $parameters
+   * @param tx_rnbase_IParameters $parameters
    * @param array $defaults
    */
 	function _initConfig(&$parameters, &$defaults) {

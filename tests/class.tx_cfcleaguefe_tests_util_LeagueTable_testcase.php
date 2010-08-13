@@ -41,7 +41,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$league->setTeams(array_values($teams));
 		$matches = $league->getMatches(2);
 
-		$params = tx_rnbase::makeInstance('tx_lib_spl_arrayObject');
+		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$league = $this->prepareLeague('league_1');
 //    t3lib_div::debug($league, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
 
-		$params = tx_rnbase::makeInstance('tx_lib_spl_arrayObject');
+		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
@@ -85,7 +85,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$league = $this->prepareLeague('league_1');
 		$league->record['point_system'] = 0; // Punktsystem umstellen
 
-		$params = tx_rnbase::makeInstance('tx_lib_spl_arrayObject');
+		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);

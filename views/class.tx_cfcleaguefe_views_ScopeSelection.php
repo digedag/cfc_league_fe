@@ -113,7 +113,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
    * Erstellt die einzelnen Teile der Scopeauswahl. 
    * @param string $template HTML- Template
    * @param array &$itemsArr Datensätze für die Auswahl
-   * @param tx_lib_link &$link Linkobjekt
+   * @param tx_rnbase_util_Link &$link Linkobjekt
    * @param string $markerName Name des Markers (SAISON, ROUND usw.)
    * @param tx_rnbase_configurations &$configurations Config-Objekt
    */

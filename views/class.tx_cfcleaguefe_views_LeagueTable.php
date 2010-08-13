@@ -231,7 +231,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 	 * Die Auswahl für Tabellentyp, Tabellenscope und Punktesystem.
 	 * @param string $template HTML- Template
 	 * @param array &$itemsArr Datensätze für die Auswahl
-	 * @param tx_lib_link &$link Linkobjekt
+	 * @param tx_rnbase_util_Link &$link Linkobjekt
 	 * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
 	 * @param tx_rnbase_configurations &$configurations Konfig-Objekt
 	 */
