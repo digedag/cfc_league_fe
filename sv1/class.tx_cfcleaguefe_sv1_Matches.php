@@ -54,10 +54,10 @@ class tx_cfcleaguefe_sv1_Matches extends t3lib_svbase implements tx_cfcleaguefe_
 		return $searcher->search($fields, $options);
 	}
 	/**
-	 * @return tx_cfcleaguefe_util_MatchTable
+	 * @return tx_cfcleaguefe_util_MatchTableBuilder
 	 */
-	function getMatchTable() {
-		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
+	public function getMatchTable() {
+		return tx_rnbase::makeInstance('tx_cfcleague_util_MatchTableBuilder');
 	}
 
 }
