@@ -121,7 +121,8 @@ static $total = 0;
 		// Fehlerhafte Spieler entfernen
 		foreach($players As $key => $player) {
 			if(!is_object($player)) {
-				t3lib_div::debug('Player with UID ' . $key . ' not found. Probably the profile was deleted, but still has references.', 'tx_cfcleaguefe_sv2_PlayerStatistics'); // TODO: remove me
+				tx_rnbase::load('tx_rnbase_util_Logger');
+				tx_rnbase_util_Logger::warn('Player with UID ' . $key . ' not found. Probably the profile was deleted, but still has references.','cfc_league_fe');
 				unset($players[$key]);
 			}
 		}
