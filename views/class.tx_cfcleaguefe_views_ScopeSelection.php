@@ -140,6 +140,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
     $parts = array();
     // Jetzt über die vorhandenen Items iterieren
     foreach($items As $item) {
+    	if(!is_object($item)) continue; // Sollte eigentlich nicht vorkommen.
       $keepVars[strtolower($markerName)] = $item->uid;
       $link->parameters($keepVars);
       $isCurrent = ($item->uid == $currItem->uid);
