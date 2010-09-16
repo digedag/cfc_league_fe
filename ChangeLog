@@ -2,9 +2,12 @@
 
 Änderungen
 ----------
+v0.7.7 (??.09.2010)
+
 v0.7.6 (16.09.2010)
  * Two new markers for profiles: ###PROFILE_DBNAME### and ###PROFILE_DBNAMEREV### with support for stage name
  * #42: remove marker ###MATCH_LEAGUETABLE###
+ * Bugfixes for alltime table
 
 v0.7.5 (03.09.2010)
  * All references to extensions lib/div removed.
