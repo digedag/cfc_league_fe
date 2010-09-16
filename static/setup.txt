@@ -143,6 +143,27 @@ lib.t3sports.profile {
     showprofile.pid = {$plugin.tx_cfcleaguefe_competition.playerpage}
     refereematches.pid = {$plugin.tx_cfcleaguefe_competition.matchtablepage}
   }
+  dcname = CASE
+  dcname {
+    default = TEXT
+    default.field = stage_name
+    -1 = COA
+    -1 {
+      10 = TEXT
+      10.field = first_name
+      10.noTrimWrap = || |
+      10.required = 1
+      20 = TEXT
+      20.field = last_name
+    }
+    key.field = stage_name
+    key.ifEmpty = -1
+  }
+  dcnamerev =< lib.t3sports.profile.dcname
+  dcnamerev.-1.5 = TEXT
+  dcnamerev.-1.5.field = last_name
+  dcnamerev.-1.10.noTrimWrap = |, ||
+  dcnamerev.-1.20 = 
   description.parseFunc =< lib.parseFunc_RTE
   summary.parseFunc =< lib.parseFunc_RTE
   birthday = CASE
