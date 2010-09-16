@@ -205,8 +205,8 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 
       $markerLabel = $configurations->getFormatter()->wrap($key, 'leaguetable.controls.'. $confName .'.'.$key.'.');
 
-      $markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'###'] = $this->formatter->wrap($value, 'leaguetable.controls.'. $confName .'.value.');
-      $markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_LINK_URL###'] = $this->formatter->wrap($link->makeUrl(false), 'leaguetable.controls.'. $confName . (($key == $currItem) ? '.current.' : '.normal.') );
+      $markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'###'] = $configurations->getFormatter()->wrap($value, 'leaguetable.controls.'. $confName .'.value.');
+      $markerArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_LINK_URL###'] = $configurations->getFormatter()->wrap($link->makeUrl(false), 'leaguetable.controls.'. $confName . (($key == $currItem) ? '.current.' : '.normal.') );
 
       $linkStr = ($currentNoLink && $key == $currItem) ? $token : $link->makeTag();
       // Ein zusätzliche Wrap um das generierte Element inkl. Link

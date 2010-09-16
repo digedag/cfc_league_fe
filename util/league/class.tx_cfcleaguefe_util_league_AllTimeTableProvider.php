@@ -82,7 +82,7 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 		$this->cfgTableScope = 0; // Normale Tabelle
 		$this->cfgTableType = $this->getConfigurations()->get($this->confId.'tabletype');
 		if($this->getConfigurations()->get($this->confId.'tabletypeSelectionInput')) {
-			$this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters()->offsetGet('tabletype') : $this->cfgTableType;
+			$this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
 		}
 		$this->cfgPointSystem = $this->getConfigurations()->get($this->confId.'pointSystem');
 		if($this->getConfigurations()->get($this->confId.'pointSystemSelectionInput')) {
