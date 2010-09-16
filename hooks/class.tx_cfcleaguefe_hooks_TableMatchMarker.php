@@ -25,6 +25,8 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 
 
 
@@ -105,24 +107,27 @@ class tx_cfcleaguefe_hooks_TableMatchMarker {
 		$match = $this->getMatch($params);
 		if(!is_object($match)) return false; // The call is not for us
 		$competition = $match->getCompetition();
-		if(!$competition->isTypeLeague()) return;
-
-		$formatter = $params['formatter'];
-		$configurations = $formatter->getConfigurations();
-		$confId = $params['confid'].'leaguetable.';
-		$table = '#####<!-- Template not found -->';
-		tx_rnbase::load('tx_rnbase_util_Files');
-		$tableTemplate = tx_rnbase_util_Files::getFileResource($configurations->get($confId.'template'),
-				array('subpart'=>$configurations->get($confId.'subpartName')));
-		if($tableTemplate) {
-			$tableData = $this->getTableData($formatter->getConfigurations(), $confId, $competition, $match);
-			$writer = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTableWriter');
-			$table = $writer->writeLeagueTable($tableTemplate, $tableData, $competition->getTableMarks(), $configurations, $confId);
+		if(!$competition->isTypeLeague()) {
+			// remove marker
+			$markerArray['###'.$marker.'_LEAGUETABLE###'] = $table;
+		}
+		else {
+			$formatter = $params['formatter'];
+			$configurations = $formatter->getConfigurations();
+			$confId = $params['confid'].'leaguetable.';
+			$table = '#####<!-- Template not found -->';
+			tx_rnbase::load('tx_rnbase_util_Files');
+			$tableTemplate = tx_rnbase_util_Files::getFileResource($configurations->get($confId.'template'),
+					array('subpart'=>$configurations->get($confId.'subpartName')));
+			if($tableTemplate) {
+				$tableData = $this->getTableData($formatter->getConfigurations(), $confId, $competition, $match);
+				$writer = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTableWriter');
+				$table = $writer->writeLeagueTable($tableTemplate, $tableData, $competition->getTableMarks(), $configurations, $confId);
+			}
 		}
 
-
 		$markerArray['###'.$marker.'_LEAGUETABLE###'] = $table;
-		$params['template'] = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 //		t3lib_div::debug($tableData, 'tx_cfcleaguefe_hooks_TableMatchMarkers :: addLeagueTable'); // TODO: remove me
 	}
 	private function getTableData($configurations, $confId, $competition, $match) {
