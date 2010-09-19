@@ -207,11 +207,11 @@
               <config>
                 <type>select</type>
                 <foreign_table>tx_cfcleague_club</foreign_table>
-                <foreign_table_where>ORDER BY name</foreign_table_where>
+                <foreign_table_where>ORDER BY city,name</foreign_table_where>
                 <multiple>0</multiple>
                 <maxitems>20</maxitems>
                 <autoSizeMax>30</autoSizeMax>
-                <size>5</size>
+                <size>15</size>
               </config>
             </TCEforms>
           </clubSelection>
