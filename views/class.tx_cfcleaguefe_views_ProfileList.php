@@ -43,14 +43,7 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 	 */
 	function createOutput($template, &$viewData, &$configurations, &$formatter) {
 		$markerArray = array(); // Eventuell später für allgemeine Daten oder Labels
-
-		$pagerData = $viewData->offsetGet('pagerData');
-		$charPointer = $viewData->offsetGet('charpointer');
-		$subpartArray['###CHARBROWSER###'] = $this->_createPager(
-													tx_rnbase_util_Templates::getSubpart($template,'###CHARBROWSER###'),
-													$markerArray,
-													$pagerData,
-													$charPointer, $configurations, $this->getController()->getConfId().'profile.charbrowser.');
+		$subpartArray = array();
 
 		$listCnt =& $viewData->offsetGet('listsize');
 		$profiles =& $viewData->offsetGet('profiles');
@@ -66,44 +59,9 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base {
 		return $out ;
 	}
 
-
-	/**
-	 * Liefert den Pagerstring
-	 * TODO: Hier müssen noch Formatierungen eingebaut werden!
-	 * @param tx_rnbase_configurations $configurations
-	 */
-	function _createPager($template, $markerArray, $pagerData, $curr_pointer, $configurations, $confId) {
-    $out = array();
-		$link = $configurations->createLink(); // Link auf die eigene Seite
-		$link->initByTS($configurations, $confId.'link.', array());
-//		$link->destination($GLOBALS['TSFE']->id); // Das Ziel der Seite vorbereiten
-   	$token = md5(microtime());
-    $link->label($token);
-    $emptyArr = array();
-		$pagerItems = $pagerData['list'];
-		if(!is_array($pagerItems) || !count($pagerItems)) return '';
-		
-		while(list($pointer, $size) = each($pagerItems)) {
-			$myMarkerArray = $markerArray;
-			$myMarkerArray['###PB_ITEM###'] = $pointer;
-			$myMarkerArray['###PB_ITEM_SIZE###'] = $size;
-
-			if(strcmp($pointer, $curr_pointer)) {
-				$link->parameters(array('charpointer' => $pointer));
-				$wrappedSubpartArray['###PB_ITEM_LINK###'] = explode($token, $link->makeTag());
-			}
-			else
-				$wrappedSubpartArray['###PB_ITEM_LINK###'] = $emptyArr;
-			$out[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $myMarkerArray, $emptyArray, $wrappedSubpartArray);
-		}
-
-		return implode($configurations->get('profilelist.charbrowser.implode'),$out);
-  }
-
 	function getMainSubpart(&$viewData) {
 		return '###PROFILE_LIST###';
 	}
-  
 }
 
 

@@ -45,13 +45,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 						'clublist.club.', 'CLUB', $formatter);
 						
 		$markerArray = array();
-		$pagerData = $viewData->offsetGet('pagerData');
-		$charPointer = $viewData->offsetGet('charpointer');
-		$subpartArray['###CHARBROWSER###'] = $this->_createPager(
-										tx_rnbase_util_Templates::getSubpart($template,'###CHARBROWSER###'),
-										$markerArray,
-										$pagerData,
-										$charPointer, $configurations);
+		$subpartArray = array();
 
 		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'CLUBMAP'))
 			$markerArray['###CLUBMAP###'] = $this->getMap($items, $configurations, $this->getController()->getConfId().'map.', 'CLUB');
@@ -122,35 +116,6 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 			$icon->setAnchorPoint($width/2,$height/2);
 			$marker->setIcon($icon);
 		}
-	}
-	/**
-	 * Liefert den Pagerstring
-	 */
-	function _createPager($template, $markerArray, &$pagerData, $curr_pointer, &$configurations) {
-		$out = array();
-		$link = $configurations->createLink(); // Link auf die eigene Seite
-		$link->destination($GLOBALS['TSFE']->id); // Das Ziel der Seite vorbereiten
-		$token = md5(microtime());
-		$link->label($token);
-		$emptyArr = array();
-		$pagerItems = $pagerData['list'];
-		if(!is_array($pagerItems) || !count($pagerItems)) return '';
-		
-		while(list($pointer, $size) = each($pagerItems)) {
-			$myMarkerArray = $markerArray;
-			$myMarkerArray['###PB_ITEM###'] = $pointer;
-			$myMarkerArray['###PB_ITEM_SIZE###'] = $size;
-
-			if(strcmp($pointer, $curr_pointer)) {
-				$link->parameters(array('charpointer' => $pointer));
-				$wrappedSubpartArray['###PB_ITEM_LINK###'] = explode($token, $link->makeTag());
-			}
-			else
-				$wrappedSubpartArray['###PB_ITEM_LINK###'] = $emptyArr;
-			$out[] = $configurations->getCObj()->substituteMarkerArrayCached($template, $myMarkerArray, $emptyArray, $wrappedSubpartArray);
-		}
-
-		return implode($configurations->get('listorganisations.org.charbrowser.implode'),$out);
 	}
 
 	/**

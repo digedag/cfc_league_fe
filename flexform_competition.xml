@@ -721,6 +721,14 @@
               </config>
             </TCEforms>
           </stadiumlist.map.showBasePoint>
+          <stadiumlist.stadium.charbrowser>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_charbrowser</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </stadiumlist.stadium.charbrowser>
 
           <stadiumlistTemplate>
             <TCEforms>
