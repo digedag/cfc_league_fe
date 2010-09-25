@@ -24,6 +24,8 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich
@@ -77,8 +79,8 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 //		// Jetzt die Bilder einbinden
 //		$subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
 
-		$template = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_afterSubst', array('item' => &$profile, 'template'=>&$template), $this);
+		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_afterSubst', array('item' => &$profile, 'template'=>&$template, 'confId'=>$confId, 'marker'=>$marker, 'conf' => $formatter->getConfigurations()), $this);
 		return $template;
 	}
 	private function prepareRecord($item) {
