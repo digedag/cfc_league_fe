@@ -77,6 +77,7 @@
               <config>
                 <type>select</type>
                 <foreign_table>tx_cfcleague_saison</foreign_table>
+                <foreign_table_where>ORDER BY tx_cfcleague_saison.sorting</foreign_table_where>
                 <multiple>0</multiple>
                 <maxitems>200</maxitems>
                 <size>10</size>
