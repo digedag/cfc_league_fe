@@ -2,10 +2,11 @@
 
 Änderungen
 ----------
-v0.7.7 (??.09.2010)
+v0.7.7 (26.09.2010)
  * Character browser in stadium list
  * Profile list: TS-path for character browser changed to profilelist.profile.charbrowser
  * Profile list: HTML-part for charbrowser must be within subpart ###PROFILES###
+ * It is possible to show player stats in ProfileView
 
 v0.7.6 (16.09.2010)
  * Two new markers for profiles: ###PROFILE_DBNAME### and ###PROFILE_DBNAMEREV### with support for stage name
