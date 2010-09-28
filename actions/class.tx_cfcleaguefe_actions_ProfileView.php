@@ -45,7 +45,7 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC {
 
 		$fields = array();
 		$options = array();
-		$this->initSearch($fields, $options, $parameters, $configurations, $firstChar);
+		$this->initSearch($fields, $options, $parameters, $configurations);
 
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
 		$profiles = $service->search($fields, $options);
@@ -54,10 +54,11 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC {
 			return 'No profile found!';
 
 		$viewData->offsetSet('profile', $profile);
+		self::$exclude[] = $profile->uid;
 		return $out;
 	}
 
-	protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar) {
+	protected function initSearch(&$fields, &$options, $parameters, $configurations) {
 		// ggf. die Konfiguration aus der TS-Config lesen
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profileview.fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profileview.options.');
@@ -78,12 +79,13 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC {
 		}
 	}
 
+	public function getConfId() {return 'profileview.';}
 	function getTemplateName() {return 'profile';}
 	function getViewClassName() { return 'tx_cfcleaguefe_views_ProfileView'; }
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_ProfileView.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_ProfileView.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_ProfileView.php']);
 }
 
 ?>

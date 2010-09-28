@@ -102,7 +102,12 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 
 //		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
 		if($profile->hasReport()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showprofile', $marker, array('profileId' => $profile->uid), $template);
+			$params = array('profileId' => $profile->uid);
+			if(is_object($this->options['team'])) {
+				// Transfer current team to profile view
+				$params['team'] = $this->options['team']->uid;
+			}
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showprofile', $marker, $params, $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper('showprofile').'LINK';

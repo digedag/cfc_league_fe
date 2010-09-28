@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v0.7.8 (??.09.2010)
+ * It is possible to show team notes in profile view. Link is build in team view.
+
 v0.7.7 (26.09.2010)
  * Character browser in stadium list
  * Profile list: TS-path for character browser changed to profilelist.profile.charbrowser

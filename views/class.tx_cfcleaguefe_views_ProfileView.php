@@ -41,16 +41,26 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 
 		$profile =& $viewData->offsetGet('profile');
 		if(is_object($profile))
-			$out = $this->_createView($template, $profile, $formatter);
+			$out = $this->_createView($template, $profile, $configurations);
 		else
 			$out = 'Sorry, profile not found...';
 		return $out;
 	}
 
-	function _createView($template, &$profile, &$formatter) {
+	function _createView($template, $profile, $configurations) {
 		$out = '';
-		$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
-		$out .= $profileMarker->parseTemplate($template, $profile, $formatter, 'profileview.profile.');
+		$markerOptions = array();
+		$teamId = $configurations->getParameters()->getInt('team');
+		if(!$teamId) {
+			// Id per TS suchen
+			$teamId = intval($configurations->get('profileview.staticteam'));
+		}
+		if($teamId) {
+			tx_rnbase::load('tx_cfcleaguefe_models_team');
+			$markerOptions['team'] = tx_cfcleaguefe_models_team::getInstance($teamId);
+		}
+		$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker', $markerOptions);
+		$out .= $profileMarker->parseTemplate($template, $profile, $configurations->getFormatter(), 'profileview.profile.');
 		return $out;
 	}
 
@@ -58,15 +68,10 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 	function getMainSubpart(&$viewData) {
 		return '###PROFILE_VIEW###';
 	}
-  
-//t3lib_div::debug($damPics['files'][603] , 'view_teamview');
-//t3lib_div::debug($media, 'view_teamview');
-
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php'])
-{
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php']);
 }
 ?>

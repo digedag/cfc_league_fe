@@ -34,7 +34,7 @@ class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base {
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
     $team =& $viewData->offsetGet('team');
     if(is_object($team))
-      $out = $this->_createView($template, $team, $cObj, $configurations);
+      $out = $this->_createView($template, $team, $configurations);
     else
       $out = 'Sorry, no team found...';
     return $out;
@@ -42,11 +42,11 @@ class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base {
   function getMainSubpart() {return '###TEAM_VIEW###';}
 	
 
-	function _createView($template, &$team, &$cObj, &$configurations) {
+	function _createView($template, $team, $configurations) {
 		$out = '';
 
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-		$out .= $teamMarker->parseTemplate($template, $team, $this->formatter, 'teamview.team.', 'TEAM');
+		$out .= $teamMarker->parseTemplate($template, $team, $configurations->getFormatter(), 'teamview.team.', 'TEAM');
 
 		return $out;
 	}
