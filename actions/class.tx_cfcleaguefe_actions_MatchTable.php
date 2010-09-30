@@ -49,11 +49,13 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 	function handleRequest(&$parameters,&$configurations, &$viewdata) {
 		// Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
 		// ggf. die Konfiguration aus der TS-Config lesen
+		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
 		$fields = array();
 		$options = array();
-
+		
 //  	$options['debug'] = 1;
-		$this->initSearch($fields, $options, $parameters, $configurations);
+		$filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
+		//$this->initSearch($fields, $options, $parameters, $configurations);
 		$listSize = 0;
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		// Soll ein PageBrowser verwendet werden
@@ -69,7 +71,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		$viewdata->offsetSet('provider', $prov);
 
 		// View
-		$this->viewType = $configurations->get('matchtable.viewType');
+		$this->viewType = $configurations->get($this->getConfId().'viewType');
 		return '';
 	}
 

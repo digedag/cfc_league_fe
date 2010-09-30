@@ -639,6 +639,7 @@ plugin.tx_cfcleaguefe_competition {
   matchtable {
     # Ausgabe mit HTML-Template
     viewType = HTML
+    filter = tx_cfcleaguefe_filter_Match
     # With fields it is possible to defined additional query options
     # select what matches you want to show
     fields {
