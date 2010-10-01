@@ -33,6 +33,8 @@ tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_filter_Match extends tx_rnbase_filter_BaseFilter {
+	private $data;
+	private static $profileData = array('profile','player','referee');
 	/**
 	 * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen
 	 *
@@ -68,16 +70,41 @@ class tx_cfcleaguefe_filter_Match extends tx_rnbase_filter_BaseFilter {
 		
 		$matchtable->setTimeRange($configurations->get($confId.'timeRangePast'),$configurations->get($confId.'timeRangeFuture'));
 		if($configurations->get($confId.'acceptRefereeIdFromRequest')) {
-			$matchtable->setReferees($parameters->offsetGet('refereeId'));
+			$ids = $parameters->getInt('refereeId');
+			if($ids) {
+				$matchtable->setReferees($ids);
+				$this->addFilterData('referee', $ids);
+			}
 		}
-
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','filterMatch_setfields', 
 			array('matchtable' => &$matchtable, 'fields'=>&$fields, 'options'=>&$options, 'configurations'=>$configurations, 'confid'=>$confId), 
 			$this);
-
 		$matchtable->getFields($fields, $options);
 	}
 
+	function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER') {
+		if(!is_array($this->data) || count($this->data) == 0) return $template;
+
+		$subpartArray['###FILTERITEMS###'] = '';
+		$subpart = tx_rnbase_util_Templates::getSubpart($template, '###FILTERITEMS###');
+		$profileKeys = array_flip(self::$profileData);
+		tx_rnbase::load('tx_cfcleague_models_Profile');
+
+		foreach($this->data As $key => $filterData) {
+			if(array_key_exists($key, $profileKeys)) {
+				// Person anzeigen
+				$profile = tx_cfcleague_models_Profile::getInstance($filterData);
+				$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
+				$subpartArray['###FILTERITEMS###'] .= $profileMarker->parseTemplate($subpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
+			}
+		}
+		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+		return $template;
+	}
+
+	public function addFilterData($type, $value) {
+		$this->data[$type] = $value;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/filter/class.tx_cfcleaguefe_filter_Match.php']) {

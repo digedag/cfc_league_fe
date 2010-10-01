@@ -662,6 +662,10 @@ plugin.tx_cfcleaguefe_competition {
     acceptRefereeIdFromRequest = 1
     match =< lib.t3sports.match
     match {
+      filter {
+        player =< lib.t3sports.profile
+        referee =< lib.t3sports.profile
+      }
       pagebrowser =< lib.t3sports.pagebrowser
       roll.value = 1
       stadium.ifEmpty = Ort noch unbekannt

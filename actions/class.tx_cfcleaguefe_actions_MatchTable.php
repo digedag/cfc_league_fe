@@ -49,7 +49,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 	function handleRequest(&$parameters,&$configurations, &$viewdata) {
 		// Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
 		// ggf. die Konfiguration aus der TS-Config lesen
-		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
+		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewdata, $this->getConfId());
 		$fields = array();
 		$options = array();
 		
