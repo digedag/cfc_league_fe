@@ -108,6 +108,11 @@ plugin.tx_cfcleaguefe_report {
   # cat=T3sports (misc)/maxH_profilePicture; type=int+;label=Maximum heigth of profile images
   maxH_profilePicture = 300
 
+  # cat=T3sports (misc)/maxW_profilePicture; type=int+;label=Maximum width of first profile picture in details view
+  maxW_firstProfilePicture = 300
+  # cat=T3sports (misc)/maxH_profilePicture; type=int+;label=Maximum heigth of first profile picture in details view
+  maxH_firstProfilePicture = 200
+
   # cat=T3sports (misc)/maxW_profileThumb; type=int+;label=Maximum width of profile thumbnails
   maxW_profileThumb = 100
   # cat=T3sports (misc)/maxH_profileThumb; type=int+;label=Maximum heigth of profile thumbnails
@@ -117,6 +122,11 @@ plugin.tx_cfcleaguefe_report {
   maxW_teamPicture = 500
   # cat=T3sports (misc)/maxH_teamPicture; type=int+;label=Maximum heigth of team images
   maxH_teamPicture = 300
+
+  # cat=T3sports (misc)/maxW_teamPicture; type=int+;label=Maximum width of first team picture in details view
+  maxW_firstTeamPicture = 300
+  # cat=T3sports (misc)/maxH_teamPicture; type=int+;label=Maximum heigth of first team picture in details view
+  maxH_firstTeamPicture = 200
 
   # cat=T3sports (misc)/maxW_teamThumb; type=int+;label=Maximum width of team thumbnails
   maxW_teamThumb = 100

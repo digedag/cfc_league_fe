@@ -458,10 +458,6 @@ lib.t3sports.team {
       description.br = 1
       creator.wrap = Foto:&nbsp; |
       creator.ifEmpty = -
-      thumbnail {
-        file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
-        file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
-      }
     }
   }
   # Formatierung der Spieler-, Trainer-, Betreuerdatensätze
@@ -1154,17 +1150,10 @@ plugin.tx_cfcleaguefe_report {
   }
   profileview {
     profile =< lib.t3sports.profile
-    profile.firstImage {
-      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
-      file.maxW = 150
-      file.maxH = 200
+    profile.firstpicture.media.thumbnail {
+      file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_firstProfilePicture}
+      file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_firstProfilePicture}
     }
-    profile.images {
-      file.maxW = 100
-      file.maxH = 100
-      imageLinkWrap < tt_content.image.20.1.imageLinkWrap
-    }
-
   }
   clubview {
     club =< lib.t3sports.club
@@ -1185,6 +1174,14 @@ plugin.tx_cfcleaguefe_report {
   # View TeamView
   teamview {
     team =< lib.t3sports.team
+    team {
+      firstpicture.media {
+        thumbnail {
+          file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_firstTeamPicture}
+          file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_firstTeamPicture}
+        }
+      }
+    }
   }
   # View MatchReport
   matchreport {
