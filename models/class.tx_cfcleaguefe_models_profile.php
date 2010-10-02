@@ -255,16 +255,16 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 	 * @param tx_cfcleaguefe_models_team $team
 	 */
 	public function addTeamNotes(&$team) {
-		if(is_object($team)) {
-			// Zunächst alle Daten initialisieren
-			tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
-			$types = tx_cfcleaguefe_models_teamNoteType::getAll();
-			for($i=0, $cnt=count($types); $i < $cnt; $i++) {
-				$type = $types[$i];
-				$this->record['tn'.$type->getMarker()] = '';
-				$this->record['tn'.$type->getMarker().'_type'] = '0';
-			}
+		// Zunächst alle Daten initialisieren
+		tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
+		$types = tx_cfcleaguefe_models_teamNoteType::getAll();
+		for($i=0, $cnt=count($types); $i < $cnt; $i++) {
+			$type = $types[$i];
+			$this->record['tn'.$type->getMarker()] = '';
+			$this->record['tn'.$type->getMarker().'_type'] = '0';
+		}
 
+		if(is_object($team)) {
 			// Mit Team können die TeamNotes geholt werden
 			$notes = $this->getTeamNotes($team);
 			for($i=0, $cnt=count($notes); $i < $cnt; $i++ ) {
