@@ -106,7 +106,7 @@ class tx_cfcleaguefe_actions_TableChart {
 		$this->createChartDataset($xyDataset, $tsArr, $configurations, $league);
 		try {
 			tx_rnbase::load('tx_rnbase_plot_Builder');
-			$chart = tx_rnbase_plot_Builder::getInstance()->make($tsArr);
+			$chart = tx_rnbase_plot_Builder::getInstance()->make($tsArr, false);
 //			require_once(PATH_site.t3lib_extMgm::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
 //			$chart = tx_pbimagegraph_ts::make($tsArr);
 		}
