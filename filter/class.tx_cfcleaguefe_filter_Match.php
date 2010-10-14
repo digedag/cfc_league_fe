@@ -83,19 +83,20 @@ class tx_cfcleaguefe_filter_Match extends tx_rnbase_filter_BaseFilter {
 	}
 
 	function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER') {
-		if(!is_array($this->data) || count($this->data) == 0) return $template;
 
 		$subpartArray['###FILTERITEMS###'] = '';
 		$subpart = tx_rnbase_util_Templates::getSubpart($template, '###FILTERITEMS###');
-		$profileKeys = array_flip(self::$profileData);
-		tx_rnbase::load('tx_cfcleague_models_Profile');
-
-		foreach($this->data As $key => $filterData) {
-			if(array_key_exists($key, $profileKeys)) {
-				// Person anzeigen
-				$profile = tx_cfcleague_models_Profile::getInstance($filterData);
-				$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
-				$subpartArray['###FILTERITEMS###'] .= $profileMarker->parseTemplate($subpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
+		if(is_array($this->data) && count($this->data) > 0) {
+			$profileKeys = array_flip(self::$profileData);
+			tx_rnbase::load('tx_cfcleague_models_Profile');
+	
+			foreach($this->data As $key => $filterData) {
+				if(array_key_exists($key, $profileKeys)) {
+					// Person anzeigen
+					$profile = tx_cfcleague_models_Profile::getInstance($filterData);
+					$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
+					$subpartArray['###FILTERITEMS###'] .= $profileMarker->parseTemplate($subpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
+				}
 			}
 		}
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
