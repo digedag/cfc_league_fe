@@ -131,7 +131,7 @@ class tx_cfcleaguefe_hooks_TableMatchMarker {
 //		t3lib_div::debug($tableData, 'tx_cfcleaguefe_hooks_TableMatchMarkers :: addLeagueTable'); // TODO: remove me
 	}
 	private function getTableData($configurations, $confId, $competition, $match) {
-		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $configurations->getParameters(),$configurations, $competition);
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $configurations->getParameters(),$configurations, $competition, $confId);
 		if(intval($configurations->get($confId.'leaguetable.useRoundFromMatch')))
 			$tableProvider->setCurrentRound($match->getRound());
 
