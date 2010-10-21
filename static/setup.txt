@@ -659,7 +659,9 @@ plugin.tx_cfcleaguefe_competition {
     match =< lib.t3sports.match
     match {
       filter {
+        profile =< lib.t3sports.profile
         player =< lib.t3sports.profile
+        coach =< lib.t3sports.profile
         referee =< lib.t3sports.profile
       }
       pagebrowser =< lib.t3sports.pagebrowser

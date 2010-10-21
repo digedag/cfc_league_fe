@@ -34,7 +34,7 @@ tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
  */
 class tx_cfcleaguefe_filter_Match extends tx_rnbase_filter_BaseFilter {
 	private $data;
-	private static $profileData = array('profile','player','referee');
+	private static $profileData = array('profile','player','coach','referee');
 	/**
 	 * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen
 	 *
@@ -83,21 +83,25 @@ class tx_cfcleaguefe_filter_Match extends tx_rnbase_filter_BaseFilter {
 	}
 
 	function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER') {
-
 		$subpartArray['###FILTERITEMS###'] = '';
 		$subpart = tx_rnbase_util_Templates::getSubpart($template, '###FILTERITEMS###');
 		if(is_array($this->data) && count($this->data) > 0) {
+			// Dafür sorgen, daß überflüssige Subpart verschwinden
+			foreach(self::$profileData As $key) $subpartArray['###'.strtoupper($key).'###'] = '';
 			$profileKeys = array_flip(self::$profileData);
 			tx_rnbase::load('tx_cfcleague_models_Profile');
-	
 			foreach($this->data As $key => $filterData) {
-				if(array_key_exists($key, $profileKeys)) {
-					// Person anzeigen
+				if(array_key_exists($key, $profileKeys) && intval($filterData) > 0) {
+					// Person anzeigen, die anderen Subparts entfernen
+					$profSubpartName = '###'.strtoupper($key).'###';
+					$profileSubpart = tx_rnbase_util_Templates::getSubpart($template, $profSubpartName);
+					
 					$profile = tx_cfcleague_models_Profile::getInstance($filterData);
 					$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
-					$subpartArray['###FILTERITEMS###'] .= $profileMarker->parseTemplate($subpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
+					$subpartArray[$profSubpartName] = $profileMarker->parseTemplate($profileSubpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
 				}
 			}
+			$subpartArray['###FILTERITEMS###'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subpart, $markerArray, $subpartArray);
 		}
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 		return $template;
