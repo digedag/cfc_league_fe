@@ -2,6 +2,11 @@
 
 Änderungen
 ----------
+v0.8.0 (21.10.2010)
+ * MatchTable: Output markers for profile data in filter items changed
+ * Leaguetable in match report: TS config path fixed
+ * ProfileView: Example subparts for player and referee statistics with t3sportstats
+
 v0.7.8 (05.10.2010)
  * It is possible to show team notes in profile view. Link is build in team view.
  * Filter class for matchtable
