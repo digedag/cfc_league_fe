@@ -73,6 +73,13 @@ interface tx_cfcleaguefe_util_league_TableProvider {
 	 */
 	function getPenalties();
 	/**
+	 * Name of compare method.
+	 * Es gibt die normale compareTeams() und die compareTeamsH2H für den Head-to-head modus. In letzterem
+	 * Fall zählt bei Punktgleichheit zuerst der direkte Vergleich gegeneinander.
+	 * @return string name
+	 */
+	function getCompareMethod();
+	/**
 	 * Teams to handle
 	 * @return array[tx_cfcleaguefe_models_team]
 	 */

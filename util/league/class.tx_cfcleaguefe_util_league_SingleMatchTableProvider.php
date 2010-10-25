@@ -32,10 +32,9 @@ class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe
 
 	private $match;
 	
-	function tx_cfcleaguefe_util_league_SingleMatchTableProvider($league, $match) {
-		$this->setLeague($league);
+	function __construct($match, $parameters, $configurations, $league, $confId='') {
+		parent::__construct($parameters, $configurations, $league, $confId);
 		$this->match = $match;
-		$this->init();
 	}
 
 	function getChartClubs(){
@@ -57,13 +56,6 @@ class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe
 	}
 	function getMatches() {
     return $this->getLeague()->getMatches(2, $this->cfgTableScope);
-	}
-
-	protected function init() {
-		// Der TableScope wirkt sich auf die betrachteten Spiele (Hin-Rückrunde) aus
-		$this->cfgTableScope = 0; // Normale Tabelle
-		$this->cfgTableType = 0;
-		$this->cfgPointSystem = $this->getLeague()->record['point_system'];
 	}
 }
 

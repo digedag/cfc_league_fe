@@ -39,7 +39,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	private $matches;
 	private $markClubs = null;
 	
-	function tx_cfcleaguefe_util_league_DefaultTableProvider($parameters, $configurations, $league, $confId='') {
+	function __construct($parameters, $configurations, $league, $confId='') {
 		$this->setLeague($league);
 		$this->setConfigurations($configurations, $confId);
 		$this->setParameters($parameters);
@@ -55,6 +55,9 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	}
 	function getPointsLoose() {
 		return 0;
+	}
+	function getCompareMethod() {
+		return $this->cfgCompareMethod ? $this->cfgCompareMethod : 'compareTeams';
 	}
 	function isCountLoosePoints() {
 		return $this->cfgPointSystem == '1'; // im 2-Punktesystem die Minuspunkte sammeln
@@ -151,6 +154,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 			$this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
 		}
 		$this->cfgLiveTable = intval($this->getConfigurations()->get($this->confId.'showLiveTable'));
+		$this->cfgCompareMethod = $this->getConfigurations()->get(($this->confId ? $this->confId : 'leaguetable.').'compareMethod');
 	}
 
 	/**

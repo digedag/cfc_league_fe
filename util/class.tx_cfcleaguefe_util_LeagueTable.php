@@ -61,7 +61,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			$this->handleMatches($roundMatches);
 			// Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
 			$teamData = $this->_teamData;
-			usort($teamData, array($this, 'compareTeams'));
+			usort($teamData, array($this, $this->getCompareMethod()));
 			// Nun setzen wir die Tabellenstände
 			reset($teamData);
 			foreach($teamData As $position => $team) {
@@ -96,7 +96,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			$this->handleMatches($roundMatches);
 			// Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
 			$teamData = $this->_teamData;
-			usort($teamData, array($this, 'compareTeams'));
+			usort($teamData, array($this, $this->getCompareMethod()));
 			// Nun setzen wir die Tabellenstände
 			reset($teamData);
 			for($i=0; $i < count($teamData); $i++) {
@@ -110,10 +110,15 @@ class tx_cfcleaguefe_util_LeagueTable  {
 				$this->_teamData[$team['teamId']]['position'] = $newPosition;
 			}
 		}
-		usort($this->_teamData, array($this, 'compareTeams'));
+		usort($this->_teamData, array($this, $this->getCompareMethod()));
 		return $this->_teamData;
 	}
 
+	private function getCompareMethod() {
+		$method = $this->getTableProvider()->getCompareMethod();
+		if(!method_exists($this, $method)) throw new Exception('Compare method not available: '.$method);
+		return $method;
+	}
 	/**
 	 * Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
 	 * für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
@@ -158,7 +163,13 @@ class tx_cfcleaguefe_util_LeagueTable  {
       $toto = $match->getToto();
 			tx_rnbase_util_Misc::callHook('cfc_league_fe','leagueTable_handleMatches', 
 				array('match' => &$match, 'teamdata'=>&$this->_teamData), $this);
-      
+
+			// CDe begin */
+			// in ['matches'] werden die Heimspiele einer Mannschaft und das Resultat abgelegt
+			// Zugriff so: $this->_teamData[$heimId]['matches'][$gastId][$resultat]
+			$this->_teamData[$match->getHome()->getUid()]['matches'][$match->getGuest()->getUid()] = $match->getResult();
+			// CDe end */
+
       // Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
       // Daher rufen wir jetzt die passende Methode auf
       switch($this->getTableProvider()->getTableType()) {
@@ -368,6 +379,10 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			$this->_teamData[$teamId]['drawCount'] = 0;
 			$this->_teamData[$teamId]['loseCount'] = 0;
 
+			// CDe begin */
+			$this->_teamData[$teamId]['matches'] = array();
+			// CDe end */
+
 			// Muss das Team hervorgehoben werden?
 			$markClubs = $tableProvider->getMarkClubs();
 			if(count($markClubs)) {
@@ -388,65 +403,6 @@ class tx_cfcleaguefe_util_LeagueTable  {
 	}
 	
 
-	function _getDefaults($configurations, $league) {
-		$defaults['pointsystem'] = $league->record['point_system'];
-		$defaults['pointsystemInput'] = $configurations->get('pointSystemSelectionInput');
-		$defaults['chartclubs'] = $configurations->get('chartClubs');
-		$defaults['markclubs'] = $configurations->get('markClubs');
-		$defaults['tabletype'] = $configurations->get('tabletype');
-		$defaults['tabletypeInput'] = $configurations->get('tabletypeSelectionInput');
-		$defaults['tablescope'] = $configurations->get('tablescope');
-		$defaults['tablescopeInput'] = $configurations->get('tablescopeSelectionInput');
-    $defaults['penalties'] = $league->getPenalties();
-		return $defaults;
-  }
-
-  /**
-   * Initialisiert die Instanz mit den notwendigen Daten
-   * @param tx_rnbase_IParameters $parameters
-   * @param array $defaults
-   */
-	function _initConfig(&$parameters, &$defaults) {
-		// Das Punktesystem kommt aus der Liga, kann aber über einen Parameter verändert werden
-		$this->cfgPointSystem = $defaults['pointsystem'];
-		// Das das Punktesystem geändert werden?
-		if($defaults['pointSystemInput']) {
-			// Prüfen, ob der Parameter im Request liegt
-			if($parameters->offsetGet('pointsystem'))
-				$this->cfgPointSystem = intval($parameters->offsetGet('pointsystem'));
-		}
-
-		$this->cfgChartClubs = t3lib_div::intExplode(',',$defaults['chartclubs']);
-		$this->cfgMarkClubs = t3lib_div::intExplode(',',$defaults['markclubs']);
-		$this->cfgTableType = $defaults['tabletype'];
-//t3lib_div::debug($configurations);
-		// Wird der TableType per SelectBox angeboten?
-		if($defaults['tabletypeInput']) {
-			$this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
-		}
-
-		// Der TableScope wirkt sich auf die betrachteten Spiele aus
-		$this->cfgTableScope = $defaults['tablescope'];
-		if($defaults['tablescopeInput']) {
-			$this->cfgTableScope = $parameters->offsetGet('tablescope') ? $parameters->offsetGet('tablescope') : $this->cfgTableScope;
-		}
-
-		if($this->cfgPointSystem == '0') { // 3-Punkt
-			$this->cfgPointsDraw = 1;
-			$this->cfgPointsWin = 3;
-			$this->cfgPointsLose = 0;
-		}
-		elseif($this->cfgPointSystem == '1') { // 2-Punkt
-			$this->cfgPointsDraw = 1;
-			$this->cfgPointsWin = 2;
-			$this->cfgPointsLose = 0;
-		}
-		else {
-			t3lib_div::debug($this->cfgPointSystem,'Error: Unknown Pointsystem-ID');
-		}
-		// Die Ligastrafen laden
-		$this->penalties = $defaults['penalties'];
-	}
   function setTableProvider(&$tableProvider) {
   	$this->tableProvider = $tableProvider;
   }
@@ -462,7 +418,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 	/**
 	 * Funktion zur Sortierung der Tabellenzeilen
 	 */
-	function compareTeams($t1, $t2) {
+	private function compareTeams($t1, $t2) {
 		// Zwangsabstieg prüfen
 		if($t1['last_place']) return 1;
 		if($t2['last_place']) return -1;
@@ -487,6 +443,71 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		}
 		return $t1['points'] > $t2['points'] ? -1 : 1;
 	}
+
+	/**
+	 * Funktion zur Sortierung der Tabellenzeilen nach dem Head-to-head modus.
+	 * Bei Punktgleichstand zählt hier zuerst der direkte Vergleich
+	 */
+	private function compareTeamsH2H($t1, $t2) {
+/* CDe begin */
+		$isH2HComparison = true; // = "is Head-to-head-comparison"
+
+		// Zwangsabstieg prüfen
+		if($t1['last_place']) return 1;
+		if($t2['last_place']) return -1;
+	
+		if($t1['points'] == $t2['points']) {
+			// Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
+			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
+			if($t1['points2'] == $t2['points2']) {
+				// direkter Vergleich gilt vor Tordifferenz / wird ignoriert, falls !$isH2HComparison
+				$t1vst2 = preg_split('[ : ]', $this->_teamData[$t1['teamId']]['matches'][$t2['teamId']]);
+				$t2vst1 = preg_split('[ : ]', $this->_teamData[$t2['teamId']]['matches'][$t1['teamId']]);
+				
+				$t1H2HPoints = 0;
+				$t2H2HPoints = 0;	
+				if (count($t1vst2) > 0 && $t1vst2[0] > $t1vst2[1]) {
+					$t1H2HPoints += 1;
+				} elseif (count($t1vst2) > 0 && $t1vst2[0] < $t1vst2[1]) {
+					$t2H2HPoints += 1;
+				}
+				if (count($t2vst1) > 0 && $t2vst1[0] > $t2vst1[1]) {
+					$t2H2HPoints += 1;
+				} elseif (count($t2vst1) > 0 && $t2vst1[0] < $t2vst1[1]) {
+					$t1H2HPoints += 1;
+				}
+
+				if ($t1H2HPoints == $t2H2HPoints || !$isH2HComparison) {
+					// dann eben zuerst die Tordifferenz der 2 Spiele prüfen (Hin- und Rückspiel)
+					$t1H2HDiff = 0 + $t1vst2[0] + $t2vst1[1] - $t1vst2[1] - $t2vst1[0];
+					$t2H2HDiff = 0 + $t1vst2[1] + $t2vst1[0] - $t1vst2[0] - $t2vst1[1];
+					if($t1H2HDiff == $t2H2HDiff || !$isH2HComparison) {
+						// jetzt prüfen, wer mehr Auswärtstore geschossen hat
+						if ($t1vst2[1] == $t2vst1[1] || !$isH2HComparison) {
+							// jetzt die allgemeine Tordifferenz prüfen
+							$t1diff = $t1['goals1'] - $t1['goals2'];
+							$t2diff = $t2['goals1'] - $t2['goals2'];
+							if($t1diff == $t2diff) {
+								// jetzt zählen die mehr geschossenen Tore
+								if($t1['goals1'] == $t2['goals1'])
+									return 0; // Punkt und Torgleich
+								return $t1['goals1'] > $t2['goals1'] ? -1 : 1;
+							}
+							return $t1diff > $t2diff ? -1 : 1;
+						}
+						return $t2vst1[1] > $t1vst2[1] ? -1 : 1;
+					}
+					return $t1H2HDiff > $t2H2HDiff ? -1 : 1;
+				}
+				return $t1H2HPoints > $t2H2HPoints ? -1 : 1;
+			}
+			// Bei den Minuspunkten ist weniger mehr
+			return $t1['points2'] < $t2['points2'] ? -1 : 1;
+		}
+		return $t1['points'] > $t2['points'] ? -1 : 1;
+/* CDe end */
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_LeagueTable.php']) {

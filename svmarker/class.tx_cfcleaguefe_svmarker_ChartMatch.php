@@ -34,11 +34,12 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 
 	function addChart($params, $parent) {
 		$marker = $params['marker'];
+		$confId = $params['confid'];
 		$template = $params['template'];
 		if(!tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
 			!tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) return;
 		$formatter = $params['formatter'];
-		$chart = $this->getMarkerValue($params, $formatter);
+		$chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
 		$markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
 		$markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
 		$params['template'] = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -48,14 +49,17 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 	 *
 	 * @param array $params
 	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId matchreport.match.
 	 */
-	function getMarkerValue($params, $formatter) {
+	function getMarkerValue($params, $formatter, $confId) {
 		if(!isset($params['match'])) return false;
 		$match = $params['match'];
 		$competition = $match->getCompetition();
 		if(!$competition->isTypeLeague()) return '';
 
-		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_SingleMatchTableProvider', $competition, $match);
+		// TODO: die confid sollte angepaßt werden
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_SingleMatchTableProvider', 
+			$match, $formatter->getConfigurations()->getParameters(), $formatter->getConfigurations(), $competition, 'matchreport.svChartMatch.table.');
 
 		$leagueTable = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTable');
 		$xyDataset = $leagueTable->generateChartData($tableProvider);
