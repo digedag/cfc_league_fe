@@ -39,21 +39,36 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 
 	function __construct($rowOrUid) {
 		parent::__construct($rowOrUid);
-		$this->_init();
+		$this->initResult();
 	}
 	function getTableName(){return 'tx_cfcleague_games';}
 
 	/**
-	 * Notwendige Initialisierungen für den Spieldatensatz
+	 * Notwendige Initialisierung für das Ergebnis des Spieldatensatzes
 	 *
 	 */
-	private function _init() {
+	public function initResult() {
+		if($this->resultInited) return;
+
 		// Um das Endergebnis zu ermitteln, muss bekannt sein, wieviele Spielabschnitte
 		// es gibt. Dies steht im Wettbewerb
-		$comp = &tx_cfcleaguefe_models_competition::getInstance($this->record['competition']);
+		$comp = $this->getCompetition();
 		$this->record['matchparts'] = $comp->getMatchParts();
-		$goalsHome = $this->record['goals_home_'.$comp->getMatchParts()];
-		$goalsGuest = $this->record['goals_guest_'.$comp->getMatchParts()];
+		if($comp->isAddPartResults())
+			$this->initResultAdded($comp, $comp->getMatchParts());
+		else
+			$this->initResultSimple($comp, $comp->getMatchParts());
+		$this->resultInited = true;
+	}
+
+	/**
+	 * Init result and expect the endresult in last match part.
+	 * @param tx_cfcleague_models_Competition $comp
+	 * @param int $matchParts
+	 */
+	private function initResultSimple($comp, $matchParts) {
+		$goalsHome = $this->record['goals_home_'.$matchParts];
+		$goalsGuest = $this->record['goals_guest_'.$matchParts];
 		// Gab es Verländerung oder Elfmeterschiessen
 		if($this->isPenalty()) {
 			$goalsHome = $this->record['goals_home_ap'];
@@ -66,6 +81,35 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 		$this->record['goals_home'] = $goalsHome;
 		$this->record['goals_guest'] = $goalsGuest;
 	}
+	/**
+	 * Init result and add all matchpart results.
+	 * @param tx_cfcleague_models_Competition $comp
+	 * @param int $matchParts
+	 */
+	private function initResultAdded($comp, $matchParts) {
+		$goalsHome = 0;
+		$goalsGuest = 0;
+
+		// Teilergebnisse holen
+		$matchParts = $matchParts > 0 ? $matchParts : 1;
+		for($i=1; $i<=$matchParts; $i++) {
+			$goalsHome += $this->record['goals_home_'.$i];
+			$goalsGuest += $this->record['goals_guest_'.$i];
+		}
+		// Gab es Verländerung oder Elfmeterschiessen
+		if($this->isPenalty()) {
+			$goalsHome += $this->record['goals_home_ap'];
+			$goalsGuest += $this->record['goals_guest_ap'];
+		}
+		elseif($this->isExtraTime()) {
+			$goalsHome += $this->record['goals_home_et'];
+			$goalsGuest += $this->record['goals_guest_et'];
+		}
+		$this->record['goals_home'] = $goalsHome;
+		$this->record['goals_guest'] = $goalsGuest;
+	}
+
+
 	public function getGoalsHome($matchPart = '') {
 		$ret = $this->record['goals_home'];
 		if(strlen($matchPart))
@@ -227,16 +271,6 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 			$this->_matchNoteTypes[intval($this->_matchNotes[$i]->record['type'])][] = $this->_matchNotes[$i];
 		}
 	}
-
-  /**
-   * Returns the competition
-   *
-   * @return tx_cfcleaguefe_models_competition
-   */
-  function getCompetition() {
-    return tx_cfcleaguefe_models_competition::getInstance($this->record['competition']);
-  }
-  
 
   /**
    * Liefert das Heim-Team als Objekt
@@ -549,6 +583,22 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 	 */
 	function getRound() {
 		return intval($this->record['round']);
+	}
+
+	/**
+	 * Returns the competition
+ 	 *
+	 * @return tx_cfcleague_models_Competition
+	 */
+	public function getCompetition() {
+		if(!$this->competition) {
+			tx_rnbase::load('tx_cfcleague_models_Competition');
+			$this->competition = tx_cfcleague_models_Competition::getInstance($this->record['competition']);
+		}
+		return $this->competition;
+	}
+	public function setCompetition($competition) {
+		$this->competition = $competition;
 	}
 
 
