@@ -424,7 +424,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		if($t2['last_place']) return -1;
 	
 		if($t1['points'] == $t2['points']) {
-			// Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
+			// Im 2-Punkte-Modus sind die Minuspunkte ausschlaggebend
 			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
 			if($t1['points2'] == $t2['points2']) {
 				// Jetzt die Tordifferenz prüfen
@@ -432,8 +432,13 @@ class tx_cfcleaguefe_util_LeagueTable  {
 				$t2diff = $t2['goals1'] - $t2['goals2'];
 				if($t1diff == $t2diff) {
 					// Jetzt zählen die mehr geschossenen Tore
-					if($t1['goals1'] == $t2['goals1'])
-						return 0; // Punkt und Torgleich
+					if($t1['goals1'] == $t2['goals1']) {
+						// #49: Und jetzt noch die Anzahl Spiele werten
+						if($t1['matchCount'] == $t2['matchCount']) {
+							return 0; // Punkt und Torgleich
+						}
+						return $t1['matchCount'] > $t2['matchCount'];
+					}
 					return $t1['goals1'] > $t2['goals1'] ? -1 : 1;
 				}
 				return $t1diff > $t2diff ? -1 : 1;
@@ -489,8 +494,13 @@ class tx_cfcleaguefe_util_LeagueTable  {
 							$t2diff = $t2['goals1'] - $t2['goals2'];
 							if($t1diff == $t2diff) {
 								// jetzt zählen die mehr geschossenen Tore
-								if($t1['goals1'] == $t2['goals1'])
-									return 0; // Punkt und Torgleich
+								if($t1['goals1'] == $t2['goals1']) {
+									// #49: Und jetzt noch die Anzahl Spiele werten
+									if($t1['matchCount'] == $t2['matchCount']) {
+										return 0; // Punkt und Torgleich
+									}
+									return $t1['matchCount'] > $t2['matchCount'];
+								}
 								return $t1['goals1'] > $t2['goals1'] ? -1 : 1;
 							}
 							return $t1diff > $t2diff ? -1 : 1;

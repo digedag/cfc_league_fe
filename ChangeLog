@@ -4,6 +4,7 @@
 ----------
 v0.8.1 (??.10.2010)
  * Leaguetable: new head to head mode. That means the direct match decides the position if points are equals. Set this by TS: leaguetable.compareMethod = compareTeamsH2H. Thanks to Christophe Denis!
+ * #49: number of matches is used to calculate league table
 
 v0.8.0 (21.10.2010)
  * MatchTable: Output markers for profile data in filter items changed
