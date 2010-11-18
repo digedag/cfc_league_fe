@@ -2,7 +2,10 @@
 
 Änderungen
 ----------
-v0.8.1 (??.10.2010)
+v0.8.2 (??.10.2010)
+ * 52: Exception in league table alltime fixed.
+
+v0.8.1 (17.10.2010)
  * Leaguetable: new head to head mode. That means the direct match decides the position if points are equals. Set this by TS: leaguetable.compareMethod = compareTeamsH2H. Thanks to Christophe Denis!
  * #49: number of matches is used to calculate league table
  * #48: Template for match status -1 included 

@@ -164,12 +164,6 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			tx_rnbase_util_Misc::callHook('cfc_league_fe','leagueTable_handleMatches', 
 				array('match' => &$match, 'teamdata'=>&$this->_teamData), $this);
 
-			// CDe begin */
-			// in ['matches'] werden die Heimspiele einer Mannschaft und das Resultat abgelegt
-			// Zugriff so: $this->_teamData[$heimId]['matches'][$gastId][$resultat]
-			$this->_teamData[$match->getHome()->getUid()]['matches'][$match->getGuest()->getUid()] = $match->getResult();
-			// CDe end */
-
       // Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
       // Daher rufen wir jetzt die passende Methode auf
       switch($this->getTableProvider()->getTableType()) {
@@ -197,6 +191,8 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		$guestId = $this->getTableProvider()->getTeamId($match->getGuest());
 		$this->addMatchCount($homeId);
 		$this->addMatchCount($guestId);
+		// Für H2H modus das Spielergebnis merken
+		$this->addResult($homeId, $guestId, $match->getResult());
 
 		if($toto == 0) { // Unentschieden
 			$this->addPoints($homeId, $this->getTableProvider()->getPointsDraw());
@@ -234,6 +230,9 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
 	}
 
+	private function addResult($homeId, $guestId, $result) {
+		$this->_teamData[$homeId]['matches'][$guestId] = $result;
+	}
   /**
    * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
    * Heimmannschaft gewertet.
@@ -242,8 +241,10 @@ class tx_cfcleaguefe_util_LeagueTable  {
 	 */
 	function _countHome(&$match, $toto) {
 		$homeId = $this->getTableProvider()->getTeamId($match->getHome());
+		$guestId = $this->getTableProvider()->getTeamId($match->getGuest());
 		// Anzahl Spiele aktualisieren
 		$this->addMatchCount($homeId);
+		$this->addResult($homeId, $guestId, $match->getGuest());
 
 		if($toto == 0) { // Unentschieden
 			$this->addPoints($homeId, $this->getTableProvider()->getPointsDraw());
@@ -268,14 +269,17 @@ class tx_cfcleaguefe_util_LeagueTable  {
 	}
 
 	/**
-	 * Zählt die Punkte für eine normale Tabelle
+	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die 
+   * Gastmannschaft gewertet.
 	 * @param tx_cfcleaguefe_models_match $match
 	 * @param int $toto
 	 */
 	function _countGuest(&$match, $toto) {
+		$homeId = $this->getTableProvider()->getTeamId($match->getHome());
 		$guestId = $this->getTableProvider()->getTeamId($match->getGuest());
 		// Anzahl Spiele aktualisieren
 		$this->addMatchCount($guestId);
+		$this->addResult($homeId, $guestId, $match->getGuest());
 
 		if($toto == 0) { // Unentschieden
 			$this->addPoints($guestId, $this->getTableProvider()->getPointsDraw());
