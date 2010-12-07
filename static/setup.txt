@@ -221,6 +221,7 @@ lib.t3sports.profile {
     offset = 0
     subpartName = ###FIRSTPICTURE###
   }
+  roll.value = 1
 }
 
 lib.t3sports.club {

@@ -132,10 +132,9 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
 		$children = $srv->search($fields, $options);
-
-		if(!array_key_exists('orderby', $options)) // Default sorting
+		if(!empty($children) && !array_key_exists('orderby', $options)) // Default sorting
 			$children = $this->sortProfiles($children, $team->record[$joinCol]);
-
+			
 		$options['team'] = $team;
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($children,
