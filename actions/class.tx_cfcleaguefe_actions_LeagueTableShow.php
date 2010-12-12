@@ -97,7 +97,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für die Auswahl des Punktsystems
 	 */
-	function _handleSBPointSystem($parameters, &$configurations, &$viewData) {
+	private function _handleSBPointSystem($parameters, &$configurations, &$viewData) {
 		global $TCA;
 		if($configurations->get('pointSystemSelectionInput')) {
 			// Die Daten für das Punktsystem kommen aus dem TCA der Tabelle tx_cfcleague_competition
@@ -118,7 +118,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für den Tabellentyp
 	 */
-	function _handleSBTableType($parameters, &$configurations, &$viewData) {
+	private function _handleSBTableType($parameters, &$configurations, &$viewData) {
 		if($configurations->get('tabletypeSelectionInput')) {
 			$flex =& $this->getFlexForm($configurations);
 			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable','tabletype'));
@@ -135,7 +135,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für den Tabellenscope
 	 */
-	function _handleSBTableScope($parameters, &$configurations, &$viewData, $confId='') {
+	private function _handleSBTableScope($parameters, &$configurations, &$viewData, $confId='') {
 		if($configurations->get($confId.'tablescopeSelectionInput')) {
 			$flex =& $this->getFlexForm($configurations);
 			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable','tablescope'));
@@ -149,7 +149,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 		}
 	}
 
-	function &getFlexForm(&$configurations) {
+	private function &getFlexForm(&$configurations) {
 		static $flex;
 		if (!is_array($flex)) {
 			$flex = t3lib_div::getURL(t3lib_extMgm::extPath($configurations->getExtensionKey()) . $configurations->get('flexform'));
@@ -160,11 +160,11 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Liefert die möglichen Werte für ein Attribut aus einem FlexForm-Array
 	 */
-	function getItemsArrayFromFlexForm($flexArr, $sheetName, $valueName) {
+	private function getItemsArrayFromFlexForm($flexArr, $sheetName, $valueName) {
 		return $flexArr['sheets'][$sheetName]['ROOT']['el'][$valueName]['TCEforms']['config']['items'];
 	}
 
-	function translateItems($items) {
+	private function translateItems($items) {
 		global $TSFE;
 
 		$ret = array();
@@ -177,7 +177,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sammelt die Daten für die Erstellung der Tabelle
 	 */
-	function buildTable($parameters,&$configurations, &$league, $roundUid) {
+	private function buildTable($parameters,&$configurations, &$league, $roundUid) {
 		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $parameters,$configurations, $league);
 
 		// Tabelle nur bis bestimmten Spieltag anzeigen

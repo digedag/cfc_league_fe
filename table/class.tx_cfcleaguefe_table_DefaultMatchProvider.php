@@ -24,6 +24,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
+tx_rnbase::load('tx_cfcleaguefe_table_IMatchProvider');
 
 /**
  * Match provider
@@ -189,6 +190,15 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		$this->matches = $matchSrv->search($fields, $options);
 //    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
 		return $this->matches;
+	}
+
+	public function getPenalties() {
+		// Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
+		// für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
+//		if($this->cfgTableType || $this->cfgTableScope) 
+//			return array();
+
+		return $this->getLeague()->getPenalties();
 	}
 }
 

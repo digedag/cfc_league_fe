@@ -57,11 +57,14 @@
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.StadiumList</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_StadiumList</numIndex>
                   </numIndex>
+                  <numIndex index="18" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LeagueTableNew</numIndex>
+                    <numIndex index="1">tx_cfcleaguefe_actions_LeagueTable</numIndex>
+                  </numIndex>
                   <numIndex index="20" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LeagueTableAllTime</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_LeagueTableAllTime</numIndex>
                   </numIndex>
-
                 </items>
                 <multiple>0</multiple>
                 <maxitems>10</maxitems>

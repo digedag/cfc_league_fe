@@ -26,36 +26,33 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
 /**
- * Factory for table classes
+ * Builder class for league tables. 
  */
-class tx_cfcleaguefe_table_Factory {
+class tx_cfcleaguefe_table_Builder {
 
 	/**
 	 * 
 	 * @param tx_cfcleague_util_MatchTable $matchTable
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
-	 * @return tx_cfcleaguefe_table_DefaultMatchProvider
-	 */
-	public static function createMatchProviderByMatchTable($matchTable, $configurations, $confId) {
-		$prov = tx_rnbase::makeInstance('tx_cfcleaguefe_table_DefaultMatchProvider', $configurations, $confId);
-		$prov->setMatchTable($matchTable);
-		return $prov;
-	}
-	/**
-	 * 
-	 * @param string $type
 	 * @return tx_cfcleaguefe_table_ITableType
 	 */
-	public static function createTableType($type) {
-		tx_rnbase::load('tx_rnbase_util_Misc');
-		return tx_rnbase_util_Misc::getService('t3sports_leaguetable', $type);
+	public static function buildByRequest($scopeArr, $configurations, $confId) {
+		$matchTable = tx_cfcleague_util_ServiceRegistry::getMatchService()->getMatchTableBuilder();
+		$matchTable->setScope($scope);
+
+		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
+		$prov = tx_cfcleaguefe_table_Factory::createMatchProviderByMatchTable($matchTable, $configurations, $confId);
+		$table = tx_cfcleaguefe_table_Factory::createTableType('football');
+		$table->setMatchProvider($prov);
+		$result = $table->getTableData();
+		return $table;
 	}
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Factory.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Factory.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Builder.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Builder.php']);
 }
 
 ?>

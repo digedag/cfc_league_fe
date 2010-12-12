@@ -20,6 +20,7 @@
 			<label index="plugin.competition.flexform.action.MatchTable">Match table</label>
 			<label index="plugin.competition.flexform.action.MatchCrossTable">Match table (cross)</label>
 			<label index="plugin.competition.flexform.action.LeagueTable">League table</label>
+			<label index="plugin.competition.flexform.action.LeagueTableNew">League table (new)</label>
 			<label index="plugin.competition.flexform.action.LeagueTableAllTime">All time league table</label>
 			<label index="plugin.competition.flexform.action.TableChart">Tablechart</label>
 			<label index="plugin.competition.flexform.action.LiveTickerList">Live Ticker List</label>

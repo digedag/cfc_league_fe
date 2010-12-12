@@ -24,38 +24,39 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
+require_once(PATH_t3lib.'class.t3lib_svbase.php');
+tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
 
 /**
- * Factory for table classes
+ * Computes league tables for football.
  */
-class tx_cfcleaguefe_table_Factory {
+class tx_cfcleaguefe_table_TableIceHockey extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
 
 	/**
-	 * 
-	 * @param tx_cfcleague_util_MatchTable $matchTable
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 * @return tx_cfcleaguefe_table_DefaultMatchProvider
+	 * Set match provider
+	 * @param tx_cfcleaguefe_table_IMatchProvider $matchProvider
+	 * @return void
 	 */
-	public static function createMatchProviderByMatchTable($matchTable, $configurations, $confId) {
-		$prov = tx_rnbase::makeInstance('tx_cfcleaguefe_table_DefaultMatchProvider', $configurations, $confId);
-		$prov->setMatchTable($matchTable);
-		return $prov;
+	public function setMatchProvider(tx_cfcleaguefe_table_IMatchProvider $matchProvider) {
+		$this->matchProvider = $matchProvider;
 	}
 	/**
-	 * 
-	 * @param string $type
-	 * @return tx_cfcleaguefe_table_ITableType
+	 * Returns the final table data
+	 * @return tx_cfcleaguefe_table_ITableResult
 	 */
-	public static function createTableType($type) {
-		tx_rnbase::load('tx_rnbase_util_Misc');
-		return tx_rnbase_util_Misc::getService('t3sports_leaguetable', $type);
+	public function getTableData() {
+		
 	}
+
+	public function getTableWriter() {
+		
+	}
+	
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Factory.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Factory.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_TableIceHockey.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_TableIceHockey.php']);
 }
 
 ?>
