@@ -52,6 +52,9 @@ class tx_cfcleaguefe_table_TableIceHockey extends t3lib_svbase implements tx_cfc
 		
 	}
 	
+	public function getTCALabel() {
+		return 'Icehockey';
+	}
 }
 
 

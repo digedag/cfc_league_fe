@@ -107,18 +107,32 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		return false;
 	}
 	/**
+	 * @return tx_cfcleague_models_Competition
+	 */
+	public function getBaseCompetition() {
+		return $this->getLeague();
+	}
+	/**
 	 * If table is written for a single league, this league will be returned.
 	 * return tx_cfcleague_models_Competition or false
 	 */
 	private function getLeague() {
 		if($this->league === 0) {
 			$matchTable = $this->getMatchTable();
+
 			$fields = array();
 			$options = array();
 			$matchTable->getFields($fields, $options);
-			$options['what'] = 'MATCH.COMPETITION';
-			// TODO: Abfrage fertigstellen
-			$this->league = false;
+			$options['what'] = 'distinct competition';
+//			$options['debug'] = 1;
+
+			$result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
+			// es wird immer nur der 1. Wettbewerb verwendet
+			$leagueUid = count($result) ? $result[0]['competition'] : false;
+			if(!$leagueUid) throw new Exception('Could not find a valid competition.');
+			$this->league = tx_cfcleague_models_Competition::getInstance($leagueUid);
+			if(!$this->league->isValid())
+				throw new Exception('Competition with uid '.intval($leagueUid). ' is not valid!');
 		}
 		return $this->league;
 	}
@@ -148,6 +162,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		if(is_object($this->matchTable))
 			return $this->matchTable;
 
+		// Todo: Was ist, wenn MatchTable nicht extern gesetzt wurde??
 		$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
 		$matchTable = $matchSrv->getMatchTableBuilder();
 		$matchTable->setStatus($this->getMatchStatus()); //Status der Spiele
@@ -187,7 +202,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 			}
 		}
 //		$options['debug'] = 1;
-		$this->matches = $matchSrv->search($fields, $options);
+		$this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
 //    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
 		return $this->matches;
 	}
@@ -199,6 +214,15 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 //			return array();
 
 		return $this->getLeague()->getPenalties();
+	}
+	/**
+	 * Returns the table type t be used for matches. It should be normally retrieved from
+	 * competitions.
+	 * @return string
+	 */
+	public function getTableType(){
+		// Alle Wettbewerbe laden und den Typ ermitteln
+		return $this->getLeague()->getTableType();
 	}
 }
 

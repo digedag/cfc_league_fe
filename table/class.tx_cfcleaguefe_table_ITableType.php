@@ -34,6 +34,13 @@ interface tx_cfcleaguefe_table_ITableType {
 	 */
 	public function setMatchProvider(tx_cfcleaguefe_table_IMatchProvider $matchProvider);
 	/**
+	 * Set configuration
+	 * @param tx_rnbase_configurations $configuration
+	 * @param string confId
+	 * @return void
+	 */
+	public function setConfigurations($configuration, $confId);
+	/**
 	 * Returns the final table data
 	 * @return tx_cfcleaguefe_table_ITableResult
 	 */

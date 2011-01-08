@@ -28,6 +28,12 @@
  */
 interface tx_cfcleaguefe_table_IMatchProvider {
 	/**
+	 * The base competition. It is normally used to retrieve some basic 
+	 * configuration for table calculation.
+	 * @return tx_cfcleague_models_Competition
+	 */
+	public function getBaseCompetition();
+	/**
 	 * Match penalties to handle
 	 * @return array[tx_cfcleaguefe_models_penalty]
 	 */
@@ -47,6 +53,13 @@ interface tx_cfcleaguefe_table_IMatchProvider {
 	 * @return int
 	 */
 	public function getMaxRounds();
+
+	/**
+	 * Returns the table type to be used for matches. It should be normally retrieved from
+	 * competitions.
+	 * @return string
+	 */
+	public function getTableType();
 
 //	/**
 //	 * Return a unique key for a given team. This is not necessarily the uid of the team. Maybe it is 

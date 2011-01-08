@@ -85,6 +85,8 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC {
 		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
 		$viewData->offsetSet('league', $currCompetition); // Die Liga für den View bereitstellen
 
+		t3lib_div::debug($table->getTableData(), 'class.tx_cfcleaguefe_actions_LeagueTable.php'); // TODO: remove me
+
 //		// Müssen zusätzliche Selectboxen gezeigt werden?
 //		$this->_handleSBTableType($parameters, $configurations, $viewData);
 //		$this->_handleSBPointSystem($parameters, $configurations, $viewData);

@@ -39,13 +39,18 @@ class tx_cfcleaguefe_table_Builder {
 	 */
 	public static function buildByRequest($scopeArr, $configurations, $confId) {
 		$matchTable = tx_cfcleague_util_ServiceRegistry::getMatchService()->getMatchTableBuilder();
-		$matchTable->setScope($scope);
+		$matchTable->setScope($scopeArr);
 
 		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
 		$prov = tx_cfcleaguefe_table_Factory::createMatchProviderByMatchTable($matchTable, $configurations, $confId);
-		$table = tx_cfcleaguefe_table_Factory::createTableType('football');
+		// Der Provider liefert alle realen Daten auf Basis der Daten
+		// Für Sondertabellen können diese Werte später überschrieben werden. Hier folgt
+		// dann die Integration der GUI
+		// Der Provider kennt die Spiele, also könnte er auch die Sportart kennen...
+		$table = tx_cfcleaguefe_table_Factory::createTableType($prov->getTableType());
+
+		$table->setConfigurations($configurations, $confid.'tablecfg.');
 		$table->setMatchProvider($prov);
-		$result = $table->getTableData();
 		return $table;
 	}
 }
