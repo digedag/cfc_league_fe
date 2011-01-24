@@ -6,6 +6,7 @@
 v0.8.2 (??.10.2010)
  * 52: Exception in league table alltime fixed.
  * ROLL-Markers added and configured in TeamView for players
+ * ScopeSelection configured for report plugin
 
 v0.8.1 (17.10.2010)
  * Leaguetable: new head to head mode. That means the direct match decides the position if points are equals. Set this by TS: leaguetable.compareMethod = compareTeamsH2H. Thanks to Christophe Denis!

@@ -1126,10 +1126,8 @@ plugin.tx_cfcleaguefe_report {
   stadiumviewTemplate = {$plugin.tx_cfcleaguefe_report.stadiumviewTemplate}
 
   # Angaben zur ScopeAuswahl
+  scopeSelection =< plugin.tx_cfcleaguefe_competition.scopeSelection
   scopeSelection {
-    # Ausgabe mit HTML-Template
-    viewType = HTML
-    saison.current.noLink = 1
     group.current.noLink = 1
   }
 
