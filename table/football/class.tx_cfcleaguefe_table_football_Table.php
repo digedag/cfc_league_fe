@@ -30,7 +30,7 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
 /**
  * Computes league tables for football.
  */
-class tx_cfcleaguefe_table_TableFootball extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
+class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
 
 	/**
 	 * Set configuration
@@ -396,8 +396,8 @@ class tx_cfcleaguefe_table_TableFootball extends t3lib_svbase implements tx_cfcl
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_TableFootball.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_TableFootball.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_football_Table.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_football_Table.php']);
 }
 
 ?>
