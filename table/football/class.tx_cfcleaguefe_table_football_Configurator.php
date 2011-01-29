@@ -78,6 +78,36 @@ class tx_cfcleaguefe_table_football_Configurator {
 	public function getMarkClubs(){
 		return $this->markClubs ? $this->markClubs : t3lib_div::intExplode(',',$this->getConfValue('markClubs'));
 	}
+	/**
+	 * Returns the table type. This means which matches to use: all, home or away matches only
+	 * @return int 0-normal, 1-home, 2-away
+	 */
+	public function getTableType() {
+		return $this->cfgTableType;
+	}
+	public function getPointsWin() {
+		return $this->cfgPointSystem == '1' ? 2 : 3;
+	}
+	public function getPointsDraw() {
+		return 1;
+	}
+	public function getPointsLoose() {
+		return 0;
+	}
+	/**
+	 * @return tx_cfcleaguefe_table_football_IComparator
+	 */
+	public function getComparator() {
+		$compareClass = $this->cfgComparatorClass ? $this->cfgComparatorClass : 'tx_cfcleaguefe_table_football_Comparator';
+		$comparator = tx_rnbase::makeInstance($compareClass);
+		if(!is_object($comparator))
+			throw new Exception('Could not instanciate comparator: '.$compareClass);
+
+		tx_rnbase::load('tx_cfcleaguefe_table_football_IComparator');
+		if(!($comparator instanceof tx_cfcleaguefe_table_football_IComparator))
+			throw new Exception('Comparator is no instance of tx_cfcleaguefe_table_football_IComparator: '.get_class($comparator));
+		return $comparator;
+	}
 
 	protected function init() {
 		// Der TableScope wirkt sich auf die betrachteten Spiele (Hin-Rückrunde) aus
@@ -98,7 +128,7 @@ class tx_cfcleaguefe_table_football_Configurator {
 			$this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
 		}
 		$this->cfgLiveTable = intval($this->getConfValue('showLiveTable'));
-		$this->cfgCompareMethod = $this->getConfValue('compareMethod');
+		$this->cfgComparatorClass = $this->getConfValue('comparatorClass');
 	}
 }
 
