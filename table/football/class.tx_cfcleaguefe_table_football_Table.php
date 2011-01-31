@@ -32,6 +32,8 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
  */
 class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
 
+	private $_teamData = array();
+
 	/**
 	 * Set configuration
 	 * @param tx_rnbase_configurations $configuration
