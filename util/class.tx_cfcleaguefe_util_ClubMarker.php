@@ -122,7 +122,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($children,
 						false, $template, 'tx_cfcleaguefe_util_TeamMarker',
-						$confId, $markerPrefix, $formatter, $options);
+						$confId, $markerPrefix, $formatter);
 		return $out;
 	}
 
