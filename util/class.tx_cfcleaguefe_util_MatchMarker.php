@@ -25,6 +25,8 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich
@@ -92,8 +94,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$this->pushTT('parse arena');
 		if($this->containsMarker($template, $marker.'_ARENA_'))
 			$template = $this->_addArena($template, $match, $formatter, $confId.'arena.', $marker.'_ARENA');
-		
 		$this->pullTT();
+
+		$template = $this->addTickerLists($template, $match, $formatter, $confId,$marker);
+
 		if($this->fullMode) {
 			$this->pushTT('add media');
 			$this->_addMedia($subpartArray, $markerArray,$match,$formatter, $template, $confId, $marker);
@@ -210,6 +214,63 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		}
 	}
 
+	/**
+	 * Add dynamic defined markers for profiles and matchnotes
+	 *
+	 * @param string $template
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $matchConfId
+	 * @param string $matchMarker
+	 * @return string
+	 */
+	private function addTickerLists($template, $match, $formatter, $matchConfId, $matchMarker) {
+		$configurations = $formatter->getConfigurations();
+		$dynaMarkers = $configurations->getKeyNames($matchConfId.'tickerLists.');
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+
+		for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
+			// Prüfen ob der Marker existiert
+			if(!self::containsMarker($template, $matchMarker .'_'.strtoupper($dynaMarkers[$i])))
+				continue;
+			$confId = $matchConfId.'tickerLists.'.$dynaMarkers[$i] .'.';
+			// Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte 
+			// stehen schon im report bereit
+	    $srv = tx_cfcleague_util_ServiceRegistry::getMatchService();
+			$fields = array();
+	    $fields['MATCHNOTE.GAME'][OP_EQ_INT] = $match->getUid();
+			$options = array();
+			$options['what'] = 'uid';
+			tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
+			tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
+			$children = $srv->searchMatchNotes($fields, $options);
+			// Die gefundenen Notes werden jetzt durch ihre aufbereiteten Dublikate ersetzt
+			$items = array();
+			$tickerHash = $this->getTickerHash($match);
+			for($i=0, $cnt=count($items); $i < $cnt; $i++) {
+				if(array_key_exists($children[$i]->getUid(), $tickerHash))
+				$items[] = $children[$i];
+			}
+			$template = $listBuilder->render($items,
+							false, $template, 'tx_cfcleaguefe_util_MatchNoteMarker',
+							$confId, $markerPrefix, $formatter);
+		}
+		return $template;
+	}
+	/**
+	 * Liefert die Ticker als Hash. Key ist die UID des Datensatzes
+	 * @param tx_cfcleague_models_Match $match
+	 */
+	protected function getTickerHash($match) {
+		if(!is_array($this->tickerHash)) {
+			$this->tickerHash = array();
+      $tickerArr =& tx_cfcleaguefe_util_MatchTicker::getTicker4Match($match);
+			for($i=0, $cnt=count($tickerArr); $i<$cnt; $i++)
+				$this->tickerHash[$tickerArr[$i]->uid] = $tickerArr[$i];
+		}
+		return $this->tickerHash;
+	}
+
   /**
    * Die Anzeige des Spiels kann je nach Status variieren. Daher gibt es dafür verschiedene Template-Subparts.
    * ###RESULT_STATUS_-1###, ###RESULT_STATUS_0###, ###RESULT_STATUS_1###, ###RESULT_STATUS_2### und ###RESULT_STATUS_-10###.
@@ -225,7 +286,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
     $subTemplate = $formatter->cObj->getSubpart($template, '###RESULT_STATUS_'.$match->record['status'].'###');
     if($subTemplate)
       $subpartArray['###RESULT_STATUS_'.$match->record['status'].'###'] = 
-               $formatter->cObj->substituteMarkerArrayCached($subTemplate, 
+               tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, 
                                                $markerArray, $subpartArray, $wrappedSubpartArray);
   }
 
@@ -260,9 +321,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //		$mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
     
 		// Zuerst wieder das Template laden
-		$gPictureTemplate = $formatter->cObj->getSubpart($template,'###'. $baseMarker .'_MEDIAS###');
+		$gPictureTemplate = tx_rnbase_util_Templates::getSubpart($template,'###'. $baseMarker .'_MEDIAS###');
 
-		$pictureTemplate = $formatter->cObj->getSubpart($gPictureTemplate,'###'. $baseMarker .'_MEDIA###');
+		$pictureTemplate = tx_rnbase_util_Templates::getSubpart($gPictureTemplate,'###'. $baseMarker .'_MEDIA###');
 		$markerArray = array();
 		$out = '';
 		$serviceObj = t3lib_div::makeInstanceService('mediaplayer');
@@ -273,12 +334,12 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //			$media = new $mediaClass($filePath);
 			$markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.',$baseMarker.'_MEDIA');
 			$markerArray['###'. $baseMarker.'_MEDIA_PLAYER###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
-			$out .= $formatter->cObj->substituteMarkerArrayCached($pictureTemplate, $markerArray);
+			$out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($pictureTemplate, $markerArray);
 		}
 		// Der String mit den Bilder ersetzt jetzt den Subpart ###MATCH_MEDIAS_2###
 		if(strlen(trim($out)) > 0) {
 			$subpartArray['###'. $baseMarker .'_MEDIA###'] = $out;
-			$out = $formatter->cObj->substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
 		}
 		$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
 	}

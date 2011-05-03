@@ -1228,6 +1228,15 @@ plugin.tx_cfcleaguefe_report {
 	      }
 	    }
 
+      # Tickerlisten verfolgen den selben Zweck wie die dynaMarkers nur mit einer anderen Technik
+      # Die Ausgabe erfolgt hier wie in ganz normalen Listen
+      tickerLists {
+        ticker {
+          filter.fields =
+          filter.options {
+          }
+        }
+      }
       # Mit den DynaMarkern können Listen von Spiel-Ereignissen zusammengestellt werden
       # Der Zugriff im HTML-Template erfolgt nach folgendem Prinzip: 
       # der DynaMarker "scorerHome" hat den Marker ###MATCH_SCORERHOME###
