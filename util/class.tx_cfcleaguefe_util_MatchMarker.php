@@ -231,7 +231,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 
 		for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
 			// Prüfen ob der Marker existiert
-			if(!self::containsMarker($template, $matchMarker .'_'.strtoupper($dynaMarkers[$i])))
+			$markerPrefix = $matchMarker .'_'.strtoupper($dynaMarkers[$i]);
+			if(!self::containsMarker($template, $markerPrefix))
 				continue;
 			$confId = $matchConfId.'tickerLists.'.$dynaMarkers[$i] .'.';
 			// Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte 
@@ -247,10 +248,12 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			// Die gefundenen Notes werden jetzt durch ihre aufbereiteten Dublikate ersetzt
 			$items = array();
 			$tickerHash = $this->getTickerHash($match);
-			for($i=0, $cnt=count($items); $i < $cnt; $i++) {
-				if(array_key_exists($children[$i]->getUid(), $tickerHash))
-				$items[] = $children[$i];
+			for($i=0, $cnt=count($children); $i < $cnt; $i++) {
+				if(array_key_exists($children[$i]['uid'], $tickerHash)) {
+					$items[] = $tickerHash[$children[$i]['uid']];
+				}
 			}
+
 			$template = $listBuilder->render($items,
 							false, $template, 'tx_cfcleaguefe_util_MatchNoteMarker',
 							$confId, $markerPrefix, $formatter);

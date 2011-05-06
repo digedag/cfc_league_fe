@@ -53,10 +53,36 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_BaseMarker {
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$item->getColumnNames());
 //		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
+		if($this->containsMarker($template, $marker.'_PLAYER_'))
+			$template = $this->_addProfile($template, $item->getPlayer(), $formatter, $confId.'player.', $marker.'_PLAYER');
+		if($this->containsMarker($template, $marker.'_PLAYERCHANGEIN_'))
+			$template = $this->_addProfile($template, $item->getPlayerChangeIn(), $formatter, $confId.'playerchangein.', $marker.'_PLAYERCHANGEIN');
+		if($this->containsMarker($template, $marker.'_PLAYERCHANGEOUT_'))
+			$template = $this->_addProfile($template, $item->getPlayerChangeOut(), $formatter, $confId.'playerchangeout.', $marker.'_PLAYERCHANGEOUT');
 
-		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-		return $out;
+		return $template;
+	}
+
+	/**
+	 * Bindet eine Spieler ein
+	 *
+	 * @param string $template
+	 * @param tx_cfcleague_models_MatchNote $item
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 * @param string $markerPrefix
+	 * @return string
+	 */
+	protected function _addProfile($template, $sub, $formatter, $confId, $markerPrefix) {
+		if(!$sub) {
+			// Kein Stadium vorhanden. Leere Instanz anlegen und altname setzen
+			$sub = tx_rnbase_util_BaseMarker::getEmptyInstance('tx_cfcleague_models_Profile');
+		}
+		$marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
+		$template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
+		return $template;
 	}
 
 	protected function prepareRecord($item, $template, $configurations, $confId, $marker) {
