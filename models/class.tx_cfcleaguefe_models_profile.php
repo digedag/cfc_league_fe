@@ -125,7 +125,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 	static function prepareLinks(&$formatter, $confId, &$profile) {
 		$link = $formatter->configurations->createLink();
 		$link->destination($GLOBALS['TSFE']->id);
-		$link->parameters(array('refereeId' => $profile->uid));
+		$link->parameters(array('refereeId' => $profile->uid, 'profileId' => $profile->uid));
 		$cfg = $link->_makeConfig('url');
 		$GLOBALS['TSFE']->register['T3SPORTS_PARAMS_REFEREE_MATCHES'] = $cfg['additionalParams'];
 	}

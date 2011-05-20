@@ -67,7 +67,7 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC {
 		if(intval($configurations->get('profileview.excludeAlreadyDisplayed'))) {
 			// Doppelte Anzeige von Personen vermeiden
 			if(count(self::$exclude)) {
-				$fields['COMPANY.UID'][OP_NOTIN_INT] = implode(',', self::$exclude);
+				$fields['PROFILE.UID'][OP_NOTIN_INT] = implode(',', self::$exclude);
 			}
 		}
 		else {
