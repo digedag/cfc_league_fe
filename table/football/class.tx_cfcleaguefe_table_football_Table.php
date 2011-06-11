@@ -110,7 +110,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	}
 
 	public function getTableWriter() {
-		
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_table_football_TableWriter');
 	}
 	public function getTCALabel() {
 		return 'Football';

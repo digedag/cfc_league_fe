@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2011 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -85,18 +85,19 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC {
 		tx_rnbase::load('tx_cfcleaguefe_table_Builder');
 		$table = tx_cfcleaguefe_table_Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
 
-		$viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
-		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
-		$viewData->offsetSet('league', $currCompetition); // Die Liga für den View bereitstellen
-
-		t3lib_div::debug($table->getTableData(), 'class.tx_cfcleaguefe_actions_LeagueTable.php'); // TODO: remove me
+//		$viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
+//		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
+//		$viewData->offsetSet('league', $currCompetition); // Die Liga für den View bereitstellen
+		$viewData->offsetSet('table', $table); // Die Tabelle für den View bereitstellen
+		
+//		t3lib_div::debug($table->getTableData(), 'class.tx_cfcleaguefe_actions_LeagueTable.php'); // TODO: remove me
 
 //		// Müssen zusätzliche Selectboxen gezeigt werden?
 //		$this->_handleSBTableType($parameters, $configurations, $viewData);
 //		$this->_handleSBPointSystem($parameters, $configurations, $viewData);
 //		$this->_handleSBTableScope($parameters, $configurations, $viewData);
 
-		return 'Fertig';
+		return '';
 	}
 
 

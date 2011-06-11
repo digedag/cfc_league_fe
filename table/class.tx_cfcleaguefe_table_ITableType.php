@@ -46,6 +46,9 @@ interface tx_cfcleaguefe_table_ITableType {
 	 */
 	public function getTableData();
 
+	/**
+	 * @return tx_cfcleaguefe_table_ITableWriter
+	 */
 	public function getTableWriter();
 }
 

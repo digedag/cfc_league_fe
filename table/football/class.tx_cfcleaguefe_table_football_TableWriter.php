@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2011 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,29 +22,33 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
+tx_rnbase::load('tx_cfcleaguefe_table_ITableWriter');
 
 /**
- * Implementors provide access to computed table result.
+ * Computes league tables for football.
  */
-interface tx_cfcleaguefe_table_ITableResult {
+class tx_cfcleaguefe_table_football_TableWriter implements tx_cfcleaguefe_table_ITableWriter {
+
 	/**
 	 * Set table data by round
-	 * @param int $round
-	 * @param array $scoreLine
-	 * @return void
+	 * @param tx_cfcleaguefe_table_ITableType $table
+	 * @param string $template
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * @return string
 	 */
-	public function addScore($round, $scoreLine);
-	/**
-	 * Return table data by round
-	 * @param int $round
-	 * @return array
-	 */
-	public function getScores($round);
+	public function writeTable($table, $template, $configurations, $confId) {
+		t3lib_div::debug($template, 'class.tx_cfcleaguefe_table_football_TableWriter.php'); // TODO: remove me
+
+	}
+
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableResult.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableResult.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_football_TableWriter.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_football_TableWriter.php']);
 }
 
 ?>

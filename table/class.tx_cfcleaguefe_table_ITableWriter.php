@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2011 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,27 +24,22 @@
 
 
 /**
- * Implementors provide access to computed table result.
+ * Implementors generate an output string for table.
  */
-interface tx_cfcleaguefe_table_ITableResult {
+interface tx_cfcleaguefe_table_ITableWriter {
 	/**
 	 * Set table data by round
-	 * @param int $round
-	 * @param array $scoreLine
-	 * @return void
+	 * @param tx_cfcleaguefe_table_ITableType $table
+	 * @param string $template
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * @return string
 	 */
-	public function addScore($round, $scoreLine);
-	/**
-	 * Return table data by round
-	 * @param int $round
-	 * @return array
-	 */
-	public function getScores($round);
+	public function writeTable($table, $template, $configurations, $confId);
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableResult.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableResult.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableWriter.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableWriter.php']);
 }
 
 ?>

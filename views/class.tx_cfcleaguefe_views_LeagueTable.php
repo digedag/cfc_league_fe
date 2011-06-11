@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2011 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,7 +40,14 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
    * @param tx_rnbase_util_FormatUtil $formatter
    */
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
-		$this->formatter = &$configurations->getFormatter();
+		$table = $viewData->offsetGet('table');
+		if(is_object($table)) {
+			$viewData->offsetUnset('table');
+			// Ausgabe mit neuem Verfahren
+			return $this->showLeagueTable($table, $template, $configurations);
+		}
+		
+		$this->formatter = $formatter;
 
 		// Liga und Tablemarks holen
 		$league = $viewData->offsetGet('league');
@@ -66,6 +73,17 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 	}
 
 	function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
+
+	/**
+	 * 
+	 * @param tx_cfcleaguefe_table_ITableType $table
+	 * @param string $template
+	 * @param tx_rnbase_configurations $configurations
+	 */
+	private function showLeagueTable($table, $template, $configurations) {
+		$writer = $table->getTableWriter();
+		$writer->writeTable($table, $template, $configurations, $this->getController()->getConfId().'');
+	}
 
 	/**
 	 * Erstellt die Liste mit den Ligastrafen
