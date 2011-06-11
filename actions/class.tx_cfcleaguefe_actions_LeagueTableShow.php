@@ -51,6 +51,9 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 
 		// Die Werte des aktuellen Scope ermitteln
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		// Hook to manipulate scopeArray
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','action_LeagueTable_handleScope_hook',
+			array('scopeArray' => &$scopeArr, 'parameters' =>$parameters, 'configurations'=> $configurations, 'confId' => $this->getConfId()), $this);
 		$saisonUids = $scopeArr['SAISON_UIDS'];
 		$groupUids = $scopeArr['GROUP_UIDS'];
 		$compUids = $scopeArr['COMP_UIDS'];
