@@ -82,7 +82,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 	 */
 	private function showLeagueTable($table, $template, $configurations) {
 		$writer = $table->getTableWriter();
-		$writer->writeTable($table, $template, $configurations, $this->getController()->getConfId().'');
+		return $writer->writeTable($table, $template, $configurations, $this->getController()->getConfId().'');
 	}
 
 	/**

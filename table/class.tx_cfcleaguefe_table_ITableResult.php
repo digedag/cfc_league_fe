@@ -40,6 +40,19 @@ interface tx_cfcleaguefe_table_ITableResult {
 	 * @return array
 	 */
 	public function getScores($round);
+	public function getMarks();
+	public function setMarks($marks);
+	public function getPenalties();
+	public function setPenalties($penalties);
+	/**
+	 * @return tx_cfcleague_competition
+	 */
+	public function getCompetition();
+	/**
+	 * 
+	 * @param tx_cfcleague_competition $competition
+	 */
+	public function setCompetition($competition);
 }
 
 

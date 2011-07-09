@@ -76,11 +76,13 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	 * @return tx_cfcleaguefe_table_ITableResult
 	 */
 	public function getTableData() {
+    $tableData = tx_rnbase::makeInstance('tx_cfcleaguefe_table_TableResult');
 		$configurator = $this->createConfigurator();
 		$this->initTeams($configurator);
-		$this->handlePenalties(); // Strafen können direkt berechnet werden
-
-    $tableData = Array();
+		$this->handlePenalties($tableData); // Strafen können direkt berechnet werden
+		$tableData->setMarks($this->getMatchProvider()->getTableMarks());
+		$tableData->setCompetition($this->getMatchProvider()->getBaseCompetition());
+		
     $rounds = $this->getMatchProvider()->getRounds();
 		$comparator = $configurator->getComparator();
 
@@ -92,6 +94,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 			usort($teamData, array($comparator, 'compare'));
 			// Nun setzen wir die Tabellenstände
 			reset($teamData);
+//			$scoreLine = array();
 			for($i=0; $i < count($teamData); $i++) {
 				$newPosition = $i +1;
 				$team = $teamData[$i];
@@ -102,7 +105,9 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 				}
 				$this->_teamData[$team['teamId']]['position'] = $newPosition;
 				// Jetzt die Daten des Teams übernehmen
-				$tableData[$round][] = $this->_teamData[$team['teamId']];
+				$tableData->addScore($round, $this->_teamData[$team['teamId']]);
+//				$scoreLine[] = $this->_teamData[$team['teamId']];
+//				$tableData[$round][] = $this->_teamData[$team['teamId']];
 			}
     }
     
@@ -174,8 +179,9 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	 * Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
 	 * für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
 	 */
-	protected function handlePenalties() {
+	protected function handlePenalties($tableData) {
 		$penalties = $this->getMatchProvider()->getPenalties();
+		$tableData->setPenalties($penalties);
 
 		foreach($penalties As $penalty) {
 			// Welches Team ist betroffen?

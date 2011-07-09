@@ -22,6 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+tx_rnbase::load('tx_cfcleaguefe_table_ITableResult');
 
 /**
  * Implementors provide access to computed table result.
@@ -44,6 +45,32 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
 	 */
 	public function getScores($round) {
 		return $this->tableData[$round];
+	}
+
+	public function getMarks(){
+		return $this->marks;
+	}
+	public function setMarks($marks){
+		$this->marks = $marks;
+	}
+	public function getPenalties(){
+		return $this->penalties;
+	}
+	public function setPenalties($penalties){
+		$this->penalties = $penalties;
+	}
+	/**
+	 * @return tx_cfcleague_competition
+	 */
+	public function getCompetition(){
+		return $this->competition;
+	}
+	/**
+	 * 
+	 * @param tx_cfcleague_competition $competition
+	 */
+	public function setCompetition($competition){
+		$this->competition = $competition;
 	}
 }
 

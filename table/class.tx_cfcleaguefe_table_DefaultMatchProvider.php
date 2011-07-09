@@ -216,13 +216,21 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		return $this->getLeague()->getPenalties();
 	}
 	/**
-	 * Returns the table type t be used for matches. It should be normally retrieved from
+	 * Returns the table type to be used for matches. It should be normally retrieved from
 	 * competitions.
 	 * @return string
 	 */
 	public function getTableType(){
 		// Alle Wettbewerbe laden und den Typ ermitteln
 		return $this->getLeague()->getTableType();
+	}
+	/**
+	 * Returns the table marks used to mark some posititions in table. It should be normally 
+	 * retrieved from competition.
+	 * @return string
+	 */
+	public function getTableMarks(){
+		return $this->getLeague()->getTableMarks();
 	}
 }
 

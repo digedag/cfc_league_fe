@@ -33,6 +33,16 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
 class tx_cfcleaguefe_table_icehockey_Table extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
 
 	/**
+	 * Set configuration
+	 * @param tx_rnbase_configurations $configuration
+	 * @param string confId
+	 * @return void
+	 */
+	public function setConfigurations($configuration, $confId){
+		$this->configuration = $configuration;
+		$this->confId = $confId;
+	}
+	/**
 	 * Set match provider
 	 * @param tx_cfcleaguefe_table_IMatchProvider $matchProvider
 	 * @return void

@@ -61,6 +61,13 @@ interface tx_cfcleaguefe_table_IMatchProvider {
 	 */
 	public function getTableType();
 
+	/**
+	 * Returns the table marks used to mark some posititions in table. It should be normally 
+	 * retrieved from competition.
+	 * @return string
+	 */
+	public function getTableMarks();
+
 //	/**
 //	 * Return a unique key for a given team. This is not necessarily the uid of the team. Maybe it is 
 //	 * wanted to join some team results.
