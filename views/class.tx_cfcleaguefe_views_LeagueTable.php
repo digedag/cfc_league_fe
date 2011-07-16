@@ -180,8 +180,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
       $idxEnd = $idxStart + $teams2Show;
       // Am Tabellenende nachregulieren
       if($idxEnd > count($tableData)) {
-//        $idxEnd = count($tableData);
-        $idxStart = $idxEnd - $teams2Show;
+        $idxStart = count($tableData) - $teams2Show;
       }
     }
 
