@@ -65,11 +65,13 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	/**
 	 * @return tx_cfcleaguefe_table_football_Configurator
 	 */
-	private function createConfigurator() {
-		$configuratorClass = $this->getConfValue('configuratorClass');
-		$configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_football_Configurator';
-		$configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
-		return $configurator;
+	public function getConfigurator() {
+		if(!is_object($this->configurator)) {
+			$configuratorClass = $this->getConfValue('configuratorClass');
+			$configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_football_Configurator';
+			$this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getConfigurator(), $this->configuration, $this->confId);
+		}
+		return $this->configurator;
 	}
 	/**
 	 * Returns the final table data
@@ -77,12 +79,13 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	 */
 	public function getTableData() {
     $tableData = tx_rnbase::makeInstance('tx_cfcleaguefe_table_TableResult');
-		$configurator = $this->createConfigurator();
+    $configurator = $this->getConfigurator();
 		$this->initTeams($configurator);
 		$this->handlePenalties($tableData); // Strafen können direkt berechnet werden
 		$tableData->setMarks($this->getMatchProvider()->getTableMarks());
 		$tableData->setCompetition($this->getMatchProvider()->getBaseCompetition());
-		
+		$tableData->setConfigurator($configurator);
+
     $rounds = $this->getMatchProvider()->getRounds();
 		$comparator = $configurator->getComparator();
 
@@ -312,7 +315,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 
 		if($toto == 0) { // Unentschieden
 			$this->addPoints($homeId, $configurator->getPointsDraw());
-			if($this->getTableProvider()->isCountLoosePoints()) {
+			if($configurator->isCountLoosePoints()) {
 				$this->addPoints2($homeId, $configurator->getPointsDraw());
 			}
 			$this->addDrawCount($homeId);

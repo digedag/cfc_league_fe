@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2011 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,12 +24,13 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
+tx_rnbase::load('tx_cfcleaguefe_table_IConfigurator');
 
 /**
  * Configurator for football league tables. 
  * Diese Klasse erweitert den MatchProvider und liefert Daten zur Steuerung der Tabellenberechnung.
  */
-class tx_cfcleaguefe_table_football_Configurator {
+class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table_IConfigurator {
 	/**
 	 * @var tx_cfcleaguefe_table_IMatchProvider
 	 */
@@ -71,8 +72,8 @@ class tx_cfcleaguefe_table_football_Configurator {
 		return $this->matchProvider;
 	}
 	protected function getConfValue($key) {
-		if(!is_object($this->configuration)) return false;
-		return $this->configuration->get($this->confId.$key);
+		if(!is_object($this->configurations)) return false;
+		return $this->configurations->get($this->confId.$key);
 	}
 
 	public function getMarkClubs(){
@@ -85,6 +86,13 @@ class tx_cfcleaguefe_table_football_Configurator {
 	public function getTableType() {
 		return $this->cfgTableType;
 	}
+	/**
+	 * Returns the table scope. This means which matches to use: all, first saison part or second saison part only
+	 * @return int 0-normal, 1-first, 2-second
+	 */
+	public function getTableScope() {
+		return $this->cfgTableScope;
+	}
 	public function getPointsWin() {
 		return $this->cfgPointSystem == '1' ? 2 : 3;
 	}
@@ -93,6 +101,9 @@ class tx_cfcleaguefe_table_football_Configurator {
 	}
 	public function getPointsLoose() {
 		return 0;
+	}
+	public function getPointSystem() {
+		return $this->cfgPointSystem;
 	}
 	/**
 	 * @return tx_cfcleaguefe_table_football_IComparator
@@ -113,18 +124,20 @@ class tx_cfcleaguefe_table_football_Configurator {
 		// Der TableScope wirkt sich auf die betrachteten Spiele (Hin-Rückrunde) aus
 		$parameters = $this->configurations->getParameters();
 		$this->cfgTableScope = $this->getConfValue('tablescope');
-		if($this->getConfValue('tablescopeSelectionInput')) {
+		// Wir bleiben mit den alten falschen TS-Einstellungen kompatibel und fragen
+		// beide Einstellungen ab
+		if($this->configurations->get('tabletypeSelectionInput') || $this->getConfValue('tablescopeSelectionInput')) {
 			$this->cfgTableScope = $parameters->offsetGet('tablescope') ? $parameters->offsetGet('tablescope') : $this->cfgTableScope;
 		}
 
 		// tabletype means home or away matches only
 		$this->cfgTableType = $this->getConfValue('tabletype');
-		if($this->getConfValue('tabletypeSelectionInput')) {
+		if($this->configurations->get('tabletypeSelectionInput') || $this->getConfValue('tabletypeSelectionInput')) {
 			$this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
 		}
 
 		$this->cfgPointSystem = $this->getMatchProvider()->getBaseCompetition()->record['point_system'];
-		if($this->getConfValue('pointSystemSelectionInput')) {
+		if($this->configurations->get('pointSystemSelectionInput') || $this->getConfValue('pointSystemSelectionInput')) {
 			$this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
 		}
 		$this->cfgLiveTable = intval($this->getConfValue('showLiveTable'));

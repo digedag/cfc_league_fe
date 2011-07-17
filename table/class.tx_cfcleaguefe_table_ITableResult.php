@@ -53,6 +53,15 @@ interface tx_cfcleaguefe_table_ITableResult {
 	 * @param tx_cfcleague_competition $competition
 	 */
 	public function setCompetition($competition);
+	/**
+	 * @return tx_cfcleaguefe_table_IConfigurator
+	 */
+	public function getConfigurator();
+	/**
+	 * 
+	 * @param tx_cfcleaguefe_table_IConfigurator $configurator
+	 */
+	public function setConfigurator($configurator);
 }
 
 

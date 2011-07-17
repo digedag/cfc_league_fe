@@ -50,6 +50,10 @@ interface tx_cfcleaguefe_table_ITableType {
 	 * @return tx_cfcleaguefe_table_ITableWriter
 	 */
 	public function getTableWriter();
+	/**
+	 * @return tx_cfcleaguefe_table_IConfigurator
+	 */
+	public function getConfigurator();
 }
 
 

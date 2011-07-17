@@ -9,6 +9,16 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 
+<!-- Labels for leaguetable -->
+			<label index="label_tabletype_normal">Standard Table</label>
+			<label index="label_tabletype_home">Home Table</label>
+			<label index="label_tabletype_away">Away Table</label>
+			<label index="label_pointsystem_point2">2 Point-Rule</label>
+			<label index="label_pointsystem_point3">3 Point-Rule</label>
+			<label index="label_tablescope_normal">Saison</label>
+			<label index="label_tablescope_first">First round</label>
+			<label index="label_tablescope_second">Second round</label>
+
 <!-- Labels for assist-list -->
 			<label index="statistics_assistlist_label_headline">Best assists</label>
 			<label index="statistics_assistlist_label_player">Player</label>
@@ -79,6 +89,16 @@
 
 		</languageKey>
 		<languageKey index="de" type="array">
+
+<!-- Labels for leaguetable -->
+			<label index="label_tabletype_normal">Normal</label>
+			<label index="label_tabletype_home">Heimtabelle</label>
+			<label index="label_tabletype_away">Auswärtstabelle</label>
+			<label index="label_pointsystem_point2">2 Punkt-Regel</label>
+			<label index="label_pointsystem_point3">3 Punkt-Regel</label>
+			<label index="label_tablescope_normal">Saison</label>
+			<label index="label_tablescope_first">Hinrunde</label>
+			<label index="label_tablescope_second">Rückrunde</label>
 
 <!-- Labels der Assist-Statistik -->
 			<label index="statistics_assistlist_label_headline">Die besten Torvorbereiter</label>

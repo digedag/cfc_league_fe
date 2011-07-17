@@ -609,6 +609,7 @@ plugin.tx_cfcleaguefe_competition {
         0.override = NORMAL
         1.override = HOME
         2.override = AWAY
+        link.useKeepVars = 1
       }
       tablescope {
         current.noLink = 1
@@ -616,12 +617,14 @@ plugin.tx_cfcleaguefe_competition {
         0.override = NORMAL
         1.override = FIRST
         2.override = SECOND
+        link.useKeepVars = 1
       }
       pointsystem {
         current.noLink = 1
         current.wrap = <b>|</b>
-        0.override = POINT2
-        1.override = POINT3
+        0.override = POINT3
+        1.override = POINT2
+        link.useKeepVars = 1
       }
     }
   }

@@ -43,8 +43,8 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
 	 * @param int $round
 	 * @return array
 	 */
-	public function getScores($round) {
-		return $this->tableData[$round];
+	public function getScores($round=-1) {
+		return $round > -1 ? $this->tableData[$round] : $this->tableData[count($this->tableData) -1];
 	}
 
 	public function getMarks(){
@@ -71,6 +71,19 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
 	 */
 	public function setCompetition($competition){
 		$this->competition = $competition;
+	}
+	/**
+	 * @return tx_cfcleaguefe_table_IConfigurator
+	 */
+	public function getConfigurator() {
+		return $this->configurator;
+	}
+	/**
+	 * 
+	 * @param tx_cfcleaguefe_table_IConfigurator $configurator
+	 */
+	public function setConfigurator($configurator) {
+		$this->configurator = $configurator;
 	}
 }
 

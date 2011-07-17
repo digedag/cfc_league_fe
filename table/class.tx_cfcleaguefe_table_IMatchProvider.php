@@ -49,7 +49,7 @@ interface tx_cfcleaguefe_table_IMatchProvider {
 	 */
 	public function getRounds();
 	/**
-	 * Returns the number of all round. This is used for chart generation.
+	 * Returns the number of all rounds. This is used for chart generation.
 	 * @return int
 	 */
 	public function getMaxRounds();

@@ -48,7 +48,19 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	public function setMatchTable($matchTable) {
 		$this->matchTable = $matchTable;
 	}
-
+	public function setScope($scope) {
+		$this->scope = $scope;
+	}
+	public function setConfigurator($configurator) {
+		$this->configurator = $configurator;
+	}
+	/**
+	 * 
+	 * @return tx_cfcleaguefe_table_IConfigurator
+	 */
+	public function getConfigurator() {
+		return $this->configurator;
+	}
 	/**
 	 * Return all teams or clubs of given matches. It returns teams for simple league tables.
 	 * But for alltime table, teams are useless. It exists one saison only! 
@@ -118,7 +130,11 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	 */
 	private function getLeague() {
 		if($this->league === 0) {
-			$matchTable = $this->getMatchTable();
+			// Den Wettbewerb müssen wir initial auf Basis des Scopes laden.
+			// Die Matchtable ist unab
+			$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
+			$matchTable = $matchSrv->getMatchTableBuilder();
+			$matchTable->setScope($this->scope);
 
 			$fields = array();
 			$options = array();
@@ -149,6 +165,9 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
     }
     return $rounds;
 	}
+	/**
+	 * Liefert die Gesamtzahl der Spieltage einer Saison
+	 */
 	public function getMaxRounds() {
 		// TODO: Das geht nur, wenn der Scope auf eine Liga zeigt
 		$league = $this->getLeague();
@@ -170,6 +189,11 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		if($this->currRound) {
 			// Nur bis zum Spieltag anzeigen
 			$matchTable->setMaxRound($this->currRound);
+		}
+		if(is_array($this->scope)) {
+			// Die Runde im Scope wird gesondert gesetzt.
+			unset($scopeArr['ROUND_UIDS']);
+			$matchTable->setScope($this->scope);
 		}
 	}
 

@@ -38,19 +38,23 @@ class tx_cfcleaguefe_table_Builder {
 	 * @return tx_cfcleaguefe_table_ITableType
 	 */
 	public static function buildByRequest($scopeArr, $configurations, $confId) {
-		$matchTable = tx_cfcleague_util_ServiceRegistry::getMatchService()->getMatchTableBuilder();
-		$matchTable->setScope($scopeArr);
-
+		
 		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
-		$prov = tx_cfcleaguefe_table_Factory::createMatchProviderByMatchTable($matchTable, $configurations, $confId);
+		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($configurations, $confId);
+		$prov->setScope($scopeArr);
 		// Der Provider liefert alle realen Daten auf Basis der Daten
 		// Für Sondertabellen können diese Werte später überschrieben werden. Hier folgt
 		// dann die Integration der GUI
 		// Der Provider kennt die Spiele, also könnte er auch die Sportart kennen...
 		$table = tx_cfcleaguefe_table_Factory::createTableType($prov->getTableType());
-
+		
 		$table->setConfigurations($configurations, $confid.'tablecfg.');
+		// MatchProvider und Configurator müssen sich gegenseitig kennen
 		$table->setMatchProvider($prov);
+		exit();
+		// TODO: Hier kommt ein OutOfMemory...
+		$c = $table->getConfigurator();
+		$prov->setConfigurator($c);
 		return $table;
 	}
 }
