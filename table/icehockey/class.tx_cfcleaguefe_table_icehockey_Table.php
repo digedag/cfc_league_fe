@@ -33,6 +33,19 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
 class tx_cfcleaguefe_table_icehockey_Table extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
 
 	/**
+	 * @return tx_cfcleaguefe_table_football_Configurator
+	 */
+	public function getConfigurator() {
+		if(!is_object($this->configurator)) {
+			$configuratorClass = $this->getConfValue('configuratorClass');
+			// TODO: Eine default Klasse wäre gut.
+			$configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_football_Configurator';
+			$this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getConfigurator(), $this->configuration, $this->confId);
+		}
+		return $this->configurator;
+	}
+
+	/**
 	 * Set configuration
 	 * @param tx_rnbase_configurations $configuration
 	 * @param string confId
