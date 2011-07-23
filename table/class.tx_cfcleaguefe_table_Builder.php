@@ -51,8 +51,6 @@ class tx_cfcleaguefe_table_Builder {
 		$table->setConfigurations($configurations, $confid.'tablecfg.');
 		// MatchProvider und Configurator müssen sich gegenseitig kennen
 		$table->setMatchProvider($prov);
-		exit();
-		// TODO: Hier kommt ein OutOfMemory...
 		$c = $table->getConfigurator();
 		$prov->setConfigurator($c);
 		return $table;

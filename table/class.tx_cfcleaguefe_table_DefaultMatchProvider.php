@@ -36,6 +36,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	private $configurations;
 	private $confId;
 	private $league = 0;
+	private $scope;
 	/**
 	 * @var tx_cfcleague_util_MatchTableBuilder
 	 */
@@ -113,10 +114,10 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		$fields = array();
 		$options = array();
 		$matchTable->getFields($fields, $options);
-		$options['what'] = 'COMP.SAISON';
-//		$this->matches = $matchSrv->search($fields, $options);
-
-		return false;
+		$options['what'] = 'count(DISTINCT COMPETITION.SAISON) AS `saison`';
+		$compSrv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+		$result = $compSrv->search($fields, $options);
+		return intval($result[0]['saison']) > 1;
 	}
 	/**
 	 * @return tx_cfcleague_models_Competition
@@ -185,7 +186,11 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
 		$matchTable = $matchSrv->getMatchTableBuilder();
 		$matchTable->setStatus($this->getMatchStatus()); //Status der Spiele
-		$matchTable->setCompetitions($this->getLeague()->uid);
+		// Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem 
+		// in der Plugineinstellung. Somit funktionieren aber auch gleich die Alltimetabellen
+		$matchTable->setScope($this->scope);
+//		$matchTable->setCompetitions($this->getLeague()->uid);
+
 		if($this->currRound) {
 			// Nur bis zum Spieltag anzeigen
 			$matchTable->setMaxRound($this->currRound);
@@ -195,6 +200,8 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 			unset($scopeArr['ROUND_UIDS']);
 			$matchTable->setScope($this->scope);
 		}
+		$this->matchTable = $matchTable;
+		return $this->matchTable;
 	}
 
 	private function getMatchStatus() {
@@ -203,6 +210,10 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 			$status = $this->configurations->get($this->confId.'filter.livetable') ? '1,2' : '2';
 		return $status;
 	}
+	/**
+	 * Liefert die Spiele, die für die Berechnung der Tabelle notwendig sind.
+	 * Hier werden auch die Einstellungen des Configurators verwendet.
+	 */
 	private function getMatches() {
 		if(is_array($this->matches))
 			return $this->matches;
@@ -214,20 +225,20 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		// Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
 		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
 		// Haben wir eine $currRound
-		if($this->cfgTableScope) {
+
+		if($tableScope = $this->getConfigurator()->getTableScope()) {
 			$round = count(t3lib_div::intExplode(',',$this->getLeague()->record['teams']));
 			$round = ($round) ? $round - 1 : $round;
 			if($round) {
 				// Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
 				$joined['value'] = $round;
 				$joined['cols'] = array('MATCH.ROUND');
-				$joined['operator'] = $this->cfgTableScope==1 ? OP_LTEQ_INT : OP_GT_INT;
+				$joined['operator'] = $tableScope==1 ? OP_LTEQ_INT : OP_GT_INT;
 				$fields[SEARCH_FIELD_JOINED][] = $joined;
 			}
 		}
-//		$options['debug'] = 1;
+		//$options['debug'] = 1;
 		$this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
-//    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
 		return $this->matches;
 	}
 
@@ -245,7 +256,8 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	 * @return string
 	 */
 	public function getTableType(){
-		// Alle Wettbewerbe laden und den Typ ermitteln
+		// Wir liefern hier im Prinzip die Sportart. Dies tun wir, indem wir auf Basis des aktuellen 
+		// Scopes einen Wettbewerb ermitteln und von diesem die Sportart holen
 		return $this->getLeague()->getTableType();
 	}
 	/**

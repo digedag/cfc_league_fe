@@ -69,7 +69,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 		if(!is_object($this->configurator)) {
 			$configuratorClass = $this->getConfValue('configuratorClass');
 			$configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_football_Configurator';
-			$this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getConfigurator(), $this->configuration, $this->confId);
+			$this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
 		}
 		return $this->configurator;
 	}
