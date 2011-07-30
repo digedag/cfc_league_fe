@@ -594,6 +594,8 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 		if(!$this->competition) {
 			tx_rnbase::load('tx_cfcleague_models_Competition');
 			$this->competition = tx_cfcleague_models_Competition::getInstance($this->record['competition']);
+			if(!is_object($this->competition))
+				throw new Exception('Match with UID ' . $this->uid . ' has no valid competition!');
 		}
 		return $this->competition;
 	}
