@@ -38,6 +38,7 @@ league_1:
       # T1-T2 - 1:1
       record: 
         uid: 11
+        competition: 1
         home: 1
         guest: 2
         round: 1
@@ -50,6 +51,7 @@ league_1:
       # T3-T4 - 2:0
       record: 
         uid: 12
+        competition: 1
         home: 3
         guest: 4
         round: 1
@@ -62,6 +64,7 @@ league_1:
       # T3-T1 - 1:0
       record: 
         uid: 13
+        competition: 1
         home: 3
         guest: 1
         round: 2
@@ -74,6 +77,7 @@ league_1:
       # T4-T2 - 1:2
       record: 
         uid: 14
+        competition: 1
         home: 4
         guest: 2
         round: 2
@@ -86,6 +90,7 @@ league_1:
       # T1-T4 - 3:0
       record: 
         uid: 15
+        competition: 1
         home: 1
         guest: 4
         round: 3
@@ -98,7 +103,7 @@ league_2:
   # Diese Liga besteht aus vier Teams wobei Team 2 Spielfrei ist und fünf absolvierten Spielen
   clazz: tx_cfcleaguefe_models_competition
   record: 
-    uid: 1
+    uid: 2
     teams: 1,2,3,4
     point_system: 1
   teams: 
@@ -134,6 +139,7 @@ league_2:
       # T1-T2 - 1:1 - Spielfrei
       record: 
         uid: 11
+        competition: 2
         home: 1
         guest: 2
         round: 1
@@ -146,6 +152,7 @@ league_2:
       # T3-T4 - 2:0
       record: 
         uid: 12
+        competition: 2
         home: 3
         guest: 4
         round: 1
@@ -158,6 +165,7 @@ league_2:
       # T3-T1 - 1:0
       record: 
         uid: 13
+        competition: 2
         home: 3
         guest: 1
         round: 2
@@ -170,6 +178,7 @@ league_2:
       # T4-T2 - 1:2 - Spielfrei
       record: 
         uid: 14
+        competition: 2
         home: 4
         guest: 2
         round: 2
@@ -182,6 +191,7 @@ league_2:
       # T1-T4 - 3:0
       record: 
         uid: 15
+        competition: 2
         home: 1
         guest: 4
         round: 3

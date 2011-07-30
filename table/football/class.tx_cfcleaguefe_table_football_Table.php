@@ -65,8 +65,8 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	/**
 	 * @return tx_cfcleaguefe_table_football_Configurator
 	 */
-	public function getConfigurator() {
-		if(!is_object($this->configurator)) {
+	public function getConfigurator($forceNew=false) {
+		if($forceNew || !is_object($this->configurator)) {
 			$configuratorClass = $this->getConfValue('configuratorClass');
 			$configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_football_Configurator';
 			$this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
@@ -129,11 +129,12 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
    * @param tx_cfcleaguefe_models_competition $tableProvider
    */
   protected function initTeams(tx_cfcleaguefe_table_football_Configurator $configurator) {
+  	$this->_teamData = array();
 		$teams = $configurator->getTeams();
 		foreach($teams As $team) {
 			$teamId = $configurator->getTeamId($team);
 			if(!$teamId) continue; // Ignore teams without given id
-//			if($team->isDummy()) continue; // Ignore dummy teams
+			if($team->isDummy()) continue; // Ignore dummy teams
 			if(array_key_exists($teamId, $this->_teamData)) continue;
 
 			$this->_teamData[$teamId]['team'] = $team;
@@ -229,6 +230,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	protected function handleMatches(&$matches, tx_cfcleaguefe_table_football_Configurator $configurator) {
 		// Wir laufen jetzt über alle Spiele und legen einen Punktespeicher für jedes Team an
 		foreach($matches As $match) {
+
 			if($match->isDummy()) continue; // Ignore Dummy-Matches
 			// Wie ist das Spiel ausgegangen?
 			$toto = $match->getToto();
@@ -248,6 +250,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 					$this->countStandard($match, $toto, $configurator);
 			}
 		}
+
 		unset($this->_teamData[0]); // Remove dummy data from teams without id
 	}
 	/**

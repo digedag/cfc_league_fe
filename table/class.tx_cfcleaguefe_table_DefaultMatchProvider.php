@@ -193,6 +193,9 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 			$status = $this->configurations->get($this->confId.'filter.livetable') ? '1,2' : '2';
 		return $status;
 	}
+	public function setMatches($matches) {
+		$this->matches = $matches;
+	}
 	/**
 	 * Liefert die Spiele, die für die Berechnung der Tabelle notwendig sind.
 	 * Hier werden auch die Einstellungen des Configurators verwendet.

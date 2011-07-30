@@ -29,10 +29,33 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
  * Builder class for league tables. 
  */
 class tx_cfcleaguefe_table_Builder {
-
 	/**
 	 * 
-	 * @param tx_cfcleague_util_MatchTable $matchTable
+	 * @param tx_cfcleague_model_Competition $league
+	 * @param array $matches
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * @return tx_cfcleaguefe_table_ITableType
+	 */
+	public static function buildByCompetitionAndMatches($league, $matches, $configurations, $confId) {
+		$tableType = $league->getTableType();
+		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
+		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($tableType, $configurations, $confId);
+		$prov->setLeague($league);
+		$prov->setMatches($matches);
+		$table = tx_cfcleaguefe_table_Factory::createTableType($tableType);
+		$table->setConfigurations($configurations, $confid.'tablecfg.');
+		// MatchProvider und Configurator müssen sich gegenseitig kennen
+		$table->setMatchProvider($prov);
+		$c = $table->getConfigurator(true);
+		$prov->setConfigurator($c);
+
+		return $table;
+	}
+	
+	/**
+	 * 
+	 * @param array $scopeArr
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
 	 * @return tx_cfcleaguefe_table_ITableType
@@ -56,7 +79,7 @@ class tx_cfcleaguefe_table_Builder {
 		$table->setConfigurations($configurations, $confid.'tablecfg.');
 		// MatchProvider und Configurator müssen sich gegenseitig kennen
 		$table->setMatchProvider($prov);
-		$c = $table->getConfigurator();
+		$c = $table->getConfigurator(true);
 		$prov->setConfigurator($c);
 		return $table;
 	}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2011 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,12 +28,12 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_rnbase_util_Spyc');
 //tx_rnbase::load('tx_cfcleaguefe_models_team');
-tx_rnbase::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
+tx_rnbase::load('tx_cfcleaguefe_table_Builder');
 tx_rnbase::load('tx_cfcleague_models_Competition');
 tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
 
-class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
-	function test_dummyTeam() {
+class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_testcase {
+	function test_LeagueTableWithDummyTeam() {
 		$league = $this->prepareLeague('league_2');
 		// Team 2 ist der Dummy und muss entfernt werden
 		$teams = $league->getTeams();
@@ -44,54 +44,55 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
-		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
-		$prov->setMatches($league->getMatches(2));
+		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 
-		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-		$result = $leagueTable->generateTable($prov);
-		$this->assertTrue(is_array($result), 'Got no result array');
-		$this->assertEquals(3, count($result), 'Table should contain 3 teams, but is: ' . count($result));
+		$result = $leagueTable->getTableData();
+		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+		
+		$scoreLine = $result->getScores();
+		$this->assertEquals(3, count($scoreLine), 'Table should contain 3 teams.');
 	}
-	function test_twoPointSystem() {
+	function test_LeagueTableWithTwoPointSystem() {
 
 		$league = $this->prepareLeague('league_1');
 
+		$matches = $league->getMatches(2);
+		
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
-		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
-		$prov->setMatches($league->getMatches(2));
 
-		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-		$result = $leagueTable->generateTable($prov);
+		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+		$result = $leagueTable->getTableData();
 
-		$this->assertTrue(is_array($result), 'Got no result array');
-		$this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: ' . count($result));
+		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+		$scoreLine = $result->getScores();
+
+		$this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');
 
 		// Tabelle 2-P.
 		// T3 - 2 3:0 4:0
 		// T2 - 2 3:2 3:1
 		// T1 - 3 4:2 3:3
 		// T4 - 3 1:7 0:6
-		$this->assertEquals(3, $result[0]['teamId'], 'Team 3 should be 1. place');
-		$this->assertEquals(2, $result[1]['teamId'], 'Team 2 should be 2. place');
-		$this->assertEquals(1, $result[2]['teamId'], 'Team 1 should be 3. place');
-		$this->assertEquals(4, $result[3]['teamId'], 'Team 4 should be 4. place');
+		$this->assertEquals(3, $scoreLine[0]['teamId'], 'Team 3 should be 1. place');
+		$this->assertEquals(2, $scoreLine[1]['teamId'], 'Team 2 should be 2. place');
+		$this->assertEquals(1, $scoreLine[2]['teamId'], 'Team 1 should be 3. place');
+		$this->assertEquals(4, $scoreLine[3]['teamId'], 'Team 4 should be 4. place');
 	}
 
-	function test_threePointSystem() {
+	function test_LeagueTableWithThreePointSystem() {
 
 		$league = $this->prepareLeague('league_1');
 		$league->record['point_system'] = 0; // Punktsystem umstellen
+		$matches = $league->getMatches(2);
 
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
-		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
-		$prov->setMatches($league->getMatches(2));
-    
-		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-		$result = $leagueTable->generateTable($prov);
+		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+		$result = $leagueTable->getTableData();
+  
 //    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
     
 		// Tabelle 3-P.
@@ -99,17 +100,21 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		// T1 - 3 4:2 4
 		// T2 - 2 3:2 4
 		// T4 - 3 1:7 0
-		$this->assertTrue(is_array($result), 'Got no result array');
-		$this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: ' . count($result));
-		$this->assertEquals(3, $result[0]['teamId'], 'Team 3 should be 1. place');
-		$this->assertEquals(1, $result[1]['teamId'], 'Team 1 should be 2. place');
-		$this->assertEquals(2, $result[2]['teamId'], 'Team 2 should be 3. place');
-		$this->assertEquals(4, $result[3]['teamId'], 'Team 4 should be 4. place');
-		$this->assertEquals(6, $result[0]['points'], 'Team 3 should has wrong points');
-		$this->assertEquals(0, $result[3]['points'], 'Team 4 should has wrong points');
+		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+		$scoreLine = $result->getScores();
+
+		$this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');
+		$this->assertEquals(6, $scoreLine[0]['points'], 'Team 3 should have 6 points');
+		$this->assertEquals(-1, $scoreLine[0]['points2'], 'Team 3 should have no negative points in 3 point system.');
+		$this->assertEquals(3, $scoreLine[0]['teamId'], 'Team 3 should be 1. place');
+		$this->assertEquals(1, $scoreLine[1]['teamId'], 'Team 1 should be 2. place');
+		$this->assertEquals(2, $scoreLine[2]['teamId'], 'Team 2 should be 3. place');
+		$this->assertEquals(4, $scoreLine[3]['teamId'], 'Team 4 should be 4. place');
+		$this->assertEquals(6, $scoreLine[0]['points'], 'Team 3 should has wrong points');
+		$this->assertEquals(0, $scoreLine[3]['points'], 'Team 4 should has wrong points');
 		// Alle Teams müssen bei den Minuspunkten -1 haben
-		for($i = 0, $size = count($result); $i < $size; $i++) {
-			$this->assertEquals(-1, $result[$i]['points2'], 'Team at '. ($i + 1) . '. place wrong neg points');
+		for($i = 0, $size = count($scoreLine); $i < $size; $i++) {
+			$this->assertEquals(-1, $scoreLine[$i]['points2'], 'Team at '. ($i + 1) . '. place wrong neg points');
 		}
 	}
 
