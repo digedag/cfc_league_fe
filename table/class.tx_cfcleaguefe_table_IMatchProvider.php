@@ -55,13 +55,6 @@ interface tx_cfcleaguefe_table_IMatchProvider {
 	public function getMaxRounds();
 
 	/**
-	 * Returns the table type to be used for matches. It should be normally retrieved from
-	 * competitions.
-	 * @return string
-	 */
-	public function getTableType();
-
-	/**
 	 * Returns the table marks used to mark some posititions in table. It should be normally 
 	 * retrieved from competition.
 	 * @return string

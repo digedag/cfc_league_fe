@@ -30,8 +30,8 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableResult');
 class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableResult {
 	private $tableData = array();
 	/**
-	 * Set match provider
-	 * @param int $round
+	 * Add score for round
+	 * @param int $round round starts with 1
 	 * @param array $scoreLine
 	 * @return void
 	 */
@@ -43,8 +43,8 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
 	 * @param int $round
 	 * @return array
 	 */
-	public function getScores($round=-1) {
-		return $round > -1 ? $this->tableData[$round] : $this->tableData[count($this->tableData) -1];
+	public function getScores($round=0) {
+		return $round > 0 ? $this->tableData[$round] : $this->tableData[count($this->tableData)];
 	}
 
 	public function getMarks(){

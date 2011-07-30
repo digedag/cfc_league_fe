@@ -38,15 +38,20 @@ class tx_cfcleaguefe_table_Builder {
 	 * @return tx_cfcleaguefe_table_ITableType
 	 */
 	public static function buildByRequest($scopeArr, $configurations, $confId) {
-		
+		// Zuallererst muss die Sportart ermittelt werden, weil diese für
+		// die weiteren Klassen notwendig ist.
+		// die Sportart wird daher static auf Basis des Scopes ermittelt
+		tx_rnbase::load('tx_cfcleaguefe_table_DefaultMatchProvider');
+		$tableType = tx_cfcleaguefe_table_DefaultMatchProvider::getLeagueFromScope($scopeArr)->getTableType();
+
 		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
-		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($configurations, $confId);
+		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($tableType, $configurations, $confId);
 		$prov->setScope($scopeArr);
 		// Der Provider liefert alle realen Daten auf Basis der Daten
 		// Für Sondertabellen können diese Werte später überschrieben werden. Hier folgt
 		// dann die Integration der GUI
 		// Der Provider kennt die Spiele, also könnte er auch die Sportart kennen...
-		$table = tx_cfcleaguefe_table_Factory::createTableType($prov->getTableType());
+		$table = tx_cfcleaguefe_table_Factory::createTableType($tableType);
 		
 		$table->setConfigurations($configurations, $confid.'tablecfg.');
 		// MatchProvider und Configurator müssen sich gegenseitig kennen

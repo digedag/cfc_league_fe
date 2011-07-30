@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2011 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -129,27 +129,10 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	 * If table is written for a single league, this league will be returned.
 	 * return tx_cfcleague_models_Competition or false
 	 */
-	private function getLeague() {
+	protected function getLeague() {
 		if($this->league === 0) {
 			// Den Wettbewerb müssen wir initial auf Basis des Scopes laden.
-			// Die Matchtable ist unab
-			$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
-			$matchTable = $matchSrv->getMatchTableBuilder();
-			$matchTable->setScope($this->scope);
-
-			$fields = array();
-			$options = array();
-			$matchTable->getFields($fields, $options);
-			$options['what'] = 'distinct competition';
-//			$options['debug'] = 1;
-
-			$result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
-			// es wird immer nur der 1. Wettbewerb verwendet
-			$leagueUid = count($result) ? $result[0]['competition'] : false;
-			if(!$leagueUid) throw new Exception('Could not find a valid competition.');
-			$this->league = tx_cfcleague_models_Competition::getInstance($leagueUid);
-			if(!$this->league->isValid())
-				throw new Exception('Competition with uid '.intval($leagueUid). ' is not valid!');
+			$this->league = self::getLeagueFromScope($this->scope);
 		}
 		return $this->league;
 	}
@@ -214,7 +197,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	 * Liefert die Spiele, die für die Berechnung der Tabelle notwendig sind.
 	 * Hier werden auch die Einstellungen des Configurators verwendet.
 	 */
-	private function getMatches() {
+	protected function getMatches() {
 		if(is_array($this->matches))
 			return $this->matches;
 
@@ -226,20 +209,18 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
 		// Haben wir eine $currRound
 
-		if($tableScope = $this->getConfigurator()->getTableScope()) {
-			$round = count(t3lib_div::intExplode(',',$this->getLeague()->record['teams']));
-			$round = ($round) ? $round - 1 : $round;
-			if($round) {
-				// Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
-				$joined['value'] = $round;
-				$joined['cols'] = array('MATCH.ROUND');
-				$joined['operator'] = $tableScope==1 ? OP_LTEQ_INT : OP_GT_INT;
-				$fields[SEARCH_FIELD_JOINED][] = $joined;
-			}
-		}
+		$this->modifyMatchFields($fields, $options);
 		//$options['debug'] = 1;
 		$this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
 		return $this->matches;
+	}
+	/**
+	 * Entry point for child classes to modify fields and options for match lookup.
+	 * @param array $fields
+	 * @param array $options
+	 */
+	protected function modifyMatchFields(&$fields, &$options) {
+		
 	}
 
 	public function getPenalties() {
@@ -248,17 +229,31 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 //		if($this->cfgTableType || $this->cfgTableScope) 
 //			return array();
 
+//		$this->getConfigurator()->
 		return $this->getLeague()->getPenalties();
 	}
 	/**
-	 * Returns the table type to be used for matches. It should be normally retrieved from
-	 * competitions.
-	 * @return string
+	 * Returns the first league found from given scope
+	 * @param array $scopeArr
 	 */
-	public function getTableType(){
-		// Wir liefern hier im Prinzip die Sportart. Dies tun wir, indem wir auf Basis des aktuellen 
-		// Scopes einen Wettbewerb ermitteln und von diesem die Sportart holen
-		return $this->getLeague()->getTableType();
+	public static function getLeagueFromScope($scopeArr) {
+		$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
+		$matchTable = $matchSrv->getMatchTableBuilder();
+		$matchTable->setScope($scopeArr);
+
+		$fields = array();
+		$options = array();
+		$matchTable->getFields($fields, $options);
+		$options['what'] = 'distinct competition';
+
+		$result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
+		// es wird immer nur der 1. Wettbewerb verwendet
+		$leagueUid = count($result) ? $result[0]['competition'] : false;
+		if(!$leagueUid) throw new Exception('Could not find a valid competition.');
+		$league = tx_cfcleague_models_Competition::getInstance($leagueUid);
+		if(!$league->isValid())
+			throw new Exception('Competition with uid '.intval($leagueUid). ' is not valid!');
+		return $league;
 	}
 	/**
 	 * Returns the table marks used to mark some posititions in table. It should be normally 

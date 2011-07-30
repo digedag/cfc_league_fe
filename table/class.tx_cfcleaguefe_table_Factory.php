@@ -37,8 +37,11 @@ class tx_cfcleaguefe_table_Factory {
 	 * @param string $confId
 	 * @return tx_cfcleaguefe_table_DefaultMatchProvider
 	 */
-	public static function createMatchProvider($configurations, $confId) {
-		$prov = tx_rnbase::makeInstance('tx_cfcleaguefe_table_DefaultMatchProvider', $configurations, $confId);
+	public static function createMatchProvider($tableType, $configurations, $confId) {
+
+		$clazz = $configurations->get($confId.$tableType.'.matchProviderClass');
+		$clazz = $clazz ? $clazz : 'tx_cfcleaguefe_table_DefaultMatchProvider';
+		$prov = tx_rnbase::makeInstance($clazz, $configurations, $confId);
 		return $prov;
 	}
 	/**

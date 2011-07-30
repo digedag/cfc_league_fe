@@ -49,7 +49,7 @@ class tx_cfcleaguefe_table_football_TableWriter implements tx_cfcleaguefe_table_
 			$compMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
 			$template = $compMarker->parseTemplate($template, $result->getCompetition(), $configurations->getFormatter(), $confId.'league.', 'LEAGUE');
 		}
-$start = microtime(true);
+//$start = microtime(true);
 		$penalties = array(); // Strafen sammeln
 		$subpartArray['###ROWS###'] = $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), 
 				$result, $penalties, $configurations, $confId);
@@ -63,7 +63,7 @@ $start = microtime(true);
 		// Die Tabellensteuerung
 		$subpartArray['###CONTROLS###'] = $this->createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'),
 				$result->getConfigurator(), $configurations, $confId.'controls.');
-t3lib_div::debug((microtime(true)-$start), 'class.tx_cfcleaguefe_table_football_TableWriter.php'); // TODO: remove me
+//t3lib_div::debug((microtime(true)-$start), 'class.tx_cfcleaguefe_table_football_TableWriter.php'); // TODO: remove me
 
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 		return $out;
@@ -77,6 +77,7 @@ t3lib_div::debug((microtime(true)-$start), 'class.tx_cfcleaguefe_table_football_
 		$marks = $result->getMarks();
 	
 		$tableData = $result->getScores(-1); // TODO: Woher kommt die aktuelle Runde?
+
 		// Sollen alle Teams gezeigt werden?
 		$tableSize = intval($configurations->get($confId.'table.leagueTableSize'));
 		if($tableSize && $tableSize < count($tableData)) {
