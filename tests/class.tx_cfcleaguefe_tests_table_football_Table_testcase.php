@@ -55,9 +55,10 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 	function test_LeagueTableWithTwoPointSystem() {
 
 		$league = $this->prepareLeague('league_1');
+		$league->record['point_system'] = 1; // Punktsystem einstellen
 
 		$matches = $league->getMatches(2);
-		
+
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');

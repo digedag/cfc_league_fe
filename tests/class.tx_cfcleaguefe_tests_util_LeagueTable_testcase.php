@@ -35,6 +35,7 @@ tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
 class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 	function test_dummyTeam() {
 		$league = $this->prepareLeague('league_2');
+
 		// Team 2 ist der Dummy und muss entfernt werden
 		$teams = $league->getTeams();
 		unset($teams[1]);
@@ -53,8 +54,8 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$this->assertEquals(3, count($result), 'Table should contain 3 teams, but is: ' . count($result));
 	}
 	function test_twoPointSystem() {
-
 		$league = $this->prepareLeague('league_1');
+		$league->record['point_system'] = 1; // Punktsystem umstellen
 
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
@@ -80,7 +81,6 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 	}
 
 	function test_threePointSystem() {
-
 		$league = $this->prepareLeague('league_1');
 		$league->record['point_system'] = 0; // Punktsystem umstellen
 
@@ -89,7 +89,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 		$config->_dataStore->offsetSet('tableType', '0');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
 		$prov->setMatches($league->getMatches(2));
-    
+
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$result = $leagueTable->generateTable($prov);
 //    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
