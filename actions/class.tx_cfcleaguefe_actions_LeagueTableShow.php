@@ -49,6 +49,10 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	 */
 	function handleRequest(&$parameters,&$configurations, &$viewData){
 
+		if($configurations->get($this->getConfId().'newMode')) {
+			$action = tx_rnbase::makeInstance('tx_cfcleaguefe_actions_LeagueTable');
+			return $action->handleRequest($parameters, $configurations, $viewData);
+		}
 		// Die Werte des aktuellen Scope ermitteln
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
 		// Hook to manipulate scopeArray
