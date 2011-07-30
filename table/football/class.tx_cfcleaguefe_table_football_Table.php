@@ -59,7 +59,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	/**
 	 * @return tx_cfcleaguefe_table_IMatchProvider
 	 */
-	protected function getMatchProvider() {
+	public function getMatchProvider() {
 		return $this->matchProvider;
 	}
 	/**
@@ -112,9 +112,9 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 //				$scoreLine[] = $this->_teamData[$team['teamId']];
 //				$tableData[$round][] = $this->_teamData[$team['teamId']];
 			}
-    }
-    
-    return $tableData;
+		}
+
+		return $tableData;
 	}
 
 	public function getTableWriter() {

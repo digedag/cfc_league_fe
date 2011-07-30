@@ -82,7 +82,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 
 	function test_threePointSystem() {
 		$league = $this->prepareLeague('league_1');
-		$league->record['point_system'] = 0; // Punktsystem umstellen
+		$league->record['point_system'] = 0; // Punktsystem einstellen
 
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
@@ -92,8 +92,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_phpunit_testcase {
 
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$result = $leagueTable->generateTable($prov);
-//    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
-    
+
 		// Tabelle 3-P.
 		// T3 - 2 3:0 6
 		// T1 - 3 4:2 4

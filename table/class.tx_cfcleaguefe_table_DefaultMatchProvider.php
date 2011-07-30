@@ -52,6 +52,9 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	public function setScope($scope) {
 		$this->scope = $scope;
 	}
+	public function getScope() {
+		return $this->scope;
+	}
 	public function setConfigurator($configurator) {
 		$this->configurator = $configurator;
 	}
@@ -179,9 +182,10 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 			$matchTable->setMaxRound($this->currRound);
 		}
 		if(is_array($this->scope)) {
+			$scopeArr = $this->scope;
 			// Die Runde im Scope wird gesondert gesetzt.
 			unset($scopeArr['ROUND_UIDS']);
-			$matchTable->setScope($this->scope);
+			$matchTable->setScope($scopeArr);
 		}
 		$this->matchTable = $matchTable;
 		return $this->matchTable;

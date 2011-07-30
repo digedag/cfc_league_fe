@@ -39,7 +39,7 @@ interface tx_cfcleaguefe_table_ITableResult {
 	 * @param int $round
 	 * @return array
 	 */
-	public function getScores($round);
+	public function getScores($round=0);
 	public function getMarks();
 	public function setMarks($marks);
 	public function getPenalties();

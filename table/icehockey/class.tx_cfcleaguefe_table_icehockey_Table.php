@@ -63,6 +63,9 @@ class tx_cfcleaguefe_table_icehockey_Table extends t3lib_svbase implements tx_cf
 	public function setMatchProvider(tx_cfcleaguefe_table_IMatchProvider $matchProvider) {
 		$this->matchProvider = $matchProvider;
 	}
+	public function getMatchProvider() {
+		return $this->matchProvider;
+	}
 	/**
 	 * Returns the final table data
 	 * @return tx_cfcleaguefe_table_ITableResult

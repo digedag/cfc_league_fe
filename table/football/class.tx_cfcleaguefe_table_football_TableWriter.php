@@ -52,7 +52,7 @@ class tx_cfcleaguefe_table_football_TableWriter implements tx_cfcleaguefe_table_
 //$start = microtime(true);
 		$penalties = array(); // Strafen sammeln
 		$subpartArray['###ROWS###'] = $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), 
-				$result, $penalties, $configurations, $confId);
+				$result, $penalties, $table->getMatchProvider(), $configurations, $confId);
 
 		// Jetzt die Strafen auflisten
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
@@ -71,12 +71,22 @@ class tx_cfcleaguefe_table_football_TableWriter implements tx_cfcleaguefe_table_
 
 	/**
 	 * Erstellt die Ligatabelle.
-	 * @param $result tx_cfcleaguefe_table_ITableResult
+	 * @param string $templateList
+	 * @param tx_cfcleaguefe_table_ITableResult $result
+	 * @param array $penalties
+	 * @param tx_cfcleaguefe_table_IMatchProvider $matchProvider
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
 	 */
-	protected function createTable($templateList, $result, &$penalties, &$configurations, $confId) {
+	protected function createTable($templateList, $result, &$penalties, $matchProvider, $configurations, $confId) {
 		$marks = $result->getMarks();
-	
-		$tableData = $result->getScores(-1); // TODO: Woher kommt die aktuelle Runde?
+
+		$round = 0;
+		if(intval($configurations->get($confId.'useRoundFromScope'))) {
+			$scope = $matchProvider->getScope();
+			$round = intval($scope['ROUND_UIDS']);
+		}
+		$tableData = $result->getScores($round);
 
 		// Sollen alle Teams gezeigt werden?
 		$tableSize = intval($configurations->get($confId.'table.leagueTableSize'));
