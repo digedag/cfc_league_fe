@@ -44,7 +44,8 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
 	 * @return array
 	 */
 	public function getScores($round=0) {
-		return $round > 0 ? $this->tableData[$round] : $this->tableData[count($this->tableData)];
+		$ret = $round > 0 ? $this->tableData[$round] : $this->tableData[count($this->tableData)];
+		return is_array($ret) ? $ret : array();
 	}
 
 	public function getMarks(){
