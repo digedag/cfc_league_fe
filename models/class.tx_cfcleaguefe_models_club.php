@@ -54,6 +54,7 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club {
   }
   /**
    * Liefert die Teams dieses Vereins
+   * TODO: In Service auslagern
    * @param $saisonIds commaseperated saison-uids
    * @param $agegroups commaseperated agegroup-uids
    */
@@ -63,7 +64,7 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club {
             'tx_cfcleague_teams.coaches, tx_cfcleague_teams.players, tx_cfcleague_teams.supporters, '. 
             'tx_cfcleague_teams.coaches_comment, tx_cfcleague_teams.players_comment, tx_cfcleague_teams.supporters_comment, '. 
             'tx_cfcleague_teams.dam_images';
-    $from = array('tx_cfcleague_teams INNER JOIN tx_cfcleague_competition c ON FIND_IN_SET(tx_cfcleague_teams.uid, c.teams)',
+    $from = array('tx_cfcleague_teams INNER JOIN tx_cfcleague_competition c ON FIND_IN_SET(tx_cfcleague_teams.uid, c.teams) AND c.hidden=0 AND c.deleted=0 ',
                   'tx_cfcleague_teams');
     $options = array();
     $options['where'] = 'tx_cfcleague_teams.club = ' . $this->uid .
