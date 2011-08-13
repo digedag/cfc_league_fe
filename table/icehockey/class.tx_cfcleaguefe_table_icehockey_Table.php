@@ -24,63 +24,18 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
-tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
+tx_rnbase::load('tx_cfcleaguefe_table_football_Table');
 
 /**
- * Computes league tables for football.
+ * Computes league tables for icehockey.
+ * Since icehockey is very similar to football, the same code base is used.
+ * Rules:
+ * 2 points for winner
+ * 1 point for looser if draw after extra time
  */
-class tx_cfcleaguefe_table_icehockey_Table extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
+class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football_Table {
 
-	/**
-	 * @return tx_cfcleaguefe_table_football_Configurator
-	 */
-	public function getConfigurator() {
-		if(!is_object($this->configurator)) {
-			$configuratorClass = $this->getConfValue('configuratorClass');
-			// TODO: Eine default Klasse wäre gut.
-			$configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_football_Configurator';
-			$this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getConfigurator(), $this->configuration, $this->confId);
-		}
-		return $this->configurator;
-	}
 
-	/**
-	 * Set configuration
-	 * @param tx_rnbase_configurations $configuration
-	 * @param string confId
-	 * @return void
-	 */
-	public function setConfigurations($configuration, $confId){
-		$this->configuration = $configuration;
-		$this->confId = $confId;
-	}
-	/**
-	 * Set match provider
-	 * @param tx_cfcleaguefe_table_IMatchProvider $matchProvider
-	 * @return void
-	 */
-	public function setMatchProvider(tx_cfcleaguefe_table_IMatchProvider $matchProvider) {
-		$this->matchProvider = $matchProvider;
-	}
-	public function getMatchProvider() {
-		return $this->matchProvider;
-	}
-	/**
-	 * Returns the final table data
-	 * @return tx_cfcleaguefe_table_ITableResult
-	 */
-	public function getTableData() {
-		
-	}
-
-	public function getTableWriter() {
-		
-	}
-	
-	public function getTCALabel() {
-		return 'Icehockey';
-	}
 }
 
 
