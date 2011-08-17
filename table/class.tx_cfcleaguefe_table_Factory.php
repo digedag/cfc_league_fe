@@ -51,7 +51,8 @@ class tx_cfcleaguefe_table_Factory {
 	 */
 	public static function createTableType($type) {
 		tx_rnbase::load('tx_rnbase_util_Misc');
-		return tx_rnbase_util_Misc::getService('t3sports_leaguetable', $type);
+		$srv = tx_rnbase_util_Misc::getService('t3sports_sports', $type);
+		return $srv->getLeagueTable();
 	}
 }
 
