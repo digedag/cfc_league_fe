@@ -40,11 +40,28 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
 	}
 	/**
 	 * Return table data by round
+	 * If round is 0 the highest available round is returned.
 	 * @param int $round
 	 * @return array
 	 */
 	public function getScores($round=0) {
-		$ret = $round > 0 ? $this->tableData[$round] : $this->tableData[count($this->tableData)];
+		if($round == 0) {
+			$rounds = array_keys($this->tableData);
+			$round = $rounds[count($rounds)-1];
+		}
+		elseif(!array_key_exists($round, $this->tableData)){
+			// Wenn für den übergebenen Spieltag keine Daten vorhanden sind, wird der nächst vorher liegende Spieltag geliefert.
+			$rounds = array_keys($this->tableData);
+			$usedRound = 1;
+			foreach($rounds As $availableRound) {
+				if($availableRound <= $round)
+					$usedRound = $availableRound;
+				else 
+					break;
+			}
+			$round = $usedRound;
+		}
+		$ret = $this->tableData[$round];
 		return is_array($ret) ? $ret : array();
 	}
 
