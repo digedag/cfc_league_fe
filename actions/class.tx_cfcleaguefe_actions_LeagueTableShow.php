@@ -104,7 +104,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für die Auswahl des Punktsystems
 	 */
-	private function _handleSBPointSystem($parameters, &$configurations, &$viewData) {
+	protected function _handleSBPointSystem($parameters, &$configurations, &$viewData) {
 		global $TCA;
 		if($configurations->get('pointSystemSelectionInput')) {
 			// Die Daten für das Punktsystem kommen aus dem TCA der Tabelle tx_cfcleague_competition
@@ -125,7 +125,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für den Tabellentyp
 	 */
-	private function _handleSBTableType($parameters, &$configurations, &$viewData) {
+	protected function _handleSBTableType($parameters, &$configurations, &$viewData) {
 		if($configurations->get('tabletypeSelectionInput')) {
 			$flex =& $this->getFlexForm($configurations);
 			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable','tabletype'));
@@ -142,7 +142,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für den Tabellenscope
 	 */
-	private function _handleSBTableScope($parameters, &$configurations, &$viewData, $confId='') {
+	protected function _handleSBTableScope($parameters, &$configurations, &$viewData, $confId='') {
 		if($configurations->get($confId.'tablescopeSelectionInput')) {
 			$flex =& $this->getFlexForm($configurations);
 			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable','tablescope'));
@@ -188,6 +188,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $parameters,$configurations, $league);
 
 		// Tabelle nur bis bestimmten Spieltag anzeigen
+		// FIXME: Bei eine spezial-Tabelle (Hin-/Rückrunde) muss diese Option ignoriert werden
 		if(intval($configurations->get('leaguetable.useRoundFromScope')))
 			$tableProvider->setCurrentRound($roundUid);
 
