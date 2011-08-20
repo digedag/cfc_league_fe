@@ -505,12 +505,15 @@ lib.t3sports.match {
   date {
     default = TEXT
     default.field = date
-		default.strftime = %a, %d.%m.%y Anstoss: %H:%M Uhr
-    2 = TEXT
-    2.value = -
+    default.strftime = %a, %d.%m.%y Anstoss: %H:%M Uhr
+    H0000 = TEXT
+    H0000 {
+      field = date
+      strftime = %A, %e. %B %Y
+    }
     key {
       field = date
-      ifEmpty = 2
+      strftime = H%H%M
     }
   }
   liveticker_author.wrap = Das Spielstenogramm von&nbsp;|
