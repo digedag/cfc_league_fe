@@ -50,7 +50,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 			return $formatter->configurations->getLL('team_notFound');
 		}
 		$this->prepareRecord($team);
-		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_initRecord', array('item' => &$team, 'template'=>&$template), $this);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_initRecord', array('item' => &$team, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
 		$ignore = self::findUnusedCols($team->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $confId , $ignore, $marker.'_',$team->getColumnNames());
@@ -82,7 +82,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$this->pullTT();
 
 		$template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_afterSubst', array('item' => &$team, 'template'=>&$template), $this);
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_afterSubst', array('item' => &$team, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		return $template;
 	}
 
