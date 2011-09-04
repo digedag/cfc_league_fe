@@ -116,6 +116,29 @@ lib.t3sports.pagebrowser {
   hideIfSinglePage = 1
   link.useKeepVars = 1
 }
+lib.t3sports.group {
+  logo = USER
+  logo {
+    userFunc = tx_rnbase_util_TSDAM->printImages
+    refField = logo
+    refTable = tx_cfcleague_group
+#    template = EXT:cfc_league_fe/res/lightboxpics.html
+#    subpartName = ###PICTURES###
+    media {
+      file = IMAGE
+      file.file.import.field = file
+      file.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
+      file.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
+      thumbnail < .file
+      thumbnail = IMAGE
+      thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_matchThumb}
+      thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_matchThumb}
+      thumbnail.params = border="0"
+      thumbnail.titleText.field = title
+    }
+  }
+}
+
 lib.t3sports.competition {
   short_name.crop = 5 | ... | 1
   short_name.ifEmpty.field = name
@@ -428,6 +451,7 @@ lib.t3sports.team {
   }
   roll.value = 1
   listinfo.llkeyEmpty = teamlist_empty
+  group =< lib.t3sports.group
 
   pictures = USER
   pictures {

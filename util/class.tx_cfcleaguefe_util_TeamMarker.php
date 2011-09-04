@@ -77,9 +77,12 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 
 		// set club data
 		$this->pushTT('Club data');
-		if(self::containsMarker($template, $marker.'_CLUB'))
+		if(self::containsMarker($template, $marker.'_CLUB_'))
 			$template = $this->_addClubData($template, $team->getClub(), $formatter, $confId.'club.', $marker.'_CLUB');
 		$this->pullTT();
+
+		if($this->containsMarker($template, $marker.'_GROUP_'))
+			$template = $this->addGroup($template, $team, $formatter, $confId.'group.', $marker.'_GROUP');
 
 		$template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_afterSubst', array('item' => &$team, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
@@ -96,6 +99,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$group = $srv->getAgeGroup($item);
 //		$group = $item->getAgeGroup();
 		$GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->uid : 0;
+		$item->record['group'] = is_object($group) ?  $group->getUid() : '0';
 		$item->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
 		$item->record['firstpicture'] = $item->record['dam_images'];
 		$item->record['pictures'] = $item->record['dam_images'];
@@ -104,7 +108,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	/**
 	 * Hinzufügen der Daten des Vereins
 	 *
-	 * @param array $firstMarkerArray
+	 * @param string $template
 	 * @param tx_cfcleaguefe_models_club $club
 	 */
 	protected function _addClubData($template, $club, $formatter, $clubConf, $markerPrefix) {
@@ -112,6 +116,21 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
 		return $template;
 	}
+	/**
+	 * Hinzufügen der Altersklasse
+	 *
+	 * @param string $template
+	 * @param tx_cfcleaguefe_models_team $item
+	 */
+	protected function addGroup($template, $item, $formatter, $confId, $markerPrefix) {
+		$srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
+		$group = $srv->getAgeGroup($item);
+
+		$groupMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_GroupMarker');
+		$template = $groupMarker->parseTemplate($template, $group, $formatter, $confId, $markerPrefix);
+		return $template;
+	}
+
 	/**
 	 * Hinzufügen der Spieler des Teams.
 	 * @param string $template HTML-Template für die Profile

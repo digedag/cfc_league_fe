@@ -38,20 +38,23 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $marker Name des Markers
 	 * @return String das geparste Template
 	 */
-	public function parseTemplate($template, &$group, &$formatter, $confId, $marker = 'GROUP') {
-		if(!is_object($group)) {
-			// Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
-			$group = self::getEmptyInstance('tx_cfcleaguefe_models_group');
+	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'GROUP') {
+		if(!is_object($item)) {
+			// Ist kein Objekt vorhanden wird ein leeres Objekt verwendet.
+			$item = self::getEmptyInstance('tx_cfcleaguefe_models_group');
 		}
-		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
-		$markerArray = $formatter->getItemMarkerArrayWrapped($group->record, $confId , 0, $marker.'_',$group->getColumnNames());
-		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-		return $out;
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','groupMarker_initRecord', array('item' => &$item, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
+		// Es wird das MarkerArray mit den Daten des Records gefüllt.
+		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , 0, $marker.'_',$item->getColumnNames());
+		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
+		tx_rnbase_util_Misc::callHook('cfc_league_fe','groupMarker_afterSubst', array('item' => &$item, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
+		return $template;
 	}
 }
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_GroupMarker.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_GroupMarker.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_GroupMarker.php']);
 }
 ?>
