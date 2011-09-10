@@ -102,6 +102,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		}
 		$fields = array();
 		$options = array();
+		$options['orderby']['MATCH.ROUND'] = 'asc';
 		$matchTable->getFields($fields, $options);
 		// Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
 		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field

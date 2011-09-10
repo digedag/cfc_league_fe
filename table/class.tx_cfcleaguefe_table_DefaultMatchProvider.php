@@ -211,13 +211,14 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		$matchTable = $this->getMatchTable();
 		$fields = array();
 		$options = array();
+		$options['orderby']['MATCH.ROUND'] = 'asc';
 		$matchTable->getFields($fields, $options);
 		// Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
 		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
 		// Haben wir eine $currRound
 
 		$this->modifyMatchFields($fields, $options);
-		//$options['debug'] = 1;
+//		$options['debug'] = 1;
 		$this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
 		return $this->matches;
 	}
