@@ -10,6 +10,7 @@ v0.8.2 (??.05.2011)
  * ScopeSelection configured for report plugin
  * New Leaguetable: Set H2H-mode by TS: leaguetable.comparatorClass = tx_cfcleaguefe_table_football_ComparatorH2H
  * Match report: display match notes with listmarker.
+ * Bugfix: Don't cache scope if no cObj UID is available
 
 v0.8.1 (17.10.2010)
  * Leaguetable: new head to head mode. That means the direct match decides the position if points are equals. Set this by TS: leaguetable.compareMethod = compareTeamsH2H. Thanks to Christophe Denis!
