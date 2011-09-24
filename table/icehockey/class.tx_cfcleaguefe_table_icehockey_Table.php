@@ -35,7 +35,140 @@ tx_rnbase::load('tx_cfcleaguefe_table_football_Table');
  */
 class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football_Table {
 
+	/**
+	 * @return tx_cfcleaguefe_table_icehockey_Configurator
+	 */
+	public function getConfigurator($forceNew=false) {
+		if($forceNew || !is_object($this->configurator)) {
+			$configuratorClass = $this->getConfValue('configuratorClass');
+			$configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_icehockey_Configurator';
+			$this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
+		}
+		return $this->configurator;
+	}
 
+
+	/**
+	 * Zählt die Punkte für eine normale Tabelle
+	 * @param tx_cfcleague_models_Match $match
+	 * @param int $toto
+	 */
+	protected function countStandard(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+		// Anzahl Spiele aktualisieren
+		$homeId = $configurator->getTeamId($match->getHome());
+		$guestId = $configurator->getTeamId($match->getGuest());
+		$this->addMatchCount($homeId);
+		$this->addMatchCount($guestId);
+		// Für H2H modus das Spielergebnis merken
+		$this->addResult($homeId, $guestId, $match->getResult());
+
+		if($toto == 0) { // Unentschieden
+			$this->addPoints($homeId, $configurator->getPointsDraw());
+			$this->addPoints($guestId, $configurator->getPointsDraw());
+			if($configurator->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $configurator->getPointsDraw());
+				$this->addPoints2($guestId, $configurator->getPointsDraw());
+			}
+
+			$this->addDrawCount($homeId);
+			$this->addDrawCount($guestId);
+		}
+		elseif($toto == 1) {  // Heimsieg
+			$this->addPoints($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($guestId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
+			if($configurator->isCountLoosePoints()) {
+				$this->addPoints2($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			}
+
+			$this->addWinCount($homeId);
+			$this->addLoseCount($guestId);
+		}
+		else { // Auswärtssieg
+			$this->addPoints($homeId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			if($configurator->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			}
+			$this->addLoseCount($homeId);
+			$this->addWinCount($guestId);
+		}
+
+		// Jetzt die Tore summieren
+		$this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
+		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+	}
+
+  /**
+   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
+   * Heimmannschaft gewertet.
+	 * @param tx_cfcleague_models_Match $match
+	 * @param int $toto
+	 */
+	protected function countHome(&$match, $toto, tx_cfcleaguefe_table_icehockey_Configurator $configurator) {
+		$homeId = $configurator->getTeamId($match->getHome());
+		$guestId = $configurator->getTeamId($match->getGuest());
+		// Anzahl Spiele aktualisieren
+		$this->addMatchCount($homeId);
+		$this->addResult($homeId, $guestId, $match->getGuest());
+
+		if($toto == 0) { // Unentschieden
+			$this->addPoints($homeId, $configurator->getPointsDraw());
+			if($configurator->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $configurator->getPointsDraw());
+			}
+			$this->addDrawCount($homeId);
+		}
+		elseif($toto == 1) {  // Heimsieg
+			$this->addPoints($homeId, $configurator->getPointsWin());
+			$this->addWinCount($homeId);
+		}
+		else { // Auswärtssieg
+			$this->addPoints($homeId, $configurator->getPointsLoose());
+			if($configurator->isCountLoosePoints()) {
+				$this->addPoints2($homeId, $configurator->getPointsWin());
+			}
+			$this->addLoseCount($homeId);
+		}
+		// Jetzt die Tore summieren
+		$this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
+	}
+
+	/**
+	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die 
+   * Gastmannschaft gewertet.
+	 * @param tx_cfcleague_models_Match $match
+	 * @param int $toto
+	 */
+	protected function countGuest(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+
+		$homeId = $configurator->getTeamId($match->getHome());
+		$guestId = $configurator->getTeamId($match->getGuest());
+		// Anzahl Spiele aktualisieren
+		$this->addMatchCount($guestId);
+		$this->addResult($homeId, $guestId, $match->getGuest());
+
+		if($toto == 0) { // Unentschieden
+			$this->addPoints($guestId, $configurator->getPointsDraw());
+			if($configurator->isCountLoosePoints()) {
+				$this->addPoints2($guestId, $configurator->getPointsDraw());
+			}
+			$this->addDrawCount($guestId);
+		}
+		elseif($toto == 1) {  // Heimsieg
+			$this->addPoints($guestId, $configurator->getPointsLoose());
+			if($configurator->isCountLoosePoints()) {
+				$this->addPoints2($guestId, $configurator->getPointsWin());
+			}
+			$this->addLoseCount($guestId);
+		}
+		else { // Auswärtssieg
+			$this->addPoints($guestId, $configurator->getPointsWin());
+			$this->addWinCount($guestId);
+		}
+
+		// Jetzt die Tore summieren
+		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+	}
 }
 
 

@@ -187,7 +187,6 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 		foreach($penalties As $penalty) {
 			// Welches Team ist betroffen?
 			if(array_key_exists($penalty->record['team'], $this->_teamData)) {
-//    t3lib_div::debug($penalty, 'tx_cfcleaguefe_util_LeagueTable'); // TODO: Remove me!
 				// Die Strafe wird für den View mit abgespeichert
 				// Falls es eine Korrektur ist, dann nicht speichern
 				if(!$penalty->isCorrection())
@@ -221,7 +220,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 
 	/**
 	 * Die Spiele werden zum aktuellen Tabellenstand hinzugerechnet
-	 * @param array $matches
+	 * @param array[tx_cfcleague_models_Match] $matches
 	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
 	 */
 	protected function handleMatches(&$matches, tx_cfcleaguefe_table_football_Configurator $configurator) {
@@ -252,7 +251,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	}
 	/**
 	 * Zählt die Punkte für eine normale Tabelle
-	 * @param tx_cfcleaguefe_models_match $match
+	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
 	protected function countStandard(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
@@ -303,7 +302,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
   /**
    * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
    * Heimmannschaft gewertet.
-	 * @param tx_cfcleaguefe_models_match $match
+	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
 	protected function countHome(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
@@ -338,7 +337,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	/**
 	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die 
    * Gastmannschaft gewertet.
-	 * @param tx_cfcleaguefe_models_match $match
+	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
 	protected function countGuest(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
@@ -371,13 +370,13 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
 	}
 
-	private function addResult($homeId, $guestId, $result) {
+	protected function addResult($homeId, $guestId, $result) {
 		$this->_teamData[$homeId]['matches'][$guestId] = $result;
 	}
 	/**
 	 * Addiert Punkte zu einem Team
 	 */
-	private function addPoints($teamId, $points) {
+	protected function addPoints($teamId, $points) {
 		$this->_teamData[$teamId]['points'] = $this->_teamData[$teamId]['points'] + $points;
 	}
 
@@ -385,23 +384,23 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	 * Addiert negative Punkte zu einem Team. Diese Funktion wird nur im 2-Punkte-System
 	 * verwendet.
 	 */
-	private function addPoints2($teamId, $points) {
+	protected function addPoints2($teamId, $points) {
 		$this->_teamData[$teamId]['points2'] = $this->_teamData[$teamId]['points2'] + $points;
 	}
 	/**
 	 * Addiert die absolvierten Spiele zu einem Team
  	 */
-	private function addMatchCount($teamId) {
+	protected function addMatchCount($teamId) {
 		$this->_teamData[$teamId]['matchCount'] = $this->_teamData[$teamId]['matchCount'] + 1;
 	}
 
-	private function addWinCount($teamId) {
+	protected function addWinCount($teamId) {
 		$this->_teamData[$teamId]['winCount'] = $this->_teamData[$teamId]['winCount'] + 1;
 	}
-	private function addDrawCount($teamId) {
+	protected function addDrawCount($teamId) {
 		$this->_teamData[$teamId]['drawCount'] = $this->_teamData[$teamId]['drawCount'] + 1;
 	}
-	private function addLoseCount($teamId) {
+	protected function addLoseCount($teamId) {
 		$this->_teamData[$teamId]['loseCount'] = $this->_teamData[$teamId]['loseCount'] + 1;
 	}
 }
@@ -410,5 +409,3 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_football_Table.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_football_Table.php']);
 }
-
-?>

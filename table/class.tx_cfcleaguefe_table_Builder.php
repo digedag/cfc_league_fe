@@ -38,7 +38,8 @@ class tx_cfcleaguefe_table_Builder {
 	 * @return tx_cfcleaguefe_table_ITableType
 	 */
 	public static function buildByCompetitionAndMatches($league, $matches, $configurations, $confId) {
-		$tableType = $league->getTableType();
+		$tableType = $league->getSports();
+
 		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
 		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($tableType, $configurations, $confId);
 		$prov->setLeague($league);
@@ -65,7 +66,7 @@ class tx_cfcleaguefe_table_Builder {
 		// die weiteren Klassen notwendig ist.
 		// die Sportart wird daher static auf Basis des Scopes ermittelt
 		tx_rnbase::load('tx_cfcleaguefe_table_DefaultMatchProvider');
-		$tableType = tx_cfcleaguefe_table_DefaultMatchProvider::getLeagueFromScope($scopeArr)->getTableType();
+		$tableType = tx_cfcleaguefe_table_DefaultMatchProvider::getLeagueFromScope($scopeArr)->getSports();
 
 		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
 		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($tableType, $configurations, $confId);
@@ -75,7 +76,7 @@ class tx_cfcleaguefe_table_Builder {
 		// dann die Integration der GUI
 		// Der Provider kennt die Spiele, also könnte er auch die Sportart kennen...
 		$table = tx_cfcleaguefe_table_Factory::createTableType($tableType);
-		
+
 		$table->setConfigurations($configurations, $confid.'tablecfg.');
 		// MatchProvider und Configurator müssen sich gegenseitig kennen
 		$table->setMatchProvider($prov);

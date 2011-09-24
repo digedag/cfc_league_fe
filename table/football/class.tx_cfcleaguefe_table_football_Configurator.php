@@ -34,9 +34,9 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 	/**
 	 * @var tx_cfcleaguefe_table_IMatchProvider
 	 */
-	private $matchProvider;
-	private $configurations;
-	private $confId;
+	protected $matchProvider;
+	protected $configurations;
+	protected $confId;
 	public function __construct(tx_cfcleaguefe_table_IMatchProvider $matchProvider, $configurations, $confId) {
 		$this->matchProvider = $matchProvider;
 		$this->configurations = $configurations;

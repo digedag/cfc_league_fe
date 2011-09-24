@@ -243,6 +243,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	/**
 	 * Returns the first league found from given scope
 	 * @param array $scopeArr
+	 * @return tx_cfcleague_models_Competition
 	 */
 	public static function getLeagueFromScope($scopeArr) {
 		$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();

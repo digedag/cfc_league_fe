@@ -35,22 +35,29 @@ class tx_cfcleaguefe_table_icehockey_Configurator extends tx_cfcleaguefe_table_f
 	 * @return boolean
 	 */
 	public function isCountLoosePoints() {
-		// TODO: Es gibt auch hier verschiedene Zählungen. Diese müssen konfigurierbar werden.
-		return $this->cfgPointSystem == '1'; // im 2-Punktesystem die Minuspunkte sammeln
+
+		return true; // Beim eishockey werden immer die Minuspunkte gezählt.
 	}
 
-	public function getPointsWin(boolean $afterExtraTime) {
-		
+	public function getPointsWin($afterExtraTime, $afterPenalty) {
+		$points = $this->getPointSystem() == '1' ? 2 : 3;
+		if($this->getPointSystem() == 0) {
+			// Drei Punkt
+			$points = $afterExtraTime || $afterPenalty ? 2 : $points;
+		}
+		return $points;
 	}
-	public function getPointsWin() {
-		return $this->cfgPointSystem == '1' ? 2 : 3;
+	public function getPointsDraw($afterExtraTime, $afterPenalty) {
+		return 1; // Unentschieden gibt es eigentlich nicht...
 	}
-	public function getPointsDraw() {
-		return 1;
+	public function getPointsLoose($afterExtraTime, $afterPenalty) {
+		return $afterExtraTime || $afterPenalty ? 1 : 0;
 	}
-	public function getPointsLoose(boolean $afterExtraTime) {
-		return 0;
-	}
+	/**
+	 * Quelle: http://de.wikipedia.org/wiki/Punkteregel#Eishockey
+	 * 0- 3-Punktsystem
+	 * 1- 2-Punktsystem
+	 */
 	public function getPointSystem() {
 		return $this->cfgPointSystem;
 	}
