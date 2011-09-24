@@ -83,6 +83,8 @@
 			<label index="label_matchstatus_10">postponed</label>
 			<label index="label_matchstatus_postponed">postponed</label>
 			<label index="label_matchstatus_invalid">invalid</label>
+			<label index="label_afterextratime_short">a.e.</label>
+			<label index="label_onpenalty_short">o.p.</label>
 
 			<label index="label_basepoint">Base point for distance calculation</label>
 			<label index="label_distance">Distance</label>
@@ -155,6 +157,8 @@
 			<label index="label_matchstatus_10">Verlegt</label>
 			<label index="label_matchstatus_postponed">Verlegt</label>
 			<label index="label_matchstatus_invalid">Ungültig</label>
+			<label index="label_afterextratime_short">n.V.</label>
+			<label index="label_onpenalty_short">u.E.</label>
 
 			<label index="label_basepoint">Ausgangspunkt für Entfernungsberechnung</label>
 			<label index="label_distance">Entfernung</label>

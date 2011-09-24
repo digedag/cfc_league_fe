@@ -545,6 +545,22 @@ lib.t3sports.match {
   game_report_author.wrap = Der Spielbericht von&nbsp;|
   game_report_author.required = 1
 
+  dcresultsuffix = COA
+  dcresultsuffix {
+    20 = TEXT
+    20.value = ###LABEL_AFTEREXTRATIME_SHORT###
+    20.if {
+      value = 1
+      equals.field = is_extratime
+    }
+    30 = TEXT
+    30.value = ###LABEL_ONPENALTY_SHORT###
+    30.if {
+      value = 1
+      equals.field = is_penalty
+    }
+  }
+
   pictures = USER
   pictures {
     userFunc = tx_rnbase_util_TSDAM->printImages
