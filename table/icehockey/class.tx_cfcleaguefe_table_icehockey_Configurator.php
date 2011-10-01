@@ -31,12 +31,11 @@ tx_rnbase::load('tx_cfcleaguefe_table_football_Configurator');
  */
 class tx_cfcleaguefe_table_icehockey_Configurator extends tx_cfcleaguefe_table_football_Configurator {
 	/**
-	 * 2-point-system
+	 * Whether or not loose points are count
 	 * @return boolean
 	 */
 	public function isCountLoosePoints() {
-
-		return true; // Beim eishockey werden immer die Minuspunkte gezählt.
+		return $this->getPointSystem() == '1'; // Beim eishockey gibt es im 3-Punktsystem keine Minuspunkte.
 	}
 
 	public function getPointsWin($afterExtraTime, $afterPenalty) {
