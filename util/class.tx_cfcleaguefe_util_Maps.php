@@ -97,8 +97,9 @@ class tx_cfcleaguefe_util_Maps {
 		else {
 			$coord = self::lookupAddress($item->getStreet(),$item->getCity(),'',$item->getZip(), $item->getCountryCode());
 		}
-		$distance = self::calculateDistance($coord->getLatitude(), $coord->getLongitude(), $lat,$lng);
-		return $distance;
+		if($coord)
+			return self::calculateDistance($coord->getLatitude(), $coord->getLongitude(), $lat,$lng);
+		return 0;
 	}
 	
 	/**

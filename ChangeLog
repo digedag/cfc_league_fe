@@ -13,6 +13,7 @@ v0.8.2 (??.05.2011)
  * Bugfix: Don't cache scope if no cObj UID is available
  * New marker ###MATCH_DCRESULTSUFFIX### to indicate extra time and penalty
  * Leaguetable works for icehockey in 2 and 3 point system
+ * NPE in distance calculation fixed if wec_map is not installed
 
 v0.8.1 (17.10.2010)
  * Leaguetable: new head to head mode. That means the direct match decides the position if points are equals. Set this by TS: leaguetable.compareMethod = compareTeamsH2H. Thanks to Christophe Denis!
