@@ -77,7 +77,13 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 	}
 
 	public function getMarkClubs(){
-		return $this->markClubs ? $this->markClubs : t3lib_div::intExplode(',',$this->getConfValue('markClubs'));
+		if(!$this->markClubs) {
+			$values = $this->getConfValue('markClubs');
+			if(!$values)
+				$values = $this->configurations->get('markClubs'); // used from flexform
+			$this->markClubs = t3lib_div::intExplode(',',$values);
+		}
+		return $this->markClubs;
 	}
 	/**
 	 * Returns the table type. This means which matches to use: all, home or away matches only
