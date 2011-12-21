@@ -68,6 +68,9 @@ class tx_cfcleaguefe_table_Builder {
 		tx_rnbase::load('tx_cfcleaguefe_table_DefaultMatchProvider');
 		$tableType = tx_cfcleaguefe_table_DefaultMatchProvider::getLeagueFromScope($scopeArr)->getSports();
 
+		// Vereine dürfen die Spielauswahl nicht einschränken
+		unset($scopeArr['CLUB_UIDS']);
+
 		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
 		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($tableType, $configurations, $confId);
 		$prov->setScope($scopeArr);
