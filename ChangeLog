@@ -3,13 +3,13 @@
 Änderungen
 ----------
 
-v0.8.2 (??.05.2011)
+v0.8.2 (21.12.2011)
  * Match date: show no kickoff time in FE if not set. Thanks to saerdna78 from typo3.org forum!
  * #52: Exception in league table alltime fixed.
  * ROLL-Markers added and configured in TeamView for players
  * ScopeSelection configured for report plugin
  * New Leaguetable: Set H2H-mode by TS: leaguetable.comparatorClass = tx_cfcleaguefe_table_football_ComparatorH2H
- * Match report: display match notes with listmarker.
+ * Match report: display match notes with listbuilder.
  * Bugfix: Don't cache scope if no cObj UID is available
  * New marker ###MATCH_DCRESULTSUFFIX### to indicate extra time and penalty
  * Leaguetable works for icehockey in 2 and 3 point system
