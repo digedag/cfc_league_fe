@@ -70,14 +70,14 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC {
 				return $out; // Ohne Liga keine Tabelle!
 		}
 		else {
-			// Die Tabelle wird berechnet, wenn der aktuelle Scope auf eine Liga zeigt
-			if(!(isset($compUids) && t3lib_div::testInt($compUids))) {
-				return $out;
-			}
-			// Wir müssen den Typ des Wettbewerbs ermitteln.
-			$currCompetition = new tx_cfcleaguefe_models_competition($compUids);
-			if(intval($currCompetition->record['type']) != 1) {
-				return $out;
+			// Wenn ein einzelner Wettbewerb ausgewählt ist, muss es eine Liga sein
+			// Bei mehreren liegt es in der Verantwortungen 
+			if(isset($compUids) && t3lib_div::testInt($compUids)) {
+				// Wir müssen den Typ des Wettbewerbs ermitteln.
+				$currCompetition = tx_rnbase::makeInstance('tx_cfcleague_models_competition', $compUids);
+				if(intval($currCompetition->record['type']) != 1) {
+					return $out;
+				}
 			}
 		}
 
@@ -85,17 +85,7 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC {
 		tx_rnbase::load('tx_cfcleaguefe_table_Builder');
 		$table = tx_cfcleaguefe_table_Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
 
-//		$viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
-//		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
-//		$viewData->offsetSet('league', $currCompetition); // Die Liga für den View bereitstellen
 		$viewData->offsetSet('table', $table); // Die Tabelle für den View bereitstellen
-		
-//		t3lib_div::debug($table->getTableData(), 'class.tx_cfcleaguefe_actions_LeagueTable.php'); // TODO: remove me
-
-//		// Müssen zusätzliche Selectboxen gezeigt werden?
-//		$this->_handleSBTableType($parameters, $configurations, $viewData);
-//		$this->_handleSBPointSystem($parameters, $configurations, $viewData);
-//		$this->_handleSBTableScope($parameters, $configurations, $viewData);
 
 		return '';
 	}
