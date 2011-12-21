@@ -217,6 +217,9 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
 		// Haben wir eine $currRound
 
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $this->configurations, $this->confId.'filter.fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $this->configurations, $this->confId.'filter.options.');
+
 		$this->modifyMatchFields($fields, $options);
 //		$options['debug'] = 1;
 		$this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
