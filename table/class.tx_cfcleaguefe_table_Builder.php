@@ -45,7 +45,7 @@ class tx_cfcleaguefe_table_Builder {
 		$prov->setLeague($league);
 		$prov->setMatches($matches);
 		$table = tx_cfcleaguefe_table_Factory::createTableType($tableType);
-		$table->setConfigurations($configurations, $confid.'tablecfg.');
+		$table->setConfigurations($configurations, $confId.'tablecfg.');
 		// MatchProvider und Configurator müssen sich gegenseitig kennen
 		$table->setMatchProvider($prov);
 		$c = $table->getConfigurator(true);
