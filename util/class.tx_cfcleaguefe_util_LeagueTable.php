@@ -393,7 +393,6 @@ class tx_cfcleaguefe_util_LeagueTable  {
 				$this->_teamData[$teamId]['markClub'] = in_array($team->record['club'], $markClubs) ? 1 : 0;
 			}
 		}
-//      t3lib_div::debug($this->_teamData,'Vereine');
 	}
 	/**
 	 * Returns position change, either UP or DOWN or EQ.

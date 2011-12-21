@@ -546,7 +546,15 @@
               </config>
             </TCEforms>
           </leaguetableTemplate>
-
+          <leaguetable.filter.options.debug>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </leaguetable.filter.options.debug>
         </el>
       </ROOT>
     </s_leaguetable>
