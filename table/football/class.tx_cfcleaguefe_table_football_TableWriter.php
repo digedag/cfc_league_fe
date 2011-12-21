@@ -89,7 +89,7 @@ class tx_cfcleaguefe_table_football_TableWriter implements tx_cfcleaguefe_table_
 		$tableData = $result->getScores($round);
 
 		// Sollen alle Teams gezeigt werden?
-		$tableSize = intval($configurations->get($confId.'tableSize'));
+		$tableSize = intval($configurations->get($confId.'tablecfg.tableSize'));
 		if($tableSize && $tableSize < count($tableData)) {
 			// Es sollen weniger Teams gezeigt werden als vorhanden sind
 			// Diesen Ausschnitt müssen wir jetzt ermitteln
