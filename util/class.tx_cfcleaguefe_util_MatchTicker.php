@@ -161,6 +161,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 				if(!$changeOutHome->isEmpty()) {
 					$change =& $changeOutHome->get();
 					$change->record['player_home_2'] = $ticker->record['player_home'];
+					$change->record['comment2'] = $ticker->record['comment'];
 				}
 				else {
 					// Einwechslung ablegen
@@ -176,6 +177,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 					// Wartet schon so ein Wechsel
 					$change =& $changeInHome->get();
 					$ticker->record['player_home_2'] = $change->record['player_home'];
+					$change->record['comment2'] = $ticker->record['comment'];
 				}
 				else {
 					//t3lib_div::debug($ticker->record, 'Ausw ablegen util_match_ticker');
@@ -192,6 +194,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 					// Die Auswechslung holen
 					$change =& $changeOutGuest->get();
 					$change->record['player_guest_2'] = $ticker->record['player_guest'];
+					$change->record['comment2'] = $ticker->record['comment'];
 				}
 				else {
 					// Einwechslung ablegen
@@ -206,6 +209,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 					// Es muss immer die Auswechslung erhalten bleiben
 					$changeIn =& $changeInGuest->get();
 					$ticker->record['player_guest_2'] = $changeIn->record['player_guest'];
+					$change->record['comment2'] = $ticker->record['comment'];
 				}
 				else {
 					// Auswechselung ablegen
