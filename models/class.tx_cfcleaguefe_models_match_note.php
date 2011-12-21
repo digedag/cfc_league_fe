@@ -563,27 +563,23 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 	 */
 	function _getPlayerChange($type) {
 		// Ist es ein Wechsel?
-		if($this->isChange()) {
-
+		if($this->isChange() && ($this->record['player_home'] || $this->record['player_guest'])) {
 			// Heim oder Gast?
 			if($this->record['player_home']) {
 				$players = $this->match->getPlayersHome(1);
-//if($this->uid == 1466)
-//  t3lib_div::debug($players, 'chg home mdl_note');
-				if($this->record['type'] == '80') { // Einwechslung
-					return $players[$this->record[$type ? 'player_home' : 'player_home_2']];
-				} else {
-					return $players[$this->record[$type ? 'player_home_2' : 'player_home']];
-				}
+				$playerField = $this->record['type'] == '80' ? 
+					($type ? 'player_home' : 'player_home_2') : 
+					($type ? 'player_home_2' : 'player_home');
 			}
-			elseif($this->record['player_guest']) {
+			else {
 				$players = $this->match->getPlayersGuest(1);
-//t3lib_div::debug($players, 'chg guest mdl_note');
-				if($this->record['type'] == '80') { // Einwechslung
-					return $players[$this->record[$type ? 'player_guest' : 'player_guest_2']];
-				}
-				return $players[$this->record[$type ? 'player_guest_2' : 'player_guest']];
+				$playerField = $this->record['type'] == '80' ?
+					$type ? 'player_guest' : 'player_guest_2' :
+					$type ? 'player_guest_2' : 'player_guest';
 			}
+			if($this->record[$playerField] < 0)
+				return $this->getUnknownPlayer();
+			return $players[$this->record[$playerField]];
 		}
 	}
 }
