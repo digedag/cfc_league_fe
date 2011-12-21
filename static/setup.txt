@@ -685,6 +685,7 @@ plugin.tx_cfcleaguefe_competition {
   matchtable {
     # Ausgabe mit HTML-Template
     viewType = HTML
+    _caching.disableSubstCache = 1
     filter = tx_cfcleaguefe_filter_Match
     # With fields it is possible to defined additional query options
     # select what matches you want to show
@@ -727,6 +728,7 @@ plugin.tx_cfcleaguefe_competition {
   }
 
 	matchcrosstable {
+    _caching.disableSubstCache = 1
     headline.team =< lib.t3sports.teamSmall
     dataline.team =< lib.t3sports.teamSmall
 #    dataline.implode =
