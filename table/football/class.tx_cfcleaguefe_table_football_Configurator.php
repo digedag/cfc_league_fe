@@ -75,6 +75,12 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 		if(!is_object($this->configurations)) return false;
 		return $this->configurations->get($this->confId.$key);
 	}
+	/**
+	 * @return tx_cfcleague_models_Competition
+	 */
+	public function getCompetition() {
+		return $this->getMatchProvider()->getBaseCompetition();
+	}
 
 	public function getMarkClubs(){
 		if(!$this->markClubs) {

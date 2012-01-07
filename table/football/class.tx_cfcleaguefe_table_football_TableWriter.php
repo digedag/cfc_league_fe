@@ -221,9 +221,18 @@ class tx_cfcleaguefe_table_football_TableWriter implements tx_cfcleaguefe_table_
 			// Die Daten für das Punktsystem kommen aus dem TCA der Tabelle tx_cfcleague_competition
 			// Die TCA laden
 
+			$sports = $configurator->getCompetition()->getSports();
+			$srv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+			$systems = $srv->getPointSystems($sports);
+			$items = array();
+			foreach($systems As $system) {
+				$items[] = $system[1];
+			}
+
 			// Wir bereiten die Selectbox vor
-			$items = array(0,1);
+			// $items = array(0,1);
 			//$items = array(1=>0,0=>1);
+
 			$arr = array($items, $configurator->getPointSystem());
 			$subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), 
 				$arr, $link, 'POINTSYSTEM', $configurations, $confId);

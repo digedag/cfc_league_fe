@@ -3,7 +3,10 @@
 Änderungen
 ----------
 
-v0.8.2 (21.12.2011)
+v0.8.3 (21.12.2011)
+ * Pointsystem selection in leaguetable is now dynamic for selected sports
+
+v0.8.2 (21.12.2011) (not released)
  * Match date: show no kickoff time in FE if not set. Thanks to saerdna78 from typo3.org forum!
  * #52: Exception in league table alltime fixed.
  * ROLL-Markers added and configured in TeamView for players

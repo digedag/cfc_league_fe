@@ -111,7 +111,15 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 			// Die TCA laden
 			$table = 'tx_cfcleague_competition';
 			t3lib_div::loadTCA($table);
-			$items = $this->translateItems($TCA[$table]['columns']['point_system']['config']['items']);
+//			$items = $this->translateItems($TCA[$table]['columns']['point_system']['config']['items']);
+//			$items = array(1=>0,0=>1);
+
+			$srv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+			$systems = $srv->getPointSystems('football');
+			$items = array();
+			foreach($systems As $system) {
+				$items[] = $system[1];
+			}
 
 			// Wir bereiten die Selectbox vor
 			$arr = Array();
