@@ -574,8 +574,8 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 			else {
 				$players = $this->match->getPlayersGuest(1);
 				$playerField = $this->record['type'] == '80' ?
-					$type ? 'player_guest' : 'player_guest_2' :
-					$type ? 'player_guest_2' : 'player_guest';
+					($type ? 'player_guest' : 'player_guest_2') :
+					($type ? 'player_guest_2' : 'player_guest');
 			}
 			if($this->record[$playerField] < 0)
 				return $this->getUnknownPlayer();
