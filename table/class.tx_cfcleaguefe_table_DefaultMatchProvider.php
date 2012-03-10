@@ -249,7 +249,6 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	 * @return tx_cfcleague_models_Competition
 	 */
 	public static function getLeagueFromScope($scopeArr) {
-		t3lib_div::debug($scopeArr, 'class.tx_cfcleaguefe_actions_LeagueTable.php Line: ' . __LINE__); // TODO: remove me
 		if(!($scopeArr['COMP_UIDS'] && $scopeArr['COMP_UIDS'] == intval($scopeArr['COMP_UIDS']))) {
 			$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
 			$matchTable = $matchSrv->getMatchTableBuilder();
