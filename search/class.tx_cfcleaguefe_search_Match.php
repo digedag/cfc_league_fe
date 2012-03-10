@@ -58,7 +58,7 @@ class tx_cfcleaguefe_search_Match extends tx_rnbase_util_SearchBase {
 	protected function getJoins($tableAliases) {
 		$join = '';
 		if(isset($tableAliases['COMPETITION'])) {
-			$join .= ' JOIN tx_cfcleague_competition ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid ';
+			$join .= ' JOIN tx_cfcleague_competition ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid AND tx_cfcleague_competition.deleted=0 AND tx_cfcleague_competition.hidden=0';
 		}
 		if(isset($tableAliases['TEAM1'])) {
 			$join .= ' INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid ';
