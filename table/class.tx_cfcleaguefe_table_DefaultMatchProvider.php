@@ -75,41 +75,45 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	public function getTeams() {
 		if(is_array($this->teams))
 			return $this->teams;
-		if($this->useClubs()) {
-			$this->teams = $this->getClubs();
-			return $this->teams;
-		}
 		$this->teams = array();
-		$matches = $this->getMatches();
-		for($i=0, $cnt = count($matches); $i < $cnt; $i++) {
-			$match = $matches[$i];
-			$team = $match->getHome();
-			if($team->getUid() && !array_key_exists($team->getUid(), $this->teams)) {
-				$this->teams[$team->getUid()] = $team;
+		// Es ist keine gute Idee, die Teams über die beendeten Spiele zu holen. 
+		// Dadurch kann am Saisonbeginn keine Tabelle erstellt werden.
+		// Es ist besser die Spiele über die Wettbewerbe zu laden.
+		$fields = array();
+		$options = array();
+		tx_rnbase::load('tx_cfcleague_search_Builder');
+		tx_cfcleague_search_Builder::setField($fields,'COMPETITION.SAISON', OP_IN_INT, $this->scope['SAISON_UIDS']);
+		tx_cfcleague_search_Builder::setField($fields,'COMPETITION.AGEGROUP', OP_INSET_INT, $this->scope['GROUP_UIDS']);
+		tx_cfcleague_search_Builder::setField($fields,'COMPETITION.UID', OP_IN_INT, $this->scope['COMP_UIDS']);
+		tx_cfcleague_search_Builder::setField($fields,'TEAM.CLUB', OP_IN_INT, $this->scope['CLUB_UIDS']);
+		if(intval($scope['COMP_OBLIGATION'])) {
+			if(intval($scope['COMP_OBLIGATION']) == 1)
+	  		$fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = 1;
+	  	else
+	  		$fields['COMPETITION.OBLIGATION'][OP_NOTEQ_INT] = 1;
+		}
+		tx_cfcleague_search_Builder::setField($fields,'COMPETITION.TYPE', OP_IN_INT, $this->scope['COMP_TYPES']);
+		tx_cfcleague_search_Builder::setField($fields,'TEAM.AGEGROUP', OP_IN_INT, $this->scope['TEAMGROUP_UIDS']);
+
+		$options['distinct']=1;
+		$options['orderby']['TEAM.SORTING'] = 'asc'; // Nach Sortierung auf Seite
+		$teams = tx_cfcleague_util_ServiceRegistry::getTeamService()->searchTeams($fields, $options);
+		$useClubs = $this->useClubs();
+		foreach($teams As $team) {
+			if(!$useClubs) {
+				if($team->getUid() && !array_key_exists($team->getUid(), $this->teams)) {
+					$this->teams[$team->getUid()] = $team;
+				}
 			}
-			$team = $match->getGuest();
-			if($team->getUid() && !array_key_exists($team->getUid(), $this->teams)) {
-				$this->teams[$team->uid] = $team;
+			else {
+				$club = $team->getClub();
+				if($club->uid && !array_key_exists($club->uid, $this->teams)) {
+					$club->record['club'] = $club->uid; // necessary for mark clubs
+					$this->teams[$club->uid] = $club;
+				}
 			}
 		}
 		return $this->teams;
-	}
-	private function getClubs() {
-		$teams = array();
-		for($i=0, $cnt = count($this->matches); $i < $cnt; $i++) {
-			$match = $this->matches[$i];
-			$club = $match->getHome()->getClub();
-			if($club->uid && !array_key_exists($club->uid, $teams)) {
-				$club->record['club'] = $club->uid; // necessary for mark clubs
-				$teams[$club->uid] = $club;
-			}
-			$club = $match->getGuest()->getClub();
-			if($club->uid && !array_key_exists($club->uid, $teams)) {
-				$club->record['club'] = $club->uid; // necessary for mark clubs
-				$teams[$club->uid] = $club;
-			}
-		}
-		return $teams;
 	}
 	private function useClubs() {
 		// Wenn die Tabelle über mehrere Saisons geht, dann müssen Clubs verwendet werden
@@ -216,12 +220,10 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		// Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
 		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
 		// Haben wir eine $currRound
-
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $this->configurations, $this->confId.'filter.fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $this->configurations, $this->confId.'filter.options.');
 
 		$this->modifyMatchFields($fields, $options);
-//		$options['debug'] = 1;
 		$this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
 		return $this->matches;
 	}

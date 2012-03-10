@@ -3,6 +3,9 @@
 Änderungen
 ----------
 
+v0.8.4 (10.03.2012)
+ * #64 League table is empty on start of saison
+
 v0.8.3 (21.12.2011)
  * Pointsystem selection in leaguetable is now dynamic for selected sports
 

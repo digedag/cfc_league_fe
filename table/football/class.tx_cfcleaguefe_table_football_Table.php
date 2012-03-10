@@ -89,32 +89,41 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
     $rounds = $this->getMatchProvider()->getRounds();
 		$comparator = $configurator->getComparator();
 
-    foreach($rounds As $round => $roundMatches) {
-			$this->handleMatches($roundMatches, $configurator);
-			// Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
-			$teamData = $this->_teamData;
-			$comparator->setTeamData($teamData);
-			usort($teamData, array($comparator, 'compare'));
-			// Nun setzen wir die Tabellenstände
-			reset($teamData);
-//			$scoreLine = array();
-			for($i=0; $i < count($teamData); $i++) {
-				$newPosition = $i +1;
-				$team = $teamData[$i];
-				if($this->_teamData[$team['teamId']]['position']) {
-					$oldPosition = $this->_teamData[$team['teamId']]['position'];
-					$this->_teamData[$team['teamId']]['oldposition'] = $oldPosition;
-					$this->_teamData[$team['teamId']]['positionchange'] = $this->getPositionChange($oldPosition, $newPosition);
-				}
-				$this->_teamData[$team['teamId']]['position'] = $newPosition;
-				// Jetzt die Daten des Teams übernehmen
-				$tableData->addScore($round, $this->_teamData[$team['teamId']]);
-//				$scoreLine[] = $this->_teamData[$team['teamId']];
-//				$tableData[$round][] = $this->_teamData[$team['teamId']];
+		if(!empty($rounds)) {
+	    foreach($rounds As $round => $roundMatches) {
+				$this->handleMatches($roundMatches, $configurator);
+				// Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
+				$teamData = $this->_teamData;
+				$comparator->setTeamData($teamData);
+				usort($teamData, array($comparator, 'compare'));
+				// Nun setzen wir die Tabellenstände
+				reset($teamData);
+				$this->addScore4Round($round, $teamData, $tableData);
 			}
+		}
+		else {
+			// Tabelle ohne Spiele, nur die Teams zeigen
+			$teamData = array_values($this->_teamData);
+			reset($teamData);
+			$this->addScore4Round(0, $teamData, $tableData);
 		}
 
 		return $tableData;
+	}
+	protected function addScore4Round($round, $teamData, $tableData) {
+
+		for($i=0; $i < count($teamData); $i++) {
+			$newPosition = $i +1;
+			$team = $teamData[$i];
+			if($this->_teamData[$team['teamId']]['position']) {
+				$oldPosition = $this->_teamData[$team['teamId']]['position'];
+				$this->_teamData[$team['teamId']]['oldposition'] = $oldPosition;
+				$this->_teamData[$team['teamId']]['positionchange'] = $this->getPositionChange($oldPosition, $newPosition);
+			}
+			$this->_teamData[$team['teamId']]['position'] = $newPosition;
+			// Jetzt die Daten des Teams übernehmen
+			$tableData->addScore($round, $this->_teamData[$team['teamId']]);
+		}
 	}
 
 	public function getTableWriter() {
