@@ -594,8 +594,11 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 		if(!$this->competition) {
 			tx_rnbase::load('tx_cfcleague_models_Competition');
 			$this->competition = tx_cfcleague_models_Competition::getInstance($this->record['competition']);
-			if(!is_object($this->competition))
+			if(!is_object($this->competition)) {
+				tx_rnbase::load('tx_rnbase_util_Logger');
+				tx_rnbase_util_Logger::warn('Match with UID ' . $this->uid . ' has no valid competition!', 't3sports', array('match'=>$this->record));
 				throw new Exception('Match with UID ' . $this->uid . ' has no valid competition!');
+			}
 		}
 		return $this->competition;
 	}
