@@ -249,19 +249,25 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	 * @return tx_cfcleague_models_Competition
 	 */
 	public static function getLeagueFromScope($scopeArr) {
-		$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
-		$matchTable = $matchSrv->getMatchTableBuilder();
-		$matchTable->setScope($scopeArr);
-
-		$fields = array();
-		$options = array();
-		$matchTable->getFields($fields, $options);
-		$options['what'] = 'distinct competition';
-
-		$result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
-		// es wird immer nur der 1. Wettbewerb verwendet
-		$leagueUid = count($result) ? $result[0]['competition'] : false;
+		t3lib_div::debug($scopeArr, 'class.tx_cfcleaguefe_actions_LeagueTable.php Line: ' . __LINE__); // TODO: remove me
+		if(!($scopeArr['COMP_UIDS'] && $scopeArr['COMP_UIDS'] == intval($scopeArr['COMP_UIDS']))) {
+			$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
+			$matchTable = $matchSrv->getMatchTableBuilder();
+			$matchTable->setScope($scopeArr);
+	
+			$fields = array();
+			$options = array();
+			$matchTable->getFields($fields, $options);
+			$options['what'] = 'distinct competition';
+	
+			$result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
+			// es wird immer nur der 1. Wettbewerb verwendet
+			$leagueUid = count($result) ? $result[0]['competition'] : false;
+		} 
+		else 
+			$leagueUid = intval($scopeArr['COMP_UIDS']);
 		if(!$leagueUid) throw new Exception('Could not find a valid competition.');
+
 		$league = tx_cfcleague_models_Competition::getInstance($leagueUid);
 		if(!$league->isValid())
 			throw new Exception('Competition with uid '.intval($leagueUid). ' is not valid!');
