@@ -40,14 +40,16 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		unset($teams[1]);
 		$league->setTeams(array_values($teams));
 		$matches = $league->getMatches(2);
-
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 
+		// Die Teams vorher setzen, damit kein DB-Zugriff erfolgt
+		$leagueTable->getMatchProvider()->setTeams(array_values($teams));
 		$result = $leagueTable->getTableData();
 		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+
 		
 		$scoreLine = $result->getScores();
 		$this->assertEquals(3, count($scoreLine), 'Table should contain 3 teams.');
@@ -64,6 +66,8 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		$config->_dataStore->offsetSet('tableType', '0');
 
 		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+		$leagueTable->getMatchProvider()->setTeams($league->getTeams());
+		
 		$result = $leagueTable->getTableData();
 
 		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
@@ -92,6 +96,7 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
 		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+		$leagueTable->getMatchProvider()->setTeams($league->getTeams());
 		$result = $leagueTable->getTableData();
   
 //    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');

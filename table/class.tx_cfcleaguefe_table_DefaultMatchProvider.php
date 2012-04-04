@@ -66,6 +66,13 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		return $this->configurator;
 	}
 	/**
+	 * It is possible to set teams from external. Useful to avoid database access.
+	 * @param array[tx_cfcleague_models_Team] $teams
+	 */
+	public function setTeams($teams) {
+		$this->teams = $teams;
+	}
+	/**
 	 * Return all teams or clubs of given matches. It returns teams for simple league tables.
 	 * But for alltime table, teams are useless. It exists one saison only! 
 	 * So for alltime table clubs are returned.
