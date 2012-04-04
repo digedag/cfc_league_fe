@@ -38,6 +38,11 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
 	public function addScore($round, $scoreLine) {
 		$this->tableData[$round][] = $scoreLine;
 	}
+
+	public function getRoundSize() {
+		return count($this->tableData);
+	}
+
 	/**
 	 * Return table data by round
 	 * If round is 0 the highest available round is returned.
