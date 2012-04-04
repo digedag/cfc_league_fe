@@ -44,6 +44,8 @@ class tx_cfcleaguefe_table_Builder {
 		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($tableType, $configurations, $confId);
 		$prov->setLeague($league);
 		$prov->setMatches($matches);
+		// Der Scope muss gesetzt werden, damit die Team gefunden werden
+		$prov->setScope(array('COMP_UIDS' => $league->getUid()));
 		$table = tx_cfcleaguefe_table_Factory::createTableType($tableType);
 		$table->setConfigurations($configurations, $confId.'tablecfg.');
 		// MatchProvider und Configurator müssen sich gegenseitig kennen
