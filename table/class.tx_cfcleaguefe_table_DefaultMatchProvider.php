@@ -186,7 +186,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		// Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem 
 		// in der Plugineinstellung. Somit funktionieren aber auch gleich die Alltimetabellen
 		$matchTable->setScope($this->scope);
-//		$matchTable->setCompetitions($this->getLeague()->uid);
+//		$matchTable->setCompetitionTypes(1);
 
 		if($this->currRound) {
 			// Nur bis zum Spieltag anzeigen
