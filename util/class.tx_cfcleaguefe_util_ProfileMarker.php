@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2012 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,25 +31,28 @@ tx_rnbase::load('tx_rnbase_util_Templates');
  * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich
  */
 class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
-  private $defaultMarkerArr;
-  private $options;
+	private $defaultMarkerArr;
+	private $options;
 
-  /**
-   * Initialisiert den Marker Array. 
-   */
-  function __construct(&$options = array()){
-  	$this->options = $options;
-  }
+	/**
+	 * Initialisiert den Marker Array. 
+	 */
+	public function __construct(&$options = array()){
+		$this->options = $options;
+	}
 
-  /**
-   * Initialisiert die Labels für die Profile-Klasse
-   *
-   * @param tx_rnbase_util_FormatUtil $formatter
-   * @param array $defaultMarkerArr
-   */
-  public function initLabelMarkers(&$formatter, $profileConfId, $defaultMarkerArr = 0, $profileMarker = 'PROFILE') {
-    return $this->prepareLabelMarkers('tx_cfcleaguefe_models_profile', $formatter, $profileConfId, $defaultMarkerArr, $profileMarker);
-  }
+	public function getOptions() {
+		return $this->options;
+	}
+	/**
+	 * Initialisiert die Labels für die Profile-Klasse
+	 *
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param array $defaultMarkerArr
+	 */
+	public function initLabelMarkers(&$formatter, $profileConfId, $defaultMarkerArr = 0, $profileMarker = 'PROFILE') {
+		return $this->prepareLabelMarkers('tx_cfcleaguefe_models_profile', $formatter, $profileConfId, $defaultMarkerArr, $profileMarker);
+	}
 
 	/**
 	 * @param $template das HTML-Template
@@ -83,7 +86,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_afterSubst', array('item' => &$profile, 'template'=>&$template, 'confId'=>$confId, 'marker'=>$marker, 'conf' => $formatter->getConfigurations()), $this);
 		return $template;
 	}
-	private function prepareRecord($item) {
+	protected function prepareRecord($item) {
 		$item->record['firstpicture'] = $item->record['dam_images'];
 		$item->record['pictures'] = $item->record['dam_images'];
 	}
