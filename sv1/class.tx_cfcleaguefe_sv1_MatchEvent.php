@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,32 +38,34 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 	var $subheader;
 	var $image;
 	var $category = 'Matches';
-  
+	/* @var $configurations tx_rnbase_configurations */
+
 	/**
 	 *  Finds all matches.
 	 *
 	 *  @return array The array of events represented by the model.
 	 */
 	function findAllWithin($start_date, $end_date, $pidList) {
+		/* @var $this->configurations tx_rnbase_configurations */
+		$configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
+    $configurations->init($this->conf, null, 'cal', 'cal');
 		$this->_init();
+		$confId = 'view.cfc_league_events.';
 
-		// Aus der Config holen wir die möglichen Einschränkungen für die Suche
-		$saisons = $this->conf['view.']['cfc_league_events.']['saisonSelection'];
-		$groups = $this->conf['view.']['cfc_league_events.']['groupSelection'];
-		$competitions = $this->conf['view.']['cfc_league_events.']['competitionSelection'];
-		$club = $this->conf['view.']['cfc_league_events.']['clubSelection'];
-
-
-		$arr = array();
 		$matchTable = $this->getMatchTable();
 		$start_date = is_object($start_date) ? $start_date->getTime() : $start_date;
 		$end_date = is_object($end_date) ? $end_date->getTime() : $end_date;
 		$matchTable->setDateRange($start_date, $end_date);
 		$matchTable->setPidList($pidList);
-		$matchTable->setSaisons($saisons);
-		$matchTable->setAgeGroups($groups);
-		$matchTable->setCompetitions($competitions);
-		$matchTable->setClubs($club);
+		$matchTable->setSaisons($configurations->get($confId.'saisonSelection'));
+		$matchTable->setAgeGroups($configurations->get($confId.'groupSelection'));
+		$matchTable->setCompetitions($configurations->get($confId.'competitionSelection'));
+		$matchTable->setClubs($configurations->get($confId.'clubSelection'));
+		$matchTable->setIgnoreDummy($configurations->getBool($confId.'ignoreDummy',false, false));
+		$matchTable->setCompetitionTypes($configurations->get($confId.'competitionTypes'));
+		$matchTable->setCompetitionObligation($configurations->getInt($confId.'competitionObligation'));
+		$matchTable->setLimit($configurations->getInt($confId.'limit'));
+		$matchTable->setLiveTicker($configurations->getBool('view.cfc_league_events.livetickerOnly', false, false));
 
 		$fields = array();
 		$options = array();
@@ -71,7 +73,11 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 			$options['debug'] = 1;
 		$matchTable->getFields($fields, $options);
 
-		$srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'fields.');
+		// Optionen
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'options.');
+
+		$srv = tx_cfcleague_util_ServiceRegistry::getMatchService();
 		$matches = $srv->search($fields, $options);
 
 		$events = array();
@@ -84,10 +90,10 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 	/**
 	 * Returns a new matchtable instance
 	 *
-	 * @return tx_cfcleaguefe_util_MatchTable
+	 * @return tx_cfcleague_util_MatchTableBuilder
 	 */
 	private function getMatchTable() {
-		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
+		return tx_rnbase::makeInstance('tx_cfcleague_util_MatchTableBuilder');
 	}
 	/**
 	 *  Finds a single event.
