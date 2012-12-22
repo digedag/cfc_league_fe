@@ -77,7 +77,7 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 		// Optionen
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'options.');
 
-		$srv = tx_cfcleague_util_ServiceRegistry::getMatchService();
+		$srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matches = $srv->search($fields, $options);
 
 		$events = array();
