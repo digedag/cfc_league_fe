@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -94,6 +94,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$this->pushTT('parse arena');
 		if($this->containsMarker($template, $marker.'_ARENA_'))
 			$template = $this->_addArena($template, $match, $formatter, $confId.'arena.', $marker.'_ARENA');
+		if($this->containsMarker($template, $marker.'_SETRESULTS'))
+			$template = $this->_addSetResults($template, $match, $formatter, $confId.'setresults.', $marker.'_SETRESULT');
 		$this->pullTT();
 
 		$template = $this->addTickerLists($template, $match, $formatter, $confId,$marker);
@@ -128,6 +130,24 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	}
 
 	/**
+	 * Integriert die Satzergebnisse
+	 * 
+	 * @param string $template
+	 * @param tx_cfcleaguefe_models_match $item
+	 * @param $formatter
+	 * @param $confId
+	 * @param $markerPrefix
+	 */
+	protected function _addSetResults($template, $item, $formatter, $confId, $markerPrefix) {
+    if(strlen(trim($template)) == 0) return '';
+    $sets = $item->getSets();
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+		$out = $listBuilder->render($sets,
+					false, $template, 'tx_rnbase_util_SimpleMarker',
+					$confId, $markerPrefix, $formatter, $options);
+		return $out;
+	}
+	/**
 	 * Bindet die Arena ein
 	 *
 	 * @param string $template
@@ -137,7 +157,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	 * @param string $markerPrefix
 	 * @return string
 	 */
-	protected function _addArena($template, &$item, &$formatter, $confId, $markerPrefix) {
+	protected function _addArena($template, $item, $formatter, $confId, $markerPrefix) {
 		$sub = $item->getArena();
 		if(!$sub) {
 			// Kein Stadium vorhanden. Leere Instanz anlegen und altname setzen

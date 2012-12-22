@@ -3,6 +3,10 @@
 Änderungen
 ----------
 
+v0.8.6 (??.12.2012)
+ * Bugfix for cal extension
+ * Support for match sets in matchtable
+
 v0.8.5 (08.12.2012)
  * New filter options for cal extension
 

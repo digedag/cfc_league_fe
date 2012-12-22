@@ -80,6 +80,9 @@
 			<label index="label_pictures">Pictures</label>
 			<label index="label_currentround">Current round</label>
 
+			<label index="label_sets">Sets</label>
+			<label index="label_set">Set</label>
+
 			<label index="label_matchstatus_10">postponed</label>
 			<label index="label_matchstatus_postponed">postponed</label>
 			<label index="label_matchstatus_invalid">invalid</label>
@@ -153,6 +156,9 @@
 			<label index="label_capacity">Kapazität</label>
 			<label index="label_pictures">Bilder</label>
 			<label index="label_currentround">Aktueller Spieltag</label>
+
+			<label index="label_sets">Sätze</label>
+			<label index="label_set">Satz</label>
 
 			<label index="label_matchstatus_10">Verlegt</label>
 			<label index="label_matchstatus_postponed">Verlegt</label>

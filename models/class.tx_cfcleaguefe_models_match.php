@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -350,12 +350,26 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     return $ret;
   }
 
-  /**
-   * Liefert die Schiedsrichterassistenten als Datenobjekte in einem Array
-   */
-  function getAssists() {
-    return $this->_getProfiles($this->record['assists']);
-  }
+	/**
+	 * Liefert die Schiedsrichterassistenten als Datenobjekte in einem Array
+	 */
+	function getAssists() {
+		return $this->_getProfiles($this->record['assists']);
+	}
+	protected $sets = null;
+
+	/**
+	 * Return sets if available
+	 * @return array[tx_cfcleague_models_Set]
+	 */
+	public function getSets() {
+		if(!is_array($this->sets)) {
+			tx_rnbase::load('tx_cfcleague_models_Set');
+			$this->sets = tx_cfcleague_models_Set::buildFromString($this->record['sets']);
+			$this->sets = $this->sets ? $this->sets : array();
+		}
+		return $this->sets;
+	}
 
   /**
    * Liefert die Spieler des Heimteams der Startelf als Datenobjekte in einem Array
