@@ -200,4 +200,101 @@ league_2:
         goals_guest_2: 0
         goals_home: 3
         goals_guest: 0
+league_volley_1: 
+  # Diese Liga besteht aus vier Teams und fünf absolvierten Spielen
+  clazz: tx_cfcleague_models_competition
+  record: 
+    uid: 1
+    teams: 1,2,3,4
+    point_system: 0
+    sports: volleyball
+    match_parts: 1
+  teams: 
+    clazz: tx_cfcleaguefe_models_team
+    - 
+      record: 
+        uid: 1
+        name: Team 1
+        short_name: Team 1
+        club: 1
+    - 
+      record: 
+        uid: 2
+        name: Team 2
+        short_name: Team 2
+        club: 2
+    - 
+      record: 
+        uid: 3
+        name: Team 3
+        short_name: Team 3
+        club: 3
+    - 
+      record: 
+        uid: 4
+        name: Team 4
+        short_name: Team 4
+        club: 4
+  matches: 
+    clazz: tx_cfcleaguefe_models_match
+    - 
+      # T1-T2 - 2:1 (25:20;23:25;25:19)
+      record: 
+        uid: 11
+        competition: 1
+        home: 1
+        guest: 2
+        round: 1
+        status: 2
+        goals_home_1: 2
+        goals_guest_1: 1
+        sets: 25:20;23:25;25:19
+    - 
+      # T3-T4 - 2:0 (25:20;25:23)
+      record: 
+        uid: 12
+        competition: 1
+        home: 3
+        guest: 4
+        round: 1
+        status: 2
+        goals_home_1: 2
+        goals_guest_1: 0
+        sets: 25:20;25:23
+    - 
+      # T3-T1 - 0:2 (21:25;22:25)
+      record: 
+        uid: 13
+        competition: 1
+        home: 3
+        guest: 1
+        round: 2
+        status: 2
+        goals_home_1: 0
+        goals_guest_1: 2
+        sets: 21:25;22:25
+    - 
+      # T4-T2 - 1:2  (25:20;23:25;19:25)
+      record: 
+        uid: 14
+        competition: 1
+        home: 4
+        guest: 2
+        round: 2
+        status: 2
+        goals_home_1: 1
+        goals_guest_1: 2
+        sets: 25:20;23:25;19:25
+    - 
+      # T1-T4 - 2:0 (25:21;25:21)
+      record: 
+        uid: 15
+        competition: 1
+        home: 1
+        guest: 4
+        round: 3
+        status: 2
+        goals_home_1: 2
+        goals_guest_1: 0
+        sets: 25:21;25:21
  

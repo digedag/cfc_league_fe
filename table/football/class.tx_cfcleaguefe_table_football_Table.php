@@ -32,7 +32,7 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
  */
 class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
 
-	private $_teamData = array();
+	protected $_teamData = array();
 
 	/**
 	 * Set configuration
@@ -171,7 +171,14 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 			if(count($markClubs)) {
 				$this->_teamData[$teamId]['markClub'] = in_array($team->record['club'], $markClubs) ? 1 : 0;
 			}
+			$this->initTeam($teamId);
 		}
+	}
+	/**
+	 * This methods is intended to be overwritten by subclasses to init team data
+	 * @param int $teamId
+	 */
+	protected function initTeam($teamId) {
 	}
 
 	/**
