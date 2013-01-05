@@ -138,7 +138,7 @@ league_2:
     - 
       # T1-T2 - 1:1 - Spielfrei
       record: 
-        uid: 11
+        uid: 31
         competition: 2
         home: 1
         guest: 2
@@ -151,7 +151,7 @@ league_2:
     - 
       # T3-T4 - 2:0
       record: 
-        uid: 12
+        uid: 32
         competition: 2
         home: 3
         guest: 4
@@ -164,7 +164,7 @@ league_2:
     - 
       # T3-T1 - 1:0
       record: 
-        uid: 13
+        uid: 33
         competition: 2
         home: 3
         guest: 1
@@ -177,7 +177,7 @@ league_2:
     - 
       # T4-T2 - 1:2 - Spielfrei
       record: 
-        uid: 14
+        uid: 34
         competition: 2
         home: 4
         guest: 2
@@ -190,7 +190,7 @@ league_2:
     - 
       # T1-T4 - 3:0
       record: 
-        uid: 15
+        uid: 35
         competition: 2
         home: 1
         guest: 4
@@ -204,7 +204,7 @@ league_volley_1:
   # Diese Liga besteht aus vier Teams und fünf absolvierten Spielen
   clazz: tx_cfcleague_models_competition
   record: 
-    uid: 1
+    uid: 100
     teams: 1,2,3,4
     point_system: 0
     sports: volleyball
@@ -240,8 +240,8 @@ league_volley_1:
     - 
       # T1-T2 - 2:1 (25:20;23:25;25:19)
       record: 
-        uid: 11
-        competition: 1
+        uid: 111
+        competition: 100
         home: 1
         guest: 2
         round: 1
@@ -252,8 +252,8 @@ league_volley_1:
     - 
       # T3-T4 - 2:0 (25:20;25:23)
       record: 
-        uid: 12
-        competition: 1
+        uid: 112
+        competition: 100
         home: 3
         guest: 4
         round: 1
@@ -264,8 +264,8 @@ league_volley_1:
     - 
       # T3-T1 - 0:2 (21:25;22:25)
       record: 
-        uid: 13
-        competition: 1
+        uid: 113
+        competition: 100
         home: 3
         guest: 1
         round: 2
@@ -276,8 +276,8 @@ league_volley_1:
     - 
       # T4-T2 - 1:2  (25:20;23:25;19:25)
       record: 
-        uid: 14
-        competition: 1
+        uid: 114
+        competition: 100
         home: 4
         guest: 2
         round: 2
@@ -288,8 +288,8 @@ league_volley_1:
     - 
       # T1-T4 - 2:0 (25:21;25:21)
       record: 
-        uid: 15
-        competition: 1
+        uid: 115
+        competition: 100
         home: 1
         guest: 4
         round: 3
