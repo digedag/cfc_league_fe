@@ -44,7 +44,7 @@ class tx_cfcleaguefe_tests_table_volleyball_Table_testcase extends tx_phpunit_te
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
-//t3lib_div::debug($matches, 'class.tx_cfcleaguefe_tests_table_volleyball_Table_testcase.php Line: ' . __LINE__); // TODO: remove me
+//t3lib_div::debug($league, 'class.tx_cfcleaguefe_tests_table_volleyball_Table_testcase.php Line: ' . __LINE__); // TODO: remove me
 
 		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 		$leagueTable->getMatchProvider()->setTeams($league->getTeams());
@@ -53,7 +53,7 @@ class tx_cfcleaguefe_tests_table_volleyball_Table_testcase extends tx_phpunit_te
 
 		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
 		$scoreLine = $result->getScores();
-		
+
 		$this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');
 
 		// Tabelle 2-P.
