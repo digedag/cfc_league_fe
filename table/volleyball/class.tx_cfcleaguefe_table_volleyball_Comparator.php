@@ -48,7 +48,7 @@ class tx_cfcleaguefe_table_volleyball_Comparator implements tx_cfcleaguefe_table
 				$t1diff = $t1['sets1'] - $t1['sets2'];
 				$t2diff = $t2['sets1'] - $t2['sets2'];
 				if($t1diff == $t2diff) {
-					// Jetzt zählen die mehr geschossenen Tore
+					// Jetzt zählen die mehr gewonnene Sätze
 					if($t1['sets1'] == $t2['sets1']) {
 						// #49: Und jetzt noch die Anzahl Spiele werten
 						if($t1['matchCount'] == $t2['matchCount']) {

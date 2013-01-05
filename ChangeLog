@@ -3,9 +3,10 @@
 Änderungen
 ----------
 
-v0.8.6 (??.12.2012)
+v0.8.6 (??.01.2012)
  * Bugfix for cal extension
  * Support for match sets in matchtable
+ * Support for volleyball in leaguetable
 
 v0.8.5 (08.12.2012)
  * New filter options for cal extension

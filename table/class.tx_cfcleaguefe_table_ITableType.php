@@ -59,6 +59,11 @@ interface tx_cfcleaguefe_table_ITableType {
 	 * @return tx_cfcleaguefe_table_IConfigurator
 	 */
 	public function getConfigurator();
+	/**
+	 * Unique id string for this type of table
+	 * @return string
+	 */
+	public function getTypeID();
 }
 
 

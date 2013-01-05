@@ -5,6 +5,17 @@
 <body>
 
 <h1>Template für Ligatabelle</h1>
+<p>Ab sofort werden Tabellen für verschiedene Sportarten unterstützt. Jede 
+Sportart erhält dafür einen eigenen Subpart innerhalb von #*#LEAGUE_TABLE###
+Mitgeliefert werden:
+<ul>
+<li>###SPORTS_FOOTBALL###
+<li>##SPORTS_ICEHOCKEY###
+<li>###SPORTS_VOLLEYBALL###
+</ul>
+</p>
+
+
 <h2>Vorhandene Marker:</h2>
 <pre>
 ###CONTROLS### Subpart für das Steuerungspanel der Tabelle
@@ -40,8 +51,87 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 
 
 
+<!-- ------------------------------------------------ -->
+<!-- START MAIN TEMPLATE -->
+<!-- ------------------------------------------------ -->
+###LEAGUE_TABLE###
 
-<!-- ###LEAGUE_TABLE### start -->
+###SPORTS_FOOTBALL###
+<h2>###LEAGUE_NAME###</h2>
+
+<!-- ###CONTROLS### start -->
+<div class="cfcleague-scopeselection">
+###CONTROL_TABLETYPE###
+<p>
+###CONTROL_TABLETYPE_NORMAL_LINK### ###LABEL_TABLETYPE_NORMAL### ###CONTROL_TABLETYPE_NORMAL_LINK###
+###CONTROL_TABLETYPE_HOME_LINK### ###LABEL_TABLETYPE_HOME### ###CONTROL_TABLETYPE_HOME_LINK###
+###CONTROL_TABLETYPE_AWAY_LINK### ###LABEL_TABLETYPE_AWAY### ###CONTROL_TABLETYPE_AWAY_LINK###
+</p>
+###CONTROL_TABLETYPE###
+
+###CONTROL_TABLESCOPE###
+<p>
+###CONTROL_TABLESCOPE_NORMAL_LINK### ###LABEL_TABLESCOPE_NORMAL### ###CONTROL_TABLESCOPE_NORMAL_LINK### 
+###CONTROL_TABLESCOPE_FIRST_LINK### ###LABEL_TABLESCOPE_FIRST### ###CONTROL_TABLESCOPE_FIRST_LINK### 
+###CONTROL_TABLESCOPE_SECOND_LINK### ###LABEL_TABLESCOPE_SECOND### ###CONTROL_TABLESCOPE_SECOND_LINK###
+</p>
+###CONTROL_TABLESCOPE###
+
+###CONTROL_POINTSYSTEM###
+<p>
+###CONTROL_POINTSYSTEM_POINT3_LINK### ###LABEL_POINTSYSTEM_POINT3### ###CONTROL_POINTSYSTEM_POINT3_LINK###
+###CONTROL_POINTSYSTEM_POINT2_LINK### ###LABEL_POINTSYSTEM_POINT2### ###CONTROL_POINTSYSTEM_POINT2_LINK###
+</p>
+###CONTROL_POINTSYSTEM###
+
+</div>
+<!-- ###CONTROLS### end -->
+
+
+
+
+###ROWS###
+<div class="cfcleague-leaguetable">
+<table cellspacing="0" cellpadding="0" class="cfcleague-leaguetable">
+<tr>
+  <th>Pl.</th><th>###LABEL_CLUB###</th><th>###LABEL_MATCHES###</th><th>S</th><th>U</th><th>N</th><th>###LABEL_GOALS###</th><th>###LABEL_DIFF###</th><th>###LABEL_POINTS###</th>
+</tr>
+
+###ROW###
+<tr class="cfcleague-leaguetable-row###ROW_ROLL### ###ROW_MARKCLUB### cfcleague-leaguetable-row_###ROW_MARK###">
+  <td>###ROW_POSITION###. (###ROW_OLDPOSITION###)</td>
+  <td>###ROW_LOGO### ###ROW_SHOWTEAMLINK######ROW_NAME######ROW_PENALTIES######ROW_SHOWTEAMLINK### (###ROW_SHOWMATCHTABLELINK######LABEL_MATCHTABLE######ROW_SHOWMATCHTABLELINK###)</td>
+  <td>###ROW_MATCHCOUNT###</td>
+  <td>###ROW_WINCOUNT###</td>
+  <td>###ROW_DRAWCOUNT###</td>
+  <td>###ROW_LOSECOUNT###</td>
+  <td>###ROW_GOALS1###:###ROW_GOALS2###</td>
+  <td>###ROW_GOALS_DIFF###</td>
+  <td>###ROW_POINTS######ROW_POINTS2###</td>
+</tr>
+###ROW###
+</table>
+</div>
+###ROWS###
+
+<!-- ###PENALTIES### start -->
+<div class="cfcleague-leaguetable-comments">
+
+<h3>Hinweise</h3>
+<!-- ###PENALTY### start -->
+<p class="cfcleague-leaguetable-comment">* ###PENALTY_COMMENT###
+</p>
+<!-- ###PENALTY### end -->
+</div>
+<!-- ###PENALTIES### end -->
+
+###SPORTS_FOOTBALL###
+
+<!-- ------------------------------- -->
+<!-- ------------------------------- -->
+
+
+###SPORTS_ICEHOCKEY###
 
 <h2>###LEAGUE_NAME###</h2>
 
@@ -80,7 +170,7 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 <div class="cfcleague-leaguetable">
 <table cellspacing="0" cellpadding="0" class="cfcleague-leaguetable">
 <tr>
-  <th>Pl.</th><th>Verein</th><th>Spiele</th><th>S</th><th>U</th><th>N</th><th>Tore</th><th>Diff</th><th>Punkte</th>
+  <th>Pl.</th><th>###LABEL_CLUB###</th><th>###LABEL_MATCHES###</th><th>S</th><th>U</th><th>N</th><th>###LABEL_GOALS###</th><th>###LABEL_DIFF###</th><th>###LABEL_POINTS###</th>
 </tr>
 
 ###ROW###
@@ -111,8 +201,96 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 </div>
 <!-- ###PENALTIES### end -->
 
-<!-- ###LEAGUE_TABLE### end -->
+###SPORTS_ICEHOCKEY###
 
+<!-- ------------------------------- -->
+<!-- ------------------------------- -->
+
+###SPORTS_VOLLEYBALL###
+
+<h2>###LEAGUE_NAME###</h2>
+
+<!-- ###CONTROLS### start -->
+<div class="cfcleague-scopeselection">
+###CONTROL_TABLETYPE###
+<p>
+###CONTROL_TABLETYPE_NORMAL_LINK### ###LABEL_TABLETYPE_NORMAL### ###CONTROL_TABLETYPE_NORMAL_LINK###
+###CONTROL_TABLETYPE_HOME_LINK### ###LABEL_TABLETYPE_HOME### ###CONTROL_TABLETYPE_HOME_LINK###
+###CONTROL_TABLETYPE_AWAY_LINK### ###LABEL_TABLETYPE_AWAY### ###CONTROL_TABLETYPE_AWAY_LINK###
+</p>
+###CONTROL_TABLETYPE###
+
+###CONTROL_TABLESCOPE###
+<p>
+###CONTROL_TABLESCOPE_NORMAL_LINK### ###LABEL_TABLESCOPE_NORMAL### ###CONTROL_TABLESCOPE_NORMAL_LINK### 
+###CONTROL_TABLESCOPE_FIRST_LINK### ###LABEL_TABLESCOPE_FIRST### ###CONTROL_TABLESCOPE_FIRST_LINK### 
+###CONTROL_TABLESCOPE_SECOND_LINK### ###LABEL_TABLESCOPE_SECOND### ###CONTROL_TABLESCOPE_SECOND_LINK###
+</p>
+###CONTROL_TABLESCOPE###
+
+###CONTROL_POINTSYSTEM###
+<p>
+###CONTROL_POINTSYSTEM_POINT3_LINK### ###LABEL_POINTSYSTEM_POINT3### ###CONTROL_POINTSYSTEM_POINT3_LINK###
+###CONTROL_POINTSYSTEM_POINT2_LINK### ###LABEL_POINTSYSTEM_POINT2### ###CONTROL_POINTSYSTEM_POINT2_LINK###
+</p>
+###CONTROL_POINTSYSTEM###
+
+</div>
+<!-- ###CONTROLS### end -->
+
+
+###ROWS###
+<div class="cfcleague-leaguetable">
+<table cellspacing="0" cellpadding="0" class="cfcleague-leaguetable">
+<tr>
+  <th>Pl.</th><th>###LABEL_CLUB###</th><th>###LABEL_MATCHES###</th><th>S</th><th>U</th><th>N</th><th>###LABEL_BALLS###</th><th>###LABEL_DIFF###</th><th>###LABEL_SETS###</th><th>###LABEL_POINTS###</th>
+</tr>
+
+###ROW###
+<tr class="cfcleague-leaguetable-row###ROW_ROLL### ###ROW_MARKCLUB### cfcleague-leaguetable-row_###ROW_MARK###">
+  <td>###ROW_POSITION###. (###ROW_OLDPOSITION###)</td>
+  <td>###ROW_LOGO### ###ROW_SHOWTEAMLINK######ROW_NAME######ROW_PENALTIES######ROW_SHOWTEAMLINK### (###ROW_SHOWMATCHTABLELINK######LABEL_MATCHTABLE######ROW_SHOWMATCHTABLELINK###)</td>
+  <td>###ROW_MATCHCOUNT###</td>
+  <td>###ROW_WINCOUNT###</td>
+  <td>###ROW_DRAWCOUNT###</td>
+  <td>###ROW_LOSECOUNT###</td>
+  <td>###ROW_BALLS1###:###ROW_BALLS2###</td>
+  <td>###ROW_BALLS_DIFF###</td>
+  <td>###ROW_SETS1###:###ROW_SETS2###</td>
+  <td>###ROW_POINTS######ROW_POINTS2###</td>
+</tr>
+###ROW###
+</table>
+</div>
+###ROWS###
+
+<!-- ###PENALTIES### start -->
+<div class="cfcleague-leaguetable-comments">
+
+<h3>Hinweise</h3>
+<!-- ###PENALTY### start -->
+<p class="cfcleague-leaguetable-comment">* ###PENALTY_COMMENT###
+</p>
+<!-- ###PENALTY### end -->
+</div>
+<!-- ###PENALTIES### end -->
+
+###SPORTS_VOLLEYBALL###
+
+###LEAGUE_TABLE###
+
+
+
+
+
+
+
+
+
+<!-- ------------------------------- -->
+<!-- ------------------------------- -->
+<!-- ------------------------------- -->
+<!-- ------------------------------- -->
 
 
 

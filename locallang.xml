@@ -9,7 +9,16 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 
+			<label index="label_club">Club</label>
+			<label index="label_matches">Matches</label>
+			<label index="label_match">Match</label>
+
 <!-- Labels for leaguetable -->
+			<label index="label_diff">Diff</label>
+			<label index="label_goal">Goal</label>
+			<label index="label_goals">Goals</label>
+			<label index="label_points">Points</label>
+			<label index="label_balls">Balls</label>
 			<label index="label_tabletype_normal">Standard Table</label>
 			<label index="label_tabletype_home">Home Table</label>
 			<label index="label_tabletype_away">Away Table</label>
@@ -95,7 +104,16 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 
+			<label index="label_club">Verein</label>
+			<label index="label_matches">Spiele</label>
+			<label index="label_match">Spiel</label>
+
 <!-- Labels for leaguetable -->
+			<label index="label_diff">Diff</label>
+			<label index="label_goal">Tor</label>
+			<label index="label_goals">Tore</label>
+			<label index="label_points">Punkte</label>
+			<label index="label_balls">Bälle</label>
 			<label index="label_tabletype_normal">Normal</label>
 			<label index="label_tabletype_home">Heimtabelle</label>
 			<label index="label_tabletype_away">Auswärtstabelle</label>
