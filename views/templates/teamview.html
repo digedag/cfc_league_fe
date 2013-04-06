@@ -42,13 +42,16 @@ Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser
 <h1>###TEAM_NAME###</h1>
 ###TEAM_LOGO###
 
-<p class="cfcleague-teamview-firstpic">###TEAM_FIRSTPICTURE###</p>
+<h3>Team-Bild</h3>
+<p class="cfcleague-teamview-firstpic">
+###TEAM_FIRSTPICTURE###
+</p>
 
 
   <!-- ###TEAM_PLAYERS### begin -->
   <div class="cfcleague-teamview-players">
   <h2>Das Aufgebot</h2>
-  <table style="width:483px">
+  <table class="table table-striped">
    <tr>
     <th>Bild</th>
     <th>Position / Trikot</th>
@@ -59,7 +62,7 @@ Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser
     <th>Nat.</th>
    </tr>
     <!-- ###TEAM_PLAYER### begin -->
-   <tr class="cfcleaguefe-teamview-player cfcleague-row###TEAM_PLAYER_ROLL### ">
+   <tr class="cfcleague-row###TEAM_PLAYER_ROLL### ">
     <td>###TEAM_PLAYER_FIRSTPICTURE###<br />###TEAM_PLAYER_TNPICTURE###</td>
     <td>###TEAM_PLAYER_TNPOSITION### / ###TEAM_PLAYER_TNTRIKOT###</td>
     <td>###TEAM_PLAYER_SHOWPROFILELINK######TEAM_PLAYER_LAST_NAME###, ###TEAM_PLAYER_FIRST_NAME######TEAM_PLAYER_SHOWPROFILELINK### (###TEAM_PLAYER_UID###)</td>
@@ -77,7 +80,7 @@ Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser
   <!-- ###TEAM_COACHS### begin -->
   <div class="cfcleague-teamview-coaches">
   <h2>Die Trainer</h2>
-  <table style="width:483px">
+  <table style="table table-striped">
    <tr>
     <th>Name,Vorname</th>
     <th>geb.am</th>
@@ -96,7 +99,7 @@ Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser
   <!-- ###TEAM_SUPPORTERS### begin -->
   <div class="cfcleague-teamview-supporters">
   <h2>Die Betreuer</h2>
-  <table style="width:483px">
+  <table style="table table-striped">
    <tr>
     <th>Name,Vorname</th>
     <th>geb.am</th>
@@ -114,6 +117,7 @@ Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser
 
 
   <div class="cfcleaguefe-teamview-picture">
+  <h3>Bilder</h3>
   ###TEAM_PICTURES###
   </div>
 
