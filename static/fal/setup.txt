@@ -64,7 +64,7 @@ lib.t3sports.profile.firstpicture {
 }
 
 ########
-# Vereine
+# Vereine (FAL fixed)
 ########
 lib.t3sports.club.dam_logo >
 lib.t3sports.club.logo >
@@ -162,18 +162,26 @@ lib.t3sports.team.firstpicture {
 
 
 ########
-# Stadion
+# Stadion (FAL in progress)
 ########
 lib.t3sports.stadium.logo >
+
 lib.t3sports.stadium.logo = IMAGE
 lib.t3sports.stadium.logo {
-  file.import.field = t3logo
-  file.import = uploads/tx_cfcleague/
-  file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_teamlogo}
-  file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_teamlogo}
+  file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+  file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+	file.import.cObject = USER
+	file.import.cObject {
+		# Mit dieser Methode wird nur die erste Referenz ausgewertet 
+    userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
+    refField=t3logo
+    refTable=tx_cfcleague_stadiums
+  }
+  file.treatIdAsReference = 1
 }
-lib.t3sports.stadium.pictures >
 
+
+lib.t3sports.stadium.pictures >
 lib.t3sports.stadium.pictures =< tt_content.image.20
 lib.t3sports.stadium.pictures {
   imgList.field = t3pictures
