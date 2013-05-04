@@ -1,26 +1,26 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2009-2010 Rene Nitzsche (rene@system25.de)
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2009-2013 Rene Nitzsche (rene@system25.de)
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
@@ -79,16 +79,22 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 			return '';
 		}
 
-		tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
-		tx_rnbase::load('tx_rnbase_maps_Factory');
-		$map = tx_rnbase_maps_Factory::createGoogleMap($formatter->getConfigurations(), $confId);
-
-		// Icon
-		tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), 
-			$confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
-		
-		$map->addMarker($marker);
-		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array('###'.$markerPrefix.'###' => $map->draw()));
+		try {
+			
+			tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+			tx_rnbase::load('tx_rnbase_maps_Factory');
+			$map = tx_rnbase_maps_Factory::createGoogleMap($formatter->getConfigurations(), $confId);
+	
+			// Icon
+			tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), 
+				$confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
+			
+			$map->addMarker($marker);
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array('###'.$markerPrefix.'###' => $map->draw()));
+		}
+		catch(Exception $e) {
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array('###'.$markerPrefix.'###' => '###LABEL_mapNotAvailable###'));
+		}
 		return $out;
 	}
 

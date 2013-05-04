@@ -156,7 +156,7 @@ lib.t3sports.team.firstpicture {
     refField=t3images
     refTable=tx_cfcleague_teams
   }
-#  file.treatIdAsReference = 1
+  file.treatIdAsReference = 1
 }
 
 
