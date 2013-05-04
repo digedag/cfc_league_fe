@@ -25,7 +25,6 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
-require_once(t3lib_extMgm::extPath('rn_memento') . 'sv1/class.tx_rnmemento_sv1.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_Spyc.php');
 
 

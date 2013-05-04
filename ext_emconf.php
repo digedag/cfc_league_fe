@@ -34,10 +34,9 @@ $EM_CONF[$_EXTKEY] = array(
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
-			'typo3' => '4.1.0-6.0.99',
-			'php' => '5.0.0-0.0.0',
+			'typo3' => '4.1.0-6.9.99',
+			'php' => '5.2.0-0.0.0',
 			'rn_base' => '0.12.2-0.0.0',
-			'rn_memento' => '',
 			'pbimagegraph' => '2.0.0-0.0.0',
 			'cfc_league' => '0.8.1-0.0.0',
 		),
