@@ -40,10 +40,10 @@ plugin.tx_cfcleaguefe_competition {
   tickerlist_format_date = %d. %B ab %H:%M Uhr
 
   # cat=T3sports (misc)/maxW_logo_matchtable; type=int+;label=Maximum width of team logos in matchtable
-  maxW_logo_matchtable = 20
+  maxW_logo_matchtable = 25
 
   # cat=T3sports (misc)/maxH_logo_matchtable; type=int+;label=Maximum height of team logos in matchtable
-  maxH_logo_matchtable = 20
+  maxH_logo_matchtable = 25
 
   # cat=T3sports (misc)/maxW_logo_teamlist; type=int+;label=Maximum width of logos in teamlist
   maxW_logo_teamlist = 40

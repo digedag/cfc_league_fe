@@ -426,7 +426,7 @@ lib.t3sports.teamLogo {
     0.0.default.conf.tx_cfcleague_club.0.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
     0.0.default.conf.tx_cfcleague_club.0.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
     # Logo aus Verein
-    0.0.default.conf.tx_cfcleague_club.default.media.file.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
+#    0.0.default.conf.tx_cfcleague_club.default.media.file.file.XY = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable},{$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
     0.0.default.conf.tx_cfcleague_club.default.media.file.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_logo_matchtable}
     0.0.default.conf.tx_cfcleague_club.default.media.file.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
     # Logo im Team (Select-Box)

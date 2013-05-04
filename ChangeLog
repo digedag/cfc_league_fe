@@ -5,6 +5,7 @@
 
 v0.9.1 (??.01.2013)
  * Compat-Version for TYPO3 6.0
+ * Dependency to rn_memento removed
 
 v0.9.0 (12.01.2012)
  * Bugfix for cal extension
