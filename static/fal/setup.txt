@@ -68,17 +68,23 @@ lib.t3sports.profile.firstpicture {
 ########
 lib.t3sports.club.dam_logo >
 lib.t3sports.club.logo >
+
 lib.t3sports.club.logo = IMAGE
 lib.t3sports.club.logo {
-  file.import.field = logo
-  file.import = uploads/tx_cfcleague/
-  file.maxH = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+  file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
   file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+	file.import.cObject = USER
+	file.import.cObject {
+		# Mit dieser Methode wird nur die erste Referenz ausgewertet 
+    userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
+    refField=logo
+    refTable=tx_cfcleague_club
+  }
+  file.treatIdAsReference = 1
 }
-lib.t3sports.club.dam_logo =< lib.t3sports.club.logo
 
 ########
-# Teams
+# Teams (FAL fixed)
 ########
 
 lib.t3sports.teamLogo.big {
