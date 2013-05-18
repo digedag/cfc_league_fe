@@ -20,42 +20,18 @@ lib.t3sports.pictures.mediaBase {
 ########
 # Spiel
 ########
-lib.t3sports.match.pictures >
-lib.t3sports.match.firstpicture >
-
-lib.t3sports.match.pictures =< tt_content.image.20
 lib.t3sports.match.pictures {
-  imgList.field = t3images
-  imgPath = uploads/tx_cfcleague/
-  # Zoom aktivieren
-  1.imageLinkWrap.enable.field = 
-  1.imageLinkWrap.enable = 1
-  # Anzahl Bilder nebeneinander
-  cols.field = 
-  cols = 4
-}
-
-lib.t3sports.match.firstpicture =< tt_content.image.20
-lib.t3sports.match.firstpicture {
-  imgList.field = t3images
-  imgMax = 1
-  imgPath = uploads/tx_cfcleague/
-  # Zoom aktivieren
-  1.imageLinkWrap.enable.field = 
-  1.imageLinkWrap.enable = 1
-  maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
-  maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
+    userFunc = tx_rnbase_util_TSFAL->printImages
+    refField = t3images
 }
 
 
 ########
-# Personen
+# Personen (FAL fixed)
 ########
 lib.t3sports.profile.pictures {
   userFunc = tx_rnbase_util_TSFAL->printImages
   refField = t3images
-}
-lib.t3sports.profile.firstpicture {
 }
 
 ########
