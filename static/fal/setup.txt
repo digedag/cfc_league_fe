@@ -3,19 +3,6 @@
 
 includeLibs.tx_t3sports_fal = EXT:rn_base/util/class.tx_rnbase_util_TSFAL.php
 
-lib.t3sports.pictures.mediaBase {
-  file = IMG_RESOURCE
-  file.file.import.field = file
-  file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
-  file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
-  thumbnail < .file
-  thumbnail = IMAGE
-  thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamThumb}
-  thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamThumb}
-  thumbnail.params = border="0"
-  thumbnail.titleText.field = title
-}
-
 
 ########
 # Spiel
@@ -27,7 +14,7 @@ lib.t3sports.match.pictures {
 
 
 ########
-# Personen (FAL fixed)
+# Personen
 ########
 lib.t3sports.profile.pictures {
   userFunc = tx_rnbase_util_TSFAL->printImages
@@ -35,27 +22,20 @@ lib.t3sports.profile.pictures {
 }
 
 ########
-# Vereine (FAL fixed)
+# Vereine
 ########
-lib.t3sports.club.dam_logo >
-lib.t3sports.club.logo >
+#lib.t3sports.club.dam_logo >
+#lib.t3sports.club.logo >
 
-lib.t3sports.club.logo = IMAGE
+#lib.t3sports.club.logo = IMAGE
 lib.t3sports.club.logo {
-  file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-  file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-	file.import.cObject = USER
-	file.import.cObject {
-		# Mit dieser Methode wird nur die erste Referenz ausgewertet 
-    userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
-    refField=logo
-    refTable=tx_cfcleague_club
-  }
-  file.treatIdAsReference = 1
+	userFunc=tx_rnbase_util_TSFAL->printImages
+	refField = logo
+	refTable = tx_cfcleague_club
 }
 
 ########
-# Teams (FAL fixed)
+# Teams
 ########
 
 lib.t3sports.teamLogo.big {
@@ -84,45 +64,27 @@ lib.t3sports.teamLogo.small.0.default.file {
 		maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
 }
 
-lib.t3sports.team.pictures >
-lib.t3sports.team.firstpicture >
-lib.t3sports.teamSmall.pictures >
-lib.t3sports.teamSmall.firstpicture >
 
-
-lib.t3sports.team.pictures = USER
 lib.t3sports.team.pictures {
 	userFunc = tx_rnbase_util_TSFAL->printImages
-	references {
-	  fieldName = t3images
-	  table = tx_cfcleague_teams
-	}
   refField = t3images
   refTable = tx_cfcleague_teams
-  template = EXT:cfc_league_fe/res/lightboxpics.html
-  offset = 1
-  subpartName = ###PICTURES###
-  media =< lib.t3sports.pictures.mediaBase
 }
-
-lib.t3sports.team.firstpicture = IMAGE
-lib.t3sports.team.firstpicture {
-  file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_firstTeamPicture}
-  file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_firstTeamPicture}
-	file.import.cObject = USER
-	file.import.cObject {
-		# Mit dieser Methode wird nur die erste Referenz ausgewertet 
-    userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
-    refField=t3images
-    refTable=tx_cfcleague_teams
-  }
-  file.treatIdAsReference = 1
-}
-
-
 
 ########
-# Stadion (FAL fixed)
+# Teamnote
+########
+lib.t3sports.teamnote {
+  conf.tx_cfcleague_team_notes {
+    1.file.import.cObject {
+			userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
+    }
+		1.file.treatIdAsReference = 1
+  }
+}
+
+########
+# Stadion
 ########
 lib.t3sports.stadium.logo >
 
@@ -141,39 +103,25 @@ lib.t3sports.stadium.logo {
 }
 
 
-lib.t3sports.stadium.pictures >
-lib.t3sports.stadium.pictures = USER
 lib.t3sports.stadium.pictures {
 	userFunc = tx_rnbase_util_TSFAL->printImages
-  refField = pictures
-  refTable = tx_cfcleague_stadiums
-  template = EXT:cfc_league_fe/res/lightboxpics.html
-  subpartName = ###PICTURES###
-  media =< lib.t3sports.pictures.mediaBase
 }
 
 
 ########
-# Competition (FAL fixed)
+# Competition
 ########
-lib.t3sports.competition.logo >
-lib.t3sports.competition.logo = IMAGE
 lib.t3sports.competition.logo {
-	file.maxH = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
-	file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
-	file.import.cObject = USER
 	file.import.cObject {
 		# Mit dieser Methode wird nur die erste Referenz ausgewertet 
 		userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
-		refField=logo
-		refTable=tx_cfcleague_competition
 	}
 	file.treatIdAsReference = 1
 }
 
 
 ########
-# Group (FAL fixed)
+# Group
 ########
 lib.t3sports.group.logo {
 	userFunc=tx_rnbase_util_TSFAL->printImages

@@ -25,6 +25,20 @@ plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallan
 # template:
 #  lib.t3sports.profile.tnpicture =< lib.t3sports.teamnote
 
+# Config for lightbox template
+lib.t3sports.pictures.mediaBase {
+  file = IMG_RESOURCE
+  file.file.import.field = file
+  file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
+  file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
+  thumbnail < .file
+  thumbnail = IMAGE
+  thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamThumb}
+  thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamThumb}
+  thumbnail.params = border="0"
+  thumbnail.titleText.field = title
+}
+
 lib.t3sports.stadium {
   pagebrowser =< lib.t3sports.pagebrowser
   name = TEXT
@@ -57,18 +71,7 @@ lib.t3sports.stadium {
     refTable = tx_cfcleague_stadiums
     template = EXT:cfc_league_fe/res/lightboxpics.html
     subpartName = ###PICTURES###
-    media {
-      file = IMG_RESOURCE
-      file.file.import.field = file
-      file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_profilePicture}
-      file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_profilePicture}
-      thumbnail < .file
-      thumbnail = IMAGE
-      thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_profileThumb}
-      thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_profileThumb}
-      thumbnail.params = border="0"
-      thumbnail.titleText.field = title
-    }
+    media =< lib.t3sports.pictures.mediaBase
   }
   map =< lib.t3sports.map
   map.template = {$plugin.tx_cfcleaguefe_competition.stadiumlistTemplate}
@@ -143,14 +146,16 @@ lib.t3sports.competition {
   short_name.crop = 5 | ... | 1
   short_name.ifEmpty.field = name
   logo = IMAGE
-  logo.file.import.cObject = USER
-  logo.file.import.cObject {
-    userFunc=tx_dam_tsfe->fetchFileList
-    refField=logo
-    refTable=tx_cfcleague_competition
+  logo {
+    file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
+    file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_complogo}
+    file.import.cObject = USER
+    file.import.cObject {
+      userFunc=tx_dam_tsfe->fetchFileList
+      refField=logo
+      refTable=tx_cfcleague_competition
+    }
   }
-  logo.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
-  logo.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_complogo}
 }
 
 
@@ -461,18 +466,7 @@ lib.t3sports.team {
     template = EXT:cfc_league_fe/res/lightboxpics.html
     offset = 1
     subpartName = ###PICTURES###
-    media {
-      file = IMG_RESOURCE
-      file.file.import.field = file
-      file.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamPicture}
-      file.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamPicture}
-      thumbnail < .file
-      thumbnail = IMAGE
-      thumbnail.file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_teamThumb}
-      thumbnail.file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_teamThumb}
-      thumbnail.params = border="0"
-      thumbnail.titleText.field = title
-    }
+    media =< lib.t3sports.pictures.mediaBase
   }
   firstpicture =< lib.t3sports.team.pictures
   firstpicture {
