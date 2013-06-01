@@ -3,7 +3,7 @@
 Änderungen
 ----------
 
-v0.9.1 (??.06.2013)
+v0.9.1 (01.06.2013)
  * Compat-Version for TYPO3 6.0
  * Dependency to rn_memento removed
  * FAL support added
