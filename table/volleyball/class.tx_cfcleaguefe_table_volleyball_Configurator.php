@@ -79,7 +79,12 @@ class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_
 	 * @return tx_cfcleaguefe_table_volleyball_IComparator
 	 */
 	public function getComparator() {
-		$compareClass = $this->cfgComparatorClass ? $this->cfgComparatorClass : 'tx_cfcleaguefe_table_volleyball_Comparator';
+		$compareClass = $this->cfgComparatorClass;
+		if(!$comparatorClass) {
+			$compareClass = $this->getPointSystem() == self::POINT_SYSTEM_2POINT ? 
+					'tx_cfcleaguefe_table_volleyball_Comparator' :
+					'tx_cfcleaguefe_table_volleyball_Comparator3Point';
+		}
 		$comparator = tx_rnbase::makeInstance($compareClass);
 		if(!is_object($comparator))
 			throw new Exception('Could not instanciate comparator: '.$compareClass);
