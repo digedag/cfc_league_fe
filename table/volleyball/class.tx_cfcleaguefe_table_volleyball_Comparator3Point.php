@@ -48,7 +48,7 @@ class tx_cfcleaguefe_table_volleyball_Comparator3Point implements tx_cfcleaguefe
 
 		// Zuerst die Punkte
 		if($t1['points'] == $t2['points']) {
-			tx_rnbase_util_Debug::debug($t1,'compare'.__LINE__);
+//			tx_rnbase_util_Debug::debug($t1,'compare'.__LINE__);
 			// Die gewonnenen Spiele prüfen
 			if($t1['winCount'] == $t2['winCount']) {
 				// Jetzt den Satzquotient prüfen
