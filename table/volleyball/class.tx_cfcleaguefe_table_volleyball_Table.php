@@ -69,26 +69,25 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 //if($homeId == 1 || $guestId == 1)
 //t3lib_div::debug($match->record['sets'], $homeId.'-'.$guestId.'class.tx_cfcleaguefe_table_volleyball_Table.php Line: ' . __LINE__); // TODO: remove me
 
-
 		// Beim Volleyball gibt es kein Unentschieden
 		if($toto == 1) {  // Heimsieg
 			// Für die 
-			$this->addPoints($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
-			$this->addPoints($guestId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($homeId, $configurator->getPointsWin($match->getGoalsHome(), $match->getGoalsGuest()));
+			$this->addPoints($guestId, $configurator->getPointsLoose($match->getGoalsHome(), $match->getGoalsGuest()));
 
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+				$this->addPoints2($guestId, $configurator->getPointsLoose($match->getGoalsHome(), $match->getGoalsGuest()));
 			}
 
 			$this->addWinCount($homeId);
 			$this->addLoseCount($guestId);
 		}
 		else { // Auswärtssieg
-			$this->addPoints($homeId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
-			$this->addPoints($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($homeId, $configurator->getPointsLoose($match->getGoalsHome(), $match->getGoalsGuest()));
+			$this->addPoints($guestId, $configurator->getPointsWin($match->getGoalsHome(), $match->getGoalsGuest()));
 
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+				$this->addPoints2($homeId, $configurator->getPointsWin($match->getGoalsHome(), $match->getGoalsGuest()));
 			}
 			$this->addLoseCount($homeId);
 			$this->addWinCount($guestId);

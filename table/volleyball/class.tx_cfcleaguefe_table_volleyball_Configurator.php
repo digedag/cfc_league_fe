@@ -30,27 +30,42 @@ tx_rnbase::load('tx_cfcleaguefe_table_football_Configurator');
  * Configurator for volleyball league tables. 
  */
 class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_football_Configurator {
+	const POINT_SYSTEM_2POINT = 0;
+	const POINT_SYSTEM_3POINT = 1;
 	/**
 	 * Whether or not loose points are count
 	 * @return boolean
 	 */
 	public function isCountLoosePoints() {
 		// Im Volleyball werden zukünftig auch Minuspunkte gezählt.
-		return true;
-//		return $this->getPointSystem() == '1';
+		return $this->getPointSystem() == POINT_SYSTEM_2POINT;
 	}
 
-	public function getPointsWin($afterExtraTime, $afterPenalty) {
+	/**
+	 * Für die Punktberechnung ist im Volleyball die Satzverteilung relevant.
+	 */
+	public function getPointsWin($winSetsHome, $winSetsGuest) {
+//	tx_rnbase_util_Debug::debug($this->getPointSystem(), 'volley_Conf'.__LINE__);
 		$points = 2;
+		if($this->getPointSystem()==self::POINT_SYSTEM_3POINT) {
+			$points = $this->isSplitResult($winSetsHome, $winSetsGuest) ? 2 : 3;
+		}
 		return $points;
+	}
+	protected function isSplitResult($winSetsHome, $winSetsGuest) {
+		// Wenn die Satzdifferenz 1 ist, werden die Punkte geteilt
+		return abs($winSetsHome - $winSetsGuest) == 1;
 	}
 	public function getPointsDraw($afterExtraTime, $afterPenalty) {
 		return 0; // Unentschieden gibt es eigentlich nicht...
 	}
-	public function getPointsLoose($afterExtraTime, $afterPenalty) {
-		// TODO: Es gibt Punkte pro Satzgewinn...
-
-		return $afterExtraTime || $afterPenalty ? 1 : 0;
+	public function getPointsLoose($winSetsHome, $winSetsGuest) {
+		$points = 0;
+		if($this->getPointSystem()==self::POINT_SYSTEM_3POINT) {
+			// Wenn die Satzdifferenz 1 ist, werden die Punkte geteilt
+			$points = $this->isSplitResult($winSetsHome, $winSetsGuest) ? 1 : 0;
+		}
+		return $points;
 	}
 	/**
 	 * Quelle: http://de.wikipedia.org/wiki/Punkteregel#Eishockey
