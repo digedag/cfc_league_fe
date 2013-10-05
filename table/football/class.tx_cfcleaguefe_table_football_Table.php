@@ -160,6 +160,8 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 			$this->_teamData[$teamId]['position'] = 0;
 			$this->_teamData[$teamId]['oldposition'] = 0;
 			$this->_teamData[$teamId]['positionchange'] = 'EQ';
+			// Für die Formatierung im FE muss das Punktsystem bekannt sein.
+			$this->_teamData[$teamId]['point_system'] = $configurator->getPointSystem();
 
 			$this->_teamData[$teamId]['matchCount'] = 0;
 			$this->_teamData[$teamId]['winCount'] = 0;

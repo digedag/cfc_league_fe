@@ -38,7 +38,7 @@ class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_
 	 */
 	public function isCountLoosePoints() {
 		// Im Volleyball werden zukünftig auch Minuspunkte gezählt.
-		return $this->getPointSystem() == POINT_SYSTEM_2POINT;
+		return $this->getPointSystem() == self::POINT_SYSTEM_2POINT;
 	}
 
 	/**
@@ -68,9 +68,9 @@ class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_
 		return $points;
 	}
 	/**
-	 * Quelle: http://de.wikipedia.org/wiki/Punkteregel#Eishockey
-	 * 0- 3-Punktsystem
-	 * 1- 2-Punktsystem
+	 * Quelle: https://sourceforge.net/apps/trac/cfcleague/ticket/74
+	 * 0- 2-Punktsystem
+	 * 1- 3-Punktsystem
 	 */
 	public function getPointSystem() {
 		return $this->cfgPointSystem;

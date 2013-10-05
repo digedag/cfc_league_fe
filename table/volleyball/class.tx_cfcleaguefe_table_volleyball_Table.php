@@ -55,7 +55,7 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
-	protected function countStandard($match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+	protected function countStandard($match, $toto, tx_cfcleaguefe_table_volleyball_Configurator $configurator) {
 
 		// Anzahl Spiele aktualisieren
 		$homeId = $configurator->getTeamId($match->getHome());
@@ -118,6 +118,9 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		$this->_teamData[$teamId]['sets1'] = $this->_teamData[$teamId]['sets1'] + $sets1;
 		$this->_teamData[$teamId]['sets2'] = $this->_teamData[$teamId]['sets2'] + $sets2;
 		$this->_teamData[$teamId]['sets_diff'] = $this->_teamData[$teamId]['sets1'] - $this->_teamData[$teamId]['sets2'];
+		// TODO: Muss hier ggf. gerundet werden??
+		$this->_teamData[$teamId]['sets_quot'] = $this->_teamData[$teamId]['sets1'] / 
+														($this->_teamData[$teamId]['sets2'] > 0 ? $this->_teamData[$teamId]['sets2'] : 1);
 	}
 	
 	/**
@@ -127,6 +130,8 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		$this->_teamData[$teamId]['balls1'] = $this->_teamData[$teamId]['balls1'] + $balls1;
 		$this->_teamData[$teamId]['balls2'] = $this->_teamData[$teamId]['balls2'] + $balls2;
 		$this->_teamData[$teamId]['balls_diff'] = $this->_teamData[$teamId]['balls1'] - $this->_teamData[$teamId]['balls2'];
+		$this->_teamData[$teamId]['balls_quot'] = $this->_teamData[$teamId]['balls1'] / 
+														($this->_teamData[$teamId]['balls2'] > 0 ? $this->_teamData[$teamId]['balls2'] : 1);
 	}
 
   /**

@@ -50,21 +50,12 @@ class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_tabl
 			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
 			if($t1['points2'] == $t2['points2']) {
 				// direkter Vergleich gilt vor Tordifferenz / wird ignoriert, falls !$isH2HComparison
-				$t1vst2 = preg_split('[ : ]', $this->_teamData[$t1['teamId']]['matches'][$t2['teamId']]);
-				$t2vst1 = preg_split('[ : ]', $this->_teamData[$t2['teamId']]['matches'][$t1['teamId']]);
-				
-				$t1H2HPoints = 0;
-				$t2H2HPoints = 0;	
-				if (count($t1vst2) > 0 && $t1vst2[0] > $t1vst2[1]) {
-					$t1H2HPoints += 1;
-				} elseif (count($t1vst2) > 0 && $t1vst2[0] < $t1vst2[1]) {
-					$t2H2HPoints += 1;
-				}
-				if (count($t2vst1) > 0 && $t2vst1[0] > $t2vst1[1]) {
-					$t2H2HPoints += 1;
-				} elseif (count($t2vst1) > 0 && $t2vst1[0] < $t2vst1[1]) {
-					$t1H2HPoints += 1;
-				}
+				tx_rnbase::load('tx_cfcleaguefe_table_Util');
+				$baseData = tx_cfcleaguefe_table_Util::prepareH2H($this->_teamData, $t1, $t2);
+				$t1vst2 = $baseData['t1vst2'];
+				$t2vst1 = $baseData['t2vst1'];
+				$t1H2HPoints = $baseData['t1H2HPoints'];
+				$t2H2HPoints = $baseData['t2H2HPoints'];
 
 				if ($t1H2HPoints == $t2H2HPoints || !$isH2HComparison) {
 					// dann eben zuerst die Tordifferenz der 2 Spiele prüfen (Hin- und Rückspiel)

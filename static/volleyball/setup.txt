@@ -1,0 +1,17 @@
+plugin.tx_cfcleaguefe_competition {
+  leaguetable.table {
+    # show ball quotient in 3 point system only
+    balls_quot {
+      if.value = 1
+      if.equals.field = point_system
+      number_format.decimal=3
+      number_format.dec_point=,
+    }
+    balls_diff {
+      if.value = 0
+      if.equals.field = point_system
+    }
+    sets_quot < .balls_quot
+    sets_diff < .balls_diff
+  }
+}

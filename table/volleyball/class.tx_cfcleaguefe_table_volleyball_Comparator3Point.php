@@ -48,27 +48,38 @@ class tx_cfcleaguefe_table_volleyball_Comparator3Point implements tx_cfcleaguefe
 
 		// Zuerst die Punkte
 		if($t1['points'] == $t2['points']) {
-//			tx_rnbase_util_Debug::debug($t1,'compare'.__LINE__);
+//tx_rnbase_util_Debug::debug($t1,'compare'.__LINE__);
 			// Die gewonnenen Spiele prüfen
 			if($t1['winCount'] == $t2['winCount']) {
 				// Jetzt den Satzquotient prüfen
-				// TODO: die Quotienten schon vorberechnen
-				$t1diff = $t1['sets1'] / ($t1['sets2'] > 0 ? $t1['sets2'] : 1);
-				$t2diff = $t2['sets1'] / ($t2['sets2'] > 0 ? $t2['sets2'] : 1);
-				if($t1diff == $t2diff) {
+				$t1setquot = $t1['sets_quot'];
+				$t2setquot = $t2['sets_quot'];
+				if($t1setquot == $t2setquot) {
 					// Jetzt der Ballquotient
-					$t1balls = $t1['balls1'] / ($t1['balls2'] > 0 ? $t1['balls2'] : 1);
-					$t2balls = $t2['balls1'] / ($t2['balls2'] > 0 ? $t2['balls2'] : 1);
+					$t1balls = $t1['balls_quot'];
+					$t2balls = $t2['balls_quot'];
 					if($t1balls == $t2balls) {
-						// TODO: Und jetzt der direkte Vergleich
-						if($t1['matchCount'] == $t2['matchCount']) {
-							return 0; // Punkt und Torgleich
+						// Und jetzt der direkte Vergleich
+						tx_rnbase::load('tx_cfcleaguefe_table_Util');
+						$baseData = tx_cfcleaguefe_table_Util::prepareH2H($this->_teamData, $t1, $t2);
+						$t1vst2 = $baseData['t1vst2'];
+						$t2vst1 = $baseData['t2vst1'];
+						$t1H2HPoints = $baseData['t1H2HPoints'];
+						$t2H2HPoints = $baseData['t2H2HPoints'];
+						if ($t1H2HPoints == $t2H2HPoints) {
+							// dann eben zuerst die Satzdifferenz der 2 Spiele prüfen (Hin- und Rückspiel)
+							$t1H2HDiff = 0 + $t1vst2[0] + $t2vst1[1] - $t1vst2[1] - $t2vst1[0];
+							$t2H2HDiff = 0 + $t1vst2[1] + $t2vst1[0] - $t1vst2[0] - $t2vst1[1];
+							if($t1H2HDiff == $t2H2HDiff) {
+								return 0; // Gleichstand. Entscheidungsspiel wird nicht beachtet
+							}
+							return $t1H2HDiff > $t2H2HDiff ? -1 : 1;
 						}
-						return $t1['matchCount'] > $t2['matchCount'];
+						return $t1H2HPoints > $t2H2HPoints ? -1 : 1;
 					}
 					return $t1balls > $t2balls ? -1 : 1;
 				}
-				return $t1diff > $t2diff ? -1 : 1;
+				return $t1setquot > $t2setquot ? -1 : 1;
 			}
 			return $t1['winCount'] > $t2['winCount'] ? -1 : 1;
 		}

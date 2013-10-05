@@ -47,6 +47,7 @@ if (TYPO3_MODE=='BE')	{
 // list static templates in templates selection
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/', 'T3sports');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/cal/','T3sports cal-events');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/volleyball/','T3sports for Volleyball');
 
 tx_rnbase::load('tx_rnbase_util_TYPO3');
 if(tx_rnbase_util_TYPO3::isTYPO60OrHigher())
