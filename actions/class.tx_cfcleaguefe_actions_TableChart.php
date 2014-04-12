@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2014 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@ tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
 tx_rnbase::load('tx_rnbase_util_TYPO3');
 tx_rnbase::load('tx_rnbase_util_Math');
 
-if(tx_rnbase_util_TYPO3::isTYPO43OrHigher())
-	require_once(PATH_t3lib.'error/class.t3lib_error_exception.php');
 
 
 /**

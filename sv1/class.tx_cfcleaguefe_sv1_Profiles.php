@@ -24,7 +24,6 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_DB');
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
 
 interface tx_cfcleaguefe_ProfileService {
 	function getTeamNotes(&$profile, &$team);
