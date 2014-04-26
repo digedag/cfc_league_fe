@@ -43,7 +43,7 @@ class tx_cfcleaguefe_search_Match extends tx_rnbase_util_SearchBase {
 		$tableMapping['TEAM1'] = 't1';
 		$tableMapping['TEAM2'] = 't2';
 		// Hook to append other tables
-		tx_rnbase_util_Misc::callHook('cfc_league_fe','search_Match_getTableMapping_hook',
+		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getTableMapping_hook',
 			array('tableMapping' => &$tableMapping), $this);
 		return $tableMapping;
 	}
@@ -67,7 +67,7 @@ class tx_cfcleaguefe_search_Match extends tx_rnbase_util_SearchBase {
 			$join .= ' INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid ';
 		}
 		// Hook to append other tables
-		tx_rnbase_util_Misc::callHook('cfc_league_fe','search_Match_getJoins_hook',
+		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getJoins_hook',
 			array('join' => &$join, 'tableAliases' => $tableAliases), $this);
 		return $join;
 	}

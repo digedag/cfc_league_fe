@@ -39,14 +39,14 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
 	 * Zeigt die Tabelle für eine Liga. Die Tabelle wird nur dann berechnet, wenn auf der
 	 * aktuellen Seite genau ein Wettbewerb ausgewählt ist und dieser Wettbewerb eine Liga ist.
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData){
+	function handleRequest(&$parameters, &$configurations, &$viewData){
 		// Die Werte des aktuellen Scope ermitteln
-		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 		$this->initSearch($fields, $options, $parameters, $configurations);
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matches = $service->search($fields, $options);
 
-		$dataArr = $this->buildTable($parameters,$configurations, $matches);
+		$dataArr = $this->buildTable($parameters, $configurations, $matches);
 		$viewData =& $configurations->getViewData();
 		$viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
 		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
@@ -76,7 +76,7 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'leaguetableAllTime.fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'leaguetableAllTime.options.');
 
-		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 		
 		$matchtable = $this->getMatchTable();
 		$matchtable->setScope($scopeArr);
@@ -94,8 +94,8 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
 	/**
 	 * Sammelt die Daten für die Erstellung der Tabelle
 	 */
-	function buildTable($parameters,&$configurations, &$matches) {
-		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_AllTimeTableProvider', $parameters,$configurations, $matches, 'leaguetableAllTime.');
+	function buildTable($parameters, &$configurations, &$matches) {
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_AllTimeTableProvider', $parameters, $configurations, $matches, 'leaguetableAllTime.');
 
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$arr = Array(

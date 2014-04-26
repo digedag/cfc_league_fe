@@ -69,7 +69,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 		}
 		// Den ClubMarker erstellen
 		$clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
-		$templateEntry = $configurations->getCObj()->getSubpart($templateList,'###ROW###');
+		$templateEntry = $configurations->getCObj()->getSubpart($templateList, '###ROW###');
 
 		$parts = array();
 		$rowRoll = intval($configurations->get('leaguetableAllTime.table.roll.value'));
@@ -131,7 +131,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
    * Setzt die Tabellenmarkierungen für eine Zeile
    */
   function _setMark(&$row, &$marks) {
-    if(is_array($marks) && array_key_exists($row['position'],$marks)){
+    if(is_array($marks) && array_key_exists($row['position'], $marks)){
       // Markierung und Bezeichnung setzen
       $row['mark'] = $marks[$row['position']][0];
       $row['markLabel'] = $marks[$row['position']][1];
@@ -150,7 +150,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 		$pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
 		$link->destination($pid); // Das Ziel der Seite vorbereiten
 
-  	$subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'',);
+  	$subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'', );
     if($viewData->offsetGet('tabletype_select')) {
       $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), 
                     $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
@@ -183,7 +183,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
     $items = $itemsArr[0];
     $currItem = $itemsArr[1];
     $confName = strtolower($markerName); // Konvention
-    $noLink = array('','');
+    $noLink = array('', '');
 
     // Aus den KeepVars den aktuellen Wert entfernen
     $keepVars = $configurations->getKeepVars()->getArrayCopy();

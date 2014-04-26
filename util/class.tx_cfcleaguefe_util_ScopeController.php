@@ -55,18 +55,18 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * @param $useObjects Wenn true werden ganze Objekte
 	 * @return Array mit den UIDs als String
 	 */
-	public static function handleCurrentScope($parameters,&$configurations, $useObjects = false) {
+	public static function handleCurrentScope($parameters, &$configurations, $useObjects = false) {
 		$cObjUid = $configurations->cObj->data['uid'];
 		// Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
 		if(!$cObjUid || !isset(self::$_cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
 			// Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
 			$ret = Array();
-			$ret['SAISON_UIDS'] = self::handleCurrentSaison($parameters,$configurations, $useObjects);
-			$ret['GROUP_UIDS'] = self::handleCurrentCompetitionGroup($parameters,$configurations, $useObjects);
-			$ret['TEAMGROUP_UIDS'] = self::handleCurrentTeamGroup($parameters,$configurations, $useObjects);
-			self::handleCurrentCompetition($ret, $parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $useObjects);
-			$ret['CLUB_UIDS'] = self::handleCurrentClub($parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $ret['COMP_UIDS'], $useObjects);
-			$ret['ROUND_UIDS'] = self::handleCurrentRound($parameters,$configurations,$ret['SAISON_UIDS'],$ret['GROUP_UIDS'], $ret['COMP_UIDS'], $ret['CLUB_UIDS'], $useObjects);
+			$ret['SAISON_UIDS'] = self::handleCurrentSaison($parameters, $configurations, $useObjects);
+			$ret['GROUP_UIDS'] = self::handleCurrentCompetitionGroup($parameters, $configurations, $useObjects);
+			$ret['TEAMGROUP_UIDS'] = self::handleCurrentTeamGroup($parameters, $configurations, $useObjects);
+			self::handleCurrentCompetition($ret, $parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $useObjects);
+			$ret['CLUB_UIDS'] = self::handleCurrentClub($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $useObjects);
+			$ret['ROUND_UIDS'] = self::handleCurrentRound($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $ret['CLUB_UIDS'], $useObjects);
 	
 			// Die Daten für das Plugin cachen
 			self::$_cObjectUID[$cObjUid] = $ret;
@@ -101,7 +101,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * @param tx_rnbase_configurations $configurations
 	 * @return String Die UIDs als String
 	 */
-	private static function handleCurrentSaison($parameters,&$configurations, $useObjects = false) {
+	private static function handleCurrentSaison($parameters, &$configurations, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		$saisonUids = $configurations->get('saisonSelection');
 
@@ -111,10 +111,10 @@ class tx_cfcleaguefe_util_ScopeController {
 			// TODO: Es sollten zusätzliche Kriterien zur Ermittlung der Saisons herangezogen werden
 			// Einfach alle Saisons zu zeigen führt zu vielen leeren Seiten
 			$saisons = tx_cfcleaguefe_models_saison::findItems($saisonUids);
-			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($saisons,$parameters, 'saison', $useObjects ? '' : 'name');
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($saisons, $parameters, 'saison', $useObjects ? '' : 'name');
 			$saisonUids = $dataArr[1];
 			$viewData->offsetSet('saison_select', $dataArr);
-			$configurations->addKeepVar('saison',$saisonUids);
+			$configurations->addKeepVar('saison', $saisonUids);
 			self::$_scopeParams['saison'] = $saisonUids;
 		}
 		return $saisonUids;
@@ -126,7 +126,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
-	private function handleCurrentCompetitionGroup($parameters,&$configurations, $useObjects = false) {
+	private function handleCurrentCompetitionGroup($parameters, &$configurations, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		$groupUids = $configurations->get('groupSelection');
 
@@ -134,10 +134,10 @@ class tx_cfcleaguefe_util_ScopeController {
 		if($configurations->get('groupSelectionInput')) {
 			// Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
 			$groups = tx_cfcleaguefe_models_group::findAll($groupUids);
-			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups,$parameters,'group', $useObjects ? '' : 'name');
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
 			$groupUids = $dataArr[1];
 			$viewData->offsetSet('group_select', $dataArr);
-			$configurations->addKeepVar('group',$groupUids);
+			$configurations->addKeepVar('group', $groupUids);
 			self::$_scopeParams['group'] = $groupUids;
 		}
 		return $groupUids;
@@ -149,7 +149,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
-	private function handleCurrentTeamGroup($parameters,&$configurations, $useObjects = false) {
+	private function handleCurrentTeamGroup($parameters, &$configurations, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		$groupUids = $configurations->get('scope.teamGroup');
 
@@ -157,10 +157,10 @@ class tx_cfcleaguefe_util_ScopeController {
 		if($configurations->get('scope.teamGroupSelectionInput')) {
 			// Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
 			$groups = tx_cfcleaguefe_models_group::findAll($groupUids);
-			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups,$parameters,'group', $useObjects ? '' : 'name');
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
 			$groupUids = $dataArr[1];
 			$viewData->offsetSet('teamgroup_select', $dataArr);
-			$configurations->addKeepVar('teamgroup',$groupUids);
+			$configurations->addKeepVar('teamgroup', $groupUids);
 			self::$_scopeParams['teamgroup'] = $groupUids;
 		}
 		return $groupUids;
@@ -172,7 +172,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
-	private function handleCurrentClub($parameters,&$configurations, $saisonUids,$groupUids,$compUids, $useObjects = false) {
+	private function handleCurrentClub($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		$clubUids = $configurations->get('clubSelection');
 
@@ -180,11 +180,11 @@ class tx_cfcleaguefe_util_ScopeController {
 		// Das machen wir nur, wenn mindestens ein Verein konfiguriert wurde
 		if($configurations->get('clubSelectionInput')){ // && strlen($clubUids) > 0) {
 			// Die UIDs der Vereine in Objekte umwandeln, um eine Selectbox zu bauen
-			$clubs = tx_cfcleaguefe_models_club::findAll($clubUids, $saisonUids,$groupUids,$compUids);
-			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($clubs,$parameters,'club', $useObjects ? '' : 'name');
+			$clubs = tx_cfcleaguefe_models_club::findAll($clubUids, $saisonUids, $groupUids, $compUids);
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($clubs, $parameters, 'club', $useObjects ? '' : 'name');
 			$clubUids = $dataArr[1];
 			$viewData->offsetSet('club_select', $dataArr);
-			$configurations->addKeepVar('club',$clubUids);
+			$configurations->addKeepVar('club', $clubUids);
 			self::$_scopeParams['club'] = $clubUids;
 		}
 		return $clubUids;
@@ -196,7 +196,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
-	private function handleCurrentCompetition(&$scopeArr, $parameters,&$configurations, $saisonUids,$groupUids, $useObjects = false) {
+	private function handleCurrentCompetition(&$scopeArr, $parameters, &$configurations, $saisonUids, $groupUids, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		$compUids = $configurations->get('competitionSelection');
 
@@ -213,10 +213,10 @@ class tx_cfcleaguefe_util_ScopeController {
 			tx_cfcleaguefe_search_Builder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
 
 			$competitions = $compServ->search($fields, $options);
-			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($competitions,$parameters,'competition', $useObjects ? '' : 'name');
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($competitions, $parameters, 'competition', $useObjects ? '' : 'name');
 			$compUids = $dataArr[1];
 			$viewData->offsetSet('competition_select', $dataArr);
-			$configurations->addKeepVar('competition',$compUids);
+			$configurations->addKeepVar('competition', $compUids);
 			self::$_scopeParams['competition'] = $compUids;
 		}
 		$scopeArr['COMP_UIDS'] = $compUids;
@@ -239,17 +239,17 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * @param compUids String die UIDs der aktuell eingestellten Wettbewerbe
 	 * @return String Die UIDs als String
 	 */
-	private function handleCurrentRound($parameters,&$configurations, $saisonUids,$groupUids, $compUids, $clubUids, $useObjects = false) {
+	private function handleCurrentRound($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		// Soll eine SelectBox für Wettkämpfe gezeigt werden?
 		if($configurations->get('roundSelectionInput') && (isset($compUids) && tx_rnbase_util_Math::testInt($compUids))) {
 			$currCompetition = new tx_cfcleaguefe_models_competition($compUids);
 			// Die Spielrunden ermitteln
 			$rounds = $currCompetition->getRounds();
-			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareRoundSelect($rounds,$parameters, $useObjects ? '' : 'uid');
+			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareRoundSelect($rounds, $parameters, $useObjects ? '' : 'uid');
 			$roundUid = $dataArr[1];
 			$viewData->offsetSet('round_select', $dataArr);
-			$configurations->addKeepVar('round',$roundUid);
+			$configurations->addKeepVar('round', $roundUid);
 		}
 		return $roundUid;
 	}
@@ -261,7 +261,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * @param $displayAttrName Der Name eines Atttributs, um dessen Wert anzuzeigen. Wenn der 
 	 *        String leer ist, dann wird das gesamten Objekt als Wert verwendet.
 	 */
-	private function _prepareSelect($objects,$parameters, $parameterName, $displayAttrName = 'name') {
+	private function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name') {
 		global $TSFE;
 		$ret = array();
 		if(count($objects)) {

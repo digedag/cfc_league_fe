@@ -65,7 +65,7 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 		$tsArr = $formatter->configurations->get('matchreport.svChartMatch.');
 
 		tx_rnbase::load('tx_cfcleaguefe_actions_TableChart');
-		tx_cfcleaguefe_actions_TableChart::createChartDataset($xyDataset, $tsArr, $formatter->configurations, $competition,'matchreport.svChartMatch.');
+		tx_cfcleaguefe_actions_TableChart::createChartDataset($xyDataset, $tsArr, $formatter->configurations, $competition, 'matchreport.svChartMatch.');
 		try {
 			require_once(PATH_site.t3lib_extMgm::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
 			$chart = tx_pbimagegraph_ts::make($tsArr);

@@ -41,7 +41,7 @@ class tx_cfcleaguefe_actions_StadiumList extends tx_rnbase_action_BaseIOC {
 	 * @param array $viewData
 	 * @return string error msg or null
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData){
+	function handleRequest(&$parameters, &$configurations, &$viewData){
 		$srv = tx_cfcleague_util_ServiceRegistry::getStadiumService();
 
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
@@ -52,7 +52,7 @@ class tx_cfcleaguefe_actions_StadiumList extends tx_rnbase_action_BaseIOC {
 
 		// Soll ein PageBrowser verwendet werden
 		tx_rnbase_filter_BaseFilter::handleCharBrowser($configurations, 
-			$this->getConfId().'stadium.charbrowser',$viewData, $fields, $options, array(
+			$this->getConfId().'stadium.charbrowser', $viewData, $fields, $options, array(
 				'searchcallback'=> array($srv, 'search'),
 				'colname' => 'name'
 			));

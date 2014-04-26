@@ -41,14 +41,14 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewdata
 	 * @return string error message
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+	function handleRequest(&$parameters, &$configurations, &$viewdata) {
 		$fields = array();
 		$options = array();
 //  	$options['debug'] = 1;
 		$this->initSearch($fields, $options, $parameters, $configurations);
 		$listSize = 0;
 		// Soll ein PageBrowser verwendet werden
-		$this->handlePageBrowser($parameters,$configurations, $viewdata, $fields, $options);
+		$this->handlePageBrowser($parameters, $configurations, $viewdata, $fields, $options);
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matches = $service->search($fields, $options);
 
@@ -58,7 +58,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 /////////////
 
     $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
-    $matchTable->setTimeRange($configurations->get('tickerlist.timeRangePast'),$configurations->get('tickerlist.timeRangeFuture'));
+    $matchTable->setTimeRange($configurations->get('tickerlist.timeRangePast'), $configurations->get('tickerlist.timeRangeFuture'));
     $matchTable->setLimit($configurations->get('tickerlist.limit'));
     $matchTable->setOrderDesc($configurations->get('tickerlist.orderDesc') ? true : false );
     $matchTable->setLiveTicker(1); // Nur LiveTickerspiele holen
@@ -93,12 +93,12 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'tickerlist.fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'tickerlist.options.');
 
-		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 		
 		$matchtable = $this->getMatchTable();
 		$matchtable->setScope($scopeArr);
 		$matchtable->setTeams($teamId);
-		$matchtable->setTimeRange($configurations->get('tickerlist.timeRangePast'),$configurations->get('tickerlist.timeRangeFuture'));
+		$matchtable->setTimeRange($configurations->get('tickerlist.timeRangePast'), $configurations->get('tickerlist.timeRangeFuture'));
     $matchtable->setLiveTicker();; // Nur Live-Tickerspiele holen
 		
 		$matchtable->getFields($fields, $options);
@@ -118,7 +118,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
    * @param array $fields
    * @param array $options
    */
-	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
+	function handlePageBrowser(&$parameters, &$configurations, &$viewdata, &$fields, &$options) {
 		if(is_array($configurations->get('tickerlist.match.pagebrowser.'))) {
 			$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 			// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Spiele zu ermitteln

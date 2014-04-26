@@ -37,7 +37,7 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewData
 	 * @return string
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData) {
+	function handleRequest(&$parameters, &$configurations, &$viewData) {
 		// Die MatchID ermittlen
 		// Ist sie fest definiert?
 		$matchId = intval($configurations->get('matchreportMatchUid'));

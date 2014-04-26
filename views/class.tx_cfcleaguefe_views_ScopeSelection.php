@@ -121,7 +121,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
     $items = $itemsArr[0];
     $currItem = $items[$itemsArr[1]];
     $confName = strtolower($markerName); // Konvention
-    $noLink = array('','');
+    $noLink = array('', '');
 
     // Aus den KeepVars den aktuellen Wert entfernen
     $keepVars = $configurations->getKeepVars()->getArrayCopy();
@@ -146,7 +146,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $isCurrent = ($item->uid == $currItem->uid);
       $item->record['isCurrent'] = $isCurrent ? 1 : 0;
 //t3lib_div::debug($itemConfId, 'tx_cfcleaguefe_views_ScopeSelection');
-      $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->record, 'scopeSelection.'. $confName.'.', 0, $markerName.'_',$item->getColumnNames());
+      $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->record, 'scopeSelection.'. $confName.'.', 0, $markerName.'_', $item->getColumnNames());
 //      $markerArray['###'. $markerName .'_LINK_URL###'] = $this->formatter->wrap($link->makeUrl(false), 'scopeSelection.'. $confName . ($isCurrent ? '.current.' : '.normal.') );
       $markerArray['###'. $markerName .'_LINK_URL###'] = $link->makeUrl(false);
 
@@ -167,7 +167,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
     $out = implode($parts, $configurations->get('scopeSelection.'. $confName .'.implode'));
 
     // Im Haupttemplate stellen wir die ausgewählte Saison als Marker zur Verfügung
-    $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->record, $itemConfId, 0, $markerName.'_',$currItem->getColumnNames());
+    $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->record, $itemConfId, 0, $markerName.'_', $currItem->getColumnNames());
     $subpartArray['###' . $markerName . '_SELECTION_2###'] = $out;
     
     $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);

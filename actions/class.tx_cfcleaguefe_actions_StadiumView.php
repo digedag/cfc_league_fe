@@ -38,7 +38,7 @@ class tx_cfcleaguefe_actions_StadiumView extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewData
 	 * @return string
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData) {
+	function handleRequest(&$parameters, &$configurations, &$viewData) {
 
 		$items = array();
 		// Im Flexform kann direkt ein Team ausgwählt werden

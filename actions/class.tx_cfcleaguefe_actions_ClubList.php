@@ -41,7 +41,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 	 * @param array $viewData
 	 * @return string error msg or null
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData){
+	function handleRequest(&$parameters, &$configurations, &$viewData){
 		$srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
 		$this->conf = $configurations;
 
@@ -51,8 +51,8 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 		$filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 
 		// Soll ein PageBrowser verwendet werden
-		$this->handleCharBrowser($parameters,$configurations, $viewData, $fields, $options);
-		$this->handlePageBrowser($parameters,$configurations, $viewData, $fields, $options);
+		$this->handleCharBrowser($parameters, $configurations, $viewData, $fields, $options);
+		$this->handlePageBrowser($parameters, $configurations, $viewData, $fields, $options);
 		$items = $srv->searchClubs($fields, $options);
 		$viewData->offsetSet('items', $items);
     return null;
@@ -66,7 +66,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
    * @param array $fields
    * @param array $options
    */
-	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
+	function handlePageBrowser(&$parameters, &$configurations, &$viewdata, &$fields, &$options) {
 		if(is_array($configurations->get($this->getConfId().'club.pagebrowser.'))) {
 			$service = tx_cfcleague_util_ServiceRegistry::getTeamService();
 			// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Orgs zu ermitteln
@@ -82,7 +82,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 			$viewdata->offsetSet('pagebrowser', $pageBrowser);
 		}
 	}
-	function handleCharBrowser(&$parameters,&$configurations, &$viewData, &$fields, &$options) {
+	function handleCharBrowser(&$parameters, &$configurations, &$viewData, &$fields, &$options) {
 		if($configurations->get($this->getConfId().'club.charbrowser')) {
 			$srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
 			$colName = $configurations->get($this->getConfId().'club.charbrowser.column');
@@ -90,7 +90,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 
 			$pagerData = $this->findPagerData($srv, $configurations, $colName);
 			$firstChar = $parameters->offsetGet('charpointer');
-			$firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar,0,1) : $pagerData['default'];
+			$firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar, 0, 1) : $pagerData['default'];
 			$viewData->offsetSet('pagerData', $pagerData);
 			$viewData->offsetSet('charpointer', $firstChar);
 		}
@@ -101,7 +101,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 			$specials = tx_rnbase_util_SearchBase::getSpecialChars();
 			$firsts = $specials[$firstChar];
 			if($firsts) {
-				$firsts = implode('\',\'',$firsts);
+				$firsts = implode('\', \'', $firsts);
 			}
 			else $firsts = $firstChar;
 

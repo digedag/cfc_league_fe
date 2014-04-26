@@ -48,16 +48,16 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	 * Zeigt die Tabelle für eine Liga. Die Tabelle wird nur dann berechnet, wenn auf der
 	 * aktuellen Seite genau ein Wettbewerb ausgewählt ist und dieser Wettbewerb eine Liga ist.
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData){
+	function handleRequest(&$parameters, &$configurations, &$viewData){
 
 		if($configurations->get($this->getConfId().'newMode')) {
 			$action = tx_rnbase::makeInstance('tx_cfcleaguefe_actions_LeagueTable');
 			return $action->handleRequest($parameters, $configurations, $viewData);
 		}
 		// Die Werte des aktuellen Scope ermitteln
-		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 		// Hook to manipulate scopeArray
-		tx_rnbase_util_Misc::callHook('cfc_league_fe','action_LeagueTable_handleScope_hook',
+		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'action_LeagueTable_handleScope_hook',
 			array('scopeArray' => &$scopeArr, 'parameters' =>$parameters, 'configurations'=> $configurations, 'confId' => $this->getConfId()), $this);
 		$saisonUids = $scopeArr['SAISON_UIDS'];
 		$groupUids = $scopeArr['GROUP_UIDS'];
@@ -89,7 +89,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 		}
 
 		// Okay, es ist eine Liga
-		$dataArr = $this->buildTable($parameters,$configurations, $currCompetition, $roundUid);
+		$dataArr = $this->buildTable($parameters, $configurations, $currCompetition, $roundUid);
 		$viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
 		$viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
 		$viewData->offsetSet('league', $currCompetition); // Die Liga für den View bereitstellen
@@ -137,7 +137,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	protected function _handleSBTableType($parameters, &$configurations, &$viewData) {
 		if($configurations->get('tabletypeSelectionInput')) {
 			$flex =& $this->getFlexForm($configurations);
-			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable','tabletype'));
+			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable', 'tabletype'));
 
 			// Wir bereiten die Selectbox vor
 			$arr = Array();
@@ -154,7 +154,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	protected function _handleSBTableScope($parameters, &$configurations, &$viewData, $confId='') {
 		if($configurations->get($confId.'tablescopeSelectionInput')) {
 			$flex =& $this->getFlexForm($configurations);
-			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable','tablescope'));
+			$items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable', 'tablescope'));
 
 			// Wir bereiten die Selectbox vor
 			$arr = Array();
@@ -193,8 +193,8 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	/**
 	 * Sammelt die Daten für die Erstellung der Tabelle
 	 */
-	private function buildTable($parameters,&$configurations, &$league, $roundUid) {
-		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $parameters,$configurations, $league);
+	private function buildTable($parameters, &$configurations, &$league, $roundUid) {
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $parameters, $configurations, $league);
 
 		// Tabelle nur bis bestimmten Spieltag anzeigen
 		// FIXME: Bei eine spezial-Tabelle (Hin-/Rückrunde) muss diese Option ignoriert werden

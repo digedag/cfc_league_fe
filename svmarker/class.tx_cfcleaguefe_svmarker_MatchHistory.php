@@ -89,7 +89,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
 		if(!$templateCode) return '<!-- NO TEMPLATE FOUND -->';
 		$subpartName = $formatter->configurations->get($confId.'subpartName');
 		$subpartName = $subpartName ? $subpartName : '###HISTORIC_MATCHES###';
-		$templateCode = tx_rnbase_util_Templates::getSubpart($templateCode,$subpartName);
+		$templateCode = tx_rnbase_util_Templates::getSubpart($templateCode, $subpartName);
 		if(!$templateCode) return '<!-- NO SUBPART '.$subpartName.' FOUND -->';
 
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');

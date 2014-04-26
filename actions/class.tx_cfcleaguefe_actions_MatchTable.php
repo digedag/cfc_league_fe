@@ -46,7 +46,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewdata
 	 * @return string error message
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+	function handleRequest(&$parameters, &$configurations, &$viewdata) {
 		// Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
 		// ggf. die Konfiguration aus der TS-Config lesen
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewdata, $this->getConfId());
@@ -89,7 +89,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
 
-		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 		// Spielplan für ein Team
 		$teamId = $configurations->get($this->getConfId().'teamId');
 		if($configurations->get($this->getConfId().'acceptTeamIdFromRequest')) {
@@ -111,7 +111,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 			$matchtable->setGuestClubs($clubId);
 		}
 		
-		$matchtable->setTimeRange($configurations->get($this->getConfId().'timeRangePast'),$configurations->get('matchtable.timeRangeFuture'));
+		$matchtable->setTimeRange($configurations->get($this->getConfId().'timeRangePast'), $configurations->get('matchtable.timeRangeFuture'));
 		if($configurations->get($this->getConfId().'acceptRefereeIdFromRequest')) {
 			$matchtable->setReferees($parameters->offsetGet('refereeId'));
 		}

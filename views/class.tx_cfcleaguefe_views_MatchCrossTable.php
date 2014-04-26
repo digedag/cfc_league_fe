@@ -84,7 +84,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
   	$teamCnt = count($teamIds);
   	$initArray = array_flip($teamIds);
   	$opponents = $teams;
-  	while (list($uid,$team)=each($teams))	{
+  	while (list($uid, $team)=each($teams))	{
   		$ret[$uid] = $initArray;
   		$ret[$uid][$uid] = ''; // Das Spiel gegen sich selbst
   		// In das Array alle Heimspiele des Teams legen
@@ -175,7 +175,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$parts = array();
 
 		tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'include teams');
-		while (list($uid,$team)=each($teams))	{
+		while (list($uid, $team)=each($teams))	{
 			$team->record['roll'] = $rowRollCnt;
 			$parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'matchcrosstable.headline.team.', 'TEAM');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
@@ -191,7 +191,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
   	// Das Team 'Spielfrei' vorher entfernen
   	$dummyTeams = array();
   	reset($teams);
-  	while (list($uid,$team)=each($teams))	{
+  	while (list($uid, $team)=each($teams))	{
   		if($team->isDummy())
   			$dummyTeams[] = $uid;
   	}

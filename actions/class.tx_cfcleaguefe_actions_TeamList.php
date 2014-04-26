@@ -32,7 +32,7 @@ tx_rnbase::load('tx_rnbase_filter_BaseFilter');
  */
 class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC {
 
-	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+	function handleRequest(&$parameters, &$configurations, &$viewdata) {
 		// Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
 		// ggf. die Konfiguration aus der TS-Config lesen
 		$srv = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();

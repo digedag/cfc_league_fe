@@ -39,10 +39,10 @@ class tx_cfcleaguefe_actions_TableChart {
   /**
    *
    */
-  function execute($parameters,$configurations){
+  function execute($parameters, $configurations){
 
     // Die Werte des aktuellen Scope ermitteln
-    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
     $saisonUids = $scopeArr['SAISON_UIDS'];
     $groupUids = $scopeArr['GROUP_UIDS'];
     $compUids = $scopeArr['COMP_UIDS'];
@@ -76,7 +76,7 @@ class tx_cfcleaguefe_actions_TableChart {
 
     // Okay, es ist eine Liga
     $viewData =& $configurations->getViewData();
-    $viewData->offsetSet('plot', $this->generateGraph($parameters, $configurations,$currCompetition)); // Die Testplot für den View bereitstellen
+    $viewData->offsetSet('plot', $this->generateGraph($parameters, $configurations, $currCompetition)); // Die Testplot für den View bereitstellen
 
     // View
     $view = tx_rnbase::makeInstance('tx_rnbase_view_phpTemplateEngine');
@@ -89,7 +89,7 @@ class tx_cfcleaguefe_actions_TableChart {
 	 * Erzeugt den Graphen
 	 */
 	function generateGraph(&$parameters, &$configurations, &$league) {
-		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider',$parameters,$configurations, $league);
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $parameters, $configurations, $league);
 
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$xyDataset = $leagueTable->generateChartData($tableProvider);
@@ -125,13 +125,13 @@ class tx_cfcleaguefe_actions_TableChart {
     $defaultLine = $configurations->get($confId.'defaults.line');
     $defaultLineArr = $configurations->get($confId.'defaults.line.');
 
-    $colors = t3lib_div::trimExplode(',',$configurations->get($confId.'defaults.colors'));
+    $colors = t3lib_div::trimExplode(',', $configurations->get($confId.'defaults.colors'));
 
     $title = $configurations->get($confId.'defaults.title');
 //    t3lib_div::debug($title ,'ac_chart');
     if($tsArr['10.']['10.']['text']) {
       if($title) {
-        $tsArr['10.']['10.']['text'] = str_replace('COMPETITION_NAME',$league->record['name'],$title);
+        $tsArr['10.']['10.']['text'] = str_replace('COMPETITION_NAME', $league->record['name'], $title);
         // Hier könnten noch zusätzliche Ersetzungsstrings eingebaut werden..
       }
     }

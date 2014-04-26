@@ -59,10 +59,10 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewData
 	 * @return string
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData) {
+	function handleRequest(&$parameters, &$configurations, &$viewData) {
 	//    global $T3_SERVICES;
 //t3lib_div::debug($T3_SERVICES['cfcleague_statistics'], 'tx_cfcleaguefe_actions_PlayerStatistics');
-		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 		// Die notwendigen Statistikklassen ermitteln
 		$types = t3lib_div::trimExplode(',', $configurations->get('statisticTypes'), 1);
 		if(!count($types)) {
@@ -121,7 +121,7 @@ class PlayerStatsMemento extends tx_cfcleaguefe_util_Memento {
       // Die Profile müssen wieder instanziiert werden
       if(is_array($data)) {
         $ret['player_data'][$data['player']] = $data;
-        $ret['player_data'][$data['player']]['player'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile',$data['player']);
+        $ret['player_data'][$data['player']]['player'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $data['player']);
       }
     }
     $ret['add_data'] = $arr['add_data'];

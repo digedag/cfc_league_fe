@@ -39,7 +39,7 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewData
 	 * @return string
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData) {
+	function handleRequest(&$parameters, &$configurations, &$viewData) {
 
 		$teams = array();
 		// Im Flexform kann direkt ein Team ausgwählt werden
@@ -55,7 +55,7 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC {
 		if($teamId <= 0) {
 			// Nix angegeben also über den Scope suchen
 			// Die Werte des aktuellen Scope ermitteln
-			$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+			$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 			$saisonUids = $scopeArr['SAISON_UIDS'];
 			$groupUids = $scopeArr['GROUP_UIDS'];
 			$club = $configurations->get('teamviewClub');

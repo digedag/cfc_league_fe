@@ -111,9 +111,9 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 			$width = intval($imgConf['file.']['maxW']);
 			$height = $height ? $height : 20;
 			$width = $width ? $width : 20;
-			$icon->setImage($url,$width,$height);
-			$icon->setShadow($url,$width,$height);
-			$icon->setAnchorPoint($width/2,$height/2);
+			$icon->setImage($url, $width, $height);
+			$icon->setShadow($url, $width, $height);
+			$icon->setAnchorPoint($width/2, $height/2);
 			$marker->setIcon($icon);
 		}
 	}

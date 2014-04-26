@@ -1,6 +1,6 @@
 <?php if (!defined ('TYPO3_MODE')) 	die ('Access denied.'); ?>
 <?php 
-  tx_div::load('tx_rnbase_util_FormUtil');
+  tx_rnbase::load('tx_rnbase_util_FormUtil');
   $viewData =& $configurations->getViewData();
   $pointSystem = $viewData->offsetGet('tablePointSystem'); // Das verwendete Punktesystem holen
 
@@ -58,7 +58,7 @@
     $css = ($cnt++) % 2;
     if($row['penalties']) $penalties[] = $row['penalties'];
 ?>
-<tr class="cfcleague-leaguetable-row<? echo $css ?><? if($row['markClub']){ ?> cfcleague-leaguetable-rowTeam<? } ?><? if(is_array($marks) && array_key_exists($cnt,$marks)){ ?> cfcleague-leaguetable-row_<? echo $marks[$cnt][0]; } ?>">
+<tr class="cfcleague-leaguetable-row<? echo $css ?><? if($row['markClub']){ ?> cfcleague-leaguetable-rowTeam<? } ?><? if(is_array($marks) && array_key_exists($cnt, $marks)){ ?> cfcleague-leaguetable-row_<? echo $marks[$cnt][0]; } ?>">
   <td><? echo $cnt ?>.</td>
   <td><? echo $row['teamName']; if($row['penalties']) { echo '*'; } ?> </td>
   <td><? echo $row['matchCount'] ?></td>
@@ -82,7 +82,7 @@
 <p class="cfcleague-leaguetable-comment">
 <?        foreach($penaltyArr As $penalty) {
           echo '* '. $penalty->record['comment'] . '<br />';
-//          t3lib_div::debug($penalty,'tmpl');
+//          t3lib_div::debug($penalty, 'tmpl');
        } ?>
 </p>
 <?     } ?>

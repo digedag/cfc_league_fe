@@ -47,7 +47,7 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewdata
 	 * @return string error message
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewdata) {
+	function handleRequest(&$parameters, &$configurations, &$viewdata) {
 		// Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
 		// ggf. die Konfiguration aus der TS-Config lesen
 		$fields = array();
@@ -81,7 +81,7 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'matchcrosstable.fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'matchcrosstable.options.');
 
-		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matchtable = $service->getMatchTable();
@@ -117,10 +117,10 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
     return $teamsArr;
   }
 
-	function ___handleRequest(&$parameters,&$configurations, &$viewdata) {
+	function ___handleRequest(&$parameters, &$configurations, &$viewdata) {
 
     // Die Werte des aktuellen Scope ermitteln
-    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+    $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
     $saisonUids = $scopeArr['SAISON_UIDS'];
     $groupUids = $scopeArr['GROUP_UIDS'];
     $compUids = $scopeArr['COMP_UIDS'];

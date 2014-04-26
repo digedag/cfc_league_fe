@@ -42,7 +42,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewData
 	 * @return string
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData) {
+	function handleRequest(&$parameters, &$configurations, &$viewData) {
 // Zunächst sollten wir die Anfangsbuchstaben ermitteln
     $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
 		
@@ -50,7 +50,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 			$pagerData = $this->findPagerData($service, $configurations);
 
 			$firstChar = $parameters->offsetGet('charpointer');
-			$firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar,0,1) : $pagerData['default'];
+			$firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar, 0, 1) : $pagerData['default'];
 			$viewData->offsetSet('pagerData', $pagerData);
 			$viewData->offsetSet('charpointer', $firstChar);
 		}
@@ -86,16 +86,16 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 		$timeRange = $configurations->get('profilelist.birthdays');
 		if($timeRange) {
 			$timePattern = $timeRange == 'DAY' ? '%d%m' : '%m';
-			$where .= " ( (DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday),'${timePattern}') = DATE_FORMAT(CURDATE(),'${timePattern}')";
+			$where .= " ( (DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), '${timePattern}') = DATE_FORMAT(CURDATE(), '${timePattern}')";
 			$where .= ' AND tx_cfcleague_profiles.birthday > 0) OR ';
 			// Variante 2 für Zeiten vor 1970
-			$where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( tx_cfcleague_profiles.birthday )),'1970-01-01')),'${timePattern}') = DATE_FORMAT(CURDATE(),'${timePattern}')";
+			$where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( tx_cfcleague_profiles.birthday )), '1970-01-01')), '${timePattern}') = DATE_FORMAT(CURDATE(), '${timePattern}')";
 			$where .= ' AND tx_cfcleague_profiles.birthday < 0 ))';
 			if($fields[SEARCH_FIELD_CUSTOM]) $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
 			$fields[SEARCH_FIELD_CUSTOM] .= $where;
 			
 			// Sortierung nach Datum
-			$sort = array('DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday),\'%m%d\')' => 'asc');
+			$sort = array('DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), \'%m%d\')' => 'asc');
 			if(is_array($options['orderby']))
 			  $options['orderby'] = array_merge($sort, $options['orderby']);
 			else

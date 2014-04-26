@@ -58,7 +58,7 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base {
 			$service = t3lib_div::makeInstanceService('cfcleague_statistics', $type);
 			if(!is_object($service)) // Ohne den Service geht nix
 				continue;
-			$srvTemplate = $cObj->getSubpart($template,'###STATISTIC_'.strtoupper($type).'###');
+			$srvTemplate = $cObj->getSubpart($template, '###STATISTIC_'.strtoupper($type).'###');
 			// Der Service muss jetzt den Marker liefert
 			$srvMarker = $service->getMarker($configurations);
 			$subpartArray['###STATISTIC_'.strtoupper($type).'###'] = $srvMarker->parseTemplate($srvTemplate, $stats, $configurations->getFormatter(), 'statistics.'.$type.'.', strtoupper($type));

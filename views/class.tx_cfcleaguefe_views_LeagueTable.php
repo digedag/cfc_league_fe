@@ -127,7 +127,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 		}
 		// Den TeamMarker erstellen
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-		$templateEntry = tx_rnbase_util_Templates::getSubpart($templateList,'###ROW###');
+		$templateEntry = tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
 		
 		$parts = array();
 		// Die einzelnen Zeilen zusammenbauen
@@ -203,7 +203,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
    * Setzt die Tabellenmarkierungen für eine Zeile
    */
   function _setMark(&$row, &$marks) {
-    if(is_array($marks) && array_key_exists($row['position'],$marks)){
+    if(is_array($marks) && array_key_exists($row['position'], $marks)){
       // Markierung und Bezeichnung setzen
       $row['mark'] = $marks[$row['position']][0];
       $row['markLabel'] = $marks[$row['position']][1];
@@ -223,7 +223,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 		$pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
 		$link->destination($pid); // Das Ziel der Seite vorbereiten
 
-		$subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'',);
+		$subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'', );
     if($viewData->offsetGet('tabletype_select')) {
       $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLETYPE###'), 
                     $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
@@ -256,7 +256,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 		$items = $itemsArr[0];
 		$currItem = $itemsArr[1];
 		$confName = strtolower($markerName); // Konvention
-		$noLink = array('','');
+		$noLink = array('', '');
 		$formatter = $configurations->getFormatter();
 
 		// Aus den KeepVars den aktuellen Wert entfernen
