@@ -1,22 +1,22 @@
 <?php
 
-########################################################################
-# Extension Manager/Repository config file for ext "cfc_league_fe".
-#
-# Auto generated 17-07-2010 14:52
-#
-# Manual updates:
-# Only the data in the array - everything else is removed by next
-# writing. "version" and "dependencies" must not be touched!
-########################################################################
+// ########################################################################
+// # Extension Manager/Repository config file for ext "cfc_league_fe".
+// #
+// # Auto generated 17-07-2010 14:52
+// #
+// # Manual updates:
+// # Only the data in the array - everything else is removed by next
+// # writing. "version" and "dependencies" must not be touched!
+// ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'T3sports FE',
 	'description' => 'FE-Plugins von T3sports. Liefert u.a. die Views Spielplan, Spielbericht, Tabellen, Team- und Spieleransicht. FE plugins for T3sports. Contains views for matchtable, leaguetable, matchreport, team and player reports and many more. Requires PHP5!',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '0.9.1',
-	'dependencies' => 'rn_base,rn_memento,pbimagegraph,cfc_league',
+	'version' => '1.0.0',
+	'dependencies' => 'rn_base,pbimagegraph,cfc_league',
 	'conflicts' => '',
 	'priority' => '',
 	'loadOrder' => '',
@@ -35,10 +35,10 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'typo3' => '4.3.0-6.2.99',
-			'php' => '5.2.0-0.0.0',
-			'rn_base' => '0.14.0-0.0.0',
+			'php' => '5.3.0-0.0.0',
+			'rn_base' => '0.14.1-0.0.0',
 			'pbimagegraph' => '2.0.0-0.0.0',
-			'cfc_league' => '0.9.1-0.0.0',
+			'cfc_league' => '1.0.0-0.0.0',
 		),
 		'conflicts' => array(
 		),
