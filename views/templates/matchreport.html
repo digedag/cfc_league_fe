@@ -73,19 +73,22 @@
 </div>
 
 
+###MATCH_TICKERS###
 <h2>Das Spielstenogramm</h2>
 <div id="cfcleague-report-ticker">
  <div id="cfcleague-report-ticker-author">###MATCH_LIVETICKER_AUTHOR###</div>
-###MATCH_TICKERLIST###
+	###MATCH_TICKER###
+	<div class="t3s-ticker-head">
+		<span class="t3s-ticker-min">###MATCH_TICKER_MINUTE### min</span>
+		<span class="cfcleague-ticker-score">Spielstand: ###MATCH_TICKER_DCSCORE###</span>
+	</div>
+	<div class="t3s-ticker-msg">
+		<p class="t3s-ticker-comment">
+		###MATCH_TICKER_DCMESSAGE###</p>
+	</div>
+	###MATCH_TICKER###
 </div>
-
-<!-- 
-###MATCH_NOTES###
-###MATCH_NOTE###
-###MATCH_NOTE_MINUTE### - ###MATCH_NOTE_PLAYER### - ###MATCH_NOTE_TEXT###
-###MATCH_NOTE###
-###MATCH_NOTES###
- -->
+###MATCH_TICKERS###
 
   <div id="cfcleague-report-images">
   ###MATCH_PICTURES###
