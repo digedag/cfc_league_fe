@@ -1364,7 +1364,7 @@ plugin.tx_cfcleaguefe_report {
         # Die Heimtorschützen anzeigen
         scorerHome {
 		      cron = 1
-          ifEmpty.cObject = HTML
+          ifEmpty.cObject = TEXT
           ifEmpty.cObject.value.field = scorer_home_stat
           ifEmpty.cObject.value.ifEmpty = -
           ifEmpty.cObject.value.br = 1
@@ -1491,7 +1491,7 @@ plugin.tx_cfcleaguefe_report {
     lineuphome {
 		  seperator = |, |
       profile < lib.t3sports.matchreport.reportPlayers.profile
-      ifEmpty.cObject = HTML
+      ifEmpty.cObject = TEXT
       ifEmpty.cObject.value.field = players_home_stat
       ifEmpty.cObject.value.ifEmpty = unbekannt
       ifEmpty.cObject.value.br = 1
@@ -1526,7 +1526,7 @@ plugin.tx_cfcleaguefe_report {
     }
     lineupguest =< plugin.tx_cfcleaguefe_report.matchreport.lineuphome
     lineupguest {
-      ifEmpty.cObject = HTML
+      ifEmpty.cObject = TEXT
       ifEmpty.cObject.value.field = players_guest_stat
       ifEmpty.cObject.value.ifEmpty = unbekannt
       ifEmpty.cObject.value.br = 1
@@ -1535,7 +1535,7 @@ plugin.tx_cfcleaguefe_report {
     substnameshome {
 		  seperator = |, |
       profile < lib.t3sports.matchreport.reportPlayers.profile
-      ifEmpty.cObject = HTML
+      ifEmpty.cObject = TEXT
       ifEmpty.cObject.value.field = substitutes_home_stat
       ifEmpty.cObject.value.ifEmpty = unbekannt
       ifEmpty.cObject.value.br = 1
