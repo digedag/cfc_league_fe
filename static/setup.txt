@@ -1486,9 +1486,9 @@ plugin.tx_cfcleaguefe_report {
     # eigene Listen erstellt werden
 
     coachnames =< lib.t3sports.matchreport.profiles
-#    lineuphome =< lib.t3sports.matchreport.profiles
-#    lineuphome =< lib.t3sports.matchreport.reportPlayers
     lineuphome {
+		  strategy.enable = 1
+		  strategy.seperator = | - |
 		  seperator = |, |
       profile < lib.t3sports.matchreport.reportPlayers.profile
       ifEmpty.cObject = TEXT

@@ -181,7 +181,7 @@ class tx_cfcleaguefe_models_matchreport {
    *
    * @param string $confId
    */
-  function getTickerList($confId) {
+  public function getTickerList($confId) {
     $conf = $this->_configurations->get($confId);
     $tickers = array();
     $tickerArr = $this->_getMatchTicker($conf['cron']);
@@ -214,7 +214,7 @@ class tx_cfcleaguefe_models_matchreport {
    *
    * @param $cron chronologischer Reihenfolge: "0" - 90 bis 0, "1" - 0 bis 90
    */
-  function _getMatchTicker($cron = 0) {
+  protected function _getMatchTicker($cron = 0) {
     $ret = ($cron != 1) ? array_reverse($this->_tickerArr) : $this->_tickerArr;
     return $ret;
   }
@@ -519,8 +519,13 @@ class tx_cfcleaguefe_models_matchreport {
     $system = t3lib_div::trimExplode('-',$system);
     $players = is_array($players) ? array_values($players) : array();
 
+    $strategyEnable = $this->_configurations->getBool($confId.'strategy.enable');
+    
     // Jetzt die Spieler nach dem System aufteilen
-    $parts = count($system);
+//    $parts = count($system);
+		if(!$strategyEnable)
+			$system[0] = count($players);
+
     $partCnt = 0;
     $partArr = array();
     $splitSum = $system[$partCnt];
@@ -536,12 +541,18 @@ class tx_cfcleaguefe_models_matchreport {
     }
 
 //    $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
-    $ret = implode(' - ', $partArr);
+		$sep = $this->_configurations->get($confId.'strategy.seperator');
+		$hits = array();
+		if(preg_match('/^\|(.*)\|$/', $sep, $hits)) {
+			$sep = $hits[1];
+		}
+		$ret = implode(' - ', $partArr);
 
-    // Jetzt noch ein Wrap über alles
+		// Jetzt noch ein Wrap über alles
 //t3lib_div::debug($conf, $confId.' - tx_cfcleaguefe_models_matchreport'); // TODO: remove me
-    return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
-  }
+//tx_rnbase_util_Debug::debug($strategyEnable, $confId.' - '. __FILE__.' : '.__LINE__); // TODO: remove me
+		return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
+	}
 
   /**
    * Lädt das Spiel aus der Datenbank
