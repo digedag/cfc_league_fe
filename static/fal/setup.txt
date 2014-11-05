@@ -51,7 +51,7 @@ lib.t3sports.teamLogo.big {
 	0.default >
 	0.default = IMAGE
 	0.default.file {
-		treatIdAsReference = 1
+#		treatIdAsReference = 1
 		import.field = logo
 		maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
 		maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
