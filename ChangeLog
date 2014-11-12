@@ -3,6 +3,9 @@
 Änderungen
 ----------
 
+v1.0.1 (??.04.2014)
+ * Prev and next links in profile view if linked from teamview.
+
 v1.0.0 (26.04.2014)
  * Support for TYPO3 6.2
  * #74: New 3 point system for volleyball

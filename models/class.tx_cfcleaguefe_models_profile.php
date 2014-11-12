@@ -32,7 +32,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 
   function getTableName(){return 'tx_cfcleague_profiles';}
 
-  function tx_cfcleaguefe_models_profile($rowOrUid) {
+  function __construct($rowOrUid) {
     if(!is_array($rowOrUid) && intval($rowOrUid) < 0) {
       // Unbekannter Spieler
       $this->uid = $rowOrUid;
@@ -44,7 +44,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 
   /**
    * Gibt das Profile formatiert aus. Dabei werden auch MatchNotes berücksichtigt,
-   * die dem Profil zugeordnet sind. Die Person wird im FE daher nur über einen 
+   * die dem Profil zugeordnet sind. Die Person wird im FE daher nur über einen
    * einzelnen Marker ausgegeben.
    * @param tx_rnbase_util_FormatUtil $formatter
    * @param array $conf Configuration array
@@ -61,7 +61,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     }
     self::prepareLinks($formatter, $confId, $profile);
 // TODO Das sollte dynamisch gestaltet werden, damit alle Daten der Tabelle verwendet
-// werden können. 
+// werden können.
 //t3lib_div::debug(tx_rnbase_configurations::getUniqueKeysNames($conf), 'tx_cfcleaguefe_models_profile');
 		$conf = $formatter->configurations->get($confId);
     $arr = array();
@@ -105,7 +105,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     foreach($arr As $val) {
       $ret[] = $val[0];
     }
-    
+
     $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
     $ret = implode($sep, $ret);
 
@@ -115,7 +115,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
   }
   /**
    * Bereitet Links im Spielbericht vor. Da hier keine Marker verwendet werden, muss für die Verlinkung der
-   * normale typolink im TS verwendet werden. Die Zusatz-Parameter müssen hier als String vorbereitet und 
+   * normale typolink im TS verwendet werden. Die Zusatz-Parameter müssen hier als String vorbereitet und
    * in ein Register gelegt werden.
    *
    * @param tx_rnbase_util_FormatUtil $formatter
@@ -254,7 +254,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 	 * Fügt die TeamNotes für den Spieler hinzu. Wird kein Team übergeben, dann passiert nichts.
 	 * @param tx_cfcleaguefe_models_team $team
 	 */
-	public function addTeamNotes(&$team) {
+	public function addTeamNotes($team) {
 		// Zunächst alle Daten initialisieren
 		tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
 		$types = tx_cfcleaguefe_models_teamNoteType::getAll();

@@ -1267,6 +1267,8 @@ plugin.tx_cfcleaguefe_report {
       file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_firstProfilePicture}
       file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_firstProfilePicture}
     }
+    nextprofile =< lib.t3sports.profile
+    prevprofile =< lib.t3sports.profile
   }
   clubview {
     club =< lib.t3sports.club

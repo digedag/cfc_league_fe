@@ -87,54 +87,35 @@ Seite ###PAGEBROWSER_CURRENT_PAGE_NUMBER###
 
 <!-- ###PROFILE_VIEW### begin -->
 <div id="cfcleague-profileview">
-  <h1>###PROFILE_DCNAME###</h1>
 
-<table style="width:480px">
-<tr>
-  <td rowspan="20" style="vertical-align:top">###PROFILE_FIRSTPICTURE###</td>
-  <td class="prof_head">Geburtsdatum:</td>
-  <td class="prof_value">###PROFILE_BIRTHDAY###</td>
-</tr>
-<tr>
-  <td class="prof_head">Nationalit&auml;t:</td>
-  <td class="prof_value">###PROFILE_NATIONALITY###</td>
-</tr>
-<tr>
-  <td class="prof_head">Gr&ouml;&szlig;e:</td>
-  <td class="prof_value">###PROFILE_HEIGHT### cm</td>
-</tr>
-<tr>
-  <td class="prof_head">Gewicht:</td>
-  <td class="prof_value">###PROFILE_WEIGHT### kg</td>
-</tr>
-<tr>
-  <td class="prof_head">Position:</td>
-  <td class="prof_value">###PROFILE_POSITION###</td>
-</tr>
-<tr>
-  <td class="prof_head">Trikotnummer (aus TeamNote):</td>
-  <td class="prof_value">###PROFILE_TNTRIKOT###</td>
-</tr>
+<h1>###PROFILE_DCNAME###</h1>
+
+###PROFILEPAGER###
+<nav>
+  <ul class="pager">
+    <li>###PREVPROFILE_SHOWPROFILELINK###  <span class="glyphicon glyphicon-backward"></span> ###PREVPROFILE_DCNAME### ###PREVPROFILE_SHOWPROFILELINK###</li>
+    <li>###NEXTPROFILE_SHOWPROFILELINK### ###NEXTPROFILE_DCNAME### <span class="glyphicon glyphicon-forward"></span> ###NEXTPROFILE_SHOWPROFILELINK###</li>
+  </ul>
+</nav>
+###PROFILEPAGER###
 
 
+ 
 
-<tr>
-  <td class="prof_head">Vertragsdauer:</td>
-  <td class="prof_value">###PROFILE_DURATION_OF_CONTRACT###</td>
-</tr>
-<tr>
-  <td class="prof_head">im Verein seit:</td>
-  <td class="prof_value">###PROFILE_START_OF_CONTRACT###</td>
-</tr>
-<tr>
-  <td class="prof_head">Sternzeichen:</td>
-  <td class="prof_value">###PROFILE_SIGN###</td>
-</tr>
-<tr>
-  <td class="prof_head">Spitzname:</td>
-  <td class="prof_value">###PROFILE_NICKNAME###</td>
-</tr>
-</table>
+###PROFILE_FIRSTPICTURE###
+<dl class="dl-horizontal">
+  <dt>Geburtsdatum:</dt><dd>###PROFILE_BIRTHDAY###</dd>
+  <dt>Nationalit&auml;t:</dt><dd>###PROFILE_NATIONALITY###</dd>
+  <dt>Gr&ouml;&szlig;e:</dt><dd>###PROFILE_HEIGHT### cm</dd>
+  <dt>Gewicht:</dt><dd>###PROFILE_WEIGHT### kg</dd>
+  <dt>Position:</dt><dd>###PROFILE_POSITION###</dd>
+  <dt>Trikotnummer (aus TeamNote):</dt><dd>###PROFILE_TNTRIKOT###</dd>
+  <dt>Vertragsdauer:</dt><dd>###PROFILE_DURATION_OF_CONTRACT###</dd>
+  <dt>im Verein seit:</dt><dd>###PROFILE_START_OF_CONTRACT###</dd>
+  <dt>Sternzeichen:</dt><dd>###PROFILE_SIGN###</dd>
+  <dt>Spitzname:</dt><dd>###PROFILE_NICKNAME###</dd>
+</dl>
+
 <p class="bodytext">###PROFILE_SUMMARY###</p>
 <p class="bodytext">###PROFILE_DESCRIPTION###</p>
 
@@ -142,20 +123,23 @@ Bilder: ###PROFILE_PICTURES###
 
 ###PROFILE_STATS_LEAGUE###
 <h2>Spielerstatistik (needs T3sportstats)</h2>
-Spiele: ###PROFILE_STATS_LEAGUE_PLAYEDLINK### ###PROFILE_STATS_LEAGUE_PLAYED### ###PROFILE_STATS_LEAGUE_PLAYEDLINK###<br />
-Minuten: ###PROFILE_STATS_LEAGUE_PLAYTIME###<br />
-Tore: ###PROFILE_STATS_LEAGUE_GOALSLINK### ###PROFILE_STATS_LEAGUE_GOALS### ###PROFILE_STATS_LEAGUE_GOALSLINK###<br />
+<dl class="dl-horizontal">
+	<dt>Spiele:</dt><dd>###PROFILE_STATS_LEAGUE_PLAYEDLINK### ###PROFILE_STATS_LEAGUE_PLAYED### ###PROFILE_STATS_LEAGUE_PLAYEDLINK###</dd>
+	<dt>Minuten:</dt><dd>###PROFILE_STATS_LEAGUE_PLAYTIME###</dd>
+	<dt>Tore:</dt><dd>###PROFILE_STATS_LEAGUE_GOALSLINK### ###PROFILE_STATS_LEAGUE_GOALS### ###PROFILE_STATS_LEAGUE_GOALSLINK###</dd>
+</dl>
 
 ###PROFILE_STATS_LEAGUE###
 
 ###PROFILE_STATS_REFEREE###
 <h2>Schiedsrichterstatistik (needs T3sportstats)</h2>
-Spiele: ###PROFILE_STATS_REFEREE_PLAYEDLINK### ###PROFILE_STATS_REFEREE_PLAYED### ###PROFILE_STATS_REFEREE_PLAYEDLINK###<br />
-als Schiedsrichter: ###PROFILE_STATS_REFEREE_MAINREF###<br />
-als Assistent: ###PROFILE_STATS_REFEREE_ASSIST###<br />
-Elfmeter: ###PROFILE_STATS_REFEREE_PENALTY###<br />
-Karten (G/GR/R): ###PROFILE_STATS_REFEREE_CARDYELLOW###/###PROFILE_STATS_REFEREE_CARDYR###/###PROFILE_STATS_REFEREE_CARDRED### <br />
-
+<dl class="dl-horizontal">
+	<dt>Spiele:</dt><dd>###PROFILE_STATS_REFEREE_PLAYEDLINK### ###PROFILE_STATS_REFEREE_PLAYED### ###PROFILE_STATS_REFEREE_PLAYEDLINK###</dd>
+	<dt>als Schiedsrichter:</dt><dd>###PROFILE_STATS_REFEREE_MAINREF###</dd>
+	<dt>als Assistent:</dt><dd>###PROFILE_STATS_REFEREE_ASSIST###</dd>
+	<dt>Elfmeter:</dt><dd>###PROFILE_STATS_REFEREE_PENALTY###</dd>
+	<dt>Karten (G/GR/R):</dt><dd>###PROFILE_STATS_REFEREE_CARDYELLOW###/###PROFILE_STATS_REFEREE_CARDYR###/###PROFILE_STATS_REFEREE_CARDRED###</dd>
+</dl>
 ###PROFILE_STATS_REFEREE###
 
 </div>

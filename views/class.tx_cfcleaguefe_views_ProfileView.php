@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2014 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -41,13 +41,13 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 
 		$profile =& $viewData->offsetGet('profile');
 		if(is_object($profile))
-			$out = $this->_createView($template, $profile, $configurations);
+			$out = $this->createView($template, $profile, $configurations);
 		else
 			$out = 'Sorry, profile not found...';
 		return $out;
 	}
 
-	function _createView($template, $profile, $configurations) {
+	protected function createView($template, $profile, $configurations) {
 		$out = '';
 		$markerOptions = array();
 		$teamId = $configurations->getParameters()->getInt('team');
@@ -61,9 +61,61 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 		}
 		$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker', $markerOptions);
 		$out .= $profileMarker->parseTemplate($template, $profile, $configurations->getFormatter(), 'profileview.profile.');
+		$profiles = $this->findNextAndPrevProfiles($profile, $markerOptions['team']);
+
+		$out = $profileMarker->parseTemplate($out, $profiles['next'], $configurations->getFormatter(), 'profileview.nextprofile.', 'NEXTPROFILE');
+		$out = $profileMarker->parseTemplate($out, $profiles['prev'], $configurations->getFormatter(), 'profileview.prevprofile.', 'PREVPROFILE');
+
+
+		$markerArray = $subpartArray = $wrappedSubpartArray = array();
+		if($teamId) {
+			$wrappedSubpartArray['###PROFILEPAGER###'] = array('','');
+		}
+		else {
+			$subpartArray['###PROFILEPAGER###'] = '';
+		}
+
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray, $wrappedSubpartArray);
+
 		return $out;
 	}
 
+	/**
+	 * @param tx_cfcleaguefe_models_profile $profile
+	 * @param tx_cfcleaguefe_models_team $team
+	 * @return array[tx_cfcleaguefe_models_profile]
+	 */
+	protected function findNextAndPrevProfiles($profile, $team) {
+		$ret = array();
+		if($team && $team->isValid()) {
+			// Alle Profile des Teams sammeln
+			$teamProfiles = array();
+			if($team->record['players'])
+				$teamProfiles = array_merge($teamProfiles, tx_rnbase_util_Strings::intExplode(',', $team->record['players']));
+			if($team->record['coaches'])
+				$teamProfiles = array_merge($teamProfiles, tx_rnbase_util_Strings::intExplode(',', $team->record['coaches']));
+			if($team->record['supporters'])
+				$teamProfiles = array_merge($teamProfiles, tx_rnbase_util_Strings::intExplode(',', $team->record['supporters']));
+			// Das aktuelle Profil suchen
+			foreach ($teamProfiles As $idx => $uid) {
+				if($uid == $profile->getUid()) {
+					// Gefunden! Was ist der Prev?
+					$prevId = $idx == 0 ? count($teamProfiles)-1 : $idx-1;
+					$nextId = $idx == count($teamProfiles) - 1 ? 0 : $idx+1;
+					// TODO: In Schleife packen und den nächsten sichtbaren Link suchen.
+					$ret['prev'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$prevId]);
+					$ret['next'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$nextId]);
+				}
+			}
+		}
+		if(!isset($ret['prev'])) {
+			$ret['prev'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', 0);
+		}
+		if(!isset($ret['next'])) {
+			$ret['next'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', 0);
+		}
+		return $ret;
+	}
 
 	function getMainSubpart(&$viewData) {
 		return '###PROFILE_VIEW###';

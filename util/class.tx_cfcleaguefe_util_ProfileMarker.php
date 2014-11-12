@@ -35,7 +35,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 	private $options;
 
 	/**
-	 * Initialisiert den Marker Array. 
+	 * Initialisiert den Marker Array.
 	 */
 	public function __construct(&$options = array()){
 		$this->options = $options;
@@ -65,7 +65,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 	 */
 	public function parseTemplate($template, &$profile, &$formatter, $confId, $marker = 'PROFILE') {
 		if(!is_object($profile)) {
-			return $formatter->configurations->getLL('profile_notFound');
+			$profile = self::getEmptyInstance('tx_cfcleaguefe_models_profile');
 		}
 		$profile->addTeamNotes($this->options['team']);
 		$this->prepareRecord($profile);
@@ -78,14 +78,15 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-    
+
 //		// Jetzt die Bilder einbinden
 //		$subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
-
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','profileMarker_afterSubst', array('item' => &$profile, 'template'=>&$template, 'confId'=>$confId, 'marker'=>$marker, 'conf' => $formatter->getConfigurations()), $this);
 		return $template;
 	}
+
 	protected function prepareRecord($item) {
 		$item->record['firstpicture'] = $item->record['dam_images'];
 		$item->record['pictures'] = $item->record['dam_images'];
@@ -102,7 +103,6 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker {
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
 	protected function prepareLinks(&$profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
-
 //		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
 		if($profile->hasReport()) {
 			$params = array('profileId' => $profile->uid);
