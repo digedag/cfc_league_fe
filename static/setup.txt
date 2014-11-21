@@ -1267,8 +1267,17 @@ plugin.tx_cfcleaguefe_report {
       file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_firstProfilePicture}
       file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_firstProfilePicture}
     }
-    nextprofile =< lib.t3sports.profile
-    prevprofile =< lib.t3sports.profile
+    nextprofile.player =< lib.t3sports.profile
+    nextprofile.supporter =< lib.t3sports.profile
+    nextprofile.supporter.links.showprofile.pid = {$plugin.tx_cfcleaguefe_competition.profilepage}
+    nextprofile.coach =< lib.t3sports.profile
+    nextprofile.coach.links.showprofile.pid = {$plugin.tx_cfcleaguefe_competition.profilepage}
+    prevprofile.player =< lib.t3sports.profile
+    prevprofile.coach =< lib.t3sports.profile
+    prevprofile.coach.links.showprofile.pid = {$plugin.tx_cfcleaguefe_competition.profilepage}
+    prevprofile.supporter =< lib.t3sports.profile
+    prevprofile.supporter.links.showprofile.pid = {$plugin.tx_cfcleaguefe_competition.profilepage}
+    team =< lib.t3sports.team
   }
   clubview {
     club =< lib.t3sports.club

@@ -57,21 +57,32 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 		}
 		if($teamId) {
 			tx_rnbase::load('tx_cfcleaguefe_models_team');
-			$markerOptions['team'] = tx_cfcleaguefe_models_team::getInstance($teamId);
+			$team = tx_cfcleaguefe_models_team::getInstance($teamId);
+			$markerOptions['team'] = $team;
 		}
 		$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker', $markerOptions);
 		$out .= $profileMarker->parseTemplate($template, $profile, $configurations->getFormatter(), 'profileview.profile.');
 		$profiles = $this->findNextAndPrevProfiles($profile, $markerOptions['team']);
 
-		$out = $profileMarker->parseTemplate($out, $profiles['next'], $configurations->getFormatter(), 'profileview.nextprofile.', 'NEXTPROFILE');
-		$out = $profileMarker->parseTemplate($out, $profiles['prev'], $configurations->getFormatter(), 'profileview.prevprofile.', 'PREVPROFILE');
-
+		$subType = $profiles['next']->memberType == 1 ? 'coach.' : (
+				$profiles['next']->memberType == 2 ? 'supporter.' : 'player.'
+		);
+		$out = $profileMarker->parseTemplate($out, $profiles['next'], $configurations->getFormatter(), 'profileview.nextprofile.'.$subType, 'NEXTPROFILE');
+		$subType = $profiles['prev']->memberType == 1 ? 'coach.' : (
+				$profiles['prev']->memberType == 2 ? 'supporter.' : 'player.'
+		);
+		$out = $profileMarker->parseTemplate($out, $profiles['prev'], $configurations->getFormatter(), 'profileview.prevprofile.'.$subType, 'PREVPROFILE');
 
 		$markerArray = $subpartArray = $wrappedSubpartArray = array();
+
 		if($teamId) {
+			$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+			$out = $teamMarker->parseTemplate($out, $team, $configurations->getFormatter(), 'profileview.team.', 'TEAM');
+			$wrappedSubpartArray['###TEAM###'] = array('','');
 			$wrappedSubpartArray['###PROFILEPAGER###'] = array('','');
 		}
 		else {
+			$subpartArray['###TEAM###'] = '';
 			$subpartArray['###PROFILEPAGER###'] = '';
 		}
 
@@ -87,15 +98,28 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 	 */
 	protected function findNextAndPrevProfiles($profile, $team) {
 		$ret = array();
+		$playerIds = array();
+		$coachIds = array();
+		$supporterIds = array();
+
 		if($team && $team->isValid()) {
 			// Alle Profile des Teams sammeln
 			$teamProfiles = array();
-			if($team->record['players'])
-				$teamProfiles = array_merge($teamProfiles, tx_rnbase_util_Strings::intExplode(',', $team->record['players']));
-			if($team->record['coaches'])
-				$teamProfiles = array_merge($teamProfiles, tx_rnbase_util_Strings::intExplode(',', $team->record['coaches']));
-			if($team->record['supporters'])
-				$teamProfiles = array_merge($teamProfiles, tx_rnbase_util_Strings::intExplode(',', $team->record['supporters']));
+			if($team->record['players']) {
+				$playerIds = tx_rnbase_util_Strings::intExplode(',', $team->record['players']);
+				$teamProfiles = array_merge($teamProfiles, $playerIds);
+				$playerIds = array_flip($playerIds);
+			}
+			if($team->record['coaches']) {
+				$coachIds = tx_rnbase_util_Strings::intExplode(',', $team->record['coaches']);
+				$teamProfiles = array_merge($teamProfiles, $coachIds);
+				$coachIds = array_flip($coachIds);
+			}
+			if($team->record['supporters']) {
+				$supporterIds = tx_rnbase_util_Strings::intExplode(',', $team->record['supporters']);
+				$teamProfiles = array_merge($teamProfiles, $supporterIds);
+				$supporterIds= array_flip($supporterIds);
+			}
 			// Das aktuelle Profil suchen
 			foreach ($teamProfiles As $idx => $uid) {
 				if($uid == $profile->getUid()) {
@@ -105,16 +129,33 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 					// TODO: In Schleife packen und den nächsten sichtbaren Link suchen.
 					$ret['prev'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$prevId]);
 					$ret['next'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$nextId]);
+//					break;
 				}
 			}
 		}
-		if(!isset($ret['prev'])) {
+		// Sind es Trainer oder Spieler??
+		if(isset($ret['prev'])) {
+			$this->setMemberType($ret['prev'], $coachIds, $supporterIds);
+		}
+		else {
 			$ret['prev'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', 0);
 		}
-		if(!isset($ret['next'])) {
+		if(isset($ret['next'])) {
+			$this->setMemberType($ret['next'], $coachIds, $supporterIds);
+		}
+		else {
 			$ret['next'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', 0);
 		}
 		return $ret;
+	}
+	private function setMemberType($profile, $coachIds, $supporterIds) {
+		$profileUid = $profile->getUid();
+		$profile->memberType = 0;
+		if(array_key_exists($profileUid, $coachIds)) {
+			$profile->memberType = 1;
+		}
+		elseif(array_key_exists($profileUid, $supporterIds))
+			$profile->memberType = 2;
 	}
 
 	function getMainSubpart(&$viewData) {
