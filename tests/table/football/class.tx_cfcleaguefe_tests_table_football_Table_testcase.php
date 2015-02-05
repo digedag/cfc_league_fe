@@ -131,7 +131,7 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		// Sicherstellen, daß die Klasse geladen wurde
 		tx_rnbase::load($clazzName);
 		foreach($yamlData As $arr) {
-			if(is_array($arr['record']))
+			if(isset($arr['record']) && is_array($arr['record']))
 				$ret[] = new $clazzName($arr['record']);
 		}
 		return $ret;
