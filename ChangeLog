@@ -3,8 +3,9 @@
 Änderungen
 ----------
 
-v1.0.1 (??.04.2014)
+v1.0.1 (??.02.2015)
  * Prev and next links in profile view if linked from teamview.
+ * ScopeSelection: Marker for current item changed to ###SAISON_CURRENT_NAME###
 
 v1.0.0 (26.04.2014)
  * Support for TYPO3 6.2
