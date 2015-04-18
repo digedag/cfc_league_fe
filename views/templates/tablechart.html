@@ -25,7 +25,7 @@ This is just an example. The sources of jqplot are not included!
 
 ###JQPLOT###
 
-<script language="javascript" type="text/javascript" src="/fileadmin/scripts/jqplot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="/fileadmin/scripts/jqplot/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="/fileadmin/scripts/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
 <script type="text/javascript" src="fileadmin/scripts/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
 <script type="text/javascript" src="/fileadmin/scripts/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
@@ -95,7 +95,9 @@ jQuery(document).ready(function(){
 </script>
 
 
-<div id="chart1" class="jqplot-target" style="width:450px; height:300px; position:relative;">
+<div class="chart-container">
+	<div id="chart1" class="jqplot-target" style="width:100%; height:300px; position:relative;">
+	</div>
 </div>
 
 ###JQPLOT###
@@ -105,10 +107,105 @@ http://www.flotcharts.org/
 ----------------------------------------------------------------- -->
 
 ###FLOT###
-Test
-<pre>
-###JSON###
-</pre>
+<style>
+.chart-container {
+	box-sizing: border-box;
+	width: 500px;
+	height: 400px;
+	padding: 20px 15px 15px 15px;
+	margin: 15px 15px;
+	border: 1px solid #ddd;
+	background: #fff;
+	background: linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+	box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+	-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.chart-placeholder { width: 100%;
+	height: 100%;
+	font-size: 14px;
+	line-height: 1.2em;
+}
+
+</style>
+
+<script type="text/javascript" src="/typo3conf/ext/rn_base/Resources/Public/JavaScript/Flot/jquery.flot.min.js"></script>
+
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+	var chartData = ###JSON###;
+	var series = [];
+	var seriesConfig = [];
+	// fill the series data
+	for (var i = 0; i < chartData.datasets.length; i++) {
+		series.push({ 
+			label: chartData.datasets[i].info.name,
+			data: chartData.datasets[i].data 
+		});
+		seriesConfig.push({
+			lineWidth:2,
+			label: chartData.datasets[i].info.name,
+			markerOptions: { size: 7, style:"filledCircle" }
+		});
+	}
+	jQuery("<div id='tooltip'></div>").css({
+		position: "absolute",
+		display: "none",
+		border: "1px solid #fdd",
+		padding: "2px",
+		"background-color": "#fee",
+		opacity: 0.80
+	}).appendTo("body");
+	jQuery("#placeholder").bind("plothover", function (event, pos, item) {
+		if (item) {
+			var x = item.datapoint[0].toFixed(0),
+				y = item.datapoint[1].toFixed(0);
+			jQuery("#tooltip").html(item.series.label + ": <strong>Platz " + y + "</strong> am " + x + ". Spieltag")
+				.css({top: item.pageY+5, left: item.pageX+5})
+				.fadeIn(200);
+		} else {
+			jQuery("#tooltip").hide();
+		}
+	});
+
+	var options = {
+			legend: {show:true},
+			series: {
+				lines: {
+					show: true
+				},
+				points: {
+					show: true
+				}
+			},
+			grid: {
+				hoverable: true,
+			},
+			xaxis: {max: chartData.xmax},
+			yaxis: {
+				min: 1,
+				tickDecimals: 0,
+				ticks: 18,
+				transform: function (v) { return -v; },
+				inverseTransform: function (v) { return -v; }
+			}
+	};
+	jQuery.plot("#placeholder", series, options);
+});
+
+</script>
+
+<div class="chart-container">
+	<div id="placeholder" class="chart-placeholder"></div>
+</div>
+
 ###FLOT###
 
 ###TABLECHART###
