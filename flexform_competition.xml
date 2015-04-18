@@ -37,6 +37,10 @@
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.TableChart</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_TableChart</numIndex>
                   </numIndex>
+                  <numIndex index="30" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.TableChartJS</numIndex>
+                    <numIndex index="1">tx_cfcleaguefe_actions_TableChartJS</numIndex>
+                  </numIndex>
                   <numIndex index="4" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LiveTickerList</numIndex>
                     <numIndex index="1">tx_cfcleaguefe_actions_LiveTickerList</numIndex>
@@ -566,7 +570,7 @@
 
         <type>array</type>
         <el>
-          <chartClubs>
+          <tablechart.chartClubs>
             <TCEforms>
               <exclude>1</exclude>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablechart.clubs</label>
@@ -579,7 +583,33 @@
                 <maxitems>20</maxitems>
               </config>
             </TCEforms>
-          </chartClubs>
+          </tablechart.chartClubs>
+          <tablechart.library>
+            <TCEforms>
+              <exclude>1</exclude>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableType</label>
+              <config>
+                <type>select</type>
+                <items type="array">
+                  <numIndex index="0" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_pbimagegraph</numIndex>
+                    <numIndex index="1">pbimagegraph</numIndex>
+                  </numIndex>
+                  <numIndex index="1" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_flot</numIndex>
+                    <numIndex index="1">flot</numIndex>
+                  </numIndex>
+                  <numIndex index="2" type="array">
+                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_jqplot</numIndex>
+                    <numIndex index="1">jqplot</numIndex>
+                  </numIndex>
+                </items>
+                <multiple>0</multiple>
+                <maxitems>1</maxitems>
+                <size>1</size>
+              </config>
+            </TCEforms>
+          </tablechart.library>
           <chart.defaults.colors>
             <TCEforms>
               <exclude>1</exclude>

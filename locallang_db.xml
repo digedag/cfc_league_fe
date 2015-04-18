@@ -14,6 +14,7 @@
 			<label index="plugin.competition.flexform.tab.MatchTable">Match table</label>
 			<label index="plugin.competition.flexform.tab.LeagueTable">League Table</label>
 			<label index="plugin.competition.flexform.tab.TableChart">League Chart</label>
+			<label index="plugin.competition.flexform.tab.TableChartJS">League Chart JS</label>
 			<label index="plugin.competition.flexform.tab.TickerList">Liveticker List</label>
 			<label index="plugin.competition.flexform.action">View Types</label>
 			<label index="plugin.competition.flexform.action.CompetitionSelection">Competition Selection</label>
@@ -44,6 +45,9 @@
 			<label index="plugin.competition.flexform.leaguetable.size">Number of teams to show</label>
 			<label index="plugin.competition.flexform.tablechart.clubs">Clubs on chart</label>
 			<label index="plugin.competition.flexform.tablechart.colors">Colors for clubs</label>
+			<label index="plugin_competition_flexform_tablechart_lib_pbimagegraph">ext:pbimagegraph</label>
+			<label index="plugin_competition_flexform_tablechart_lib_flot">jQuery Flot</label>
+			<label index="plugin_competition_flexform_tablechart_lib_jqplot">jQuery JqPlot</label>
 			<label index="plugin.competition.flexform.matchtable.debug">Debug SQL query</label>
 			<label index="plugin.competition.flexform.matchtable.limit">Max matches to show</label>
 			<label index="plugin.competition.flexform.matchtable.report_page">Page for report</label>
@@ -148,6 +152,7 @@
 			<label index="plugin.competition.flexform.action.LeagueTable">Ligatabelle</label>
 			<label index="plugin.competition.flexform.action.LeagueTableAllTime">Ligatabelle (All-Time)</label>
 			<label index="plugin.competition.flexform.action.TableChart">Tabellenfahrt</label>
+			<label index="plugin.competition.flexform.action.TableChartJS">Tabellenfahrt JS</label>
 			<label index="plugin.competition.flexform.action.LiveTickerList">Liste der Live-Ticker</label>
 			<label index="plugin.competition.flexform.action.Statistics">Statistiken</label>
 			<label index="plugin.competition.flexform.action.TeamList">Teamliste</label>

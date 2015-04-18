@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+<!-- ------------------------------- -->
+<!-- START TABLE CHART -->
+<!-- ------------------------------- -->
+
+<div>
+Alle Vorlagen in dieser Datei sind nur als Implementierungshinweis zu sehen. 
+</div>
+
+###TABLECHART###
+
+<!-- -----------------------------------------------------------------
+http://www.jqplot.com/
+
+This is just an example. The sources of jqplot are not included!
+----------------------------------------------------------------- -->
+
+###JQPLOT###
+
+<script language="javascript" type="text/javascript" src="/fileadmin/scripts/jqplot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="/fileadmin/scripts/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+<script type="text/javascript" src="fileadmin/scripts/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+<script type="text/javascript" src="/fileadmin/scripts/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+<script type="text/javascript" src="/fileadmin/scripts/jqplot/plugins/jqplot.highlighter.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/fileadmin/scripts/jqplot/jquery.jqplot.min.css" />
+
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+	  var chartData = ###JSON###;
+		var series = [];
+		var seriesConfig = [];
+		// fill the series data
+		for (var i = 0; i < chartData.datasets.length; i++) {
+			series.push(chartData.datasets[i].data);
+			seriesConfig.push({
+				lineWidth:2,
+				label: chartData.datasets[i].info.name,
+				markerOptions: { size: 7, style:"filledCircle" }
+			});
+		}
+		
+		var plot3 = $.jqplot('chart1', series,
+			{
+				animate: true,
+				title:'Tabellenfahrt',
+				axes: {
+					xaxis: {
+						pad: 1,
+						max: chartData.xmax,
+						min: 1,
+						tickOptions: {
+							formatString: '%.0f'
+						},
+						label: 'Spieltag'
+					},
+					yaxis: {
+						pad: 1,
+						max: 1,
+						min: 18,
+						rendererOptions: {
+						},
+						tickOptions: {
+							formatString: '%.0f'
+						},
+						label: 'Platz'
+						// same options as axesDefaults
+					},
+				},
+				legend: { show: true },
+				// Series options are specified as an array of objects, one object
+				// for each series.
+				series: seriesConfig,
+				highlighter: {
+					show: true, 
+					showLabel: true, 
+/*					tooltipAxes: 'y',*/
+					formatString: '<b><i><span style="color:red;">Platz %s</span></i></b> am %s. Spieltag',
+					useAxesFormatters: false,
+					sizeAdjust: 7.5, 
+					tooltipLocation : 'ne'
+				}
+			}
+		);
+	});
+</script>
+
+
+<div id="chart1" class="jqplot-target" style="width:450px; height:300px; position:relative;">
+</div>
+
+###JQPLOT###
+
+<!-- -----------------------------------------------------------------
+http://www.flotcharts.org/
+----------------------------------------------------------------- -->
+
+###FLOT###
+Test
+<pre>
+###JSON###
+</pre>
+###FLOT###
+
+###TABLECHART###
+
+
+
+</body>
+</html>

@@ -38,7 +38,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	private $currRound;
 	private $matches;
 	private $markClubs = null;
-	
+
 	function __construct($parameters, $configurations, $league, $confId='') {
 		$this->setLeague($league);
 		$this->setConfigurations($configurations, $confId);
@@ -77,7 +77,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	function getPenalties() {
 		// Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
 		// für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
-		if($this->cfgTableType || $this->cfgTableScope) 
+		if($this->cfgTableType || $this->cfgTableScope)
 			return array();
 
 		return $this->getLeague()->getPenalties();
@@ -85,7 +85,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 	function getTeamId($team) {
 		return $team->uid;
 	}
-	
+
 	function getTeams() {
 		return $this->getLeague()->getTeams(true);
 	}
@@ -195,7 +195,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		$this->currRound = $round;
 	}
 	/**
-	 * Set matches to use. Useful for unit testing. 
+	 * Set matches to use. Useful for unit testing.
 	 *
 	 * @param array[tx_cfcleaguefe_models_match] $matches
 	 */
