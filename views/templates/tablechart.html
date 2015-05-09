@@ -49,13 +49,14 @@ jQuery(document).ready(function(){
 			});
 		}
 		
-		var plot3 = $.jqplot('chart1', series,
+		var chartPlot = $.jqplot('chart1', series,
 			{
 				animate: true,
 				title:'Tabellenfahrt',
 				axes: {
 					xaxis: {
 						pad: 1,
+						tickInterval: 2.0,
 						max: chartData.xmax,
 						min: 1,
 						tickOptions: {
@@ -64,14 +65,15 @@ jQuery(document).ready(function(){
 						label: 'Spieltag'
 					},
 					yaxis: {
-						pad: 1,
 						max: 1,
-						min: 18,
+						min: chartData.ymax,
+						numberTicks: chartData.ymax,
 						rendererOptions: {
 						},
 						tickOptions: {
 							formatString: '%.0f'
 						},
+						labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
 						label: 'Platz'
 						// same options as axesDefaults
 					},
@@ -81,10 +83,16 @@ jQuery(document).ready(function(){
 				// for each series.
 				series: seriesConfig,
 				highlighter: {
-					show: true, 
+					tooltipContentEditor: function (str, seriesIndex, pointIndex) {
+						var data = str.split("-");
+						var team = chartData.datasets[seriesIndex].info.name;
+						var logo = chartData.datasets[seriesIndex].info.logo;
+				  	return "<div style=\"padding:3px\"><h2>"+team+"</h2><strong>Platz " + data[1] + "</strong> am "+
+				  						data[0]+". Spieltag<br/>"+logo+"</div>";
+				  },
+				  show: true, 
 					showLabel: true, 
-/*					tooltipAxes: 'y',*/
-					formatString: '<b><i><span style="color:red;">Platz %s</span></i></b> am %s. Spieltag',
+					formatString: '%s-%s',
 					useAxesFormatters: false,
 					sizeAdjust: 7.5, 
 					tooltipLocation : 'ne'
@@ -93,7 +101,6 @@ jQuery(document).ready(function(){
 		);
 	});
 </script>
-
 
 <div class="chart-container">
 	<div id="chart1" class="jqplot-target" style="width:100%; height:300px; position:relative;">
@@ -147,7 +154,8 @@ jQuery(document).ready(function(){
 	for (var i = 0; i < chartData.datasets.length; i++) {
 		series.push({ 
 			label: chartData.datasets[i].info.name,
-			data: chartData.datasets[i].data 
+			data: chartData.datasets[i].data,
+			logo: chartData.datasets[i].info.logo,
 		});
 		seriesConfig.push({
 			lineWidth:2,
@@ -167,7 +175,8 @@ jQuery(document).ready(function(){
 		if (item) {
 			var x = item.datapoint[0].toFixed(0),
 				y = item.datapoint[1].toFixed(0);
-			jQuery("#tooltip").html(item.series.label + ": <strong>Platz " + y + "</strong> am " + x + ". Spieltag")
+			jQuery("#tooltip").html("<h2>"+item.series.label + "</h2><strong>Platz " + y + "</strong> am " + 
+					x + ". Spieltag<br/>"+item.series.logo)
 				.css({top: item.pageY+5, left: item.pageX+5})
 				.fadeIn(200);
 		} else {

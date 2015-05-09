@@ -674,6 +674,20 @@ plugin.tx_cfcleaguefe_competition {
   	table =< lib.t3sports.club
     tablescopeSelectionInput = 0
   }
+  # Tabellenfahrt per JS
+  tablechart {
+    team {
+      logo =< lib.t3sports.teamLogo.small
+/*
+      logo = IMG_RESOURCE
+      logo {
+        file.import.field = file
+		    file.maxH = 400
+		    file.maxW = 400
+      }
+*/
+    }
+  }
 
   # Daten für den Spielplan-View
   matchtable {

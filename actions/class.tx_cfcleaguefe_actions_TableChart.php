@@ -89,9 +89,9 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 
 	/**
 	 *
-	 * @param unknown $scopeArr
-	 * @param unknown $configurations
-	 * @param unknown $confId
+	 * @param array $scopeArr
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
 	 * @return multitype:number NULL
 	 */
 	protected function prepareChartData($scopeArr, $configurations, $confId) {
@@ -104,6 +104,9 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 		// Anzahl der Spielrunden
 		$chartData['xmax'] = $table->getMatchProvider()->getMaxRounds();
 
+		$cObj = $configurations->getCObj();
+		$cObjData = $cObj->data;
+
 		$dataSets = array();
 		$data = $table->getTableData();
 		for($i=1; $i <= $data->getRoundSize(); $i++) {
@@ -114,21 +117,24 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 					if(!isset($dataSets[$scoreArr['teamId']])) {
 						// Basisdaten setzen
 						$team = $scoreArr['team'];
-						// TODO: wie bekommt man das Logo hier rein??
+						$cObj->data = $team->record;
+						$logo = $cObj->cObjGetSingle(
+								$configurations->get($confId.'team.logo'), $configurations->get($confId.'team.logo.'));
 						$dataSets[$scoreArr['teamId']] = array(
 								'info' => array(
 										'teamid'=> $team->record['uid'],
 										'clubid'=> $scoreArr['clubId'],
 										'name'=> $team->record['name'],
 										'short_name'=> $team->record['short_name'],
+										'logo' => $logo,
 								),
 						);
 					}
 					$dataSets[$scoreArr['teamId']]['data'][] = $point;
-					//exit();
 				}
 			}
 		}
+		$cObj->data = $cObjData;
 		// Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
 		// Den höchsten absolvierten Spieltag ermitteln
 		// 		$lastRound = $table->getTableData()->getRoundSize() + 1;
