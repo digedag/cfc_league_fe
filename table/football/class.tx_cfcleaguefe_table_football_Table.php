@@ -103,6 +103,8 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 		else {
 			// Tabelle ohne Spiele, nur die Teams zeigen
 			$teamData = array_values($this->_teamData);
+			$comparator->setTeamData($teamData);
+			usort($teamData, array($comparator, 'compare'));
 			reset($teamData);
 			$this->addScore4Round(0, $teamData, $tableData);
 		}
@@ -219,7 +221,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 				$this->_teamData[$penalty->record['team']]['drawCount'] += $penalty->record['draws'];
 				$this->_teamData[$penalty->record['team']]['loseCount'] += $penalty->record['loses'];
 
-				// Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht 
+				// Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht
 				if($penalty->record['static_position'])
 					$this->_teamData[$penalty->record['team']]['last_place'] = $penalty->record['static_position'];
 			}
@@ -247,7 +249,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 			if($match->isDummy()) continue; // Ignore Dummy-Matches
 			// Wie ist das Spiel ausgegangen?
 			$toto = $match->getToto();
-			tx_rnbase_util_Misc::callHook('cfc_league_fe','leagueTableFootball_handleMatches', 
+			tx_rnbase_util_Misc::callHook('cfc_league_fe','leagueTableFootball_handleMatches',
 				array('match' => &$match, 'teamdata'=>&$this->_teamData), $this);
 
 			// Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
@@ -317,7 +319,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	}
 
   /**
-   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
+   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
    * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
@@ -352,7 +354,7 @@ class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfc
 	}
 
 	/**
-	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die 
+	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
    * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
