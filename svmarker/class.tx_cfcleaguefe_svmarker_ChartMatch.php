@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2015 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,40 +24,46 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 /**
  * Service to output a chart to compare two match opponents
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 
-	function addChart($params, $parent) {
+	public function addChart($params, $parent) {
 		$marker = $params['marker'];
 		$confId = $params['confid'];
 		$template = $params['template'];
 		if(!tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
 			!tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) return;
 		$formatter = $params['formatter'];
-		$chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
+		//$chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
+		$chart = '<!-- TODO: convert to JS -->';
+		$markerArray = $subpartArray = $wrappedSubpartArray = array();
 		$markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
 		$markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
-		$params['template'] = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
+		$params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 	/**
 	 * Generate chart
+	 * FIXME: Umstellen auf ChartJS
 	 *
 	 * @param array $params
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $confId matchreport.match.
 	 */
-	function getMarkerValue($params, $formatter, $confId) {
+	protected function getMarkerValue($params, $formatter, $confId) {
 		if(!isset($params['match'])) return false;
 		$match = $params['match'];
 		$competition = $match->getCompetition();
 		if(!$competition->isTypeLeague()) return '';
 
 		// TODO: die confid sollte angepaßt werden
-		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_SingleMatchTableProvider', 
+		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_SingleMatchTableProvider',
 			$match, $formatter->getConfigurations()->getParameters(), $formatter->getConfigurations(), $competition, 'matchreport.svChartMatch.table.');
 
 		$leagueTable = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTable');
