@@ -39,6 +39,7 @@ lib.t3sports.club.logo {
 ########
 
 lib.t3sports.teamLogo.big {
+	key.field = t3logo
 	# render first logo from club record
 	0.0.default.conf.tx_cfcleague_club {
 		key.field = logo
@@ -56,7 +57,25 @@ lib.t3sports.teamLogo.big {
 		maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
 		maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
 	}
+	# Logo in team record
+	default >
+	default = IMAGE
+	default {
+		file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+		file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+		file.import.cObject = USER
+		file.import.cObject {
+			# Mit dieser Methode wird nur die erste Referenz ausgewertet 
+			userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
+			refField=t3logo
+			refTable=tx_cfcleague_teams
+		}
+		file.treatIdAsReference = 1
+	}
 }
+
+
+
 # remove DAM stuff
 lib.t3sports.teamLogo.small.0.default.conf >
 lib.t3sports.teamLogo.small.0.default.file {
