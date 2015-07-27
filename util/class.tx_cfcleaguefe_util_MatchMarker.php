@@ -45,7 +45,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
   }
 
   /**
-   * Set fillMode on or off 
+   * Set fillMode on or off
    *
    * @param boolean $mode
    */
@@ -67,7 +67,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //$time = t3lib_div::milliseconds();
 
 		$this->prepareFields($match);
-		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord', 
+		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord',
 			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 
 		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
@@ -79,7 +79,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
 		$ignore = self::findUnusedCols($match->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($match->record, $confId, $ignore, $marker.'_');
-
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
@@ -107,13 +106,13 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		}
 		// Add competition
 		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
-    
+
 		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
 //$total['total'] = t3lib_div::milliseconds() - $time;
 //if($total['total'] > 40	)
 //t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_afterSubst', 
+		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_afterSubst',
 			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		return $template;
 
@@ -121,7 +120,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 //		$markerArray = array();
 //		$subpartArray = array();
 //		$wrappedSubpartArray = array();
-//    
+//
 //		$params['confid'] = $confId;
 //		$params['marker'] = $marker;
 //		$params['match'] = $match;
@@ -131,7 +130,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 
 	/**
 	 * Integriert die Satzergebnisse
-	 * 
+	 *
 	 * @param string $template
 	 * @param tx_cfcleaguefe_models_match $item
 	 * @param $formatter
@@ -170,9 +169,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	}
 
 	/**
-	 * Im folgenden werden einige Personenlisten per TS aufbereitet. Jede dieser Listen 
+	 * Im folgenden werden einige Personenlisten per TS aufbereitet. Jede dieser Listen
 	 * ist über einen einzelnen Marker im FE verfügbar. Bei der Ausgabe der Personen
-	 * werden auch vorhandene MatchNotes berücksichtigt, so daß ein Spieler mit gelber 
+	 * werden auch vorhandene MatchNotes berücksichtigt, so daß ein Spieler mit gelber
 	 * Karte diese z.B. neben seinem Namen angezeigt bekommt.
 	 *
 	 * @param tx_cfcleaguefe_models_match $match
@@ -197,7 +196,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 
 		$match->record['pictures'] = $match->record['dam_images'];
 		$match->record['firstpicture'] = $match->record['dam_images'];
-		
+
 		$report =&$match->getMatchReport();
 		if(!is_object($report)) return;
 		// Die Aufstellungen setzen
@@ -255,7 +254,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			if(!self::containsMarker($template, $markerPrefix))
 				continue;
 			$confId = $matchConfId.'tickerLists.'.$dynaMarkers[$i] .'.';
-			// Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte 
+			// Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte
 			// stehen schon im report bereit
 	    $srv = tx_cfcleague_util_ServiceRegistry::getMatchService();
 			$fields = array();
@@ -305,11 +304,11 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
       $subpartArray['###RESULT_STATUS_'.$i.'###'] = '';
     }
     $subpartArray['###RESULT_STATUS_-10###'] = '';
-    
+
     $subTemplate = $formatter->cObj->getSubpart($template, '###RESULT_STATUS_'.$match->record['status'].'###');
     if($subTemplate)
-      $subpartArray['###RESULT_STATUS_'.$match->record['status'].'###'] = 
-               tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, 
+      $subpartArray['###RESULT_STATUS_'.$match->record['status'].'###'] =
+               tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate,
                                                $markerArray, $subpartArray, $wrappedSubpartArray);
   }
 
@@ -333,7 +332,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
 			return;
 		}
-		
+
 		$damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->uid, 'dam_media');
 		if(count($damMedia['files']) == 0) { // Keine Daten vorhanden
 			// Alle Marker löschen
@@ -342,7 +341,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		}
 
 //		$mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
-    
+
 		// Zuerst wieder das Template laden
 		$gPictureTemplate = tx_rnbase_util_Templates::getSubpart($template, '###'. $baseMarker .'_MEDIAS###');
 
@@ -377,14 +376,17 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	private function prepareLinks(&$match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
+	private function prepareLinks($match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
 		$linkId = 'report';
+		$cObjData = $formatter->getConfigurations()->getCObj()->data;
+		$formatter->getConfigurations()->getCObj()->data = $match->record;
+
 		if($match->hasReport()) {
 			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid), $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 		$linkId = 'ticker';
@@ -393,9 +395,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
+		$formatter->getConfigurations()->getCObj()->data = $cObjData;
 	}
 }
 
