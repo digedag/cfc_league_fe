@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2015 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -64,7 +64,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		return $out;
 	}
 
-	protected function prepareRecord(&$item, $template, $configurations, $confId, $marker) {
+	protected function prepareRecord($item, $template, $configurations, $confId, $marker) {
 		$item->record['distance'] = '';
 		if($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
 			$lat = doubleval($configurations->get($confId.'_basePosition.latitude'));
@@ -73,7 +73,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 			$item->record['distance'] = tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng);
 		}
 	}
-	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
+	protected function _addAddress($template, $address, $formatter, $addressConf, $markerPrefix) {
 		$addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
 		$template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
 		return $template;
@@ -110,7 +110,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $confId Config-String
 	 * @param string $markerPrefix
 	 */
-	private function addTeams($template, &$item, &$formatter, $confId, $markerPrefix) {
+	private function addTeams($template, $item, $formatter, $confId, $markerPrefix) {
     $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
 		$fields = array();
     $fields['TEAM.CLUB'][OP_EQ_INT] = $item->getUid();
@@ -137,7 +137,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 	public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix) {
 		if(!self::hasGeoData($item)) return false;
 		tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
-		
+
 		$marker = new tx_rnbase_maps_DefaultMarker();
 		if($item->getLongitute() || $item->getLatitute()) {
 			$marker->setCoords($item->getCoords());
@@ -164,16 +164,19 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	protected function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
+	protected function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
 		$linkId = 'show';
+		$cObjData = $formatter->getConfigurations()->getCObj()->data;
+		$formatter->getConfigurations()->getCObj()->data = $item->record;
 		if($item->isPersisted()) {
 			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('club' => $item->uid), $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
+		$formatter->getConfigurations()->getCObj()->data = $cObjData;
 	}
 }
 
@@ -181,4 +184,3 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_ClubMarker.php'])	{
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_ClubMarker.php']);
 }
-?>
