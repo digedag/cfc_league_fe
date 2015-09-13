@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_Strings');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich
@@ -60,25 +60,25 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		// Die Spieler setzen
 		$this->pushTT('add player');
 		if($this->containsMarker($template, $marker.'_PLAYERS'))
-			$template = $this->_addProfiles($template, $team, $formatter, $confId.'player.', $marker.'_PLAYER','players');
+			$template = $this->addProfiles($template, $team, $formatter, $confId.'player.', $marker.'_PLAYER','players');
 		$this->pullTT();
 
 		// Die Trainer setzen
 		$this->pushTT('add coaches');
 		if($this->containsMarker($template, $marker.'_COACHS'))
-			$template = $this->_addProfiles($template, $team, $formatter, $confId.'coach.', $marker.'_COACH','coaches');
+			$template = $this->addProfiles($template, $team, $formatter, $confId.'coach.', $marker.'_COACH','coaches');
 		$this->pullTT();
 
 		// Die Betreuer setzen
 		$this->pushTT('add supporter');
 		if($this->containsMarker($template, $marker.'_SUPPORTERS'))
-			$template = $this->_addProfiles($template, $team, $formatter, $confId.'supporter.', $marker.'_SUPPORTER','supporters');
+			$template = $this->addProfiles($template, $team, $formatter, $confId.'supporter.', $marker.'_SUPPORTER','supporters');
 		$this->pullTT();
 
 		// set club data
 		$this->pushTT('Club data');
 		if(self::containsMarker($template, $marker.'_CLUB_'))
-			$template = $this->_addClubData($template, $team->getClub(), $formatter, $confId.'club.', $marker.'_CLUB');
+			$template = $this->addClubData($template, $team->getClub(), $formatter, $confId.'club.', $marker.'_CLUB');
 		$this->pullTT();
 
 		if($this->containsMarker($template, $marker.'_GROUP_'))
@@ -94,7 +94,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 *
 	 * @param tx_cfcleaguefe_models_team $item
 	 */
-	private function prepareRecord(&$item) {
+	private function prepareRecord($item) {
 		$srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
 		$group = $srv->getAgeGroup($item);
 //		$group = $item->getAgeGroup();
@@ -104,14 +104,14 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$item->record['firstpicture'] = $item->record['dam_images'];
 		$item->record['pictures'] = $item->record['dam_images'];
 	}
-  
+
 	/**
 	 * Hinzufügen der Daten des Vereins
 	 *
 	 * @param string $template
 	 * @param tx_cfcleaguefe_models_club $club
 	 */
-	protected function _addClubData($template, $club, $formatter, $clubConf, $markerPrefix) {
+	protected function addClubData($template, $club, $formatter, $clubConf, $markerPrefix) {
 		$clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
 		$template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
 		return $template;
@@ -140,20 +140,20 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $markerPrefix Prefix für die Daten des Profile-Records
 	 * @param string $joinCol Name der Teamspalte mit den Profilen players, coaches, supporters
 	 */
-	private function _addProfiles($template, &$team, &$formatter, $confId, $markerPrefix, $joinCol) {
+	private function addProfiles($template, $team, $formatter, $confId, $markerPrefix, $joinCol) {
   	// Ohne Template gibt es nichts zu tun!
     if(strlen(trim($template)) == 0) return '';
 
 		//$srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
     $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
-		$fields['PROFILE.UID'][OP_IN_INT] = $team->record[$joinCol];
-		$options = array();
+		$fields = $options = array();
+    $fields['PROFILE.UID'][OP_IN_INT] = $team->record[$joinCol];
 		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
 		$children = $srv->search($fields, $options);
 		if(!empty($children) && !array_key_exists('orderby', $options)) // Default sorting
 			$children = $this->sortProfiles($children, $team->record[$joinCol]);
-			
+
 		$options['team'] = $team;
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($children,
@@ -169,8 +169,8 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 * @return array
 	 */
 	function sortProfiles(&$profiles, $sortArr) {
-		$sortArr = array_flip(t3lib_div::intExplode(',', $sortArr));
-		foreach($profiles As $profile) 
+		$sortArr = array_flip(tx_rnbase_util_Strings::intExplode(',', $sortArr));
+		foreach($profiles As $profile)
 			$sortArr[$profile->uid] = $profile;
 		$ret = array();
 		foreach($sortArr As $profile)
@@ -229,7 +229,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		else {
 			$linkId = 'showteam';
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 	}
@@ -242,4 +242,3 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_TeamMarker.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_TeamMarker.php']);
 }
-?>
