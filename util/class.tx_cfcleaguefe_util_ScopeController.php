@@ -33,11 +33,11 @@ tx_rnbase::load('tx_rnbase_util_Math');
 
 /**
  * Viele Views dieser Extension müssen wissen, für welche Saison, Liga, Alterklasse
- * und eventuell Spielrunde und Verein die Daten angezeigt werden sollen. Diese Kombination 
+ * und eventuell Spielrunde und Verein die Daten angezeigt werden sollen. Diese Kombination
  * ist der aktuelle <b>Scope der Anwendung</b>.
  * Diese Klasse stellt Methoden bereit, um den aktuell ausgewählten Scope zu ermitteln.
  * Wenn in der Konfiguation des Views festgelegt wurde, daß einzelne Scope-Elemente durch
- * den FE-User geändert werden können, dann werden bei Abruf des aktuellen Scopes 
+ * den FE-User geändert werden können, dann werden bei Abruf des aktuellen Scopes
  * automatisch die notwendigen Daten vorbereitet und in der ViewData abgelegt.
  */
 class tx_cfcleaguefe_util_ScopeController {
@@ -47,7 +47,7 @@ class tx_cfcleaguefe_util_ScopeController {
 
  	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Ligen bereit.
-	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * Es wird ein Array mit dem aktuell gültigen Scope zurückgeliefert.
 	 * @param tx_rnbase_IParameters $parameters
@@ -67,7 +67,7 @@ class tx_cfcleaguefe_util_ScopeController {
 			self::handleCurrentCompetition($ret, $parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $useObjects);
 			$ret['CLUB_UIDS'] = self::handleCurrentClub($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $useObjects);
 			$ret['ROUND_UIDS'] = self::handleCurrentRound($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $ret['CLUB_UIDS'], $useObjects);
-	
+
 			// Die Daten für das Plugin cachen
 			self::$_cObjectUID[$cObjUid] = $ret;
 			// die variablen Parameter in ein T3-Register schreiben
@@ -95,7 +95,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	}
 	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Ligen bereit.
-	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @param tx_rnbase_IParameters $parameters
 	 * @param tx_rnbase_configurations $configurations
@@ -122,7 +122,7 @@ class tx_cfcleaguefe_util_ScopeController {
 
 	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Alterklasse für einen Wettbewerb bereit.
-	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
@@ -145,7 +145,7 @@ class tx_cfcleaguefe_util_ScopeController {
 
 	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Alterklasse für einen Wettbewerb bereit.
-	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
@@ -168,7 +168,7 @@ class tx_cfcleaguefe_util_ScopeController {
 
 	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Vereine bereit.
-	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
@@ -192,7 +192,7 @@ class tx_cfcleaguefe_util_ScopeController {
 
 	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Wettbewerb bereit.
-	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * @return String Die UIDs als String
 	 */
@@ -230,7 +230,7 @@ class tx_cfcleaguefe_util_ScopeController {
 
 	/**
 	 * Diese Funktion stellt die UIDs der aktuell ausgewählten Spielrunde bereit.
-	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen 
+	 * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
 	 * vorbereitet und in die viewData der Config gelegt.
 	 * Die Spielrunde wird bei folgenden Bedingungen eingeblendet:<ul>
 	 * <li> Es ist nur ein Wettbewerb ausgewählt
@@ -258,7 +258,7 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * Liefert ein Array für die Erstellung der Select-Box für eine Model-Klasse
 	 * Das Ergebnis-Array hat zwei Einträge: Index 0 enthält das Wertearray, Index 1 das
 	 * aktuelle Element
-	 * @param $displayAttrName Der Name eines Atttributs, um dessen Wert anzuzeigen. Wenn der 
+	 * @param $displayAttrName Der Name eines Atttributs, um dessen Wert anzuzeigen. Wenn der
 	 *        String leer ist, dann wird das gesamten Objekt als Wert verwendet.
 	 */
 	private function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name') {
@@ -279,15 +279,21 @@ class tx_cfcleaguefe_util_ScopeController {
 
   /**
    * Liefert ein Array für die Erstellung der Select-Box für die Spielrunden einer Liga
+   * @param array[tx_cfcleaguefe_models_competition_round] $rounds
    */
-  private function _prepareRoundSelect($objects, $parameters, $displayAttrName = 'name') {
-    $ret = array();
-    if(count($objects)) {
-      $default = $objects[0]->record['uid'];
-      foreach($objects As $object) {
-        $ret[0][$object->record['uid']] = strlen($displayAttrName) == 0 ? $object : $object->record['name'];
-        if($object->record['finished']) // Aktuellen Spieltag suchen
+  private function _prepareRoundSelect($rounds, $parameters, $displayAttrName = 'name') {
+  	$ret = array();
+    if(count($rounds)) {
+    	$skipOtherRounds = FALSE;
+      $default = $rounds[0]->record['uid'];
+      foreach($rounds As $object) {
+      	// Die Daten für die Auswahlbox füllen
+        $ret[0][$object->record['uid']] = strlen($displayAttrName) == 0 ? $object : $object->record[$displayAttrName];
+        if(!$skipOtherRounds && $object->record['finished']) // Aktuellen Spieltag suchen
           $default = $object->record['uid'];
+        // Bei einer Lücke in den beendeten Spieltagen die Spieltage nach der Lücke ignorieren
+        if(!$skipOtherRounds && !$object->record['finished'])
+        	$skipOtherRounds = TRUE;
       }
       // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
       $paramValue = $parameters->offsetGet('round');
