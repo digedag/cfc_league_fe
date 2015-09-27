@@ -22,8 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_search_Builder');
 tx_rnbase::load('tx_cfcleaguefe_models_saison');
 tx_rnbase::load('tx_cfcleaguefe_models_competition');
@@ -262,7 +260,6 @@ class tx_cfcleaguefe_util_ScopeController {
 	 *        String leer ist, dann wird das gesamten Objekt als Wert verwendet.
 	 */
 	private function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name') {
-		global $TSFE;
 		$ret = array();
 		if(count($objects)) {
 			foreach($objects As $object) {
@@ -305,7 +302,6 @@ class tx_cfcleaguefe_util_ScopeController {
   }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_ScopeController.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_ScopeController.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_ScopeController.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_ScopeController.php']);
 }
-?>
