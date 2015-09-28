@@ -237,14 +237,14 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * @param compUids String die UIDs der aktuell eingestellten Wettbewerbe
 	 * @return String Die UIDs als String
 	 */
-	private function handleCurrentRound($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false) {
+	private function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false) {
 		$viewData =& $configurations->getViewData();
 		// Soll eine SelectBox für Wettkämpfe gezeigt werden?
 		if($configurations->get('roundSelectionInput') && (isset($compUids) && tx_rnbase_util_Math::testInt($compUids))) {
 			$currCompetition = new tx_cfcleaguefe_models_competition($compUids);
 			// Die Spielrunden ermitteln
 			$rounds = $currCompetition->getRounds();
-			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareRoundSelect($rounds, $parameters, $useObjects ? '' : 'uid');
+			$dataArr = tx_cfcleaguefe_util_ScopeController::prepareRoundSelect($rounds, $parameters, $configurations, 'scope.rounds.', $useObjects ? '' : 'uid');
 			$roundUid = $dataArr[1];
 			$viewData->offsetSet('round_select', $dataArr);
 			$configurations->addKeepVar('round', $roundUid);
@@ -277,8 +277,10 @@ class tx_cfcleaguefe_util_ScopeController {
   /**
    * Liefert ein Array für die Erstellung der Select-Box für die Spielrunden einer Liga
    * @param array[tx_cfcleaguefe_models_competition_round] $rounds
+   * @param tx_rnbase_IParameters $parameters
+   * @param tx_rnbase_configurations $configurations
    */
-  private function _prepareRoundSelect($rounds, $parameters, $displayAttrName = 'name') {
+  private function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name') {
   	$ret = array();
     if(count($rounds)) {
     	$skipOtherRounds = FALSE;
@@ -291,6 +293,10 @@ class tx_cfcleaguefe_util_ScopeController {
         // Bei einer Lücke in den beendeten Spieltagen die Spieltage nach der Lücke ignorieren
         if(!$skipOtherRounds && !$object->record['finished'])
         	$skipOtherRounds = TRUE;
+      }
+      // Ist ein fester Wert für die aktuelle Spielrunde konfiguriert?
+      if(($fixedRound = $configurations->getInt($confId.'fixedCurrent')) > 0) {
+      	$default = $fixedRound;
       }
       // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
       $paramValue = $parameters->offsetGet('round');
