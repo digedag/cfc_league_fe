@@ -151,8 +151,8 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 	}
 	/**
 	 * Liefert ein Array mit allen Spielrunden der Liga
-	 * 
-	 * @return array
+	 *
+	 * @return array[tx_cfcleaguefe_models_competition_round]
 	 */
 	function getRounds(){
 		# build SQL for select
@@ -164,7 +164,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 		$options['groupby'] = 'round,round_name';
 		$options['orderby'] = 'round';
 		$options['wrapperclass'] = 'tx_cfcleaguefe_models_competition_round';
-		
+
 		return tx_rnbase_util_DB::doSelect($what, 'tx_cfcleague_games', $options);
 	}
 	/**
@@ -231,7 +231,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
       $options['where'] = 'uid IN (' . $uids .') ';
       if($ignoreDummies)
       	$options['where'] .= ' AND dummy = 0  ';
-      
+
       $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
       $options['orderby'] = 'sorting';
       $this->teams = tx_rnbase_util_DB::doSelect('*','tx_cfcleague_teams',$options, 0);
@@ -240,7 +240,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
   }
 
   /**
-   * Set participating teams. This is usually not necessary, since getTeams() 
+   * Set participating teams. This is usually not necessary, since getTeams()
    * makes an automatic lookup in database.
    *
    * @param array $teamsArr if $teamsArr is no array the internal array is removed
@@ -263,7 +263,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
     return $comp;
   }
   /**
-   * statische Methode, die ein Array mit Instanzen dieser Klasse liefert. 
+   * statische Methode, die ein Array mit Instanzen dieser Klasse liefert.
    * Es werden entweder alle oder nur bestimmte Wettkämpfe einer Saison geliefert.
    * @param string $saisonUid int einzelne UID einer Saison
    * @param string $groupUid int einzelne UID einer Altersklasse
@@ -350,7 +350,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 }
 
 /**
- * Die Spielrunde hat keine eigene Tabelle. Die Verwendung der Basisklasse hat aber den 
+ * Die Spielrunde hat keine eigene Tabelle. Die Verwendung der Basisklasse hat aber den
  * Vorteil des besseren Handlings im weiteren Verlauf.
  */
 class tx_cfcleaguefe_models_competition_round extends tx_rnbase_model_base {
