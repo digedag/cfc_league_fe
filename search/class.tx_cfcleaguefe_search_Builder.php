@@ -21,13 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 
 /**
  * Mit dem Builder werden haufig auftretende Suchanfragen zusammengebaut
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_search_Builder {
@@ -46,11 +45,11 @@ class tx_cfcleaguefe_search_Builder {
    		$result = true;
 		}
 		if(strlen(trim($groupUids))) {
-	  	$fields['COMPETITION.AGEGROUP'][OP_EQ_INT] = $groupUids;
+	  	$fields['COMPETITION.AGEGROUP'][OP_IN_INT] = $groupUids;
    		$result = true;
 		}
 		if(strlen(trim($saisonUids))) {
-	  	$fields['COMPETITION.SAISON'][OP_EQ_INT] = $saisonUids;
+	  	$fields['COMPETITION.SAISON'][OP_IN_INT] = $saisonUids;
    		$result = true;
 		}
 		// Wettbewerbstypen
@@ -70,7 +69,7 @@ class tx_cfcleaguefe_search_Builder {
 		}
   	return $result;
 	}
-	
+
 	/**
 	 * Search for competition by teams
 	 *
@@ -169,5 +168,3 @@ class tx_cfcleaguefe_search_Builder {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/search/class.tx_cfcleaguefe_search_Builder.php']) {
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/search/class.tx_cfcleaguefe_search_Builder.php']);
 }
-
-?>
