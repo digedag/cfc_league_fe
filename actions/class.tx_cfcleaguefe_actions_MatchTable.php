@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_cfcleaguefe_models_team');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
@@ -37,7 +35,7 @@ tx_rnbase::load('tx_rnbase_filter_BaseFilter');
  */
 class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 
-	
+
 	/**
 	 * Handle request
 	 *
@@ -52,14 +50,14 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewdata, $this->getConfId());
 		$fields = array();
 		$options = array();
-		
+
 //  	$options['debug'] = 1;
 		$filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 		//$this->initSearch($fields, $options, $parameters, $configurations);
 		$listSize = 0;
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		// Soll ein PageBrowser verwendet werden
-		tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, 
+		tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations,
 			$this->getConfId().'match.pagebrowser', $viewdata, $fields, $options, array(
 			'searchcallback'=> array($service, 'search'),
 			'pbid' => 'mt'.$configurations->getPluginId(),
@@ -110,7 +108,7 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC {
 			$matchtable->setHomeClubs($clubId);
 			$matchtable->setGuestClubs($clubId);
 		}
-		
+
 		$matchtable->setTimeRange($configurations->get($this->getConfId().'timeRangePast'), $configurations->get('matchtable.timeRangeFuture'));
 		if($configurations->get($this->getConfId().'acceptRefereeIdFromRequest')) {
 			$matchtable->setReferees($parameters->offsetGet('refereeId'));
