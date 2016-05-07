@@ -22,32 +22,29 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'util/class.tx_rnbase_util_Spyc.php');
+tx_rnbase::load('tx_rnbase_util_Spyc');
+tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
+tx_rnbase::load('tx_cfcleaguefe_util_MatchTicker');
+tx_rnbase::load('tx_cfcleaguefe_util_Statistics');
+tx_rnbase::load('tx_cfcleague_util_Memento');
 
-
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_MatchTicker.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_Statistics.php');
-
-require_once(t3lib_extMgm::extPath('cfc_league') . 'util/class.tx_cfcleague_util_Memento.php');
 
 
 /**
  * Controller für die Anzeige von Spielerstatistiken
- * 
+ *
  * Zunächst ist wichtig welche Spieler betrachtet werden sollen. Dieser
- * Scope ist zunächst auf die Spieler eines Teams und damit auch einer 
- * Saison beschränkt. (Ein Team spielt ja nur in einer Saison.) Später 
- * könnte man den Scope aber auch erweitern: 
+ * Scope ist zunächst auf die Spieler eines Teams und damit auch einer
+ * Saison beschränkt. (Ein Team spielt ja nur in einer Saison.) Später
+ * könnte man den Scope aber auch erweitern:
  * - Spieler eines Vereins in einer bestimmten Altersgruppe in allen Saisons
  * - Anzeige der besten Torschützen einer Liga (teamübergreifend)
  * - usw.
  * Vermutlich wäre es aber besser dafür eigene Views zu erstellen. Diese
  * könnten dann die entsprechenden Flexforms zur Verfügung stellen.
- * 
+ *
  * Diese Klasse zeigt zunächst die Auswertung für die Spieler eines Teams.
  */
 class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC {
@@ -90,7 +87,7 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC {
 
 		return null;
 	}
-  
+
   /**
    * Liefert auf Basis des aktuellen Scopes einen eindeutigen Key unter dem das Memento gespeichert
    * werden kann.
@@ -147,7 +144,7 @@ class PlayerStatsMemento extends tx_cfcleaguefe_util_Memento {
 
 /**
  * Sortierfunktion um die korrekte Reihenfolge nach Namen zu ermittlen
- * @deprecated 
+ * @deprecated
  */
 function cmpPlayer($a, $b) {
   $player1 = $a['player'];

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,10 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
-require_once(t3lib_extMgm::extPath('cal').'service/class.tx_cal_event_service.php');
-require_once(t3lib_extMgm::extPath('cfc_league_fe').'models/class.tx_cfcleaguefe_models_match_calevent.php');
+require_once(tx_rnbase_util_Extensions::extPath('cal').'service/class.tx_cal_event_service.php');
+require_once(tx_rnbase_util_Extensions::extPath('cfc_league_fe').'models/class.tx_cfcleaguefe_models_match_calevent.php');
+
 
 /**
  *
@@ -83,7 +83,7 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 		$events = array();
 
 		foreach($matches as $match) {
-			$events[date('Ymd',$match->record['date'])][date('Hi',$match->record['date'])] [$match->uid] = $this->createEvent($match, false);		
+			$events[date('Ymd',$match->record['date'])][date('Hi',$match->record['date'])] [$match->uid] = $this->createEvent($match, false);
 		}
 		return $events;
 	}
@@ -99,7 +99,7 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 	 *  Finds a single event.
 	 *
 	 *  @return		object			The event represented by the model.
-	 */	
+	 */
 	function find($uid, $pidList) {
 		$this->_init();
 		$match = tx_rnbase::makeInstance('tx_cfcleaguefe_models_match', $uid);
@@ -107,7 +107,7 @@ class tx_cfcleaguefe_sv1_MatchEvent extends tx_cal_event_service {
 /*
     $events = array();
     $result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "tt_news", " uid=".$uid);
-    while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {	
+    while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
     	$event = $this->createEvent($row, false);
     }
 */

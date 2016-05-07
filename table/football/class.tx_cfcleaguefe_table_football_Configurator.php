@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2011 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,12 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_table_IConfigurator');
 
 /**
- * Configurator for football league tables. 
+ * Configurator for football league tables.
  * Diese Klasse erweitert den MatchProvider und liefert Daten zur Steuerung der Tabellenberechnung.
  */
 class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table_IConfigurator {

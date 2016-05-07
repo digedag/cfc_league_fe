@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleague_util_Cache');
 tx_rnbase::load('tx_rnbase_util_Queue');
@@ -136,13 +134,13 @@ class tx_cfcleaguefe_util_MatchTicker {
 	 * Der zweite Datensatz wird aus dem Ergebnisarray entfernt.
 	 * @param array $ret Referenz auf Array mit den bisher gefundenen Ticker-Daten
 	 * @param tx_cfcleaguefe_models_match_note $ticker der zuletzt hinzugefügte Ticker
-	 * @return boolean wether or not the ticker record was removed 
+	 * @return boolean wether or not the ticker record was removed
 	 */
 	function _handleChange(&$ret, &$ticker) {
 		$isRemoved = false;
 		if(!$ticker->isChange())
 			return $isRemoved;
-// TODO: Es muss immer die Auswechslung erhalten bleiben! 
+// TODO: Es muss immer die Auswechslung erhalten bleiben!
 		// 1. Ein- und Auswechslungen zusammenfassen
 		static $changeInHome, $changeInGuest; // Hier liegen die IDX von Einwechslungen im Zielarray
 		static $changeOutHome, $changeOutGuest; // Hier die AUswechslungen

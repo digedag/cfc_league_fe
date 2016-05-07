@@ -22,19 +22,17 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
 
 /**
- * 
+ *
  */
 class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 * @param array_object $parameters
 	 * @param tx_rnbase_configurations $configurations
@@ -110,7 +108,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC {
 			$fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(".$colName."),1) IN ('$firsts') ";;
 		}
 	}
-	
+
 	/**
 	 * Wir verwenden einen alphabetischen Pager. Also muß zunächst ermittelt werden, welche
 	 * Buchstaben überhaupt vorkommen.

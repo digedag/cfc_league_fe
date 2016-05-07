@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
@@ -36,7 +34,7 @@ class tx_cfcleaguefe_actions_CompetitionSelection extends tx_rnbase_action_BaseI
    *
    */
 	function handleRequest(&$parameters, &$configurations, &$viewdata) {
-	
+
 		$this->viewType = $configurations->get('scopeSelection.viewType');
 		// Die Werte des aktuellen Scope ermitteln
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations, $this->viewType == 'HTML');

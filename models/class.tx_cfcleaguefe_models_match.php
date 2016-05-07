@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_model_base');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
+tx_rnbase::load('tx_cfcleaguefe_models_match_note');
 
 tx_rnbase::load('tx_cfcleaguefe_models_competition');
 
@@ -302,7 +301,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
   function getGuestNameShort() {
   	return $this->getGuest()->getNameShort();
   }
-  
+
   /**
    * Setzt das Gast-Team
    */
@@ -577,7 +576,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
   }
 
 	/**
-	 * Liefert den TOTO-Wert des Spiels. Als 0 für ein Unentschieden, 1 für einen Heim- 
+	 * Liefert den TOTO-Wert des Spiels. Als 0 für ein Unentschieden, 1 für einen Heim-
 	 * und 2 für einen Auswärstsieg.
 	 * @param string $matchPart The matchpart is 1,2,3...,et,ap,last
 	 */
@@ -642,16 +641,16 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    * Returns the from-Clause for a medium data request. Dabei wird eine Query über folgende Tabellen
    * erstellt: <ul>
    * <li>tx_cfcleague_games
-   * <li>tx_cfcleague_teams 
+   * <li>tx_cfcleague_teams
    * </ul>
    * @return ein Array mit From-Clause und 'tx_cfcleague_games'
    */
   function getFromMedium() {
     return Array( '
-       tx_cfcleague_games 
+       tx_cfcleague_games
          INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid
-         INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid', 
-         'tx_cfcleague_games');  
+         INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid',
+         'tx_cfcleague_games');
   }
 
   /**
@@ -671,7 +670,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
              goals_home_et, goals_home_ap,
              goals_guest_et, goals_guest_ap,
              is_extratime, goals_home_et, goals_guest_et,
-             is_penalty, goals_home_ap, goals_guest_ap, 
+             is_penalty, goals_home_ap, goals_guest_ap,
              tx_cfcleague_games.competition,
              tx_cfcleague_competition.name As competition_name,tx_cfcleague_competition.short_name As competition_short_name, tx_cfcleague_competition.type As competition_type,
              (SELECT tx_cfcleague_group.name FROM tx_cfcleague_group WHERE tx_cfcleague_group.uid = tx_cfcleague_competition.agegroup) As agegroup,
@@ -687,28 +686,28 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    * erstellt: <ul>
    * <li>tx_cfcleague_games
    * <li>tx_cfcleague_competition
-   * <li>tx_cfcleague_teams 
+   * <li>tx_cfcleague_teams
    * </ul>
    * @return ein Array mit From-Clause und 'tx_cfcleague_games'
    */
   function getFromFull() {
     // CHECK: Funktioniert das auch bei MySQL4??
     return Array( '
-       tx_cfcleague_games 
+       tx_cfcleague_games
          INNER JOIN tx_cfcleague_competition ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid
          INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid
          INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid',
-         'tx_cfcleague_games');  
+         'tx_cfcleague_games');
 
 /* Funktioniert bei MySQL 5 nicht mehr:
     return Array( '
-       tx_cfcleague_games 
+       tx_cfcleague_games
          INNER JOIN tx_cfcleague_competition
          INNER JOIN tx_cfcleague_teams As t1
          INNER JOIN tx_cfcleague_teams As t2
          ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid
          ON tx_cfcleague_games.home = t1.uid
-         ON tx_cfcleague_games.guest = t2.uid', 'tx_cfcleague_games');  
+         ON tx_cfcleague_games.guest = t2.uid', 'tx_cfcleague_games');
 */
 	}
 	/**

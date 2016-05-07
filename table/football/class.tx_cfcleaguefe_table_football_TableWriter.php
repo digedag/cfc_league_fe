@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleaguefe_table_TableWriterBase');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
@@ -51,7 +49,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 		}
 //$start = microtime(true);
 		$penalties = array(); // Strafen sammeln
-		$subpartArray['###ROWS###'] = $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), 
+		$subpartArray['###ROWS###'] = $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'),
 				$result, $penalties, $table->getMatchProvider(), $configurations, $confId);
 
 		// Jetzt die Strafen auflisten
@@ -98,7 +96,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 		// Den TeamMarker erstellen
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$templateEntry = tx_rnbase_util_Templates::getSubpart($templateList,'###ROW###');
-		
+
 		$parts = array();
 		// Die einzelnen Zeilen zusammenbauen
 		$rowRoll = intval($configurations->get($confId.'table.roll.value'));
@@ -127,7 +125,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
 	/**
 	 * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
-	 * ermittelt und zurückgeliefert. 
+	 * ermittelt und zurückgeliefert.
 	 * @param &$tableData Daten der Tabelle
 	 * @param $tableSize Maximale Anzahl Teams, die gezeigt werden soll
 	 */
@@ -204,8 +202,8 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 			// Wir bereiten die Selectbox vor
 			$arr = Array($items, $configurator->getTableType());
 			//$arr = Array($items, ($parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : 0));
-			$subpartArray['###CONTROL_TABLETYPE###'] = 
-				$this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), 
+			$subpartArray['###CONTROL_TABLETYPE###'] =
+				$this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'),
 					$arr, $link, 'TABLETYPE', $configurations, $confId);
 		}
 
@@ -213,7 +211,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 			$items = array(0,1,2);
 			// Wir bereiten die Selectbox vor
 			$arr = Array($items, $configurator->getTableScope());
-			$subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), 
+			$subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'),
 				$arr, $link, 'TABLESCOPE', $configurations, $confId);
 		}
 
@@ -234,7 +232,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 			//$items = array(1=>0,0=>1);
 
 			$arr = array($items, $configurator->getPointSystem());
-			$subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), 
+			$subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'),
 				$arr, $link, 'POINTSYSTEM', $configurations, $confId);
 		}
 
@@ -267,7 +265,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 //			$token = md5(microtime());
 //			$link->label($token);
 //		}
-		
+
 		$currentNoLink = intval($configurations->get($confId. $confName .'.current.noLink'));
 
 		$token = self::getToken();
@@ -283,7 +281,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
 			$data['iscurrent'] = $isCurrent ? 1 : 0;
 			$data['value'] = $value;
-	
+
 			$tempArray = $formatter->getItemMarkerArrayWrapped($data, $confId. $confName.'.', 0, 'CONTROL_'.$markerName.'_'. $markerLabel.'_');
 			$tempArray['###CONTROL_'. $markerName .'_'. $markerLabel .'###'] = $tempArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_VALUE###'];
 			$markerArray = array_merge($markerArray, $tempArray);
@@ -296,7 +294,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 			$linkStr = $formatter->wrap($linkStr, $confId. $confName . ($isCurrent ? '.current.' : '.normal.') );
 			$wrappedSubpartArray['###CONTROL_'.$markerName.'_'. $markerLabel .'_LINK###'] = explode($token, $linkStr);
 		}
-		
+
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
 	}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 
@@ -45,7 +44,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 	function handleRequest(&$parameters, &$configurations, &$viewData) {
 // Zunächst sollten wir die Anfangsbuchstaben ermitteln
     $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
-		
+
 		if($configurations->get('profilelist.charbrowser')) {
 			$pagerData = $this->findPagerData($service, $configurations);
 
@@ -93,7 +92,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 			$where .= ' AND tx_cfcleague_profiles.birthday < 0 ))';
 			if($fields[SEARCH_FIELD_CUSTOM]) $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
 			$fields[SEARCH_FIELD_CUSTOM] .= $where;
-			
+
 			// Sortierung nach Datum
 			$sort = array('DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), \'%m%d\')' => 'asc');
 			if(is_array($options['orderby']))
@@ -113,7 +112,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC {
 			$fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(last_name),1) IN ('$firsts') ";;
 		}
 	}
-	
+
 	/**
 	 * Wir verwenden einen alphabetischen Pager. Also muß zunächst ermittelt werden, welche
 	 * Buchstaben überhaupt vorkommen.

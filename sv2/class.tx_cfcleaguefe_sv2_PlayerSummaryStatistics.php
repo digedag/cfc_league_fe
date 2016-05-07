@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,34 +22,33 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
 
 /**
  * Service for summery of player statistics
- * Since this list is similar to player statistics, it is based on that service. 
+ * Since this list is similar to player statistics, it is based on that service.
  * It simply modifies the result
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_PlayerStatistics {
   private $result = array();
   /** Array with competition IDs of handled matches */
   private $compIds = array();
-  
+
   public function handleMatch(&$match, $clubId) {
     if($match->record['players_home'] || $match->record['players_guest'] || count($match->getMatchNotes()))
       $this->result['numberOfUsedMatches'] = $this->result['numberOfUsedMatches'] + 1;
-    $this->compIds[] = $match->record['competition']; 
+    $this->compIds[] = $match->record['competition'];
   }
-  
+
   /**
    * Liefert allgemeine Daten zur Spielerstatistik
    *
    * @return array
    */
   public function getResult() {
-    if(!array_key_exists('numberOfUsedMatches', $this->result)) 
+    if(!array_key_exists('numberOfUsedMatches', $this->result))
       $this->result['numberOfUsedMatches'] = 0;
     $teams = $this->getTeams($this->getScopeArray());
     $this->_setAdditionalData($this->getScopeArray(), $teams, array_unique($this->compIds));
@@ -65,13 +64,13 @@ class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_Play
   public function getMarker($configurations) {
     return tx_rnbase::makeInstance('tx_cfcleaguefe_sv2_PlayerSummaryStatisticsMarker');
   }
-  
+
   /**
    * Einige Zusatzdaten ermitteln
    */
   function _setAdditionalData(&$scopeArr, &$teams, &$compUids) {
     // Wir zählen wieviele Spiele die Wettbewerbe haben, die in der
-    // Statistik betrachtet wurden. 
+    // Statistik betrachtet wurden.
     $ret = array();
     $this->result['numberOfMatches'] = 0;
 //    $compUid = t3lib_div::intExplode(',', $scopeArr['COMP_UIDS']);
@@ -89,7 +88,7 @@ class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_Play
     }
     return $ret;
   }
-  
+
 }
 
 

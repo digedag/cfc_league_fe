@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,12 +22,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_table_football_Configurator');
 
 /**
- * Configurator for volleyball league tables. 
+ * Configurator for volleyball league tables.
  */
 class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_football_Configurator {
 	const POINT_SYSTEM_2POINT = 0;
@@ -81,7 +79,7 @@ class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_
 	public function getComparator() {
 		$compareClass = $this->cfgComparatorClass;
 		if(!$comparatorClass) {
-			$compareClass = $this->getPointSystem() == self::POINT_SYSTEM_2POINT ? 
+			$compareClass = $this->getPointSystem() == self::POINT_SYSTEM_2POINT ?
 					'tx_cfcleaguefe_table_volleyball_Comparator' :
 					'tx_cfcleaguefe_table_volleyball_Comparator3Point';
 		}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_ListBuilder');
@@ -43,7 +41,7 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base {
 		$items =& $viewData->offsetGet('items');
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
-		$template = $listBuilder->render($items, 
+		$template = $listBuilder->render($items,
 						$viewData, $template, 'tx_cfcleaguefe_util_StadiumMarker',
 						$this->getController()->getConfId().'stadium.', 'STADIUM', $formatter);
 
@@ -64,7 +62,7 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base {
 			foreach($items As $item) {
 				$marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'stadium.', $markerPrefix);
 				if(!$marker) continue;
-				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, 
+				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations,
 					$this->getController()->getConfId().'map.icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
 				$map->addMarker($marker);
 			}
@@ -87,7 +85,7 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base {
 	}
 
 	function getMainSubpart() {return '###STADIUM_LIST###';}
-  
+
 }
 
 

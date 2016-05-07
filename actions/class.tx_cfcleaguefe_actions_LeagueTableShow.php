@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_models_saison');
 tx_rnbase::load('tx_cfcleaguefe_models_competition');
 tx_rnbase::load('tx_cfcleaguefe_models_group');
@@ -36,10 +34,10 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
 /**
  * Controller für die Anzeige eines Liga-Tabelle
  * TODO: Umstellung der Tabellenerzeugung:
- * Zur Berechnung einer Tabelle werden zunächst die gewünschten Spiele benötigt. Diese können über die MatchTable bereitgestellt 
+ * Zur Berechnung einer Tabelle werden zunächst die gewünschten Spiele benötigt. Diese können über die MatchTable bereitgestellt
  * werden. Die Spiele werden dann einem LeagueTableProvider übergeben. Dieser kann die Spiele für die berechnung der Tabelle aufbereiten.
- * 
- * Dann muss über alle Spiele iteriert werden. Jedes Spiel wird einer Visitorklasse 
+ *
+ * Dann muss über alle Spiele iteriert werden. Jedes Spiel wird einer Visitorklasse
  * übergeben, die die Punkte ermittelt. Diese Visitorklasse wird vom Wettbewerb bereitgestellt und hängt von der Sportart ab.
  */
 class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {

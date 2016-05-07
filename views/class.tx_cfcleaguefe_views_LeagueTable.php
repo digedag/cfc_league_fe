@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2013 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
@@ -46,7 +45,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 			// Ausgabe mit neuem Verfahren
 			return $this->showLeagueTable($table, $template, $configurations);
 		}
-		
+
 		$this->formatter = $formatter;
 
 		// Liga und Tablemarks holen
@@ -57,7 +56,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
 		// Die Ligatabelle zusammenbauen
 		$penalties = array(); // Strafen sammeln
-		$subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), 
+		$subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'),
 				$viewData, $penalties, $marks, $configurations);
 
 		// Jetzt die Strafen auflisten
@@ -75,7 +74,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 	function getMainSubpart(&$viewData) {return '###LEAGUE_TABLE###';}
 
 	/**
-	 * 
+	 *
 	 * @param tx_cfcleaguefe_table_ITableType $table
 	 * @param string $template
 	 * @param tx_rnbase_configurations $configurations
@@ -128,7 +127,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 		// Den TeamMarker erstellen
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$templateEntry = tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
-		
+
 		$parts = array();
 		// Die einzelnen Zeilen zusammenbauen
 		$rowRoll = intval($configurations->get('leaguetable.table.roll.value'));
@@ -155,7 +154,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
   /**
    * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
-   * ermittelt und zurückgeliefert. 
+   * ermittelt und zurückgeliefert.
    * @param &$tableData Daten der Tabelle
    * @param $tableSize Maximale Anzahl Teams, die gezeigt werden soll
    */
@@ -225,17 +224,17 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
 		$subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'', );
     if($viewData->offsetGet('tabletype_select')) {
-      $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLETYPE###'), 
+      $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLETYPE###'),
                     $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
     }
 
     if($viewData->offsetGet('tablescope_select')) {
-      $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLESCOPE###'), 
+      $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLESCOPE###'),
                     $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
     }
 
     if($viewData->offsetGet('pointsystem_select')) {
-      $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_POINTSYSTEM###'), 
+      $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_POINTSYSTEM###'),
                     $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
     }
 
@@ -267,7 +266,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 			$token = md5(microtime());
 			$link->label($token);
 		}
-		
+
 		$currentNoLink = intval($configurations->get('leaguetable.controls.'. $confName .'.current.noLink'));
 
 		$markerArray = array();
@@ -281,7 +280,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base {
 
 			$data['iscurrent'] = $isCurrent ? 1 : 0;
 			$data['value'] = $value;
-	
+
 			$tempArray = $formatter->getItemMarkerArrayWrapped($data, 'leaguetable.controls.'. $confName.'.', 0, 'CONTROL_'.$markerName.'_'. $markerLabel.'_');
 			$tempArray['###CONTROL_'. $markerName .'_'. $markerLabel .'###'] = $tempArray['###CONTROL_'. $markerName .'_'. $markerLabel .'_VALUE###'];
 			$markerArray = array_merge($markerArray, $tempArray);

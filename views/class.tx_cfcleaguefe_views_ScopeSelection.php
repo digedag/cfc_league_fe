@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
@@ -30,13 +29,13 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Viewklasse für die Anzeige der Scope-Auswahl mit Hilfe eines HTML-Templates. Die Verlinkung
- * erfolgt nicht mehr über ein HTML-Formular, sondern mit echten Links, wodurch die 
+ * erfolgt nicht mehr über ein HTML-Formular, sondern mit echten Links, wodurch die
  * Caching-Mechanismen von TYPO3 zur Wirkung kommen können.
  */
 class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
 
 	function getMainSubpart() {return '###SCOPE_SELECTION###';}
-	
+
   /**
    * Erstellen des Frontend-Outputs
    * @param string $template
@@ -57,14 +56,14 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
     $subpartArray['###COMPETITION_SELECTION###'] = '';
     $subpartArray['###ROUND_SELECTION###'] = '';
     $subpartArray['###CLUB_SELECTION###'] = '';
-    
+
     // Wenn Saison gezeigt werden soll, dann Abschnitt erstellen
     if($viewData->offsetGet('saison_select')) {
       // Das Template holen
       $subTemplate = $cObj->getSubpart($template, '###SAISON_SELECTION###');
 
       $items = $viewData->offsetGet('saison_select');
-      $subpartArray['###SAISON_SELECTION###'] = 
+      $subpartArray['###SAISON_SELECTION###'] =
           $this->_fillTemplate($subTemplate, $items, $link, 'SAISON', $configurations);
     }
 
@@ -74,7 +73,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $subTemplate = $cObj->getSubpart($template, '###GROUP_SELECTION###');
 
       $items = $viewData->offsetGet('group_select');
-      $subpartArray['###GROUP_SELECTION###'] = 
+      $subpartArray['###GROUP_SELECTION###'] =
           $this->_fillTemplate($subTemplate, $items, $link, 'GROUP', $configurations);
     }
 
@@ -84,7 +83,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $subTemplate = $cObj->getSubpart($template, '###COMPETITION_SELECTION###');
 
       $items = $viewData->offsetGet('competition_select');
-      $subpartArray['###COMPETITION_SELECTION###'] = 
+      $subpartArray['###COMPETITION_SELECTION###'] =
           $this->_fillTemplate($subTemplate, $items, $link, 'COMPETITION', $configurations);
     }
     // Wenn Spieltag gezeigt werden soll, dann Abschnitt erstellen
@@ -93,7 +92,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $subTemplate = $cObj->getSubpart($template, '###ROUND_SELECTION###');
 
       $items = $viewData->offsetGet('round_select');
-      $subpartArray['###ROUND_SELECTION###'] = 
+      $subpartArray['###ROUND_SELECTION###'] =
           $this->_fillTemplate($subTemplate, $items, $link, 'ROUND', $configurations);
     }
     // Wenn Verein gezeigt werden soll, dann Abschnitt erstellen
@@ -101,17 +100,17 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       // Das Template holen
       $subTemplate = $cObj->getSubpart($template, '###CLUB_SELECTION###');
       $items = $viewData->offsetGet('club_select');
-      $subpartArray['###CLUB_SELECTION###'] = 
+      $subpartArray['###CLUB_SELECTION###'] =
           $this->_fillTemplate($subTemplate, $items, $link, 'CLUB', $configurations);
     }
-    
+
     $out .= $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
     return $out;
   }
 
   /**
-   * Erstellt die einzelnen Teile der Scopeauswahl. 
+   * Erstellt die einzelnen Teile der Scopeauswahl.
    * @param string $template HTML- Template
    * @param array &$itemsArr Datensätze für die Auswahl
    * @param tx_rnbase_util_Link &$link Linkobjekt
@@ -157,7 +156,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $subpartArray = array();
       $wrappedSubpartArray = array();
       $wrappedSubpartArray['###'.$markerName.'_LINK###'] = explode($token, $linkStr);
-      
+
       $parts[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
       unset($keepVars[strtolower($markerName)]);
     }
@@ -167,10 +166,10 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
     // Im Haupttemplate stellen wir die ausgewählte Saison als Marker zur Verfügung
     $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->record, $itemConfId.'current.', 0, $markerName.'_CURRENT_', $currItem->getColumnNames());
     $subpartArray['###' . $markerName . '_SELECTION_2###'] = $out;
-    
+
     $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
-   
+
     return $out;
   }
 }

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleaguefe_views_LeagueTable');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
@@ -33,7 +32,7 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_LeagueTable {
 
 	function createOutput($template, &$viewData, &$configurations, &$formatter){
-  	
+
 		$cObj =& $formatter->cObj;
 		$markerArray = array();
 		$marks = array();
@@ -44,7 +43,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 							$viewData, $penalties, $marks, $configurations);
 
     // Jetzt die Strafen auflisten
-//    $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'), 
+//    $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'),
 //                             $penalties, $configurations);
 
 		// Die Tabellensteuerung
@@ -94,7 +93,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 
   /**
    * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
-   * ermittelt und zurückgeliefert. 
+   * ermittelt und zurückgeliefert.
    * @param &$tableData Daten der Tabelle
    * @param $tableSize Maximale Anzahl Teams, die gezeigt werden soll
    */
@@ -152,17 +151,17 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 
   	$subpartArray = array('###CONTROL_TABLETYPE###' => '', '###CONTROL_TABLESCOPE###' => '', '###CONTROL_POINTSYSTEM###' =>'', );
     if($viewData->offsetGet('tabletype_select')) {
-      $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), 
+      $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'),
                     $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
     }
 
     if($viewData->offsetGet('tablescope_select')) {
-      $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), 
+      $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'),
                     $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
     }
 
     if($viewData->offsetGet('pointsystem_select')) {
-      $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), 
+      $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'),
                     $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
     }
 

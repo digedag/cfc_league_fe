@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2011-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleaguefe_table_football_Table');
 
@@ -115,7 +113,7 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 	}
 
   /**
-   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
+   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
    * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
@@ -158,7 +156,7 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 	}
 
 	/**
-	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die 
+	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
    * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto

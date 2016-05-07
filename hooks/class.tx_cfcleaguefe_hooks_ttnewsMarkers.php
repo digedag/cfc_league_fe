@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2010 Rene Nitzsche
+ *  (c) 2008-2016 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,21 +21,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 
 /**
  * Make links to match reports from tt_news
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_hooks_ttnewsMarkers {
 	/**
 	 * Hook um weitere Marker in tt_news einzufügen. Es sollte möglich sein auf alle
-	 * Views von T3sports direkt zu verlinken. Die meisten Einstellungen kommen aus der 
+	 * Views von T3sports direkt zu verlinken. Die meisten Einstellungen kommen aus der
 	 * TS-Config.
 	 * Beispiel für einen Link in der News:
 	 * [t3sports:matchreport:123 Zum Spielbericht]
@@ -92,7 +90,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 
 		$wrappedSubpartArray = array();
 		$empty = array();
-		tx_rnbase_util_BaseMarker::initLink($empty, $empty, $wrappedSubpartArray, $this->configurations->getFormatter(), 
+		tx_rnbase_util_BaseMarker::initLink($empty, $empty, $wrappedSubpartArray, $this->configurations->getFormatter(),
 							'external_', $linkId, 'TTNEWS', $linkParams);
 		$out = $wrappedSubpartArray['###TTNEWS_'.strtoupper($linkId).'LINK###'][0] . $match[3] . $wrappedSubpartArray['###TTNEWS_'.strtoupper($linkId).'LINK###'][1];
 		return $out;

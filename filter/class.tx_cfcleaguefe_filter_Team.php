@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010 Rene Nitzsche
+ *  (c) 2010-2016 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_cfcleague_search_Builder');
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
@@ -29,7 +28,7 @@ tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 
 /**
  * Default filter for teams
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_filter_Team extends tx_rnbase_filter_BaseFilter {

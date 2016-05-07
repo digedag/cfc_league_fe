@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 
 /**
  * Factory for table classes
@@ -31,7 +29,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 class tx_cfcleaguefe_table_Factory {
 
 	/**
-	 * 
+	 *
 	 * @param tx_cfcleague_util_MatchTable $matchTable
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
@@ -45,7 +43,7 @@ class tx_cfcleaguefe_table_Factory {
 		return $prov;
 	}
 	/**
-	 * 
+	 *
 	 * @param string $type
 	 * @return tx_cfcleaguefe_table_ITableType
 	 */

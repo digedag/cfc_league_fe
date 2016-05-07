@@ -22,7 +22,7 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist']['tx_cfcleaguefe_comp
 // Das tt_content-Feld pi_flexform einblenden
 $TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_competition']='pi_flexform';
 
-tx_rnbase_util_Extensions::addPiFlexFormValue('tx_cfcleaguefe_competition','FILE:EXT:'.$_EXTKEY.'/Configuration/Flexform/flexform_competition.xml');
+tx_rnbase_util_Extensions::addPiFlexFormValue('tx_cfcleaguefe_competition','FILE:EXT:'.$_EXTKEY.'/Configuration/Flexform/'.(tx_rnbase_util_TYPO3::isTYPO70OrHigher() ? 'plugin' : 'flexform' ).'_competition.xml');
 tx_rnbase_util_Extensions::addPlugin(Array('LLL:EXT:'.$_EXTKEY.'/locallang_db.php:plugin.competition.label','tx_cfcleaguefe_competition'));
 
 ////////////////////////////////
@@ -36,7 +36,7 @@ $TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']
 //$TCA['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']='pi_flexform,imagewidth;;13, --palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgLinks;7, --palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgOptions;11,tx_hldamgallery_displaypage';
 
 
-tx_rnbase_util_Extensions::addPiFlexFormValue('tx_cfcleaguefe_report','FILE:EXT:'.$_EXTKEY.'/Configuration/Flexform/flexform_report.xml');
+tx_rnbase_util_Extensions::addPiFlexFormValue('tx_cfcleaguefe_report','FILE:EXT:'.$_EXTKEY.'/Configuration/Flexform/'.(tx_rnbase_util_TYPO3::isTYPO70OrHigher() ? 'plugin' : 'flexform' ).'_report.xml');
 tx_rnbase_util_Extensions::addPlugin(Array('LLL:EXT:'.$_EXTKEY.'/locallang_db.php:plugin.report.label','tx_cfcleaguefe_report'));
 
 # Add plugin wizards

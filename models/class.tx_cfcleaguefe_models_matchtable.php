@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_DB');
 tx_rnbase::load('tx_cfcleaguefe_models_match');
 
@@ -115,7 +114,7 @@ class tx_cfcleaguefe_models_matchtable{
   function setTeam($uid){
     $this->_team = trim(implode(',',t3lib_div::intExplode(',',$uid)));
   }
-  
+
   /**
    * Sucht Spiele aus der Datenbank mit den definierten Werten. Die Spiele werden mit den
    * maximal verfügbaren Daten geliefert. Es finden also immer Joins auf andere Tabellen statt.
@@ -171,7 +170,7 @@ class tx_cfcleaguefe_models_matchtable{
       if(strlen($where) >0) $where .= ' AND ';
       $where .= ' (home IN (' . $this->_team . ') OR guest IN (' . $this->_team . '))';
     }
-    
+
     if(isset($status)) {
       if(strlen($where) >0) $where .= ' AND ';
       $where .= ' tx_cfcleague_games.status IN (' . $status . ')';
@@ -244,14 +243,14 @@ class tx_cfcleaguefe_models_matchtable{
    /*
 // Ermittelt alle Spiele eines Teams in einer Saison
 SELECT distinct m.uid, m.home, t1.name as home_name, m.guest, t2.name as guest_name
-FROM `tx_cfcleague_games` as m 
-  INNER JOIN tx_cfcleague_competition As c 
+FROM `tx_cfcleague_games` as m
+  INNER JOIN tx_cfcleague_competition As c
   INNER JOIN tx_cfcleague_teams As t1
   INNER JOIN tx_cfcleague_teams As t2
   ON m.competition = c.uid
   ON m.home = t1.uid
   ON m.guest = t2.uid
-WHERE 
+WHERE
 c.saison IN (1) AND
 ( m.home = 1 OR m.guest=1)
    */

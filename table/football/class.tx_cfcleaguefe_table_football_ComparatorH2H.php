@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Rene Nitzsche (rene@system25.de)
+*  (c) 2011-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,11 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleaguefe_table_football_IComparator');
 
 /**
- * Comperator methods for football league tables. 
+ * Comperator methods for football league tables.
  */
 class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_table_football_IComparator {
 	public function setTeamData(array &$teamdata) {
@@ -44,7 +43,7 @@ class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_tabl
 		// Zwangsabstieg prüfen
 		if($t1['last_place']) return 1;
 		if($t2['last_place']) return -1;
-	
+
 		if($t1['points'] == $t2['points']) {
 			// Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
 			// da sie im 3-PM immer identisch sein sollten, können wir immer testen

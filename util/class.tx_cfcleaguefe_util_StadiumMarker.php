@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2009-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
@@ -80,15 +79,15 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 		}
 
 		try {
-			
+
 			tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
 			tx_rnbase::load('tx_rnbase_maps_Factory');
 			$map = tx_rnbase_maps_Factory::createGoogleMap($formatter->getConfigurations(), $confId);
-	
+
 			// Icon
-			tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), 
+			tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(),
 				$confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
-			
+
 			$map->addMarker($marker);
 			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array('###'.$markerPrefix.'###' => $map->draw()));
 		}
@@ -111,7 +110,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 	public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix) {
 		if(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute() ) return false;
 		tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
-		
+
 		$marker = new tx_rnbase_maps_DefaultMarker();
 		if($item->getLongitute() || $item->getLatitute()) {
 			$marker->setCoords($item->getCoords());
@@ -127,7 +126,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 		$marker->setDescription($bubble);
 		return $marker;
 	}
-	
+
 	protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix) {
 		$addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
 		$template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
@@ -151,7 +150,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker {
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled')); 
+			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 	}

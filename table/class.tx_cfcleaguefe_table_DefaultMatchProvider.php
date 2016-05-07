@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2011 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleaguefe_table_IMatchProvider');
 
@@ -59,7 +57,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		$this->configurator = $configurator;
 	}
 	/**
-	 * 
+	 *
 	 * @return tx_cfcleaguefe_table_IConfigurator
 	 */
 	public function getConfigurator() {
@@ -74,7 +72,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	}
 	/**
 	 * Return all teams or clubs of given matches. It returns teams for simple league tables.
-	 * But for alltime table, teams are useless. It exists one saison only! 
+	 * But for alltime table, teams are useless. It exists one saison only!
 	 * So for alltime table clubs are returned.
 	 *
 	 * @return array[tx_cfcleague_models_Team]
@@ -83,7 +81,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		if(is_array($this->teams))
 			return $this->teams;
 		$this->teams = array();
-		// Es ist keine gute Idee, die Teams über die beendeten Spiele zu holen. 
+		// Es ist keine gute Idee, die Teams über die beendeten Spiele zu holen.
 		// Dadurch kann am Saisonbeginn keine Tabelle erstellt werden.
 		// Es ist besser die Spiele über die Wettbewerbe zu laden.
 		$fields = array();
@@ -153,7 +151,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	public function setLeague($league) {
 		$this->league = $league;
 	}
-	
+
 	public function getRounds() {
     $rounds = array();
     $matches = $this->getMatches();
@@ -183,7 +181,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
 		$matchTable = $matchSrv->getMatchTableBuilder();
 		$matchTable->setStatus($this->getMatchStatus()); //Status der Spiele
-		// Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem 
+		// Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem
 		// in der Plugineinstellung. Somit funktionieren aber auch gleich die Alltimetabellen
 		$matchTable->setScope($this->scope);
 //		$matchTable->setCompetitionTypes(1);
@@ -240,13 +238,13 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	 * @param array $options
 	 */
 	protected function modifyMatchFields(&$fields, &$options) {
-		
+
 	}
 
 	public function getPenalties() {
 		// Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
 		// für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
-//		if($this->cfgTableType || $this->cfgTableScope) 
+//		if($this->cfgTableType || $this->cfgTableScope)
 //			return array();
 
 //		$this->getConfigurator()->
@@ -262,17 +260,17 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 			$matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
 			$matchTable = $matchSrv->getMatchTableBuilder();
 			$matchTable->setScope($scopeArr);
-	
+
 			$fields = array();
 			$options = array();
 			$matchTable->getFields($fields, $options);
 			$options['what'] = 'distinct competition';
-	
+
 			$result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
 			// es wird immer nur der 1. Wettbewerb verwendet
 			$leagueUid = count($result) ? $result[0]['competition'] : false;
-		} 
-		else 
+		}
+		else
 			$leagueUid = intval($scopeArr['COMP_UIDS']);
 		if(!$leagueUid) throw new Exception('Could not find a valid competition.');
 
@@ -282,7 +280,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 		return $league;
 	}
 	/**
-	 * Returns the table marks used to mark some posititions in table. It should be normally 
+	 * Returns the table marks used to mark some posititions in table. It should be normally
 	 * retrieved from competition.
 	 * @return string
 	 */

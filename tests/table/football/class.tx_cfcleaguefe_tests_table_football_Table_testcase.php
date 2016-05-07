@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Rene Nitzsche (rene@system25.de)
+*  (c) 2011-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
 tx_rnbase::load('tx_rnbase_configurations');
@@ -50,7 +48,7 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		$result = $leagueTable->getTableData();
 		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
 
-		
+
 		$scoreLine = $result->getScores();
 		$this->assertEquals(3, count($scoreLine), 'Table should contain 3 teams.');
 	}
@@ -67,7 +65,7 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 
 		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 		$leagueTable->getMatchProvider()->setTeams($league->getTeams());
-		
+
 		$result = $leagueTable->getTableData();
 
 		$this->assertTrue($result instanceof tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
@@ -98,9 +96,9 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 		$leagueTable->getMatchProvider()->setTeams($league->getTeams());
 		$result = $leagueTable->getTableData();
-  
+
 //    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
-    
+
 		// Tabelle 3-P.
 		// T3 - 2 3:0 6
 		// T1 - 3 4:2 4
@@ -146,7 +144,7 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		// Laden der Daten
 		$data = tx_rnbase_util_Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));
 		$data = $data[$leagueName];
-		
+
 		$league = &tx_cfcleague_models_Competition::getInstance($data['record']['uid'], $data['record']);
 		$teams = $this->makeInstances($data['teams'],$data['teams']['clazz']);
 		foreach ($teams As $team)

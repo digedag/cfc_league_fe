@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Templates');
@@ -33,7 +32,7 @@ tx_rnbase::load('tx_rnbase_util_Templates');
  */
 class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 	function getMainSubpart() {return '###CROSSTABLE###';}
-	
+
   /**
    * Erstellen des Frontend-Outputs
    * @param string $template
@@ -54,7 +53,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'createHeadline');
 		$subpartArray['###HEADLINE###'] = $this->_createHeadline($headlineTemplate, $teams, $configurations);
 		tx_rnbase_util_Misc::pullTT();
-		
+
 		tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'generateTableData');
 		$teamsArray = $this->generateTableData($matches, $teams);
 		tx_rnbase_util_Misc::pullTT();
@@ -64,7 +63,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 		$subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $configurations, $viewData);
 		tx_rnbase_util_Misc::pullTT();
 		$markerArray = array('###MATCHCOUNT###' => count($matches), );
-		
+
 		return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 	}
 
@@ -107,7 +106,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
    * @return tx_cfcleaguefe_models_match
    */
   private function findMatch(&$matches, $home, $guest) {
-  	$ret = array(); 
+  	$ret = array();
   	for($i=0, $cnt = count($matches); $i < $cnt; $i++) {
   		if($matches[$i]->record['home'] == $home && $matches[$i]->record['guest'] == $guest)
 //  			return $matches[$i];
@@ -132,7 +131,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
-		
+
 		$lines = array();
 		// Über alle Zeilen iterieren
 		foreach($datalines as $uid=>$matches) {
@@ -147,7 +146,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 				}
 				else
 					$parts[] = $matchArr; // Sollte ein String sein...
-					
+
 				$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 			}
 			// Jetzt die einzelnen Teile zusammenfügen
@@ -184,7 +183,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base {
 
 		$subpartArray['###TEAM###'] = implode($parts, $configurations->get('matchcrosstable.headline.team.implode'));
 		$markerArray = array('###TEAMCOUNT###' => count($teams), );
-    
+
 		return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 	}
   private function removeDummyTeams(&$teams) {

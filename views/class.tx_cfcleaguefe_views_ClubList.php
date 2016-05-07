@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2009-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 
 tx_rnbase::load('tx_rnbase_view_Base');
@@ -43,7 +41,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 		$template = $listBuilder->render($items,
 						$viewData, $template, 'tx_cfcleaguefe_util_ClubMarker',
 						'clublist.club.', 'CLUB', $formatter);
-						
+
 		$markerArray = array();
 		$subpartArray = array();
 
@@ -68,7 +66,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 				$marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'club.', $markerPrefix);
 				if(!$marker) continue;
 
-				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, 
+				tx_cfcleaguefe_util_Maps::addIcon($map, $configurations,
 					$this->getController()->getConfId().'map.icon.clublogo.', $marker, 'club_'.$item->getUid(), $item->getFirstLogo());
 				//$this->addIcon($map, $marker, $item, $configurations);
 				$map->addMarker($marker);
@@ -84,7 +82,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 				$marker->setDescription('###LABEL_BASEPOINT###');
 				$map->addMarker($marker);
 			}
-			
+
 			$ret = $map->draw();
 		} catch (Exception $e) {
 			$ret = '###LABEL_mapNotAvailable###';
@@ -120,7 +118,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base {
 
 	/**
 	 * Subpart der im HTML-Template geladen werden soll. Dieser wird der Methode
-	 * createOutput automatisch als $template übergeben. 
+	 * createOutput automatisch als $template übergeben.
 	 *
 	 * @return string
 	 */

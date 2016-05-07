@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_model_base');
 
 
@@ -57,10 +56,10 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 
   function toString() {
     return 'tx_cfcleaguefe_models_match_note( uid['. $this->uid .
-            '] type[' . $this->record['type'] . 
-            '] minute[' . $this->record['minute'] . 
-            '] player_home[' . $this->record['player_home'] . 
-            '] player_guest[' . $this->record['player_guest'] . 
+            '] type[' . $this->record['type'] .
+            '] minute[' . $this->record['minute'] .
+            '] player_home[' . $this->record['player_home'] .
+            '] player_guest[' . $this->record['player_guest'] .
             '])';
 	}
 
@@ -242,7 +241,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 
   /**
    * Entscheidet, ob die Note angezeigt werden soll. Dies wird über die Config
-   * entschieden. Derzeit wird die Spielminute (noteMinimumMinute) und der 
+   * entschieden. Derzeit wird die Spielminute (noteMinimumMinute) und der
    * Typ der Meldung (noteType und noteIgnoreType) überprüft.
    *
    * @param array $conf
@@ -254,7 +253,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   }
 	/**
 	 * Liefert true, wenn die Meldung dem Typ entspricht
-	 * Parameter ist entweder die Typnummer oder ein Array mit den Keys 
+	 * Parameter ist entweder die Typnummer oder ein Array mit den Keys
 	 * noteType und noteTeam. Bei noteType kann eine Liste von Typnummern
 	 * angegeben werden. NoteTeam ist entweder home oder guest.
 	 * @param array $typeNumberOrArray
@@ -269,7 +268,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 			$ignoreTypes = $typeArr['noteIgnoreType'] ? t3lib_div::intExplode(',', $typeArr['noteIgnoreType']) : array();
 
 			// Wenn Typen definiert sind, dann wird ignoreType nicht betrachtet
-			if(in_array($this->getType(), $types) || 
+			if(in_array($this->getType(), $types) ||
 				(!count($types) && !count($ignoreTypes)) ||
 				(!in_array($this->getType(), $ignoreTypes) && count($ignoreTypes)) ) {
 
@@ -322,14 +321,14 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   }
 
   /**
-   * Liefert true wenn es ein Eigentor ist. 
+   * Liefert true wenn es ein Eigentor ist.
    */
   function isGoalOwn() {
     return $this->getType() == 30;
   }
 
   /**
-   * Liefert true wenn ein Tor für das Heimteam gefallen ist. Auch Eigentore werden 
+   * Liefert true wenn ein Tor für das Heimteam gefallen ist. Auch Eigentore werden
    * berücksichtigt.
    */
   function isGoalHome() {
@@ -340,7 +339,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   }
 
   /**
-   * Liefert true wenn ein Tor für das Gastteam gefallen ist. Auch Eigentore werden 
+   * Liefert true wenn ein Tor für das Gastteam gefallen ist. Auch Eigentore werden
    * berücksichtigt.
    */
   function isGoalGuest() {
@@ -362,7 +361,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   }
 
   /**
-   * Liefert die Singleton-Instanz des unbekannten Spielers. Dieser hat die ID -1 und 
+   * Liefert die Singleton-Instanz des unbekannten Spielers. Dieser hat die ID -1 und
    * wird für MatchNotes verwendet, wenn der Spieler nicht bekannt ist.
    */
   function &getUnknownPlayer() {
@@ -373,7 +372,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   }
 
   /**
-   * Liefert die Singleton-Instanz eines nicht gefundenen Profils. Dieses hat die ID -2 und 
+   * Liefert die Singleton-Instanz eines nicht gefundenen Profils. Dieses hat die ID -2 und
    * wird für MatchNotes verwendet, wenn das Profil nicht mehr in der Datenbank gefunden wurde.
    * FIXME: Vermutlich ist diese Funktionalität in der Matchklasse besser aufgehoben
    */
@@ -456,7 +455,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   function getMatch() {
   	return $this->match;
   }
-  
+
 	/**
 	 * Ermittelt für die übergebenen Spiele die MatchNotes. Wenn $types = 1 dann
 	 * werden nur die Notes mit dem Typ < 100 geliefert. Die MatchNotes werden direkt
@@ -567,8 +566,8 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 			// Heim oder Gast?
 			if($this->record['player_home']) {
 				$players = $this->match->getPlayersHome(1);
-				$playerField = $this->record['type'] == '80' ? 
-					($type ? 'player_home' : 'player_home_2') : 
+				$playerField = $this->record['type'] == '80' ?
+					($type ? 'player_home' : 'player_home_2') :
 					($type ? 'player_home_2' : 'player_home');
 			}
 			else {

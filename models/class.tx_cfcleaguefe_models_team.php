@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleague_models_Team');
 tx_rnbase::load('tx_cfcleaguefe_models_club');
 tx_rnbase::load('tx_cfcleaguefe_search_Builder');
@@ -54,7 +53,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
   function getNameShort() {
   	return $this->record['short_name'];
   }
-  
+
 	/**
 	 * Liefert den Verein des Teams als Objekt
 	 * @return tx_cfcleaguefe_models_club Verein als Objekt oder 0
@@ -73,7 +72,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 
 	var $agegroup = null;
 	/**
-	 * Returns the teams age group. This value is retrieved from the teams competitions. So 
+	 * Returns the teams age group. This value is retrieved from the teams competitions. So
 	 * the first competition found, decides about the age group.
 	 * @return tx_cfcleaguefe_models_group or null
 	 */
@@ -147,7 +146,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 
 
 	/**
-	 * Liefert das Logo des Teams. Es ist entweder das zugeordnete Logo des Teams oder 
+	 * Liefert das Logo des Teams. Es ist entweder das zugeordnete Logo des Teams oder
 	 * das Logo des Vereins.
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $confId

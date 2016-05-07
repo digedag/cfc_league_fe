@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_cfcleaguefe_models_team');
@@ -62,7 +60,7 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
 		$teams = $this->_resolveTeams($matches);
 		$viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
 		$viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
-		
+
 		return '';
 	}
 
@@ -147,18 +145,18 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
     $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
     $extended = $configurations->get('matchcrosstable.allData');
     $matches = $matchTable->findMatches($saisonUids, $groupUids, $currCompetition, '', '', $status, $extended);
-    
+
     $teams = $this->_resolveTeams($matches);
-    
+
     $viewData =& $configurations->getViewData();
     $viewData->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
     $viewData->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
-    
+
     return '';
   }
 	function getTemplateName() {return 'matchcrosstable';}
 	function getViewClassName() {	return 'tx_cfcleaguefe_views_MatchCrossTable'; }
-  
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchCrossTable.php'])	{

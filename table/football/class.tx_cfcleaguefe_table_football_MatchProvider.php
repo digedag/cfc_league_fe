@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2013 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_table_DefaultMatchProvider');
 
 /**
@@ -34,7 +32,7 @@ class tx_cfcleaguefe_table_football_MatchProvider extends tx_cfcleaguefe_table_D
 	public function getPenalties() {
 		// Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
 		// für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
-		if($this->getConfigurator()->getTableScope() || $this->getConfigurator()->getTableType()) 
+		if($this->getConfigurator()->getTableScope() || $this->getConfigurator()->getTableType())
 			return array();
 
 		return $this->getLeague()->getPenalties();

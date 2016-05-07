@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_DB');
 
 interface tx_cfcleaguefe_ProfileService {
@@ -32,7 +31,7 @@ interface tx_cfcleaguefe_ProfileService {
 
 /**
  * Service for accessing profile information
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_sv1_Profiles extends t3lib_svbase implements tx_cfcleaguefe_ProfileService  {
@@ -65,7 +64,7 @@ class tx_cfcleaguefe_sv1_Profiles extends t3lib_svbase implements tx_cfcleaguefe
 		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Profile');
 		return $searcher->search($fields, $options);
 	}
-  
+
 }
 
 

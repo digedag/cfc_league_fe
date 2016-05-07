@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_DB');
 require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_competition_penalty.php');
 
@@ -145,7 +144,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
         $this->_teamData[$penalty->record['team']]['drawCount'] += $penalty->record['draws'];
         $this->_teamData[$penalty->record['team']]['loseCount'] += $penalty->record['loses'];
 
-        // Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht 
+        // Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht
         if($penalty->record['static_position'])
          $this->_teamData[$penalty->record['team']]['last_place'] = $penalty->record['static_position'];
       }
@@ -161,7 +160,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
     	if($match->isDummy()) continue; // Ignore Dummy-Matches
       // Wie ist das Spiel ausgegangen?
       $toto = $match->getToto();
-			tx_rnbase_util_Misc::callHook('cfc_league_fe','leagueTable_handleMatches', 
+			tx_rnbase_util_Misc::callHook('cfc_league_fe','leagueTable_handleMatches',
 				array('match' => &$match, 'teamdata'=>&$this->_teamData), $this);
 
       // Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
@@ -234,7 +233,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		$this->_teamData[$homeId]['matches'][$guestId] = $result;
 	}
   /**
-   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
+   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
    * Heimmannschaft gewertet.
 	 * @param tx_cfcleaguefe_models_match $match
 	 * @param int $toto
@@ -269,7 +268,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 	}
 
 	/**
-	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die 
+	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
    * Gastmannschaft gewertet.
 	 * @param tx_cfcleaguefe_models_match $match
 	 * @param int $toto
@@ -404,7 +403,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 	protected function getPositionChange($oldPosition, $newPosition) {
 		return $oldPosition == $newPosition ? 'EQ' : ($oldPosition > $newPosition ? 'UP' : 'DOWN');
 	}
-	
+
 
   function setTableProvider(&$tableProvider) {
   	$this->tableProvider = $tableProvider;
@@ -425,7 +424,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		// Zwangsabstieg prüfen
 		if($t1['last_place']) return 1;
 		if($t2['last_place']) return -1;
-	
+
 		if($t1['points'] == $t2['points']) {
 			// Im 2-Punkte-Modus sind die Minuspunkte ausschlaggebend
 			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
@@ -463,7 +462,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 		// Zwangsabstieg prüfen
 		if($t1['last_place']) return 1;
 		if($t2['last_place']) return -1;
-	
+
 		if($t1['points'] == $t2['points']) {
 			// Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
 			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
@@ -471,9 +470,9 @@ class tx_cfcleaguefe_util_LeagueTable  {
 				// direkter Vergleich gilt vor Tordifferenz / wird ignoriert, falls !$isH2HComparison
 				$t1vst2 = preg_split('[ : ]', $this->_teamData[$t1['teamId']]['matches'][$t2['teamId']]);
 				$t2vst1 = preg_split('[ : ]', $this->_teamData[$t2['teamId']]['matches'][$t1['teamId']]);
-				
+
 				$t1H2HPoints = 0;
-				$t2H2HPoints = 0;	
+				$t2H2HPoints = 0;
 				if (count($t1vst2) > 0 && $t1vst2[0] > $t1vst2[1]) {
 					$t1H2HPoints += 1;
 				} elseif (count($t1vst2) > 0 && $t1vst2[0] < $t1vst2[1]) {

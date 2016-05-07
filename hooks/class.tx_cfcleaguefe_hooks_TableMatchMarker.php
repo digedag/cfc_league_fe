@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009 Rene Nitzsche
+ *  (c) 2009-2016 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,18 +21,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
-
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 
-
-
 /**
  * Integrate a league table in matchreport
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_hooks_TableMatchMarker {
@@ -138,11 +133,11 @@ class tx_cfcleaguefe_hooks_TableMatchMarker {
 		// Wir benötigen noch die beiden Club-UIDs
 		$clubMarks = array();
 		$clubUid = $match->getHome()->getClubUid();
-		if($clubUid) $clubMarks[] = $clubUid; 
+		if($clubUid) $clubMarks[] = $clubUid;
 		$clubUid = $match->getGuest()->getClubUid();
-		if($clubUid) $clubMarks[] = $clubUid; 
+		if($clubUid) $clubMarks[] = $clubUid;
 		$tableProvider->setMarkClubs($clubMarks);
-		
+
 		$leagueTable = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTable');
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$tableData = $leagueTable->generateTable($tableProvider);

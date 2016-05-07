@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2010 Rene Nitzsche
+ *  (c) 2008-2016 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_util_Misc');
 
@@ -32,7 +31,7 @@ define('MATCHSRV_FIELD_MATCH_DATE', 'MATCH.DATE');
 
 /**
  * Class to search matches from database
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_search_Match extends tx_rnbase_util_SearchBase {

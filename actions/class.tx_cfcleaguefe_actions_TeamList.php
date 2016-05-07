@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
@@ -42,13 +40,13 @@ class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC {
 		$options = array();
 		$filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 
-		tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, 
+		tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations,
 			$this->getConfId().'team.pagebrowser', $viewdata, $fields, $options, array(
 			'searchcallback'=> array($srv, 'search'),
 			'pbid' => 'teams',
 			)
 		);
-		
+
 		$teams = $srv->search($fields, $options);
 		$viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
 	}

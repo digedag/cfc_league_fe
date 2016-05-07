@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2013-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 /**
  * Some util methods
@@ -37,7 +36,7 @@ class tx_cfcleaguefe_table_Util {
 		$t2vst1 = preg_split('[ : ]', $teamData[$t2['teamId']]['matches'][$t1['teamId']]);
 
 		$t1H2HPoints = 0;
-		$t2H2HPoints = 0;	
+		$t2H2HPoints = 0;
 		if (count($t1vst2) > 0 && $t1vst2[0] > $t1vst2[1]) {
 			$t1H2HPoints += 1;
 		} elseif (count($t1vst2) > 0 && $t1vst2[0] < $t1vst2[1]) {
@@ -48,7 +47,7 @@ class tx_cfcleaguefe_table_Util {
 		} elseif (count($t2vst1) > 0 && $t2vst1[0] < $t2vst1[1]) {
 			$t1H2HPoints += 1;
 		}
-		return array('t1H2HPoints'=>$t1H2HPoints, 't2H2HPoints'=>$t2H2HPoints, 
+		return array('t1H2HPoints'=>$t1H2HPoints, 't2H2HPoints'=>$t2H2HPoints,
 									't1vst2'=>$t1vst2, 't2vst1'=>$t2vst1);
 	}
 

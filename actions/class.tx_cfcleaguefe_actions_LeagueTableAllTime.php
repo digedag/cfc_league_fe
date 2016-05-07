@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_actions_LeagueTableShow');
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
@@ -77,7 +75,7 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'leaguetableAllTime.options.');
 
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
-		
+
 		$matchtable = $this->getMatchTable();
 		$matchtable->setScope($scopeArr);
 //		$matchtable->setStatus(2);

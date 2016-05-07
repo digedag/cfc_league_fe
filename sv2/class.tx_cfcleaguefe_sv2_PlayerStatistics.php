@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,21 +22,20 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleaguefe_util_StatisticsHelper');
 
 tx_rnbase::load('tx_rnbase_util_Misc');
 
 /**
  * Service for player statistics
- * 
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_sv2_PlayerStatistics extends t3lib_svbase {
 
   /**
    *  Für jeden Spieler wird ein Datenarray erstellt
-   *  In jedem Datenarray liegt für jede Info ein Zähler, 
+   *  In jedem Datenarray liegt für jede Info ein Zähler,
    *  sowie zusätzlich noch eine Referenz auf den Spieler
    */
   private $playersArr = array();
@@ -47,7 +46,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends t3lib_svbase {
                          'card_yellow', 'card_yellowred', 'card_red', 'goals_all', 'goals_head',
                          'goals_own', 'goals_penalty', 'goals_home', 'goals_away', 'goals_assist',
                          'goals_joker');
-  
+
   /**
    * This method is called one time before the statistic process starts.
    *
@@ -57,8 +56,8 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends t3lib_svbase {
     $this->scopeArr = $scope;
     $this->configurations = $configurations;
   }
-  
-static $total = 0; 
+
+static $total = 0;
 	/**
 	 * Ein einzelnes Spiel auswerten
 	 *
@@ -76,7 +75,7 @@ static $total = 0;
     //&if($team->record['club'] == $clubId || !$clubId) {
       $players = $this->getPlayer($match,true); // All Spieler des Heimteams holen
 
-    if(is_array($players)) 
+    if(is_array($players))
         foreach($players As $player) {
           // Jeden Spieler aktualisieren
 //if($player->uid == '257') t3lib_div::debug($match->record['round'], 'stats');
@@ -87,13 +86,13 @@ static $total = 0;
     if($this->isObservedTeam($team)) {
       // Nochmal die Spieler des Auswärtsteams
       $players = $this->getPlayer($match, false); // All Spieler des Gastteams holen
-      if(is_array($players)) 
+      if(is_array($players))
         foreach($players As $player) {
           // Jeden Spieler aktualisieren
           $this->_countMatch4Player($player, $match, $this->playersArr);
         }
     }
-//t3lib_div::debug( self::$total, 'total sv2_playerstatistics');  
+//t3lib_div::debug( self::$total, 'total sv2_playerstatistics');
   }
   /**
    * Entscheidet, ob die Spieler des Teams in die Statistik eingehen
@@ -169,8 +168,8 @@ static $total = 0;
    */
 	protected function getTeams($scopeArr){
 		tx_rnbase::load('tx_cfcleaguefe_models_team');
-		$teams = call_user_func(array('tx_cfcleaguefe_models_team',"getTeams"), 
-					$scopeArr['COMP_UIDS'], 
+		$teams = call_user_func(array('tx_cfcleaguefe_models_team',"getTeams"),
+					$scopeArr['COMP_UIDS'],
 					$scopeArr['CLUB_UIDS']);
 		return $teams;
 	}
@@ -217,11 +216,11 @@ static $total = 0;
     else    // Wenn der Spieler nicht im Spiel vorkommt, können wir abbrechen
       return;
 
-      
+
     // Steht der Spieler in der Startelf
     if( is_array($startPlayer) && array_key_exists($player->uid, $startPlayer)) {
       $playerData['match_count'] = intval($playerData['match_count']) + 1;
-      
+
       // Wurde der Spieler ausgewechselt?
       $min = tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
       if($min > 0)
@@ -249,7 +248,7 @@ static $total = 0;
       $playerData['match_minutes'] = intval($playerData['match_minutes']) + $min;
       $ignorePlayer = 0;
     }
-    
+
     if($ignorePlayer) {
       // Hier betrachten wir die eingewechselten Spieler
       $min = tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match);
@@ -297,7 +296,7 @@ static $total = 0;
 	      $min = tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
 	      if($min != 0)
 	        $playerData['card_yellow'] = intval($playerData['card_yellow']) + 1;
-      }        
+      }
       $this->_countGoals(0,'goals_all', $player, $match, $playerData);
       $this->_countGoals(11,'goals_head', $player, $match, $playerData);
       $this->_countGoals(12,'goals_penalty', $player, $match, $playerData);
@@ -327,7 +326,7 @@ static $total = 0;
 
   /**
    * Zählt die Tore für einen Spieler. Der Typ ist entweder 0 für alle Tore oder
-   * entspricht dem MatchNote-Typ für ein bestimmtes Tor. Wenn der Typ 0 ist, dann werden 
+   * entspricht dem MatchNote-Typ für ein bestimmtes Tor. Wenn der Typ 0 ist, dann werden
    * auch auch die Werte für GOALS_HOME, GOALS_AWAY und GOALS_JOKER aktualisiert
    * @param $type int 0 oder MatchNote-Typ
    * @param $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
@@ -408,9 +407,9 @@ static $total = 0;
 function playerStatsCmpPlayer($a, $b) {
   $player1 = $a['player'];
   $player2 = $b['player'];
-  
+
 //t3lib_div::debug(strtoupper($player1->getName(1)), 'no_class_scope'); // TODO: Remove me!
-  return strcmp(tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))), 
+  return strcmp(tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
   							tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1))));
 }
 

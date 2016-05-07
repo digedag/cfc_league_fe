@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011-2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2011-2016 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,8 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_cfcleaguefe_table_football_Table');
 tx_rnbase::load('tx_cfcleague_util_MatchSets');
@@ -71,7 +69,7 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 
 		// Beim Volleyball gibt es kein Unentschieden
 		if($toto == 1) {  // Heimsieg
-			// Für die 
+			// Für die
 			$this->addPoints($homeId, $configurator->getPointsWin($match->getGoalsHome(), $match->getGoalsGuest()));
 			$this->addPoints($guestId, $configurator->getPointsLoose($match->getGoalsHome(), $match->getGoalsGuest()));
 
@@ -119,10 +117,10 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		$this->_teamData[$teamId]['sets2'] = $this->_teamData[$teamId]['sets2'] + $sets2;
 		$this->_teamData[$teamId]['sets_diff'] = $this->_teamData[$teamId]['sets1'] - $this->_teamData[$teamId]['sets2'];
 		// TODO: Muss hier ggf. gerundet werden??
-		$this->_teamData[$teamId]['sets_quot'] = $this->_teamData[$teamId]['sets1'] / 
+		$this->_teamData[$teamId]['sets_quot'] = $this->_teamData[$teamId]['sets1'] /
 														($this->_teamData[$teamId]['sets2'] > 0 ? $this->_teamData[$teamId]['sets2'] : 1);
 	}
-	
+
 	/**
 	 * Addiert Bälle zu einem Team
 	 */
@@ -130,12 +128,12 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		$this->_teamData[$teamId]['balls1'] = $this->_teamData[$teamId]['balls1'] + $balls1;
 		$this->_teamData[$teamId]['balls2'] = $this->_teamData[$teamId]['balls2'] + $balls2;
 		$this->_teamData[$teamId]['balls_diff'] = $this->_teamData[$teamId]['balls1'] - $this->_teamData[$teamId]['balls2'];
-		$this->_teamData[$teamId]['balls_quot'] = $this->_teamData[$teamId]['balls1'] / 
+		$this->_teamData[$teamId]['balls_quot'] = $this->_teamData[$teamId]['balls1'] /
 														($this->_teamData[$teamId]['balls2'] > 0 ? $this->_teamData[$teamId]['balls2'] : 1);
 	}
 
   /**
-   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die 
+   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
    * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
@@ -168,7 +166,7 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 	}
 
 	/**
-	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die 
+	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
    * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto

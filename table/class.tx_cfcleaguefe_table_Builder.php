@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,15 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 
 /**
- * Builder class for league tables. 
+ * Builder class for league tables.
  */
 class tx_cfcleaguefe_table_Builder {
 	/**
-	 * 
+	 *
 	 * @param tx_cfcleague_model_Competition $league
 	 * @param array $matches
 	 * @param tx_rnbase_configurations $configurations
@@ -55,9 +53,9 @@ class tx_cfcleaguefe_table_Builder {
 
 		return $table;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param array $scopeArr
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
 
 /**
@@ -31,7 +30,7 @@ tx_rnbase::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
 class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe_util_league_DefaultTableProvider{
 
 	private $match;
-	
+
 	function __construct($match, $parameters, $configurations, $league, $confId='') {
 		parent::__construct($parameters, $configurations, $league, $confId);
 		$this->match = $match;
@@ -46,7 +45,7 @@ class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe
 		if($clubId) $clubs[] = $clubId;
 
 		return $clubs;
-	} 
+	}
 	function getMarkClubs(){
 		return array();
 	}

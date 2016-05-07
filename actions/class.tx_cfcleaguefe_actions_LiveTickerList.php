@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
@@ -94,13 +92,13 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'tickerlist.options.');
 
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
-		
+
 		$matchtable = $this->getMatchTable();
 		$matchtable->setScope($scopeArr);
 		$matchtable->setTeams($teamId);
 		$matchtable->setTimeRange($configurations->get('tickerlist.timeRangePast'), $configurations->get('tickerlist.timeRangeFuture'));
     $matchtable->setLiveTicker();; // Nur Live-Tickerspiele holen
-		
+
 		$matchtable->getFields($fields, $options);
 	}
 	/**

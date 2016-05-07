@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011-2013 Rene Nitzsche (rene@system25.de)
+*  (c) 2011-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,11 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleaguefe_table_football_IComparator');
 
 /**
- * Comperator methods for football league tables. 
+ * Comperator methods for football league tables.
  */
 class tx_cfcleaguefe_table_football_Comparator implements tx_cfcleaguefe_table_football_IComparator {
 	public function setTeamData(array &$teamdata) {
@@ -39,7 +38,7 @@ class tx_cfcleaguefe_table_football_Comparator implements tx_cfcleaguefe_table_f
 		// Zwangsabstieg prüfen
 		if($t1['last_place']) return 1;
 		if($t2['last_place']) return -1;
-	
+
 		if($t1['points'] == $t2['points']) {
 			// Im 2-Punkte-Modus sind die Minuspunkte ausschlaggebend
 			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
@@ -77,7 +76,7 @@ class tx_cfcleaguefe_table_football_Comparator implements tx_cfcleaguefe_table_f
 		// Zwangsabstieg prüfen
 		if($t1['last_place']) return 1;
 		if($t2['last_place']) return -1;
-	
+
 		if($t1['points'] == $t2['points']) {
 			// Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
 			// da sie im 3-PM immer identisch sein sollten, können wir immer testen
@@ -85,9 +84,9 @@ class tx_cfcleaguefe_table_football_Comparator implements tx_cfcleaguefe_table_f
 				// direkter Vergleich gilt vor Tordifferenz / wird ignoriert, falls !$isH2HComparison
 				$t1vst2 = preg_split('[ : ]', $this->_teamData[$t1['teamId']]['matches'][$t2['teamId']]);
 				$t2vst1 = preg_split('[ : ]', $this->_teamData[$t2['teamId']]['matches'][$t1['teamId']]);
-				
+
 				$t1H2HPoints = 0;
-				$t2H2HPoints = 0;	
+				$t2H2HPoints = 0;
 				if (count($t1vst2) > 0 && $t1vst2[0] > $t1vst2[1]) {
 					$t1H2HPoints += 1;
 				} elseif (count($t1vst2) > 0 && $t1vst2[0] < $t1vst2[1]) {

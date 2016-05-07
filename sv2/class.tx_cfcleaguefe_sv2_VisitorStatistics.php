@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,22 +22,20 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 
 /**
  * Service for visitor statistics
- * Count how visitors of all teams 
- * 
+ * Count how visitors of all teams
+ *
  * @author Rene Nitzsche
  */
 class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
   /** Array with statistical results */
   private $result = array();
-  private $statData = array('home_matchcount', 'home_total','home_average', 
+  private $statData = array('home_matchcount', 'home_total','home_average',
                             'away_matchcount', 'away_total','away_average',
                             'all_matchcount', 'all_total','all_average');
-  
+
   public function prepare($scope, &$configurations, &$parameters) {
     $this->scopeArr = $scope;
     $this->configurations = $configurations;
@@ -60,7 +58,7 @@ class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
     $this->countVisitors($home, 'all', $match->getVisitors());
     $this->countVisitors($guest, 'all', $match->getVisitors());
   }
-  
+
   /**
    * Liefert die Liste der besten Vorlagengeber
    *
@@ -77,7 +75,7 @@ class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
 
     // Jetzt noch sortieren
     $this->sortResult();
-    
+
     return $this->result;
   }
   private function sortResult() {
@@ -111,7 +109,7 @@ class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
 	public function getMarker($configurations) {
 		return tx_rnbase::makeInstance('tx_cfcleaguefe_sv2_TeamStatisticsMarker');
 	}
-  
+
   /**
    * Zählt die Zuschauer eines Spiels
    *
@@ -153,7 +151,7 @@ class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
     }
     return $dataArray[$teamId];
   }
-  
+
 }
 
 function cmpVisitors_HomeAvg($a, $b) {

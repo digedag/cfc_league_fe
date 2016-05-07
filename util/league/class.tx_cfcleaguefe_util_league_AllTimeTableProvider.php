@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
 
 /**
@@ -33,18 +31,18 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 
 	private $matches;
 	private $teams;
-	
+
 	function tx_cfcleaguefe_util_league_AllTimeTableProvider($parameters, $configurations, $matches, $confId='') {
 		$this->setConfigurations($configurations, $confId);
 		$this->setParameters($parameters);
-		
+
 		$this->matches = $matches;
 		$this->init();
 	}
 
 	/**
 	 * Return all clubs of given matches. Since this is an alltime table, teams are useless. It exists one saison
-	 * only! Thats why we return clubs. 
+	 * only! Thats why we return clubs.
 	 *
 	 * @return array[tx_cfcleaguefe_models_club]
 	 */
@@ -67,11 +65,11 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 		}
 		return $this->teams;
 	}
-	
+
 	function getRounds() {
     return array(0 => $this->matches);
 	}
-	
+
 	function getPenalties() {
 		return array(); // Bring hier wohl nichts...
 	}
@@ -93,7 +91,7 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 	function getTeamId($team) {
 		return $team->record['club'];
 	}
-	
+
 }
 
 

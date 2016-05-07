@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,13 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_cfcleaguefe_models_match');
 tx_rnbase::load('tx_cfcleaguefe_models_profile');
 tx_rnbase::load('tx_cfcleaguefe_util_MatchTicker');
 
-if(t3lib_extMgm::isLoaded('dam'))
-	require_once(t3lib_extMgm::extPath('dam') . 'lib/class.tx_dam_media.php');
+
+if(tx_rnbase_util_Extensions::isLoaded('dam'))
+	require_once(tx_rnbase_util_Extensions::extPath('dam') . 'lib/class.tx_dam_media.php');
 
 
 /**
@@ -72,7 +72,7 @@ class tx_cfcleaguefe_models_matchreport {
    */
   function getPictures() {
   	if(!t3lib_extMgm::isLoaded('dam')) return '';
-  	
+
   	$damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_images');
     $out = '';
 //t3lib_div::debug($this->_formatter->cObj->data, 'mdl_report');
@@ -282,7 +282,7 @@ class tx_cfcleaguefe_models_matchreport {
 
   /**
    * Liefert die Startaufstellung des Heimteams
-   * @deprecated 
+   * @deprecated
    */
   function getPlayerNamesHome() {
     return $this->_getLineUp($this->match->getPlayersHome(), $this->match->record['system_home'], 'matchreport.players.');
@@ -290,12 +290,12 @@ class tx_cfcleaguefe_models_matchreport {
 
   /**
    * Liefert den Namen der Spieler in der Startaufstellung des Heimteams
-   * @deprecated 
+   * @deprecated
    */
   function getPlayerNamesGuest() {
     return $this->getLineupGuest();
   }
-  
+
   /**
    * Build the line_up string for home team
    * @param string $confId
@@ -313,7 +313,7 @@ class tx_cfcleaguefe_models_matchreport {
   function getLineupGuest($confId = 'matchreport.players.') {
     return $this->_getLineUp($this->match->getPlayersGuest(), $this->match->record['system_guest'], $confId);
   }
-  
+
 
   /**
    * Liefert den Namen der Spieler in der Reservespieler des Heimteams
@@ -520,7 +520,7 @@ class tx_cfcleaguefe_models_matchreport {
     $players = is_array($players) ? array_values($players) : array();
 
     $strategyEnable = $this->_configurations->getBool($confId.'strategy.enable');
-    
+
     // Jetzt die Spieler nach dem System aufteilen
 //    $parts = count($system);
 		if(!$strategyEnable)
@@ -564,7 +564,7 @@ class tx_cfcleaguefe_models_matchreport {
   }
 
   /**
-   * Liefert das Logo eines Teams. Es ist entweder das zugeordnete Logo des Teams oder 
+   * Liefert das Logo eines Teams. Es ist entweder das zugeordnete Logo des Teams oder
    * das Logo des Vereins.
    * @param tx_cfcleaguefe_models_team
    */
