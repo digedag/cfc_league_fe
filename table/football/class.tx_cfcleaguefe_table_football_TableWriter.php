@@ -24,6 +24,7 @@
 
 tx_rnbase::load('tx_cfcleaguefe_table_TableWriterBase');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
  * Computes league tables for football.
@@ -61,7 +62,6 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 		// Die Tabellensteuerung
 		$subpartArray['###CONTROLS###'] = $this->createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'),
 				$result->getConfigurator(), $configurations, $confId.'controls.');
-//t3lib_div::debug((microtime(true)-$start), 'class.tx_cfcleaguefe_table_football_TableWriter.php'); // TODO: remove me
 
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 		return $out;
@@ -111,7 +111,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
 			$team = $row['team'];
 			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-			$team->record = t3lib_div::array_merge($row, $team->record);
+			$team->record = Tx_Rnbase_Utility_T3General::array_merge($row, $team->record);
 
 			$parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId.'table.', 'ROW');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;

@@ -23,6 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_cfcleaguefe_table_DefaultMatchProvider');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Match provider
@@ -45,7 +46,7 @@ class tx_cfcleaguefe_table_football_MatchProvider extends tx_cfcleaguefe_table_D
 	 */
 	protected function modifyMatchFields(&$fields, &$options) {
 		if($tableScope = $this->getConfigurator()->getTableScope()) {
-			$round = count(t3lib_div::intExplode(',',$this->getLeague()->record['teams']));
+			$round = count(Tx_Rnbase_Utility_Strings::intExplode(',',$this->getLeague()->record['teams']));
 			$round = ($round) ? $round - 1 : $round;
 			if($round) {
 				// Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird

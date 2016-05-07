@@ -97,8 +97,6 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 		$leagueTable->getMatchProvider()->setTeams($league->getTeams());
 		$result = $leagueTable->getTableData();
 
-//    t3lib_div::debug($result, 'tx_cfcleaguefe_tests_LeagueTable_testcase');
-
 		// Tabelle 3-P.
 		// T3 - 2 3:0 6
 		// T1 - 3 4:2 4
@@ -123,7 +121,8 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_phpunit_test
 	}
 
 	function getFixturePath($filename) {
-		return t3lib_extMgm::extPath('cfc_league_fe').'tests/fixtures/'.$filename;
+		tx_rnbase::load('tx_rnbase_util_Extensions');
+		return tx_rnbase_util_Extensions::extPath('cfc_league_fe').'tests/fixtures/'.$filename;
 	}
 	function makeInstances($yamlData, $clazzName) {
 		// Sicherstellen, daß die Klasse geladen wurde

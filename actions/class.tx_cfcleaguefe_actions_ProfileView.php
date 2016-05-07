@@ -24,8 +24,6 @@
 
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
-//require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'util/class.tx_cfcleaguefe_util_ScopeController.php');
-
 /**
  * Controller für die Anzeige eines Personenprofils
  */

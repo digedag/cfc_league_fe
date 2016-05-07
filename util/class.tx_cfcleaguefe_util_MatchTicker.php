@@ -24,7 +24,8 @@
 
 tx_rnbase::load('tx_cfcleague_util_Cache');
 tx_rnbase::load('tx_rnbase_util_Queue');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
+tx_rnbase::load('tx_rnbase_util_Extensions');
+require_once(tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
 
 
 
@@ -51,7 +52,6 @@ class tx_cfcleaguefe_util_MatchTicker {
 	 */
 	function &getMatches4Scope($scopeArr, $types = 0) {
 // Wir liefern alle Spiele des Scopes mit den zugehörigen Tickermeldungen
-//    $time = t3lib_div::milliseconds();
 		// Die Spiele bekommen wir über die Matchtable
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
 		$matchtable = $service->getMatchTable();
@@ -65,9 +65,6 @@ class tx_cfcleaguefe_util_MatchTicker {
 
 		// Jetzt holen wir die Tickermeldungen für diese Spiele
 		$matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
-
-//    t3lib_div::debug( t3lib_div::milliseconds() - $time, 'util_ticker');
-
 		return $matches;
 	}
 
@@ -178,7 +175,6 @@ class tx_cfcleaguefe_util_MatchTicker {
 					$change->record['comment2'] = $ticker->record['comment'];
 				}
 				else {
-					//t3lib_div::debug($ticker->record, 'Ausw ablegen util_match_ticker');
 					// Auswechselung ablegen
 					$changeOutHome->put($ticker);
 				}
@@ -239,5 +235,3 @@ Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.changei
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTicker.php']) {
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTicker.php']);
 }
-
-?>

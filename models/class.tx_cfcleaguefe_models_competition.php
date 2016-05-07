@@ -25,6 +25,7 @@
 tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_cfcleague_models_Competition');
 tx_rnbase::load('tx_rnbase_util_Math');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
@@ -63,7 +64,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 			$scope = intval($scope);
 			if($scope) {
 				// Feststellen wann die Hinrunde endet: Anz Teams - 1
-				$round = count(t3lib_div::intExplode(',',$this->record['teams']));
+				$round = count(Tx_Rnbase_Utility_Strings::intExplode(',',$this->record['teams']));
 				$round = ($round) ? $round - 1 : $round;
 			}
 			// Check if data is already cached
@@ -179,7 +180,6 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 //	  $options['debug'] = 1;
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
   	$matches = $service->search($fields, $options);
-//t3lib_div::debug($roundId, 'tx_cfcleaguefe_models_competition'); // TODO: Remove me!
   	return $matches;
   }
 
@@ -211,7 +211,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
    */
   function getGroup($all=false) {
 		tx_rnbase::load('tx_cfcleaguefe_models_group');
-		$groupIds = t3lib_div::intExplode(',',$this->record['agegroup']);
+		$groupIds = Tx_Rnbase_Utility_Strings::intExplode(',',$this->record['agegroup']);
 		if(!count($groupIds)) return null;
 		if(!$all) return tx_cfcleaguefe_models_group::getInstance($groupIds[0]);
 		$ret = array();
@@ -286,7 +286,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
     }
 
     if(strlen($compTypes)) {
-      $where .= ' AND type IN (' . implode(t3lib_div::intExplode(',', $compTypes), ',') . ')';
+      $where .= ' AND type IN (' . implode(Tx_Rnbase_Utility_Strings::intExplode(',', $compTypes), ',') . ')';
     }
 
     /*
@@ -309,12 +309,12 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
     if(!$str) return 0;
 
     $ret = array();
-    $arr = t3lib_div::trimExplode('|',$str);
+    $arr = Tx_Rnbase_Utility_Strings::trimExplode('|',$str);
     foreach($arr As $item) {
       // Jedes Item splitten
-      $mark = t3lib_div::trimExplode(';',$item);
-      $positions = t3lib_div::intExplode(',',$mark[0]);
-      $comments = t3lib_div::trimExplode(',',$mark[1]);
+      $mark = Tx_Rnbase_Utility_Strings::trimExplode(';',$item);
+      $positions = Tx_Rnbase_Utility_Strings::intExplode(',',$mark[0]);
+      $comments = Tx_Rnbase_Utility_Strings::trimExplode(',',$mark[1]);
       // Jetzt das Ergebnisarray aufbauen
       foreach($positions As $position) {
         $ret[$position] = Array($comments[0], $comments[1]);

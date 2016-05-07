@@ -22,8 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('cal').'controller/class.tx_cal_registry.php');
-require_once(t3lib_extMgm::extPath('cal').'model/class.tx_cal_phpicalendar_model.php');
+require_once(tx_rnbase_util_Extensions::extPath('cal').'controller/class.tx_cal_registry.php');
+require_once(tx_rnbase_util_Extensions::extPath('cal').'model/class.tx_cal_phpicalendar_model.php');
+tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * A model for the calendar.
@@ -36,14 +37,14 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
   var $isException;
   var $category;
   var $_match;
-  
-  
+
+
   function tx_cfcleaguefe_models_match_calevent(&$controller, &$match, $isException, $serviceKey){
-  	$this->tx_cal_model($controller, $serviceKey);		
+  	$this->tx_cal_model($controller, $serviceKey);
   	$this->createEvent($match, $isException);
   	$this->isException = $isException;
   }
-  
+
   /**
    * Wir überschreiben die Methode der Basisklasse, damit wir die eigenen Marker verwenden können.
    */
@@ -53,7 +54,7 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     else {
       $cObj = &tx_cal_registry::Registry('basic','cobj');
     }
-    
+
     $file = $cObj->fileResource($this->conf['view.']['cfc_league_events.']['template']);
     if ($file == '') {
     	return '<h3>cal: no match template file found:</h3>'.$this->conf['view.']['cfc_league_events.']['template'];
@@ -79,14 +80,10 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     $rems = array ();
 		$wrapped = array();
 		$this->getMarker($template, $markerArray, $rems, $wrapped, $this->conf['view']);
-    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $rems, $wrapped);
-    
-//    return $this->formatter->cObj->substituteMarkerArrayCached($template, $markerArray);
-
-//t3lib_div::debug($markerArray, 'mdl_event');
+    return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $rems, $wrapped);
 
   }
-  
+
   function createEvent(&$match){
     $this->_match = $match;
 
@@ -94,7 +91,7 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     $this->setType($this->serviceKey);
     $this->setUid($row['uid']);
 
-    // In cal 0.16.x ändert sich das Datumsformat 
+    // In cal 0.16.x ändert sich das Datumsformat
     if(method_exists($this, 'setStart')) {
   		$start_date = new tx_cal_date($row['date']);
   		$end_date = new tx_cal_date($row['date'] + (60*105));
@@ -105,7 +102,7 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
       $this->setStarttime($row['date']);
       $this->setEndtime($row['date'] + (60*105));
     }
-    
+
     $this->setTitle('Fussball');
     $this->setSubheader($row['short']);
     $this->setImage($row['image']);
@@ -115,47 +112,47 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
     }
     $this->setLocation($row['stadium']);
   }
-  
+
   /**
     * Returns the headerstyle name
     */
    function getHeaderStyle(){
    	return $this->conf['view.']['cfc_league_events.']['headerStyle'];
    }
-   
+
    /**
     * Returns the bodystyle name
     */
    function getBodyStyle(){
-   	return $this->conf['view.']['cfc_league_events.']["bodyStyle"];	
+   	return $this->conf['view.']['cfc_league_events.']["bodyStyle"];
    }
 
 
- 
+
   function getSubheader(){
   	return $this->subheader;
   }
-  
+
   function setSubheader($s){
   	$this->subheader = $s;
   }
-  
+
   function getImage(){
   	return $this->image;
   }
-  
+
   function setImage($s){
   	$this->image = $s;
   }
-  
+
   function getUntil(){
-  	return 0;	
+  	return 0;
   }
-  
+
   function getCategory(){
   	return $this->category;
   }
-  
+
   function setCategory($cat){
   	$this->category = $cat;
   }
@@ -166,4 +163,3 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_match_calevent.php']) {
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_match_calevent.php']);
 }
-?>

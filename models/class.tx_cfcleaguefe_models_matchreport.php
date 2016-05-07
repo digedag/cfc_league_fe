@@ -25,6 +25,8 @@
 tx_rnbase::load('tx_cfcleaguefe_models_match');
 tx_rnbase::load('tx_cfcleaguefe_models_profile');
 tx_rnbase::load('tx_cfcleaguefe_util_MatchTicker');
+tx_rnbase::load('Tx_Rnbase_Utility_T3General');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 if(tx_rnbase_util_Extensions::isLoaded('dam'))
@@ -71,11 +73,10 @@ class tx_cfcleaguefe_models_matchreport {
    * @return HTML-String for match pictures
    */
   function getPictures() {
-  	if(!t3lib_extMgm::isLoaded('dam')) return '';
+  	if(!tx_rnbase_util_Extensions::isLoaded('dam')) return '';
 
   	$damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_images');
     $out = '';
-//t3lib_div::debug($this->_formatter->cObj->data, 'mdl_report');
     while(list($uid, $filePath) = each($damPics['files'])) {
       $out .= $this->_formatter->getDAMImage($filePath, 'matchreport.images.', 'cfc_league');
     }
@@ -88,13 +89,10 @@ class tx_cfcleaguefe_models_matchreport {
    * @return array of string
    */
   function getMedia() {
-  	if(!t3lib_extMgm::isLoaded('dam')) return '';
+  	if(!tx_rnbase_util_Extensions::isLoaded('dam')) return '';
   	$arr = array();
     $damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_media');
-    if (is_object($serviceObj = t3lib_div::makeInstanceService('mediaplayer'))) {
-
-//t3lib_div::debug($damMedia, 'mdl_report');
-
+    if (is_object($serviceObj = Tx_Rnbase_Utility_T3General::makeInstanceService('mediaplayer'))) {
       // Player holen
       while(list($uid, $media) = each($damMedia['rows'])) {
         $arr[] = $serviceObj->getPlayer($media, $this->_configurations->get('matchreport.media.'));
@@ -235,19 +233,14 @@ class tx_cfcleaguefe_models_matchreport {
     $tickers = array();
     $tickerArr = $this->_getMatchTicker();
     if($this->_configurations->get('tickerTypes')) {
-
-//t3lib_div::debug($this->_configurations->get('tickerTypes'), 'mdl_report');
-
       foreach($tickerArr As $ticker) {
-        if( !(t3lib_div::inList($this->_configurations->get('tickerTypes'), $ticker->getType()) ))
+        if( !(Tx_Rnbase_Utility_T3General::inList($this->_configurations->get('tickerTypes'), $ticker->getType()) ))
           $tickers[] = $ticker;
       }
     }
     else {
       $tickers = $tickerArr;
     }
-//    return $this->_wrapTickers($tickers,'matchreport.tickerlist.');
-
     return $tickers;
   }
 
@@ -503,9 +496,7 @@ class tx_cfcleaguefe_models_matchreport {
 		}
 		else $ret = null;
 
-
     $conf = $this->_configurations->get($confIdAll);
-//t3lib_div::debug($conf, $confIdAll.' - tx_cfcleaguefe_models_matchreport'); // TODO: Remove me!
 		// Jetzt noch ein Wrap über alles
 		return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
 	}
@@ -516,7 +507,7 @@ class tx_cfcleaguefe_models_matchreport {
   function _getLineUp($players, $system, $confId) {
     $conf = $this->_configurations->get($confId);
 
-    $system = t3lib_div::trimExplode('-',$system);
+    $system = Tx_Rnbase_Utility_Strings::trimExplode('-',$system);
     $players = is_array($players) ? array_values($players) : array();
 
     $strategyEnable = $this->_configurations->getBool($confId.'strategy.enable');
@@ -549,8 +540,6 @@ class tx_cfcleaguefe_models_matchreport {
 		$ret = implode(' - ', $partArr);
 
 		// Jetzt noch ein Wrap über alles
-//t3lib_div::debug($conf, $confId.' - tx_cfcleaguefe_models_matchreport'); // TODO: remove me
-//tx_rnbase_util_Debug::debug($strategyEnable, $confId.' - '. __FILE__.' : '.__LINE__); // TODO: remove me
 		return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
 	}
 

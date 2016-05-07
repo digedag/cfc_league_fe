@@ -24,6 +24,7 @@
 
 tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('tx_rnbase_maps_google_Icon');
+tx_rnbase::load('tx_rnbase_util_Extensions');
 
 /**
  * Utility methods for google maps integration
@@ -101,10 +102,10 @@ class tx_cfcleaguefe_util_Maps {
 			return self::calculateDistance($coord->getLatitude(), $coord->getLongitude(), $lat,$lng);
 		return 0;
 	}
-	
+
 	/**
 	 * Address lookup
-	 * 
+	 *
 	 * @param string $street
 	 * @param string $city
 	 * @param string $state
@@ -113,10 +114,10 @@ class tx_cfcleaguefe_util_Maps {
 	 * @return tx_rnbase_maps_ICoord or false
 	 */
 	public static function lookupAddress($street, $city, $state, $zip, $country) {
-		if(!t3lib_extMgm::isLoaded('wec_map')) return false;
-		require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
+		if(!tx_rnbase_util_Extensions::isLoaded('wec_map')) return false;
+		require_once(tx_rnbase_util_Extensions::extPath('wec_map').'class.tx_wecmap_cache.php');
 
-		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
+		$lookupTable = tx_rnbase::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, self::getKey());
 
 		$coord = tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
@@ -127,8 +128,8 @@ class tx_cfcleaguefe_util_Maps {
 	private static $key = false;
 	private static function getKey() {
 		if(!self::$key) {
-			require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
-			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
+			require_once(tx_rnbase_util_Extensions::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
+			$domainmgr = tx_rnbase::makeInstance('tx_wecmap_domainmgr');
 			self::$key = $domainmgr->getKey();
 		}
 		return self::$key;

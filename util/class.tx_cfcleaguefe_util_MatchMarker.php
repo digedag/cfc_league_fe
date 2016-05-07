@@ -24,6 +24,7 @@
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
+tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 
 /**
@@ -62,7 +63,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		if(!is_object($match)) {
 			return $formatter->configurations->getLL('match_notFound');
 		}
-//$time = t3lib_div::milliseconds();
 
 		$this->prepareFields($match);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord',
@@ -106,24 +106,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
 
 		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
-//$total['total'] = t3lib_div::milliseconds() - $time;
-//if($total['total'] > 40	)
-//t3lib_div::debug($total, 'tx_cfcleaguefe_views_MatchMarker'); // TODO: Remove me!
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_afterSubst',
 			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		return $template;
-
-		// Now lookout for external marker services.
-//		$markerArray = array();
-//		$subpartArray = array();
-//		$wrappedSubpartArray = array();
-//
-//		$params['confid'] = $confId;
-//		$params['marker'] = $marker;
-//		$params['match'] = $match;
-//		self::callModules($template, $markerArray, $subpartArray, $wrappedSubpartArray, $params, $formatter);
-//		return $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 
 	/**
@@ -206,7 +192,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		$match->record['coachnames_guest'] = $report->getCoachNameGuest('matchreport.coachnames.');
 		$match->record['refereenames'] = $report->getRefereeName('matchreport.refereenames.');
 		$match->record['assistsnames'] = $report->getAssistNames('matchreport.assistsnames.');
-		//    t3lib_div::debug($match->record['lineup_home'], 'tx_cfcleaguefe_util_MatchMarker');
 	}
 
 	/**
@@ -227,7 +212,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 		for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
 			$typeArr = $formatter->configurations->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
 			$match->record[$dynaMarkers[$i]] = $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
-//      t3lib_div::debug($typeArr, '#'. $dynaMarkers[$i] . '# tx_cfcleaguefe_util_MatchMarker');
 		}
 	}
 
@@ -325,7 +309,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
   	// Prüfen, ob Marker vorhanden sind
 		if(!self::containsMarker($template, $baseMarker .'_MEDIAS'))
 			return;
-		if(!t3lib_extMgm::isLoaded('dam')) {
+		if(!tx_rnbase_util_Extensions::isLoaded('dam')) {
 			// Not supported without DAM!
 			$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
 			return;
@@ -338,15 +322,13 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
 			return;
 		}
 
-//		$mediaClass = tx_rnbase::makeInstanceClassName('tx_dam_media');
-
 		// Zuerst wieder das Template laden
 		$gPictureTemplate = tx_rnbase_util_Templates::getSubpart($template, '###'. $baseMarker .'_MEDIAS###');
 
 		$pictureTemplate = tx_rnbase_util_Templates::getSubpart($gPictureTemplate, '###'. $baseMarker .'_MEDIA###');
 		$markerArray = array();
 		$out = '';
-		$serviceObj = t3lib_div::makeInstanceService('mediaplayer');
+		$serviceObj = Tx_Rnbase_Utility_T3General::makeInstanceService('mediaplayer');
 
 		// Alle Daten hinzufügen
 		while(list($uid, $filePath) = each($damMedia['files'])) {

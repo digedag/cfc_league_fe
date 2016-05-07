@@ -24,7 +24,7 @@
 
 tx_rnbase::load('tx_cfcleaguefe_views_LeagueTable');
 tx_rnbase::load('tx_rnbase_util_Templates');
-
+tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
@@ -81,7 +81,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 //			$this->_preparePenalties($row, $penalties);
 			$team = $row['team'];
 			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-			$team->record = t3lib_div::array_merge($row, $team->record);
+			$team->record = Tx_Rnbase_Utility_T3General::array_merge($row, $team->record);
 			$parts[] = $clubMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), 'leaguetableAllTime.table.', 'ROW');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 		}

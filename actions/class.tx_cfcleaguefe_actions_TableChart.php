@@ -27,7 +27,7 @@ tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
 tx_rnbase::load('tx_rnbase_util_TYPO3');
 tx_rnbase::load('tx_rnbase_util_Math');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
-
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 /**
@@ -146,7 +146,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 		return $chartData;
 	}
 	protected function getChartClubs(){
-		return t3lib_div::intExplode(',',$this->getConfigurations()->get($this->getConfId().'chartClubs'));
+		return Tx_Rnbase_Utility_Strings::intExplode(',',$this->getConfigurations()->get($this->getConfId().'chartClubs'));
 	}
 
 
@@ -191,8 +191,6 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 		try {
 			tx_rnbase::load('tx_rnbase_plot_Builder');
 			$chart = tx_rnbase_plot_Builder::getInstance()->make($tsArr, false);
-//			require_once(PATH_site.t3lib_extMgm::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
-//			$chart = tx_pbimagegraph_ts::make($tsArr);
 		}
 		catch(Exception $e) {
 			$chart = 'Not possible';
@@ -210,17 +208,15 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 		$defaultLine = $configurations->get($confId.'defaults.line');
 		$defaultLineArr = $configurations->get($confId.'defaults.line.');
 
-		$colors = t3lib_div::trimExplode(',', $configurations->get($confId.'defaults.colors'));
+		$colors = Tx_Rnbase_Utility_Strings::trimExplode(',', $configurations->get($confId.'defaults.colors'));
 
 		$title = $configurations->get($confId.'defaults.title');
-//    t3lib_div::debug($title ,'ac_chart');
 		if($tsArr['10.']['10.']['text']) {
 			if($title) {
 				$tsArr['10.']['10.']['text'] = str_replace('COMPETITION_NAME', $league->record['name'], $title);
 				// Hier könnten noch zusätzliche Ersetzungsstrings eingebaut werden..
 			}
 		}
-//t3lib_div::debug($tsArr['10.']['10.']['text'], 'ac_chart');
 		// Maximum ist die Anzahl der Teams in der Liga
 		$tsArr['10.']['20.']['10.']['axis.']['y.']['forceMaximum'] = count($league->getTeams());
 
@@ -237,7 +233,6 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 			else
 				$tsArr['10.']['20.']['10.'][$seriesCnt . '.']['lineColor'] = $colors[$seriesIdx] ? $colors[$seriesIdx] : red;
 
-//    t3lib_div::debug($tsArr['10.']['20.']['10.'][$seriesCnt . '.']['lineColor'] ,'ac_chart');
 			// Jetzt die Daten rein
 			$dataCnt = 10;
 			$tsArr['10.']['20.']['10.'][$seriesCnt . '.']['dataset.']['10'] = 'trivial';

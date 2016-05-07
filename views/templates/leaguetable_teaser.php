@@ -1,7 +1,7 @@
 <?php if (!defined ('TYPO3_MODE')) 	die ('Access denied.'); ?>
-<?php 
+<?php
   // Teaseransicht einer Ligatabelle
-  // Wir zeigen nur die Tabellenposition und den Namen des Teams  
+  // Wir zeigen nur die Tabellenposition und den Namen des Teams
 
 //  tx_div::load('tx_rnbase_util_FormUtil');
   $viewData =& $configurations->getViewData();
@@ -10,13 +10,12 @@
   $league = $viewData->offsetGet('league'); // Die aktuelle Liga
   $marks = $league->getTableMarks();
 
-//  t3lib_div::debug($link->makeUrl(),'tpl_leaguetable_teaser');
 ?>
 
 
 
 <div class="cfcleague-teaser">
-<?php 
+<?php
   $data = $viewData->offsetGet('tableData');
 
   // Es werden nur 5 Teams gezeigt, dabei wird das markierte Team in die Mitte gesetzt
@@ -42,23 +41,18 @@
       $idxStart = $idxEnd - $teams2Show;
     }
   }
-//t3lib_div::debug($idxStart, 'st vw');
-//t3lib_div::debug($idxEnd, 'end vw');
 
   $cnt = 0;
   for($cnt=0; $cnt < count($data); $cnt++){
     $row = $data[$cnt];
-//    $cnt++;
     if($mark && !($cnt >= $idxStart && $cnt < $idxEnd))
       continue;
-
-//t3lib_div::debug($cnt, 'vw');
 
 ?>
 <p class="<? if($row['markClub']){ ?>rowTeam-teaser<? } ?>">
   <? echo ($cnt+1) ?>. <? echo $row['teamNameShort']; ?><br />
 </p>
-<?php 
+<?php
   } // Close foreach
 ?>
 </div>

@@ -123,7 +123,6 @@ class tx_cfcleaguefe_hooks_TableMatchMarker {
 
 		$markerArray['###'.$marker.'_LEAGUETABLE###'] = $table;
 		$params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-//		t3lib_div::debug($tableData, 'tx_cfcleaguefe_hooks_TableMatchMarkers :: addLeagueTable'); // TODO: remove me
 	}
 	private function getTableData($configurations, $confId, $competition, $match) {
 		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $configurations->getParameters(),$configurations, $competition, $confId);

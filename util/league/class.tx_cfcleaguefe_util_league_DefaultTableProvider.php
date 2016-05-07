@@ -23,6 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_cfcleaguefe_util_league_TableProvider');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * The default table provider can handle match data for a single competition of type league
@@ -61,10 +62,10 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		return $this->cfgPointSystem == '1'; // im 2-Punktesystem die Minuspunkte sammeln
 	}
 	function getChartClubs(){
-		return t3lib_div::intExplode(',',$this->getConfigurations()->get($this->confId.'chartClubs'));
+		return Tx_Rnbase_Utility_Strings::intExplode(',',$this->getConfigurations()->get($this->confId.'chartClubs'));
 	}
 	function getMarkClubs(){
-		return $this->markClubs ? $this->markClubs : t3lib_div::intExplode(',',$this->getConfigurations()->get($this->confId.'markClubs'));
+		return $this->markClubs ? $this->markClubs : Tx_Rnbase_Utility_Strings::intExplode(',',$this->getConfigurations()->get($this->confId.'markClubs'));
 	}
 	public function setMarkClubs($clubUids) {
 		$this->markClubs = $clubUids;
@@ -106,7 +107,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 		// die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
 		// Haben wir eine $currRound
 		if($this->cfgTableScope) {
-			$round = count(t3lib_div::intExplode(',',$this->getLeague()->record['teams']));
+			$round = count(Tx_Rnbase_Utility_Strings::intExplode(',',$this->getLeague()->record['teams']));
 			$round = ($round) ? $round - 1 : $round;
 			if($round) {
 				// Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird

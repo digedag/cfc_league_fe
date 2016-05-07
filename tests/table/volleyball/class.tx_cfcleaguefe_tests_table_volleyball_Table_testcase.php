@@ -42,7 +42,6 @@ class tx_cfcleaguefe_tests_table_volleyball_Table_testcase extends tx_phpunit_te
 		$params = new ArrayObject();
 		$config = new tx_rnbase_configurations();
 		$config->_dataStore->offsetSet('tableType', '0');
-//t3lib_div::debug($league, 'class.tx_cfcleaguefe_tests_table_volleyball_Table_testcase.php Line: ' . __LINE__); // TODO: remove me
 
 		$leagueTable = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 		$leagueTable->getMatchProvider()->setTeams($league->getTeams());
@@ -77,7 +76,8 @@ class tx_cfcleaguefe_tests_table_volleyball_Table_testcase extends tx_phpunit_te
 
 
 	function getFixturePath($filename) {
-		return t3lib_extMgm::extPath('cfc_league_fe').'tests/fixtures/'.$filename;
+		tx_rnbase::load('tx_rnbase_util_Extensions');
+		return tx_rnbase_util_Extensions::extPath('cfc_league_fe').'tests/fixtures/'.$filename;
 	}
 	function makeInstances($yamlData, $clazzName) {
 		// Sicherstellen, daß die Klasse geladen wurde

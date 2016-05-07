@@ -25,6 +25,8 @@
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_cfcleaguefe_models_team');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
+
 
 /**
  * Controller für die Anzeige eines Spielplans als Kreuztabelle
@@ -106,8 +108,6 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
       $teamsArr[$teams[$i]->uid] = $teams[$i];
     }
 
-//t3lib_div::debug($teamsArr, 'vw_matchtable');
-
     for($i=0; $i < $mCnt; $i++) {
       $matches[$i]->setHome( $teamsArr[$matches[$i]->record['home']]);
       $matches[$i]->setGuest( $teamsArr[$matches[$i]->record['guest']]);
@@ -136,11 +136,9 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
         return $out; // Ohne Wettbewerb keine Tabelle!
     }
     else {
-      $currCompetition = t3lib_div::intExplode(',', $compUids);
+      $currCompetition = Tx_Rnbase_Utility_Strings::intExplode(',', $compUids);
       $currCompetition = $currCompetition[0];
     }
-
-//t3lib_div::debug($scopeArr, 'ac_MatchTable');
 
     $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
     $extended = $configurations->get('matchcrosstable.allData');
@@ -162,5 +160,3 @@ class tx_cfcleaguefe_actions_MatchCrossTable  extends tx_rnbase_action_BaseIOC {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchCrossTable.php'])	{
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchCrossTable.php']);
 }
-
-?>

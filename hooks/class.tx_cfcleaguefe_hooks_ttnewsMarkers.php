@@ -23,6 +23,7 @@
 
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 /**
@@ -68,8 +69,8 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 		$linkId = $match[1];
 		$conf = $this->linkConf[$linkId.'.'];
 		$linkParams = array();
-		$params = t3lib_div::trimExplode(',', $conf['ext_parameters']);
-		$paramValues = t3lib_div::trimExplode(',', $match[2]);
+		$params = Tx_Rnbase_Utility_Strings::trimExplode(',', $conf['ext_parameters']);
+		$paramValues = Tx_Rnbase_Utility_Strings::trimExplode(',', $match[2]);
 		for($i=0, $cnt = count($params); $i < $cnt; $i++) {
 			$linkParams[$params[$i]] = $paramValues[$i];
 		}

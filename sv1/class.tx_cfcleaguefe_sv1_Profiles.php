@@ -23,6 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_DB');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 interface tx_cfcleaguefe_ProfileService {
 	function getTeamNotes(&$profile, &$team);
@@ -34,7 +35,7 @@ interface tx_cfcleaguefe_ProfileService {
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Profiles extends t3lib_svbase implements tx_cfcleaguefe_ProfileService  {
+class tx_cfcleaguefe_sv1_Profiles extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_ProfileService  {
 
 	/**
 	 * Find team notes for a profile

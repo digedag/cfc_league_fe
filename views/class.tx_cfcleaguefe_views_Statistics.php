@@ -23,7 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_view_Base');
-
+tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
  * Viewklasse für die Anzeige eines Personenprofils
@@ -54,7 +54,7 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base {
 		}
 
 		foreach ($data as $type => $stats) {
-			$service = t3lib_div::makeInstanceService('cfcleague_statistics', $type);
+			$service = Tx_Rnbase_Utility_T3General::makeInstanceService('cfcleague_statistics', $type);
 			if(!is_object($service)) // Ohne den Service geht nix
 				continue;
 			$srvTemplate = $cObj->getSubpart($template, '###STATISTIC_'.strtoupper($type).'###');
@@ -62,7 +62,6 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base {
 			$srvMarker = $service->getMarker($configurations);
 			$subpartArray['###STATISTIC_'.strtoupper($type).'###'] = $srvMarker->parseTemplate($srvTemplate, $stats, $configurations->getFormatter(), 'statistics.'.$type.'.', strtoupper($type));
 		}
-//t3lib_div::debug($subpartArray, 'tx_cfcleaguefe_views_Statistics');
  		$out = $cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray); //, $wrappedSubpartArray);
 		return $out;
 	}

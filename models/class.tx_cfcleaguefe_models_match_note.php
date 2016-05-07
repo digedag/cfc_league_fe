@@ -23,6 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_model_base');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 /**
@@ -82,7 +83,6 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 		if($formatter->configurations->get($confId.'hide') == '1') // Die Meldung soll nicht gezeigt werden
 			return '';
 
-//  t3lib_div::debug($ticker->uid, 'arr mdl_note');
 		// Wenn der Ticker für den eigene Vereins ist, einen Eintrag im Register setzen
 		$GLOBALS['TSFE']->register['T3SPORTS_NOTE_FAVCLUB'] = $ticker->isFavClub(); // XXX: Access to image size by TS
 
@@ -123,8 +123,6 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 				$value = '';
 			}
 		}
-//if($ticker->uid == 1455)
-//  t3lib_div::debug($ticker->record, 'tx_cfcleaguefe_models_match_note');
 		$cObj = $formatter->configurations->getCObj(1);
 		$cObj->data = $ticker->record;
 		foreach($ticker->record AS $key => $val) {
@@ -154,7 +152,6 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 		$ret = implode($sep, $ret);
 
     // Abschließend nochmal den Ergebnisstring wrappen
-//t3lib_div::debug($arr, 'arr mdl_note');
 		return $formatter->wrap($ret, $confId, $ticker->record);
 	}
 
@@ -264,8 +261,8 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 			$typeArr = $typeNumberOrArray;
 			// Wenn es ein Array ist, dann zunächst die Typen ermitteln
 			// Keine Typen bedeutet, daß alle verwendet werden
-			$types = $typeArr['noteType'] ? t3lib_div::intExplode(',', $typeArr['noteType']) : array();
-			$ignoreTypes = $typeArr['noteIgnoreType'] ? t3lib_div::intExplode(',', $typeArr['noteIgnoreType']) : array();
+			$types = $typeArr['noteType'] ? Tx_Rnbase_Utility_Strings::intExplode(',', $typeArr['noteType']) : array();
+			$ignoreTypes = $typeArr['noteIgnoreType'] ? Tx_Rnbase_Utility_Strings::intExplode(',', $typeArr['noteIgnoreType']) : array();
 
 			// Wenn Typen definiert sind, dann wird ignoreType nicht betrachtet
 			if(in_array($this->getType(), $types) ||
@@ -474,7 +471,6 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 			$matchIds[] = $matches[$i]->uid;
 		}
 
-//  t3lib_div::debug($matches[i]->uid, 'mdl_note');
 		$matchIds = implode(',', $matchIds); // ID-String erstellen
 
 		$what = '*';
@@ -496,8 +492,6 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 			$matchesHash[$matchNotes[$i]->record['game']]->addMatchNote($matchNotes[$i]);
 		}
 
-//  t3lib_div::debug($matchesHash[172], 'mdl_note');
-//  t3lib_div::debug($matches[19], 'mdl_note');
 		return $matches;
 	}
 
@@ -508,7 +502,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   function _isShowTicker($conf, $ticker) {
     $showOnly = $conf['showOnly'];
     if(strlen($showOnly) > 0) {
-      $showOnly = t3lib_div::intExplode(',',$showOnly);
+      $showOnly = Tx_Rnbase_Utility_Strings::intExplode(',',$showOnly);
       // Prüfen ob der aktuelle Typ paßt
       if(count($showOnly) > 0 && in_array($ticker->record['type'], $showOnly)) {
         return 1;
@@ -523,8 +517,8 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
   function &_getFlexForm(&$configurations) {
     static $flex;
     if (!is_array($flex)) {
-      $flex = t3lib_div::getURL(t3lib_extMgm::extPath($configurations->getExtensionKey()) . $configurations->get('flexform'));
-      $flex = t3lib_div::xml2array($flex);
+      $flex = Tx_Rnbase_Utility_T3General::getURL(tx_rnbase_util_Extensions::extPath($configurations->getExtensionKey()) . $configurations->get('flexform'));
+      $flex = Tx_Rnbase_Utility_T3General::xml2array($flex);
     }
     return $flex;
   }

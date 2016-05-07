@@ -24,6 +24,7 @@
 
 tx_rnbase::load('tx_rnbase_util_DB');
 tx_rnbase::load('tx_cfcleaguefe_models_match');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 /**
@@ -112,7 +113,7 @@ class tx_cfcleaguefe_models_matchtable{
    * @param string $uid
    */
   function setTeam($uid){
-    $this->_team = trim(implode(',',t3lib_div::intExplode(',',$uid)));
+    $this->_team = trim(implode(',',Tx_Rnbase_Utility_Strings::intExplode(',',$uid)));
   }
 
   /**
@@ -198,10 +199,6 @@ class tx_cfcleaguefe_models_matchtable{
       $cal->clear(CALENDAR_MINUTE);
       $cal->add(CALENDAR_DAY_OF_MONTH,$this->_daysAhead);
       $where .= ' tx_cfcleague_games.date < ' . $cal->getTime();
-
-//t3lib_div::debug($this->_daysPast ,'mdl_matchtable ');
-
-//      $cal->tests();
     }
 
 
@@ -229,11 +226,6 @@ class tx_cfcleaguefe_models_matchtable{
     $limit = intval($this->_limit);
     if($limit)
       $arr['limit'] = $limit;
-
-//t3lib_div::debug($cal ,'Spiele: ');
-
-
-//t3lib_div::debug($club, 'md_matchtable');
 
     $rows = tx_rnbase_util_DB::doSelect($what, $from, $arr, 0);
 

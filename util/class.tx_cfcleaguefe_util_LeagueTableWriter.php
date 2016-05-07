@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2009-2016 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,24 +22,25 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// Die Datenbank-Klasse
+tx_rnbase::load('Tx_Rnbase_Utility_T3General');
+tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Die Klasse ist in der Lage, Tabellen einer Liga darzustellen. Es ist aber keine typische Markerklasse, da umfangreichere
  * Daten übergeben werden.
  */
 class tx_cfcleaguefe_util_LeagueTableWriter  {
-	
+
 	public function writeLeagueTable($template, $tableData, $marks, &$configurations, $confId) {
 		$penalties = array(); // Strafen sammeln
-		$subpartArray['###ROWS###'] = $this->_createTable(t3lib_parsehtml::getSubpart($template, '###ROWS###'),
+		$subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'),
 				$tableData, $penalties, $marks, $configurations, $confId);
 
 		// Jetzt die Strafen auflisten
 		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'PENALTIES'))
 			$subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'), $penalties, $configurations);
 
-		$out .= $configurations->getCObj()->substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+		$out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 		return $out;
 	}
 
@@ -56,8 +57,8 @@ class tx_cfcleaguefe_util_LeagueTableWriter  {
 		}
 		// Den TeamMarker erstellen
 		$teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-		$templateEntry = t3lib_parsehtml::getSubpart($templateList,'###ROW###');
-		
+		$templateEntry = tx_rnbase_util_Templates::getSubpart($templateList,'###ROW###');
+
 		$parts = array();
 		// Die einzelnen Zeilen zusammenbauen
 		$rowRoll = intval($configurations->get($confId.'table.roll.value'));
@@ -71,7 +72,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter  {
 
 			$team = $row['team'];
 			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-			$team->record = t3lib_div::array_merge($row, $team->record);
+			$team->record = Tx_Rnbase_Utility_T3General::array_merge($row, $team->record);
 
 			$parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId.'table.', 'ROW');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
@@ -79,7 +80,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter  {
 		// Jetzt die einzelnen Teile zusammenfügen
     $markerArray = array();
     $subpartArray['###ROW###'] = implode($parts, $configurations->get($confId.'table.implode'));
-		return $configurations->getCObj()->substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
 	}
 
 	/**
@@ -110,7 +111,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter  {
 
 	/**
 	 * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
-	 * ermittelt und zurückgeliefert. 
+	 * ermittelt und zurückgeliefert.
 	 * @param &$tableData Daten der Tabelle
 	 * @param $tableSize Maximale Anzahl Teams, die gezeigt werden soll
 	 */

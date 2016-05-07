@@ -22,6 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service for visitor statistics
@@ -29,7 +30,7 @@
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv2_VisitorStatistics extends t3lib_svbase {
+class tx_cfcleaguefe_sv2_VisitorStatistics extends Tx_Rnbase_Service_Base {
   /** Array with statistical results */
   private $result = array();
   private $statData = array('home_matchcount', 'home_total','home_average',

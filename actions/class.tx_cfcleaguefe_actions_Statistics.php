@@ -28,6 +28,7 @@ tx_rnbase::load('tx_rnbase_util_Spyc');
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_cfcleaguefe_util_MatchTicker');
 tx_rnbase::load('tx_cfcleaguefe_util_Statistics');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 tx_rnbase::load('tx_cfcleague_util_Memento');
 
 
@@ -57,18 +58,16 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC {
 	 * @return string
 	 */
 	function handleRequest(&$parameters, &$configurations, &$viewData) {
-	//    global $T3_SERVICES;
-//t3lib_div::debug($T3_SERVICES['cfcleague_statistics'], 'tx_cfcleaguefe_actions_PlayerStatistics');
 		$scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
 		// Die notwendigen Statistikklassen ermitteln
-		$types = t3lib_div::trimExplode(',', $configurations->get('statisticTypes'), 1);
+		$types = Tx_Rnbase_Utility_Strings::trimExplode(',', $configurations->get('statisticTypes'), 1);
 		if(!count($types)) {
 			// Abbruch kein Typ angegeben
 			return $configurations->getLL('statistics_noTypeFound');
 		}
 		$services = array();
 		foreach ($types as $type) {
-			$service = t3lib_div::makeInstanceService('cfcleague_statistics', $type);
+			$service = tx_rnbase::makeInstanceService('cfcleague_statistics', $type);
 			if(is_object($service))
 				$services[$type] = $service;
 		}
@@ -158,5 +157,3 @@ function cmpPlayer($a, $b) {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_Statistics.php'])	{
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_Statistics.php']);
 }
-
-?>

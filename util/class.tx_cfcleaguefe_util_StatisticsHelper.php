@@ -40,7 +40,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
   /**
    * Allgemeine Prüffunktion auf einen bestimmten Note-Typ für einen Spieler. Alle gefundenen
    * Notes werden als Ergebnis zurückgeliefert.
-   * 
+   *
    * @param $type int MatchNote-Typ
    * @param $player Referenz auf den Spieler
    * @param $match Referenz auf das Spiel
@@ -50,7 +50,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
     $ret = array();
 //    $tickerArr = &$match->getMatchNotes();
     $tickerArr = &$match->getMatchNotesByType($type);
-    
+
     for($i = 0; $i < count($tickerArr); $i++) {
       $matchNote = &$tickerArr[$i];
       $notePlayer = $matchNote->getPlayer();
@@ -66,16 +66,16 @@ class tx_cfcleaguefe_util_StatisticsHelper {
   private static $goalTypes = array(10,11,12);
   /**
    * Prüft, ob der Spieler ein Tor geschossen hat. Eigentore werden hier ignoriert.
-   * 
+   *
    * @param $type int MatchNote-Typ des Tors oder 0 für alle Tore
    * @param $player Referenz auf den Spieler
    * @param $match Referenz auf das Spiel
    * @returns liefert die MatchNotes der Tore als Array oder 0
    */
   public function isGoal($type, &$player, &$match) {
-    $tickerType = $type == 0 ? self::$goalTypes : $type; 
+    $tickerType = $type == 0 ? self::$goalTypes : $type;
     $tickerArr = &$match->getMatchNotesByType($tickerType);
-    
+
     $ret = array();
 //    $tickerArr = &$match->getMatchNotes();
 
@@ -94,7 +94,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
 
   /**
    * Prüft, ob der Spieler eine gelbe Karte gesehen hat
-   * 
+   *
    * @param tx_cfcleaguefe_models_profile $player
    * @param tx_cfcleaguefe_models_match $match
    * @returns liefert die Spielminute oder 0
@@ -104,7 +104,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
   }
   /**
    * Prüft, ob der Spieler eine gelb-rote Karte gesehen hat
-   * 
+   *
    * @param tx_cfcleaguefe_models_profile $player
    * @param tx_cfcleaguefe_models_match $match
    * @returns liefert die Spielminute oder 0
@@ -114,7 +114,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
   }
   /**
    * Prüft, ob der Spieler eine rote Karte gesehen hat
-   * 
+   *
    * @param tx_cfcleaguefe_models_profile $player
    * @param tx_cfcleaguefe_models_match $match
    * @returns liefert die Spielminute oder 0
@@ -125,14 +125,14 @@ class tx_cfcleaguefe_util_StatisticsHelper {
 
   /**
    * Prüft, ob der Spieler eine Karte gesehen hat
-   * 
+   *
    * @param string $type Typ der Karte: Y,R,YR
    * @param tx_cfcleaguefe_models_profile $player
    * @param tx_cfcleaguefe_models_match $match
    * @returns liefert die Spielminute oder 0
    */
   private function _isCard($type, &$player, &$match) {
-    $tickerType = $type == 'Y' ? 70 : ($type == 'YR' ? 71 : 72 ); 
+    $tickerType = $type == 'Y' ? 70 : ($type == 'YR' ? 71 : 72 );
     $tickerArr = &$match->getMatchNotesByType($tickerType);
 
 //    $tickerArr = &$match->getMatchNotes();
@@ -178,30 +178,14 @@ class tx_cfcleaguefe_util_StatisticsHelper {
    */
   private function _isPlayerChanged($inOut, &$player, &$match) {
     $tickerArr = &$match->getMatchNotesByType(($inOut == 'IN') ?  81 : 80);
-//t3lib_div::debug($tickerArr, $inOut.' canges tx_cfcleaguefe_util_StatisticsHelper');
     for($i = 0 , $size = count($tickerArr); $i < $size; $i++) {
       $matchNote = &$tickerArr[$i];
         $playerChange = ($inOut == 'IN') ? $matchNote->getPlayerChangeIn() : $matchNote->getPlayerChangeOut();
         if($playerChange && $playerChange->uid == $player->uid) {
-//  t3lib_div::debug($matchNote->toString(),'Wechsel utl_stats');
           // Es ist nicht möglich einen Spieler zweimal auszuwechseln!
           return $matchNote->getMinute();
         }
     }
-
-
-//    $tickerArr = &$match->getMatchNotes();
-//    for($i = 0 , $size = count($tickerArr); $i < $size; $i++) {
-//      $matchNote = &$tickerArr[$i];
-//      if($matchNote->isChange()) {
-//        $playerChange = ($inOut == 'IN') ? $matchNote->getPlayerChangeIn() : $matchNote->getPlayerChangeOut();
-//        if($playerChange && $playerChange->uid == $player->uid) {
-////  t3lib_div::debug($matchNote->toString(),'Wechsel utl_stats');
-//          // Es ist nicht möglich einen Spieler zweimal auszuwechseln!
-//          return $matchNote->getMinute();
-//        }
-//      }
-//    }
   }
 }
 

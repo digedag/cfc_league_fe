@@ -25,13 +25,15 @@
 tx_rnbase::load('tx_cfcleaguefe_util_StatisticsHelper');
 
 tx_rnbase::load('tx_rnbase_util_Misc');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Service for player statistics
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv2_PlayerStatistics extends t3lib_svbase {
+class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base {
 
   /**
    *  Für jeden Spieler wird ein Datenarray erstellt
@@ -78,7 +80,6 @@ static $total = 0;
     if(is_array($players))
         foreach($players As $player) {
           // Jeden Spieler aktualisieren
-//if($player->uid == '257') t3lib_div::debug($match->record['round'], 'stats');
           $this->_countMatch4Player($player, $match, $this->playersArr);
         }
     }
@@ -92,7 +93,6 @@ static $total = 0;
           $this->_countMatch4Player($player, $match, $this->playersArr);
         }
     }
-//t3lib_div::debug( self::$total, 'total sv2_playerstatistics');
   }
   /**
    * Entscheidet, ob die Spieler des Teams in die Statistik eingehen
@@ -204,9 +204,6 @@ static $total = 0;
 
     // In welchem Team steht der Spieler?
     $team = $match->getTeam4Player($player->uid);
-//if($player->uid == 257)
-//  t3lib_div::debug($match->record, '257 tx_cfcleaguefe_sv2_PlayerStatistics');
-
 
     if($team == 1)
       $startPlayer = $match->getPlayersHome();
@@ -225,7 +222,6 @@ static $total = 0;
       $min = tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
       if($min > 0)
         $playerData['changed_out'] = intval($playerData['changed_out']) + 1;
-//if($min > 0) t3lib_div::debug($min, 'utl_stats');
 
       // Nicht ausgewechselt, aber wurde der Spieler vom Platz gestellt?
       if(intval($min) == 0) {
@@ -300,10 +296,8 @@ static $total = 0;
       $this->_countGoals(0,'goals_all', $player, $match, $playerData);
       $this->_countGoals(11,'goals_head', $player, $match, $playerData);
       $this->_countGoals(12,'goals_penalty', $player, $match, $playerData);
-//$time = t3lib_div::milliseconds();
       $this->_countNote(30,'goals_own', $player, $match, $playerData);
       $this->_countNote(31,'goals_assist', $player, $match, $playerData);
-//self::$total = self::$total + t3lib_div::milliseconds() - $time;
     }
   }
   /**
@@ -384,7 +378,7 @@ static $total = 0;
     if(strlen(trim($team->record['players'])) > 0 ) {
       if(count($players)) {
         // Jetzt die Spieler in die richtige Reihenfolge bringen
-        $uids = t3lib_div::intExplode(',', $team->record['players']);
+        $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $team->record['players']);
         $uids = array_flip($uids);
         foreach($players as $record) {
           // In $record liegt der Statistikdatensatz des Spielers
@@ -408,7 +402,6 @@ function playerStatsCmpPlayer($a, $b) {
   $player1 = $a['player'];
   $player2 = $b['player'];
 
-//t3lib_div::debug(strtoupper($player1->getName(1)), 'no_class_scope'); // TODO: Remove me!
   return strcmp(tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
   							tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1))));
 }

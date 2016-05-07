@@ -104,12 +104,11 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	 * Sorgt bei Bedarf für die Einblendung der SelectBox für die Auswahl des Punktsystems
 	 */
 	protected function _handleSBPointSystem($parameters, &$configurations, &$viewData) {
-		global $TCA;
 		if($configurations->get('pointSystemSelectionInput')) {
 			// Die Daten für das Punktsystem kommen aus dem TCA der Tabelle tx_cfcleague_competition
 			// Die TCA laden
 			$table = 'tx_cfcleague_competition';
-			t3lib_div::loadTCA($table);
+			tx_rnbase_util_TCA::loadTCA($table);
 //			$items = $this->translateItems($TCA[$table]['columns']['point_system']['config']['items']);
 //			$items = array(1=>0,0=>1);
 
@@ -166,8 +165,8 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC {
 	private function &getFlexForm(&$configurations) {
 		static $flex;
 		if (!is_array($flex)) {
-			$flex = t3lib_div::getURL(t3lib_extMgm::extPath($configurations->getExtensionKey()) . $configurations->get('flexform'));
-			$flex = t3lib_div::xml2array($flex);
+			$flex = Tx_Rnbase_Utility_T3General::getURL(tx_rnbase_util_Extensions::extPath($configurations->getExtensionKey()) . $configurations->get('flexform'));
+			$flex = Tx_Rnbase_Utility_T3General::xml2array($flex);
 		}
 		return $flex;
 	}

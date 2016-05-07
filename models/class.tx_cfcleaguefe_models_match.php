@@ -26,6 +26,7 @@ tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_cfcleaguefe_models_match_note');
 
 tx_rnbase::load('tx_cfcleaguefe_models_competition');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 /**
@@ -147,7 +148,8 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 	 * @return string
 	 */
 	public function getStateName() {
-		t3lib_div::loadTCA('tx_cfcleague_games');
+		tx_rnbase::load('tx_rnbase_util_TCA');
+		tx_rnbase_util_TCA::loadTCA('tx_cfcleague_games');
 		$items = $GLOBALS['TCA']['tx_cfcleague_games']['columns']['status']['config']['items'];
 		foreach($items As $item) {
 			if($item[1] == $this->record['status'])
@@ -238,7 +240,6 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
       for($i=0, $size = count($type); $i < $size; $i++) {
         $notes = $this->_matchNoteTypes[intval($type[$i])];
         if(is_array($notes)) {
-//t3lib_div::debug($notes, 'tx_cfcleaguefe_models_match');
           $ret = array_merge($ret, $notes);
         }
       }
@@ -427,7 +428,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     if($this->record['players_home']) $uids[] = $this->record['players_home'];
     if($this->record['substitutes_home']) $uids[] = $this->record['substitutes_home'];
     $uids = implode($uids, ',');
-    $uids = t3lib_div::intExplode(',', $uids);
+    $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uids);
     if(in_array($playerUid, $uids))
       return 1;
 
@@ -435,7 +436,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
     if($this->record['players_guest']) $uids[] = $this->record['players_guest'];
     if($this->record['substitutes_guest']) $uids[] = $this->record['substitutes_guest'];
     $uids = implode($uids, ',');
-    $uids = t3lib_div::intExplode(',', $uids);
+    $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uids);
     if(in_array($playerUid, $uids))
       return 2;
     return 0;
@@ -459,13 +460,10 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
       $this->_profiles = $this->_profiles2;
 
 //      $ret = array();
-      $uids = t3lib_div::intExplode(',', $uidStr);
+      $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uidStr);
       foreach($uids As $uid) {
         $ret[$uid] =& $this->_profiles[$uid];
       }
-
-//t3lib_div::debug(is_object($this->_profiles2[8]), 'mdl_match');
-
     }
     return $ret;
   }
@@ -557,7 +555,6 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    * Liefert den Autor des Spielberichts
    */
   function getReportAuthor($formatter=0, $configKey = 'match.author.') {
-//t3lib_div::debug($this->record, 'mdl_match');
     if($formatter)
       return $formatter->wrap($this->record['game_report_author'], $configKey);
     else

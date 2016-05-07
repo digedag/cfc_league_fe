@@ -4,14 +4,13 @@
   $matchReport = $viewData->offsetGet('matchReport');
   $home = $matchReport->match->getHome();
   $guest = $matchReport->match->getGuest();
-//t3lib_div::debug($home, 'tmpl');
 ?>
 
 <h3 class="cfcleague-report-head3"><? echo $matchReport->getRoundName() . ' ' . $matchReport->getCompetitionName(); ?></h3>
 
 <h1 class="cfcleague-report-head1">
-<? echo $matchReport->getTeamNameHome() . ' - ' . $matchReport->getTeamNameGuest() . ' ' . 
-         $matchReport->match->record['goals_home_2'] . ' : ' . $matchReport->match->record['goals_guest_2'] ; ?> 
+<? echo $matchReport->getTeamNameHome() . ' - ' . $matchReport->getTeamNameGuest() . ' ' .
+         $matchReport->match->record['goals_home_2'] . ' : ' . $matchReport->match->record['goals_guest_2'] ; ?>
 </h1>
 
 <table id="cfcleague-report-introtable">
@@ -197,10 +196,10 @@ if(is_array($media) && count($media)) {
     <? if($ticker->isChange()) { ?>
       <p class="cfcleague-report-ticker-player, cfcleague-report-ticker-playerhome">
       Spielerwechsel:
-      <? 
-         $p = $ticker->getPlayerChangeIn(); 
-         echo is_object($p) ? $p->getName() : 'ERROR!'; ?> 
-f&uuml;r <? $p = $ticker->getPlayerChangeOut(); 
+      <?
+         $p = $ticker->getPlayerChangeIn();
+         echo is_object($p) ? $p->getName() : 'ERROR!'; ?>
+f&uuml;r <? $p = $ticker->getPlayerChangeOut();
          echo is_object($p) ? $p->getName() : 'ERROR!'; ?>
       </p>
 

@@ -23,6 +23,8 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_cfcleaguefe_table_IConfigurator');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
+
 
 /**
  * Configurator for football league tables.
@@ -85,7 +87,7 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 			$values = $this->getConfValue('markClubs');
 			if(!$values)
 				$values = $this->configurations->get('markClubs'); // used from flexform
-			$this->markClubs = t3lib_div::intExplode(',',$values);
+			$this->markClubs = Tx_Rnbase_Utility_Strings::intExplode(',',$values);
 		}
 		return $this->markClubs;
 	}

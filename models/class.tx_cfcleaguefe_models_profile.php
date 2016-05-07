@@ -61,7 +61,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     self::prepareLinks($formatter, $confId, $profile);
 // TODO Das sollte dynamisch gestaltet werden, damit alle Daten der Tabelle verwendet
 // werden können.
-//t3lib_div::debug(tx_rnbase_configurations::getUniqueKeysNames($conf), 'tx_cfcleaguefe_models_profile');
 		$conf = $formatter->configurations->get($confId);
     $arr = array();
     // Über alle Felder im record iterieren
@@ -186,7 +185,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
     if($note->isType(200)) {
       // Wenn das im Record liegt, kann es auch per TS ausgewertet werden!
       $this->record['teamCaptain'] = '1';
-//      t3lib_div::debug('Ist Capt', $this->uid.'tx_cfcleaguefe_models_profile');
     }
   }
 
@@ -238,7 +236,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
         $last_name = $formatter->stdWrap($profile->record['last_name'],$conf['lastname.']);
 
 //      $confFirst = $conf['firstname.'];
-//t3lib_div::debug($confFirst, 'mdl_profile');
 //      if($confFirst['hide'] != '1')
       if($conf['firstname'] || $conf['firstname.'])
         $first_name = $formatter->stdWrap($profile->record['first_name'], $conf['firstname.']);

@@ -145,9 +145,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base {
       $link->parameters($keepVars);
       $isCurrent = ($item->uid == $currItem->uid);
       $item->record['isCurrent'] = $isCurrent ? 1 : 0;
-//t3lib_div::debug($itemConfId, 'tx_cfcleaguefe_views_ScopeSelection');
       $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->record, 'scopeSelection.'. $confName.'.', 0, $markerName.'_', $item->getColumnNames());
-//      $markerArray['###'. $markerName .'_LINK_URL###'] = $this->formatter->wrap($link->makeUrl(false), 'scopeSelection.'. $confName . ($isCurrent ? '.current.' : '.normal.') );
       $markerArray['###'. $markerName .'_LINK_URL###'] = $link->makeUrl(false);
 
       $linkStr = ($currentNoLink && $isCurrent) ? $token : $link->makeTag();

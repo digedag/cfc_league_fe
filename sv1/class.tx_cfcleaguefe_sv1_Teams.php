@@ -23,6 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_DB');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 interface tx_cfcleaguefe_TeamService {
   function search($fields, $options);
@@ -33,7 +34,7 @@ interface tx_cfcleaguefe_TeamService {
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Teams extends t3lib_svbase implements tx_cfcleaguefe_TeamService  {
+class tx_cfcleaguefe_sv1_Teams extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_TeamService  {
 
 	/**
 	 * Search database for teams

@@ -23,13 +23,14 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_Templates');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service to output a chart to compare two match opponents
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
+class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base {
 
 	public function addChart($params, $parent) {
 		$marker = $params['marker'];
@@ -71,7 +72,8 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends t3lib_svbase {
 		tx_rnbase::load('tx_cfcleaguefe_actions_TableChart');
 		tx_cfcleaguefe_actions_TableChart::createChartDataset($xyDataset, $tsArr, $formatter->configurations, $competition, 'matchreport.svChartMatch.');
 		try {
-			require_once(PATH_site.t3lib_extMgm::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
+			tx_rnbase::load('tx_rnbase_util_Extensions');
+			require_once(PATH_site.tx_rnbase_util_Extensions::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
 			$chart = tx_pbimagegraph_ts::make($tsArr);
 		}
 		catch(Exception $e) {

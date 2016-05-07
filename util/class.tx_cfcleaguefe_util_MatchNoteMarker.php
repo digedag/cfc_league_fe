@@ -24,6 +24,7 @@
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
+tx_rnbase::load('tx_rnbase_util_Extensions');
 
 
 /**
@@ -44,7 +45,7 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_BaseMarker {
 	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'NOTE') {
 		if(!is_object($item)) {
 			// Ist kein Datensatz vorhanden wird ein leeres Objekt verwendet.
-			require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
+			require_once(tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
 			$item = self::getEmptyInstance('tx_cfcleaguefe_models_match_note');
 		}
 		$this->prepareRecord($item, $template, $formatter->getConfigurations(), $confId, $marker);

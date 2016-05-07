@@ -23,11 +23,12 @@
  ***************************************************************/
 
 tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Computes league tables for football.
  */
-class tx_cfcleaguefe_table_football_Table extends t3lib_svbase implements tx_cfcleaguefe_table_ITableType {
+class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_table_ITableType {
 
 	protected $_teamData = array();
 

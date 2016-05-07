@@ -1,5 +1,5 @@
 <?php if (!defined ('TYPO3_MODE')) 	die ('Access denied.'); ?>
-<?php 
+<?php
   tx_rnbase::load('tx_rnbase_util_FormUtil');
   $viewData =& $configurations->getViewData();
   $pointSystem = $viewData->offsetGet('tablePointSystem'); // Das verwendete Punktesystem holen
@@ -8,7 +8,6 @@
   $marks = $league->getTableMarks();
 
   $link->destination($GLOBALS['TSFE']->id); // Das Ziel der Seite vorbereiten
-//  t3lib_div::debug($link->makeUrl(),'tpl_leaguetable');
 ?>
 <style>
 </style>
@@ -18,22 +17,21 @@
 <?
   $keepVars = $configurations->getKeepVars();
   $keepVars = $keepVars->getArrayCopy();
-//    t3lib_div::debug($keepVars,'Template_leaguetable');
 
   if($viewData->offsetGet('tabletype_select')) {
-    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[tabletype]', 
+    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[tabletype]',
             $viewData->offsetGet('tabletype_select'),
             'onchange="submit();"') . '<br />';
     unset($keepVars[$configurations->createParamName('tabletype')]);
   }
   if($viewData->offsetGet('tablescope_select')) {
-    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[tablescope]', 
+    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[tablescope]',
             $viewData->offsetGet('tablescope_select'),
             'onchange="submit();"') . '<br />';
     unset($keepVars[$configurations->createParamName('tablescope')]);
   }
   if($viewData->offsetGet('pointsystem_select')) {
-    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[pointsystem]', 
+    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[pointsystem]',
             $viewData->offsetGet('pointsystem_select'),
             'onchange="submit();"') . '<br />';
     unset($keepVars[$configurations->createParamName('pointsystem')]);
@@ -49,11 +47,10 @@
 <tr>
   <th>Pl.</th><th>Verein</th><th>Spiele</th><th>S</th><th>U</th><th>N</th><th>Tore</th><th>Diff</th><th>Punkte</th>
 </tr>
-<?php 
+<?php
   $data = $viewData->offsetGet('tableData');
 
   $cnt = 0;
-//  t3lib_div::debug($data); 
   foreach($data As $row){
     $css = ($cnt++) % 2;
     if($row['penalties']) $penalties[] = $row['penalties'];
@@ -70,7 +67,7 @@
   <td><? echo $row['points'] ?><? if($pointSystem == 1){ echo ':' . $row['points2'];}?> </td>
 
 </tr>
-<?php 
+<?php
   } // Close foreach
 ?>
 </table>
@@ -82,7 +79,6 @@
 <p class="cfcleague-leaguetable-comment">
 <?        foreach($penaltyArr As $penalty) {
           echo '* '. $penalty->record['comment'] . '<br />';
-//          t3lib_div::debug($penalty, 'tmpl');
        } ?>
 </p>
 <?     } ?>

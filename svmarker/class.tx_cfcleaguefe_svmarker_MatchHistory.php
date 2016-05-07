@@ -23,13 +23,14 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_Templates');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service to output historic matches of two match opponents
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_svmarker_MatchHistory extends t3lib_svbase {
+class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base {
 	/**
 	 * Add historic matches
 	 * @param $params

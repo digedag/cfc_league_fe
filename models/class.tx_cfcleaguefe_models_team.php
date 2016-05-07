@@ -26,6 +26,7 @@ tx_rnbase::load('tx_cfcleague_models_Team');
 tx_rnbase::load('tx_cfcleaguefe_models_club');
 tx_rnbase::load('tx_cfcleaguefe_search_Builder');
 tx_rnbase::load('tx_cfcleaguefe_models_group');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 
@@ -239,7 +240,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
     if(strlen(trim($this->record[$recordKey])) > 0 ) {
       if(count($profiles)) {
         // Jetzt die Spieler in die richtige Reihenfolge bringen
-        $uids = t3lib_div::intExplode(',', $this->record[$recordKey]);
+        $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $this->record[$recordKey]);
         $uids = array_flip($uids);
         foreach($profiles as $player) {
           $ret[$uids[$player->uid]] = $player;
@@ -268,7 +269,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 	 */
 	function getTeamsByUid($teamIds) {
 		if(!is_array($teamIds)) {
-			$teamIds = t3lib_div::intExplode(',',$teamIds);
+			$teamIds = Tx_Rnbase_Utility_Strings::intExplode(',',$teamIds);
 		}
 		if(!count($teamIds))
 			return array();
@@ -286,8 +287,8 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 	 * TODO: Als static deklarieren
 	 */
 	function getTeams($competitionIds, $clubIds) {
-		$competitionIds = implode(t3lib_div::intExplode(',',$competitionIds), ',');
-		$clubIds = implode(t3lib_div::intExplode(',',$clubIds), ',');
+		$competitionIds = implode(Tx_Rnbase_Utility_Strings::intExplode(',',$competitionIds), ',');
+		$clubIds = implode(Tx_Rnbase_Utility_Strings::intExplode(',',$clubIds), ',');
 
 //    $what = tx_cfcleaguefe_models_team::getWhat();
 		$what = 'tx_cfcleague_teams.*';

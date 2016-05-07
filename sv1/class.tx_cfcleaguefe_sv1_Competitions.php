@@ -23,6 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_DB');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 interface tx_cfcleaguefe_CompetitionService {
   function search($fields, $options);
@@ -33,7 +34,7 @@ interface tx_cfcleaguefe_CompetitionService {
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Competitions extends t3lib_svbase implements tx_cfcleaguefe_CompetitionService  {
+class tx_cfcleaguefe_sv1_Competitions extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_CompetitionService  {
 
   /**
    * Search database for competitions
@@ -42,7 +43,7 @@ class tx_cfcleaguefe_sv1_Competitions extends t3lib_svbase implements tx_cfcleag
    * @param array $options
    * @return array of tx_cfcleaguefe_models_competition
    */
-  function search($fields, $options) {
+  public function search($fields, $options) {
   	tx_rnbase::load('tx_rnbase_util_SearchBase');
 		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Competition');
 		return $searcher->search($fields, $options);

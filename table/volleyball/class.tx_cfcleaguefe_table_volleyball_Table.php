@@ -64,9 +64,6 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		$this->addResult($homeId, $guestId, $match->getResult());
 		$sets = $match->getSets();
 
-//if($homeId == 1 || $guestId == 1)
-//t3lib_div::debug($match->record['sets'], $homeId.'-'.$guestId.'class.tx_cfcleaguefe_table_volleyball_Table.php Line: ' . __LINE__); // TODO: remove me
-
 		// Beim Volleyball gibt es kein Unentschieden
 		if($toto == 1) {  // Heimsieg
 			// Für die

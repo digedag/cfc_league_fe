@@ -23,7 +23,8 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_DB');
-require_once(t3lib_extMgm::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_competition_penalty.php');
+tx_rnbase::load('tx_rnbase_util_Extensions');
+require_once(tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_competition_penalty.php');
 
 /**
  * Die Klasse ist in der Lage, Tabellen einer Liga zu berechnen.
@@ -128,7 +129,6 @@ class tx_cfcleaguefe_util_LeagueTable  {
     foreach($penalties As $penalty) {
       // Welches Team ist betroffen?
       if(array_key_exists($penalty->record['team'], $this->_teamData)) {
-//    t3lib_div::debug($penalty, 'tx_cfcleaguefe_util_LeagueTable'); // TODO: Remove me!
         // Die Strafe wird für den View mit abgespeichert
         // Falls es eine Korrektur ist, dann nicht speichern
 				if(!$penalty->isCorrection())

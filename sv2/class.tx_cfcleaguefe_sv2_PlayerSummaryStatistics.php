@@ -73,8 +73,6 @@ class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_Play
     // Statistik betrachtet wurden.
     $ret = array();
     $this->result['numberOfMatches'] = 0;
-//    $compUid = t3lib_div::intExplode(',', $scopeArr['COMP_UIDS']);
-//    if(count($compUid) == 1) {
     foreach($compUids As $compUid) {
       $comp = tx_rnbase::makeInstance('tx_cfcleaguefe_models_competition', $compUid);
       // Gesucht: Anzahl Spiele der Teams gesamt und beendet

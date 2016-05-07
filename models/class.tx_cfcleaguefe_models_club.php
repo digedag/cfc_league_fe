@@ -24,6 +24,7 @@
 
 tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_cfcleague_models_Club');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 /**
@@ -105,23 +106,23 @@ AND c.agegroup = 1
     $options['wrapperclass'] = 'tx_cfcleaguefe_models_club';
     $options['orderby'] = 'name';
 
-    $saison = (strlen($saisonUids)) ? implode(t3lib_div::intExplode(',', $saisonUids), ',') : '';
+    $saison = (strlen($saisonUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $saisonUids), ',') : '';
     if(strlen($saison) > 0)
       $where .= ' tx_cfcleague_competition.saison IN (' . $saison . ')';
 
-    $groups = (strlen($groupUids)) ? implode(t3lib_div::intExplode(',', $groupUids), ',') : '';
+    $groups = (strlen($groupUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $groupUids), ',') : '';
     if(strlen($groups) > 0) {
       if(strlen($where) >0) $where .= ' AND ';
       $where .= ' tx_cfcleague_competition.agegroup IN (' . $groups . ')';
     }
 
-    $comps = (strlen($compUids)) ? implode(t3lib_div::intExplode(',', $compUids), ',') : '';
+    $comps = (strlen($compUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $compUids), ',') : '';
     if(strlen($comps) > 0) {
       if(strlen($where) >0) $where .= ' AND ';
       $where .= ' tx_cfcleague_competition.uid IN (' . $comps . ')';
     }
 
-    $clubs = (strlen($clubUids)) ? implode(t3lib_div::intExplode(',', $clubUids), ',') : '';
+    $clubs = (strlen($clubUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $clubUids), ',') : '';
     if(strlen($clubs) > 0) {
       if(strlen($where) >0) $where .= ' AND ';
       $where .= ' tx_cfcleague_club.uid IN (' . $clubs . ')';

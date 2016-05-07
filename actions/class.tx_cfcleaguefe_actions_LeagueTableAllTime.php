@@ -86,7 +86,7 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
 	 * @return tx_cfcleaguefe_util_MatchTable
 	 */
 	function getMatchTable() {
-		return t3lib_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
 
 	/**

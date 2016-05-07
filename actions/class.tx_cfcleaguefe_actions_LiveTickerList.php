@@ -66,8 +66,6 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
     $viewData =& $configurations->getViewData();
     $viewData->offsetSet('matches', $matches);
 
-// t3lib_div::debug($viewData,'ac_tickerlist');
-
     // View
     $view = tx_rnbase::makeInstance('tx_cfcleaguefe_views_LiveTickerList');
     $view->setTemplatePath($configurations->getTemplatePath());
@@ -105,7 +103,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC {
 	 * @return tx_cfcleaguefe_util_MatchTable
 	 */
 	function getMatchTable() {
-		return t3lib_div::makeInstance('tx_cfcleaguefe_util_MatchTable');
+		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
   /**
    * Initializes page browser

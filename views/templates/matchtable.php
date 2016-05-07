@@ -1,6 +1,6 @@
 <?php if (!defined ('TYPO3_MODE')) 	die ('Access denied.'); ?>
 
-<?php 
+<?php
   tx_div::load('tx_rnbase_util_FormUtil');
   // Die ViewData bereitstellen
   $viewData =& $configurations->getViewData();
@@ -15,14 +15,11 @@
     else
       $link = 0; // Es werden keine Links gesetzt
 
-//t3lib_div::debug($link, 'tmpl_matchtable');
-
 ?>
 
 <table cellspacing="0" cellpadding="0" class="cfcleague-matchtable">
-<?php 
+<?php
   $cnt = 0;
-  //t3lib_div::debug($data); 
   foreach($data As $match){
     $css = ($cnt++) % 2;
 ?>
@@ -38,14 +35,14 @@
 <td class="cfcleague-matchtable-result">
 <? if($match->record['status'] > 0) {
      $showLink = $reportPage && $match->hasReport();
-     if($showLink) { 
+     if($showLink) {
 // Wir setzen den Parameter für die Ziel-Url
        $link->parameters(array('matchId' => $match->uid));
 
 ?>
  <a href="<? echo $link->makeUrl(FALSE); ?>">
 <?
-     } 
+     }
 ?>
 <?   echo $match->record['goals_home_2']; ?> : <? echo $match->record['goals_guest_2']; ?>
 <?   if($showLink) { ?></a><? } ?>
@@ -56,7 +53,7 @@
 </td>
 
 </tr>
-<?php 
+<?php
   }  // Close foreach
 ?>
 </table>
