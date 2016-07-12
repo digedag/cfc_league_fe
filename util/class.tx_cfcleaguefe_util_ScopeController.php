@@ -53,8 +53,8 @@ class tx_cfcleaguefe_util_ScopeController {
 	 * @param $useObjects Wenn true werden ganze Objekte
 	 * @return Array mit den UIDs als String
 	 */
-	public static function handleCurrentScope($parameters, &$configurations, $useObjects = false) {
-		$cObjUid = $configurations->cObj->data['uid'];
+	public static function handleCurrentScope($parameters, $configurations, $useObjects = false) {
+		$cObjUid = $configurations->getCObj()->data['uid'];
 		// Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
 		if(!$cObjUid || !isset(self::$_cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
 			// Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
