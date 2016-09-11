@@ -271,8 +271,9 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 	 * Zählt die Punkte für eine normale Tabelle
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
+	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
 	 */
-	protected function countStandard(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+	protected function countStandard($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 		// Anzahl Spiele aktualisieren
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
@@ -322,8 +323,9 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
    * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
+	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
 	 */
-	protected function countHome(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+	protected function countHome($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
 		// Anzahl Spiele aktualisieren
@@ -357,8 +359,9 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
    * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
+	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
 	 */
-	protected function countGuest(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+	protected function countGuest($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
 		// Anzahl Spiele aktualisieren

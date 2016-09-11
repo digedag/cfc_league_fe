@@ -61,7 +61,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 	 */
 	function getClub() {
 		if(!$this->record['club']) return 0;
-		return tx_cfcleaguefe_models_club::getInstance($this->record['club']);
+		return tx_cfcleaguefe_models_club::getClubInstance($this->record['club']);
 	}
 	/**
 	 * Returns the UID of club
@@ -80,7 +80,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 	public function getAgeGroup() {
 		if(!$this->agegroup) {
 			if(intval($this->record['agegroup']))
-				$this->agegroup = tx_cfcleaguefe_models_group::getInstance($this->record['agegroup']);
+				$this->agegroup = tx_cfcleaguefe_models_group::getGroupInstance($this->record['agegroup']);
 			if(!$this->agegroup) {
 				$comps = $this->getCompetitions(true);
 				for($i=0, $cnt = count($comps); $i < $cnt; $i++) {
@@ -202,7 +202,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
    * @param int $teamUid
    * @return tx_cfcleaguefe_models_team
    */
-  static function getInstance($teamUid) {
+  static function getTeamInstance($teamUid) {
     $uid = intval($teamUid);
     if(!$uid) throw new Exception('Team uid expected. Was: >' . $teamUid . '<', -1);
     if(! self::$instances[$uid]) {

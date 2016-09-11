@@ -548,7 +548,7 @@ class tx_cfcleaguefe_models_matchreport {
    */
   function _loadMatch($matchId) {
     // Wir holen gleich einige Zusatzinfos mit
-    $match = tx_cfcleaguefe_models_match::getInstance($matchId);
+    $match = tx_cfcleaguefe_models_match::getMatchInstance($matchId);
     return $match->isValid() ? $match : 0;
   }
 

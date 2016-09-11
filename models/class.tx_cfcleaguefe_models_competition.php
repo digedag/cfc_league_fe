@@ -213,10 +213,10 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 		tx_rnbase::load('tx_cfcleaguefe_models_group');
 		$groupIds = Tx_Rnbase_Utility_Strings::intExplode(',',$this->record['agegroup']);
 		if(!count($groupIds)) return null;
-		if(!$all) return tx_cfcleaguefe_models_group::getInstance($groupIds[0]);
+		if(!$all) return tx_cfcleaguefe_models_group::getGroupInstance($groupIds[0]);
 		$ret = array();
 		foreach($groupIds As $groupId) {
-			$ret[] = tx_cfcleaguefe_models_group::getInstance($groupId);
+			$ret[] = tx_cfcleaguefe_models_group::getGroupInstance($groupId);
 		}
   	return $ret;
   }

@@ -42,7 +42,7 @@ class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_
 	/**
 	 * Für die Punktberechnung ist im Volleyball die Satzverteilung relevant.
 	 */
-	public function getPointsWin($winSetsHome, $winSetsGuest) {
+	public function getPointsWinVolley($winSetsHome, $winSetsGuest) {
 //	tx_rnbase_util_Debug::debug($this->getPointSystem(), 'volley_Conf'.__LINE__);
 		$points = 2;
 		if($this->getPointSystem()==self::POINT_SYSTEM_3POINT) {
@@ -54,10 +54,10 @@ class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_
 		// Wenn die Satzdifferenz 1 ist, werden die Punkte geteilt
 		return abs($winSetsHome - $winSetsGuest) == 1;
 	}
-	public function getPointsDraw($afterExtraTime, $afterPenalty) {
+	public function getPointsDrawVolley($afterExtraTime, $afterPenalty) {
 		return 0; // Unentschieden gibt es eigentlich nicht...
 	}
-	public function getPointsLoose($winSetsHome, $winSetsGuest) {
+	public function getPointsLooseVolley($winSetsHome, $winSetsGuest) {
 		$points = 0;
 		if($this->getPointSystem()==self::POINT_SYSTEM_3POINT) {
 			// Wenn die Satzdifferenz 1 ist, werden die Punkte geteilt

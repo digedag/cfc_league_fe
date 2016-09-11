@@ -508,8 +508,10 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
    */
   function _getTeam($uid) {
 		if(!$uid) throw new Exception('Invalid match with uid ' . $this->getUid() . ': At least one team is not set.');
-    tx_rnbase::load('tx_cfcleaguefe_models_team');
-    $team = tx_cfcleaguefe_models_team::getInstance($uid);
+	// TODO: Umstellen auf tx_cfcleague_models_team
+	//$team = tx_cfcleague_util_ServiceRegistry::getTeamService()->getTeam($uid);
+	tx_rnbase::load('tx_cfcleaguefe_models_team');
+    $team = tx_cfcleaguefe_models_team::getTeamInstance($uid);
     return $team;
   }
 
@@ -714,7 +716,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 	 * @param int $uid
 	 * @return tx_cfcleaguefe_models_match
 	 */
-	static function getInstance($uid) {
+	public static function getMatchInstance($uid) {
 		$uid = intval($uid);
 		if(!uid) throw new Exception('Invalid uid for match');
 		if(!is_object(self::$instances[$uid])) {
@@ -723,7 +725,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 		return self::$instances[$uid];
 	}
 
-	static function addInstance(&$match) {
+	public static function addInstance(&$match) {
 		self::$instances[$match->uid] = $match;
 	}
 }
@@ -731,5 +733,3 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_match.php']) {
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_match.php']);
 }
-
-?>
