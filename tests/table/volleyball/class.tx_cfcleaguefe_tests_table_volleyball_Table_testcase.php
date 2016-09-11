@@ -30,7 +30,7 @@ tx_rnbase::load('tx_cfcleaguefe_table_Builder');
 tx_rnbase::load('tx_cfcleague_models_Competition');
 tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
 
-class tx_cfcleaguefe_tests_table_volleyball_Table_testcase extends tx_phpunit_testcase {
+class tx_cfcleaguefe_tests_table_volleyball_Table_testcase extends Tx_Phpunit_TestCase {
 
 	function test_LeagueTableWithTwoPointSystem() {
 
