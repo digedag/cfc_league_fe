@@ -281,72 +281,12 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 	/**
 	 * Liefert das Sternzeichen der Person.
 	 */
-	function getSign() {
-		$signs = Signs::getInstance();
-		return intval($this->record['birthday']) != 0 ? $signs->getSign($this->record['birthday']) : '';
+	public function getSign() {
+		$signs = Tx_Cfcleaguefe_Utility_Signs::getInstance();
+		return intval($this->getProperty('birthday')) != 0 ? $signs->getSign($this->record['birthday']) : '';
 	}
 }
 
-/**
- * Liefert Sternzeichen zu einem Datum
- */
-class Signs {
-  var $signs;
-
-  function getInstance ()
-  {
-    static $instance;
-    if (!isset($instance)) {
-      $c = __CLASS__;
-      $instance = new $c;
-      $instance->createSigns();
-    } // if
-    return $instance;
-  }
-
-
-  function getSign($date) {
-    $days = date('z', $date);
-    while(list($key,$value) = each($this->signs)) {
-      if($days <= $key)
-        return $value;
-    }
-    return 'unbekannt';
-  }
-
-  function createSigns() {
-    global $TSFE;
-    $this->signs = array( date('z',strtotime("2006-01-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.capricorn'),
-                    date('z',strtotime("2006-02-19")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.aquarius'),
-                    date('z',strtotime("2006-03-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.pisces'),
-                    date('z',strtotime("2006-04-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.aries'),
-                    date('z',strtotime("2006-05-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.taurus'),
-                    date('z',strtotime("2006-06-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.gemini'),
-                    date('z',strtotime("2006-07-22")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.cancer'),
-                    date('z',strtotime("2006-08-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.leo'),
-                    date('z',strtotime("2006-09-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.virgo'),
-                    date('z',strtotime("2006-10-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.libra'),
-                    date('z',strtotime("2006-11-22")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.scorpio'),
-                    date('z',strtotime("2006-12-21")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.sagittarius'),
-                    date('z',strtotime("2004-12-31")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.capricorn'));
-  }
-
-  function __call($foo, $para){
-    echo "$foo gibt es nicht.";
-  }
-}
-
-/**
- * Sortierfunktion, um die korrekte Reihenfolge nach weights zu ermittlen
- */
-/*
-function cmpWeight($a, $b) {
-  if ($a[1] == $b[1]) {
-    return 0;
-  }
-  return ($a[1] < $b[1]) ? -1 : 1;
-}
-*/
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_profile.php']) {
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_profile.php']);
