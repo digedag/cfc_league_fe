@@ -35,24 +35,6 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club {
   private static $instances;
 
   /**
-   * Returns address dataset or null
-   * @return tx_cfcleague_models_Address or null
-   */
-  function getAddress() {
-  	if(!$this->record['address'])
-  		return null;
-    $address = tx_rnbase::makeInstance('tx_cfcleague_models_Address', $this->record['address']);
-		return $address->isValid() ? $address : null;
-  }
-  /**
-   * Whether or not this is a favorite club
-   *
-   * @return boolean
-   */
-  function isFavorite() {
-  	return intval($this->record['favorite']) > 0;
-  }
-  /**
    * Liefert die Teams dieses Vereins
    * TODO: In Service auslagern
    * @param $saisonIds commaseperated saison-uids
@@ -149,7 +131,7 @@ AND tx_cfcleague_competition.agegroup = 1
    * @param int $$clubUid
    * @return tx_cfcleaguefe_models_club
    */
-  static function getInstance($clubUid) {
+  static function getClubInstance($clubUid) {
     $uid = intval($clubUid);
     if(!$uid) throw new Exception('Club uid expected. Was: >' . $clubUid . '<', -1);
     if(! self::$instances[$uid]) {

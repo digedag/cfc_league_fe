@@ -80,7 +80,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers {
 			$uid = $linkParams['matchId'];
 			try {
 				tx_rnbase::load('tx_cfcleaguefe_models_match');
-				$t3match = tx_cfcleaguefe_models_match::getInstance($uid);
+				$t3match = tx_cfcleaguefe_models_match::getMatchInstance($uid);
 				$competition = $t3match->getCompetition();
 				$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->record['agegroup'];
 			}

@@ -47,7 +47,7 @@ class tx_cfcleaguefe_models_group extends tx_rnbase_model_base {
    * @param int $uid
    * @return tx_cfcleaguefe_models_group
    */
-  static public function getInstance($uid) {
+  static public function getGroupInstance($uid) {
   	self::_init();
   	return self::$instances[$uid];
   }

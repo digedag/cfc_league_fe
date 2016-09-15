@@ -111,7 +111,8 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
 			$team = $row['team'];
 			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-			$team->record = Tx_Rnbase_Utility_T3General::array_merge($row, $team->record);
+//			$team->record = Tx_Rnbase_Utility_T3General::array_merge($row, $team->getRecord());
+			$team->setProperty( Tx_Rnbase_Utility_T3General::array_merge($row, $team->getRecord()));
 
 			$parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId.'table.', 'ROW');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;

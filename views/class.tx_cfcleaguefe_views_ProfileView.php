@@ -56,8 +56,7 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 			$teamId = intval($configurations->get('profileview.staticteam'));
 		}
 		if($teamId) {
-			tx_rnbase::load('tx_cfcleaguefe_models_team');
-			$team = tx_cfcleaguefe_models_team::getInstance($teamId);
+			$team = tx_cfcleague_util_ServiceRegistry::getTeamService()->getTeam($uid);
 			$markerOptions['team'] = $team;
 		}
 		$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker', $markerOptions);

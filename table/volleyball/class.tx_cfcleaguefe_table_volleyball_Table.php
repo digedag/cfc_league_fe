@@ -52,8 +52,9 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 	 * Zählt die Punkte für eine normale Tabelle
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
+	 * @param tx_cfcleaguefe_table_volleyball_Configurator $configurator
 	 */
-	protected function countStandard($match, $toto, tx_cfcleaguefe_table_volleyball_Configurator $configurator) {
+	protected function countStandard($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 
 		// Anzahl Spiele aktualisieren
 		$homeId = $configurator->getTeamId($match->getHome());
@@ -67,22 +68,22 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		// Beim Volleyball gibt es kein Unentschieden
 		if($toto == 1) {  // Heimsieg
 			// Für die
-			$this->addPoints($homeId, $configurator->getPointsWin($match->getGoalsHome(), $match->getGoalsGuest()));
-			$this->addPoints($guestId, $configurator->getPointsLoose($match->getGoalsHome(), $match->getGoalsGuest()));
+			$this->addPoints($homeId, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+			$this->addPoints($guestId, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
 
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($guestId, $configurator->getPointsLoose($match->getGoalsHome(), $match->getGoalsGuest()));
+				$this->addPoints2($guestId, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
 			}
 
 			$this->addWinCount($homeId);
 			$this->addLoseCount($guestId);
 		}
 		else { // Auswärtssieg
-			$this->addPoints($homeId, $configurator->getPointsLoose($match->getGoalsHome(), $match->getGoalsGuest()));
-			$this->addPoints($guestId, $configurator->getPointsWin($match->getGoalsHome(), $match->getGoalsGuest()));
+			$this->addPoints($homeId, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+			$this->addPoints($guestId, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
 
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($homeId, $configurator->getPointsWin($match->getGoalsHome(), $match->getGoalsGuest()));
+				$this->addPoints2($homeId, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
 			}
 			$this->addLoseCount($homeId);
 			$this->addWinCount($guestId);
@@ -134,8 +135,9 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
    * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
+	 * @param tx_cfcleaguefe_table_volleyball_Configurator $configurator
 	 */
-	protected function countHome(&$match, $toto, tx_cfcleaguefe_table_volleyball_Configurator $configurator) {
+	protected function countHome($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
 		// Anzahl Spiele aktualisieren
@@ -144,13 +146,13 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		$sets = $match->getSets();
 
 		if($toto == 1) {  // Heimsieg
-			$this->addPoints($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($homeId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
 			$this->addWinCount($homeId);
 		}
 		else { // Auswärtssieg
-			$this->addPoints($homeId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($homeId, $configurator->getPointsLooseVolley($match->isExtraTime(), $match->isPenalty()));
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+				$this->addPoints2($homeId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
 			}
 			$this->addLoseCount($homeId);
 		}
@@ -167,8 +169,9 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
    * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
+	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
 	 */
-	protected function countGuest(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+	protected function countGuest($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
@@ -178,14 +181,14 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 		$sets = $match->getSets();
 
 		if($toto == 1) {  // Heimsieg
-			$this->addPoints($guestId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($guestId, $configurator->getPointsLooseVolley($match->isExtraTime(), $match->isPenalty()));
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+				$this->addPoints2($guestId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
 			}
 			$this->addLoseCount($guestId);
 		}
 		else { // Auswärtssieg
-			$this->addPoints($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($guestId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
 			$this->addWinCount($guestId);
 		}
 

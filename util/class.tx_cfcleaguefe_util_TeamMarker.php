@@ -47,13 +47,13 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 */
 	public function parseTemplate($template, $team, $formatter, $confId, $marker = 'TEAM') {
 		if(!is_object($team)) {
-			return $formatter->configurations->getLL('team_notFound');
+			return $formatter->getConfigurations()->getLL('team_notFound');
 		}
 		$this->prepareRecord($team);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','teamMarker_initRecord', array('item' => &$team, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		// Es wird das MarkerArray mit den Daten des Teams gefüllt.
-		$ignore = self::findUnusedCols($team->record, $template, $marker);
-		$markerArray = $formatter->getItemMarkerArrayWrapped($team->record, $confId , $ignore, $marker.'_',$team->getColumnNames());
+		$ignore = self::findUnusedCols($team->getRecord(), $template, $marker);
+		$markerArray = $formatter->getItemMarkerArrayWrapped($team->getRecord(), $confId , $ignore, $marker.'_',$team->getColumnNames());
 		$wrappedSubpartArray = array();
 		$subpartArray = array();
 		$this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
@@ -98,7 +98,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 		$srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
 		$group = $srv->getAgeGroup($item);
 //		$group = $item->getAgeGroup();
-		$GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->uid : 0;
+		$GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->getUid() : 0;
 		$item->record['group'] = is_object($group) ?  $group->getUid() : '0';
 		$item->record['agegroup_name'] = is_object($group) ?  $group->getName() : '';
 		$item->record['firstpicture'] = $item->record['dam_images'];
@@ -141,18 +141,18 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $joinCol Name der Teamspalte mit den Profilen players, coaches, supporters
 	 */
 	private function addProfiles($template, $team, $formatter, $confId, $markerPrefix, $joinCol) {
-  	// Ohne Template gibt es nichts zu tun!
-    if(strlen(trim($template)) == 0) return '';
+		// Ohne Template gibt es nichts zu tun!
+		if(strlen(trim($template)) == 0) return '';
 
 		//$srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
-    $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+		$srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
 		$fields = $options = array();
-    $fields['PROFILE.UID'][OP_IN_INT] = $team->record[$joinCol];
-		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
-		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
+		$fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty($joinCol);
+		tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
 		$children = $srv->search($fields, $options);
 		if(!empty($children) && !array_key_exists('orderby', $options)) // Default sorting
-			$children = $this->sortProfiles($children, $team->record[$joinCol]);
+			$children = $this->sortProfiles($children, $team->getProperty($joinCol));
 
 		$options['team'] = $team;
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
