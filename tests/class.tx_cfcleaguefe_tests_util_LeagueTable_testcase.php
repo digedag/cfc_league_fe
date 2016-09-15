@@ -44,7 +44,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_rnbase_tests_BaseTest
 		$params = new ArrayObject();
 		$config = $this->createConfigurations(array('tableType' => '0'), 'cfc_league_fe');
 		$prov = new tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config,$league);
-		$prov->setMatches($league->getMatches(2));
+		$prov->setMatches($matches);
 
 		$leagueTable = new tx_cfcleaguefe_util_LeagueTable();
 		$result = $leagueTable->generateTable($prov);
@@ -127,16 +127,16 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_rnbase_tests_BaseTest
 	 * @param string $leagueName
 	 * @return tx_cfcleaguefe_models_competition
 	 */
-	function prepareLeague($leagueName) {
+	protected function prepareLeague($leagueName) {
 		// Laden der Daten
 		$data = tx_rnbase_util_Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));
 		$data = $data[$leagueName];
 
 		$league = &tx_cfcleague_models_Competition::getInstance($data['record']['uid'], $data['record']);
 		$teams = $this->makeInstances($data['teams'],$data['teams']['clazz']);
-		// TODO: so geht das nicht mehr!
-// 		foreach ($teams As $team)
-// 			tx_cfcleaguefe_models_team::addInstance($team);
+
+		foreach ($teams As $team)
+			tx_cfcleaguefe_models_team::addInstance($team);
 		$matches = $this->makeInstances($data['matches'],$data['matches']['clazz']);
 		$league->setTeams($teams);
 		$league->setPenalties(array());
