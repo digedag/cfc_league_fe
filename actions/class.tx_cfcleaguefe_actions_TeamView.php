@@ -48,7 +48,7 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC {
 			$teamId = intval($parameters->offsetGet('teamId'));
 			// Wenn die TeamID über den Parameter übergeben wird, dann müssen wir sie aus den
 			// Keepvars entfernen. Sonst funktionieren die Links auf den Scope nicht mehr.
-			$configurations->_keepVars->offsetUnset('teamId');
+			$configurations->removeKeepVar('teamId');
 			$parameters->offsetUnset('teamId');
 		}
 		if($teamId <= 0) {
