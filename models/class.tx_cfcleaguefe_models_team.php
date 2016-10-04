@@ -60,8 +60,8 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 	 * @return tx_cfcleaguefe_models_club Verein als Objekt oder 0
 	 */
 	function getClub() {
-		if(!$this->record['club']) return 0;
-		return tx_cfcleaguefe_models_club::getClubInstance($this->record['club']);
+		if(!$this->getProperty('club')) return 0;
+		return tx_cfcleaguefe_models_club::getClubInstance($this->getProperty('club'));
 	}
 	/**
 	 * Returns the UID of club
