@@ -23,7 +23,6 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_model_base');
-tx_rnbase::load('tx_cfcleaguefe_models_match_note');
 
 tx_rnbase::load('tx_cfcleaguefe_models_competition');
 tx_rnbase::load('Tx_Rnbase_Utility_Strings');
