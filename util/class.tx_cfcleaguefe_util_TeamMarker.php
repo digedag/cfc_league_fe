@@ -46,7 +46,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker {
 	 * @return String das geparste Template
 	 */
 	public function parseTemplate($template, $team, $formatter, $confId, $marker = 'TEAM') {
-		if(!is_object($team)) {
+		if(!is_object($team) || !$team->isValid()) {
 			return $formatter->getConfigurations()->getLL('team_notFound');
 		}
 		$this->prepareRecord($team);
