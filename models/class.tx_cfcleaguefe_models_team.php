@@ -34,26 +34,25 @@ tx_rnbase::load('Tx_Rnbase_Utility_Strings');
  * Model für ein Team.
  */
 class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
-  var $_players;
-  var $_coaches;
-  var $_supporters;
-  /** Array with loaded team instances */
-  private static $instances;
+	var $_players;
+	var $_coaches;
+	var $_supporters;
+	/** Array with loaded team instances */
+	private static $instances;
 
-
-  /**
-   * Liefert den Namen des Teams
-   * @param $confId die TS-Config für den Teamdatensatz
-   */
-  function getNameWrapped($formatter, $confId = 'team.') {
-    return $formatter->wrap($this->record['name'], $confId . 'teamName.');
-  }
-  function getName() {
-  	return $this->record['name'];
-  }
-  function getNameShort() {
-  	return $this->record['short_name'];
-  }
+	/**
+	 * Liefert den Namen des Teams
+	 * @param $confId die TS-Config für den Teamdatensatz
+	 */
+	function getNameWrapped($formatter, $confId = 'team.') {
+		return $formatter->wrap($this->getName(), $confId . 'teamName.');
+	}
+	function getName() {
+		return $this->getProperty('name');
+	}
+	function getNameShort() {
+		return $this->getProperty('short_name');
+	}
 
 	/**
 	 * Liefert den Verein des Teams als Objekt
@@ -68,7 +67,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 	 * @return int
 	 */
 	function getClubUid() {
-		return $this->record['club'];
+		return $this->getProperty('club');
 	}
 
 	var $agegroup = null;
@@ -79,8 +78,8 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 	 */
 	public function getAgeGroup() {
 		if(!$this->agegroup) {
-			if(intval($this->record['agegroup']))
-				$this->agegroup = tx_cfcleaguefe_models_group::getGroupInstance($this->record['agegroup']);
+			if(intval($this->getProperty('agegroup')))
+				$this->agegroup = tx_cfcleaguefe_models_group::getGroupInstance($this->getProperty('agegroup'));
 			if(!$this->agegroup) {
 				$comps = $this->getCompetitions(true);
 				for($i=0, $cnt = count($comps); $i < $cnt; $i++) {
@@ -92,176 +91,134 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team {
 			}
 		}
 		return $this->agegroup;
-  }
-  /**
-   * Returns the group uid set in team. This may be 0.
-   * @return int
-   */
-	public function getAgeGroupUid() {
-		return $this->record['agegroup'];
 	}
-  /**
-   * Returns the competitons of this team
-   * @param boolean $obligateOnly if true, only obligate competitions are returned
-   * @return array of tx_cfcleaguefe_models_competition
-   */
-  function getCompetitions($obligateOnly = false) {
-  	$fields = array();
-  	tx_cfcleaguefe_search_Builder::buildCompetitionByTeam($fields, $this->uid,$obligateOnly);
-  	$srv = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
-  	return $srv->search($fields, $options);
-  }
+	/**
+	 * Returns the group uid set in team. This may be 0.
+	 * @return int
+	 */
+	public function getAgeGroupUid() {
+		return $this->getProperty('agegroup');
+	}
+	/**
+	 * Returns the competitons of this team
+	 * @param boolean $obligateOnly if true, only obligate competitions are returned
+	 * @return array of tx_cfcleaguefe_models_competition
+	 */
+	function getCompetitions($obligateOnly = false) {
+		$fields = array();
+		tx_cfcleaguefe_search_Builder::buildCompetitionByTeam($fields, $this->getUid(),$obligateOnly);
+		$srv = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
+		return $srv->search($fields, $options);
+	}
 
-  /**
-   * Liefert die Trainer des Teams in der vorgegebenen Reihenfolge als Profile. Der
-   * Key ist die laufende Nummer und nicht die UID!
-   */
-  function getCoaches() {
-    if(is_array($this->_coaches))
-      return $this->_coaches;
-    $this->_coaches = $this->_getTeamMember('coaches');
-    return $this->_coaches;
-  }
+	/**
+	 * Liefert die Trainer des Teams in der vorgegebenen Reihenfolge als Profile. Der
+	 * Key ist die laufende Nummer und nicht die UID!
+	 */
+	function getCoaches() {
+		if(is_array($this->_coaches))
+		  return $this->_coaches;
+		$this->_coaches = $this->_getTeamMember('coaches');
+		return $this->_coaches;
+	}
 
-  /**
-   * Liefert die Betreuer des Teams in der vorgegebenen Reihenfolge als Profile. Der
-   * Key ist die laufende Nummer und nicht die UID!
-   */
-  function getSupporters() {
-    if(is_array($this->_supporters))
-      return $this->_supporters;
-    $this->_supporters = $this->_getTeamMember('supporters');
-    return $this->_supporters;
-  }
+	/**
+	 * Liefert die Betreuer des Teams in der vorgegebenen Reihenfolge als Profile. Der
+	 * Key ist die laufende Nummer und nicht die UID!
+	 */
+	function getSupporters() {
+		if(is_array($this->_supporters))
+			return $this->_supporters;
+		$this->_supporters = $this->_getTeamMember('supporters');
+		return $this->_supporters;
+	}
 
-  /**
-   * Liefert die Spieler des Teams in der vorgegebenen Reihenfolge als Profile. Der
-   * Key ist die laufende Nummer und nicht die UID!
-   */
-  function getPlayers() {
-    if(is_array($this->_players))
-      return $this->_players;
-    $this->_players = $this->_getTeamMember('players');
-    return $this->_players;
-  }
+	/**
+	 * Liefert die Spieler des Teams in der vorgegebenen Reihenfolge als Profile. Der
+	 * Key ist die laufende Nummer und nicht die UID!
+	 */
+	function getPlayers() {
+		if(is_array($this->_players))
+			return $this->_players;
+		$this->_players = $this->_getTeamMember('players');
+		return $this->_players;
+	}
+
 
 
 	/**
-	 * Liefert das Logo des Teams. Es ist entweder das zugeordnete Logo des Teams oder
-	 * das Logo des Vereins.
-	 * @param tx_rnbase_util_FormatUtil $formatter
-	 * @param string $confId
-	 * @deprecated Das Logo wird per Typoscript ermittelt
+	 * Liefert true, wenn für das Team eine Einzelansicht verlinkt werden kann.
 	 */
-	function getLogo(&$formatter, $confId) {
-		$image = false;
-		// Hinweis: Die TCA-Definition ist im Team und im Club verschieden. Im Team ist es eine 1-n Relation
-		// Und im Club eine n-m-Beziehung. Daher muss der Zugriff unterschiedlich erfolgen.
-		// Grund dafür gibt es keinen...
+	function hasReport() {
+		return intval($this->getProperty('link_report'));
+	}
 
-		// Vorrang hat das Teamlogo
-		if($this->record['dam_logo']) {
-			$damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_teams', $this->uid, 'relation_field_or_other_ident');
-			if(list($uid, $filePath) = each($damPics['files'])) {
-				// Das Bild muss mit einem alternativen cObj erzeugt werden, damit Gallerie nicht aktiviert wird
-//        $image = $formatter->getDAMImage($filePath, 'matchreport.logo.', 'cfc_league', 'cObjLogo');
-				$image = $formatter->getDAMImage($filePath, $confId, 'cfc_league', 'cObjLogo');
-			}
+	/**
+	 * Returns cached instances of teams
+	 *
+	 * @param int $teamUid
+	 * @return tx_cfcleaguefe_models_team
+	 */
+	public static function getTeamInstance($teamUid) {
+		$uid = intval($teamUid);
+		if(!$uid) throw new Exception('Team uid expected. Was: >' . $teamUid . '<', -1);
+		if(! self::$instances[$uid]) {
+			self::$instances[$uid] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_team', $teamUid);
 		}
-		if(!$image) {
-			// Wir suchen den Verein
-			$club = $this->getClub();
-			// Ist ein Logo vorhanden?
-			if(is_object($club) && $club->record['dam_logo']) {
-				$damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_club', $club->uid, 'dam_images');
-				if(list($uid, $filePath) = each($damPics['files'])) {
-					// Das Bild muss mit einem alternativen cObj erzeugt werden, damit Gallerie nicht aktiviert wird
-					$image = $formatter->getDAMImage($filePath, $confId, 'cfc_league', 'cObjLogo');
+		return self::$instances[$uid];
+	}
+	public static function addInstance($team) {
+		self::$instances[$team->getUid()] = $team;
+	}
+	/**
+	 * Liefert Mitglieder des Teams als Array. Teammitglieder sind Spieler, Trainer und Betreuer.
+	 * Die gefundenen Profile werden sortiert in der Reihenfolge im Team geliefert.
+	 * @column Name der DB-Spalte mit den gesuchten Team-Mitgliedern
+	 */
+	protected function _getTeamMember($column) {
+		if(strlen(trim($this->getProperty($column))) > 0 ) {
+			$what = '*';
+			$from = 'tx_cfcleague_profiles';
+			$options['where'] = 'uid IN (' .$this->getProperty($column) . ')';
+			$options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
+
+			$rows = tx_rnbase_util_DB::doSelect($what,$from,$options,0);
+			return $this->sortPlayer($rows, $column);
+		}
+		return array();
+	}
+
+	/**
+	 * Sortiert die Personen (Spieler/Trainer) entsprechend der Reihenfolge im Team
+	 * @param $profiles array of tx_cfcleaguefe_models_profile
+	 */
+	function sortPlayer($profiles, $recordKey = 'players') {
+		$ret = array();
+		if(strlen(trim($this->getProperty($recordKey))) > 0 ) {
+			if(count($profiles)) {
+				// Jetzt die Spieler in die richtige Reihenfolge bringen
+				$uids = Tx_Rnbase_Utility_Strings::intExplode(',', $this->getProperty($recordKey));
+				$uids = array_flip($uids);
+				foreach($profiles as $player) {
+					$ret[$uids[$player->getUid()]] = $player;
 				}
 			}
 		}
-
-		// Es ist kein Logo vorhanden
-		if(!$image) {
-			$conf = $formatter->configurations->get($confId . 'noLogo_stdWrap.');
-			$image = $formatter->dataStdWrap($this->record, '', $confId . 'noLogo_stdWrap.');
+		else {
+			// Wenn keine Spieler im Team geladen sind, dann wird das Array unverändert zurückgegeben
+			return $profiles;
 		}
-		return $image;
+		return $ret;
 	}
 
-  /**
-   * Liefert true, wenn für das Team eine Einzelansicht verlinkt werden kann.
-   */
-  function hasReport() {
-    return intval($this->record['link_report']);
-  }
-
-  /**
-   * Returns cached instances of teams
-   *
-   * @param int $teamUid
-   * @return tx_cfcleaguefe_models_team
-   */
-  static function getTeamInstance($teamUid) {
-    $uid = intval($teamUid);
-    if(!$uid) throw new Exception('Team uid expected. Was: >' . $teamUid . '<', -1);
-    if(! self::$instances[$uid]) {
-      self::$instances[$uid] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_team', $teamUid);
-    }
-    return self::$instances[$uid];
-  }
-	static function addInstance(&$team) {
-		self::$instances[$team->uid] = $team;
+	/**
+	 * Check if team is a dummy for free_of_match.
+	 *
+	 * @return boolean
+	 */
+	public function isDummy(){
+		return intval($this->getProperty('dummy')) != 0;
 	}
-  /**
-   * Liefert Mitglieder des Teams als Array. Teammitglieder sind Spieler, Trainer und Betreuer.
-   * Die gefundenen Profile werden sortiert in der Reihenfolge im Team geliefert.
-   * @column Name der DB-Spalte mit den gesuchten Team-Mitgliedern
-   */
-  function _getTeamMember($column) {
-    if(strlen(trim($this->record[$column])) > 0 ) {
-      $what = '*';
-      $from = 'tx_cfcleague_profiles';
-      $options['where'] = 'uid IN (' .$this->record[$column] . ')';
-      $options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
-
-      $rows = tx_rnbase_util_DB::doSelect($what,$from,$options,0);
-      return $this->sortPlayer($rows, $column);
-    }
-    return array();
-  }
-
-  /**
-   * Sortiert die Personen (Spieler/Trainer) entsprechend der Reihenfolge im Team
-   * @param $profiles array of tx_cfcleaguefe_models_profile
-   */
-  function sortPlayer($profiles, $recordKey = 'players') {
-    $ret = array();
-    if(strlen(trim($this->record[$recordKey])) > 0 ) {
-      if(count($profiles)) {
-        // Jetzt die Spieler in die richtige Reihenfolge bringen
-        $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $this->record[$recordKey]);
-        $uids = array_flip($uids);
-        foreach($profiles as $player) {
-          $ret[$uids[$player->uid]] = $player;
-        }
-      }
-    }
-    else {
-      // Wenn keine Spieler im Team geladen sind, dann wird das Array unverändert zurückgegeben
-      return $profiles;
-    }
-    return $ret;
-  }
-
-  /**
-   * Check if team is a dummy for free_of_match.
-   *
-   * @return boolean
-   */
-  function isDummy(){
-    return intval($this->record['dummy']) != 0;
-  }
 	/**
 	 * Return all teams by an array of uids.
 	 * @param mixed $teamIds
@@ -330,5 +287,3 @@ AND tx_cfcleague_competition.uid =1
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_team.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_team.php']);
 }
-
-?>
