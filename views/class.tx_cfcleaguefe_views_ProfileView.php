@@ -23,7 +23,7 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('tx_rnbase_util_Strings');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 
 /**
@@ -104,18 +104,18 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 		if($team && $team->isValid()) {
 			// Alle Profile des Teams sammeln
 			$teamProfiles = array();
-			if($team->record['players']) {
-				$playerIds = tx_rnbase_util_Strings::intExplode(',', $team->record['players']);
+			if($team->getProperty('players')) {
+				$playerIds = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('players'));
 				$teamProfiles = array_merge($teamProfiles, $playerIds);
 				$playerIds = array_flip($playerIds);
 			}
-			if($team->record['coaches']) {
-				$coachIds = tx_rnbase_util_Strings::intExplode(',', $team->record['coaches']);
+			if($team->getProperty('coaches')) {
+				$coachIds = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('coaches'));
 				$teamProfiles = array_merge($teamProfiles, $coachIds);
 				$coachIds = array_flip($coachIds);
 			}
-			if($team->record['supporters']) {
-				$supporterIds = tx_rnbase_util_Strings::intExplode(',', $team->record['supporters']);
+			if($team->getProperty('supporters')) {
+				$supporterIds = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('supporters'));
 				$teamProfiles = array_merge($teamProfiles, $supporterIds);
 				$supporterIds= array_flip($supporterIds);
 			}
@@ -128,7 +128,6 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 					// TODO: In Schleife packen und den nächsten sichtbaren Link suchen.
 					$ret['prev'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$prevId]);
 					$ret['next'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$nextId]);
-//					break;
 				}
 			}
 		}
@@ -162,8 +161,3 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 	}
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_ProfileView.php']);
-}
-?>

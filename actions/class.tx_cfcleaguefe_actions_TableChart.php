@@ -115,15 +115,15 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 					if(!isset($dataSets[$scoreArr['teamId']])) {
 						// Basisdaten setzen
 						$team = $scoreArr['team'];
-						$cObj->data = $team->record;
+						$cObj->data = $team->getProperty();
 						$logo = $cObj->cObjGetSingle(
 								$configurations->get($confId.'team.logo'), $configurations->get($confId.'team.logo.'));
 						$dataSets[$scoreArr['teamId']] = array(
 								'info' => array(
-										'teamid'=> $team->record['uid'],
+										'teamid'=> $team->getProperty('uid'),
 										'clubid'=> $scoreArr['clubId'],
-										'name'=> $team->record['name'],
-										'short_name'=> $team->record['short_name'],
+										'name'=> $team->getProperty('name'),
+										'short_name'=> $team->getProperty('short_name'),
 										'logo' => $logo,
 								),
 						);

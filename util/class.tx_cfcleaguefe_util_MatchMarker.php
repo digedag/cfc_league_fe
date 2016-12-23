@@ -37,7 +37,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker{
    * Erstellt eine neue Instanz
    * @param $options Array with options. not used until now.
    */
-  function __construct(&$options = array()) {
+  public function __construct(&$options = array()) {
     // Den TeamMarker erstellen
   	$this->teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
   	$this->competitionMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');

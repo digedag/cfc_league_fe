@@ -60,7 +60,7 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 	 */
 	public function getTeamId($team) {
 		if($this->getConfValue('teamMode') == 'club') {
-			return $team->record['club'];
+			return $team->getProperty('club');
 		}
 		return $team->getUid();
 	}
