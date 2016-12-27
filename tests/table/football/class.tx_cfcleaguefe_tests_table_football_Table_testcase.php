@@ -25,7 +25,6 @@
 
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_rnbase_util_Spyc');
-//tx_rnbase::load('tx_cfcleaguefe_models_team');
 tx_rnbase::load('tx_cfcleaguefe_table_Builder');
 tx_rnbase::load('tx_cfcleague_models_Competition');
 tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
@@ -147,9 +146,8 @@ class tx_cfcleaguefe_tests_table_football_Table_testcase extends tx_rnbase_tests
 
 		$league = &tx_cfcleague_models_Competition::getInstance($data['record']['uid'], $data['record']);
 		$teams = $this->makeInstances($data['teams'],$data['teams']['clazz']);
-		// TODO: so geht das nicht mehr!
-// 		foreach ($teams As $team)
-// 			tx_cfcleaguefe_models_team::addInstance($team);
+		foreach ($teams As $team)
+			tx_cfcleaguefe_models_team::addInstance($team);
 		$matches = $this->makeInstances($data['matches'],$data['matches']['clazz']);
 		$league->setTeams($teams);
 		$league->setPenalties(array());

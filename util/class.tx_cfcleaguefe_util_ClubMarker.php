@@ -63,13 +63,20 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker {
 		return $out;
 	}
 
+    /**
+     * @param $item tx_cfcleaguefe_models_club
+     * @param $template
+     * @param $configurations
+     * @param $confId
+     * @param $marker
+     */
 	protected function prepareRecord($item, $template, $configurations, $confId, $marker) {
-		$item->record['distance'] = '';
+		$item->setProperty('distance', '');
 		if($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
 			$lat = doubleval($configurations->get($confId.'_basePosition.latitude'));
 			$lng = doubleval($configurations->get($confId.'_basePosition.longitude'));
 			tx_rnbase::load('tx_cfcleaguefe_util_Maps');
-			$item->record['distance'] = tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng);
+			$item->setProperty('distance', tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
 		}
 	}
 	protected function _addAddress($template, $address, $formatter, $addressConf, $markerPrefix) {
