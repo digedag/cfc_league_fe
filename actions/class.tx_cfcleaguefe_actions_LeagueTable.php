@@ -22,7 +22,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_models_competition');
+tx_rnbase::load('tx_cfcleague_models_Competition');
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 
 tx_rnbase::load('tx_rnbase_util_Math');
@@ -60,7 +60,7 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC {
 		// Sollte kein Wettbewerb ausgewählt bzw. konfiguriert worden sein, dann suchen wir eine
 		// passende Liga
 		if(strlen($compUids) == 0) {
-			$comps = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids, '1');
+			$comps = tx_cfcleague_models_Competition::findAll($saisonUids, $groupUids, $compUids, '1');
 			if(count($comps) > 0)
 				$currCompetition = $comps[0];
 				// Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten.
@@ -94,8 +94,3 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC {
 	function getViewClassName() { return 'tx_cfcleaguefe_views_LeagueTable';}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_LeagueTable.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_LeagueTable.php']);
-}
-
-?>

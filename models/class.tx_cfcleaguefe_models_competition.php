@@ -196,7 +196,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 			$options['where'] .= '( home IN(' . $teamIds . ') OR ';
 			$options['where'] .= 'guest IN(' . $teamIds . ')) AND ';
 		}
-		$options['where'] .= 'competition = ' . $this->uid . ' ';
+		$options['where'] .= 'competition = ' . $this->getUid() . ' ';
 		$rows = Tx_Rnbase_Database_Connection::getInstance()->doSelect($what,$from,$options,0);
 		$ret = 0;
 		if(count($rows))
