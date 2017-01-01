@@ -79,19 +79,12 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.saison</label>
               <config>
                 <type>select</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_saison</allowed>
                 <foreign_table>tx_cfcleague_saison</foreign_table>
                 <foreign_table_where>ORDER BY tx_cfcleague_saison.sorting</foreign_table_where>
                 <enableMultiSelectFilterTextfield>1</enableMultiSelectFilterTextfield>
                 <multiple>0</multiple>
                 <maxitems>200</maxitems>
                 <size>10</size>
-                <wizards>
-                  <suggest>
-                    <type>suggest</type>
-                  </suggest>
-                </wizards>
               </config>
             </TCEforms>
           </saisonSelection>
@@ -110,19 +103,12 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.group</label>
               <config>
                 <type>select</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_group</allowed>
                 <foreign_table>tx_cfcleague_group</foreign_table>
                 <enableMultiSelectFilterTextfield>1</enableMultiSelectFilterTextfield>
                 <multiple>0</multiple>
                 <maxitems>20</maxitems>
-                <size>5</size>
-                <wizards>
-                  <suggest>
-                    <type>suggest</type>
-                  </suggest>
-                </wizards>
-              </config>
+                <size>10</size>
+               </config>
             </TCEforms>
           </groupSelection>
           <groupSelectionInput>
