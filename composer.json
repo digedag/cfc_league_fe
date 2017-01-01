@@ -1,0 +1,51 @@
+{
+	"name" : "digedag/cfc_league_fe",
+	"description" : "TYPO3 extension to manage sports competitions and clubs.",
+	"version" : "1.1.0",
+	"type" : "typo3-cms-extension",
+	"keywords" : [
+		"TYPO3 CMS",
+		"mvc",
+		"sports",
+		"football"
+	],
+	"homepage" : "http://www.system25.de/",
+	"license" : "GPL-2.0+",
+	"authors" : [{
+			"name" : "René Nitzsche",
+			"email" : "rene@system25.de",
+			"role" : "Developer"
+		}
+	],
+	"support" : {
+		"email" : "rene@system25.de",
+		"source" : "https://github.com/digedag/cfc_league_fe",
+		"issues" : "https://github.com/digedag/cfc_league_fe/issues"
+	},
+	"replace" : {
+		"cfc_league_fe" : "self.version",
+		"typo3-ter/cfc-league-fe" : "self.version"
+	},
+	"require" : {
+		"typo3/cms-core" : ">=4.5.0 <=7.6.99",
+		"digedag/cfc_league" : ">=1.1.0",
+		"digedag/rn-base" : ">=1.2.0"
+	},
+	"autoload" : {
+		"classmap" : [
+			"actions/",
+			"Classes/",
+			"filter/",
+			"hooks/",
+			"models/",
+			"search/",
+			"sv1/",
+			"sv2/",
+			"svmarker/",
+			"table/",
+			"tests/",
+			"util/",
+			"views/"
+		]
+	}
+}
