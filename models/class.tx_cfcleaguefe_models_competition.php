@@ -270,7 +270,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
    * @param string $compTypes String kommaseparierte Liste von Wettkampftypen (1-Liga;2-Pokal;0-Sonstige)
    * @return Array der gefundenen Wettkämpfe
    */
-  function findAll($saisonUid = '', $groupUid = '', $uids = '', $compTypes='') {
+  public static function findAll($saisonUid = '', $groupUid = '', $uids = '', $compTypes='') {
     if(is_string($uids) && strlen($uids) > 0) {
       $where = 'uid IN (' . $uids .')';
     }
