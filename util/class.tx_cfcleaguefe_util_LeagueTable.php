@@ -364,9 +364,9 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			if(array_key_exists($teamId, $this->_teamData)) continue;
 			$this->_teamData[$teamId]['team'] = $team;
 			$this->_teamData[$teamId]['teamId'] = $teamId;
-			$this->_teamData[$teamId]['teamName'] = $team->record['name'];
-			$this->_teamData[$teamId]['teamNameShort'] = $team->record['short_name'];
-			$this->_teamData[$teamId]['clubId'] = $team->record['club'];
+			$this->_teamData[$teamId]['teamName'] = $team->getProperty('name');
+			$this->_teamData[$teamId]['teamNameShort'] = $team->getProperty('short_name');
+			$this->_teamData[$teamId]['clubId'] = $team->getProperty('club');
 			$this->_teamData[$teamId]['points'] = 0;
 			// Bei 3-Punktssystem muss mit -1 initialisiert werden, damit der Marker später ersetzt wird
 			$this->_teamData[$teamId]['points2'] = ($tableProvider->isCountLoosePoints()) ? 0 : -1;
@@ -389,7 +389,7 @@ class tx_cfcleaguefe_util_LeagueTable  {
 			// Muss das Team hervorgehoben werden?
 			$markClubs = $tableProvider->getMarkClubs();
 			if(count($markClubs)) {
-				$this->_teamData[$teamId]['markClub'] = in_array($team->record['club'], $markClubs) ? 1 : 0;
+				$this->_teamData[$teamId]['markClub'] = in_array($team->getProperty('club'), $markClubs) ? 1 : 0;
 			}
 		}
 	}

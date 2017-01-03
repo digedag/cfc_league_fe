@@ -74,7 +74,6 @@ static $total = 0;
     // Wir betrachten nur die Spieler des gesetzten Clubs
     $team = $match->getHome();
     if($this->isObservedTeam($team)) {
-    //&if($team->record['club'] == $clubId || !$clubId) {
       $players = $this->getPlayer($match,true); // All Spieler des Heimteams holen
 
     if(is_array($players))
@@ -102,9 +101,9 @@ static $total = 0;
    */
 	protected function isObservedTeam($team) {
 		$clubId = $this->scopeArr['CLUB_UIDS'];
-		$ret = $team->record['club'] == $clubId || !$clubId;
+		$ret = $team->getProperty('club') == $clubId || !$clubId;
 		$groupId = $this->scopeArr['TEAMGROUP_UIDS'];
-		$ret = $ret && ($team->record['agegroup'] == $groupId || !$groupId);
+		$ret = $ret && ($team->getProperty('agegroup') == $groupId || !$groupId);
 		return $ret;
 	}
 	/**
@@ -371,19 +370,20 @@ static $total = 0;
 
   /**
    * Sortiert die Spieler entsprechend der Reihenfolge im Team
-   * @param $players array of tx_cfcleaguefe_models_profile
+   * @param tx_cfcleaguefe_models_profile[] $players
+   * @param tx_cfcleaguefe_models_team $team
    */
   function _sortPlayer($players, $team) {
     $ret = array();
-    if(strlen(trim($team->record['players'])) > 0 ) {
+    if(strlen(trim($team->getProperty('players'))) > 0 ) {
       if(count($players)) {
         // Jetzt die Spieler in die richtige Reihenfolge bringen
-        $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $team->record['players']);
+        $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('players'));
         $uids = array_flip($uids);
         foreach($players as $record) {
           // In $record liegt der Statistikdatensatz des Spielers
           $player = $record['player'];
-          $ret[$uids[$player->uid]] = $record;
+          $ret[$uids[$player->getUid()]] = $record;
         }
       }
     }

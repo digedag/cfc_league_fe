@@ -86,7 +86,8 @@ class tx_cfcleaguefe_filter_Match extends tx_rnbase_filter_BaseFilter {
 		$subpart = tx_rnbase_util_Templates::getSubpart($template, '###FILTERITEMS###');
 		if(is_array($this->data) && count($this->data) > 0) {
 			// Dafür sorgen, daß überflüssige Subpart verschwinden
-			foreach(self::$profileData As $key) $subpartArray['###'.strtoupper($key).'###'] = '';
+			foreach(self::$profileData As $key)
+				$subpartArray['###'.strtoupper($key).'###'] = '';
 			$profileKeys = array_flip(self::$profileData);
 			tx_rnbase::load('tx_cfcleague_models_Profile');
 			foreach($this->data As $key => $filterData) {
@@ -95,7 +96,7 @@ class tx_cfcleaguefe_filter_Match extends tx_rnbase_filter_BaseFilter {
 					$profSubpartName = '###'.strtoupper($key).'###';
 					$profileSubpart = tx_rnbase_util_Templates::getSubpart($template, $profSubpartName);
 
-					$profile = tx_cfcleague_models_Profile::getInstance($filterData);
+					$profile = tx_cfcleague_models_Profile::getProfileInstance($filterData);
 					$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
 					$subpartArray[$profSubpartName] = $profileMarker->parseTemplate($profileSubpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
 				}

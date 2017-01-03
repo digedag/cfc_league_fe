@@ -145,9 +145,9 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 
 			$this->_teamData[$teamId]['team'] = $team;
 			$this->_teamData[$teamId]['teamId'] = $teamId;
-			$this->_teamData[$teamId]['teamName'] = $team->record['name'];
-			$this->_teamData[$teamId]['teamNameShort'] = $team->record['short_name'];
-			$this->_teamData[$teamId]['clubId'] = $team->record['club'];
+			$this->_teamData[$teamId]['teamName'] = $team->getProperty('name');
+			$this->_teamData[$teamId]['teamNameShort'] = $team->getProperty('short_name');
+			$this->_teamData[$teamId]['clubId'] = $team->getProperty('club');
 			$this->_teamData[$teamId]['points'] = 0;
 			// Bei 3-Punktssystem muss mit -1 initialisiert werden, damit der Marker später ersetzt wird
 			// isLooseCount sollte zunächst über den matchProvider geholt werden
@@ -171,7 +171,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 			// Muss das Team hervorgehoben werden?
 			$markClubs = $configurator->getMarkClubs();
 			if(count($markClubs)) {
-				$this->_teamData[$teamId]['markClub'] = in_array($team->record['club'], $markClubs) ? 1 : 0;
+				$this->_teamData[$teamId]['markClub'] = in_array($team->getProperty('club'), $markClubs) ? 1 : 0;
 			}
 			$this->initTeam($teamId);
 		}

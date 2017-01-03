@@ -81,7 +81,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 //			$this->_preparePenalties($row, $penalties);
 			$team = $row['team'];
 			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-			$team->record = Tx_Rnbase_Utility_T3General::array_merge($row, $team->record);
+			$team->setProperty(Tx_Rnbase_Utility_T3General::array_merge($row, $team->getProperties()));
 			$parts[] = $clubMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), 'leaguetableAllTime.table.', 'ROW');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 		}
@@ -217,7 +217,3 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
   }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTableAllTime.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LeagueTableAllTime.php']);
-}
-?>

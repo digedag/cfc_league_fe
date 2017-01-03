@@ -36,7 +36,7 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 	 * @param arrayobject $viewData
 	 * @return string
 	 */
-	function handleRequest(&$parameters, &$configurations, &$viewData) {
+	public function handleRequest(&$parameters, &$configurations, &$viewData) {
 		// Die MatchID ermittlen
 		// Ist sie fest definiert?
 		$matchId = intval($configurations->get('matchreportMatchUid'));
@@ -45,7 +45,6 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 			if($matchId == 0)
 				return 'No matchId found!';
 		}
-
 		// Das Spiel laden
 		$matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $matchId, $configurations);
 		$viewData->offsetSet('matchReport', $matchReport); // Den Spielreport für den View bereitstellen
@@ -55,10 +54,7 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 		return null;
 	}
 
-	function getTemplateName() {return 'matchreport';}
-	function getViewClassName() { return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchReport' : 'tx_rnbase_view_phpTemplateEngine'; }
+	public function getTemplateName() {return 'matchreport';}
+	public function getViewClassName() { return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchReport' : 'tx_rnbase_view_phpTemplateEngine'; }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchReport.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchReport.php']);
-}

@@ -69,10 +69,10 @@ class tx_cfcleaguefe_util_LeagueTableWriter  {
 			$this->_setMark($row, $marks);
 			// auf Strafen prüfen
 			$this->_preparePenalties($row, $penalties);
-
+			/* @var $team tx_cfcleaguefe_models_team */
 			$team = $row['team'];
 			unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-			$team->record = Tx_Rnbase_Utility_T3General::array_merge($row, $team->record);
+			$team->setProperty( Tx_Rnbase_Utility_T3General::array_merge($row, $team->getProperties()));
 
 			$parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId.'table.', 'ROW');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
