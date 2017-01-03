@@ -274,7 +274,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 			$leagueUid = intval($scopeArr['COMP_UIDS']);
 		if(!$leagueUid) throw new Exception('Could not find a valid competition.');
 
-		$league = tx_cfcleague_models_Competition::getInstance($leagueUid);
+		$league = tx_cfcleague_models_Competition::getCompetitionInstance($leagueUid);
 		if(!$league->isValid())
 			throw new Exception('Competition with uid '.intval($leagueUid). ' is not valid!');
 		return $league;

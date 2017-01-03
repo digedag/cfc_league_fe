@@ -26,6 +26,8 @@ tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_cfcleague_models_Competition');
 tx_rnbase::load('tx_rnbase_util_Math');
 tx_rnbase::load('Tx_Rnbase_Utility_Strings');
+tx_rnbase::load('Tx_Rnbase_Database_Connection');
+
 
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
@@ -93,19 +95,19 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 				$options['wrapperclass'] = 'tx_cfcleaguefe_models_match';
 				// Issue 1880237: Return matches sorted by round
 				$options['orderby'] = 'round, date';
-				$this->matchesByState[$status . '_' . $scope] = tx_rnbase_util_DB::doSelect($what,'tx_cfcleague_games',$options, 0);
+				$this->matchesByState[$status . '_' . $scope] = Tx_Rnbase_Database_Connection::getInstance()->doSelect($what,'tx_cfcleague_games',$options, 0);
 			}
 			return $this->matchesByState[$status . '_' . $scope];
 		}
 	}
 
 	function getName() {
-		return $this->record['name'];
+		return $this->getProperty('name');
 	}
 	function getInternalName() {
-		$ret = $this->record['internal_name'];
-		$ret = strlen($ret) ? $ret : $this->record['short_name'];
-		$ret = strlen($ret) ? $ret : $this->record['name'];
+		$ret = $this->getProperty('internal_name');
+		$ret = strlen($ret) ? $ret : $this->getProperty('short_name');
+		$ret = strlen($ret) ? $ret : $this->getProperty('name');
 		return $ret;
 	}
 	/**
@@ -124,21 +126,21 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 	 * @return boolean
 	 */
 	function isTypeLeague() {
-		return $this->record['type'] == 1;
+		return $this->getProperty('type') == 1;
 	}
 	/**
 	 * Whether or not this competition is type league
 	 * @return boolean
 	 */
 	function isTypeCup() {
-		return $this->record['type'] == 2;
+		return $this->getProperty('type') == 2;
 	}
 	/**
 	 * Whether or not this competition is type league
 	 * @return boolean
 	 */
 	function isTypeOther() {
-		return $this->record['type'] == 0;
+		return $this->getProperty('type') == 0;
 	}
 	/**
 	 * Returns the number of match parts. Default is two.
@@ -146,7 +148,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 	 * @return int
    */
 	public function getMatchParts() {
-		$parts = intval($this->record['match_parts']);
+		$parts = intval($this->getProperty('match_parts'));
 		return $parts > 0 ? $parts : 2;
 	}
 	/**
@@ -160,181 +162,183 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 		# WHERE
 		$options = array();
 		# Die UID der Liga setzen
-		$options['where'] = 'competition="'.$this->uid.'"';
+		$options['where'] = 'competition="'.$this->getUid().'"';
 		$options['groupby'] = 'round,round_name';
 		$options['orderby'] = 'round';
 		$options['wrapperclass'] = 'tx_cfcleaguefe_models_competition_round';
 
-		return tx_rnbase_util_DB::doSelect($what, 'tx_cfcleague_games', $options);
+		return Tx_Rnbase_Database_Connection::getInstance()->doSelect($what, 'tx_cfcleague_games', $options);
 	}
 	/**
 	 * Liefert die Spiele einer bestimmten Spielrunde
 	 *
 	 * @param int $roundId
 	 */
-	function getMatchesByRound($roundId) {
+	public function getMatchesByRound($roundId) {
 		$fields = array();
 		$options = array();
-	  $fields['MATCH.ROUND'][OP_EQ_INT] = $roundId;
-	  $fields['MATCH.COMPETITION'][OP_EQ_INT] = $this->uid;
+		$fields['MATCH.ROUND'][OP_EQ_INT] = $roundId;
+		$fields['MATCH.COMPETITION'][OP_EQ_INT] = $this->getUid();
 //	  $options['debug'] = 1;
 		$service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
-  	$matches = $service->search($fields, $options);
-  	return $matches;
-  }
+		$matches = $service->search($fields, $options);
+		return $matches;
+	}
 
-  /**
-   * Anzahl der Spiele des/der Teams in diesem Wettbewerb
-   */
-  function getNumberOfMatches($teamIds, $status = '0,1,2'){
-    $what = 'count(uid) As matches';
-    $from = 'tx_cfcleague_games';
-    $options['where'] = 'status IN(' . $status . ') AND ';
-    if($teamIds) {
-      $options['where'] .= '( home IN(' . $teamIds . ') OR ';
-      $options['where'] .= 'guest IN(' . $teamIds . ')) AND ';
-    }
-    $options['where'] .= 'competition = ' . $this->uid . ' ';
-    $rows = tx_rnbase_util_DB::doSelect($what,$from,$options,0);
-    $ret = 0;
-    if(count($rows))
-      $ret = intval($rows[0]['matches']);
-    return $ret;
-  }
+	/**
+	 * Anzahl der Spiele des/der Teams in diesem Wettbewerb
+	 */
+	public function getNumberOfMatches($teamIds, $status = '0,1,2'){
+		$what = 'count(uid) As matches';
+		$from = 'tx_cfcleague_games';
+		$options['where'] = 'status IN(' . $status . ') AND ';
+		if($teamIds) {
+			$options['where'] .= '( home IN(' . $teamIds . ') OR ';
+			$options['where'] .= 'guest IN(' . $teamIds . ')) AND ';
+		}
+		$options['where'] .= 'competition = ' . $this->getUid() . ' ';
+		$rows = Tx_Rnbase_Database_Connection::getInstance()->doSelect($what,$from,$options,0);
+		$ret = 0;
+		if(count($rows))
+			$ret = intval($rows[0]['matches']);
+		return $ret;
+	}
 
-  /**
-   * Returns the age croup of this competition.
-   * Since version 0.6.0 there are multiple agegroups possible. For backward compatibility this
-   * method returns the first competition per default.
-   *
-   * @return tx_cfcleaguefe_models_group
-   */
-  function getGroup($all=false) {
+	/**
+	 * Returns the age croup of this competition.
+	 * Since version 0.6.0 there are multiple agegroups possible. For backward compatibility this
+	 * method returns the first competition per default.
+	 *
+	 * @return tx_cfcleaguefe_models_group
+	 */
+	public function getGroup($all=false) {
 		tx_rnbase::load('tx_cfcleaguefe_models_group');
 		$groupIds = Tx_Rnbase_Utility_Strings::intExplode(',',$this->record['agegroup']);
-		if(!count($groupIds)) return null;
-		if(!$all) return tx_cfcleaguefe_models_group::getGroupInstance($groupIds[0]);
+		if(!count($groupIds))
+			return null;
+		if(!$all)
+			return tx_cfcleaguefe_models_group::getGroupInstance($groupIds[0]);
 		$ret = array();
 		foreach($groupIds As $groupId) {
 			$ret[] = tx_cfcleaguefe_models_group::getGroupInstance($groupId);
 		}
-  	return $ret;
-  }
-  /**
-   * Returns all team participating this competition.
-   * @return array of tx_cfcleaguefe_models_team
-   */
-  function getTeams($ignoreDummies = true) {
-    if(!is_array($this->teams)) {
-      $uids = $this->record['teams'];
-      $options['where'] = 'uid IN (' . $uids .') ';
-      if($ignoreDummies)
-      	$options['where'] .= ' AND dummy = 0  ';
+		return $ret;
+	}
+	/**
+	 * Returns all team participating this competition.
+	 * @return array of tx_cfcleaguefe_models_team
+	 */
+	public function getTeams($ignoreDummies = true) {
+		if(!is_array($this->teams)) {
+			$uids = $this->getProperty('teams');
+			$options['where'] = 'uid IN (' . $uids .') ';
+			if($ignoreDummies)
+				$options['where'] .= ' AND dummy = 0  ';
 
-      $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
-      $options['orderby'] = 'sorting';
-      $this->teams = tx_rnbase_util_DB::doSelect('*','tx_cfcleague_teams',$options, 0);
-    }
-    return $this->teams;
-  }
+			$options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
+			$options['orderby'] = 'sorting';
+			$this->teams = Tx_Rnbase_Database_Connection::getInstance()->doSelect('*','tx_cfcleague_teams',$options, 0);
+		}
+		return $this->teams;
+	}
 
-  /**
-   * Set participating teams. This is usually not necessary, since getTeams()
-   * makes an automatic lookup in database.
-   *
-   * @param array $teamsArr if $teamsArr is no array the internal array is removed
-   */
-  function setTeams($teamsArr) {
-    $this->teams = is_array($teamsArr) ? $teamsArr : NULL;
-  }
-  /**
-   * Returns an instance of tx_cfcleaguefe_models_competition
-   * @param int $uid
-   * @return tx_cfcleaguefe_models_competition
-   */
-  public static function &getInstance($uid, $record = 0) {
-    $uid = intval($uid);
-    $comp = self::$instances[$uid];
-    if(!is_object($comp)) {
-      $comp = new tx_cfcleaguefe_models_competition(is_array($record) ? $record : $uid);
-      self::$instances[$uid] = $comp;
-    }
-    return $comp;
-  }
-  /**
-   * statische Methode, die ein Array mit Instanzen dieser Klasse liefert.
-   * Es werden entweder alle oder nur bestimmte Wettkämpfe einer Saison geliefert.
-   * @param string $saisonUid int einzelne UID einer Saison
-   * @param string $groupUid int einzelne UID einer Altersklasse
-   * @param string $uids String kommaseparierte Liste von Competition-UIDs
-   * @param string $compTypes String kommaseparierte Liste von Wettkampftypen (1-Liga;2-Pokal;0-Sonstige)
-   * @return Array der gefundenen Wettkämpfe
-   */
-  function findAll($saisonUid = '', $groupUid = '', $uids = '', $compTypes='') {
-    if(is_string($uids) && strlen($uids) > 0) {
-      $where = 'uid IN (' . $uids .')';
-    }
-    else
-      $where = '1';
+	/**
+	 * Set participating teams. This is usually not necessary, since getTeams()
+	 * makes an automatic lookup in database.
+	 *
+	 * @param array $teamsArr if $teamsArr is no array the internal array is removed
+	 */
+	function setTeams($teamsArr) {
+		$this->teams = is_array($teamsArr) ? $teamsArr : NULL;
+	}
+	/**
+	 * Returns an instance of tx_cfcleaguefe_models_competition
+	 * @param int $uid
+	 * @return tx_cfcleaguefe_models_competition
+	 */
+	public static function &getInstance($uid, $record = 0) {
+		$uid = intval($uid);
+		$comp = self::$instances[$uid];
+		if(!is_object($comp)) {
+			$comp = new tx_cfcleaguefe_models_competition(is_array($record) ? $record : $uid);
+			self::$instances[$uid] = $comp;
+		}
+		return $comp;
+	}
+	/**
+	 * statische Methode, die ein Array mit Instanzen dieser Klasse liefert.
+	 * Es werden entweder alle oder nur bestimmte Wettkämpfe einer Saison geliefert.
+	 * @param string $saisonUid int einzelne UID einer Saison
+	 * @param string $groupUid int einzelne UID einer Altersklasse
+	 * @param string $uids String kommaseparierte Liste von Competition-UIDs
+	 * @param string $compTypes String kommaseparierte Liste von Wettkampftypen (1-Liga;2-Pokal;0-Sonstige)
+	 * @return Array der gefundenen Wettkämpfe
+	 */
+	public static function findAll($saisonUid = '', $groupUid = '', $uids = '', $compTypes='') {
+		if(is_string($uids) && strlen($uids) > 0) {
+			$where = 'uid IN (' . $uids .')';
+		}
+		else
+			$where = '1';
 
-    if(is_numeric($saisonUid)) {
-      $where .= ' AND saison = ' . $saisonUid .'';
-    }
+		if(is_numeric($saisonUid)) {
+			$where .= ' AND saison = ' . $saisonUid .'';
+		}
 
-    if(is_numeric($groupUid)) {
-      $where .= ' AND agegroup = ' . $groupUid .'';
-    }
+		if(is_numeric($groupUid)) {
+			$where .= ' AND agegroup = ' . $groupUid .'';
+		}
 
-    if(strlen($compTypes)) {
-      $where .= ' AND type IN (' . implode(Tx_Rnbase_Utility_Strings::intExplode(',', $compTypes), ',') . ')';
-    }
+		if(strlen($compTypes)) {
+			$where .= ' AND type IN (' . implode(Tx_Rnbase_Utility_Strings::intExplode(',', $compTypes), ',') . ')';
+		}
 
-    /*
-    SELECT * FROM tx_cfcleague_competition WHERE uid IN ($uid)
-    */
+		/*
+		SELECT * FROM tx_cfcleague_competition WHERE uid IN ($uid)
+		*/
 
 		$options = array();
 		$options['where'] = $where;
 		$options['orderby'] = 'sorting';
 		$options['wrapperclass'] = 'tx_cfcleaguefe_models_competition';
-		return tx_rnbase_util_DB::doSelect('*','tx_cfcleague_competition', $options);
-  }
+		return Tx_Rnbase_Database_Connection::getInstance()->doSelect('*','tx_cfcleague_competition', $options);
+	}
 
-  /**
-   * Liefert ein Array mit den Tabellen-Markierungen
-   * arr[$position] = array(markId, comment);
-   */
-  function getTableMarks() {
-    $str = $this->record['table_marks'];
-    if(!$str) return 0;
+	/**
+	 * Liefert ein Array mit den Tabellen-Markierungen
+	 * arr[$position] = array(markId, comment);
+	 */
+	public function getTableMarks() {
+		$str = $this->getProperty('table_marks');
+		if(!$str) return 0;
 
-    $ret = array();
-    $arr = Tx_Rnbase_Utility_Strings::trimExplode('|',$str);
-    foreach($arr As $item) {
-      // Jedes Item splitten
-      $mark = Tx_Rnbase_Utility_Strings::trimExplode(';',$item);
-      $positions = Tx_Rnbase_Utility_Strings::intExplode(',',$mark[0]);
-      $comments = Tx_Rnbase_Utility_Strings::trimExplode(',',$mark[1]);
-      // Jetzt das Ergebnisarray aufbauen
-      foreach($positions As $position) {
-        $ret[$position] = Array($comments[0], $comments[1]);
-      }
-
-    }
-    return $ret;
-  }
+		$ret = array();
+		$arr = Tx_Rnbase_Utility_Strings::trimExplode('|',$str);
+		foreach($arr As $item) {
+			// Jedes Item splitten
+			$mark = Tx_Rnbase_Utility_Strings::trimExplode(';',$item);
+			$positions = Tx_Rnbase_Utility_Strings::intExplode(',',$mark[0]);
+			$comments = Tx_Rnbase_Utility_Strings::trimExplode(',',$mark[1]);
+			// Jetzt das Ergebnisarray aufbauen
+			foreach($positions As $position) {
+				$ret[$position] = Array($comments[0], $comments[1]);
+			}
+		}
+		return $ret;
+	}
 
 	/**
 	 * Liefert die verhängten Strafen für Teams des Wettbewerbs.
+	 * @return tx_cfcleaguefe_models_competition_penalty[]
 	 */
-	function getPenalties() {
+	public function getPenalties() {
 		if(!is_array($this->penalties)) {
 			$options = array();
 			# Die UID der Liga setzen
 			$options['where'] = 'competition="'.$this->uid.'" ';
 			$options['orderby'] = 'sorting';
 			$options['wrapperclass'] = 'tx_cfcleaguefe_models_competition_penalty';
-			$this->penalties = tx_rnbase_util_DB::doSelect('*','tx_cfcleague_competition_penalty', $options);
+			$this->penalties = Tx_Rnbase_Database_Connection::getInstance()->doSelect('*','tx_cfcleague_competition_penalty', $options);
 		}
 		return $this->penalties;
 	}
@@ -355,8 +359,3 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 class tx_cfcleaguefe_models_competition_round extends tx_rnbase_model_base {
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition.php']);
-}
-
-?>

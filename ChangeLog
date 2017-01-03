@@ -3,7 +3,13 @@
 Änderungen
 ----------
 
-v1.0.1 (??.02.2015)
+v1.1.0 (23.12.2016)
+ * Modification for PHP7
+ * API changes of rn_base
+ * Some bug fixes (Thanks to Mario Näther!)
+ * Some refactorings
+
+v1.0.1 (07.05.2016)
  * Prev and next links in profile view if linked from teamview.
  * ScopeSelection: Marker for current item changed to ###SAISON_CURRENT_NAME###
  * TableChart based on JS-Libraries possible. Pre-Build examples for Flot and jqPlot.

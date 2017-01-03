@@ -99,7 +99,7 @@ class tx_cfcleaguefe_tests_table_volleyball_Table_testcase extends tx_rnbase_tes
 		$data = tx_rnbase_util_Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));
 		$data = $data[$leagueName];
 
-		$league = &tx_cfcleague_models_Competition::getInstance($data['record']['uid'], $data['record']);
+		$league = tx_cfcleague_models_Competition::getCompetitionInstance($data['record']['uid'], $data['record']);
 		$teams = $this->makeInstances($data['teams'],$data['teams']['clazz']);
 		// TODO: so geht das nicht mehr!
 // 		foreach ($teams As $team)

@@ -132,7 +132,7 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_rnbase_tests_BaseTest
 		$data = tx_rnbase_util_Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));
 		$data = $data[$leagueName];
 
-		$league = &tx_cfcleague_models_Competition::getInstance($data['record']['uid'], $data['record']);
+		$league = tx_cfcleague_models_Competition::getCompetitionInstance($data['record']['uid'], $data['record']);
 		$teams = $this->makeInstances($data['teams'],$data['teams']['clazz']);
 
 		foreach ($teams As $team)
@@ -146,7 +146,3 @@ class tx_cfcleaguefe_tests_LeagueTable_testcase extends tx_rnbase_tests_BaseTest
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/tests/class.tx_cfcleaguefe_tests_util_LeagueTable_testcase.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/tests/class.tx_cfcleaguefe_tests_util_LeagueTable_testcase.php']);
-}
-?>

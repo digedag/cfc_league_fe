@@ -23,6 +23,9 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_cfcleaguefe_models_team');
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 
 /**
  * Marker class for player statistics
@@ -31,30 +34,37 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
  */
 class tx_cfcleaguefe_sv2_TeamStatisticsMarker extends tx_rnbase_util_BaseMarker {
 
-  function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker) {
-    $configurations =& $formatter->configurations;
-    // Das Template für ein Team holen
-    $template = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_TEAM###');
+	/**
+	 *
+	 * @param unknown $srvTemplate
+	 * @param unknown $stats
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param unknown $statsConfId
+	 * @param unknown $statsMarker
+	 */
+	function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker) {
+		$configurations =& $formatter->configurations;
+		// Das Template für ein Team holen
+		$template = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_TEAM###');
 
-    // Es wird der TeamMarker verwendet
-    $markerObj = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-    $markerObj->initLabelMarkers($formatter, $statsConfId.'team.', $statsMarker.'_TEAM');
-    $markerArray = $markerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
+		// Es wird der TeamMarker verwendet
+		$markerObj = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+		$markerObj->initLabelMarkers($formatter, $statsConfId.'team.', $statsMarker.'_TEAM');
+		$markerArray = $markerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
 
-    $rowRoll = intval($configurations->get($statsConfId.'team.roll.value'));
-    $rowRollCnt = 0;
-    $parts = array();
-    foreach ($stats as $teamStat) {
+		$rowRoll = intval($configurations->get($statsConfId.'team.roll.value'));
+		$rowRollCnt = 0;
+		$parts = array();
+		foreach ($stats as $teamStat) {
 			try {
-				tx_rnbase::load('tx_cfcleaguefe_models_team');
-				$team = call_user_func(array('tx_cfcleaguefe_models_team','getInstance'), $teamStat['team']);
+				$team = tx_cfcleaguefe_models_team::getTeamInstance($teamStat['team']);
 			}
 			catch (Exception $e) {
 				continue; // Ohne Team wird auch nix gezeigt
 			}
 			unset($playerStat['team']); // PHP 5.2, sonst klappt der merge nicht
-			$team->record = array_merge($teamStat, $team->record);
-			$team->record['roll'] = $rowRollCnt;
+			$team->setProperty(array_merge($teamStat, $team->getProperties()));
+			$team->setProperty('roll', $rowRollCnt);
 			// Jetzt für jedes Team das Template parsen
 			$parts[] = $markerObj->parseTemplate($template, $team, $formatter, $statsConfId.'team.', $statsMarker.'_TEAM');
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
@@ -63,13 +73,7 @@ class tx_cfcleaguefe_sv2_TeamStatisticsMarker extends tx_rnbase_util_BaseMarker 
 		$subpartArray['###'.$statsMarker.'_TEAM###'] = implode($parts, $configurations->get($statsMarker.'team.implode'));
 
 		$markerArray['###TEAMCOUNT###'] = count($parts);
-		return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
 	}
 
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_TeamStatisticsMarker.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_TeamStatisticsMarker.php']);
-}
-
-?>
