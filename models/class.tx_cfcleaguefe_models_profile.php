@@ -23,6 +23,8 @@
 ***************************************************************/
 
 tx_rnbase::load('tx_rnbase_model_base');
+tx_rnbase::load('Tx_Cfcleaguefe_Utility_Signs');
+
 
 /**
  * Model für ein Personenprofil.
@@ -287,9 +289,3 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
 	}
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_profile.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_profile.php']);
-}
-
-?>
