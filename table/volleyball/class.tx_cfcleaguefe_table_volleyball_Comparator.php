@@ -136,6 +136,3 @@ class tx_cfcleaguefe_table_volleyball_Comparator implements tx_cfcleaguefe_table
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/volleyball/class.tx_cfcleaguefe_table_volleyball_Comparator.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/volleyball/class.tx_cfcleaguefe_table_volleyball_Comparator.php']);
-}
