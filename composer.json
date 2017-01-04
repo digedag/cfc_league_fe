@@ -1,7 +1,7 @@
 {
 	"name" : "digedag/cfc_league_fe",
 	"description" : "TYPO3 extension to manage sports competitions and clubs.",
-	"version" : "1.1.0",
+	"version" : "1.1.1",
 	"type" : "typo3-cms-extension",
 	"keywords" : [
 		"TYPO3 CMS",
