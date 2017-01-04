@@ -3,6 +3,10 @@
 Änderungen
 ----------
 
+v1.1.1 (04.01.2017)
+ * composer.json added
+ * #12 flexform for competition plugin with better selection of clubs, age groups and saisons (Thanks to Mario Näther!) 
+
 v1.1.0 (23.12.2016)
  * Modification for PHP7
  * API changes of rn_base
