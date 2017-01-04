@@ -82,7 +82,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 		}
 
 		$chartData = $this->prepareChartData($scopeArr, $configurations, $this->getConfId());
-		$viewData->offsetSet('json', json_encode($chartData)); // Die Tabelle für den View bereitstellen
+		$viewData->offsetSet('json', json_encode($chartData, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_QUOT)); // Die Tabelle für den View bereitstellen
 	}
 
 	/**
