@@ -101,56 +101,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 		}
 	}
 
-	function getName() {
-		return $this->getProperty('name');
-	}
-	function getInternalName() {
-		$ret = $this->getProperty('internal_name');
-		$ret = strlen($ret) ? $ret : $this->getProperty('short_name');
-		$ret = strlen($ret) ? $ret : $this->getProperty('name');
-		return $ret;
-	}
-	/**
-	 * Set matches for a state and scope
-	 *
-	 * @param array $matchesArr
-	 * @param int $status
-	 * @param int $scope
-	 */
-	function setMatches($matchesArr, $status, $scope = 0) {
- 		$this->matchesByState[intval($status) . '_' . intval($scope)] = is_array($matchesArr) ? $matchesArr : NULL;
-	}
 
-	/**
-	 * Whether or not this competition is type league
-	 * @return boolean
-	 */
-	function isTypeLeague() {
-		return $this->getProperty('type') == 1;
-	}
-	/**
-	 * Whether or not this competition is type league
-	 * @return boolean
-	 */
-	function isTypeCup() {
-		return $this->getProperty('type') == 2;
-	}
-	/**
-	 * Whether or not this competition is type league
-	 * @return boolean
-	 */
-	function isTypeOther() {
-		return $this->getProperty('type') == 0;
-	}
-	/**
-	 * Returns the number of match parts. Default is two.
-	 *
-	 * @return int
-   */
-	public function getMatchParts() {
-		$parts = intval($this->getProperty('match_parts'));
-		return $parts > 0 ? $parts : 2;
-	}
 	/**
 	 * Liefert ein Array mit allen Spielrunden der Liga
 	 *
@@ -204,26 +155,6 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 		return $ret;
 	}
 
-	/**
-	 * Returns the age croup of this competition.
-	 * Since version 0.6.0 there are multiple agegroups possible. For backward compatibility this
-	 * method returns the first competition per default.
-	 *
-	 * @return tx_cfcleaguefe_models_group
-	 */
-	public function getGroup($all=false) {
-		tx_rnbase::load('tx_cfcleaguefe_models_group');
-		$groupIds = Tx_Rnbase_Utility_Strings::intExplode(',',$this->record['agegroup']);
-		if(!count($groupIds))
-			return null;
-		if(!$all)
-			return tx_cfcleaguefe_models_group::getGroupInstance($groupIds[0]);
-		$ret = array();
-		foreach($groupIds As $groupId) {
-			$ret[] = tx_cfcleaguefe_models_group::getGroupInstance($groupId);
-		}
-		return $ret;
-	}
 	/**
 	 * Returns all team participating this competition.
 	 * @return array of tx_cfcleaguefe_models_team
