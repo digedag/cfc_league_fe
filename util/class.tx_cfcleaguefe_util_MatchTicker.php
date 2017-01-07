@@ -74,7 +74,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 	 * @param tx_cfcleaguefe_models_match $match
 	 * @param mixed $types unused!
 	 */
-	function &getTicker4Match(&$match, $types = 0) {
+	public static function &getTicker4Match($match, $types = 0) {
 		$arr = tx_cfcleague_util_Cache::get('matchnotes_'.$match->getUid());
 		if($arr) return $arr;
 
@@ -89,9 +89,9 @@ class tx_cfcleaguefe_util_MatchTicker {
 			// Datensatz im Zielarray ablegen
 			$ret[] = $ticker;
 
-			$tickerRemoved = tx_cfcleaguefe_util_MatchTicker::_handleChange($ret, $ticker);
+			$tickerRemoved = self::_handleChange($ret, $ticker);
 			if(!$tickerRemoved) {
-				tx_cfcleaguefe_util_MatchTicker::_handleResult($ret[count($ret)-1]);
+				self::_handleResult($ret[count($ret)-1]);
 			}
 		}
 		tx_cfcleague_util_Cache::add('matchnotes_'.$match->getUid(), $ret);
@@ -103,7 +103,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 	 * in chronologischer Reihenfolge ankommen.
 	 * @param tx_cfcleaguefe_models_match_note $ticker der zuletzt hinzugefügte Ticker
 	 */
-	function _handleResult(&$ticker) {
+	private static function _handleResult(&$ticker) {
 		static $goals_home, $goals_guest;
 		if (!isset($goals_home)) {
 			$goals_home = 0;
@@ -133,7 +133,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 	 * @param tx_cfcleaguefe_models_match_note $ticker der zuletzt hinzugefügte Ticker
 	 * @return boolean wether or not the ticker record was removed
 	 */
-	function _handleChange(&$ret, &$ticker) {
+	private static function _handleChange(&$ret, &$ticker) {
 		$isRemoved = false;
 		if(!$ticker->isChange())
 			return $isRemoved;
@@ -232,6 +232,3 @@ Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.changei
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTicker.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTicker.php']);
-}
