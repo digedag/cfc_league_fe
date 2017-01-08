@@ -64,7 +64,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 		}
 		else {
 			// Die Tabelle wird berechnet, wenn der aktuelle Scope auf eine Liga zeigt
-			if(!(isset($compUids) && tx_rnbase_util_Math::testInt($compUids))) {
+			if(!(isset($compUids) && tx_rnbase_util_Math::isInteger($compUids))) {
 				return $out;
 			}
 			// Wir müssen den Typ des Wettbewerbs ermitteln.
@@ -82,7 +82,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 		}
 
 		$chartData = $this->prepareChartData($scopeArr, $configurations, $this->getConfId());
-		$viewData->offsetSet('json', json_encode($chartData, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_QUOT)); // Die Tabelle für den View bereitstellen
+		$viewData->offsetSet('json', $chartData);
 	}
 
 	/**
@@ -95,55 +95,9 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC {
 	protected function prepareChartData($scopeArr, $configurations, $confId) {
 		tx_rnbase::load('tx_cfcleaguefe_table_Builder');
 		$table = tx_cfcleaguefe_table_Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
-		// Aus den Table-Daten jetzt die DataSets erzeugen
-		$chartData = array();
-		// Anzahl der Plätze
-		$chartData['ymax'] = count($table->getTableData()->getScores());
-		// Anzahl der Spielrunden
-		$chartData['xmax'] = $table->getMatchProvider()->getMaxRounds();
 
-		$cObj = $configurations->getCObj();
-		$cObjData = $cObj->data;
-
-		$dataSets = array();
-		$data = $table->getTableData();
-		for($i=1; $i <= $data->getRoundSize(); $i++) {
-			$scores = $data->getScores($i);
-			foreach ($scores As $scoreArr) {
-				if(in_array($scoreArr['clubId'], $this->getChartClubs())) {
-					$point = array($i, $scoreArr['position']);
-					if(!isset($dataSets[$scoreArr['teamId']])) {
-						// Basisdaten setzen
-						$team = $scoreArr['team'];
-						$cObj->data = $team->getProperty();
-						$logo = $cObj->cObjGetSingle(
-								$configurations->get($confId.'team.logo'), $configurations->get($confId.'team.logo.'));
-						$dataSets[$scoreArr['teamId']] = array(
-								'info' => array(
-										'teamid'=> $team->getProperty('uid'),
-										'clubid'=> $scoreArr['clubId'],
-										'name'=> $team->getProperty('name'),
-										'short_name'=> $team->getProperty('short_name'),
-										'logo' => $logo,
-								),
-						);
-					}
-					$dataSets[$scoreArr['teamId']]['data'][] = $point;
-				}
-			}
-		}
-		$cObj->data = $cObjData;
-		// Issue 1880245: Chart auf der X-Achse bis Saisonende erweitern
-		// Den höchsten absolvierten Spieltag ermitteln
-		// 		$lastRound = $table->getTableData()->getRoundSize() + 1;
-		// 		$maxRound = $table->getMatchProvider()->getMaxRounds();
-		// 		$teamName = array_pop(array_keys($xyData));
-		// 		for( ; $lastRound <= $maxRound; $lastRound++) {
-		// 			// Es muss nur für ein Team ein weiterer Wert hinzugefügt werden
-		// 			$xyData[$teamName][$lastRound] = null;
-		// 		}
-		$chartData['datasets'] = array_values($dataSets);
-		return $chartData;
+		$builder = tx_rnbase::makeInstance('Tx_Cfcleaguefe_Chart_Builder');
+		return $builder->buildJson($table, $this->getChartClubs(), $configurations, $confId);
 	}
 	protected function getChartClubs(){
 		return Tx_Rnbase_Utility_Strings::intExplode(',',$this->getConfigurations()->get($this->getConfId().'chartClubs'));

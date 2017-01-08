@@ -1,8 +1,10 @@
 <?php
+use System25\Cfc_league_fe\Chart\Builder;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2017 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,12 +41,11 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base {
 		if(!tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
 			!tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) return;
 		$formatter = $params['formatter'];
-		//$chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
-		$chart = '<!-- TODO: convert to JS -->';
+		$chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
+//		$chart = '<!-- TODO: convert to JS -->';
 		$markerArray = $subpartArray = $wrappedSubpartArray = array();
 		$markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
 		$markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
-
 		$params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 	/**
@@ -57,43 +58,36 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base {
 	 */
 	protected function getMarkerValue($params, $formatter, $confId) {
 		if(!isset($params['match'])) return false;
+		/* @var $match tx_cfcleaguefe_models_match */
 		$match = $params['match'];
 		$competition = $match->getCompetition();
 		if(!$competition->isTypeLeague()) return '';
 
-		// TODO: die confid sollte angepaßt werden
-		$tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_SingleMatchTableProvider',
-			$match, $formatter->getConfigurations()->getParameters(), $formatter->getConfigurations(), $competition, 'matchreport.svChartMatch.table.');
+		$configurations = $formatter->getConfigurations();
 
-		$leagueTable = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTable');
-		$xyDataset = $leagueTable->generateChartData($tableProvider);
-		$tsArr = $formatter->configurations->get('matchreport.svChartMatch.');
+		tx_rnbase::load('tx_cfcleaguefe_table_Builder');
+		tx_rnbase::load('tx_cfcleague_models_Match');
+		$table = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($competition,
+				$competition->getMatches(tx_cfcleague_models_Match::MATCH_STATUS_FINISHED), $configurations, $confId);
 
-		tx_rnbase::load('tx_cfcleaguefe_actions_TableChart');
-		tx_cfcleaguefe_actions_TableChart::createChartDataset($xyDataset, $tsArr, $formatter->configurations, $competition, 'matchreport.svChartMatch.');
-		try {
-			tx_rnbase::load('tx_rnbase_util_Extensions');
-			require_once(PATH_site.tx_rnbase_util_Extensions::siteRelPath('pbimagegraph').'class.tx_pbimagegraph_ts.php');
-			$chart = tx_pbimagegraph_ts::make($tsArr);
-		}
-		catch(Exception $e) {
-			$chart = 'Chart not possible. Check devlog';
-			tx_rnbase::load('tx_rnbase_util_Logger');
-			tx_rnbase_util_Logger::warn('Error on chart creation.', 'cfc_league_fe', array('Exception' => $e->getMessage(), 'Match'=>$match->getUid()));
-		}
-		return $chart;
+		/* @var $builder Tx_Cfcleaguefe_Chart_Builder */
+		$builder = tx_rnbase::makeInstance('Tx_Cfcleaguefe_Chart_Builder');
+		$json = $builder->buildJson($table, [$match->getHome()->getClubUid(), $match->getGuest()->getClubUid()], $formatter->getConfigurations(), $confId);
+
+		$chartTemplate = tx_rnbase_util_Templates::getSubpartFromFile($configurations->get($confId.'template.file'), $configurations->get($confId.'template.subpart'));
+
+		$markerArray = $subpartArray = $wrappedSubpartArray = array();
+		$markerArray['###JSON###'] = $json;
+		$chartTemplate = tx_rnbase_util_Templates::substituteMarkerArrayCached($chartTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
+
+		return $chartTemplate;
 	}
 	/**
 	 * @return tx_cfcleaguefe_util_MatchTable
 	 */
-	function getMatchTable() {
+	protected function getMatchTable() {
 		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
 	}
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/svmarker/class.tx_cfcleaguefe_svmarker_ChartMatch.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/svmarker/class.tx_cfcleaguefe_svmarker_ChartMatch.php']);
-}
-
-?>
