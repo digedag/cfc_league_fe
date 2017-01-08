@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,6 +32,7 @@ tx_rnbase::load('Tx_Rnbase_Utility_T3General');
  */
 class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 	private $fullMode = true;
+	private $recursion = 0;
 
 	/**
 	 * Erstellt eine neue Instanz
@@ -66,7 +67,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 
 		$this->prepareFields($match);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord',
-			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
+			array('match' => $match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 
 		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
 		if($this->fullMode) {
@@ -82,17 +83,21 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 		// Es wird jetzt das Template verändert und die Daten der Teams eingetragen
 		$this->pushTT('parse home team');
-		if($this->containsMarker($template, $marker.'_HOME'))
+		if(self::containsMarker($template, $marker.'_HOME')) {
 			$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId.'home.', $marker.'_HOME');
+		}
 		$this->pullTT();
 		$this->pushTT('parse guest team');
-		if($this->containsMarker($template, $marker.'_GUEST'))
+		if(self::containsMarker($template, $marker.'_GUEST')) {
 			$template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId.'guest.', $marker.'_GUEST');
+		}
 		$this->pushTT('parse arena');
-		if($this->containsMarker($template, $marker.'_ARENA_'))
+		if(self::containsMarker($template, $marker.'_ARENA_')) {
 			$template = $this->_addArena($template, $match, $formatter, $confId.'arena.', $marker.'_ARENA');
-		if($this->containsMarker($template, $marker.'_SETRESULTS'))
+		}
+		if(self::containsMarker($template, $marker.'_SETRESULTS')) {
 			$template = $this->_addSetResults($template, $match, $formatter, $confId.'setresults.', $marker.'_SETRESULT');
+		}
 		$this->pullTT();
 
 		$template = $this->addTickerLists($template, $match, $formatter, $confId, $marker);
@@ -103,12 +108,19 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 			$this->pullTT();
 		}
 		// Add competition
-		$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
-
+		if(self::containsMarker($template, $marker.'_COMPETITION_')) {
+			$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
+		}
 		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		// Nochmal nach Markern schauen, falls SubTemplates aus dem TS neue Marker verwendet haben
+		if(self::containsMarker($template, $marker.'_') && $this->recursion == 0) {
+			// einmalige Rekursion starten
+			$this->recursion += 1;
+			$template = $this->parseTemplate($template, $match, $formatter, $confId);
+		}
 		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_afterSubst',
-			array('match' => &$match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
+			array('match' => $match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		return $template;
 	}
 
@@ -147,7 +159,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 			// Kein Stadium vorhanden. Leere Instanz anlegen und altname setzen
 			$sub = tx_rnbase_util_BaseMarker::getEmptyInstance('tx_cfcleague_models_Stadium');
 		}
-		$sub->record['altname'] = $item->record['stadium'];
+		$sub->setProperty('altname', $item->getProperty('stadium'));
 		$marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
 		$template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
 		return $template;
@@ -179,20 +191,22 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 			$GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = 0;
 		}
 
-		$match->record['pictures'] = $match->record['dam_images'];
-		$match->record['firstpicture'] = $match->record['dam_images'];
+		$match->setProperty('pictures', $match->getProperty('dam_images'));
+		$match->setProperty('firstpicture', $match->getProperty('dam_images'));
 
 		$report = $match->getMatchReport();
-		if(!is_object($report)) return;
+		if(!is_object($report)) {
+			return;
+		}
 		// Die Aufstellungen setzen
-		$match->record['lineup_home'] = $report->getLineupHome('matchreport.lineuphome.');
-		$match->record['lineup_guest'] = $report->getLineupGuest('matchreport.lineupguest.');
-		$match->record['substnames_home'] = $report->getSubstituteNamesHome('matchreport.substnameshome.');
-		$match->record['substnames_guest'] = $report->getSubstituteNamesGuest('matchreport.substnamesguest.');
-		$match->record['coachnames_home'] = $report->getCoachNameHome('matchreport.coachnames.');
-		$match->record['coachnames_guest'] = $report->getCoachNameGuest('matchreport.coachnames.');
-		$match->record['refereenames'] = $report->getRefereeName('matchreport.refereenames.');
-		$match->record['assistsnames'] = $report->getAssistNames('matchreport.assistsnames.');
+		$match->setProperty('lineup_home', $report->getLineupHome('matchreport.lineuphome.'));
+		$match->setProperty('lineup_guest', $report->getLineupGuest('matchreport.lineupguest.'));
+		$match->setProperty('substnames_home', $report->getSubstituteNamesHome('matchreport.substnameshome.'));
+		$match->setProperty('substnames_guest', $report->getSubstituteNamesGuest('matchreport.substnamesguest.'));
+		$match->setProperty('coachnames_home', $report->getCoachNameHome('matchreport.coachnames.'));
+		$match->setProperty('coachnames_guest', $report->getCoachNameGuest('matchreport.coachnames.'));
+		$match->setProperty('refereenames', $report->getRefereeName('matchreport.refereenames.'));
+		$match->setProperty('assistsnames', $report->getAssistNames('matchreport.assistsnames.'));
 	}
 
 	/**
@@ -206,13 +220,15 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 	 * @return string
 	 */
 	private function addDynamicMarkers($template, &$match, &$formatter, $matchConfId, $matchMarker) {
-		$report =&$match->getMatchReport();
-		if(!is_object($report)) return $template;
+		$report = $match->getMatchReport();
+		if (!is_object($report)) {
+			return $template;
+		}
 
-		$dynaMarkers = $formatter->configurations->getKeyNames($matchConfId.'dynaMarkers.');
-		for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
-			$typeArr = $formatter->configurations->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
-			$match->record[$dynaMarkers[$i]] = $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
+		$dynaMarkers = $formatter->getConfigurations()->getKeyNames($matchConfId.'dynaMarkers.');
+		for ($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
+			$typeArr = $formatter->getConfigurations()->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.');
+			$match->setProperty($dynaMarkers[$i], $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i] .'.'));
 		}
 	}
 
@@ -234,8 +250,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 		for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
 			// Prüfen ob der Marker existiert
 			$markerPrefix = $matchMarker .'_'.strtoupper($dynaMarkers[$i]);
-			if(!self::containsMarker($template, $markerPrefix))
+			if (!self::containsMarker($template, $markerPrefix)) {
 				continue;
+			}
 			$confId = $matchConfId.'tickerLists.'.$dynaMarkers[$i] .'.';
 			// Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte
 			// stehen schon im report bereit
@@ -247,7 +264,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 			tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
 			tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
 			$children = $srv->searchMatchNotes($fields, $options);
-			// Die gefundenen Notes werden jetzt durch ihre aufbereiteten Dublikate ersetzt
+			// Die gefundenen Notes werden jetzt durch ihre aufbereiteten Duplikate ersetzt
 			$items = array();
 			$tickerHash = $this->getTickerHash($match);
 			for($i=0, $cnt=count($children); $i < $cnt; $i++) {
@@ -265,13 +282,15 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 	/**
 	 * Liefert die Ticker als Hash. Key ist die UID des Datensatzes
 	 * @param tx_cfcleague_models_Match $match
+	 * @return array
 	 */
 	protected function getTickerHash($match) {
 		if(!is_array($this->tickerHash)) {
 			$this->tickerHash = array();
 			$tickerArr =& tx_cfcleaguefe_util_MatchTicker::getTicker4Match($match);
-			for($i=0, $cnt=count($tickerArr); $i<$cnt; $i++)
-				$this->tickerHash[$tickerArr[$i]->uid] = $tickerArr[$i];
+			for($i=0, $cnt=count($tickerArr); $i<$cnt; $i++) {
+				$this->tickerHash[$tickerArr[$i]->getUid()] = $tickerArr[$i];
+			}
 		}
 		return $this->tickerHash;
 	}
@@ -313,6 +332,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $template
 	 * @param string $baseConfId
 	 * @param string $baseMarker
+	 * @deprecated wird wohl nicht mehr verwendet...
 	 */
 	private function _addMedia(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
 		// Prüfen, ob Marker vorhanden sind
@@ -357,6 +377,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 
 	/**
 	 * Links vorbereiten
+	 * TODO: auf Linkerzeugung im SimpleMarker umstellen
 	 *
 	 * @param tx_cfcleaguefe_models_match $match
 	 * @param string $marker
@@ -368,23 +389,23 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 	private function prepareLinks($match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
 		$linkId = 'report';
 		$cObjData = $formatter->getConfigurations()->getCObj()->data;
-		$formatter->getConfigurations()->getCObj()->data = $match->record;
+		$formatter->getConfigurations()->getCObj()->data = $match->getProperty();
 
 		if($match->hasReport()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid), $template);
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->getUid()), $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
+			$remove = intval($formatter->getConfigurations()->get($confId.'links.'.$linkId.'.removeIfDisabled'));
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 		$linkId = 'ticker';
 		if($match->isTicker()) {
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->uid), $template);
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->getUid()), $template);
 		}
 		else {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			$remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
+			$remove = intval($formatter->getConfigurations()->get($confId.'links.'.$linkId.'.removeIfDisabled'));
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 		$formatter->getConfigurations()->getCObj()->data = $cObjData;

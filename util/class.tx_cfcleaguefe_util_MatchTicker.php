@@ -73,6 +73,7 @@ class tx_cfcleaguefe_util_MatchTicker {
 	 * Liefert die TickerInfos für einzelne Spiele
 	 * @param tx_cfcleaguefe_models_match $match
 	 * @param mixed $types unused!
+	 * @return tx_cfcleaguefe_models_match_note[]
 	 */
 	public static function &getTicker4Match($match, $types = 0) {
 		$arr = tx_cfcleague_util_Cache::get('matchnotes_'.$match->getUid());
