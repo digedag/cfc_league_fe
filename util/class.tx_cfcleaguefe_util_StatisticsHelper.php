@@ -34,7 +34,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
    *
    * @return tx_cfcleaguefe_util_StatisticsHelper
    */
-  private function tx_cfcleaguefe_util_StatisticsHelper(){
+  private function __construct(){
   }
 
   /**
