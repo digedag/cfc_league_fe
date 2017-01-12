@@ -39,7 +39,7 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model {
   var $_match;
 
 
-  function tx_cfcleaguefe_models_match_calevent(&$controller, &$match, $isException, $serviceKey){
+  function __construct(&$controller, &$match, $isException, $serviceKey){
   	$this->tx_cal_model($controller, $serviceKey);
   	$this->createEvent($match, $isException);
   	$this->isException = $isException;

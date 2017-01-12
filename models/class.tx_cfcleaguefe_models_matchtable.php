@@ -44,7 +44,7 @@ class tx_cfcleaguefe_models_matchtable{
 	var $_pidList; // bestimmte TYPO3-Seiten
 	var $_orderDesc; // Sortierreihenfolge
 
-  function tx_cfcleaguefe_models_matchtable() {
+  function __construct() {
     $this->setOrderDesc(false);
   }
 

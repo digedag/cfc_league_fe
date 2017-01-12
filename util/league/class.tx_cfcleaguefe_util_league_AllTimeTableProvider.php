@@ -32,7 +32,7 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 	private $matches;
 	private $teams;
 
-	function tx_cfcleaguefe_util_league_AllTimeTableProvider($parameters, $configurations, $matches, $confId='') {
+	function __construct($parameters, $configurations, $matches, $confId='') {
 		$this->setConfigurations($configurations, $confId);
 		$this->setParameters($parameters);
 
