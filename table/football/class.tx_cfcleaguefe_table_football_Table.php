@@ -76,15 +76,15 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 	 * @return tx_cfcleaguefe_table_ITableResult
 	 */
 	public function getTableData() {
-    $tableData = tx_rnbase::makeInstance('tx_cfcleaguefe_table_TableResult');
-    $configurator = $this->getConfigurator();
+		$tableData = tx_rnbase::makeInstance('tx_cfcleaguefe_table_TableResult');
+		$configurator = $this->getConfigurator();
 		$this->initTeams($configurator);
 		$this->handlePenalties($tableData); // Strafen können direkt berechnet werden
 		$tableData->setMarks($this->getMatchProvider()->getTableMarks());
 		$tableData->setCompetition($this->getMatchProvider()->getBaseCompetition());
 		$tableData->setConfigurator($configurator);
 
-    $rounds = $this->getMatchProvider()->getRounds();
+ 		$rounds = $this->getMatchProvider()->getRounds();
 		$comparator = $configurator->getComparator();
 
 		if(!empty($rounds)) {
@@ -130,12 +130,12 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 		return tx_rnbase::makeInstance('tx_cfcleaguefe_table_football_TableWriter');
 	}
 
-  /**
-   * Lädt die Namen der Teams in der Tabelle
-   * @param tx_cfcleaguefe_models_competition $tableProvider
-   */
-  protected function initTeams(tx_cfcleaguefe_table_football_Configurator $configurator) {
-  	$this->_teamData = array();
+	/**
+	 * Lädt die Namen der Teams in der Tabelle
+	 * @param tx_cfcleaguefe_models_competition $tableProvider
+	 */
+	protected function initTeams(tx_cfcleaguefe_table_football_Configurator $configurator) {
+		$this->_teamData = array();
 		$teams = $configurator->getTeams();
 		foreach($teams As $team) {
 			$teamId = $configurator->getTeamId($team);
@@ -318,9 +318,9 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
 	}
 
-  /**
-   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
-   * Heimmannschaft gewertet.
+	/**
+	 * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
+	 * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
@@ -356,7 +356,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 
 	/**
 	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
-   * Gastmannschaft gewertet.
+	 * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
@@ -428,7 +428,3 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 	public function getTypeID() {return 'football';}
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/football/class.tx_cfcleaguefe_table_football_Table.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/football/class.tx_cfcleaguefe_table_football_Table.php']);
-}

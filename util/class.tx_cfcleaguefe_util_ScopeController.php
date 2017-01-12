@@ -25,7 +25,7 @@
 tx_rnbase::load('tx_cfcleaguefe_search_Builder');
 tx_rnbase::load('tx_cfcleaguefe_models_saison');
 tx_rnbase::load('tx_cfcleaguefe_models_competition');
-tx_rnbase::load('tx_cfcleaguefe_models_group');
+tx_rnbase::load('tx_cfcleague_models_Group');
 tx_rnbase::load('tx_cfcleaguefe_models_club');
 tx_rnbase::load('tx_rnbase_util_Math');
 
@@ -131,7 +131,7 @@ class tx_cfcleaguefe_util_ScopeController {
 		// Soll eine SelectBox für Altersgruppe gezeigt werden?
 		if($configurations->get('groupSelectionInput')) {
 			// Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
-			$groups = tx_cfcleaguefe_models_group::findAll($groupUids);
+			$groups = tx_cfcleague_models_Group::findAll($groupUids);
 			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
 			$groupUids = $dataArr[1];
 			$viewData->offsetSet('group_select', $dataArr);
@@ -154,7 +154,7 @@ class tx_cfcleaguefe_util_ScopeController {
 		// Soll eine SelectBox für Altersgruppe gezeigt werden?
 		if($configurations->get('scope.teamGroupSelectionInput')) {
 			// Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
-			$groups = tx_cfcleaguefe_models_group::findAll($groupUids);
+			$groups = tx_cfcleague_models_Group::findAll($groupUids);
 			$dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
 			$groupUids = $dataArr[1];
 			$viewData->offsetSet('teamgroup_select', $dataArr);

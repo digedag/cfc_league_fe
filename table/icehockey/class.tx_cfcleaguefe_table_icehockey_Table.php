@@ -112,9 +112,9 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 		$this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
 	}
 
-  /**
-   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
-   * Heimmannschaft gewertet.
+	/**
+	 * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
+	 * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
@@ -157,7 +157,7 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 
 	/**
 	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
-   * Gastmannschaft gewertet.
+	 * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
@@ -236,9 +236,3 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 	public function getTypeID() {return 'icehockey';}
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/icehockey/class.tx_cfcleaguefe_table_icehockey_Table.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/icehockey/class.tx_cfcleaguefe_table_icehockey_Table.php']);
-}
-
-?>

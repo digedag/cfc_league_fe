@@ -117,7 +117,7 @@ http://www.flotcharts.org/
 <style>
 .chart-container {
 	box-sizing: border-box;
-	width: 500px;
+	width: 90%;
 	height: 400px;
 	padding: 20px 15px 15px 15px;
 	margin: 15px 15px;
@@ -163,7 +163,9 @@ jQuery(document).ready(function(){
 			markerOptions: { size: 7, style:"filledCircle" }
 		});
 	}
-	jQuery("<div id='tooltip'></div>").css({
+
+	
+	jQuery('<div id="tooltip"></div>').css({
 		position: "absolute",
 		display: "none",
 		border: "1px solid #fdd",

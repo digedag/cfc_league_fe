@@ -31,7 +31,7 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker {
 
 	/**
 	 * @param string $template das HTML-Template
-	 * @param tx_cfcleaguefe_models_group $group die Altersklasse
+	 * @param tx_cfcleague_models_Group $group die Altersklasse
 	 * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
 	 * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.group.'
 	 * @param string $marker Name des Markers
@@ -40,7 +40,7 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker {
 	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'GROUP') {
 		if(!is_object($item)) {
 			// Ist kein Objekt vorhanden wird ein leeres Objekt verwendet.
-			$item = self::getEmptyInstance('tx_cfcleaguefe_models_group');
+			$item = self::getEmptyInstance('tx_cfcleague_models_Group');
 		}
 		tx_rnbase_util_Misc::callHook('cfc_league_fe','groupMarker_initRecord', array('item' => &$item, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 		// Es wird das MarkerArray mit den Daten des Records gefüllt.

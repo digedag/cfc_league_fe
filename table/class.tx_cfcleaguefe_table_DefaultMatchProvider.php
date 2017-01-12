@@ -153,13 +153,13 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	}
 
 	public function getRounds() {
-    $rounds = array();
-    $matches = $this->getMatches();
-    for($i=0, $cnt = count($matches); $i < $cnt; $i ++) {
-    	$match = $matches[$i];
-      $rounds[$match->record['round']][] = $match;
-    }
-    return $rounds;
+		$rounds = array();
+		$matches = $this->getMatches();
+		for($i=0, $cnt = count($matches); $i < $cnt; $i ++) {
+			$match = $matches[$i];
+			$rounds[$match->record['round']][] = $match;
+		}
+		return $rounds;
 	}
 	/**
 	 * Liefert die Gesamtzahl der Spieltage einer Saison
@@ -289,9 +289,3 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	}
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_DefaultMatchProvider.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_DefaultMatchProvider.php']);
-}
-
-?>

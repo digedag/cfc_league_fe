@@ -87,6 +87,23 @@ class tx_cfcleaguefe_table_Builder {
 		$prov->setConfigurator($c);
 		return $table;
 	}
+	/**
+	 * Build league table to compare two opponents of a single match
+	 *
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * @return tx_cfcleaguefe_table_ITableType
+	 */
+	public static function buildByMatch($match, $configurations, $confId) {
+		$tableType = $league->getSports();
+
+		tx_rnbase::load('tx_cfcleaguefe_table_Factory');
+		$prov = tx_cfcleaguefe_table_Factory::createMatchProvider($tableType, $configurations, $confId);
+		$prov->setLeague($league);
+		$prov->setMatches($matches);
+
+	}
 }
 
 

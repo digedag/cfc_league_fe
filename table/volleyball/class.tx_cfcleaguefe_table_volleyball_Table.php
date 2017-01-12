@@ -130,9 +130,9 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 														($this->_teamData[$teamId]['balls2'] > 0 ? $this->_teamData[$teamId]['balls2'] : 1);
 	}
 
-  /**
-   * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
-   * Heimmannschaft gewertet.
+	/**
+	 * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
+	 * Heimmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 * @param tx_cfcleaguefe_table_volleyball_Configurator $configurator
@@ -166,7 +166,7 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 
 	/**
 	 * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
-   * Gastmannschaft gewertet.
+	 * Gastmannschaft gewertet.
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 * @param tx_cfcleaguefe_table_football_Configurator $configurator
@@ -203,9 +203,3 @@ class tx_cfcleaguefe_table_volleyball_Table extends tx_cfcleaguefe_table_footbal
 	public function getTypeID() {return 'volleyball';}
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/volleyball/class.tx_cfcleaguefe_table_volleyball_Table.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/volleyball/class.tx_cfcleaguefe_table_volleyball_Table.php']);
-}
-
-?>

@@ -24,7 +24,7 @@
 
 tx_rnbase::load('tx_cfcleaguefe_models_saison');
 tx_rnbase::load('tx_cfcleaguefe_models_competition');
-tx_rnbase::load('tx_cfcleaguefe_models_group');
+tx_rnbase::load('tx_cfcleague_models_Group');
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
 tx_rnbase::load('tx_rnbase_util_Math');
