@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -56,7 +56,7 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base {
 			$teamId = intval($configurations->get('profileview.staticteam'));
 		}
 		if($teamId) {
-			$team = tx_cfcleague_util_ServiceRegistry::getTeamService()->getTeam($uid);
+			$team = tx_cfcleague_util_ServiceRegistry::getTeamService()->getTeam($teamId);
 			$markerOptions['team'] = $team;
 		}
 		$profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker', $markerOptions);
