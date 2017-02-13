@@ -28,7 +28,7 @@
 	},
 	"require" : {
 		"typo3/cms-core" : ">=4.5.0 <=7.6.99",
-		"digedag/cfc_league" : ">=1.1.0",
+		"digedag/cfc-league" : ">=1.1.0",
 		"digedag/rn-base" : ">=1.2.0"
 	},
 	"autoload" : {
