@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_SimpleMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
@@ -30,48 +30,40 @@ tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich
  */
-class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
+class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 	private $recursion = 0;
+	/** @var tx_cfcleaguefe_util_TeamMarker */
+	private $teamMarker;
+	/** @var tx_cfcleaguefe_util_CompetitionMarker */
+	private $competitionMarker;
 
 	/**
 	 * Erstellt eine neue Instanz
 	 * @param $options Array with options. not used until now.
 	 */
 	public function __construct($options = array()) {
+		parent::__construct($options);
 		// Den TeamMarker erstellen
 		$this->teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$this->competitionMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
 	}
 
 	/**
-	 * @param $template das HTML-Template
-	 * @param tx_cfcleaguefe_models_match $match das Spiel
-	 * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
-	 * @param $confId Pfad der TS-Config des Spiels, z.B. 'listView.match.'
-	 * @param $marker Name des Markers für ein Spiel, z.B. MATCH
-	 * @return String das geparste Template
+	 *
+	 * {@inheritDoc}
+	 * @param tx_cfcleaguefe_models_match $match
+	 * @see tx_rnbase_util_SimpleMarker::prepareTemplate()
 	 */
-	public function parseTemplate($template, &$match, &$formatter, $confId, $marker = 'MATCH') {
-		if(!is_object($match)) {
-			return $formatter->getConfigurations()->getLL('match_notFound');
-		}
-
+	protected function prepareTemplate($template, $match, $formatter, $confId, $marker) {
 		$this->prepareFields($match);
 		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord',
-			array('match' => $match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
+				array('match' => $match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 
 		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
 		$this->pushTT('addDynamicMarkers');
 		$this->addDynamicMarkers($template, $match, $formatter, $confId, $marker);
 		$this->pullTT();
 
-		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
-		$ignore = self::findUnusedCols($match->getProperty(), $template, $marker);
-		$markerArray = $formatter->getItemMarkerArrayWrapped($match->getProperty(), $confId, $ignore, $marker.'_');
-		$wrappedSubpartArray = array();
-		$subpartArray = array();
-		$this->prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-		// Es wird jetzt das Template verändert und die Daten der Teams eingetragen
 		$this->pushTT('parse home team');
 		if(self::containsMarker($template, $marker.'_HOME')) {
 			$template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId.'home.', $marker.'_HOME');
@@ -100,8 +92,16 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 		if(self::containsMarker($template, $marker.'_COMPETITION_')) {
 			$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
 		}
-		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
-		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
+		return $template;
+	}
+
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see tx_rnbase_util_SimpleMarker::finishTemplate()
+	 */
+	protected function finishTemplate($template, $match, $formatter, $confId, $marker) {
 		// Nochmal nach Markern schauen, falls SubTemplates aus dem TS neue Marker verwendet haben
 		if(self::containsMarker($template, $marker.'_') && $this->recursion == 0) {
 			// einmalige Rekursion starten
@@ -375,7 +375,11 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	private function prepareLinks($match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
+	protected function prepareLinks($match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
+		parent::prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+
+		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
+
 		$linkId = 'report';
 		$cObjData = $formatter->getConfigurations()->getCObj()->data;
 		$formatter->getConfigurations()->getCObj()->data = $match->getProperty();
