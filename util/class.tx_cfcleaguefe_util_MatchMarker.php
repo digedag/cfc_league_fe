@@ -31,27 +31,18 @@ tx_rnbase::load('Tx_Rnbase_Utility_T3General');
  * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich
  */
 class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
-	private $fullMode = true;
 	private $recursion = 0;
 
 	/**
 	 * Erstellt eine neue Instanz
 	 * @param $options Array with options. not used until now.
 	 */
-	public function __construct(&$options = array()) {
+	public function __construct($options = array()) {
 		// Den TeamMarker erstellen
 		$this->teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
 		$this->competitionMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
 	}
 
-	/**
-	 * Set fillMode on or off
-	 *
-	 * @param boolean $mode
-	 */
-	public function setFullMode($mode) {
-		$this->fullMode = $mode;
-	}
 	/**
 	 * @param $template das HTML-Template
 	 * @param tx_cfcleaguefe_models_match $match das Spiel
@@ -70,11 +61,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 			array('match' => $match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
 
 		// Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
-		if($this->fullMode) {
-			$this->pushTT('addDynamicMarkers');
-			$this->addDynamicMarkers($template, $match, $formatter, $confId, $marker);
-			$this->pullTT();
-		}
+		$this->pushTT('addDynamicMarkers');
+		$this->addDynamicMarkers($template, $match, $formatter, $confId, $marker);
+		$this->pullTT();
+
 		// Das Markerarray wird mit den Spieldaten und den Teamdaten gefüllt
 		$ignore = self::findUnusedCols($match->getProperty(), $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($match->getProperty(), $confId, $ignore, $marker.'_');
@@ -102,11 +92,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_BaseMarker {
 
 		$template = $this->addTickerLists($template, $match, $formatter, $confId, $marker);
 
-		if($this->fullMode) {
-			$this->pushTT('add media');
-			$this->_addMedia($subpartArray, $markerArray, $match, $formatter, $template, $confId, $marker);
-			$this->pullTT();
-		}
+		$this->pushTT('add media');
+		$this->_addMedia($subpartArray, $markerArray, $match, $formatter, $template, $confId, $marker);
+		$this->pullTT();
+
 		// Add competition
 		if(self::containsMarker($template, $marker.'_COMPETITION_')) {
 			$template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
