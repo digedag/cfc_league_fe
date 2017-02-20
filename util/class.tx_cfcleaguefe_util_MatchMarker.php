@@ -378,8 +378,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 	protected function prepareLinks($match, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
 		parent::prepareLinks($match, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
-		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
-
 		$linkId = 'report';
 		$cObjData = $formatter->getConfigurations()->getCObj()->data;
 		$formatter->getConfigurations()->getCObj()->data = $match->getProperty();
@@ -402,6 +400,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 		$formatter->getConfigurations()->getCObj()->data = $cObjData;
+
+		$this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
+
 	}
 }
 
