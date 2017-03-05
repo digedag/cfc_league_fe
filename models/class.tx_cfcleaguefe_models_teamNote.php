@@ -36,28 +36,23 @@ class tx_cfcleaguefe_models_teamNote extends tx_rnbase_model_base {
 	 *
 	 * @return mixed
 	 */
-	function getValue() {
-		if($this->record['mediatype'] == 0) // Text
-			return $this->record['comment'];
-		elseif($this->record['mediatype'] == 1) // DAM-Media
-			return $this->record['media'];
-		elseif($this->record['mediatype'] == 2) // Integer
-			return $this->record['number'];
+	public function getValue() {
+		if($this->getProperty('mediatype') == 0) // Text
+			return $this->getProperty('comment');
+		elseif($this->getProperty('mediatype') == 1) // DAM-Media
+			return $this->getProperty('media');
+		elseif($this->getProperty('mediatype') == 2) // Integer
+			return $this->getProperty('number');
 	}
 	/**
 	 * Returns the NoteType
 	 *
 	 * @return tx_cfcleaguefe_models_teamNoteType
 	 */
-	function getType() {
+	public function getType() {
 		tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
-		return tx_cfcleaguefe_models_teamNoteType::getInstance($this->record['type']);
+		return tx_cfcleaguefe_models_teamNoteType::getTeamNoteInstance($this->getProperty('type'));
 	}
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_teamNote.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_teamNote.php']);
-}
-
-?>
