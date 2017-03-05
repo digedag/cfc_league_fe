@@ -33,7 +33,6 @@ tx_rnbase::load('Tx_Rnbase_Database_Connection');
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
  */
 class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition {
-	private static $instances = array();
 	/** array of teams */
 	private $teams;
 	/**
@@ -182,20 +181,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition 
 	function setTeams($teamsArr) {
 		$this->teams = is_array($teamsArr) ? $teamsArr : NULL;
 	}
-	/**
-	 * Returns an instance of tx_cfcleaguefe_models_competition
-	 * @param int $uid
-	 * @return tx_cfcleaguefe_models_competition
-	 */
-	public static function &getInstance($uid, $record = 0) {
-		$uid = intval($uid);
-		$comp = self::$instances[$uid];
-		if(!is_object($comp)) {
-			$comp = new tx_cfcleaguefe_models_competition(is_array($record) ? $record : $uid);
-			self::$instances[$uid] = $comp;
-		}
-		return $comp;
-	}
+
 	/**
 	 * statische Methode, die ein Array mit Instanzen dieser Klasse liefert.
 	 * Es werden entweder alle oder nur bestimmte Wettkämpfe einer Saison geliefert.
