@@ -85,7 +85,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 		$template = $this->addTickerLists($template, $match, $formatter, $confId, $marker);
 
 		$this->pushTT('add media');
-		$this->_addMedia($subpartArray, $markerArray, $match, $formatter, $template, $confId, $marker);
+		$template = $this->_addMedia($match, $formatter, $template, $confId, $marker);
 		$this->pullTT();
 
 		// Add competition
@@ -323,21 +323,26 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 	 * @param string $baseMarker
 	 * @deprecated wird wohl nicht mehr verwendet...
 	 */
-	private function _addMedia(&$gSubpartArray, &$firstMarkerArray, $match, $formatter, $template, $baseConfId, $baseMarker) {
+	private function _addMedia($match, $formatter, $template, $baseConfId, $baseMarker) {
 		// Prüfen, ob Marker vorhanden sind
 		if(!self::containsMarker($template, $baseMarker .'_MEDIAS'))
-			return;
+			return $template;
+
+		$gSubpartArray = $firstMarkerArray = array();
+
 		if(!tx_rnbase_util_Extensions::isLoaded('dam')) {
 			// Not supported without DAM!
-			$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
-			return;
+			$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = '';
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
+			return $out;
 		}
 
 		$damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->getUid(), 'dam_media');
 		if(count($damMedia['files']) == 0) { // Keine Daten vorhanden
 			// Alle Marker löschen
 			$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = '';
-			return;
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
+			return $out;
 		}
 
 		// Zuerst wieder das Template laden
@@ -351,7 +356,6 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 		// Alle Daten hinzufügen
 		while(list($uid, $filePath) = each($damMedia['files'])) {
 			$media = tx_rnbase::makeInstance('tx_dam_media', $filePath);
-//			$media = new $mediaClass($filePath);
 			$markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.', $baseMarker.'_MEDIA');
 			$markerArray['###'. $baseMarker.'_MEDIA_PLAYER###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
 			$out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($pictureTemplate, $markerArray);
@@ -362,6 +366,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); //, $wrappedSubpartArray);
 		}
 		$gSubpartArray['###'. $baseMarker .'_MEDIAS###'] = $out;
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
+		return $out;
 	}
 
 	/**
