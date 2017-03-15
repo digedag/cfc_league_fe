@@ -70,7 +70,10 @@ class tx_cfcleaguefe_util_MatchTicker {
 
 
 	/**
-	 * Liefert die TickerInfos für einzelne Spiele
+	 * Liefert die TickerInfos für einzelne Spiele in chronologischer Reihenfolge.
+	 * Die Meldungen enthalten den aktuellen Spielstand. Spielerwechsel werden als eine einzelne
+	 * Tickermeldung zusammengefasst.
+	 *
 	 * @param tx_cfcleaguefe_models_match $match
 	 * @param mixed $types unused!
 	 * @return tx_cfcleaguefe_models_match_note[]
@@ -120,8 +123,8 @@ class tx_cfcleaguefe_util_MatchTicker {
 		}
 
 		// Stand speichern
-		$ticker->record['goals_home'] = $goals_home;
-		$ticker->record['goals_guest'] = $goals_guest;
+		$ticker->setProperty('goals_home', $goals_home);
+		$ticker->setProperty('goals_guest', $goals_guest);
 
 	}
 
@@ -152,12 +155,12 @@ class tx_cfcleaguefe_util_MatchTicker {
 		}
 
 		if($ticker->isHome()) {
-			if($ticker->record['type'] == '81') { // Wenn Einwechslung
+			if($ticker->getType() == '81') { // Wenn Einwechslung
 				// Gibt es schon die Auswechslung?
 				if(!$changeOutHome->isEmpty()) {
 					$change =& $changeOutHome->get();
-					$change->record['player_home_2'] = $ticker->record['player_home'];
-					$change->record['comment2'] = $ticker->record['comment'];
+					$change->setProperty('player_home_2', $ticker->getProperty('player_home'));
+					$change->setProperty('comment2', $ticker->getProperty('comment'));
 				}
 				else {
 					// Einwechslung ablegen
@@ -167,13 +170,13 @@ class tx_cfcleaguefe_util_MatchTicker {
 				$isRemoved = true;
 			}
 
-			if($ticker->record['type'] == '80') { // Wenn Auswechslung
+			if($ticker->getType() == '80') { // Wenn Auswechslung
 				// Gibt es schon die Einwechslung?
 				if(!$changeInHome->isEmpty()) {
 					// Wartet schon so ein Wechsel
 					$change =& $changeInHome->get();
-					$ticker->record['player_home_2'] = $change->record['player_home'];
-					$change->record['comment2'] = $ticker->record['comment'];
+					$ticker->setProperty('player_home_2', $change->getProperty('player_home'));
+					$change->setProperty('comment2', $ticker->getProperty('comment'));
 				}
 				else {
 					// Auswechselung ablegen
@@ -183,13 +186,13 @@ class tx_cfcleaguefe_util_MatchTicker {
 		} // end if HOME
 		elseif($ticker->isGuest()) {
 
-			if($ticker->record['type'] == '81') { // Ist Einwechslung
+			if($ticker->getType() == '81') { // Ist Einwechslung
 				// Gibt es schon die Auswechslung?
 				if(!$changeOutGuest->isEmpty()) {
 					// Die Auswechslung holen
 					$change =& $changeOutGuest->get();
-					$change->record['player_guest_2'] = $ticker->record['player_guest'];
-					$change->record['comment2'] = $ticker->record['comment'];
+					$change->setProperty('player_guest_2', $ticker->getProperty('player_guest'));
+					$change->setProperty('comment2', $ticker->getProperty('comment'));
 				}
 				else {
 					// Einwechslung ablegen
@@ -198,13 +201,13 @@ class tx_cfcleaguefe_util_MatchTicker {
 				array_pop($ret); // Die Einwechslung fliegt aus dem Ticker
 				$isRemoved = true;
 			}
-			if($ticker->record['type'] == '80') { // Auswechslung
+			if($ticker->getType() == '80') { // Auswechslung
 				// Gibt es schon die Einwechslung?
 				if(!$changeInGuest->isEmpty()) {
 					// Es muss immer die Auswechslung erhalten bleiben
 					$changeIn =& $changeInGuest->get();
-					$ticker->record['player_guest_2'] = $changeIn->record['player_guest'];
-					$change->record['comment2'] = $ticker->record['comment'];
+					$ticker->setProperty('player_guest_2', $changeIn->getProperty('player_guest'));
+					$change->setProperty('comment2', $ticker->getProperty('comment'));
 				}
 				else {
 					// Auswechselung ablegen
