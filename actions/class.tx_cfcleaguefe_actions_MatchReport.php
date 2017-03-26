@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,11 +32,11 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 	 * handle request
 	 *
 	 * @param arrayobject $parameters
-	 * @param tx_rnbase_configurations $configurations
+	 * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
 	 * @param arrayobject $viewData
 	 * @return string
 	 */
-	public function handleRequest(&$parameters, &$configurations, &$viewData) {
+	protected function handleRequest(&$parameters, &$configurations, &$viewData) {
 		// Die MatchID ermittlen
 		// Ist sie fest definiert?
 		$matchId = intval($configurations->get('matchreportMatchUid'));
@@ -46,15 +46,19 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 				return 'No matchId found!';
 		}
 		// Das Spiel laden
-		$matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $matchId, $configurations);
-		$viewData->offsetSet('matchReport', $matchReport); // Den Spielreport für den View bereitstellen
+		try {
+			$matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $matchId, $configurations);
+			$viewData->offsetSet('matchReport', $matchReport); // Den Spielreport für den View bereitstellen
+		} catch (Exception $e) {
+			throw tx_rnbase::makeInstance('Tx_Rnbase_Exception_PageNotFound404', $e->getMessage()."\nX-t3sports-msg: match not found\nX-t3sports-match: ".$matchId);
+		}
 
 		// Auf das Template verzweigen
 		$this->viewType = $configurations->get('matchreport.viewType');
 		return null;
 	}
 
-	public function getTemplateName() {return 'matchreport';}
-	public function getViewClassName() { return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchReport' : 'tx_rnbase_view_phpTemplateEngine'; }
+	protected function getTemplateName() {return 'matchreport';}
+	protected function getViewClassName() { return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchReport' : 'tx_rnbase_view_phpTemplateEngine'; }
 }
 
