@@ -205,8 +205,8 @@ class tx_cfcleaguefe_util_MatchTicker {
 				// Gibt es schon die Einwechslung?
 				if(!$changeInGuest->isEmpty()) {
 					// Es muss immer die Auswechslung erhalten bleiben
-					$changeIn =& $changeInGuest->get();
-					$ticker->setProperty('player_guest_2', $changeIn->getProperty('player_guest'));
+					$change =& $changeInGuest->get();
+					$ticker->setProperty('player_guest_2', $change->getProperty('player_guest'));
 					$change->setProperty('comment2', $ticker->getProperty('comment'));
 				}
 				else {
