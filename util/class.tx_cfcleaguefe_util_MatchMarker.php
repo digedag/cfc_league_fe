@@ -106,7 +106,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 		if(self::containsMarker($template, $marker.'_') && $this->recursion == 0) {
 			// einmalige Rekursion starten
 			$this->recursion += 1;
-			$template = $this->parseTemplate($template, $match, $formatter, $confId);
+			$template = $this->parseTemplate($template, $match, $formatter, $confId, $marker);
 		}
 		tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_afterSubst',
 			array('match' => $match, 'template'=>&$template, 'confid'=>$confId, 'marker'=>$marker, 'formatter'=>$formatter), $this);
