@@ -20,27 +20,29 @@ install and update from this Github repo. There are to ways to do this:
 1. Use composer
 
 Add these entries to your composer.json
-{{{
+
+```json
 	"require": {
 	  "digedag/rn-base": "*",
 	  "digedag/cfc-league": "*@dev-master",
 	  "digedag/cfc-league-fe": "*@dev-master",
-}}}
+```
+
 Run composer update:
-{{{
+```bash
 composer update --prefer-dist digedag/cfc-league-fe
-}}}
+```
 
 2. Manual checkout from Github
 
 You can clone the source from Github into directory **typo3conf/ext**.
-{{{
+```bash
 cd typo3conf/ext
 git clone https://github.com/digedag/cfc_league_fe.git
-}}}
+```
 To pull latest changes:
-{{{
+```bash
 cd typo3conf/ext/cfc_league_fe
 git pull
-}}}
+```
 
