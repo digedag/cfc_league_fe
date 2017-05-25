@@ -44,12 +44,12 @@ class tx_cfcleaguefe_table_volleyball_Comparator3Point implements tx_cfcleaguefe
      * 4. Ballpunktequotient
      * 5. direkter Vergleich
      */
-    public static function compare($t1, $t2)
+    public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if ($t1['last_place'])
+        if ($t1['static_position'])
             return 1;
-        if ($t2['last_place'])
+        if ($t2['static_position'])
             return - 1;
 
         // Zuerst die Punkte

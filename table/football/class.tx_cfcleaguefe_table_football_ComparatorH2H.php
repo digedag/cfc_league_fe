@@ -44,9 +44,9 @@ class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_tabl
         $isH2HComparison = true; // = "is Head-to-head-comparison"
 
         // Zwangsabstieg prüfen
-        if ($t1['last_place'])
+        if ($t1['static_position'])
             return 1;
-        if ($t2['last_place'])
+        if ($t2['static_position'])
             return - 1;
 
         if ($t1['points'] == $t2['points']) {

@@ -2,6 +2,15 @@
 
 Änderungen
 ----------
+v1.2.0 (??)
+ * #14 refactoring of model classes
+ * #15 enable match marker in media templates
+ * fixes for table charts
+ * MatchMarker derives from rn_base SimpleMarker. This offers more features for rendering.
+ * fixed some issues for PHP7 support (Thanks to Mario Näther)
+ * MatchDetail view send 404 header if match is not found
+ * #27 **Breaking change:** support for fixed positions in league table. Behavior of static_position in 
+   competition penalty changed.
 
 v1.1.1 (04.01.2017)
  * composer.json added

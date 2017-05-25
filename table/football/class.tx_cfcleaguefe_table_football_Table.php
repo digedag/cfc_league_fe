@@ -120,6 +120,8 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
                 ));
                 // Nun setzen wir die Tabellenstände
                 reset($teamData);
+                // Nochmal sortieren und die statischen Positionen setzen
+                $this->handleStaticPositions($teamData);
                 $this->addScore4Round($round, $teamData, $tableData);
             }
         } else {
@@ -150,6 +152,33 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             $this->_teamData[$team['teamId']]['position'] = $newPosition;
             // Jetzt die Daten des Teams übernehmen
             $tableData->addScore($round, $this->_teamData[$team['teamId']]);
+        }
+    }
+
+    /**
+     * #27 static positions in league table defined by penalty records
+     *
+     * @param array $teamData
+     */
+    protected function handleStaticPositions(&$teamData)
+    {
+        $statics = [];
+        $maxIdx = count($teamData) -1;
+        foreach ($teamData As $currentIdx => $team) {
+            if(isset($team['static_position'])) {
+                $idx = $team['static_position'];
+                $idx = $idx > 0 ? $idx - 1 : $maxIdx;
+                $idx = $idx > $maxIdx ? $maxIdx : $idx;
+                $statics[] = [
+                    'new' => $idx,
+                    'old' => $currentIdx,
+                    'team' => $team,
+                ];
+            }
+        }
+        foreach ($statics As $data) {
+            array_splice($teamData, $data['old'], 1);
+            array_splice($teamData, $data['new'], 0, [$data['team']]);
         }
     }
 
@@ -241,26 +270,27 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         $tableData->setPenalties($penalties);
 
         foreach ($penalties as $penalty) {
+            /* @var $penalty tx_cfcleague_models_CompetitionPenalty */
             // Welches Team ist betroffen?
-            if (array_key_exists($penalty->record['team'], $this->_teamData)) {
+            if (array_key_exists($penalty->getProperty('team'), $this->_teamData)) {
                 // Die Strafe wird für den View mit abgespeichert
                 // Falls es eine Korrektur ist, dann nicht speichern
                 if (! $penalty->isCorrection())
-                    $this->_teamData[$penalty->record['team']]['penalties'][] = $penalty;
-                // Die Punkte abziehen
-                $this->_teamData[$penalty->record['team']]['points'] -= $penalty->record['points_pos'];
-                $this->_teamData[$penalty->record['team']]['points2'] += $penalty->record['points_neg'];
+                    $this->_teamData[$penalty->getProperty('team')]['penalties'][] = $penalty;
+                    // Die Punkte abziehen
+                    $this->_teamData[$penalty->getProperty('team')]['points'] -= $penalty->getProperty('points_pos');
+                    $this->_teamData[$penalty->getProperty('team')]['points2'] += $penalty->getProperty('points_neg');
 
-                $this->addGoals($penalty->record['team'], ($penalty->record['goals_pos'] * - 1), $penalty->record['goals_neg']);
+                    $this->addGoals($penalty->getProperty('team'), ($penalty->getProperty('goals_pos') * - 1), $penalty->getProperty('goals_neg'));
 
-                $this->_teamData[$penalty->record['team']]['matchCount'] += $penalty->record['matches'];
-                $this->_teamData[$penalty->record['team']]['winCount'] += $penalty->record['wins'];
-                $this->_teamData[$penalty->record['team']]['drawCount'] += $penalty->record['draws'];
-                $this->_teamData[$penalty->record['team']]['loseCount'] += $penalty->record['loses'];
+                    $this->_teamData[$penalty->getProperty('team')]['matchCount'] += $penalty->getProperty('matches');
+                    $this->_teamData[$penalty->getProperty('team')]['winCount'] += $penalty->getProperty('wins');
+                    $this->_teamData[$penalty->getProperty('team')]['drawCount'] += $penalty->getProperty('draws');
+                    $this->_teamData[$penalty->getProperty('team')]['loseCount'] += $penalty->getProperty('loses');
 
-                // Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht
-                if ($penalty->record['static_position'])
-                    $this->_teamData[$penalty->record['team']]['last_place'] = $penalty->record['static_position'];
+                    // Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht
+                    if($penalty->getProperty('static_position'))
+                        $this->_teamData[$penalty->getProperty('team')]['static_position'] = (int) $penalty->getProperty('static_position');
             }
         }
     }

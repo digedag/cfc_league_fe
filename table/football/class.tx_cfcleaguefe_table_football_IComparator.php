@@ -34,6 +34,6 @@ interface tx_cfcleaguefe_table_football_IComparator
     /**
      * Funktion zur Sortierung der Tabellenzeilen
      */
-    public static function compare($t1, $t2);
+    public function compare($t1, $t2);
 }
 

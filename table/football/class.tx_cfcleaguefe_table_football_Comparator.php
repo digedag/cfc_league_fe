@@ -37,12 +37,12 @@ class tx_cfcleaguefe_table_football_Comparator implements tx_cfcleaguefe_table_f
     /**
      * Funktion zur Sortierung der Tabellenzeilen
      */
-    public static function compare($t1, $t2)
+    public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if ($t1['last_place'])
+        if ($t1['static_position'])
             return 1;
-        if ($t2['last_place'])
+        if ($t2['static_position'])
             return - 1;
 
         if ($t1['points'] == $t2['points']) {
@@ -75,15 +75,15 @@ class tx_cfcleaguefe_table_football_Comparator implements tx_cfcleaguefe_table_f
      * Funktion zur Sortierung der Tabellenzeilen nach dem Head-to-head modus.
      * Bei Punktgleichstand zählt hier zuerst der direkte Vergleich
      */
-    public static function compareH2H($t1, $t2)
+    public function compareH2H($t1, $t2)
     {
         /* CDe begin */
         $isH2HComparison = true; // = "is Head-to-head-comparison"
 
         // Zwangsabstieg prüfen
-        if ($t1['last_place'])
+        if ($t1['static_position'])
             return 1;
-        if ($t2['last_place'])
+        if ($t2['static_position'])
             return - 1;
 
         if ($t1['points'] == $t2['points']) {
