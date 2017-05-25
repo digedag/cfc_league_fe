@@ -1,8 +1,9 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2016 Rene Nitzsche (rene@system25.de)
+ *  (c) 2013-2017 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,21 +23,17 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Comperator methods for volleyball league tables.
  */
-interface tx_cfcleaguefe_table_volleyball_IComparator {
-	public function setTeamData(array &$teamdata);
+interface tx_cfcleaguefe_table_volleyball_IComparator
+{
 
-	/**
-	 * Funktion zur Sortierung der Tabellenzeilen
-	 */
-	public static function compare($t1, $t2);
+    public function setTeamData(array &$teamdata);
 
+    /**
+     * Funktion zur Sortierung der Tabellenzeilen
+     */
+    public static function compare($t1, $t2);
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/volleyball/class.tx_cfcleaguefe_table_volleyball_IComperator.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/volleyball/class.tx_cfcleaguefe_table_volleyball_IComperator.php']);
-}
