@@ -626,12 +626,12 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      *
      * @return tx_cfcleague_models_Stadium Arena as object or false
      */
-    function getArena()
+    public function getArena()
     {
-        if (! intval($this->record['arena']))
+        if (! intval($this->getProperty('arena')))
             return false;
         tx_rnbase::load('tx_cfcleague_models_Stadium');
-        return tx_cfcleague_models_Stadium::getInstance($this->record['arena']);
+        return tx_cfcleague_models_Stadium::getStadiumInstance($this->getProperty('arena'));
     }
 
     function getStadium($formatter = 0, $configKey = 'match.stadium.')
@@ -647,9 +647,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      *
      * @return int
      */
-    function getVisitors()
+    public function getVisitors()
     {
-        return intval($this->record['visitors']);
+        return (int) $this->getProperty('visitors');
     }
 
     /**
