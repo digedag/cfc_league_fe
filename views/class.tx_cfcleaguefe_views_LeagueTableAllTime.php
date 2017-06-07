@@ -55,7 +55,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
     /**
      * Erstellt die Ligatabelle.
      */
-    protected function _createTable($templateList, &$viewData, &$penalties, &$marks, &$configurations)
+    protected function _createTable($templateList, $viewData, &$penalties, &$marks, $configurations)
     {
         $tableData = $viewData->offsetGet('tableData');
         // Sollen alle Teams gezeigt werden?
@@ -92,8 +92,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
      * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
      * ermittelt und zurückgeliefert.
      *
-     * @param
-     *            &$tableData Daten der Tabelle
+     * @param &$tableData Daten der Tabelle
      * @param $tableSize Maximale
      *            Anzahl Teams, die gezeigt werden soll
      */
@@ -145,17 +144,18 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
     /**
      * Erstellt das Steuerungspanel für die Tabelle.
      */
-    protected function _createControls($template, &$viewData, &$configurations)
+    protected function _createControls($template, $viewData, $configurations)
     {
         $link = $configurations->createLink();
         $pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
         $link->destination($pid); // Das Ziel der Seite vorbereiten
 
-        $subpartArray = array(
+        $markerArray = [];
+        $subpartArray = [
             '###CONTROL_TABLETYPE###' => '',
             '###CONTROL_TABLESCOPE###' => '',
             '###CONTROL_POINTSYSTEM###' => ''
-        );
+        ];
         if ($viewData->offsetGet('tabletype_select')) {
             $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
         }
@@ -188,13 +188,9 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
      */
     protected function _fillControlTemplate($template, &$itemsArr, $link, $markerName, $configurations)
     {
-        $items = $itemsArr[0];
         $currItem = $itemsArr[1];
         $confName = strtolower($markerName); // Konvention
-        $noLink = array(
-            '',
-            ''
-        );
+        $formatter = $configurations->getFormatter();
 
         // Aus den KeepVars den aktuellen Wert entfernen
         $keepVars = $configurations->getKeepVars()->getArrayCopy();
@@ -205,23 +201,22 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
             $link->label($token);
         }
 
-        $currentNoLink = intval($configurations->get('leaguetable.controls.' . $confName . '.current.noLink'));
-
-        $markerArray = array();
+        $currentNoLink = $configurations->getInt('leaguetable.controls.' . $confName . '.current.noLink');
+        $markerArray = $subpartArray = $wrappedSubpartArray = array();
 
         // Jetzt über die vorhandenen Items iterieren
         while (list ($key, $value) = each($itemsArr[0])) {
             $keepVars[$confName] = $key;
             $link->parameters($keepVars);
 
-            $markerLabel = $configurations->getFormatter()->wrap($key, 'leaguetable.controls.' . $confName . '.' . $key . '.');
+            $markerLabel = $formatter->wrap($key, 'leaguetable.controls.' . $confName . '.' . $key . '.');
 
             $markerArray['###CONTROL_' . $markerName . '_' . $markerLabel . '###'] = $configurations->getFormatter()->wrap($value, 'leaguetable.controls.' . $confName . '.value.');
             $markerArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK_URL###'] = $configurations->getFormatter()->wrap($link->makeUrl(false), 'leaguetable.controls.' . $confName . (($key == $currItem) ? '.current.' : '.normal.'));
 
             $linkStr = ($currentNoLink && $key == $currItem) ? $token : $link->makeTag();
             // Ein zusätzliche Wrap um das generierte Element inkl. Link
-            $linkStr = $configurations->getFormatter()->wrap($linkStr, 'leaguetable.controls.' . $confName . (($key == $currItem) ? '.current.' : '.normal.'));
+            $linkStr = $formatter->wrap($linkStr, 'leaguetable.controls.' . $confName . (($key == $currItem) ? '.current.' : '.normal.'));
             $wrappedSubpartArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK###'] = explode($token, $linkStr);
         }
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);

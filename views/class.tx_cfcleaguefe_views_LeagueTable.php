@@ -57,8 +57,10 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
         $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($league->record, 'leaguetable.league.', 0, 'LEAGUE_');
 
         // Die Ligatabelle zusammenbauen
-        $penalties = array(); // Strafen sammeln
-        $subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $viewData, $penalties, $marks, $configurations);
+        $penalties =  array(); // Strafen sammeln
+        $subpartArray = [
+            '###ROWS###' => $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $viewData, $penalties, $marks, $configurations),
+        ];
 
         // Jetzt die Strafen auflisten
         $subpartArray['###PENALTIES###'] = $this->_createPenalties(tx_rnbase_util_Templates::getSubpart($template, '###PENALTIES###'), $penalties, $configurations);
@@ -119,7 +121,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
     /**
      * Erstellt die Ligatabelle.
      */
-    protected function _createTable($templateList, &$viewData, &$penalties, &$marks, &$configurations)
+    protected function _createTable($templateList, $viewData, &$penalties, &$marks, $configurations)
     {
         $tableData = $viewData->offsetGet('tableData');
         // Sollen alle Teams gezeigt werden?
@@ -162,8 +164,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
      * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
      * ermittelt und zurückgeliefert.
      *
-     * @param
-     *            &$tableData Daten der Tabelle
+     * @param &$tableData Daten der Tabelle
      * @param $tableSize Maximale
      *            Anzahl Teams, die gezeigt werden soll
      */
@@ -227,18 +228,19 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
     /**
      * Erstellt das Steuerungspanel für die Tabelle.
      */
-    protected function _createControls($template, &$viewData, &$configurations)
+    protected function _createControls($template, $viewData, $configurations)
     {
         // Der Link für die Controls
         $link = $configurations->createLink();
         $pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
         $link->destination($pid); // Das Ziel der Seite vorbereiten
 
-        $subpartArray = array(
+        $markerArray = [];
+        $subpartArray = [
             '###CONTROL_TABLETYPE###' => '',
             '###CONTROL_TABLESCOPE###' => '',
             '###CONTROL_POINTSYSTEM###' => ''
-        );
+        ];
         if ($viewData->offsetGet('tabletype_select')) {
             $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
         }
@@ -259,26 +261,16 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
     /**
      * Die Auswahl für Tabellentyp, Tabellenscope und Punktesystem.
      *
-     * @param string $template
-     *            HTML- Template
-     * @param
-     *            array &$itemsArr Datensätze für die Auswahl
-     * @param
-     *            tx_rnbase_util_Link &$link Linkobjekt
-     * @param string $markerName
-     *            Name des Markers (TYPE, SCOPE oder SYSTEM)
-     * @param
-     *            tx_rnbase_configurations &$configurations Konfig-Objekt
+     * @param string $template HTML- Template
+     * @param array &$itemsArr Datensätze für die Auswahl
+     * @param tx_rnbase_util_Link $link Linkobjekt
+     * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
+     * @param tx_rnbase_configurations $configurations Konfig-Objekt
      */
-    protected function _fillControlTemplate($template, &$itemsArr, &$link, $markerName, &$configurations)
+    protected function _fillControlTemplate($template, &$itemsArr, $link, $markerName, $configurations)
     {
-        $items = $itemsArr[0];
         $currItem = $itemsArr[1];
         $confName = strtolower($markerName); // Konvention
-        $noLink = array(
-            '',
-            ''
-        );
         $formatter = $configurations->getFormatter();
 
         // Aus den KeepVars den aktuellen Wert entfernen
@@ -290,9 +282,9 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
             $link->label($token);
         }
 
-        $currentNoLink = intval($configurations->get('leaguetable.controls.' . $confName . '.current.noLink'));
+        $currentNoLink = $configurations->getInt('leaguetable.controls.' . $confName . '.current.noLink');
+        $markerArray = $subpartArray = $wrappedSubpartArray = array();
 
-        $markerArray = array();
         // Jetzt über die vorhandenen Items iterieren
         while (list ($key, $value) = each($itemsArr[0])) {
             $keepVars[$confName] = $key;
@@ -301,8 +293,10 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
 
             $markerLabel = $formatter->wrap($key, 'leaguetable.controls.' . $confName . '.' . $key . '.');
 
-            $data['iscurrent'] = $isCurrent ? 1 : 0;
-            $data['value'] = $value;
+            $data = [
+                'iscurrent' => $isCurrent ? 1 : 0,
+                'value' => $value,
+            ];
 
             $tempArray = $formatter->getItemMarkerArrayWrapped($data, 'leaguetable.controls.' . $confName . '.', 0, 'CONTROL_' . $markerName . '_' . $markerLabel . '_');
             $tempArray['###CONTROL_' . $markerName . '_' . $markerLabel . '###'] = $tempArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_VALUE###'];
