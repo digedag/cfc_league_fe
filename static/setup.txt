@@ -398,17 +398,17 @@ lib.t3sports.teamLogo {
     }
 
     # Logo des Teams rendern
-	  default = IMAGE
-	  default.file {
-			import.cObject = USER
+    default = IMAGE
+    default.file {
+      import.cObject = USER
       import.cObject {
-				userFunc=tx_dam_tsfe->fetchFileList
-				refField=relation_field_or_other_ident
-				refTable=tx_cfcleague_teams
-			}
-			maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-			maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-	  }
+        userFunc=tx_dam_tsfe->fetchFileList
+        refField=relation_field_or_other_ident
+        refTable=tx_cfcleague_teams
+      }
+      maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
+      maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
+    }
     key.field = dam_logo
     if {
 	    # Nix zeigen, wenn es ein Dummy-Team ist
