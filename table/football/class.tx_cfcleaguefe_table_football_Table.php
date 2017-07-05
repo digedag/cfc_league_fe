@@ -133,6 +133,8 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
                 'compare'
             ));
             reset($teamData);
+            // Nochmal sortieren und die statischen Positionen setzen
+            $this->handleStaticPositions($teamData);
             $this->addScore4Round(0, $teamData, $tableData);
         }
 

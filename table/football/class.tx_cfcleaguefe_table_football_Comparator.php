@@ -40,10 +40,10 @@ class tx_cfcleaguefe_table_football_Comparator implements tx_cfcleaguefe_table_f
     public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if ($t1['static_position'])
+        if ($t1['static_position'] == -1)
             return 1;
-        if ($t2['static_position'])
-            return - 1;
+        if ($t2['static_position'] == -1)
+            return -1;
 
         if ($t1['points'] == $t2['points']) {
             // Im 2-Punkte-Modus sind die Minuspunkte ausschlaggebend
