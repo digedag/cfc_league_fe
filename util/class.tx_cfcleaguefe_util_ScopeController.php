@@ -137,7 +137,7 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @return String Die UIDs als String
      */
-    private function handleCurrentCompetitionGroup($parameters, &$configurations, $useObjects = false)
+    private static function handleCurrentCompetitionGroup($parameters, $configurations, $useObjects = false)
     {
         $viewData = & $configurations->getViewData();
         $groupUids = $configurations->get('groupSelection');
@@ -162,7 +162,7 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @return String Die UIDs als String
      */
-    private function handleCurrentTeamGroup($parameters, &$configurations, $useObjects = false)
+    private static function handleCurrentTeamGroup($parameters, &$configurations, $useObjects = false)
     {
         $viewData = & $configurations->getViewData();
         $groupUids = $configurations->get('scope.teamGroup');
@@ -187,7 +187,7 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @return String Die UIDs als String
      */
-    private function handleCurrentClub($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $useObjects = false)
+    private static function handleCurrentClub($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $useObjects = false)
     {
         $viewData = & $configurations->getViewData();
         $clubUids = $configurations->get('clubSelection');
@@ -213,7 +213,7 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @return String Die UIDs als String
      */
-    private function handleCurrentCompetition(&$scopeArr, $parameters, &$configurations, $saisonUids, $groupUids, $useObjects = false)
+    private static function handleCurrentCompetition(&$scopeArr, $parameters, &$configurations, $saisonUids, $groupUids, $useObjects = false)
     {
         $viewData = & $configurations->getViewData();
         $compUids = $configurations->get('competitionSelection');
@@ -260,7 +260,7 @@ class tx_cfcleaguefe_util_ScopeController
      *            compUids String die UIDs der aktuell eingestellten Wettbewerbe
      * @return String Die UIDs als String
      */
-    private function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
+    private static function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
     {
         $viewData = & $configurations->getViewData();
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
@@ -285,7 +285,7 @@ class tx_cfcleaguefe_util_ScopeController
      *            Name eines Atttributs, um dessen Wert anzuzeigen. Wenn der
      *            String leer ist, dann wird das gesamten Objekt als Wert verwendet.
      */
-    private function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name')
+    private static function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name')
     {
         $ret = array();
         if (count($objects)) {
@@ -308,7 +308,7 @@ class tx_cfcleaguefe_util_ScopeController
      * @param tx_rnbase_IParameters $parameters
      * @param tx_rnbase_configurations $configurations
      */
-    private function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
+    private static function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
     {
         $ret = array();
         if (count($rounds)) {
