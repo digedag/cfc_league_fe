@@ -149,7 +149,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
             /* @var tx_cfcleaguefe_models_team $team */
             $team = $row['team'];
             unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-            $team->setProperty(Tx_Rnbase_Utility_T3General::array_merge($row, $team->getProperties()));
+            $team->setProperty($row + $team->getProperties());
 
             $parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), 'leaguetable.table.', 'ROW');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;

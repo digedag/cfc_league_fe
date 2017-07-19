@@ -56,7 +56,6 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         $subpartArray = [
             '###ROWS###' => $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $result, $penalties, $table->getMatchProvider(), $configurations, $confId)
         ];
-
         // Jetzt die Strafen auflisten
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
         $template = $listBuilder->render($penalties, false, $template, 'tx_rnbase_util_SimpleMarker', $confId . 'penalty.', 'PENALTY', $formatter, array(
@@ -117,8 +116,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
             $team = $row['team'];
             unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-            $team->setProperty(Tx_Rnbase_Utility_T3General::array_merge($row, $team->getRecord()));
-
+            $team->setProperty($row + $team->getProperty());
             $parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId . 'table.', 'ROW');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }

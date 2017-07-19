@@ -78,7 +78,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
             $this->_setMark($row, $marks);
             $team = $row['team'];
             unset($row['team']); // Gibt sonst Probleme mit PHP5.2
-            $team->setProperty(Tx_Rnbase_Utility_T3General::array_merge($row, $team->getProperty()));
+            $team->setProperty($row + $team->getProperty());
             $parts[] = $clubMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), 'leaguetableAllTime.table.', 'ROW');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }
