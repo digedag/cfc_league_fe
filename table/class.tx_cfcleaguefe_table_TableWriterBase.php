@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Rene Nitzsche (rene@system25.de)
+ *  (c) 2013-2017 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,34 +21,30 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 tx_rnbase::load('tx_cfcleaguefe_table_ITableWriter');
 
 /**
  * Implementors generate an output string for table.
  */
-abstract class tx_cfcleaguefe_table_TableWriterBase implements tx_cfcleaguefe_table_ITableWriter {
+abstract class tx_cfcleaguefe_table_TableWriterBase implements tx_cfcleaguefe_table_ITableWriter
+{
 
-	/**
-	 * 
-	 * @param tx_cfcleaguefe_table_ITableType $table
-	 * @param string $template
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 * @return string
-	 */
-	public function writeTable($table, $template, $configurations, $confId) {
-		$mainSubpart = 'SPORTS_' . strtoupper($table->getTypeID());
-		if(tx_rnbase_util_BaseMarker::containsMarker($template, $mainSubpart)) {
-			$template = tx_rnbase_util_Templates::getSubpart($template, '###'.$mainSubpart.'###');
-		}
-		return $this->renderTable($table, $template, $configurations, $confId);
-	}
-	protected abstract function renderTable($table, $template, $configurations, $confId);
+    /**
+     *
+     * @param tx_cfcleaguefe_table_ITableType $table
+     * @param string $template
+     * @param tx_rnbase_configurations $configurations
+     * @param string $confId
+     * @return string
+     */
+    public function writeTable($table, $template, $configurations, $confId)
+    {
+        $mainSubpart = 'SPORTS_' . strtoupper($table->getTypeID());
+        if (tx_rnbase_util_BaseMarker::containsMarker($template, $mainSubpart)) {
+            $template = tx_rnbase_util_Templates::getSubpart($template, '###' . $mainSubpart . '###');
+        }
+        return $this->renderTable($table, $template, $configurations, $confId);
+    }
+
+    protected abstract function renderTable($table, $template, $configurations, $confId);
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_TableWriterBase.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_TableWriterBase.php']);
-}
-
-?>
