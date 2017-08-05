@@ -203,7 +203,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 	private function getMatchStatus() {
 		$status = $this->configurations->get($this->confId.'filter.matchstatus');
 		if(!$status)
-			$status = $this->configurations->get($this->confId.'filter.livetable') ? '1,2' : '2';
+			$status = $this->configurations->get('showLiveTable') ? '1,2' : '2';
 		return $status;
 	}
 	public function setMatches($matches) {

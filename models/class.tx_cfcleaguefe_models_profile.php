@@ -50,7 +50,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base {
    * @param tx_rnbase_util_FormatUtil $formatter
    * @param array $conf Configuration array
    */
-  function wrap(&$formatter, $confId, $profile) {
+  static function wrap(&$formatter, $confId, $profile) {
     if(!is_object($profile)) {
       // Es wurde kein Profil übergeben, also gibt es nicht weiter zu tun
       return $formatter->wrap('',$confId);
