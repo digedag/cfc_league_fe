@@ -118,8 +118,8 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
         tx_cfcleague_search_Builder::setField($fields, 'COMPETITION.UID', OP_IN_INT, $this->scope['COMP_UIDS']);
         tx_cfcleague_search_Builder::setField($fields, 'TEAM.CLUB', OP_IN_INT, $this->scope['CLUB_UIDS']);
 
-        if (intval($scope['COMP_OBLIGATION'])) {
-            if (intval($scope['COMP_OBLIGATION']) == 1) {
+        if (intval($this->scope['COMP_OBLIGATION'])) {
+            if (intval($this->scope['COMP_OBLIGATION']) == 1) {
                 $fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = 1;
             }
             else {
@@ -141,9 +141,9 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
                 }
             } else {
                 $club = $team->getClub();
-                if ($club->uid && ! array_key_exists($club->uid, $this->teams)) {
-                    $club->record['club'] = $club->uid; // necessary for mark clubs
-                    $this->teams[$club->uid] = $club;
+                if ($club->getUid() && ! array_key_exists($club->getUid(), $this->teams)) {
+                    $club->setProperty('club', $club->getUid()); // necessary for mark clubs
+                    $this->teams[$club->getUid()] = $club;
                 }
             }
         }
