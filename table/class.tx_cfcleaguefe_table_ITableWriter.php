@@ -1,8 +1,9 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2012-13 Rene Nitzsche (rene@system25.de)
+ *  (c) 2012-2017 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,24 +23,20 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Implementors generate an output string for table.
  */
-interface tx_cfcleaguefe_table_ITableWriter {
-	/**
-	 * Set table data by round
-	 * @param tx_cfcleaguefe_table_ITableType $table
-	 * @param string $template
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 * @return string
-	 */
-	public function writeTable($table, $template, $configurations, $confId);
-}
+interface tx_cfcleaguefe_table_ITableWriter
+{
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableWriter.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_ITableWriter.php']);
+    /**
+     * Set table data by round
+     *
+     * @param tx_cfcleaguefe_table_ITableType $table
+     * @param string $template
+     * @param tx_rnbase_configurations $configurations
+     * @param string $confId
+     * @return string
+     */
+    public function writeTable($table, $template, $configurations, $confId);
 }
-
-?>

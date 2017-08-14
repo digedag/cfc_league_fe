@@ -1,8 +1,9 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2017 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,41 +23,36 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Factory for table classes
  */
-class tx_cfcleaguefe_table_Factory {
+class tx_cfcleaguefe_table_Factory
+{
 
-	/**
-	 *
-	 * @param tx_cfcleague_util_MatchTable $matchTable
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 * @return tx_cfcleaguefe_table_DefaultMatchProvider
-	 */
-	public static function createMatchProvider($tableType, $configurations, $confId) {
+    /**
+     *
+     * @param tx_cfcleague_util_MatchTable $matchTable
+     * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
+     * @param string $confId
+     * @return tx_cfcleaguefe_table_DefaultMatchProvider
+     */
+    public static function createMatchProvider($tableType, $configurations, $confId)
+    {
+        $clazz = $configurations->get($confId . $tableType . '.matchProviderClass');
+        $clazz = $clazz ? $clazz : 'tx_cfcleaguefe_table_DefaultMatchProvider';
+        $prov = tx_rnbase::makeInstance($clazz, $configurations, $confId);
+        return $prov;
+    }
 
-		$clazz = $configurations->get($confId.$tableType.'.matchProviderClass');
-		$clazz = $clazz ? $clazz : 'tx_cfcleaguefe_table_DefaultMatchProvider';
-		$prov = tx_rnbase::makeInstance($clazz, $configurations, $confId);
-		return $prov;
-	}
-	/**
-	 *
-	 * @param string $type
-	 * @return tx_cfcleaguefe_table_ITableType
-	 */
-	public static function createTableType($type) {
-		tx_rnbase::load('tx_rnbase_util_Misc');
-		$srv = tx_rnbase_util_Misc::getService('t3sports_sports', $type);
-		return $srv->getLeagueTable();
-	}
+    /**
+     *
+     * @param string $type
+     * @return tx_cfcleaguefe_table_ITableType
+     */
+    public static function createTableType($type)
+    {
+        tx_rnbase::load('tx_rnbase_util_Misc');
+        $srv = tx_rnbase_util_Misc::getService('t3sports_sports', $type);
+        return $srv->getLeagueTable();
+    }
 }
-
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Factory.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/class.tx_cfcleaguefe_table_Factory.php']);
-}
-
-?>
