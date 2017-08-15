@@ -82,6 +82,22 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 		return $this->getMatchProvider()->getBaseCompetition();
 	}
 
+	public function getRunningClubGames() {
+	    if (!$this->runningGamesClub) {
+            $values = '';
+            /* @var $match tx_cfcleaguefe_table_DefaultMatchProvider */
+            foreach($this->getMatchProvider()->getMatches() as $match) {
+                if($match->isRunning()) {
+
+                    $values = $values . ','. $match->getHome()->getClub()->getUid();
+                    $values = $values . ','. $match->getGuest()->getClub()->getUid();
+                }
+            }
+            $this->runningGamesClub =  Tx_Rnbase_Utility_Strings::intExplode(',',$values);
+        }
+       return $this->runningGamesClub;
+    }
+
 	public function getMarkClubs(){
 		if(!$this->markClubs) {
 			$values = $this->getConfValue('markClubs');

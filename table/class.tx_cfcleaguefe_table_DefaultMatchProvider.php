@@ -261,7 +261,7 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
      * Liefert die Spiele, die für die Berechnung der Tabelle notwendig sind.
      * Hier werden auch die Einstellungen des Configurators verwendet.
      */
-    protected function getMatches()
+    public function getMatches()
     {
         if (is_array($this->matches))
             return $this->matches;
