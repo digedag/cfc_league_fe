@@ -79,7 +79,7 @@ class tx_cfcleaguefe_models_match_note extends tx_rnbase_model_base {
 	 * @param string $confId
 	 * @param tx_cfcleaguefe_models_match_note $ticker
 	 */
-	function wrap($formatter, $confId, $ticker) {
+	static function wrap($formatter, $confId, $ticker) {
 		if($formatter->configurations->get($confId.'hide') == '1') // Die Meldung soll nicht gezeigt werden
 			return '';
 
