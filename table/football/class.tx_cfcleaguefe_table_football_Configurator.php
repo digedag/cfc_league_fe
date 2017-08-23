@@ -84,16 +84,19 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 
 	public function getRunningClubGames() {
 	    if (!$this->runningGamesClub) {
-            $values = '';
-            /* @var $match tx_cfcleaguefe_table_DefaultMatchProvider */
-            foreach($this->getMatchProvider()->getMatches() as $match) {
-                if($match->isRunning()) {
+            $values = [];
 
-                    $values = $values . ','. $match->getHome()->getClub()->getUid();
-                    $values = $values . ','. $match->getGuest()->getClub()->getUid();
+            foreach($this->getMatchProvider()->getRounds() as $round) {
+                /* @var $match tx_cfcleaguefe_table_DefaultMatchProvider */
+                foreach ($round as $matchs) {
+
+                    if($matchs->isRunning()) {
+                        $values[] = $matchs->getHome()->getClub()->getUid();
+                        $values[] = $matchs->getGuest()->getClub()->getUid();
+                    }
                 }
             }
-            $this->runningGamesClub =  Tx_Rnbase_Utility_Strings::intExplode(',',$values);
+            $this->runningGamesClub = $values;
         }
        return $this->runningGamesClub;
     }
