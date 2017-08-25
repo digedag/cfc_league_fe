@@ -53,7 +53,6 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
         // $options['debug'] = 1;
         $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
         // $this->initSearch($fields, $options, $parameters, $configurations);
-        $listSize = 0;
         $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
         // Soll ein PageBrowser verwendet werden
         tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId() . 'match.pagebrowser', $viewdata, $fields, $options, array(
@@ -78,7 +77,8 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
 
     /**
      * Set search criteria
-     *
+
+     * @deprecated wird nicht mehr verwendet
      * @param array $fields
      * @param array $options
      * @param array $parameters
@@ -128,6 +128,6 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
 
     function getViewClassName()
     {
-        return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchTable' : 'tx_rnbase_view_phpTemplateEngine';
+        return 'tx_cfcleaguefe_views_MatchTable';
     }
 }
