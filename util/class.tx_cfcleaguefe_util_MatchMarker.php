@@ -397,7 +397,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
 		}
 		$linkId = 'ticker';
-		if($match->isTicker()) {
+		$force = $formatter->getConfigurations()->getBool($confId.'links.'.$linkId.'.force', true);
+		if($match->isTicker() || $force) {
 			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array('matchId' => $match->getUid()), $template);
 		}
 		else {
