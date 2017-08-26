@@ -45,4 +45,16 @@ To pull latest changes:
 cd typo3conf/ext/cfc_league_fe
 git pull
 ```
-
+3. Update with a script
+```bash
+#!/bin/bash
+array=( rn_base cfc_league cfc_league_fe )
+for i in "${array[@]}"
+do
+        wget -O $i.zip https://github.com/digedag/$i/archive/master.zip
+        rm -rf $i
+        unzip $i.zip
+        mv $i-master $i
+        rm $i.zip
+done
+```
