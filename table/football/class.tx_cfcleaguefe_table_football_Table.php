@@ -318,9 +318,11 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         // Wir laufen jetzt über alle Spiele und legen einen Punktespeicher für jedes Team an
         foreach ($matches as $match) {
 
-            if ($match->isDummy())
+            if ($match->isDummy()) {
                 continue; // Ignore Dummy-Matches
-                                                // Wie ist das Spiel ausgegangen?
+            }
+            $this->assertTeamsInCompetition($match);
+            // Wie ist das Spiel ausgegangen?
             $toto = $match->getToto();
             tx_rnbase_util_Misc::callHook('cfc_league_fe', 'leagueTableFootball_handleMatches', array(
                 'match' => &$match,
@@ -342,6 +344,29 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         }
 
         unset($this->_teamData[0]); // Remove dummy data from teams without id
+    }
+    /**
+     * Check if teams in match are configured in competition. This is a data error check to
+     * avoid unexpected situations in table rendering.
+     *
+     * @param tx_cfcleague_models_Match $match
+     */
+    protected function assertTeamsInCompetition($match)
+    {
+        $home = $match->getHome();
+        if (!array_key_exists($home->getUid(), $this->_teamData)) {
+            throw new Exception(sprintf(
+                'Team with uid (%d) in match (%d) is not part of this selected competitions',
+                $home->getUid(), $match->getUid()
+                ));
+        }
+        $guest = $match->getGuest();
+        if (!array_key_exists($guest->getUid(), $this->_teamData)) {
+            throw new Exception(sprintf(
+                'Team with uid (%d) in match (%d) is not part of this selected competitions',
+                $guest->getUid(), $match->getUid()
+                ));
+        }
     }
 
     /**
