@@ -624,6 +624,11 @@ plugin.tx_cfcleaguefe_competition {
         if.value = 1
         if.equals.field = markClub
       }
+      markClubsIsRunningGame {
+        override = cfcleague-leaguetable-runningGame
+        if.value = 1
+        if.equals.field = markClubsIsRunningGame
+      }
       penalties {
         override = &nbsp;*
         if.value = 0

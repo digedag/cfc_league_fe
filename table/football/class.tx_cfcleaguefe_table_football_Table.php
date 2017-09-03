@@ -237,6 +237,8 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             if (count($markClubs)) {
                 $this->_teamData[$teamId]['markClub'] = in_array($team->getProperty('club'), $markClubs) ? 1 : 0;
             }
+            $this->_teamData[$teamId]['markClubsIsRunningGame'] =  in_array($team->getProperty('club'),  $configurator->getRunningClubGames()) ? 1 : 0;
+
             $this->initTeam($teamId);
         }
     }
