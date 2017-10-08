@@ -313,13 +313,15 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             // stehen schon im report bereit
             $srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
             $fields = [];
-            // Der Filter auf die Spieler ist nicht notwendig
-//            $fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty('players');
             $options = [];
             tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
             tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
             if ($this->joins($fields, 'TEAMNOTE')) {
                 $fields['TEAMNOTE.TEAM'][OP_EQ_INT] = $team->getUid();
+            }
+            else {
+                // Ohne TN müssen die Spieler des Teams gefiltert werden.
+                $fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty('players');
             }
 
             $items = $srv->search($fields, $options);
