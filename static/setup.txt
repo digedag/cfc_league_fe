@@ -1324,6 +1324,25 @@ plugin.tx_cfcleaguefe_report {
           file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_firstTeamPicture}
         }
       }
+
+      # Konfiguration von verschiedenen Spielerlisten
+      playerLists {
+      	# damit werden die Listen mit dem Prefix ###TEAM_PLAYERLIST_### bereitgestellt
+      	# Das sind nur Beispiele
+        defence {
+        	profile =< lib.t3sports.profile
+          filter.fields.TEAMNOTE.COMMENT.OP_EQ = Abwehr
+          filter.options {
+#            debug = 1
+          }
+        }
+        midfield =< plugin.tx_cfcleaguefe_report.teamview.team.playerLists.defence
+        midfield.filter.fields.TEAMNOTE.COMMENT.OP_EQ = Mittelfeld
+        offence =< plugin.tx_cfcleaguefe_report.teamview.team.playerLists.defence
+        offence.filter.fields.TEAMNOTE.COMMENT.OP_EQ = Angriff
+      }
+
+
     }
   }
   # View MatchReport

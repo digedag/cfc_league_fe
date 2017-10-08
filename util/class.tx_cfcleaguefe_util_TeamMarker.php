@@ -97,8 +97,12 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             $template = $this->addClubData($template, $team->getClub(), $formatter, $confId . 'club.', $marker . '_CLUB');
         $this->pullTT();
 
-        if ($this->containsMarker($template, $marker . '_GROUP_'))
+        if ($this->containsMarker($template, $marker . '_GROUP_')) {
             $template = $this->addGroup($template, $team, $formatter, $confId . 'group.', $marker . '_GROUP');
+        }
+        if ($this->containsMarker($template, $marker . '_PLAYERLIST')) {
+            $template = $this->addProfileLists($template, $team, $formatter, $confId . 'playerLists.', $marker . '_PLAYERLIST');
+        }
 
         $template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
         tx_rnbase_util_Misc::callHook('cfc_league_fe', 'teamMarker_afterSubst', array(
@@ -282,6 +286,65 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
         }
     }
 
+    /**
+     * Add dynamic defined markers for profiles
+     *
+     * @param string $template
+     * @param tx_cfcleaguefe_models_team $team
+     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string $listConfId
+     * @param string $teamMarker
+     * @return string
+     */
+    protected function addProfileLists($template, $team, $formatter, $listConfId, $teamMarker) {
+        $configurations = $formatter->getConfigurations();
+        $dynaMarkers = $configurations->getKeyNames($listConfId);
+        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+
+
+        for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
+            // Prüfen ob der Marker existiert
+            $markerPrefix = $teamMarker . strtoupper($dynaMarkers[$i]);
+            if (!self::containsMarker($template, $markerPrefix)) {
+                continue;
+            }
+            $confId = $listConfId.$dynaMarkers[$i] .'.';
+            // Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte
+            // stehen schon im report bereit
+            $srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
+            $fields = [];
+            // Der Filter auf die Spieler ist nicht notwendig
+//            $fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty('players');
+            $options = [];
+            tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
+            tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
+            if ($this->joins($fields, 'TEAMNOTE')) {
+                $fields['TEAMNOTE.TEAM'][OP_EQ_INT] = $team->getUid();
+            }
+
+            $items = $srv->search($fields, $options);
+            $template = $listBuilder->render($items,
+                false, $template, 'tx_cfcleaguefe_util_ProfileMarker',
+                $confId.'profile.', $markerPrefix, $formatter);
+        }
+        return $template;
+    }
+
+    /**
+     * Whether or not a given alias is used in fields
+     * @param array $fields
+     * @param string $alias
+     * @return boolean
+     */
+    protected function joins($fields, $alias)
+    {
+        foreach ($fields As $key => $op) {
+            if (Tx_Rnbase_Utility_Strings::isFirstPartOfStr($key, $alias)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public function getOptions()
     {
         return $this->options;

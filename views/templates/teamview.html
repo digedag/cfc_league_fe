@@ -50,7 +50,7 @@ Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser
 
   <!-- ###TEAM_PLAYERS### begin -->
   <div class="cfcleague-teamview-players">
-  <h2>Das Aufgebot</h2>
+  <h2>Das Aufgebot (komplett)</h2>
   <table class="table table-striped">
    <tr>
     <th>Bild</th>
@@ -76,6 +76,38 @@ Wenn in der Teamnotiz also den Marker "position" definiert ist, dann gilt dieser
   </div>
     ###TEAM_PLAYERS_COMMENT###
   <!-- ###TEAM_PLAYERS### end -->
+
+
+  <div>
+  	<!-- Beispiel für dynamische Listen auf Basis von TeamNotes -->
+	  <!-- ###TEAM_PLAYERLISTDEFENCES### begin -->
+		<h2>Abwehr</h2>
+		<ul>
+	  <!-- ###TEAM_PLAYERLISTDEFENCE### begin -->
+		<li>###TEAM_PLAYERLISTDEFENCE_DCNAME###
+	  <!-- ###TEAM_PLAYERLISTDEFENCE### end -->
+		</ul>
+	  <!-- ###TEAM_PLAYERLISTDEFENCES### end -->
+	
+	  <!-- ###TEAM_PLAYERLISTMIDFIELDS### begin -->
+		<h2>Mittelfeld</h2>
+		<ul>
+	  <!-- ###TEAM_PLAYERLISTMIDFIELD### begin -->
+		<li>###TEAM_PLAYERLISTMIDFIELD_DCNAME###
+	  <!-- ###TEAM_PLAYERLISTMIDFIELD### end -->
+		</ul>
+	  <!-- ###TEAM_PLAYERLISTMIDFIELDS### end -->
+	
+	  <!-- ###TEAM_PLAYERLISTOFFENCES### begin -->
+		<h2>Angriff</h2>
+		<ul>
+	  <!-- ###TEAM_PLAYERLISTOFFENCE### begin -->
+		<li>###TEAM_PLAYERLISTOFFENCE_DCNAME###
+	  <!-- ###TEAM_PLAYERLISTOFFENCE### end -->
+		</ul>
+	  <!-- ###TEAM_PLAYERLISTOFFENCES### end -->
+  </div>
+
 
   <!-- ###TEAM_COACHS### begin -->
   <div class="cfcleague-teamview-coaches">
