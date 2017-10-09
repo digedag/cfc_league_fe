@@ -1340,6 +1340,8 @@ plugin.tx_cfcleaguefe_report {
         midfield.filter.fields.TEAMNOTE.COMMENT.OP_EQ = Mittelfeld
         offence =< plugin.tx_cfcleaguefe_report.teamview.team.playerLists.defence
         offence.filter.fields.TEAMNOTE.COMMENT.OP_EQ = Angriff
+        goalkeeper =< plugin.tx_cfcleaguefe_report.teamview.team.playerLists.defence
+        goalkeeper.filter.fields.TEAMNOTE.COMMENT.OP_EQ = Tor
       }
 
 
