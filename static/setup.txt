@@ -1334,6 +1334,7 @@ plugin.tx_cfcleaguefe_report {
           filter.fields.TEAMNOTE.COMMENT.OP_EQ = Abwehr
           filter.options {
 #            debug = 1
+            enableFieldsForAdditionalTableAliases = TEAMNOTE
           }
         }
         midfield =< plugin.tx_cfcleaguefe_report.teamview.team.playerLists.defence
