@@ -1417,6 +1417,59 @@ plugin.tx_cfcleaguefe_report {
       # Es können beliebige weitere Listen erstellt werden. Bei der Benennung sollten aber
       # Kollisionen mit Attributen des Datensatzes "Spiel" vermieden werden.
       dynaMarkers {
+        exchangeHome {
+          cron = 1
+          ifEmpty.cObject = TEXT
+          ifEmpty.cObject.value.field = scorer_home_stat
+          ifEmpty.cObject.value.ifEmpty = -
+          ifEmpty.cObject.value.br = 1
+          # Possible values are home and guest. Empty for both
+          noteTeam = home
+          noteType = 80,81
+          #          noteIgnoreType = ??
+          #          implode = <br />
+          seperator = |<br/>|
+          ticker {
+            minute.s_weight = 0
+            minute.wrap = |.&nbsp;
+            profile =< lib.t3sports.matchreport.profiles.profile
+            profile.s_weight = 5
+            profile {
+              ifChangedOut {
+                # Position des ChangeOut-Tickers
+                s_weight = 4
+                ticker {
+                  #minute.wrap = |.&nbsp;
+                  minute >
+                  profile >
+                  profile2 =< lib.t3sports.matchreport.reportPlayers.profile
+                  profile2 {
+                    s_weight = 4
+                    # Falls der eingewechselte Spieler wieder raus muss
+                    ifChangedOut {
+                      s_weight = 2
+                      ticker {
+                        minute.wrap = |.&nbsp;
+                        profile2 =< lib.t3sports.matchreport.reportPlayers.profile
+                        noTrimWrap = |, ||
+                      }
+                    }
+                    # Wenn der auch wieder raus musste, könnte es hier weitergehen...
+                  }
+                  #          wrap = &nbsp;(|)
+                  noTrimWrap = | wird ersetzt durch | |
+                }
+              }
+            }
+            # Type nicht anzeigen
+            type >
+            # Spielstandsanzeige entfernen
+            goals_home >
+          }
+        }
+        exchangeGuest =< plugin.tx_cfcleaguefe_report.matchreport.match.dynaMarkers.exchangeHome
+        exchangeGuest.noteTeam = guest
+        exchangeGuest.ifEmpty.cObject.value.field = scorer_guest_stat
         # Die Heimtorschützen anzeigen
         scorerHome {
 		      cron = 1
