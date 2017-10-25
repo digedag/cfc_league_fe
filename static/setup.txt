@@ -1235,6 +1235,28 @@ lib.t3sports.matchNote {
     30 = TEXT
     30.field = goals_guest
   }
+
+  subparts {
+    isgoal {
+      # -> Marker: _ISGOAL_YES###
+      marker.visible = YES
+      visible = TEXT
+      visible.value = 1
+      visible.if {
+        isInList.field = type
+        value = 10,11,12,13
+      }
+    }
+    isgoalown =< lib.t3sports.matchNote.subparts.isgoal
+    isgoalown {
+      # -> Marker: _ISGOAL_YES###
+      visible.if {
+        equals.field = type
+        value = 30
+      }
+    }
+  }
+
 }
 
 plugin.tx_cfcleaguefe_report   = USER
@@ -1400,6 +1422,7 @@ plugin.tx_cfcleaguefe_report {
       # Die Ausgabe erfolgt hier wie in ganz normalen Listen
       tickerLists {
       # damit wird die Liste ###MATCH_TICKERS### bereitgestellt
+
         ticker =< lib.t3sports.matchNote
         ticker {
           filter.fields.MATCHNOTE.MINUTE.OP_GTEQ_INT = 0
@@ -1410,6 +1433,18 @@ plugin.tx_cfcleaguefe_report {
             orderby.MATCHNOTE.UID = DESC
           }
         }
+
+        goal =< lib.t3sports.matchNote
+        goal {
+          filter.fields.MATCHNOTE.MINUTE.OP_GTEQ_INT = 0
+          filter.fields.MATCHNOTE.TYPE.OP_IN_INT = 10,11,12,30,13
+          filter.options {
+            orderby.MATCHNOTE.MINUTE = DESC
+            orderby.MATCHNOTE.EXTRA_TIME = DESC
+            orderby.MATCHNOTE.UID = DESC
+          }
+        }
+
       }
       # Mit den DynaMarkern können Listen von Spiel-Ereignissen zusammengestellt werden
       # Der Zugriff im HTML-Template erfolgt nach folgendem Prinzip: 
