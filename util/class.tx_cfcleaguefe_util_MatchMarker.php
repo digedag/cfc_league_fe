@@ -256,12 +256,11 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker {
 			// Die gefundenen Notes werden jetzt durch ihre aufbereiteten Duplikate ersetzt
 			$items = array();
 			$tickerHash = $this->getTickerHash($match);
-			for($i=0, $cnt=count($children); $i < $cnt; $i++) {
-				if(array_key_exists($children[$i]['uid'], $tickerHash)) {
-					$items[] = $tickerHash[$children[$i]['uid']];
+			for($ci=0, $cnt=count($children); $ci < $cnt; $ci++) {
+				if(array_key_exists($children[$ci]['uid'], $tickerHash)) {
+					$items[] = $tickerHash[$children[$ci]['uid']];
 				}
 			}
-
 			$template = $listBuilder->render($items,
 							false, $template, 'tx_cfcleaguefe_util_MatchNoteMarker',
 							$confId, $markerPrefix, $formatter);
