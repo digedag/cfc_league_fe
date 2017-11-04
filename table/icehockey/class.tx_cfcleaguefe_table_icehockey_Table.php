@@ -60,22 +60,27 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 		// Für H2H modus das Spielergebnis merken
 		$this->addResult($homeId, $guestId, $match->getResult());
 
+		$options = tx_rnbase::makeInstance('tx_cfcleaguefe_table_PointOptions', [
+		    tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_TIME => $match->isExtraTime(),
+		    tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_PENALTY => $match->isPenalty(),
+		]);
+
 		if($toto == 0) { // Unentschieden
-			$this->addPoints($homeId, $configurator->getPointsDraw());
-			$this->addPoints($guestId, $configurator->getPointsDraw());
+			$this->addPoints($homeId, $configurator->getPointsDraw($options));
+			$this->addPoints($guestId, $configurator->getPointsDraw($options));
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($homeId, $configurator->getPointsDraw());
-				$this->addPoints2($guestId, $configurator->getPointsDraw());
+			    $this->addPoints2($homeId, $configurator->getPointsDraw($options));
+			    $this->addPoints2($guestId, $configurator->getPointsDraw($options));
 			}
 
 			$this->addDrawCount($homeId);
 			$this->addDrawCount($guestId);
 		}
 		elseif($toto == 1) {  // Heimsieg
-			$this->addPoints($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
-			$this->addPoints($guestId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($homeId, $configurator->getPointsWin($options));
+			$this->addPoints($guestId, $configurator->getPointsLoose($options));
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			    $this->addPoints2($guestId, $configurator->getPointsWin($options));
 			}
 
 			$this->addWinCount($homeId);
@@ -90,10 +95,10 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 			}
 		}
 		else { // Auswärtssieg
-			$this->addPoints($homeId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
-			$this->addPoints($guestId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+		    $this->addPoints($homeId, $configurator->getPointsLoose($options));
+		    $this->addPoints($guestId, $configurator->getPointsWin($options));
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			    $this->addPoints2($homeId, $configurator->getPointsWin($options));
 			}
 			$this->addLoseCount($homeId);
 			$this->addWinCount($guestId);
@@ -125,15 +130,20 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 		$this->addMatchCount($homeId);
 		$this->addResult($homeId, $guestId, $match->getGuest());
 
+		$options = tx_rnbase::makeInstance('tx_cfcleaguefe_table_PointOptions', [
+		    tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_TIME => $match->isExtraTime(),
+		    tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_PENALTY => $match->isPenalty(),
+		]);
+
 		if($toto == 0) { // Unentschieden
-			$this->addPoints($homeId, $configurator->getPointsDraw());
+			$this->addPoints($homeId, $configurator->getPointsDraw($options));
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($homeId, $configurator->getPointsDraw());
+				$this->addPoints2($homeId, $configurator->getPointsDraw($options));
 			}
 			$this->addDrawCount($homeId);
 		}
 		elseif($toto == 1) {  // Heimsieg
-			$this->addPoints($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($homeId, $configurator->getPointsWin($options));
 			$this->addWinCount($homeId);
 			if($match->isPenalty())
 				$this->addWinCountPenalty($homeId);
@@ -141,9 +151,9 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 				$this->addWinCountOvertime($homeId);
 		}
 		else { // Auswärtssieg
-			$this->addPoints($homeId, $configurator->getPointsLoose($match->isExtraTime(), $match->isPenalty()));
+			$this->addPoints($homeId, $configurator->getPointsLoose($options));
 			if($configurator->isCountLoosePoints()) {
-				$this->addPoints2($homeId, $configurator->getPointsWin($match->isExtraTime(), $match->isPenalty()));
+				$this->addPoints2($homeId, $configurator->getPointsWin($options));
 			}
 			$this->addLoseCount($homeId);
 			if($match->isPenalty())

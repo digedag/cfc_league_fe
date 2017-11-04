@@ -39,17 +39,17 @@ class tx_cfcleaguefe_table_handball_Configurator extends tx_cfcleaguefe_table_fo
         return true;
     }
 
-    public function getPointsWin($afterExtraTime, $afterPenalty)
+    public function getPointsWin($options = null)
     {
         return 2;
     }
 
-    public function getPointsDraw($afterExtraTime, $afterPenalty)
+    public function getPointsDraw($options = null)
     {
         return 1;
     }
 
-    public function getPointsLoose($afterExtraTime, $afterPenalty)
+    public function getPointsLoose($options = null)
     {
         return 0;
     }

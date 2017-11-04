@@ -124,13 +124,28 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
 	public function getTableScope() {
 		return $this->cfgTableScope;
 	}
-	public function getPointsWin() {
+	/**
+	 *
+	 * @param tx_cfcleaguefe_table_PointOptions $options
+	 * @return number
+	 */
+	public function getPointsWin($options = null) {
 		return $this->cfgPointSystem == '1' ? 2 : 3;
 	}
-	public function getPointsDraw() {
+	/**
+	 *
+	 * @param tx_cfcleaguefe_table_PointOptions $options
+	 * @return number
+	 */
+	public function getPointsDraw($options = null) {
 		return 1;
 	}
-	public function getPointsLoose() {
+	/**
+	 *
+	 * @param tx_cfcleaguefe_table_PointOptions $options
+	 * @return number
+	 */
+	public function getPointsLoose($options = null) {
 		return 0;
 	}
 	public function getPointSystem() {

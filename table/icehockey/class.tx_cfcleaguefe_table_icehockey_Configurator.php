@@ -36,18 +36,37 @@ class tx_cfcleaguefe_table_icehockey_Configurator extends tx_cfcleaguefe_table_f
 		return $this->getPointSystem() == '1'; // Beim eishockey gibt es im 3-Punktsystem keine Minuspunkte.
 	}
 
-	public function getPointsWin($afterExtraTime, $afterPenalty) {
-		$points = $this->getPointSystem() == '1' ? 2 : 3;
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see tx_cfcleaguefe_table_football_Configurator::getPointsWin()
+	 */
+	public function getPointsWin($options) {
+	    $afterExtraTime = $options->getOption(tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_TIME);
+	    $afterPenalty = $options->getOption(tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_PENALTY);
+	    $points = $this->getPointSystem() == '1' ? 2 : 3;
 		if($this->getPointSystem() == 0) {
 			// Drei Punkt
 			$points = $afterExtraTime || $afterPenalty ? 2 : $points;
 		}
 		return $points;
 	}
-	public function getPointsDraw($afterExtraTime, $afterPenalty) {
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see tx_cfcleaguefe_table_football_Configurator::getPointsDraw()
+	 */
+	public function getPointsDraw($options) {
 		return 1; // Unentschieden gibt es eigentlich nicht...
 	}
-	public function getPointsLoose($afterExtraTime, $afterPenalty) {
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see tx_cfcleaguefe_table_football_Configurator::getPointsLoose()
+	 */
+	public function getPointsLoose($options) {
+	    $afterExtraTime = $options->getOption(tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_TIME);
+	    $afterPenalty = $options->getOption(tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_PENALTY);
 		return $afterExtraTime || $afterPenalty ? 1 : 0;
 	}
 	/**
