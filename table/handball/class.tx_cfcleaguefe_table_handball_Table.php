@@ -53,7 +53,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
      * @param tx_cfcleague_models_Match $match
      * @param int $toto
      */
-    protected function countStandard(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator)
+    protected function countStandard($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
     {
         // Anzahl Spiele aktualisieren
         $homeId = $configurator->getTeamId($match->getHome());
@@ -123,7 +123,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
      * @param tx_cfcleague_models_Match $match
      * @param int $toto
      */
-    protected function countHome(&$match, $toto, tx_cfcleaguefe_table_icehockey_Configurator $configurator)
+    protected function countHome($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
     {
         $homeId = $configurator->getTeamId($match->getHome());
         $guestId = $configurator->getTeamId($match->getGuest());
@@ -172,7 +172,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
      * @param tx_cfcleague_models_Match $match
      * @param int $toto
      */
-    protected function countGuest(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator)
+    protected function countGuest($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
     {
         $homeId = $configurator->getTeamId($match->getHome());
         $guestId = $configurator->getTeamId($match->getGuest());

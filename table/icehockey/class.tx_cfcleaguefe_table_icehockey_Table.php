@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011-2016 Rene Nitzsche (rene@system25.de)
+ *  (c) 2011-2017 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -51,7 +51,7 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
-	protected function countStandard(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+	protected function countStandard($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 		// Anzahl Spiele aktualisieren
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
@@ -123,7 +123,7 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
-	protected function countHome(&$match, $toto, tx_cfcleaguefe_table_icehockey_Configurator $configurator) {
+	protected function countHome($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
 		// Anzahl Spiele aktualisieren
@@ -171,7 +171,7 @@ class tx_cfcleaguefe_table_icehockey_Table extends tx_cfcleaguefe_table_football
 	 * @param tx_cfcleague_models_Match $match
 	 * @param int $toto
 	 */
-	protected function countGuest(&$match, $toto, tx_cfcleaguefe_table_football_Configurator $configurator) {
+	protected function countGuest($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator) {
 
 		$homeId = $configurator->getTeamId($match->getHome());
 		$guestId = $configurator->getTeamId($match->getGuest());
