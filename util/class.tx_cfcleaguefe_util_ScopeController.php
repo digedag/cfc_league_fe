@@ -290,13 +290,14 @@ class tx_cfcleaguefe_util_ScopeController
         $ret = array();
         if (count($objects)) {
             foreach ($objects as $object) {
-                $ret[0][$object->uid] = strlen($displayAttrName) == 0 ? $object : $object->record[$displayAttrName];
+                $ret[0][$object->getUid()] = strlen($displayAttrName) == 0 ? $object : $object->getProperty($displayAttrName);
             }
             $paramValue = $parameters->offsetGet($parameterName);
             // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
-            if (isset($paramValue) && array_key_exists($paramValue, $ret[0]))
+            if (isset($paramValue) && array_key_exists($paramValue, $ret[0])) {
                 $ret[1] = $paramValue;
-            $ret[1] = $ret[1] ? $ret[1] : $objects[0]->uid;
+            }
+            $ret[1] = $ret[1] ? $ret[1] : $objects[0]->getUid();
         }
         return $ret;
     }
@@ -310,18 +311,21 @@ class tx_cfcleaguefe_util_ScopeController
      */
     private static function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
     {
-        $ret = array();
+        $ret = [];
         if (count($rounds)) {
             $skipOtherRounds = FALSE;
-            $default = $rounds[0]->record['uid'];
+            $default = $rounds[0]->getUid();
             foreach ($rounds as $object) {
                 // Die Daten für die Auswahlbox füllen
-                $ret[0][$object->record['uid']] = strlen($displayAttrName) == 0 ? $object : $object->record[$displayAttrName];
-                if (! $skipOtherRounds && $object->record['finished']) // Aktuellen Spieltag suchen
-                    $default = $object->record['uid'];
+                $ret[0][$object->getUid()] = strlen($displayAttrName) == 0 ? $object : $object->getProperty($displayAttrName);
+                // Aktuellen Spieltag suchen. Hier sollte das aktuelle Datum mit berücksichtigt werden
+                if (! $skipOtherRounds && $object->getProperty('finished')) {
+                    $default = $object->getUid();
+                }
                 // Bei einer Lücke in den beendeten Spieltagen die Spieltage nach der Lücke ignorieren
-                if (! $skipOtherRounds && ! $object->record['finished'])
+                if (! $skipOtherRounds && ! $object->getProperty('finished')) {
                     $skipOtherRounds = TRUE;
+                }
             }
             // Ist ein fester Wert für die aktuelle Spielrunde konfiguriert?
             if (($fixedRound = $configurations->getInt($confId . 'fixedCurrent')) > 0) {
@@ -329,9 +333,10 @@ class tx_cfcleaguefe_util_ScopeController
             }
             // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
             $paramValue = $parameters->offsetGet('round');
-            if (isset($paramValue) && array_key_exists($paramValue, $ret[0]))
+            if (isset($paramValue) && array_key_exists($paramValue, $ret[0])) {
                 $ret[1] = $paramValue;
-            $ret[1] = $ret[1] ? $ret[1] : $default;
+            }
+            $ret[1] = isset($ret[1]) ? $ret[1] : $default;
         }
         return $ret;
     }

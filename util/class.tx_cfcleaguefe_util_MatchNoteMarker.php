@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_SimpleMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('tx_rnbase_util_Extensions');
 
@@ -30,7 +30,13 @@ tx_rnbase::load('tx_rnbase_util_Extensions');
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Spielereignisse verantwortlich
  */
-class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_BaseMarker {
+class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker {
+
+    public function __construct($options = array())
+    {
+        $this->setClassname('tx_cfcleaguefe_models_match_note');
+        parent::__construct($options);
+    }
 
 	/**
 	 * @param string $template das HTML-Template
@@ -42,18 +48,7 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_BaseMarker {
 	 *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
 	 * @return String das geparste Template
 	 */
-	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'NOTE') {
-		if(!is_object($item)) {
-			// Ist kein Datensatz vorhanden wird ein leeres Objekt verwendet.
-			require_once(tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
-			$item = self::getEmptyInstance('tx_cfcleaguefe_models_match_note');
-		}
-		$this->prepareRecord($item, $template, $formatter->getConfigurations(), $confId, $marker);
-		// Es wird das MarkerArray mit Daten gefüllt
-		$ignore = self::findUnusedCols($item->record, $template, $marker);
-		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$item->getColumnNames());
-//		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+    protected function finishTemplate($template, $item, $formatter, $confId, $marker = 'NOTE') {
 
 		if($this->containsMarker($template, $marker.'_PLAYER_'))
 			$template = $this->_addProfile($template, $item->getPlayer(), $formatter, $confId.'player.', $marker.'_PLAYER');
@@ -85,13 +80,4 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_BaseMarker {
 		return $template;
 	}
 
-	protected function prepareRecord($item, $template, $configurations, $confId, $marker) {
-	}
-
 }
-
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchNoteMarker.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchNoteMarker.php']);
-}
-?>
