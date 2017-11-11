@@ -47,18 +47,25 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC {
 		}
 		// Das Spiel laden
 		try {
-			$matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $matchId, $configurations);
-			$viewData->offsetSet('matchReport', $matchReport); // Den Spielreport für den View bereitstellen
+		    if ($configurations->get($this->getConfId().'viewClassName') != null) {
+		        $match = tx_rnbase::makeInstance('tx_cfcleague_models_Match', $matchId);
+		        if(!$match->isValid()) {
+		            throw new Exception('Match is not valid');
+		        }
+		        $viewData->offsetSet('match', $match); // Den Spielreport für den View bereitstellen
+		    }
+		    else {
+		        /* @var $matchReport tx_cfcleaguefe_models_matchreport */
+		        $matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $matchId, $configurations);
+		        $viewData->offsetSet('match', $matchReport->getMatch()); // Den Spielreport für den View bereitstellen
+		    }
 		} catch (Exception $e) {
 			throw tx_rnbase::makeInstance('Tx_Rnbase_Exception_PageNotFound404', $e->getMessage()."\nX-t3sports-msg: match not found\nX-t3sports-match: ".$matchId);
 		}
-
-		// Auf das Template verzweigen
-		$this->viewType = $configurations->get('matchreport.viewType');
 		return null;
 	}
 
 	protected function getTemplateName() {return 'matchreport';}
-	protected function getViewClassName() { return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_MatchReport' : 'tx_rnbase_view_phpTemplateEngine'; }
+	protected function getViewClassName() { return 'tx_cfcleaguefe_views_MatchReport'; }
 }
 
