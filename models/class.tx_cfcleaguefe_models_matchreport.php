@@ -465,24 +465,11 @@ class tx_cfcleaguefe_models_matchreport
             // Der Ticker wird immer chronologisch ermittelt
             $this->_tickerArr = & tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
-            $playersHome = $this->match->getPlayersHome(1);
-            $playersGuest = $this->match->getPlayersGuest(1);
-
             for ($i = 0; $i < count($this->_tickerArr); $i ++) {
                 $note = $this->_tickerArr[$i];
-                $player = &$note->getPlayer();
-
+                $player = $note->getPlayer();
                 if (is_object($player)) {
-                    if ($note->isHome()) {
-                        if (is_object($player)) {
-                            $player->addMatchNote($note);
-                        }
-                    } else { // Gastspieler
-                             // $player =& $playersGuest[$player->uid]; //Funktioniert mit php5 nicht mehr
-                        if (is_object($player)) {
-                            $player->addMatchNote($note);
-                        }
-                    }
+                    $player->addMatchNote($note);
                 }
             }
         }
