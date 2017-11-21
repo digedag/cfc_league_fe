@@ -38,9 +38,10 @@ if (tx_rnbase_util_Extensions::isLoaded('dam')) {
 class tx_cfcleaguefe_models_matchreport
 {
 
-    var $match, $_configurations;
-    var $_formatter;
-    var $_tickerArr;
+    protected $match, $_configurations;
+    protected $_formatter;
+    protected $_tickerArr;
+    protected $initialized = false;
 
     // enthält alle Tickermeldungen
 
@@ -60,8 +61,6 @@ class tx_cfcleaguefe_models_matchreport
         $this->_configurations = $configurations;
 
         $this->_formatter = & $configurations->getFormatter();
-        // Die MatchNotes laden
-        $this->_initMatchTicker();
     }
 
     /**
@@ -239,6 +238,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     protected function _getMatchTicker($cron = 0)
     {
+        $this->_initMatchTicker();
         $ret = ($cron != 1) ? array_reverse($this->_tickerArr) : $this->_tickerArr;
         return $ret;
     }
@@ -486,6 +486,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     protected function _getNames2($profiles, $confIdAll)
     {
+        $this->_initMatchTicker();
         $ret = $this->_wrapProfiles($profiles, $confIdAll . 'profile.');
         // Jetzt noch die einzelnen Strings verbinden
         // Der Seperator sollte mit zwei Pipes eingeschlossen sein

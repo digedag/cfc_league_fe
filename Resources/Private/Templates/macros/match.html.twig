@@ -1,0 +1,91 @@
+
+{% macro score(note) %}
+  {{ note.getGoals_home }}:{{ note.getGoals_guest }}
+{% endmacro %}
+
+
+{% macro mn_message(note) %}
+  {% if note.type == 10 %}
+  Tor durch {{ _self.profile_name(note.player) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro lineup_player(player) %}
+    {% import '@EXT:cfc_league_fe/macros/profile.html.twig' as prm %}
+    {{ player.uniqueName ? prm.name_short(player.profile) : prm.name_medium(player.profile) }} [{{ player.uid }}]
+{#
+    {% if player.profile.lastname == 'Endres' %}
+    {{ dump(player.cardYellow) }}
+    {% endif %}
+#}
+{% endmacro %}
+
+{#
+render cards of player in lineup
+#}
+{% macro lineup_card(player) %}
+	{% if player.cardYellowRed %}
+	{{ ''|t3ts('lib.t3sports.matchreport.penaltyType.cObject.71') }}
+	{% elseif player.cardYellow %}
+	{{ ''|t3ts('lib.t3sports.matchreport.penaltyType.cObject.70') }}
+	{% endif %}
+	{% if player.cardRed %}
+	{{ ''|t3ts('lib.t3sports.matchreport.penaltyType.cObject.72') }}
+	{% endif %}
+
+{% endmacro %}
+
+{% macro lineup_changes(player) %}
+{% spaceless %}
+  {% set notes = player.changedout %}
+  {% if notes %}
+    {% for note in notes %}
+    {{ note.minute }}. {{ _self.lineup_player(note.player2) }}{{ _self.lineup_card(note.player2) }}
+    {% if note.player2.changedout %}
+    	{{ ', ' ~ _self.lineup_changes(note.player2) }}
+	  {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{#
+render lineup of players
+#}
+{% macro lineup(lineup) %}
+  {% if lineup %}
+    {% for line in lineup %}
+      {% for player in line %}
+	      {% set changes = _self.lineup_changes(player) %}
+	      {% set changes = changes ? ('('~changes~')') : '' %}
+        <span>{{ _self.lineup_player(player) }}{{ _self.lineup_card(player) }}{{ changes }}{{ loop.last ? '' : ', ' }}</span>
+      {% endfor %}
+      {{ loop.last ? '' : ' - ' }}
+    {% endfor %}
+  {% else %}
+  Unbekannt
+  {% endif %}
+
+{% endmacro %}
+
+{#
+render list of substitutes
+#}
+{% macro substitutes(players) %}
+  {% if players %}
+      {% for player in players %}
+        <span>{{ _self.lineup_player(player) }}{{ _self.lineup_card(player) }}{{ loop.last ? '' : ', ' }}</span>
+      {% endfor %}
+  {% else %}
+  Unbekannt
+  {% endif %}
+{% endmacro %}
+
+{% macro coach(profile) %}
+  {% import '@EXT:cfc_league_fe/macros/profile.html.twig' as prm %}
+  {% if profile %}
+  {{ prm.name_medium(profile) }} [{{ profile.uid }}]
+  {% else %}
+  Unbekannt
+  {% endif %}
+{% endmacro %}

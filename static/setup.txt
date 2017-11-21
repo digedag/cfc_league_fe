@@ -1734,3 +1734,9 @@ plugin.tt_news {
     }
   }
 }
+
+lib.tx_t3twig {
+    extensions {
+        t3sports_DataProvider = Tx_Cfcleaguefe_Twig_Extension_DataProvider
+    }
+}
