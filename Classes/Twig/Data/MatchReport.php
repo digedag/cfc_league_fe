@@ -33,6 +33,12 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
     protected $match;
     /** @var tx_cfcleague_models_MatchNote[] */
     protected $tickerArr;
+    /** @var tx_cfcleague_models_MatchNote[] */
+    protected $tickerByTeam = [
+        'home' => [],
+        'guest' => [],
+    ];
+
     /** @var Tx_Cfcleaguefe_Twig_Data_Player[] */
     protected $players = [];
     protected $playersByLastname = [];
@@ -144,6 +150,29 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
         return empty($ret) ? null : reset($ret);
     }
 
+    public function getMatchNotes()
+    {
+        return $this->tickerArr;
+    }
+
+    /**
+     *
+     * @return Tx_Cfcleaguefe_Twig_Data_MatchNote[]
+     */
+    public function getMatchNotesHome()
+    {
+        return $this->tickerByTeam['home'];
+    }
+
+    /**
+     *
+     * @return Tx_Cfcleaguefe_Twig_Data_MatchNote[]
+     */
+    public function getMatchNotesGuest()
+    {
+        return $this->tickerByTeam['guest'];
+    }
+
     /**
      *
      * @return tx_cfcleague_models_Profile[]
@@ -218,6 +247,9 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
                         $matchNote->setPlayer2($player2);
                     }
                     $this->tickerArr[] = $matchNote;
+                    if ($player) {
+                        $this->tickerByTeam[$matchNote->getMatchNote()->isHome() ? 'home' : 'guest'][] = $matchNote;
+                    }
                 }
                 catch (Exception $e) {
 

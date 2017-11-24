@@ -67,7 +67,20 @@
 <td id="cfcleague-report-coach-guest">{{ mr.coach(matchReport.coachGuest) }}</td>
 </tr>
 
+<tr>
+<th colspan="2">So fielen die Tore</th>
+</tr>
+<tr>
+<td id="cfcleague-report-scorer-home">{{ mr.scorer(matchReport.matchNotesHome, '-') }}</td>
+<td id="cfcleague-report-scorer-guest">{{ mr.scorer(matchReport.matchNotesGuest) }}</td>
+</tr>
+
 </table>
+
+<div id="cfcleague-report-summary">
+ <div id="cfcleague-report-summary-author">{{ match.getProperty('game_report_author') }}</div>
+ <div id="cfcleague-report-summary-text"> {{ match.getProperty('game_report')|t3ts('lib.t3sports.match.game_report') }}</div>
+</div>
 
 
 <table class="table table-striped table-condensed">
@@ -79,7 +92,7 @@
 </table>
 
 <h3>Die Tore</h3>
-{% for note in match.matchNotes %}
+{% for note in matchReport.matchNotes %}
 <div class="col-sm-6">
   {% if (note.type >= 10 and note.type <= 20) %}
         {{ note.minute }} {{ mr.score(note) }}: Tor durch {{ profile.name_full(note.player) }}

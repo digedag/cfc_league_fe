@@ -538,6 +538,7 @@ lib.t3sports.match {
   liveticker_author.required = 1
   game_report_author.wrap = Der Spielbericht von&nbsp;|
   game_report_author.required = 1
+  game_report.parseFunc =< lib.parseFunc_RTE
 
   dcresultsuffix = COA
   dcresultsuffix {

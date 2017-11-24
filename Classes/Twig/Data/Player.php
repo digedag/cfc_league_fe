@@ -115,6 +115,15 @@ class Tx_Cfcleaguefe_Twig_Data_Player
     }
     /**
      *
+     * @return boolean
+     */
+    public function isCaptain()
+    {
+        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CAPTAIN);
+    }
+
+    /**
+     *
      * @return tx_cfcleague_models_MatchNote[]
      */
     public function getMatchNotes()
