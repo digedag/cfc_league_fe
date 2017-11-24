@@ -1,0 +1,92 @@
+{% import '@EXT:cfc_league_fe/macros/match.html.twig' as mr %}
+{% import '@EXT:cfc_league_fe/macros/profile.html.twig' as pr %}
+
+{% set matchReport = buildMatchReport(match) %}
+
+<h2>Der Spielbericht {{ match.competition.name }} {{ match.getround_name }}</h2>
+{% set referee %}
+    {% if match.referee %}
+    {{pr.name_full(match.referee)}} ({{ match.referee.homeTown }})
+    {% else %}
+    {{ 'profile_unknownLastname'|t3trans }}
+    {% endif %}
+{% endset %}
+
+{% set assists %}
+    {% if matchReport.assists %}
+    	{% set names = [] %}
+    	{% for assist in matchReport.assists %}
+    		{% set names = names|merge([pr.name_full(assist)]) %}
+    	{% endfor %}
+    	{{ names|join(', ') }}
+    {% else %}
+    {{ 'profile_unknownLastname'|t3trans }}
+    {% endif %}
+{% endset %}
+
+<table style="width:100%">
+<tr>
+  <td class="cfcleague-report-teamname">{{ match.home.logo|t3ts('lib.t3sports.teamLogo.big', {'data': match.home}) }}</td>
+  <td class="cfcleague-report-result">{{ match.goalsHome }} : {{ match.goalsGuest }}</td>
+  <td class="cfcleague-report-teamname">{{ match.guest.logo|t3ts('lib.t3sports.teamLogo.big', {'data': match.guest}) }}</td>
+</tr>
+<tr>
+<td class="cfcleague-report-teamname">{{ match.home.name }}</td>
+<td style="text-align:center">
+ Stadion: <b>{{ match.stadium|t3link({'ts_path': 'lib.t3sports.stadium.links.show', 'params': {'stadium':match.arena.uid}}) }}</b><br />
+ Datum: <b>{{ match.date|t3ts('lib.t3sports.match.date', {'data': match.property}) }}</b><br />
+ Schiedsrichter: <b>{{ referee }}</b><br />
+ SRA: <b>{{ assists }}</b><br />
+ Zuschauer: <b>{{ match.visitors }}</b><br />
+</td>
+<td class="cfcleague-report-teamname">{{ match.guest.name }}</td>
+</tr>
+</table>
+
+
+<table class="table">
+<tr>
+<th colspan="2">Die Aufstellungen</th>
+</tr>
+<tr>
+<td id="cfcleague-report-lineup-home">{{ mr.lineup(matchReport.lineupHome) }}</td>
+<td id="cfcleague-report-lineup-guest">{{ mr.lineup(matchReport.lineupGuest) }}</td>
+</tr>
+<tr>
+<th colspan="2">Auf der Auswechselbank</th>
+</tr>
+<tr>
+<td id="cfcleague-report-subst-home">{{ mr.substitutes(matchReport.substitutesHome) }}</td>
+<td id="cfcleague-report-subst-guest">{{ mr.substitutes(matchReport.substitutesGuest) }}</td>
+</tr>
+<tr>
+<th colspan="2">Die Trainer</th>
+</tr>
+<tr>
+<td id="cfcleague-report-coach-home">{{ mr.coach(matchReport.coachHome) }}</td>
+<td id="cfcleague-report-coach-guest">{{ mr.coach(matchReport.coachGuest) }}</td>
+</tr>
+
+</table>
+
+
+<table class="table table-striped table-condensed">
+{% for note in match.matchNotes %}
+<tr>
+<td colspan="10">{{ note.uid }} {{ mr.mn_message(note) }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>Die Tore</h3>
+{% for note in match.matchNotes %}
+<div class="col-sm-6">
+  {% if (note.type >= 10 and note.type <= 20) %}
+        {{ note.minute }} {{ mr.score(note) }}: Tor durch {{ profile.name_full(note.player) }}
+  {% endif %}
+  {% if note.type == 30 %}
+        {{ note.minute }} {{ mr.score(note) }}: Eigentor durch {{ profile.name_full(note.player) }}
+  {% endif %}
+</div>
+{% endfor %}
+
