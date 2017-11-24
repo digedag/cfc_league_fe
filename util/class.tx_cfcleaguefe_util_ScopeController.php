@@ -305,9 +305,13 @@ class tx_cfcleaguefe_util_ScopeController
     /**
      * Liefert ein Array für die Erstellung der Select-Box für die Spielrunden einer Liga
      *
-     * @param array[tx_cfcleaguefe_models_competition_round] $rounds
+     * @param $rounds
      * @param tx_rnbase_IParameters $parameters
      * @param tx_rnbase_configurations $configurations
+     * @param $confId
+     * @param string $displayAttrName
+     * @return array
+     * @internal param $array [tx_cfcleaguefe_models_competition_round] $rounds
      */
     private static function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
     {
@@ -323,7 +327,7 @@ class tx_cfcleaguefe_util_ScopeController
                     $default = $object->getUid();
                 }
                 // Bei einer Lücke in den beendeten Spieltagen die Spieltage nach der Lücke ignorieren
-                if (! $skipOtherRounds && ! $object->getProperty('finished')) {
+                if (! $skipOtherRounds && ! $object->getProperty('finished') && !$configurations->getBool('leaguetable.noSkipOtherRounds')) {
                     $skipOtherRounds = TRUE;
                 }
             }

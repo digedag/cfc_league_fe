@@ -41,6 +41,7 @@
 			<label index="plugin.competition.flexform.TableScopeInput">Show Selectbox for table scope</label>
 			<label index="plugin.competition.flexform.PointSystemInput">Show Selectbox for point system</label>
 			<label index="plugin.competition.flexform.leaguetable.UseRoundFromScope">Keep table in sync with selected round from scope</label>
+			<label index="plugin.competition.flexform.leaguetable.noSkipOtherRounds">Show current table + last started matchday</label>
 			<label index="plugin.competition.flexform.leaguetable.clubs">Emphasize clubs</label>
 			<label index="plugin.competition.flexform.leaguetable.size">Number of teams to show</label>
 			<label index="plugin.competition.flexform.tablechart.clubs">Clubs on chart</label>
@@ -170,6 +171,7 @@
 			<label index="plugin.competition.flexform.TableScopeInput">Selectbox für Tabellenscope anzeigen</label>
 			<label index="plugin.competition.flexform.PointSystemInput">Selectbox für Punktsystem anzeigen</label>
 			<label index="plugin.competition.flexform.leaguetable.UseRoundFromScope">Die Tabelle passend zum ausgewählten Spieltag anzeigen</label>
+			<label index="plugin.competition.flexform.leaguetable.noSkipOtherRounds">Zeige aktuelle Tabelle + letzten angefangen Spieltag an</label>
 			<label index="plugin.competition.flexform.leaguetable.clubs">Vereine hervorheben</label>
 			<label index="plugin.competition.flexform.leaguetable.size">Maximal sichtbare Teams</label>
 			<label index="plugin.competition.flexform.tablechart.clubs">Dargestellte Vereine</label>

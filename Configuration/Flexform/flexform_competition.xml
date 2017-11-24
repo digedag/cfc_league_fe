@@ -501,6 +501,14 @@
               </config>
             </TCEforms>
           </leaguetable.useRoundFromScope>
+          <leaguetable.noSkipOtherRounds>
+            <TCEforms>
+              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.noSkipOtherRounds</label>
+              <config>
+                <type>check</type>
+              </config>
+            </TCEforms>
+          </leaguetable.noSkipOtherRounds>
           <showLiveTable>
             <TCEforms>
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.ShowLiveTable</label>
