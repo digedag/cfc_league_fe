@@ -59,6 +59,24 @@ class Tx_Cfcleaguefe_Twig_Data_MatchNote
         return $this->matchNote->getMinute();
     }
 
+    public function isHome()
+    {
+        $ret = $this->matchNote->isHome();
+        if($this->matchNote->isGoalOwn()) {
+            $ret = !$ret;
+        }
+        return $ret;
+    }
+
+    public function isGuest()
+    {
+        $ret = $this->matchNote->isGuest();
+        if($this->matchNote->isGoalOwn()) {
+            $ret = !$ret;
+        }
+        return $ret;
+    }
+
     public function getGoalsHome()
     {
         return $this->matchNote->getProperty('goals_home');

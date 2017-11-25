@@ -71,8 +71,8 @@
 <th colspan="2">So fielen die Tore</th>
 </tr>
 <tr>
-<td id="cfcleague-report-scorer-home">{{ mr.scorer(matchReport.matchNotesHome, '-') }}</td>
-<td id="cfcleague-report-scorer-guest">{{ mr.scorer(matchReport.matchNotesGuest) }}</td>
+<td id="cfcleague-report-scorer-home">{{ mr.scorer(matchReport.matchNotes, true, '-') }}</td>
+<td id="cfcleague-report-scorer-guest">{{ mr.scorer(matchReport.matchNotes, false, '-') }}</td>
 </tr>
 
 </table>

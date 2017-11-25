@@ -93,11 +93,11 @@ render list of substitutes
   {% endif %}
 {% endmacro %}
 
-{% macro scorer(notes, alternativ = '') %}
+{% macro scorer(notes, home, alternativ = '') %}
   {% import '@EXT:cfc_league_fe/macros/profile.html.twig' as prm %}
   {% set goals = '' %}
   {% for note in notes %}
-  	{% if note.isGoal %}
+  	{% if note.isGoal and (home ? note.isHome() : note.isGuest()) %}
 	  	{% set goals = goals ~ '<li>' ~ _self.score(note) ~ prm.name_full(note.player.profile) ~ ' (' ~ note.minute~'.) ' ~ '</li>' %}
 	  {% endif %}
   {% endfor %}
