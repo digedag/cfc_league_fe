@@ -1741,3 +1741,16 @@ lib.tx_t3twig {
         t3sports_DataProvider = Tx_Cfcleaguefe_Twig_Extension_DataProvider
     }
 }
+
+plugin.tx_cfcleaguefe_report {
+	_CSS_DEFAULT_STYLE (
+[class^="glyphicon-t3sports-"],
+[class*=" glyphicon-t3sports-"] {
+  background-image: url("/typo3conf/ext/cfc_league_fe/Resources/Public/Css/icons.png");
+}
+.glyphicon-t3sports-goal { background-position : 0px 0px; width : 14px; height : 14px;  }
+.glyphicon-t3sports-card-yellow { background-position : -13px 0px; width : 14px; height : 14px;  }
+.glyphicon-t3sports-card-yellowred { background-position : -26px 0px; width : 14px; height : 14px;  }
+.glyphicon-t3sports-card-red { background-position : -39px 0px; width : 14px; height : 14px;  }
+	)
+}

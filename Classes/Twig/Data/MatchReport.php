@@ -235,8 +235,11 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
                 $matchNote = null;
                 try {
                     $playerUid = $note->getPlayer();
-                    $player = tx_cfcleague_models_Profile::getProfileInstance($playerUid);
-                    $player = $this->buildPlayer($player);
+                    $player = null;
+                    if ($playerUid) {
+                        $player = tx_cfcleague_models_Profile::getProfileInstance($playerUid);
+                        $player = $this->buildPlayer($player);
+                    }
                     $matchNote = new Tx_Cfcleaguefe_Twig_Data_MatchNote($note, $player);
                     if ($player) {
                         $player->addMatchNote($matchNote);
@@ -252,7 +255,6 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
                     }
                 }
                 catch (Exception $e) {
-
                 }
             }
         }

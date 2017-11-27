@@ -82,24 +82,9 @@
  <div id="cfcleague-report-summary-text"> {{ match.getProperty('game_report')|t3ts('lib.t3sports.match.game_report') }}</div>
 </div>
 
+{% if matchReport.matchNotes %}
+<h2>Das Spielstenogramm</h2>
 
-<table class="table table-striped table-condensed">
-{% for note in match.matchNotes %}
-<tr>
-<td colspan="10">{{ note.uid }} {{ mr.mn_message(note) }}</td>
-</tr>
-{% endfor %}
-</table>
-
-<h3>Die Tore</h3>
-{% for note in matchReport.matchNotes %}
-<div class="col-sm-6">
-  {% if (note.type >= 10 and note.type <= 20) %}
-        {{ note.minute }} {{ mr.score(note) }}: Tor durch {{ profile.name_full(note.player) }}
-  {% endif %}
-  {% if note.type == 30 %}
-        {{ note.minute }} {{ mr.score(note) }}: Eigentor durch {{ profile.name_full(note.player) }}
-  {% endif %}
-</div>
-{% endfor %}
+{{ mr.timeline(matchReport.matchNotes|reverse) }}
+{% endif %}
 

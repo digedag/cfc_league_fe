@@ -59,6 +59,11 @@ class Tx_Cfcleaguefe_Twig_Data_MatchNote
         return $this->matchNote->getMinute();
     }
 
+    public function getComment()
+    {
+        return $this->matchNote->getProperty('comment');
+    }
+
     public function isHome()
     {
         $ret = $this->matchNote->isHome();

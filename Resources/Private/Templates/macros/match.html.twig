@@ -28,12 +28,12 @@ render cards of player in lineup
 #}
 {% macro lineup_card(player) %}
 	{% if player.cardYellowRed %}
-	{{ ''|t3ts('lib.t3sports.matchreport.penaltyType.cObject.71') }}
+<i class="glyphicon glyphicon-t3sports-card-yellowred"></i>
 	{% elseif player.cardYellow %}
-	{{ ''|t3ts('lib.t3sports.matchreport.penaltyType.cObject.70') }}
+<i class="glyphicon glyphicon-t3sports-card-yellow"></i>
 	{% endif %}
 	{% if player.cardRed %}
-	{{ ''|t3ts('lib.t3sports.matchreport.penaltyType.cObject.72') }}
+<i class="glyphicon glyphicon-t3sports-card-red"></i>
 	{% endif %}
 {% endmacro %}
 
@@ -109,5 +109,56 @@ render list of substitutes
   {% else %}
   {{ alternativ|raw }}
   {% endif %}
-  
+{% endmacro %}
+
+
+{# Output complete timeline of matchnotes #}
+{% macro timeline(notes) %}
+{% for note in notes %}
+	{% if note.minute >= 0 %}
+<div class="list-group">
+  <a href="#" class="list-group-item">
+  	{{ _self.timeline_headline(note) }}
+  	{% set msg = _self.timeline_message(note) %}
+  	{% if msg %}
+    <p class="list-group-item-text">{{ msg }}</p>
+    {% endif %}
+  </a>
+</div>
+	{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro timeline_headline(note) %}
+<h4 class="list-group-item-heading"><span class="badge">{{ note.minute }}. min</span> Spielstand {{ _self.score(note) }}</h4>
+{% endmacro %}
+
+{% macro icon(note) %}
+  {% if note.type in([10,11,12,30])  %}
+<i class="glyphicon glyphicon-t3sports-goal"></i>
+  {% elseif note.type == 70 %}
+<i class="glyphicon glyphicon-t3sports-card-yellow"></i>
+  {% elseif note.type == 71 %}
+<i class="glyphicon glyphicon-t3sports-card-yellowred"></i>
+  {% elseif note.type == 72 %}
+<i class="glyphicon glyphicon-t3sports-card-red"></i>
+  {% endif %}
+
+{% endmacro %}
+
+{% macro timeline_message(note) %}
+  {% import '@EXT:cfc_league_fe/macros/profile.html.twig' as prm %}
+  {% set label = ('label_matchnote_'~note.type)|t3trans %}
+  {% if label %}
+      {{ _self.icon(note) }}
+      {% if note.player2 %}
+      {{ ('label_matchnote_'~note.type)|t3trans({'%player%':prm.name_full(note.player.profile), '%player2%' : prm.name_full(note.player2.profile)} ) }}
+      {% else %}
+      {{ ('label_matchnote_'~note.type)|t3trans({'%player%':prm.name_full(note.player.profile)}) }}
+      {% endif %}
+  {% endif %}
+
+  {% if note.comment %}
+  <p class="list-group-item-text">{{ note.comment }}</p>
+	{% endif %}
 {% endmacro %}

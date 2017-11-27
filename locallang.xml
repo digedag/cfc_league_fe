@@ -101,6 +101,17 @@
 			<label index="label_basepoint">Base point for distance calculation</label>
 			<label index="label_distance">Distance</label>
 
+			<label index="label_matchnote_10">Goal scored by %player%</label>
+			<label index="label_matchnote_11">Header goal scored by %player%</label>
+			<label index="label_matchnote_12">Penalty goal scored by %player%</label>
+			<label index="label_matchnote_30">Own goal scored by %player%</label>
+			<label index="label_matchnote_31">Assist scored by %player%</label>
+			<label index="label_matchnote_32">Penalty forgiven by %player%</label>
+			<label index="label_matchnote_33">Corner kick executed by %player%</label>
+			<label index="label_matchnote_70">Yellow card for %player%</label>
+			<label index="label_matchnote_71">Yellow/red card for %player%</label>
+			<label index="label_matchnote_72">Red card for %player%</label>
+			<label index="label_matchnote_80">%player% changed in for %player2%</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 
