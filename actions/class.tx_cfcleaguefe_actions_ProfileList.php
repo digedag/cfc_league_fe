@@ -134,12 +134,15 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
         $options = [];
         $options['what'] = 'LEFT(UCASE(last_name),1) As first_char, count(LEFT(UCASE(last_name),1)) As size';
         $options['groupby'] = 'LEFT(UCASE(last_name),1)';
-        $fields = array();
+        $fields = [];
         tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
-        
+        // replace orderby
+        unset($options['orderby']);
+        $options['orderby']['first_char'] = 'asc';
+
         $rows = $service->search($fields, $options);
-        
+
         $specials = tx_rnbase_util_SearchBase::getSpecialChars();
         $wSpecials = array();
         foreach ($specials as $key => $special) {
