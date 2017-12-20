@@ -77,11 +77,13 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base {
 	 */
 	function _getSubpartArray(&$configurations) {
 		$ret = array();
-		// Flexform auslesen
-		$flex =& $configurations->getFlexFormArray();
-		$types = $this->_getItemsArrayFromFlexForm($flex, 's_statistics', 'statisticTypes');
+
+		$cfg = [];
+		$types = tx_cfcleaguefe_util_serviceRegistry::lookupStatistics($cfg);
+		$types = $types['items'];
+		
 		foreach($types As $type) {
-			$ret['###STATISTIC_'.strtoupper($type[1]).'###'] = '';
+		    $ret['###STATISTIC_'.strtoupper($type[1]).'###'] = '';
 		}
 		return $ret;
 	}
