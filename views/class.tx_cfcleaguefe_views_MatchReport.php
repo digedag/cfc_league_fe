@@ -29,7 +29,7 @@ tx_rnbase::load('tx_rnbase_view_Base');
 class tx_cfcleaguefe_views_MatchReport extends tx_rnbase_view_Base
 {
 
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###MATCHREPORT###';
     }
@@ -37,7 +37,7 @@ class tx_cfcleaguefe_views_MatchReport extends tx_rnbase_view_Base
     /**
      * Erstellen des Frontend-Outputs
      */
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         $match = $viewData->offsetGet('match');
 

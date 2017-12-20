@@ -35,7 +35,7 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base
     /**
      * Erstellen des Frontend-Outputs
      */
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
 
         // Die ViewData bereitstellen
@@ -86,7 +86,7 @@ class tx_cfcleaguefe_views_StadiumList extends tx_rnbase_view_Base
         return $ret;
     }
 
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###STADIUM_LIST###';
     }

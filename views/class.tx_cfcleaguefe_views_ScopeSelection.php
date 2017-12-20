@@ -33,7 +33,7 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
 {
 
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###SCOPE_SELECTION###';
     }
@@ -46,7 +46,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
      * @param tx_rnbase_configurations $configurations
      * @param tx_rnbase_util_FormatUtil $formatter
      */
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         $cObj = & $configurations->getCObj(0);
 
@@ -122,7 +122,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
      * @param
      *            tx_rnbase_configurations &$configurations Config-Objekt
      */
-    function _fillTemplate($template, &$itemsArr, $link, $markerName, $configurations)
+    protected function _fillTemplate($template, &$itemsArr, $link, $markerName, $configurations)
     {
         $items = $itemsArr[0];
         $currItem = $items[$itemsArr[1]];
