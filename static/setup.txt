@@ -1079,7 +1079,7 @@ lib.t3sports.matchreport.imggoal {
   file = EXT:cfc_league_fe/res/goal.gif
   file.width = 18
   file.height = 16
-  params = class="t3sports-goal"
+  params = class="t3sports-mnicon"
 }
 
 # CASE Anweisung für eine Spielstrafe
@@ -1176,6 +1176,22 @@ lib.t3sports.matchNote {
   player =< lib.t3sports.profile
   playerchangein =< lib.t3sports.profile
   playerchangeout =< lib.t3sports.profile
+  dcicon = CASE
+  dcicon {
+    key.field = type
+    10 =< lib.t3sports.matchreport.imggoal
+    11 =< lib.t3sports.matchreport.imggoal
+    12 =< lib.t3sports.matchreport.imggoal
+    13 =< lib.t3sports.matchreport.imggoal
+    30 =< lib.t3sports.matchreport.imggoal
+    70 =< lib.t3sports.matchreport.imggoal
+    70.file = EXT:cfc_league_fe/res/gelbe-karte.gif
+    71 =< lib.t3sports.matchreport.imggoal
+    71.file = EXT:cfc_league_fe/res/gelbrote-karte.gif
+    72 =< lib.t3sports.matchreport.imggoal
+    72.file = EXT:cfc_league_fe/res/rote-karte.gif
+    
+  }
   dcmessage = COA
   dcmessage.10 = CASE
   dcmessage.10 {

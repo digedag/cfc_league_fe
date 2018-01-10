@@ -40,7 +40,6 @@ class tx_cfcleaguefe_views_MatchReport extends tx_rnbase_view_Base
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         $match = $viewData->offsetGet('match');
-
         $matchMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarker');
         $matchStr = $matchMarker->parseTemplate($template, $match, $formatter, 'matchreport.match.', 'MATCH');
 
