@@ -53,7 +53,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
 
     for($i = 0; $i < count($tickerArr); $i++) {
       $matchNote = &$tickerArr[$i];
-      $notePlayer = $matchNote->getPlayer();
+      $notePlayer = $matchNote->getPlayerInstance();
       if($notePlayer && $notePlayer->uid == $player->uid) {
         if($matchNote->isType($type)) {
           $ret[] = $matchNote;
@@ -81,7 +81,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
 
     for($i = 0; $i < count($tickerArr); $i++) {
       $matchNote = &$tickerArr[$i];
-      $notePlayer = $matchNote->getPlayer();
+      $notePlayer = $matchNote->getPlayerInstance();
       if($notePlayer && $notePlayer->uid == $player->uid) {
 //        if($matchNote->isGoal() && ($type == 0 || $matchNote->isType($type)) && !$matchNote->isGoalOwn()) {
           $ret[] = $matchNote;
@@ -138,7 +138,7 @@ class tx_cfcleaguefe_util_StatisticsHelper {
 //    $tickerArr = &$match->getMatchNotes();
     for($i = 0; $i < count($tickerArr); $i++) {
       $matchNote = &$tickerArr[$i];
-      $notePlayer = $matchNote->getPlayer();
+      $notePlayer = $matchNote->getPlayerInstance();
       if($notePlayer && $notePlayer->uid == $player->uid) {
         if($type == 'Y' && $matchNote->isYellowCard()) {
 

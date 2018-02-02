@@ -467,7 +467,7 @@ class tx_cfcleaguefe_models_matchreport
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
             for ($i = 0; $i < count($this->_tickerArr); $i ++) {
                 $note = $this->_tickerArr[$i];
-                $player = $note->getPlayer();
+                $player = $note->getPlayerInstance();
                 if (is_object($player)) {
                     $player->addMatchNote($note);
                 }
