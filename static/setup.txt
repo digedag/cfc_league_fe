@@ -1659,6 +1659,7 @@ plugin.tx_cfcleaguefe_report {
     }
     lineuphome.profile {
       first_name >
+      last_name.wrap = <span class="player lineup">|</span>
       # Bei Auswechslungen einen Tickerwrap setzen
       ifChangedOut {
         # Position des ChangeOut-Tickers
@@ -1668,6 +1669,7 @@ plugin.tx_cfcleaguefe_report {
           profile >
           profile2 =< lib.t3sports.matchreport.reportPlayers.profile
           profile2 {
+            last_name.wrap = <span class="player lineup change">|</span>
             s_weight = 2
             # Falls der eingewechselte Spieler wieder raus muss
             ifChangedOut {
@@ -1675,6 +1677,7 @@ plugin.tx_cfcleaguefe_report {
               ticker {
                 minute.wrap = |.&nbsp;
                 profile2 =< lib.t3sports.matchreport.reportPlayers.profile
+                profile2.wrap = <span class="player lineup change">|</span>
                 noTrimWrap = |, ||
               }
             }
@@ -1702,6 +1705,7 @@ plugin.tx_cfcleaguefe_report {
       ifEmpty.cObject.value.br = 1
       profile {
         first_name >
+        last_name.wrap = <span class="player subst">|</span>
         # Die Karten einblenden
         ifPenalty {
           s_weight = 3
