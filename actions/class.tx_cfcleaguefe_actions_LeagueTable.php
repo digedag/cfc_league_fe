@@ -39,7 +39,6 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
  */
 class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
 {
-
     /**
      * Zeigt die Tabelle für eine Liga.
      * Die Tabelle wird nur dann berechnet, wenn auf der
@@ -47,6 +46,9 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
      */
     function handleRequest(&$parameters, &$configurations, &$viewData)
     {
+        if($configurations->getBool('showLiveTable')) {
+            $configurations->convertToUserInt();
+        }
 
         // Die Werte des aktuellen Scope ermitteln
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
@@ -60,19 +62,20 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
         $saisonUids = $scopeArr['SAISON_UIDS'];
         $groupUids = $scopeArr['GROUP_UIDS'];
         $compUids = $scopeArr['COMP_UIDS'];
-        $roundUid = $scopeArr['ROUND_UIDS'];
 
         $out = ' ';
         // Sollte kein Wettbewerb ausgewählt bzw. konfiguriert worden sein, dann suchen wir eine
         // passende Liga
         if (strlen($compUids) == 0) {
             $comps = tx_cfcleague_models_Competition::findAll($saisonUids, $groupUids, $compUids, '1');
-            if (count($comps) > 0)
+            if (count($comps) > 0) {
                 $currCompetition = $comps[0];
+            }
             // Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten.
             // Das ist aber generell eine Fehlkonfiguration.
-            else
+            else {
                 return $out; // Ohne Liga keine Tabelle!
+            }
         } else {
             // Wenn ein einzelner Wettbewerb ausgewählt ist, muss es eine Liga sein
             // Bei mehreren liegt es in der Verantwortungen

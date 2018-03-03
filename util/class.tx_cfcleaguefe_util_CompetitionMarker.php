@@ -47,10 +47,9 @@ class tx_cfcleaguefe_util_CompetitionMarker extends tx_rnbase_util_BaseMarker
     public function parseTemplate($template, &$competition, &$formatter, $confId, $marker = 'COMPETITION')
     {
         if (! is_object($competition)) {
-            // Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
+            // Ist kein Wettbewerb vorhanden wird ein leeres Objekt verwendet.
             $competition = self::getEmptyInstance('tx_cfcleaguefe_models_competition');
         }
-
         // Es wird das MarkerArray mit Daten gefüllt.
         $markerArray = $formatter->getItemMarkerArrayWrapped($competition->getProperty(), $confId, 0, $marker . '_', $competition->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
@@ -63,6 +62,10 @@ class tx_cfcleaguefe_util_CompetitionMarker extends tx_rnbase_util_BaseMarker
         return $template;
     }
 
+    /**
+     *
+     * @return tx_cfcleaguefe_util_GroupMarker
+     */
     private function getGroupMarker()
     {
         if (! is_object($this->groupMarker)) {
