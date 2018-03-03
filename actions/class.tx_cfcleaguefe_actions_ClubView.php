@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Rene Nitzsche (rene@system25.de)
+*  (c) 2009-2018 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,7 +39,6 @@ class tx_cfcleaguefe_actions_ClubView extends tx_rnbase_action_BaseIOC {
 	 */
 	function handleRequest(&$parameters, &$configurations, &$viewData) {
 
-		$items = array();
 		// Im Flexform kann direkt ein Team ausgwählt werden
 		$itemId = intval($configurations->get($this->getConfId().'club'));
 		if(!$itemId) {
@@ -56,9 +55,3 @@ class tx_cfcleaguefe_actions_ClubView extends tx_rnbase_action_BaseIOC {
 	function getViewClassName() { return 'tx_cfcleaguefe_views_ClubView'; }
 
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_ClubView.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_ClubView.php']);
-}
-
-?>
