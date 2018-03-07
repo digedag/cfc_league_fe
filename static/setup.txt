@@ -615,6 +615,7 @@ plugin.tx_cfcleaguefe_competition {
   	icehockey.matchProviderClass = tx_cfcleaguefe_table_football_MatchProvider
     # Ausgabe mit HTML-Template
     viewType = HTML
+    league =< lib.t3sports.competition
     # Angabe zur Tabelle
     table =< lib.t3sports.teamSmall
     table {
