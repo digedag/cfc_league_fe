@@ -23,6 +23,8 @@
  ***************************************************************/
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_Templates');
+tx_rnbase::load('Tx_Rnbase_Frontend_Marker_Utility');
+
 
 /**
  * Viewklasse für die Anzeige der Scope-Auswahl mit Hilfe eines HTML-Templates.
@@ -151,8 +153,10 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
             $keepVars[strtolower($markerName)] = $item->uid;
             $link->parameters($keepVars);
             $isCurrent = ($item->uid == $currItem->uid);
-            $item->record['isCurrent'] = $isCurrent ? 1 : 0;
-            $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->record, 'scopeSelection.' . $confName . '.', 0, $markerName . '_', $item->getColumnNames());
+            $item->setProperty('isCurrent', $isCurrent ? 1 : 0);
+
+            $ignore = Tx_Rnbase_Frontend_Marker_Utility::findUnusedAttributes($item, $subTemplate, $markerName);
+            $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->getProperty(), 'scopeSelection.' . $confName . '.', $ignore, $markerName . '_', $item->getColumnNames());
             $markerArray['###' . $markerName . '_LINK_URL###'] = $link->makeUrl(false);
 
             $linkStr = ($currentNoLink && $isCurrent) ? $token : $link->makeTag();

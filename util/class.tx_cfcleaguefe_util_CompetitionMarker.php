@@ -51,7 +51,8 @@ class tx_cfcleaguefe_util_CompetitionMarker extends tx_rnbase_util_BaseMarker
             $competition = self::getEmptyInstance('tx_cfcleaguefe_models_competition');
         }
         // Es wird das MarkerArray mit Daten gefüllt.
-        $markerArray = $formatter->getItemMarkerArrayWrapped($competition->getProperty(), $confId, 0, $marker . '_', $competition->getColumnNames());
+        $ignore = self::findUnusedCols($competition->getProperty(), $template, $marker);
+        $markerArray = $formatter->getItemMarkerArrayWrapped($competition->getProperty(), $confId, $ignore, $marker . '_', $competition->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
         $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
