@@ -46,11 +46,9 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
      */
     function handleRequest(&$parameters, &$configurations, &$viewData)
     {
-//         if($configurations->getBool('showLiveTable')) {
-// error_log('TRIGGER CONVERT ' . ($configurations->isPluginUserInt() ? 'N' : 'Y') . ' - ' . spl_object_hash($configurations->getContentObject()) );
-//             $configurations->convertToUserInt();
-// error_log('TRIGGER CONVERT DONE');
-//         }
+        if($configurations->getBool('showLiveTable')) {
+            $configurations->convertToUserInt();
+        }
 
         // Die Werte des aktuellen Scope ermitteln
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
