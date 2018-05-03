@@ -36,10 +36,11 @@ class tx_cfcleaguefe_util_ServiceRegistry
     public static function lookupStatistics($config)
     {
         $services = tx_rnbase_util_Misc::lookupServices('cfcleague_statistics');
+        tx_rnbase::load('tx_rnbase_util_Lang');
         foreach ($services as $subtype => $info) {
             $title = $info['title'];
             if (substr($title, 0, 4) === 'LLL:') {
-                $title = $GLOBALS['LANG']->sL($title);
+                $title = tx_rnbase_util_Lang::sL($title);
             }
             $config['items'][] = array(
                 $title,
