@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,8 +54,7 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @param tx_rnbase_IParameters $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param $useObjects Wenn
-     *            true werden ganze Objekte
+     * @param boolean $useObjects Wenn true werden ganze Objekte
      * @return Array mit den UIDs als String
      */
     public static function handleCurrentScope($parameters, $configurations, $useObjects = false)
