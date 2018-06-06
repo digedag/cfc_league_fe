@@ -149,8 +149,9 @@ class tx_cfcleaguefe_util_Maps
     {
         if (! self::$key) {
             require_once (tx_rnbase_util_Extensions::extPath('wec_map') . 'class.tx_wecmap_domainmgr.php');
+            /* @var $domainmgr tx_wecmap_domainmgr */
             $domainmgr = tx_rnbase::makeInstance('tx_wecmap_domainmgr');
-            self::$key = $domainmgr->getKey();
+            self::$key = $domainmgr->getServerKey();
         }
         return self::$key;
     }
