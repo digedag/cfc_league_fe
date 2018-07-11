@@ -2,10 +2,11 @@
 
 Änderungen
 ----------
-v1.2.0 (??)
+v1.2.0 (11.07.2018)
 
  * #14 refactoring of model classes
  * #15 enable match marker in media templates
+ * #47 support for TWIG templating added
  * fixes for table charts
  * MatchMarker derives from rn_base SimpleMarker. This offers more features for rendering.
  * fixed some issues for PHP7 support (Thanks to Mario Näther)
