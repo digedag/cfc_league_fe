@@ -375,10 +375,12 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      */
     public function getPlayerInstance()
     {
-        if ($this->isHome())
+        if ($this->isHome()) {
             return $this->getInstancePlayerHome();
-        if ($this->isGuest())
+        }
+        if ($this->isGuest()) {
             return $this->getInstancePlayerGuest();
+        }
         return 0;
     }
 

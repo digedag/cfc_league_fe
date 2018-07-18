@@ -56,6 +56,9 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
      */
     protected function finishTemplate($template, $item, $formatter, $confId, $marker = 'NOTE')
     {
+        if ($this->containsMarker($template, $marker . '_MATCH_')) {
+            $template = $this->addMatch($template, $item, $formatter, $confId . 'match.', $marker . '_MATCH');
+        }
         if ($this->containsMarker($template, $marker . '_PLAYER_')) {
             $template = $this->addProfile($template, $item->getPlayerInstance(), $formatter, $confId . 'player.', $marker . '_PLAYER');
         }
@@ -73,7 +76,7 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
     }
 
     /**
-     * Bindet eine Spieler ein
+     * Bindet einen Spieler ein
      *
      * @param string $template
      * @param tx_cfcleague_models_Profile $sub
@@ -90,6 +93,29 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
         }
         $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
         $template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
+        return $template;
+    }
+    /**
+     * Bindet ein Spiel ein
+     *
+     * @param string $template
+     * @param tx_cfcleague_models_MatchNote|tx_cfcleaguefe_models_match_note $note
+     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string $confId
+     * @param string $markerPrefix
+     * @return string
+     */
+    protected function addMatch($template, $note, $formatter, $confId, $markerPrefix)
+    {
+        if ($note instanceof tx_cfcleaguefe_models_match_note) {
+            // Das sollte zukünftig so nicht mehr sein!
+            $match = $note->getMatch();
+        }
+        else {
+            // FIXME: match laden
+        }
+        $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarker');
+        $template = $marker->parseTemplate($template, $match, $formatter, $confId, $markerPrefix);
         return $template;
     }
     /**

@@ -44,7 +44,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
         $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
 
         $fields = $options = array();
-        $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
+        $filter->init($fields, $options);
 
         // Soll ein PageBrowser verwendet werden
         $this->handleCharBrowser($parameters, $configurations, $viewData, $fields, $options);
