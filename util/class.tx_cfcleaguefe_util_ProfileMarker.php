@@ -21,16 +21,14 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_SimpleMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich
  */
-class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker
+class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
 {
-
-    private $defaultMarkerArr;
 
     private $options;
 
@@ -40,6 +38,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker
     public function __construct(&$options = array())
     {
         $this->options = $options;
+        $this->setClassname('tx_cfcleaguefe_models_profile');
     }
 
     public function getOptions()
@@ -60,57 +59,50 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker
 
     /**
      *
-     * @param $template das
-     *            HTML-Template
+     * @param string $template das HTML-Template
      * @param tx_cfcleaguefe_models_profile $profile
      *            das Profil
      * @param tx_rnbase_util_FormatUtil $formatter
      *            der zu verwendente Formatter
-     * @param $confId Pfad
+     * @param string $confId Pfad
      *            der TS-Config des Profils, z.B. 'listView.profile.'
-     * @param $marker Name
+     * @param string $marker Name
      *            des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
-     * @return String das geparste Template
+     * @return string das geparste Template
      */
-    public function parseTemplate($template, &$profile, &$formatter, $confId, $marker = 'PROFILE')
+    protected function prepareTemplate($template, $profile, $formatter, $confId, $marker = 'PROFILE')
     {
-        if (! is_object($profile)) {
-            $profile = self::getEmptyInstance('tx_cfcleaguefe_models_profile');
-        }
         $profile->addTeamNotes($this->options['team']);
-        $this->prepareRecord($profile);
+        $profile->setProperty('firstpicture', $profile->getProperty('dam_images'));
+        $profile->setProperty('pictures', $profile->getProperty('dam_images'));
+
         tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_initRecord', array(
             'item' => &$profile,
             'template' => &$template
         ), $this);
 
-        // Es wird das MarkerArray mit den Daten des Spielers gefüllt.
-        $ignore = self::findUnusedCols($profile->getProperty(), $template, $marker);
-        $markerArray = $formatter->getItemMarkerArrayWrapped($profile->getProperty(), $confId, $ignore, $marker . '_', $profile->getColumnNames());
-        $markerArray['###' . $marker . '_SIGN###'] = $profile->getSign();
-        $wrappedSubpartArray = array();
-        $subpartArray = array();
-        $this->prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+        $profile->setProperty('sign', $profile->getSign());
 
-        // // Jetzt die Bilder einbinden
-        // $subpartArray['###'.$marker.'_PICTURES###'] = $this->_addProfilePictures($markerArray,$profile,$formatter, $template, $confId, $marker);
-        $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        return $template;
+    }
 
+    /**
+     *
+     * {@inheritdoc}
+     *
+     * @see tx_rnbase_util_SimpleMarker::finishTemplate()
+     */
+    protected function finishTemplate($template, $item, $formatter, $confId, $marker)
+    {
         tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_afterSubst', array(
-            'item' => &$profile,
+            'item' => $item,
             'template' => &$template,
             'confId' => $confId,
             'marker' => $marker,
             'conf' => $formatter->getConfigurations()
         ), $this);
         return $template;
-    }
-
-    protected function prepareRecord($item)
-    {
-        $item->record['firstpicture'] = $item->record['dam_images'];
-        $item->record['pictures'] = $item->record['dam_images'];
     }
 
     /**
@@ -123,8 +115,10 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_BaseMarker
      * @param string $confId
      * @param tx_rnbase_util_FormatUtil $formatter
      */
-    protected function prepareLinks(&$profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template)
+    protected function prepareLinks($profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
+        parent::prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+
         // $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
         if ($profile->hasReport()) {
             $params = array(

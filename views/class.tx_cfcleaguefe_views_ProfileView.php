@@ -36,10 +36,10 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         $cObj = & $configurations->getCObj(0);
-        
+
         // Die ViewData bereitstellen
         $viewData = & $configurations->getViewData();
-        
+
         $profile = & $viewData->offsetGet('profile');
         if (is_object($profile))
             $out = $this->createView($template, $profile, $configurations);
@@ -62,16 +62,16 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
             $markerOptions['team'] = $team;
         }
         $profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker', $markerOptions);
-        $out .= $profileMarker->parseTemplate($template, $profile, $configurations->getFormatter(), 'profileview.profile.');
+        $out .= $profileMarker->parseTemplate($template, $profile, $configurations->getFormatter(), 'profileview.profile.', 'PROFILE');
         $profiles = $this->findNextAndPrevProfiles($profile, $markerOptions['team']);
-        
+
         $subType = $profiles['next']->memberType == 1 ? 'coach.' : ($profiles['next']->memberType == 2 ? 'supporter.' : 'player.');
         $out = $profileMarker->parseTemplate($out, $profiles['next'], $configurations->getFormatter(), 'profileview.nextprofile.' . $subType, 'NEXTPROFILE');
         $subType = $profiles['prev']->memberType == 1 ? 'coach.' : ($profiles['prev']->memberType == 2 ? 'supporter.' : 'player.');
         $out = $profileMarker->parseTemplate($out, $profiles['prev'], $configurations->getFormatter(), 'profileview.prevprofile.' . $subType, 'PREVPROFILE');
-        
+
         $markerArray = $subpartArray = $wrappedSubpartArray = array();
-        
+
         if ($teamId) {
             $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
             $out = $teamMarker->parseTemplate($out, $team, $configurations->getFormatter(), 'profileview.team.', 'TEAM');
@@ -87,9 +87,9 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
             $subpartArray['###TEAM###'] = '';
             $subpartArray['###PROFILEPAGER###'] = '';
         }
-        
+
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray, $wrappedSubpartArray);
-        
+
         return $out;
     }
 
@@ -105,7 +105,7 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
         $playerIds = array();
         $coachIds = array();
         $supporterIds = array();
-        
+
         if ($team && $team->isValid()) {
             // Alle Profile des Teams sammeln
             $teamProfiles = array();
