@@ -120,7 +120,7 @@ class tx_cfcleaguefe_util_ScopeController
             // TODO: Es sollten zusätzliche Kriterien zur Ermittlung der Saisons herangezogen werden
             // Einfach alle Saisons zu zeigen führt zu vielen leeren Seiten
             $saisons = tx_cfcleaguefe_models_saison::findItems($saisonUids);
-            $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($saisons, $parameters, 'saison', $useObjects ? '' : 'name');
+            $dataArr = self::_prepareSelect($saisons, $parameters, 'saison', $useObjects ? '' : 'name');
             $saisonUids = $dataArr[1];
             $viewData->offsetSet('saison_select', $dataArr);
             $configurations->addKeepVar('saison', $saisonUids);
@@ -145,7 +145,7 @@ class tx_cfcleaguefe_util_ScopeController
         if ($configurations->get('groupSelectionInput')) {
             // Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
             $groups = tx_cfcleague_models_Group::findAll($groupUids);
-            $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
+            $dataArr = self::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
             $groupUids = $dataArr[1];
             $viewData->offsetSet('group_select', $dataArr);
             $configurations->addKeepVar('group', $groupUids);
@@ -163,14 +163,14 @@ class tx_cfcleaguefe_util_ScopeController
      */
     private static function handleCurrentTeamGroup($parameters, &$configurations, $useObjects = false)
     {
-        $viewData = & $configurations->getViewData();
+        $viewData = $configurations->getViewData();
         $groupUids = $configurations->get('scope.teamGroup');
 
         // Soll eine SelectBox für Altersgruppe gezeigt werden?
         if ($configurations->get('scope.teamGroupSelectionInput')) {
             // Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
             $groups = tx_cfcleague_models_Group::findAll($groupUids);
-            $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
+            $dataArr = self::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
             $groupUids = $dataArr[1];
             $viewData->offsetSet('teamgroup_select', $dataArr);
             $configurations->addKeepVar('teamgroup', $groupUids);
@@ -188,15 +188,15 @@ class tx_cfcleaguefe_util_ScopeController
      */
     private static function handleCurrentClub($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $useObjects = false)
     {
-        $viewData = & $configurations->getViewData();
+        $viewData = $configurations->getViewData();
         $clubUids = $configurations->get('clubSelection');
 
         // Soll eine SelectBox für den Verein gezeigt werden?
         // Das machen wir nur, wenn mindestens ein Verein konfiguriert wurde
-        if ($configurations->get('clubSelectionInput')) { // && strlen($clubUids) > 0) {
-                                                        // Die UIDs der Vereine in Objekte umwandeln, um eine Selectbox zu bauen
+        if ($configurations->get('clubSelectionInput')) {
+            // Die UIDs der Vereine in Objekte umwandeln, um eine Selectbox zu bauen
             $clubs = tx_cfcleaguefe_models_club::findAll($clubUids, $saisonUids, $groupUids, $compUids);
-            $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($clubs, $parameters, 'club', $useObjects ? '' : 'name');
+            $dataArr = self::_prepareSelect($clubs, $parameters, 'club', $useObjects ? '' : 'name');
             $clubUids = $dataArr[1];
             $viewData->offsetSet('club_select', $dataArr);
             $configurations->addKeepVar('club', $clubUids);
@@ -212,9 +212,9 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @return String Die UIDs als String
      */
-    private static function handleCurrentCompetition(&$scopeArr, $parameters, &$configurations, $saisonUids, $groupUids, $useObjects = false)
+    private static function handleCurrentCompetition(&$scopeArr, $parameters, $configurations, $saisonUids, $groupUids, $useObjects = false)
     {
-        $viewData = & $configurations->getViewData();
+        $viewData = $configurations->getViewData();
         $compUids = $configurations->get('competitionSelection');
 
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
@@ -229,7 +229,7 @@ class tx_cfcleaguefe_util_ScopeController
             tx_cfcleaguefe_search_Builder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
 
             $competitions = $compServ->search($fields, $options);
-            $dataArr = tx_cfcleaguefe_util_ScopeController::_prepareSelect($competitions, $parameters, 'competition', $useObjects ? '' : 'name');
+            $dataArr = self::_prepareSelect($competitions, $parameters, 'competition', $useObjects ? '' : 'name');
             $compUids = $dataArr[1];
             $viewData->offsetSet('competition_select', $dataArr);
             $configurations->addKeepVar('competition', $compUids);
@@ -239,11 +239,13 @@ class tx_cfcleaguefe_util_ScopeController
         // Zusätzlich noch die weiteren Einschränkungen mit in das ScopeArray legen, weil diese Infos auch
         // von anderen Views benötigt werden
         $value = intval($configurations->get('scope.competition.obligation'));
-        if ($value)
+        if ($value) {
             $scopeArr['COMP_OBLIGATION'] = $value; // 1 - Pflicht, 2- freie Spiele
+        }
         $value = $configurations->get('scope.competition.type');
-        if (strlen(trim($value)))
+        if (strlen(trim($value))) {
             $scopeArr['COMP_TYPES'] = $value;
+        }
     }
 
     /**
@@ -280,8 +282,8 @@ class tx_cfcleaguefe_util_ScopeController
      * Das Ergebnis-Array hat zwei Einträge: Index 0 enthält das Wertearray, Index 1 das
      * aktuelle Element
      *
-     * @param $displayAttrName Der
-     *            Name eines Atttributs, um dessen Wert anzuzeigen. Wenn der
+     * @param string $displayAttrName Der
+     *            Name eines Attributs, um dessen Wert anzuzeigen. Wenn der
      *            String leer ist, dann wird das gesamten Objekt als Wert verwendet.
      */
     private static function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name')

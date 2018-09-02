@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -192,11 +192,11 @@ static $total = 0;
    * - CARD_RED Anzahl rote Karten
    * - GOAL_ALL Gesamtzahl der Tore des Spieler
    * </pre>
-   * @param $player Spieler, der gezählt werden soll
-   * @param $match Spiel, das ausgewertet wird
-   * @param $playersArr Datenarray, welches die ermittelten Daten aufnimmt
+   * @param tx_cfcleaguefe_models_profile $player Spieler, der gezählt werden soll
+   * @param tx_cfcleaguefe_models_match $match Spiel, das ausgewertet wird
+   * @param array $playersArr Datenarray, welches die ermittelten Daten aufnimmt
    */
-  function _countMatch4Player(&$player, &$match, &$playersArr) {
+  function _countMatch4Player($player, $match, &$playersArr) {
     $ignorePlayer = 1;
     $isYellowRed = false;
     $playerData = &$this->_getPlayerData($playersArr, $player);
@@ -405,9 +405,3 @@ function playerStatsCmpPlayer($a, $b) {
   return strcmp(tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
   							tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1))));
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerStatistics.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerStatistics.php']);
-}
-
-?>

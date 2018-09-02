@@ -33,11 +33,13 @@ tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
 {
 
-    var $_players;
+    private $_players;
 
-    var $_coaches;
+    private $_coaches;
 
-    var $_supporters;
+    private $_supporters;
+
+    private $agegroup = null;
 
     /**
      * Array with loaded team instances
@@ -75,8 +77,6 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     {
         return $this->getProperty('club');
     }
-
-    var $agegroup = null;
 
     /**
      * Returns the teams age group.
@@ -279,9 +279,9 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     /**
      * Returns Teams by competition and club.
      * This method can be used static.
-     * TODO: Als static deklarieren
+     * @return tx_cfcleaguefe_models_team[]
      */
-    function getTeams($competitionIds, $clubIds)
+    public static function getTeams($competitionIds, $clubIds)
     {
         $competitionIds = implode(Tx_Rnbase_Utility_Strings::intExplode(',', $competitionIds), ',');
         $clubIds = implode(Tx_Rnbase_Utility_Strings::intExplode(',', $clubIds), ',');

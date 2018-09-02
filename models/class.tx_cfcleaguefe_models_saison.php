@@ -29,7 +29,7 @@ tx_rnbase::load('tx_rnbase_model_base');
 class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base
 {
 
-    function getTableName()
+    public function getTableName()
     {
         return 'tx_cfcleague_saison';
     }
@@ -40,7 +40,7 @@ class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base
      * Parameter leer, dann werden alle Saison-Datensätze aus der Datenbank geliefert. Ansonsten
      * wird ein String mit der uids der gesuchten Saisons erwartet ('2,4,10,...').
      */
-    static function findItems($uids)
+    public static function findItems($uids)
     {
         $options = array();
         if (is_string($uids) && strlen($uids) > 0) {
@@ -51,7 +51,7 @@ class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base
         $options['orderby'] = 'sorting';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_saison';
         // SELECT * FROM tx_cfcleague_saison WHERE uid IN ($uid)
-        
-        return tx_rnbase_util_DB::doSelect('*', 'tx_cfcleague_saison', $options);
+
+        return Tx_Rnbase_Database_Connection::getInstance()->doSelect('*', 'tx_cfcleague_saison', $options);
     }
 }

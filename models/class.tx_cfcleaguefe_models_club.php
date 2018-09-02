@@ -37,10 +37,10 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club {
   /**
    * Liefert die Teams dieses Vereins
    * TODO: In Service auslagern
-   * @param $saisonIds commaseperated saison-uids
-   * @param $agegroups commaseperated agegroup-uids
+   * @param int $saisonIds commaseperated saison-uids
+   * @param int $agegroups commaseperated agegroup-uids
    */
-  function getTeams($saisonIds, $agegroups) {
+  public function getTeams($saisonIds, $agegroups) {
     $what = 'distinct tx_cfcleague_teams.uid, tx_cfcleague_teams.comment, ' .
             'tx_cfcleague_teams.name, tx_cfcleague_teams.short_name, ' .
             'tx_cfcleague_teams.coaches, tx_cfcleague_teams.players, tx_cfcleague_teams.supporters, '.
@@ -48,13 +48,13 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club {
             'tx_cfcleague_teams.dam_images';
     $from = array('tx_cfcleague_teams INNER JOIN tx_cfcleague_competition c ON FIND_IN_SET(tx_cfcleague_teams.uid, c.teams) AND c.hidden=0 AND c.deleted=0 ',
                   'tx_cfcleague_teams');
-    $options = array();
+    $options = [];
     $options['where'] = 'tx_cfcleague_teams.club = ' . $this->uid .
                     ' AND c.saison IN (' . $saisonIds . ')' .
                     ' AND c.agegroup IN (' . $agegroups . ')';
     $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
 
-    return tx_rnbase_util_DB::doSelect($what,$from,$options,0);
+    return Tx_Rnbase_Database_Connection::getInstance()->doSelect($what,$from,$options);
 
 
 /*
@@ -77,7 +77,7 @@ AND c.agegroup = 1
    * @param string $compUids string with competition uids
    * @return Array of tx_cfcleaguefe_models_club
    */
-  function findAll($clubUids, $saisonUids = '', $groupUids = '', $compUids = '') {
+  public static function findAll($clubUids, $saisonUids = '', $groupUids = '', $compUids = '') {
     // FIXME: Die Felder des Clubs aus der TCA laden.
     $what = 'DISTINCT tx_cfcleague_club.uid, tx_cfcleague_club.name, tx_cfcleague_club.short_name, tx_cfcleague_club.dam_logo ';
     $from = array('
@@ -89,24 +89,31 @@ AND c.agegroup = 1
     $options['orderby'] = 'name';
 
     $saison = (strlen($saisonUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $saisonUids), ',') : '';
-    if(strlen($saison) > 0)
+    if(strlen($saison) > 0) {
       $where .= ' tx_cfcleague_competition.saison IN (' . $saison . ')';
+    }
 
     $groups = (strlen($groupUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $groupUids), ',') : '';
     if(strlen($groups) > 0) {
-      if(strlen($where) >0) $where .= ' AND ';
+        if(strlen($where) >0) {
+            $where .= ' AND ';
+        }
       $where .= ' tx_cfcleague_competition.agegroup IN (' . $groups . ')';
     }
 
     $comps = (strlen($compUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $compUids), ',') : '';
     if(strlen($comps) > 0) {
-      if(strlen($where) >0) $where .= ' AND ';
+      if(strlen($where) >0) {
+          $where .= ' AND ';
+      }
       $where .= ' tx_cfcleague_competition.uid IN (' . $comps . ')';
     }
 
     $clubs = (strlen($clubUids)) ? implode(Tx_Rnbase_Utility_Strings::intExplode(',', $clubUids), ',') : '';
     if(strlen($clubs) > 0) {
-      if(strlen($where) >0) $where .= ' AND ';
+        if(strlen($where) >0) {
+            $where .= ' AND ';
+        }
       $where .= ' tx_cfcleague_club.uid IN (' . $clubs . ')';
     }
 
@@ -121,7 +128,7 @@ INNER JOIN tx_cfcleague_competition ON FIND_IN_SET(tx_cfcleague_teams.uid, tx_cf
 WHERE tx_cfcleague_competition.saison = 1
 AND tx_cfcleague_competition.agegroup = 1
 */
-    return tx_rnbase_util_DB::doSelect($what,$from,$options,0);
+    return Tx_Rnbase_Database_Connection::getInstance()->doSelect($what,$from,$options,0);
 
   }
 
@@ -131,7 +138,7 @@ AND tx_cfcleague_competition.agegroup = 1
    * @param int $$clubUid
    * @return tx_cfcleaguefe_models_club
    */
-  static function getClubInstance($clubUid) {
+  public static function getClubInstance($clubUid) {
     $uid = intval($clubUid);
     if(!$uid) throw new Exception('Club uid expected. Was: >' . $clubUid . '<', -1);
     if(! self::$instances[$uid]) {
@@ -141,9 +148,3 @@ AND tx_cfcleague_competition.agegroup = 1
   }
 
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_club.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_club.php']);
-}
-
-?>
