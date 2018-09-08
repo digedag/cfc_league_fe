@@ -337,7 +337,6 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         // Innerhalb der Matchnote gibt es das Konstrukt des unbekannten Spielers. Dieser
         // Wird verwendet, wenn der eigentliche Spieler nicht mehr in der Datenbank gefunden
         // wird, oder wenn die ID des Spielers -1 ist.
-        // if($_SERVER["REMOTE_ADDR"] == '89.246.162.16')
         if (intval($this->record['player_home']) == 0) { // ID 0 ist nicht vergeben
             $player = NULL;
         } elseif (intval($this->record['player_home']) == - 1) {
@@ -371,7 +370,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     /**
      * Liefert den Spieler dem diese Meldung zugeordnet ist.
      *
-     * @return ein Profil oder 0
+     * @return tx_cfcleaguefe_models_profile ein Profil oder 0
      */
     public function getPlayerInstance()
     {
@@ -428,18 +427,22 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * werden nur die Notes mit dem Typ < 100 geliefert. Die MatchNotes werden direkt
      * in den übergebenen Matches gesetzt.
      * Die ermittelten MatchNotes haben keine Referenz auf das zugehörige Match!
+     * @param tx_cfcleaguefe_models_match[] $matches
+     * @param int $types
+     * @return
      */
-    function &retrieveMatchNotes(&$matches, $types = '1')
+    public static function &retrieveMatchNotes(&$matches, $types = 1)
     {
-        if (! count($matches))
+        if (! count($matches)) {
             return $matches;
+        }
         // Die Spiele in einen Hash legen, damit wir sofort Zugriff auf ein Spiel haben
-        $matchesHash = Array();
-        $matchIds = Array();
+        $matchesHash = [];
+        $matchIds = [];
         $anz = count($matches);
         for ($i = 0; $i < $anz; $i ++) {
-            $matchesHash[$matches[$i]->uid] = & $matches[$i];
-            $matchIds[] = $matches[$i]->uid;
+            $matchesHash[$matches[$i]->getUid()] = & $matches[$i];
+            $matchIds[] = $matches[$i]->getUid();
         }
 
         $matchIds = implode(',', $matchIds); // ID-String erstellen
@@ -453,14 +456,14 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         $options['orderby'] = 'game asc, minute asc';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_match_note';
 
-        $matchNotes = tx_rnbase_util_DB::doSelect($what, $from, $options);
+        $matchNotes = Tx_Rnbase_Database_Connection::getInstance()->doSelect($what, $from, $options);
 
         // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
         $anz = count($matchNotes);
         for ($i = 0; $i < $anz; $i ++) {
             // Hier darf nur mit Referenzen gearbeitet werden
             // $matchNotes[$i]->setMatch($matchesHash[$matchNotes[$i]->record['game']]);
-            $matchesHash[$matchNotes[$i]->record['game']]->addMatchNote($matchNotes[$i]);
+            $matchesHash[$matchNotes[$i]->getProperty('game')]->addMatchNote($matchNotes[$i]);
         }
 
         return $matches;
@@ -469,9 +472,9 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     /**
      * Prüft die TS-Anweisung showOnly für eine MatchNote.
      *
-     * @return 1 - show, 0 - show not
+     * @return int 1 - show, 0 - show not
      */
-    function _isShowTicker($conf, $ticker)
+    protected function _isShowTicker($conf, $ticker)
     {
         $showOnly = $conf['showOnly'];
         if (strlen($showOnly) > 0) {

@@ -48,7 +48,7 @@ class tx_cfcleaguefe_util_MatchTicker
     /**
      * Liefert alle Spiele des Scopes mit den geladenen Tickermeldungen.
      */
-    public function &getMatches4Scope($scopeArr, $types = 0)
+    public static function &getMatches4Scope($scopeArr, $types = 0)
     {
         // Wir liefern alle Spiele des Scopes mit den zugehörigen Tickermeldungen
         // Die Spiele bekommen wir über die Matchtable
@@ -56,8 +56,8 @@ class tx_cfcleaguefe_util_MatchTicker
         $matchtable = $service->getMatchTable();
         $matchtable->setScope($scopeArr);
         $matchtable->setStatus(2);
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $options['orderby']['MATCH.DATE'] = 'asc';
         $matchtable->getFields($fields, $options);
         $matches = $service->search($fields, $options);
