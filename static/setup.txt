@@ -5,11 +5,8 @@
 # Competition-Plugin
 # #####
 
-# TODO rename controller
-#includeLibs.tx_cfcleaguefe_controllers_competition = EXT:cfc_league_fe/controllers/class.tx_cfcleaguefe_controllers_matchtable.php
 includeLibs.tx_rnbase_controller = EXT:rn_base/class.tx_rnbase_controller.php
-includeLibs.tx_t3sports_dam = EXT:dam/lib/class.tx_dam_tsfe.php
-includeLibs.tx_t3sports_dam2 = EXT:rn_base/util/class.tx_rnbase_util_TSDAM.php
+includeLibs.tx_t3sports_fal = EXT:rn_base/util/class.tx_rnbase_util_TSFAL.php
 
 plugin.tx_cfcleaguefe_competition                = USER
 plugin.tx_cfcleaguefe_competition.flexform       = flexform_competition.xml
@@ -53,20 +50,25 @@ lib.t3sports.stadium {
     decimal = 0
   }
   logo = IMAGE
-  logo.file.import.cObject = USER
-  logo.file.import.cObject {
-    userFunc=tx_dam_tsfe->fetchFileList
-    refField=logo
-    refTable=tx_cfcleague_stadiums
+  logo {
+    file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_teamlogo}
+    file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_teamlogo}
+    file.import.cObject = USER
+    file.import.cObject {
+      # Mit dieser Methode wird nur die erste Referenz ausgewertet 
+      userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
+      refField=logo
+      refTable=tx_cfcleague_stadiums
+    }
+    file.treatIdAsReference = 1
   }
+
   description.parseFunc =< lib.parseFunc_RTE
   description2.parseFunc =< lib.parseFunc_RTE
 
-  logo.file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_teamlogo}
-  logo.file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_teamlogo}
   pictures = USER
   pictures {
-    userFunc = tx_rnbase_util_TSDAM->printImages
+    userFunc = tx_rnbase_util_TSFAL->printImages
     refField = pictures
     refTable = tx_cfcleague_stadiums
     template = EXT:cfc_league_fe/res/lightboxpics.html
@@ -95,13 +97,16 @@ lib.t3sports.teamnote {
   conf.tx_cfcleague_team_notes = CASE
   conf.tx_cfcleague_team_notes {
     1 = IMAGE
-    1.file.maxW = 100
-    1.file.maxH = 100
-    1.file.import.cObject = USER
-    1.file.import.cObject {
-      userFunc=tx_dam_tsfe->fetchFileList
-      refField=media
-      refTable=tx_cfcleague_team_notes
+    1.file {
+      maxW = 100
+      maxH = 100
+      treatIdAsReference = 1
+      import.cObject = USER
+      import.cObject {
+        userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
+        refField=media
+        refTable=tx_cfcleague_team_notes
+      }
     }
     2 = TEXT
     2.field = number
@@ -122,7 +127,7 @@ lib.t3sports.pagebrowser {
 lib.t3sports.group {
   logo = USER
   logo {
-    userFunc = tx_rnbase_util_TSDAM->printImages
+	userFunc = tx_rnbase_util_TSFAL->printImages
     refField = logo
     refTable = tx_cfcleague_group
 #    template = EXT:cfc_league_fe/res/lightboxpics.html
@@ -149,9 +154,10 @@ lib.t3sports.competition {
   logo {
     file.maxW = {$plugin.tx_cfcleaguefe_competition.maxW_complogo}
     file.maxH = {$plugin.tx_cfcleaguefe_competition.maxH_complogo}
+    file.treatIdAsReference = 1
     file.import.cObject = USER
     file.import.cObject {
-      userFunc=tx_dam_tsfe->fetchFileList
+      userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
       refField=logo
       refTable=tx_cfcleague_competition
     }
@@ -223,8 +229,8 @@ lib.t3sports.profile {
 
   pictures = USER
   pictures {
-    userFunc = tx_rnbase_util_TSDAM->printImages
-    refField = dam_images
+    userFunc = tx_rnbase_util_TSFAL->printImages
+    refField = t3images
     refTable = tx_cfcleague_profiles
     template = EXT:cfc_league_fe/res/lightboxpics.html
     offset = 1
@@ -277,8 +283,8 @@ lib.t3sports.club {
 
   logo = USER
   logo {
-    userFunc = tx_rnbase_util_TSDAM->printImages
-    refField = dam_images
+    userFunc=tx_rnbase_util_TSFAL->printImages
+    refField = logo
     refTable = tx_cfcleague_club
     template = EXT:cfc_league_fe/res/clublogo.html
     limit = 1
@@ -460,8 +466,8 @@ lib.t3sports.team {
 
   pictures = USER
   pictures {
-    userFunc = tx_rnbase_util_TSDAM->printImages
-    refField = dam_images
+    userFunc = tx_rnbase_util_TSFAL->printImages
+    refField = t3images
     refTable = tx_cfcleague_teams
     template = EXT:cfc_league_fe/res/lightboxpics.html
     offset = 1
@@ -558,8 +564,8 @@ lib.t3sports.match {
 
   pictures = USER
   pictures {
-    userFunc = tx_rnbase_util_TSDAM->printImages
-    refField = dam_images
+    userFunc = tx_rnbase_util_TSFAL->printImages
+    refField = t3images
     refTable = tx_cfcleague_games
     template = EXT:cfc_league_fe/res/lightboxpics.html
 #    template = EXT:cfc_league_fe/res/gallerifficpics.html

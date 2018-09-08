@@ -5,36 +5,6 @@ includeLibs.tx_t3sports_fal = EXT:rn_base/util/class.tx_rnbase_util_TSFAL.php
 
 
 ########
-# Spiel
-########
-lib.t3sports.match.pictures {
-    userFunc = tx_rnbase_util_TSFAL->printImages
-    refField = t3images
-}
-
-
-########
-# Personen
-########
-lib.t3sports.profile.pictures {
-  userFunc = tx_rnbase_util_TSFAL->printImages
-  refField = t3images
-}
-
-########
-# Vereine
-########
-#lib.t3sports.club.dam_logo >
-#lib.t3sports.club.logo >
-
-#lib.t3sports.club.logo = IMAGE
-lib.t3sports.club.logo {
-	userFunc=tx_rnbase_util_TSFAL->printImages
-	refField = logo
-	refTable = tx_cfcleague_club
-}
-
-########
 # Teams
 ########
 
@@ -83,65 +53,3 @@ lib.t3sports.teamLogo.small.0.default.file {
 		maxH = {$plugin.tx_cfcleaguefe_competition.maxH_logo_matchtable}
 }
 
-
-lib.t3sports.team.pictures {
-	userFunc = tx_rnbase_util_TSFAL->printImages
-  refField = t3images
-  refTable = tx_cfcleague_teams
-}
-
-########
-# Teamnote
-########
-lib.t3sports.teamnote {
-  conf.tx_cfcleague_team_notes {
-    1.file.import.cObject {
-			userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
-    }
-		1.file.treatIdAsReference = 1
-  }
-}
-
-########
-# Stadion
-########
-lib.t3sports.stadium.logo >
-
-lib.t3sports.stadium.logo = IMAGE
-lib.t3sports.stadium.logo {
-  file.maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
-  file.maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
-	file.import.cObject = USER
-	file.import.cObject {
-		# Mit dieser Methode wird nur die erste Referenz ausgewertet 
-    userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
-    refField=logo
-    refTable=tx_cfcleague_stadiums
-  }
-  file.treatIdAsReference = 1
-}
-
-
-lib.t3sports.stadium.pictures {
-	userFunc = tx_rnbase_util_TSFAL->printImages
-}
-
-
-########
-# Competition
-########
-lib.t3sports.competition.logo {
-	file.import.cObject {
-		# Mit dieser Methode wird nur die erste Referenz ausgewertet 
-		userFunc=tx_rnbase_util_TSFAL->fetchFirstReference
-	}
-	file.treatIdAsReference = 1
-}
-
-
-########
-# Group
-########
-lib.t3sports.group.logo {
-	userFunc=tx_rnbase_util_TSFAL->printImages
-}
