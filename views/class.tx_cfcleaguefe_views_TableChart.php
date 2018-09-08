@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,30 +34,21 @@ class tx_cfcleaguefe_views_TableChart extends tx_rnbase_view_Base
     /**
      * Erstellen des Frontend-Outputs
      */
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-
         // Die ViewData bereitstellen
         $json = $viewData->offsetGet('json');
-        $markerArray = array();
-        $markerArray['###JSON###'] = $json;
-        $lib = $configurations->get($this->getController()
-            ->getConfId() . 'library');
+        $markerArray = [
+            '###JSON###' => $json,
+        ];
+        $lib = $configurations->get($this->getController()->getConfId() . 'library');
         $template = tx_rnbase_util_Templates::getSubpart($template, '###' . strtoupper($lib) . '###');
-        // $items =& $viewData->offsetGet('items');
-        // $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-
-        // $template = $listBuilder->render($items,
-        // $viewData, $template, 'tx_cfcleaguefe_util_StadiumMarker',
-        // $this->getController()->getConfId().'stadium.', 'STADIUM', $formatter);
-
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray); // , $wrappedSubpartArray);
         return $out;
     }
 
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###TABLECHART###';
     }
 }
-
