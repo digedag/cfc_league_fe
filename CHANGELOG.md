@@ -2,6 +2,9 @@
 
 Änderungen
 ----------
+v1.2.? (??.??.2019)
+ * always prefer static over dynamic lineup
+
 v1.2.0 (11.07.2018)
 
  * #14 refactoring of model classes

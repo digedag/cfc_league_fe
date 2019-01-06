@@ -118,7 +118,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
      * @param
      *            array &$itemsArr Datensätze für die Auswahl
      * @param
-     *            tx_rnbase_util_Link &$link Linkobjekt
+     *            tx_rnbase_util_Link $link Linkobjekt
      * @param string $markerName
      *            Name des Markers (SAISON, ROUND usw.)
      * @param
@@ -158,7 +158,6 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
             $ignore = Tx_Rnbase_Frontend_Marker_Utility::findUnusedAttributes($item, $subTemplate, $markerName);
             $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->getProperty(), 'scopeSelection.' . $confName . '.', $ignore, $markerName . '_', $item->getColumnNames());
             $markerArray['###' . $markerName . '_LINK_URL###'] = $link->makeUrl(false);
-
             $linkStr = ($currentNoLink && $isCurrent) ? $token : $link->makeTag();
             // Ein zusätzliche Wrap um das generierte Element inkl. Link
             $linkStr = $configurations->getFormatter()->wrap($linkStr, 'scopeSelection.' . $confName . (($item->uid == $currItem->uid) ? '.current.' : '.normal.'));

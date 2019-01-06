@@ -1655,6 +1655,7 @@ plugin.tx_cfcleaguefe_report {
 
     coachnames =< lib.t3sports.matchreport.profiles
     lineuphome {
+      staticField = players_home_stat
 		  strategy.enable = 1
 		  strategy.seperator = | - |
 		  seperator = |, |
@@ -1697,6 +1698,7 @@ plugin.tx_cfcleaguefe_report {
     }
     lineupguest =< plugin.tx_cfcleaguefe_report.matchreport.lineuphome
     lineupguest {
+      staticField = players_guest_stat
       ifEmpty.cObject = TEXT
       ifEmpty.cObject.value.field = players_guest_stat
       ifEmpty.cObject.value.ifEmpty = unbekannt

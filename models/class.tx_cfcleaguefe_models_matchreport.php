@@ -50,17 +50,16 @@ class tx_cfcleaguefe_models_matchreport
      * Im Gegensatz zu anderen Modelklassen, holt sich diese Klasse den notwendigen Formatter
      * direkt aus der Configuration
      *
-     * @param $matchId UID
-     *            eines Spiels
+     * @param int $matchId UID eines Spiels
      */
-    public function __construct($matchId, &$configurations)
+    public function __construct($matchId, $configurations)
     {
         // Laden des Spiels
         $this->match = self::_loadMatch($matchId);
         $this->match->setMatchReport($this);
         $this->_configurations = $configurations;
 
-        $this->_formatter = & $configurations->getFormatter();
+        $this->_formatter = $configurations->getFormatter();
     }
 
     /**

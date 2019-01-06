@@ -62,7 +62,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
      */
     protected function prepareTemplate($template, $match, $formatter, $confId, $marker)
     {
-        $this->prepareFields($match);
+        $this->prepareFields($match, $formatter, $confId);
         tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord', array(
             'match' => $match,
             'template' => &$template,
@@ -185,8 +185,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
      * Karte diese z.B. neben seinem Namen angezeigt bekommt.
      *
      * @param tx_cfcleaguefe_models_match $match
+     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string $confId
      */
-    private function prepareFields($match)
+    private function prepareFields($match, $formatter, $confId)
     {
         // Zuerst einen REGISTER-Wert für die Altergruppe setzen. Dieser kann bei der
         // Linkerstellung verwendet werden.
@@ -212,14 +214,34 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             return;
         }
         // Die Aufstellungen setzen
-        $match->setProperty('lineup_home', $report->getLineupHome('matchreport.lineuphome.'));
-        $match->setProperty('lineup_guest', $report->getLineupGuest('matchreport.lineupguest.'));
+        $configurations = $formatter->getConfigurations();
+
+        $match->setProperty('lineup_home',
+            $this->lookupStaticField($match, $configurations->get('matchreport.lineuphome.staticField')) ?:
+                    $report->getLineupHome('matchreport.lineuphome.')
+        );
+        $match->setProperty('lineup_guest',
+            $this->lookupStaticField($match, $configurations->get('matchreport.lineupguest.staticField')) ?:
+                $report->getLineupGuest('matchreport.lineupguest.')
+        );
         $match->setProperty('substnames_home', $report->getSubstituteNamesHome('matchreport.substnameshome.'));
         $match->setProperty('substnames_guest', $report->getSubstituteNamesGuest('matchreport.substnamesguest.'));
         $match->setProperty('coachnames_home', $report->getCoachNameHome('matchreport.coachnames.'));
         $match->setProperty('coachnames_guest', $report->getCoachNameGuest('matchreport.coachnames.'));
         $match->setProperty('refereenames', $report->getRefereeName('matchreport.refereenames.'));
         $match->setProperty('assistsnames', $report->getAssistNames('matchreport.assistsnames.'));
+    }
+    /**
+     *
+     * @param tx_cfcleaguefe_models_match $match
+     * @param string $fieldName
+     */
+    private function lookupStaticField($match, $fieldName)
+    {
+        if ($fieldName) {
+            return $match->getProperty($fieldName);
+        }
+        return null;
     }
 
     /**
