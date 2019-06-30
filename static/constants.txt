@@ -93,6 +93,10 @@ plugin.tx_cfcleaguefe_report {
 
   # cat=T3sports (misc)/format_date; type=string;label=Formatter-String for match date in match report
   format_date = %d.%m.%Y %H:%M Uhr
+  # cat=T3sports (misc)/format_birthday; type=string;label=Formatter-String for birthday
+  format_birthday = %d. %B %Y
+  # cat=T3sports (misc)/format_dayofdeath; type=string;label=Formatter-String for day of death
+  format_dayofdeath = %Y
 
   # cat=T3sports (misc)/map_width; type=int+;label=Width of GoogleMap
   map_width = 500

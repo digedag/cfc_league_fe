@@ -76,6 +76,7 @@
 			<label index="profile_notFound">Profile not found</label>
 			<label index="profile_unknownLastname">Unknown</label>
 			<label index="profile_unknownFirstname"></label>
+			<label index="label_profile_anonymous">Anonymous</label>
 			<label index="match_notFound">Match not found</label>
 			<label index="team_notFound">Team not found</label>
 			<label index="teamlist_empty">No teams found.</label>
@@ -175,6 +176,7 @@
 
 			<label index="profile_notFound">Person nicht gefunden</label>
 			<label index="profile_unknownLastname">unbekannt</label>
+			<label index="label_profile_anonymous">Anonym</label>
 			<label index="statistics_noTypeFound">Es wurde kein Statistiktyp definiert.</label>
 			<label index="teamlist_empty">Es wurden keine Teams gefunden.</label>
 

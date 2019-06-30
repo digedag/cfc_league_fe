@@ -177,34 +177,62 @@ lib.t3sports.profile {
     showprofile.pid = {$plugin.tx_cfcleaguefe_competition.playerpage}
     refereematches.pid = {$plugin.tx_cfcleaguefe_competition.matchtablepage}
   }
+  subparts {
+    isgdpr0 {
+      # Marker: ###PROFILE_ISGDPR0_YES###
+      marker {
+        visible = YES
+        hidden = NO
+      }
+      visible = TEXT
+      visible.value = 1
+      visible.if {
+        value = 0
+        equals.data = field:gdpr
+      }
+    }
+    isgdpr1 < .isgdpr0
+    isgdpr1.visible.if.value = 1
+    isgdpr2 < .isgdpr0
+    isgdpr2.visible.if.value = 2
+    isdied < .isgdpr0
+    isdied.visible.if.value = 1
+    isdied.visible.if.equals.data = field:died
+  }
   dcname = CASE
   dcname {
-    default = TEXT
-    default.field = stage_name
-    -1 = COA
-    -1 {
-      10 = TEXT
-      10.field = first_name
-      10.noTrimWrap = || |
-      10.required = 1
-      20 = TEXT
-      20.field = last_name
+    default = CASE
+    default {
+      default = TEXT
+      default.field = stage_name
+      -1 = COA
+      -1 {
+        10 = TEXT
+        10.field = first_name
+        10.noTrimWrap = || |
+        10.required = 1
+        20 = TEXT
+        20.field = last_name
+      }
+      key.field = stage_name
+      key.ifEmpty = -1
     }
-    key.field = stage_name
-    key.ifEmpty = -1
+    2 = TEXT
+    2.value = ###LABEL_PROFILE_ANONYMOUS###
+    key.field = gdpr
   }
   dcnamerev =< lib.t3sports.profile.dcname
-  dcnamerev.-1.5 = TEXT
-  dcnamerev.-1.5.field = last_name
-  dcnamerev.-1.10.noTrimWrap = |, ||
-  dcnamerev.-1.20 = 
+  dcnamerev.default.-1.5 = TEXT
+  dcnamerev.default.-1.5.field = last_name
+  dcnamerev.default.-1.10.noTrimWrap = |, ||
+  dcnamerev.default.-1.20 = 
   description.parseFunc =< lib.parseFunc_RTE
   summary.parseFunc =< lib.parseFunc_RTE
   birthday = CASE
   birthday {
     default = TEXT
     default.field = birthday
-    default.strftime = %d. %B %Y
+    default.strftime = {$plugin.tx_cfcleaguefe_report.format_birthday}
     2 = TEXT
     2.value = -
     key {
@@ -212,6 +240,11 @@ lib.t3sports.profile {
       ifEmpty = 2
     }
   }
+  dayofdeath =< lib.t3sports.profile.birthday
+  dayofdeath.default.field = dayofdeath
+  dayofdeath.default.strftime = {$plugin.tx_cfcleaguefe_report.format_dayofdeath}
+  dayofdeath.key.field = dayofdeath
+
   duration_of_contract = CASE
   duration_of_contract {
     default = TEXT
