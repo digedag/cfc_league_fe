@@ -74,8 +74,8 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
     protected function prepareTemplate($template, $profile, $formatter, $confId, $marker = 'PROFILE')
     {
         $profile->addTeamNotes($this->options['team']);
-        $profile->setProperty('firstpicture', $profile->getProperty('dam_images'));
-        $profile->setProperty('pictures', $profile->getProperty('dam_images'));
+        $profile->setProperty('firstpicture', $profile->getProperty('t3images'));
+        $profile->setProperty('pictures', $profile->getProperty('t3images'));
 
         tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_initRecord', array(
             'item' => &$profile,
