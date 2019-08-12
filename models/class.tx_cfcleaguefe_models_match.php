@@ -846,9 +846,10 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      */
     public static function getMatchInstance($uid)
     {
-        $uid = intval($uid);
-        if (! uid)
+        $uid = (int) $uid;
+        if (!$uid) {
             throw new Exception('Invalid uid for match');
+        }
         if (! is_object(self::$instances[$uid])) {
             self::$instances[$uid] = new tx_cfcleaguefe_models_match($uid);
         }
@@ -859,8 +860,4 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     {
         self::$instances[$match->uid] = $match;
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_match.php']) {
-    include_once ($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_match.php']);
 }
