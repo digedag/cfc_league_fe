@@ -50,9 +50,3 @@ tx_rnbase_util_Extensions::addStaticFile($_EXTKEY,'static/', 'T3sports');
 tx_rnbase_util_Extensions::addStaticFile($_EXTKEY,'static/cal/','T3sports cal-events');
 tx_rnbase_util_Extensions::addStaticFile($_EXTKEY,'static/volleyball/','T3sports for Volleyball');
 
-tx_rnbase::load('tx_rnbase_util_TYPO3');
-if(tx_rnbase_util_TYPO3::isTYPO60OrHigher())
-	tx_rnbase_util_Extensions::addStaticFile($_EXTKEY,'static/fal/','T3sports for TYPO3 6.x');
-else
-	tx_rnbase_util_Extensions::addStaticFile($_EXTKEY,'static/nodam/','T3sports without DAM');
-
