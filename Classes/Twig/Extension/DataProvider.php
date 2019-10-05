@@ -31,9 +31,9 @@ class DataProvider extends \Twig_Extension
 {
     public function getFunctions()
     {
-        return array(
+        return [
             new \Twig_SimpleFunction('buildMatchReport', array($this, 'buildMatchReport')),
-        );
+        ];
     }
 
     public function buildMatchReport(\tx_cfcleague_models_Match $match)
