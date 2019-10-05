@@ -2,8 +2,12 @@
 
 Änderungen
 ----------
-v1.2.? (??.??.2019)
- * always prefer static over dynamic lineup
+v1.3.0 (05.10.2019)
+ * always prefer static over dynamic lineup in match reports
+ * respect GDPR for personal information of profiles
+ * new field for date of death for profiles
+ * many references to DAM removed
+ * many fixes to avoid warnings in PHP 7.x
 
 v1.2.0 (11.07.2018)
 
