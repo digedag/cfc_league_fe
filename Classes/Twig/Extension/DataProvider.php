@@ -1,8 +1,10 @@
 <?php
+namespace System25\T3sports\Twig\Extension;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2019 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,9 +26,8 @@
 
 
 /**
- * Liefert Sternzeichen zu einem Datum
  */
-class Tx_Cfcleaguefe_Twig_Extension_DataProvider extends \Twig_Extension
+class DataProvider extends \Twig_Extension
 {
     public function getFunctions()
     {
@@ -35,10 +36,11 @@ class Tx_Cfcleaguefe_Twig_Extension_DataProvider extends \Twig_Extension
         );
     }
 
-    public function buildMatchReport(tx_cfcleague_models_Match $match)
+    public function buildMatchReport(\tx_cfcleague_models_Match $match)
     {
-        return tx_rnbase::makeInstance('Tx_Cfcleaguefe_Twig_Data_MatchReport', $match);
+        return \tx_rnbase::makeInstance(\System25\T3sports\Twig\Data\MatchReport::class, $match);
     }
+
     /**
      * Get Extension name
      *

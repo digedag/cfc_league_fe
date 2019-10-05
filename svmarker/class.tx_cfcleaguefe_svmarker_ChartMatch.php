@@ -70,8 +70,8 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base {
 		$table = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($competition,
 				$competition->getMatches(tx_cfcleague_models_Match::MATCH_STATUS_FINISHED), $configurations, $confId);
 
-		/* @var $builder Tx_Cfcleaguefe_Chart_Builder */
-		$builder = tx_rnbase::makeInstance('Tx_Cfcleaguefe_Chart_Builder');
+		/* @var $builder System25\T3sports\Chart\ChartBuilder */
+		$builder = tx_rnbase::makeInstance(System25\T3sports\Chart\ChartBuilder::class);
 		$json = $builder->buildJson($table, [$match->getHome()->getClubUid(), $match->getGuest()->getClubUid()], $formatter->getConfigurations(), $confId);
 
 		$chartTemplate = tx_rnbase_util_Templates::getSubpartFromFile($configurations->get($confId.'template.file'), $configurations->get($confId.'template.subpart'));

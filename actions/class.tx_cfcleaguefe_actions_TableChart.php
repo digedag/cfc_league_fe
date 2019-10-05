@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
@@ -98,7 +99,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
         tx_rnbase::load('tx_cfcleaguefe_table_Builder');
         $table = tx_cfcleaguefe_table_Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
 
-        $builder = tx_rnbase::makeInstance('Tx_Cfcleaguefe_Chart_Builder');
+        $builder = tx_rnbase::makeInstance(System25\T3sports\Chart\ChartBuilder::class);
         return $builder->buildJson($table, $this->getChartClubs(), $configurations, $confId);
     }
 

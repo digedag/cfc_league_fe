@@ -1,9 +1,10 @@
 <?php
+namespace System25\T3sports\Twig\Data;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2019 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,26 +28,26 @@
 /**
  * Provide additional data for match notes
  */
-class Tx_Cfcleaguefe_Twig_Data_MatchNote
+class MatchNote
 {
 
     protected $profileSrv;
-    /** @var tx_cfcleague_models_MatchNote[] */
+    /** @var \tx_cfcleague_models_MatchNote[] */
     protected $matchNote;
-    /** @var Tx_Cfcleaguefe_Twig_Data_Player */
+    /** @var Player */
     protected $player;
-    /** @var Tx_Cfcleaguefe_Twig_Data_Player */
+    /** @var Player */
     protected $player2;
     /**
      *
-     * @param tx_cfcleague_models_MatchNote $note
-     * @param Tx_Cfcleaguefe_Twig_Data_Player $player
+     * @param \tx_cfcleague_models_MatchNote $note
+     * @param Player $player
      */
-    public function __construct(tx_cfcleague_models_MatchNote $note, $player = null)
+    public function __construct(\tx_cfcleague_models_MatchNote $note, $player = null)
     {
         $this->matchNote = $note;
         $this->player = $player;
-        $this->profileSrv = tx_cfcleague_util_ServiceRegistry::getProfileService();
+        $this->profileSrv = \tx_cfcleague_util_ServiceRegistry::getProfileService();
     }
 
     public function getUid()
@@ -98,23 +99,23 @@ class Tx_Cfcleaguefe_Twig_Data_MatchNote
 
     public function isChange()
     {
-        return $this->getType() == tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT;
+        return $this->getType() == \tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT;
     }
 
     public function isGoal()
     {
         $goalTypes = [
-            tx_cfcleague_models_MatchNote::TYPE_GOAL,
-            tx_cfcleague_models_MatchNote::TYPE_GOAL_HEADER,
-            tx_cfcleague_models_MatchNote::TYPE_GOAL_PENALTY,
-            tx_cfcleague_models_MatchNote::TYPE_GOAL_OWN,
+            \tx_cfcleague_models_MatchNote::TYPE_GOAL,
+            \tx_cfcleague_models_MatchNote::TYPE_GOAL_HEADER,
+            \tx_cfcleague_models_MatchNote::TYPE_GOAL_PENALTY,
+            \tx_cfcleague_models_MatchNote::TYPE_GOAL_OWN,
         ];
         return in_array($this->getType(), $goalTypes);
     }
 
     /**
      *
-     * @return tx_cfcleague_models_MatchNote
+     * @return \tx_cfcleague_models_MatchNote
      */
     public function getMatchNote()
     {
@@ -122,7 +123,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchNote
     }
     /**
      *
-     * @return Tx_Cfcleaguefe_Twig_Data_Player
+     * @return Player
      */
     public function getPlayer()
     {
@@ -134,11 +135,10 @@ class Tx_Cfcleaguefe_Twig_Data_MatchNote
         return $this->player2;
     }
 
-    public function setPlayer2(Tx_Cfcleaguefe_Twig_Data_Player $player2)
+    public function setPlayer2(Player $player2)
     {
         $this->player2 = $player2;
         return $this;
     }
-
 }
 

@@ -1,8 +1,11 @@
 <?php
+
+namespace System25\T3sports\Utility;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2010-2019 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +29,8 @@
 /**
  * Liefert Sternzeichen zu einem Datum
  */
-class Tx_Cfcleaguefe_Utility_Signs {
+class Signs
+{
 	private static $signs;
 
 	public static function getInstance ()
@@ -52,19 +56,21 @@ class Tx_Cfcleaguefe_Utility_Signs {
 
 	private function createSigns() {
 		global $TSFE;
-		$this->signs = array( date('z',strtotime("2006-01-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.capricorn'),
-				date('z',strtotime("2006-02-19")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.aquarius'),
-				date('z',strtotime("2006-03-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.pisces'),
-				date('z',strtotime("2006-04-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.aries'),
-				date('z',strtotime("2006-05-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.taurus'),
-				date('z',strtotime("2006-06-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.gemini'),
-				date('z',strtotime("2006-07-22")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.cancer'),
-				date('z',strtotime("2006-08-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.leo'),
-				date('z',strtotime("2006-09-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.virgo'),
-				date('z',strtotime("2006-10-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.libra'),
-				date('z',strtotime("2006-11-22")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.scorpio'),
-				date('z',strtotime("2006-12-21")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.sagittarius'),
-				date('z',strtotime("2004-12-31")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.capricorn'));
+		$this->signs = [
+			date('z',strtotime("2006-01-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.capricorn'),
+			date('z',strtotime("2006-02-19")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.aquarius'),
+			date('z',strtotime("2006-03-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.pisces'),
+			date('z',strtotime("2006-04-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.aries'),
+			date('z',strtotime("2006-05-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.taurus'),
+			date('z',strtotime("2006-06-20")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.gemini'),
+			date('z',strtotime("2006-07-22")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.cancer'),
+			date('z',strtotime("2006-08-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.leo'),
+			date('z',strtotime("2006-09-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.virgo'),
+			date('z',strtotime("2006-10-23")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.libra'),
+			date('z',strtotime("2006-11-22")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.scorpio'),
+			date('z',strtotime("2006-12-21")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.sagittarius'),
+			date('z',strtotime("2004-12-31")) => $TSFE->sL('LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.report.sign.capricorn')
+		];
 	}
 
 }

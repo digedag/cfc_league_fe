@@ -47,7 +47,7 @@ class StadiumList extends BaseView
         $items = & $viewData->offsetGet('items');
         $listBuilder = \tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
-        $template = $listBuilder->render($items, $viewData, $template, 'tx_cfcleaguefe_util_StadiumMarker', $this->getController()
+        $template = $listBuilder->render($items, $viewData, $template, 'tx_cfcleaguefe_util_StadiumMarker', $request
             ->getConfId() . 'stadium.', 'STADIUM', $formatter);
 
         $markerArray = [];

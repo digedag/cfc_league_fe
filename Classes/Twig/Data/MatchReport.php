@@ -1,8 +1,10 @@
 <?php
+namespace System25\T3sports\Twig\Data;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2019 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,33 +23,31 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-tx_rnbase::load('Tx_Cfcleaguefe_Twig_Data_Player');
-tx_rnbase::load('Tx_Cfcleaguefe_Twig_Data_MatchNote');
 
 /**
  * Provide additional data for match
  * @author rene
  */
-class Tx_Cfcleaguefe_Twig_Data_MatchReport
+class MatchReport
 {
     protected $match;
-    /** @var tx_cfcleague_models_MatchNote[] */
+    /** @var \tx_cfcleague_models_MatchNote[] */
     protected $tickerArr;
-    /** @var tx_cfcleague_models_MatchNote[] */
+    /** @var \tx_cfcleague_models_MatchNote[] */
     protected $tickerByTeam = [
         'home' => [],
         'guest' => [],
     ];
 
-    /** @var Tx_Cfcleaguefe_Twig_Data_Player[] */
+    /** @var \System25\T3sports\Twig\Data\Player[] */
     protected $players = [];
     protected $playersByLastname = [];
 
     protected $profileSrv;
-    public function __construct(tx_cfcleague_models_Match $match)
+    public function __construct(\tx_cfcleague_models_Match $match)
     {
         $this->match = $match;
-        $this->profileSrv = tx_cfcleague_util_ServiceRegistry::getProfileService();
+        $this->profileSrv = \tx_cfcleague_util_ServiceRegistry::getProfileService();
         $this->initMatchTicker();
         $this->getLineupHome();
         $this->getLineupGuest();
@@ -71,7 +71,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
      * Substitutes for home team
      *
      * @param string $confId
-     * @return Tx_Cfcleaguefe_Twig_Data_Player[]
+     * @return \System25\T3sports\Twig\Data\Player[]
      */
     public function getSubstitutesHome()
     {
@@ -86,7 +86,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
     /**
      *
      * @param string $all
-     * @return unknown
+     * @return \tx_cfcleague_models_Profile[]
      */
     public function getPlayersHome($all = false)
     {
@@ -107,7 +107,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
     /**
      *
      * @param string $all
-     * @return tx_cfcleague_models_Profile[]
+     * @return \tx_cfcleague_models_Profile[]
      */
     public function getPlayersGuest($all = false)
     {
@@ -118,7 +118,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
      * Substitutes for guest team
      *
      * @param string $confId
-     * @return Tx_Cfcleaguefe_Twig_Data_Player[]
+     * @return \System25\T3sports\Twig\Data\Player[]
      */
     public function getSubstitutesGuest()
     {
@@ -132,7 +132,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
 
     /**
      *
-     * @return tx_cfcleague_models_Profile
+     * @return \tx_cfcleague_models_Profile
      */
     public function getCoachHome()
     {
@@ -142,7 +142,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
 
     /**
      *
-     * @return tx_cfcleague_models_Profile
+     * @return \tx_cfcleague_models_Profile
      */
     public function getCoachGuest()
     {
@@ -157,7 +157,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
 
     /**
      *
-     * @return Tx_Cfcleaguefe_Twig_Data_MatchNote[]
+     * @return \System25\T3sports\Twig\Data\MatchNote[]
      */
     public function getMatchNotesHome()
     {
@@ -166,7 +166,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
 
     /**
      *
-     * @return Tx_Cfcleaguefe_Twig_Data_MatchNote[]
+     * @return \System25\T3sports\Twig\Data\MatchNote[]
      */
     public function getMatchNotesGuest()
     {
@@ -175,7 +175,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
 
     /**
      *
-     * @return tx_cfcleague_models_Profile[]
+     * @return \tx_cfcleague_models_Profile[]
      */
     public function getAssists()
     {
@@ -184,13 +184,13 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
 
     /**
      *
-     * @param tx_cfcleague_models_Profile[] $players
+     * @param \tx_cfcleague_models_Profile[] $players
      * @param string $system
      * @return []
      */
     protected function getLineup($players, $system)
     {
-        $system = Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
+        $system = \Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
         $players = is_array($players) ? array_values($players) : array();
 
         $partCnt = 0;
@@ -209,10 +209,10 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
     }
     /**
      *
-     * @param tx_cfcleague_models_Profile $player
-     * @return Tx_Cfcleaguefe_Twig_Data_Player
+     * @param \tx_cfcleague_models_Profile $player
+     * @return \System25\T3sports\Twig\Data\Player
      */
-    protected function substPlayer(tx_cfcleague_models_Profile $player)
+    protected function substPlayer(\tx_cfcleague_models_Profile $player)
     {
         return array_key_exists($player->getUid(), $this->players) ?
             $this->players[$player->getUid()] : $this->buildPlayer($player);
@@ -227,7 +227,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
         if (! is_array($this->tickerArr)) {
             $this->tickerArr = [];
             // Der Ticker wird immer chronologisch ermittelt
-            $matchNotes =& tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
+            $matchNotes =& \tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
             for ($i = 0; $i < count($matchNotes); $i ++) {
                 $note = $matchNotes[$i];
@@ -237,15 +237,15 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
                     $playerUid = $note->getPlayer();
                     $player = null;
                     if ($playerUid) {
-                        $player = tx_cfcleague_models_Profile::getProfileInstance($playerUid);
+                        $player = \tx_cfcleague_models_Profile::getProfileInstance($playerUid);
                         $player = $this->buildPlayer($player);
                     }
-                    $matchNote = new Tx_Cfcleaguefe_Twig_Data_MatchNote($note, $player);
+                    $matchNote = new \System25\T3sports\Twig\Data\MatchNote($note, $player);
                     if ($player) {
                         $player->addMatchNote($matchNote);
                     }
                     if($matchNote->isChange()) {
-                        $player2 = tx_cfcleague_models_Profile::getProfileInstance($matchNote->getMatchNote()->getPlayer2());
+                        $player2 = \tx_cfcleague_models_Profile::getProfileInstance($matchNote->getMatchNote()->getPlayer2());
                         $player2 = $this->buildPlayer($player2);
                         $matchNote->setPlayer2($player2);
                     }
@@ -254,7 +254,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
                         $this->tickerByTeam[$matchNote->getMatchNote()->isHome() ? 'home' : 'guest'][] = $matchNote;
                     }
                 }
-                catch (Exception $e) {
+                catch (\Exception $e) {
                 }
             }
         }
@@ -274,8 +274,8 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
     }
     /**
      *
-     * @param tx_cfcleague_models_Profile $player
-     * @return Tx_Cfcleaguefe_Twig_Data_Player
+     * @param \tx_cfcleague_models_Profile $player
+     * @return \System25\T3sports\Twig\Data\Player
      */
     protected function buildPlayer($player)
     {
@@ -284,7 +284,7 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
                 $player = $this->players[$player->getUid()];
             }
             else {
-                $player = new Tx_Cfcleaguefe_Twig_Data_Player($player);
+                $player = new \System25\T3sports\Twig\Data\Player($player);
                 // Keep a reference to each player
                 $this->players[$player->getUid()] = $player;
 
@@ -301,6 +301,4 @@ class Tx_Cfcleaguefe_Twig_Data_MatchReport
         }
         return $player;
     }
-
 }
-

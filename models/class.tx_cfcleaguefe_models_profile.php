@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
@@ -21,8 +22,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_model_base');
-tx_rnbase::load('Tx_Cfcleaguefe_Utility_Signs');
 
 /**
  * Model für ein Personenprofil.
@@ -165,8 +164,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     /**
      * Liefert den kompletten Namen der Person
      *
-     * @param $reverse Wenn
-     *            1 dann ist die Form <Nachname, Vorname>
+     * @param int $reverse Wenn 1 dann ist die Form <Nachname, Vorname>
      */
     function getName($reverse = 0)
     {
@@ -288,11 +286,12 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
 
     /**
      * Liefert das Sternzeichen der Person.
+     * @return string
      */
     public function getSign()
     {
-        $signs = Tx_Cfcleaguefe_Utility_Signs::getInstance();
-        return intval($this->getProperty('birthday')) != 0 ? $signs->getSign($this->record['birthday']) : '';
+        $signs = System25\T3sports\Utility\Signs::getInstance();
+        return intval($this->getProperty('birthday')) != 0 ? $signs->getSign($this->getProperty('birthday')) : '';
     }
 }
 
