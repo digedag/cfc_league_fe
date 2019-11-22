@@ -1,8 +1,11 @@
 <?php
+
+namespace System25\T3sports\Filter;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010-2018 Rene Nitzsche
+ *  (c) 2010-2019 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -20,16 +23,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
-tx_rnbase::load('tx_cfcleague_search_Builder');
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 
 /**
  * Default filter for match notes
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_filter_MatchNote extends tx_rnbase_filter_BaseFilter
+class MatchNoteFilter extends \tx_rnbase_filter_BaseFilter
 {
 
     /**
@@ -37,8 +37,8 @@ class tx_cfcleaguefe_filter_MatchNote extends tx_rnbase_filter_BaseFilter
      *
      * @param array $fields
      * @param array $options
-     * @param tx_rnbase_IParameters $parameters
-     * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
+     * @param \tx_rnbase_IParameters $parameters
+     * @param \Tx_Rnbase_Configuration_ProcessorInterface $configurations
      * @param string $confId
      */
     protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)

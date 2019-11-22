@@ -729,7 +729,7 @@ plugin.tx_cfcleaguefe_competition {
     # Ausgabe mit HTML-Template
     viewType = HTML
     _caching.disableSubstCache = 1
-    filter = tx_cfcleaguefe_filter_Match
+    filter = System25\T3sports\Filter\MatchFilter
     # With fields it is possible to defined additional query options
     # select what matches you want to show
     fields {
@@ -897,7 +897,7 @@ plugin.tx_cfcleaguefe_competition {
 #    club.isCurrent.override = selected="selected"
   }
   teamlist {
-    filter = tx_cfcleaguefe_filter_Team
+    filter = System25\T3sports\Filter\TeamFilter
     team =< lib.t3sports.teamSmall
     options {
       orderby {
@@ -910,7 +910,7 @@ plugin.tx_cfcleaguefe_competition {
   }
   stadiumlist {
     stadium =< lib.t3sports.stadium
-    filter = tx_cfcleaguefe_filter_Stadium
+    filter = System25\T3sports\Filter\StadiumFilter
     map =< lib.t3sports.map
     map.template = {$plugin.tx_cfcleaguefe_competition.stadiumlistTemplate}
     map.stadium =< lib.t3sports.stadium
