@@ -48,7 +48,7 @@ class PlayerStatisticsMarker {
 		$playerTemplate = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_PROFILE###');
 
 		// Es wird der ProfileMarker verwendet
-		$profileMarkerObj = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
+		$profileMarkerObj = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
 		$profileMarkerObj->initLabelMarkers($formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
 		$markerArray = $profileMarkerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
 

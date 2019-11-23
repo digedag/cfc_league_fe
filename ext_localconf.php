@@ -58,13 +58,12 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' /* sv key */,
-  array(
+  [
     'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.playersummary', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_PlayerSummaryStatistics.php',
-    'className' => 'tx_cfcleaguefe_sv2_PlayerSummaryStatistics',
-  )
+    'className' => 'System25\T3sports\Statistics\Service\PlayerSummaryStatistics',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_VisitorStatistics' /* sv key */,

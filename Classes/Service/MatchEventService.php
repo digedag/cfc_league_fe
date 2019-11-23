@@ -144,8 +144,8 @@ class MatchEventService extends \tx_cal_event_service
      * TODO Implement search function!
      *
      * @param string $pidList
-     * @param date $starttime
-     * @param date $endtime
+     * @param string $starttime date string
+     * @param string $endtime date string
      * @param string $searchword
      * @param array $locationIds
      * @return array
