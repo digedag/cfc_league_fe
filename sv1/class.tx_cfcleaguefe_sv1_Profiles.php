@@ -1,4 +1,6 @@
 <?php
+use System25\T3sports\Search\ProfileSearch;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -62,15 +64,8 @@ class tx_cfcleaguefe_sv1_Profiles extends Tx_Rnbase_Service_Base implements tx_c
 	 */
 	function search($fields, $options) {
 		tx_rnbase::load('tx_rnbase_util_SearchBase');
-		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_cfcleaguefe_search_Profile');
+		$searcher = tx_rnbase_util_SearchBase::getInstance(ProfileSearch::class);
 		return $searcher->search($fields, $options);
 	}
 
 }
-
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv1/class.tx_cfcleaguefe_sv1_Profiles.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv1/class.tx_cfcleaguefe_sv1_Profiles.php']);
-}
-
-?>

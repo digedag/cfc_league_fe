@@ -21,12 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_search_Builder');
-tx_rnbase::load('tx_cfcleaguefe_models_saison');
-tx_rnbase::load('tx_cfcleaguefe_models_competition');
-tx_rnbase::load('tx_cfcleague_models_Group');
-tx_rnbase::load('tx_cfcleaguefe_models_club');
-tx_rnbase::load('tx_rnbase_util_Math');
 
 /**
  * Viele Views dieser Extension müssen wissen, für welche Saison, Liga, Alterklasse
@@ -226,7 +220,7 @@ class tx_cfcleaguefe_util_ScopeController
             $fields = array();
             $options = array();
             tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'scope.competition.options.');
-            tx_cfcleaguefe_search_Builder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
+            \System25\T3sports\Search\SearchBuilder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
 
             $competitions = $compServ->search($fields, $options);
             $dataArr = self::_prepareSelect($competitions, $parameters, 'competition', $useObjects ? '' : 'name');

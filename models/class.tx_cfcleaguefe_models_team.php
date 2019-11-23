@@ -21,11 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleague_models_Team');
-tx_rnbase::load('tx_cfcleaguefe_models_club');
-tx_rnbase::load('tx_cfcleaguefe_search_Builder');
-tx_rnbase::load('tx_cfcleague_models_Group');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Model für ein Team.
@@ -123,8 +118,8 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     public function getCompetitions($obligateOnly = false)
     {
-        $fields = array();
-        tx_cfcleaguefe_search_Builder::buildCompetitionByTeam($fields, $this->getUid(), $obligateOnly);
+        $fields = $options = [];
+        \System25\T3sports\Search\SearchBuilder::buildCompetitionByTeam($fields, $this->getUid(), $obligateOnly);
         $srv = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
         return $srv->search($fields, $options);
     }

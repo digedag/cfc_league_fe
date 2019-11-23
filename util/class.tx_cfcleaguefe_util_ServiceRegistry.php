@@ -73,7 +73,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     /**
      * Liefert den Team-Service
      *
-     * @return tx_cfcleaguefe_TeamService
+     * @return tx_cfcleaguefe_sv1_Teams
      */
     public static function getTeamService()
     {
@@ -83,7 +83,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     /**
      * Liefert den Wettbewerbsservice
      *
-     * @return tx_cfcleaguefe_CompetitionService
+     * @return tx_cfcleaguefe_sv1_Competitions
      */
     public static function getCompetitionService()
     {
