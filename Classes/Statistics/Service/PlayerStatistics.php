@@ -1,8 +1,13 @@
 <?php
+
+namespace System25\T3sports\Statistics\Service;
+
+use System25\T3sports\Statistics\PlayerStatisticsMarker;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2019 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,18 +26,13 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_util_StatisticsHelper');
-
-tx_rnbase::load('tx_rnbase_util_Misc');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Service for player statistics
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
+class PlayerStatistics extends \Tx_Rnbase_Service_Base
 {
 
     /**
@@ -40,7 +40,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
      * In jedem Datenarray liegt für jede Info ein Zähler,
      * sowie zusätzlich noch eine Referenz auf den Spieler
      */
-    private $playersArr = array();
+    private $playersArr = [];
 
     private $scopeArr;
 
@@ -82,10 +82,10 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
     /**
      * Ein einzelnes Spiel auswerten
      *
-     * @param tx_cfcleaguefe_models_match $match
+     * @param \tx_cfcleaguefe_models_match $match
      * @param int $clubId
      */
-    public function handleMatch(&$match, $clubId)
+    public function handleMatch($match, $clubId)
     {
 
         // Zunächst müssen alle Spieler des Spiels ermittelt werden
@@ -117,7 +117,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
     /**
      * Entscheidet, ob die Spieler des Teams in die Statistik eingehen
      *
-     * @param tx_cfcleaguefe_models_team $team
+     * @param \tx_cfcleaguefe_models_team $team
      * @return boolean
      */
     protected function isObservedTeam($team)
@@ -132,10 +132,10 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
     /**
      * Liefert die Spieler eines beteiligten Teams.
      *
-     * @param tx_cfcleaguefe_models_match $match
+     * @param \tx_cfcleaguefe_models_match $match
      * @param boolean $home
      *            true, wenn das Heimteam geholt werden soll
-     * @return array[tx_cfcleaguefe_models_profile]
+     * @return array[\tx_cfcleaguefe_models_profile]
      */
     protected function getPlayer($match, $home)
     {
@@ -143,8 +143,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
         // Fehlerhafte Spieler entfernen
         foreach ($players as $key => $player) {
             if (! is_object($player)) {
-                tx_rnbase::load('tx_rnbase_util_Logger');
-                tx_rnbase_util_Logger::warn('Player with UID ' . $key . ' not found. Probably the profile was deleted, but still has references.', 'cfc_league_fe');
+                \tx_rnbase_util_Logger::warn('Player with UID ' . $key . ' not found. Probably the profile was deleted, but still has references.', 'cfc_league_fe');
                 unset($players[$key]);
             }
         }
@@ -171,11 +170,11 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
     /**
      * Returns the marker instance to map result data to HTML markers
      *
-     * @param tx_rnbase_configurations $configurations
+     * @param \tx_rnbase_configurations $configurations
      */
     public function getMarker($configurations)
     {
-        return tx_rnbase::makeInstance('tx_cfcleaguefe_sv2_PlayerStatisticsMarker');
+        return \tx_rnbase::makeInstance(PlayerStatisticsMarker::class);
     }
 
     /**
@@ -196,7 +195,6 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
      */
     protected function getTeams($scopeArr)
     {
-        tx_rnbase::load('tx_cfcleaguefe_models_team');
         $teams = call_user_func(array(
             'tx_cfcleaguefe_models_team',
             "getTeams"
@@ -228,9 +226,9 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
      * - GOAL_ALL Gesamtzahl der Tore des Spieler
      * </pre>
      *
-     * @param tx_cfcleaguefe_models_profile $player
+     * @param \tx_cfcleaguefe_models_profile $player
      *            Spieler, der gezählt werden soll
-     * @param tx_cfcleaguefe_models_match $match
+     * @param \tx_cfcleaguefe_models_match $match
      *            Spiel, das ausgewertet wird
      * @param array $playersArr
      *            Datenarray, welches die ermittelten Daten aufnimmt
@@ -260,14 +258,14 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
             $playerData['match_count'] = intval($playerData['match_count']) + 1;
 
             // Wurde der Spieler ausgewechselt?
-            $min = tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
+            $min = \tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
             if ($min > 0) {
                 $playerData['changed_out'] = intval($playerData['changed_out']) + 1;
             }
 
             // Nicht ausgewechselt, aber wurde der Spieler vom Platz gestellt?
             if (intval($min) == 0) {
-                $min = tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
+                $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
                 if ($min != 0) {
                     $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
                     $isYellowRed = true;
@@ -275,7 +273,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
             }
             // Keine gelbrote, aber vielleicht rot?
             if (intval($min) == 0) {
-                $min = tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
+                $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
                 if ($min != 0) {
                     $playerData['card_red'] = intval($playerData['card_red']) + 1;
                 }
@@ -290,27 +288,27 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
 
         if ($ignorePlayer) {
             // Hier betrachten wir die eingewechselten Spieler
-            $min = tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match);
+            $min = \tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match);
             if ($min > 0) {
                 $playerData['match_count'] = intval($playerData['match_count']) + 1;
                 $playerData['changed_in'] = intval($playerData['changed_in']) + 1;
 
                 // Wurde der Spieler wieder ausgewechselt?
-                $min2 = tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
+                $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
                 if ($min2 > 0) {
                     $playerData['changed_out'] = intval($playerData['changed_out']) + 1;
                 }
 
                 // Wurde der Spieler vom Platz gestellt?
                 if (intval($min2) == 0) {
-                    $min2 = tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
+                    $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
                     if ($min2 != 0) {
                         $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
                         $isYellowRed = true;
                     }
                 }
                 if (intval($min2) == 0) {
-                    $min2 = tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
+                    $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
                     if ($min2 != 0) {
                         $playerData['card_red'] = intval($playerData['card_red']) + 1;
                     }
@@ -327,7 +325,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
         }
         if ($ignorePlayer) {
             // Bug 1864066 - Spieler, die nicht im Spiel waren können trotzdem rote Karten bekommen
-            if (tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match) != 0) {
+            if (\tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match) != 0) {
                 $playerData['card_red'] = intval($playerData['card_red']) + 1;
             }
         }
@@ -335,7 +333,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
             // Der Spieler war im Spiel. Wir suchen die restlichen Daten
             // Bug 1864071 - Gelbe Karten nur zählen, wenn nicht gelbrot
             if (! $isYellowRed) {
-                $min = tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
+                $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
                 if ($min != 0) {
                     $playerData['card_yellow'] = intval($playerData['card_yellow']) + 1;
                 }
@@ -352,15 +350,15 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
      * Zählt einen bestimmten Note-Typ für einen Spieler.
      *
      * @param int $type 0 oder MatchNote-Typ
-     * @param $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
-     * @param tx_cfcleaguefe_models_profile $player Referenz auf den Spieler
-     * @param tx_cfcleaguefe_models_match $match Referenz auf das Spiel
+     * @param string $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
+     * @param \tx_cfcleaguefe_models_profile $player Referenz auf den Spieler
+     * @param \tx_cfcleaguefe_models_match $match Referenz auf das Spiel
      * @param array $playerData Referenz auf die Statistikdaten des Spielers
      */
     protected function _countNote($type, $key, &$player, &$match, &$playerData)
     {
         // Die passenden Notes des Spielers ermitteln
-        $notes = tx_cfcleaguefe_util_StatisticsHelper::isNote($type, $player, $match);
+        $notes = \tx_cfcleaguefe_util_StatisticsHelper::isNote($type, $player, $match);
         if (is_array($notes)) {
             // Die Anzahl der Notes im Spiel für den Spieler hinzufügen
             $playerData[$key] = intval($playerData[$key]) + count($notes);
@@ -375,15 +373,15 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
      * auch auch die Werte für GOALS_HOME, GOALS_AWAY und GOALS_JOKER aktualisiert
      *
      * @param int $type 0 oder MatchNote-Typ
-     * @param $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
-     * @param tx_cfcleaguefe_models_profile $player Referenz auf den Spieler
-     * @param tx_cfcleaguefe_models_match $match Referenz auf das Spiel
+     * @param string $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
+     * @param \tx_cfcleaguefe_models_profile $player Referenz auf den Spieler
+     * @param \tx_cfcleaguefe_models_match $match Referenz auf das Spiel
      * @param array $playerData Referenz auf die Statistikdaten des Spielers
      */
     protected function _countGoals($type, $key, $player, $match, &$playerData)
     {
         // Die Tore des Spielers ermitteln
-        $notes = tx_cfcleaguefe_util_StatisticsHelper::isGoal($type, $player, $match);
+        $notes = \tx_cfcleaguefe_util_StatisticsHelper::isGoal($type, $player, $match);
         if (is_array($notes)) {
             // Die Anzahl der Tore im Spiel für den Spieler hinzufügen
             $playerData[$key] = intval($playerData[$key]) + count($notes);
@@ -396,7 +394,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
                 else {
                     $playerData['goals_away'] = intval($playerData['goals_away']) + count($notes);
                 }
-                if (tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match)) {
+                if (\tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match)) {
                     $playerData['goals_joker'] = intval($playerData['goals_joker']) + count($notes);
                 }
             }
@@ -431,8 +429,8 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
     /**
      * Sortiert die Spieler entsprechend der Reihenfolge im Team
      *
-     * @param tx_cfcleaguefe_models_profile[] $players
-     * @param tx_cfcleaguefe_models_team $team
+     * @param \tx_cfcleaguefe_models_profile[] $players
+     * @param \tx_cfcleaguefe_models_team $team
      */
     function _sortPlayer($players, $team)
     {
@@ -440,7 +438,7 @@ class tx_cfcleaguefe_sv2_PlayerStatistics extends Tx_Rnbase_Service_Base
         if (strlen(trim($team->getProperty('players'))) > 0) {
             if (count($players)) {
                 // Jetzt die Spieler in die richtige Reihenfolge bringen
-                $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('players'));
+                $uids = \Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('players'));
                 $uids = array_flip($uids);
                 foreach ($players as $record) {
                     // In $record liegt der Statistikdatensatz des Spielers
@@ -464,5 +462,8 @@ function playerStatsCmpPlayer($a, $b)
     $player1 = $a['player'];
     $player2 = $b['player'];
 
-    return strcmp(tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))), tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1))));
+    return strcmp(
+        \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
+        \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1)))
+    );
 }

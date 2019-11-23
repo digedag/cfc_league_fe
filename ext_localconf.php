@@ -29,13 +29,12 @@ if(intval($confArr['enableCalService'])) {
 }
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerStatistics' /* sv key */,
-  array(
+  [
     'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.player', 'description' => 'Statistical data about players', 'subtype' => 'player',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_PlayerStatistics.php',
-    'className' => 'tx_cfcleaguefe_sv2_PlayerStatistics',
-  )
+    'className' => 'System25\T3sports\Statistics\Service\PlayerStatistics',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_ScorerStatistics' /* sv key */,

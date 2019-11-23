@@ -1,4 +1,6 @@
 <?php
+use System25\T3sports\Statistics\Service\PlayerStatistics;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -22,8 +24,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
-
 /**
  * Service for scorer statistics
  * Since this list is similar to player statistics, it is based on that service.
@@ -31,7 +31,7 @@ tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv2_ScorerStatistics extends tx_cfcleaguefe_sv2_PlayerStatistics {
+class tx_cfcleaguefe_sv2_ScorerStatistics extends PlayerStatistics {
 
   /**
    * Liefert die Liste der besten Torschützen

@@ -1,4 +1,6 @@
 <?php
+use System25\T3sports\Statistics\Service\PlayerStatistics;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -22,7 +24,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
 
 /**
  * Service for summery of player statistics
@@ -31,7 +32,7 @@ tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_PlayerStatistics {
+class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends PlayerStatistics {
   private $result = array();
   /** Array with competition IDs of handled matches */
   private $compIds = array();
@@ -86,12 +87,4 @@ class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends tx_cfcleaguefe_sv2_Play
     }
     return $ret;
   }
-
 }
-
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerSummaryStatistics.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerSummaryStatistics.php']);
-}
-
-?>

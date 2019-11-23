@@ -1,4 +1,6 @@
 <?php
+use System25\T3sports\Statistics\PlayerStatistics;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -22,7 +24,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
 
 /**
  * Service for assist statistics
@@ -31,7 +32,7 @@ tx_rnbase::load('tx_cfcleaguefe_sv2_PlayerStatistics');
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv2_AssistStatistics extends tx_cfcleaguefe_sv2_PlayerStatistics {
+class tx_cfcleaguefe_sv2_AssistStatistics extends PlayerStatistics {
 
   /**
    * Liefert die Liste der besten Vorlagengeber

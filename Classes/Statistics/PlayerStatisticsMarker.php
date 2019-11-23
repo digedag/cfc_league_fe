@@ -1,8 +1,11 @@
 <?php
+
+namespace System25\T3sports\Statistics;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2019 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,16 +28,16 @@
 
 /**
  * Marker class for player statistics
- * 
+ *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv2_PlayerStatisticsMarker {
+class PlayerStatisticsMarker {
 	/**
-	 * Fills template of player statistics service. 
+	 * Fills template of player statistics service.
 	 *
 	 * @param string $srvTemplate
 	 * @param array $stats
-	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param \tx_rnbase_util_FormatUtil $formatter
 	 * @param string $statsConfId
 	 * @param string $statsMarker
 	 * @return string
@@ -64,15 +67,10 @@ class tx_cfcleaguefe_sv2_PlayerStatisticsMarker {
 			$rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
 		}
 		// Jetzt die einzelnen Teile zusammenfügen
+		$subpartArray = [];
 		$subpartArray['###'.$statsMarker.'_PROFILE###'] = implode($parts, $configurations->get($statsMarker.'profile.implode'));
 
 		$markerArray['###PLAYERCOUNT###'] = count($parts);
 		return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
 	}
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerStatisticsMarker.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/sv2/class.tx_cfcleaguefe_sv2_PlayerStatisticsMarker.php']);
-}
-
-?>
