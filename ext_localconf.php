@@ -38,23 +38,21 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_ScorerStatistics' /* sv key */,
-  array(
+  [
     'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.scorerlist', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_ScorerStatistics.php',
-    'className' => 'tx_cfcleaguefe_sv2_ScorerStatistics',
-  )
+    'className' => 'System25\T3sports\Statistics\Service\ScorerStatistics',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_AssistStatistics' /* sv key */,
-  array(
+  [
     'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.assistlist', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_AssistStatistics.php',
-    'className' => 'tx_cfcleaguefe_sv2_AssistStatistics',
-  )
+    'className' => 'System25\T3sports\Statistics\Service\AssistStatistics',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' /* sv key */,
@@ -67,13 +65,12 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_VisitorStatistics' /* sv key */,
-  array(
+  [
     'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.visitors', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv2/class.tx_cfcleaguefe_sv2_VisitorStatistics.php',
-    'className' => 'tx_cfcleaguefe_sv2_VisitorStatistics',
-  )
+    'className' => 'System25\T3sports\Statistics\Service\VisitorStatistics',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Matches' /* sv key */,
