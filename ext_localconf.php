@@ -19,13 +19,12 @@ $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league
 // Cal-Service nur bei Bedarf einbinden
 if(intval($confArr['enableCalService'])) {
 	tx_rnbase_util_Extensions::addService($_EXTKEY,  'cal_event_model' /* sv type */,  'tx_cfcleaguefe_sv1_MatchEvent' /* sv key */,
-	  array(
+	  [
 	    'title' => 'Cal Match Model', 'description' => '', 'subtype' => 'event',
 	    'available' => TRUE, 'priority' => 50, 'quality' => 50,
 	    'os' => '', 'exec' => '',
-	    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_MatchEvent.php',
-	    'className' => 'tx_cfcleaguefe_sv1_MatchEvent',
-	  )
+	    'className' => 'System25\T3sports\Service\MatchEventService',
+	  ]
 	);
 }
 
@@ -80,43 +79,39 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Matches' /* sv key */,
-  array(
+  [
     'title' => 'Team services', 'description' => 'Service functions for match access', 'subtype' => 'match',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Matches.php',
-    'className' => 'tx_cfcleaguefe_sv1_Matches',
-  )
+    'className' => 'System25\T3sports\Service\MatchService',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Teams' /* sv key */,
-  array(
+  [
     'title' => 'Team services', 'description' => 'Service functions for team access', 'subtype' => 'team',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Teams.php',
-    'className' => 'tx_cfcleaguefe_sv1_Teams',
-  )
+    'className' => 'System25\T3sports\Service\TeamService',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Competitions' /* sv key */,
-  array(
+  [
     'title' => 'Team services', 'description' => 'Service functions for competition access', 'subtype' => 'competition',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Competitions.php',
-    'className' => 'tx_cfcleaguefe_sv1_Competitions',
-  )
+    'className' => 'System25\T3sports\Service\CompetitionService',
+  ]
 );
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,  'tx_cfcleaguefe_sv1_Profiles' /* sv key */,
-  array(
+  [
     'title' => 'Profile services', 'description' => 'Service functions for profile access', 'subtype' => 'profile',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'sv1/class.tx_cfcleaguefe_sv1_Profiles.php',
-    'className' => 'tx_cfcleaguefe_sv1_Profiles',
-  )
+    'className' => 'System25\T3sports\Service\ProfileService',
+  ]
 );
 
 // Hook für historische Spiele

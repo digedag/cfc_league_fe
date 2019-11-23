@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
@@ -35,25 +36,25 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
     /**
      * handle request
      *
-     * @param arrayobject $parameters            
-     * @param tx_rnbase_configurations $configurations            
-     * @param arrayobject $viewData            
+     * @param arrayobject $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param arrayobject $viewData
      * @return string
      */
     protected function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         // Zunächst sollten wir die Anfangsbuchstaben ermitteln
         $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
-        
+
         if ($configurations->get('profilelist.charbrowser')) {
             $pagerData = $this->findPagerData($service, $configurations);
-            
+
             $firstChar = $parameters->offsetGet('charpointer');
             $firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar, 0, 1) : $pagerData['default'];
             $viewData->offsetSet('pagerData', $pagerData);
             $viewData->offsetSet('charpointer', $firstChar);
         }
-        
+
         $fields = array();
         $options = array(
             'count' => 1
@@ -76,7 +77,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
         $result = $service->search($fields, $options);
         $viewData->offsetSet('profiles', $result);
         $viewData->offsetSet('pagebrowser', $pageBrowser);
-        
+
         return null;
     }
 
@@ -96,7 +97,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
             if ($fields[SEARCH_FIELD_CUSTOM])
                 $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
             $fields[SEARCH_FIELD_CUSTOM] .= $where;
-            
+
             // Sortierung nach Datum
             $sort = array(
                 'DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), \'%m%d\')' => 'asc'
@@ -113,7 +114,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
                 $firsts = implode('\',\'', $firsts);
             } else
                 $firsts = $firstChar;
-            
+
             if ($fields[SEARCH_FIELD_CUSTOM])
                 $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
             $fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(last_name),1) IN ('$firsts') ";
@@ -125,9 +126,9 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
      * Wir verwenden einen alphabetischen Pager.
      * Also muß zunächst ermittelt werden, welche
      * Buchstaben überhaupt vorkommen.
-     * 
-     * @param tx_cfcleaguefe_ProfileService $service            
-     * @param tx_rnbase_configurations $configurations            
+     *
+     * @param \System25\T3sports\Service\ProfileService $service
+     * @param tx_rnbase_configurations $configurations
      */
     protected function findPagerData($service, &$configurations)
     {
@@ -150,7 +151,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
                 $wSpecials[$char] = $key;
             }
         }
-        
+
         $ret = array();
         foreach ($rows as $row) {
             if (array_key_exists(($row['first_char']), $wSpecials)) {
@@ -158,7 +159,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
             } else
                 $ret[$row['first_char']] = $row['size'];
         }
-        
+
         $current = 0;
         if (count($ret)) {
             $keys = array_keys($ret);
@@ -174,8 +175,8 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
     /**
      * Liefert die Anzahl der Ergebnisse pro Seite
      *
-     * @param array $parameters            
-     * @param tx_rnbase_configurations $configurations            
+     * @param array $parameters
+     * @param tx_rnbase_configurations $configurations
      * @return int
      */
     protected function getPageSize(&$parameters, &$configurations)

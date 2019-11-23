@@ -1,10 +1,11 @@
 <?php
-use System25\T3sports\Search\TeamSearch;
+
+namespace System25\T3sports\Service;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2019 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,31 +25,23 @@ use System25\T3sports\Search\TeamSearch;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_DB');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
-interface tx_cfcleaguefe_TeamService {
-  function search($fields, $options);
-}
-
 /**
  * Service for accessing team information
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Teams extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_TeamService  {
+class TeamService extends \Tx_Rnbase_Service_Base
+{
 
 	/**
 	 * Search database for teams
 	 *
 	 * @param array $fields
 	 * @param array $options
-	 * @return array of tx_cfcleaguefe_models_team
+	 * @return [\tx_cfcleaguefe_models_team]
 	 */
 	function search($fields, $options) {
-		tx_rnbase::load('tx_rnbase_util_SearchBase');
-		$searcher = tx_rnbase_util_SearchBase::getInstance(TeamSearch::class);
+	    $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\TeamSearch::class);
 		return $searcher->search($fields, $options);
 	}
-
 }

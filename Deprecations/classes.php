@@ -12,4 +12,9 @@ class tx_cfcleaguefe_search_Match extends System25\T3sports\Search\MatchSearch {
 class tx_cfcleaguefe_search_Profile extends System25\T3sports\Search\ProfileSearch {};
 class tx_cfcleaguefe_search_Team extends System25\T3sports\Search\TeamSearch {};
 
+class tx_cfcleaguefe_sv1_Competitions extends System25\T3sports\Service\CompetitionService {};
+class tx_cfcleaguefe_sv1_Teams extends System25\T3sports\Service\TeamService {};
+class tx_cfcleaguefe_sv1_Profiles extends System25\T3sports\Service\ProfileService {};
+class tx_cfcleaguefe_sv1_Matches extends System25\T3sports\Service\MatchService {};
+class tx_cfcleaguefe_sv1_MatchEvent extends System25\T3sports\Service\MatchEventService {};
 

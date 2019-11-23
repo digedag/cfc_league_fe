@@ -1,5 +1,6 @@
 <?php
-use System25\T3sports\Search\ProfileSearch;
+
+namespace System25\T3sports\Service;
 
 /***************************************************************
 *  Copyright notice
@@ -24,34 +25,27 @@ use System25\T3sports\Search\ProfileSearch;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_DB');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
-interface tx_cfcleaguefe_ProfileService {
-	function getTeamNotes(&$profile, &$team);
-	function search($fields, $options);
-}
-
 /**
  * Service for accessing profile information
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Profiles extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_ProfileService  {
+class ProfileService extends \Tx_Rnbase_Service_Base {
 
 	/**
 	 * Find team notes for a profile
 	 *
-	 * @param tx_cfcleaguefe_models_profile $profile
-	 * @param tx_cfcleaguefe_models_team $team
+	 * @param \tx_cfcleaguefe_models_profile $profile
+	 * @param \tx_cfcleaguefe_models_team $team
 	 */
-	function getTeamNotes(&$profile, &$team) {
+	public function getTeamNotes(&$profile, &$team) {
 		$what = '*';
 		$from = 'tx_cfcleague_team_notes';
+		$options = [];
 		$options['where'] = 'player = ' .$profile->uid . ' AND team = '. $team->uid;
 		$options['wrapperclass'] = 'tx_cfcleaguefe_models_teamNote';
 //		$options['orderby'] = 'minute asc, extra_time asc, uid asc';
-		$teamNotes = tx_rnbase_util_DB::doSelect($what, $from, $options,0);
+		$teamNotes = \tx_rnbase_util_DB::doSelect($what, $from, $options,0);
 		return $teamNotes;
 	}
 
@@ -63,8 +57,7 @@ class tx_cfcleaguefe_sv1_Profiles extends Tx_Rnbase_Service_Base implements tx_c
 	 * @return array of tx_cfcleaguefe_models_team
 	 */
 	function search($fields, $options) {
-		tx_rnbase::load('tx_rnbase_util_SearchBase');
-		$searcher = tx_rnbase_util_SearchBase::getInstance(ProfileSearch::class);
+		$searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\ProfileSearch::class);
 		return $searcher->search($fields, $options);
 	}
 

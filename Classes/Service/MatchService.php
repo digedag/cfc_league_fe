@@ -1,5 +1,6 @@
 <?php
-use System25\T3sports\Search\MatchSearch;
+
+namespace System25\T3sports\Service;
 
 /**
  * *************************************************************
@@ -26,27 +27,13 @@ use System25\T3sports\Search\MatchSearch;
  * *************************************************************
  */
 
-tx_rnbase::load('tx_rnbase_util_DB');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
-interface tx_cfcleaguefe_MatchService
-{
-
-    function search($fields, $options);
-
-    /**
-     *
-     * @return tx_cfcleaguefe_util_MatchTable
-     */
-    function getMatchTable();
-}
 
 /**
  * Service for accessing match information
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Matches extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_MatchService
+class MatchService extends \Tx_Rnbase_Service_Base
 {
 
     /**
@@ -56,10 +43,9 @@ class tx_cfcleaguefe_sv1_Matches extends Tx_Rnbase_Service_Base implements tx_cf
      * @param array $options
      * @return array of tx_cfcleaguefe_models_match
      */
-    function search($fields, $options)
+    public function search($fields, $options)
     {
-        tx_rnbase::load('tx_rnbase_util_SearchBase');
-        $searcher = tx_rnbase_util_SearchBase::getInstance(MatchSearch::class);
+        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\MatchSearch::class);
         return $searcher->search($fields, $options);
     }
 
@@ -69,7 +55,7 @@ class tx_cfcleaguefe_sv1_Matches extends Tx_Rnbase_Service_Base implements tx_cf
      */
     public function getMatchTable()
     {
-        return tx_rnbase::makeInstance('tx_cfcleague_util_MatchTableBuilder');
+        return \tx_rnbase::makeInstance('tx_cfcleague_util_MatchTableBuilder');
     }
 }
 

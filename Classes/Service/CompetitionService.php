@@ -1,4 +1,7 @@
 <?php
+
+namespace System25\T3sports\Service;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -27,7 +30,7 @@
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_sv1_Competitions extends Tx_Rnbase_Service_Base
+class CompetitionService extends \Tx_Rnbase_Service_Base
 {
 
     /**
@@ -35,12 +38,11 @@ class tx_cfcleaguefe_sv1_Competitions extends Tx_Rnbase_Service_Base
      *
      * @param array $fields
      * @param array $options
-     * @return array of tx_cfcleaguefe_models_competition
+     * @return [\tx_cfcleaguefe_models_competition]
      */
     public function search($fields, $options)
     {
-        tx_rnbase::load('tx_rnbase_util_SearchBase');
-        $searcher = tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\CompetitionSearch::class);
+        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\CompetitionSearch::class);
         return $searcher->search($fields, $options);
     }
 }

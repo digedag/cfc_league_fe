@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
@@ -53,7 +54,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     /**
      * Liefert den Profile-Service
      *
-     * @return tx_cfcleaguefe_ProfileService
+     * @return System25\T3sports\Service\ProfileService
      */
     public static function getProfileService()
     {
@@ -63,7 +64,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     /**
      * Liefert den Match-Service
      *
-     * @return tx_cfcleaguefe_MatchService
+     * @return \System25\T3sports\Service\MatchService
      */
     public static function getMatchService()
     {
@@ -73,7 +74,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     /**
      * Liefert den Team-Service
      *
-     * @return tx_cfcleaguefe_sv1_Teams
+     * @return \System25\T3sports\Service\TeamService
      */
     public static function getTeamService()
     {
@@ -83,7 +84,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     /**
      * Liefert den Wettbewerbsservice
      *
-     * @return tx_cfcleaguefe_sv1_Competitions
+     * @return \System25\T3sports\Service\CompetitionService
      */
     public static function getCompetitionService()
     {
