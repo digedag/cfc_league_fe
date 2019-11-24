@@ -35,12 +35,8 @@
 		"classmap" : [
 			"actions/",
 			"Deprecations/",
-			"filter/",
 			"hooks/",
 			"models/",
-			"search/",
-			"sv1/",
-			"sv2/",
 			"svmarker/",
 			"table/",
 			"tests/",
