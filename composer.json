@@ -22,13 +22,13 @@
 		"issues" : "https://github.com/digedag/cfc_league_fe/issues"
 	},
 	"replace" : {
-		"cfc_league_fe" : "self.version",
-		"typo3-ter/cfc-league-fe" : "self.version"
+		"typo3-ter/cfc-league-fe" : "self.version",
+		"digedag/cfc-league-fe" : "self.version"
 	},
 	"require" : {
 		"typo3/cms-core" : ">=6.2.0 <=8.7.99",
 		"digedag/cfc-league" : "^1.3.0",
-		"digedag/rn-base" : "^1.10.9*"
+		"digedag/rn-base" : "^1.10.9"
 	},
 	"autoload" : {
 		"psr-4": { "System25\\T3sports\\": "Classes" },
@@ -43,5 +43,25 @@
 			"util/",
 			"views/"
 		]
-	}
+	},
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin",
+        "preferred-install": {
+            "typo3/cms": "source"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "mkdir -p .Build/Web/typo3conf/ext/",
+            "[ -L .Build/Web/typo3conf/ext/cfc_league_fe ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/cfc_league_fe"
+        ]
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "cfc_league_fe",
+            "web-dir": ".Build/Web"
+        }
+    }
 }
