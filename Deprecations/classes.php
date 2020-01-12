@@ -16,7 +16,10 @@ class tx_cfcleaguefe_sv1_Competitions extends System25\T3sports\Service\Competit
 class tx_cfcleaguefe_sv1_Teams extends System25\T3sports\Service\TeamService {};
 class tx_cfcleaguefe_sv1_Profiles extends System25\T3sports\Service\ProfileService {};
 class tx_cfcleaguefe_sv1_Matches extends System25\T3sports\Service\MatchService {};
-class tx_cfcleaguefe_sv1_MatchEvent extends System25\T3sports\Service\MatchEventService {};
+
+if(tx_rnbase_util_Extensions::isLoaded('cal')) {
+    class tx_cfcleaguefe_sv1_MatchEvent extends System25\T3sports\Service\MatchEventService {};
+}
 class tx_cfcleaguefe_sv2_PlayerStatistics extends System25\T3sports\Statistics\Service\PlayerStatistics {};
 class tx_cfcleaguefe_sv2_PlayerStatisticsMarker extends System25\T3sports\Statistics\PlayerStatisticsMarker {};
 class tx_cfcleaguefe_sv2_PlayerSummaryStatistics extends System25\T3sports\Statistics\Service\PlayerSummaryStatistics {};

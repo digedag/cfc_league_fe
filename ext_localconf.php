@@ -17,7 +17,7 @@ $GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_initRecord
 $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
 
 // Cal-Service nur bei Bedarf einbinden
-if(intval($confArr['enableCalService'])) {
+if(((int)$confArr['enableCalService']) > 0 && tx_rnbase_util_Extensions::isLoaded('cal')) {
 	tx_rnbase_util_Extensions::addService($_EXTKEY,  'cal_event_model' /* sv type */,  'tx_cfcleaguefe_sv1_MatchEvent' /* sv key */,
 	  [
 	    'title' => 'Cal Match Model', 'description' => '', 'subtype' => 'event',
