@@ -1,8 +1,9 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,10 +34,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 
     function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-        $cObj = $formatter->cObj;
-        $markerArray = array();
-        $marks = array();
-        $penalties = array();
+        $marks = $markerArray = $penalties = [];
 
         // Die Ligatabelle zusammenbauen
         $subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $viewData, $penalties, $marks, $configurations);
@@ -54,12 +52,13 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 
     /**
      * Erstellt die Ligatabelle.
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      */
     protected function _createTable($templateList, $viewData, &$penalties, &$marks, $configurations)
     {
         $tableData = $viewData->offsetGet('tableData');
         // Sollen alle Teams gezeigt werden?
-        $tableSize = intval($configurations->get('leagueTableSize'));
+        $tableSize = $configurations->getInt('leagueTableSize');
         if ($tableSize && $tableSize < count($tableData)) {
             // Es sollen weniger Teams gezeigt werden als vorhanden sind
             // Diesen Ausschnitt müssen wir jetzt ermitteln
@@ -69,8 +68,8 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
         $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
         $templateEntry = $configurations->getCObj()->getSubpart($templateList, '###ROW###');
 
-        $parts = array();
-        $rowRoll = intval($configurations->get('leaguetableAllTime.table.roll.value'));
+        $parts = [];
+        $rowRoll = $configurations->getInt('leaguetableAllTime.table.roll.value');
         $rowRollCnt = 0;
         foreach ($tableData as $row) {
             $row['roll'] = $rowRollCnt;
@@ -83,7 +82,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }
         // Jetzt die einzelnen Teile zusammenfügen
-        $markerArray = array();
+        $markerArray = [];
         $subpartArray['###ROW###'] = implode($parts, $configurations->get('leaguetableAllTime.table.implode'));
         return $configurations->getCObj()->substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
@@ -93,7 +92,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
      * ermittelt und zurückgeliefert.
      *
      * @param &$tableData Daten der Tabelle
-     * @param $tableSize Maximale
+     * @param int $tableSize Maximale
      *            Anzahl Teams, die gezeigt werden soll
      */
     protected function _cropTable(&$tableData, $tableSize)
@@ -143,6 +142,9 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
 
     /**
      * Erstellt das Steuerungspanel für die Tabelle.
+     * 
+     * {@inheritDoc}
+     * @see tx_cfcleaguefe_views_LeagueTable::_createControls()
      */
     protected function _createControls($template, $viewData, $configurations)
     {
@@ -202,10 +204,10 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
         }
 
         $currentNoLink = $configurations->getInt('leaguetable.controls.' . $confName . '.current.noLink');
-        $markerArray = $subpartArray = $wrappedSubpartArray = array();
+        $markerArray = $subpartArray = $wrappedSubpartArray = [];
 
         // Jetzt über die vorhandenen Items iterieren
-        while (list ($key, $value) = each($itemsArr[0])) {
+        foreach ($itemsArr[0] as $key => $value) {
             $keepVars[$confName] = $key;
             $link->parameters($keepVars);
 
@@ -223,4 +225,3 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
         return $out;
     }
 }
-
