@@ -7,7 +7,7 @@ use System25\T3sports\Statistics\PlayerSummaryStatisticsMarker;
  * *************************************************************
  * Copyright notice
  *
- * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
+ * (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -45,11 +45,17 @@ class PlayerSummaryStatistics extends PlayerStatistics
      */
     private $compIds = [];
 
-    public function handleMatch(&$match, $clubId)
+    /**
+     *
+     * {@inheritDoc}
+     * @see \System25\T3sports\Statistics\Service\PlayerStatistics::handleMatch()
+     */
+    public function handleMatch($match, $clubId)
     {
-        if ($match->record['players_home'] || $match->record['players_guest'] || count($match->getMatchNotes()))
+        if ($match->getProperty('players_home') || $match->getProperty('players_guest') || count($match->getMatchNotes())) {
             $this->result['numberOfUsedMatches'] = $this->result['numberOfUsedMatches'] + 1;
-        $this->compIds[] = $match->record['competition'];
+        }
+        $this->compIds[] = $match->getProperty('competition');
     }
 
     /**
@@ -59,8 +65,9 @@ class PlayerSummaryStatistics extends PlayerStatistics
      */
     public function getResult()
     {
-        if (! array_key_exists('numberOfUsedMatches', $this->result))
+        if (! array_key_exists('numberOfUsedMatches', $this->result)) {
             $this->result['numberOfUsedMatches'] = 0;
+        }
         $teams = $this->getTeams($this->getScopeArray());
         $this->_setAdditionalData($this->getScopeArray(), $teams, array_unique($this->compIds));
         return $this->result;
@@ -84,15 +91,15 @@ class PlayerSummaryStatistics extends PlayerStatistics
     {
         // Wir zählen wieviele Spiele die Wettbewerbe haben, die in der
         // Statistik betrachtet wurden.
-        $ret = array();
+        $ret = [];
         $this->result['numberOfMatches'] = 0;
         foreach ($compUids as $compUid) {
             $comp = \tx_rnbase::makeInstance('tx_cfcleaguefe_models_competition', $compUid);
             // Gesucht: Anzahl Spiele der Teams gesamt und beendet
             // Spiele gesamt holen wir über getRounds
-            $teamIds = array();
+            $teamIds = [];
             foreach ($teams as $team) {
-                $teamIds[] = $team->uid;
+                $teamIds[] = $team->getUid();
             }
             $matchCount = $comp->getNumberOfMatches(implode($teamIds, ',')); // Spiele gesamt
             $this->result['numberOfMatches'] = $this->result['numberOfMatches'] + $matchCount;
