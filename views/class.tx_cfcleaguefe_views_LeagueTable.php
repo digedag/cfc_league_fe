@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -99,7 +99,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
             return '';
 
         $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###PENALTY###');
-        $parts = array();
+        $parts = [];
         foreach ($penalties as $penaltyArr) {
             foreach ($penaltyArr as $penalty) {
                 $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($penalty->record, 'leaguetable.penalty.', 0, 'PENALTY_');
@@ -109,7 +109,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
 
         if (count($parts)) {
             // Zum Schluß das Haupttemplate zusammenstellen
-            $markerArray = array();
+            $markerArray = [];
             $subpartArray['###PENALTY###'] = implode($parts, $configurations->get('leaguetable.penalty.implode'));
             $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); // , $wrappedSubpartArray);
         } else { // Keine Strafen vorhanden, es wird ein leerer String gesendet
@@ -155,7 +155,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }
         // Jetzt die einzelnen Teile zusammenfügen
-        $markerArray = array();
+        $markerArray = [];
         $subpartArray['###ROW###'] = implode($parts, $configurations->get('leaguetable.table.implode'));
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
@@ -242,20 +242,18 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
             '###CONTROL_POINTSYSTEM###' => ''
         ];
         if ($viewData->offsetGet('tabletype_select')) {
-            $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
+            $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(\tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
         }
 
         if ($viewData->offsetGet('tablescope_select')) {
-            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_TABLESCOPE###'), $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
+            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate(\tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
         }
 
         if ($viewData->offsetGet('pointsystem_select')) {
-            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate($this->formatter->cObj->getSubpart($template, '###CONTROL_POINTSYSTEM###'), $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
+            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(\tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
         }
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-        return $out;
-        // return implode($parts, $configurations->get('leaguetable.controls.implode'));
+        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
 
     /**
@@ -310,8 +308,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
             $linkStr = $formatter->wrap($linkStr, 'leaguetable.controls.' . $confName . ($isCurrent ? '.current.' : '.normal.'));
             $wrappedSubpartArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK###'] = explode($token, $linkStr);
         }
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-        return $out;
+        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 }
 

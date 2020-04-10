@@ -153,11 +153,11 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
             tx_rnbase::load('tx_rnbase_plot_Builder');
             $chart = tx_rnbase_plot_Builder::getInstance()->make($tsArr, false);
         } catch (Exception $e) {
-            $chart = 'Not possible';
+            $chart = 'Not possible: ' . $e->getMessage();
             tx_rnbase::load('tx_rnbase_util_Logger');
-            tx_rnbase_util_Logger::warn('Chart creation failed!', 'cfc_league_fe', array(
+            tx_rnbase_util_Logger::warn('Chart creation failed!', 'cfc_league_fe', [
                 'Exception' => $e->getMessage()
-            ));
+            ]);
         }
         return $chart;
     }

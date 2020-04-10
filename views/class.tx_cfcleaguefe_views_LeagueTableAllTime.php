@@ -39,15 +39,10 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
         // Die Ligatabelle zusammenbauen
         $subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $viewData, $penalties, $marks, $configurations);
 
-        // Jetzt die Strafen auflisten
-        // $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'),
-        // $penalties, $configurations);
-
         // Die Tabellensteuerung
         $subpartArray['###CONTROLS###'] = $this->_createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'), $viewData, $configurations);
 
-        $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-        return $out;
+        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
 
     /**
@@ -149,7 +144,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
     protected function _createControls($template, $viewData, $configurations)
     {
         $link = $configurations->createLink();
-        $pid = $GLOBALS['TSFE']->id; // Das Ziel der Seite vorbereiten
+        $pid = \tx_rnbase_util_TYPO3::getTSFE()->id; // Das Ziel der Seite vorbereiten
         $link->destination($pid); // Das Ziel der Seite vorbereiten
 
         $markerArray = [];
@@ -170,8 +165,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
             $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
         }
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-        return $out;
+        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
 
     /**
@@ -221,7 +215,6 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
             $linkStr = $formatter->wrap($linkStr, 'leaguetable.controls.' . $confName . (($key == $currItem) ? '.current.' : '.normal.'));
             $wrappedSubpartArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK###'] = explode($token, $linkStr);
         }
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-        return $out;
+        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 }

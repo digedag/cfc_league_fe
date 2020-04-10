@@ -43,22 +43,23 @@ class PlayerStatisticsMarker {
 	 * @return string
 	 */
 	function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker) {
-		$configurations =& $formatter->configurations;
+		$configurations = $formatter->getConfigurations();
 		// Das Template für einen Spieler holen
-		$playerTemplate = $formatter->cObj->getSubpart($srvTemplate,'###'.$statsMarker.'_PROFILE###');
+		$playerTemplate = \tx_rnbase_util_Templates::getSubpart($srvTemplate,'###'.$statsMarker.'_PROFILE###');
 
 		// Es wird der ProfileMarker verwendet
 		$profileMarkerObj = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
 		$profileMarkerObj->initLabelMarkers($formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
 		$markerArray = $profileMarkerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
 
-		$rowRoll = intval($configurations->get($statsConfId.'profile.roll.value'));
+		$rowRoll = (int) $configurations->get($statsConfId.'profile.roll.value');
 		$rowRollCnt = 0;
 		$parts = array();
 		foreach ($stats as $playerStat) {
 			$player = $playerStat['player'];
-			if(!is_object($player))
+			if(!is_object($player)) {
 				continue; // Ohne Spieler wird auch nix gezeigt
+			}
 			unset($playerStat['player']); // PHP 5.2, sonst klappt der merge nicht
 			$player->record = array_merge($playerStat, $player->record);
 			$player->record['roll'] = $rowRollCnt;
@@ -71,6 +72,6 @@ class PlayerStatisticsMarker {
 		$subpartArray['###'.$statsMarker.'_PROFILE###'] = implode($parts, $configurations->get($statsMarker.'profile.implode'));
 
 		$markerArray['###PLAYERCOUNT###'] = count($parts);
-		return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
+		return \tx_rnbase_util_Templates::substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
 	}
 }

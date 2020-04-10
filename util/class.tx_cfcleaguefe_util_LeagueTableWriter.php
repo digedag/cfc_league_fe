@@ -1,8 +1,11 @@
 <?php
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2016 Rene Nitzsche (rene@system25.de)
+ *  (c) 2009-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,12 +37,13 @@ class tx_cfcleaguefe_util_LeagueTableWriter
 
     public function writeLeagueTable($template, $tableData, $marks, &$configurations, $confId)
     {
-        $penalties = array(); // Strafen sammeln
+        $markerArray = $penalties = []; // Strafen sammeln
         $subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $tableData, $penalties, $marks, $configurations, $confId);
 
         // Jetzt die Strafen auflisten
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'PENALTIES'))
-            $subpartArray['###PENALTIES###'] = $this->_createPenalties($cObj->getSubpart($template, '###PENALTIES###'), $penalties, $configurations);
+        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'PENALTIES')) {
+            $subpartArray['###PENALTIES###'] = $this->_createPenalties(\tx_rnbase_util_Templates::getSubpart($template, '###PENALTIES###'), $penalties, $configurations);
+        }
 
         $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
         return $out;
@@ -47,11 +51,12 @@ class tx_cfcleaguefe_util_LeagueTableWriter
 
     /**
      * Erstellt die Ligatabelle.
+     * @param ConfigurationInterface $configurations
      */
     private function _createTable($templateList, $tableData, &$penalties, &$marks, &$configurations, $confId)
     {
         // Sollen alle Teams gezeigt werden?
-        $tableSize = intval($configurations->get($confId . 'leagueTableSize'));
+        $tableSize = $configurations->getInt($confId . 'leagueTableSize');
         if ($tableSize && $tableSize < count($tableData)) {
             // Es sollen weniger Teams gezeigt werden als vorhanden sind
             // Diesen Ausschnitt müssen wir jetzt ermitteln
@@ -80,7 +85,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }
         // Jetzt die einzelnen Teile zusammenfügen
-        $markerArray = array();
+        $markerArray = [];
         $subpartArray['###ROW###'] = implode($parts, $configurations->get($confId . 'table.implode'));
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
@@ -88,7 +93,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
     /**
      * Setzt die Tabellenmarkierungen für eine Zeile
      */
-    function _setMark(&$row, &$marks)
+    private function _setMark(&$row, &$marks)
     {
         if (is_array($marks) && array_key_exists($row['position'], $marks)) {
             // Markierung und Bezeichnung setzen
@@ -103,7 +108,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
     /**
      * Die Strafen müssen gesammelt und gezählt werden.
      */
-    function _preparePenalties(&$row, &$penalties)
+    private function _preparePenalties(&$row, &$penalties)
     {
         if (is_array($row['penalties'])) {
             $penalties[] = $row['penalties'];
@@ -116,12 +121,10 @@ class tx_cfcleaguefe_util_LeagueTableWriter
      * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
      * ermittelt und zurückgeliefert.
      *
-     * @param
-     *            &$tableData Daten der Tabelle
-     * @param $tableSize Maximale
-     *            Anzahl Teams, die gezeigt werden soll
+     * @param array &$tableData Daten der Tabelle
+     * @param int $tableSize Maximale Anzahl Teams, die gezeigt werden soll
      */
-    function _cropTable(&$tableData, $tableSize)
+    private function _cropTable(&$tableData, $tableSize)
     {
         // Es werden nur 5 Teams gezeigt, dabei wird das erste markierte Team in die Mitte gesetzt
         // Suche des Tabellenplatz des markierten Teams
@@ -149,9 +152,3 @@ class tx_cfcleaguefe_util_LeagueTableWriter
         return array_slice($tableData, $idxStart, $tableSize);
     }
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_LeagueTableWriter.php']) {
-    include_once ($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_LeagueTableWriter.php']);
-}
-
-?>

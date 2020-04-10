@@ -8,11 +8,14 @@ tx_rnbase::load('tx_cfcleaguefe_util_ServiceRegistry');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 // Hook for tt_news
-$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_ttnewsMarkers.php:tx_cfcleaguefe_hooks_ttnewsMarkers';
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = 'tx_cfcleaguefe_hooks_ttnewsMarkers';
 // LeagueTable in Match
-$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_TableMatchMarker.php:tx_cfcleaguefe_hooks_TableMatchMarker->addLeagueTable';
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_hooks_TableMatchMarker->addLeagueTable';
 // Matchtable current round in Match
-$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_initRecord'][] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_cfcleaguefe_hooks_TableMatchMarker.php:tx_cfcleaguefe_hooks_TableMatchMarker->addCurrentRound';
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_initRecord'][] = 'tx_cfcleaguefe_hooks_TableMatchMarker->addCurrentRound';
+// Hook für historische Spiele
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_svmarker_MatchHistory->addMatches';
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_svmarker_ChartMatch->addChart';
 
 $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
 
@@ -109,7 +112,4 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,
   ]
 );
 
-// Hook für historische Spiele
-$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'EXT:' . $_EXTKEY . '/svmarker/class.tx_cfcleaguefe_svmarker_MatchHistory.php:tx_cfcleaguefe_svmarker_MatchHistory->addMatches';
-$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'EXT:' . $_EXTKEY . '/svmarker/class.tx_cfcleaguefe_svmarker_ChartMatch.php:tx_cfcleaguefe_svmarker_ChartMatch->addChart';
 

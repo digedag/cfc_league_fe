@@ -46,7 +46,7 @@ class TeamStatisticsMarker extends \tx_rnbase_util_BaseMarker
     {
         $configurations = & $formatter->configurations;
         // Das Template für ein Team holen
-        $template = $formatter->cObj->getSubpart($srvTemplate, '###' . $statsMarker . '_TEAM###');
+        $template = \tx_rnbase_util_Templates::getSubpart($srvTemplate, '###' . $statsMarker . '_TEAM###');
 
         // Es wird der TeamMarker verwendet
         $markerObj = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');

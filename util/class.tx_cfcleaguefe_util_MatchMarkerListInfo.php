@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,16 +28,16 @@ tx_rnbase::load('tx_rnbase_util_ListMarkerInfo');
 class tx_cfcleaguefe_util_MatchMarkerListInfo extends tx_rnbase_util_ListMarkerInfo
 {
 
-    function init($template, &$formatter, $marker)
+    public function init($template, &$formatter, $marker)
     {
         // Im Template ist noch das Template für Spielfrei enthalten
-        $this->freeTemplate = $formatter->cObj->getSubpart($template, '###' . $marker . '_FREE###');
+        $this->freeTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###' . $marker . '_FREE###');
         // Dieses enfernen wir jetzt direkt aus dem Template
         $subpartArray = ['###' . $marker . '_FREE###' => ''];
-        $this->template = $formatter->cObj->substituteMarkerArrayCached($template, array(), $subpartArray);
+        $this->template =  \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [], $subpartArray);
     }
 
-    function getTemplate(&$item)
+    public function getTemplate(&$item)
     {
         return $item->isDummy() ? $this->freeTemplate : $this->template;
     }
