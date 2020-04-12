@@ -5,10 +5,22 @@ defined('TYPO3_MODE') or die();
 
 call_user_func(function()
 {
+    $extKey = 'cfc_league_fe';
     ////////////////////////////////
     // Plugin Competition anmelden
     ////////////////////////////////
-    $extKey = 'cfc_league_fe';
+
+    // Einige Felder ausblenden
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['tx_cfcleaguefe_competition']='layout,select_key,pages,recursive';
+
+    // Das tt_content-Feld pi_flexform einblenden
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_competition']='pi_flexform';
+
+    tx_rnbase_util_Extensions::addPiFlexFormValue(
+        'tx_cfcleaguefe_competition',
+        'FILE:EXT:cfc_league_fe/Configuration/Flexform/plugin_competition.xml'
+    );
+
     tx_rnbase_util_Extensions::addPlugin(
         [
             'LLL:EXT:'.$extKey.'/locallang_db.php:plugin.competition.label',
@@ -17,22 +29,22 @@ call_user_func(function()
         'list_type',
         $extKey
     );
-    
+
     ////////////////////////////////
     // Plugin Report anmelden
     ////////////////////////////////
 
     // Einige Felder ausblenden
-    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['tx_cfcleaguefe_competition']='layout,select_key,pages';
-    
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['tx_cfcleaguefe_report']='layout,select_key,pages,recursive';
+
     // Das tt_content-Feld pi_flexform einblenden
-    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_competition']='pi_flexform';
-    
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report']='pi_flexform';
+
     tx_rnbase_util_Extensions::addPiFlexFormValue(
-        'tx_cfcleaguefe_competition',
-        'FILE:EXT:cfc_league_fe/Configuration/Flexform/plugin_competition.xml'
+        'tx_cfcleaguefe_report',
+        'FILE:EXT:cfc_league_fe/Configuration/Flexform/plugin_report.xml'
     );
-    
+
     /**
      * Adds an entry to the list of plugins in content elements of type "Insert plugin"
      * Takes the $itemArray (label, value[,icon]) and adds to the items-array of 
@@ -51,11 +63,10 @@ call_user_func(function()
      */
     tx_rnbase_util_Extensions::addPlugin(
         [
-            'LLL:EXT:cfc_league_fe/locallang_db.php:plugin.competition.label',
-            'tx_cfcleaguefe_competition'
+            'LLL:EXT:cfc_league_fe/locallang_db.php:plugin.report.label',
+            'tx_cfcleaguefe_report'
         ],
         'list_type',
         $extKey
-        
     );
 });
