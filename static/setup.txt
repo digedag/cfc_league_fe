@@ -433,6 +433,7 @@ lib.t3sports.teamLogo {
         refField=t3logo
         refTable=tx_cfcleague_teams
       }
+      treatIdAsReference = 1
       maxW = {$plugin.tx_cfcleaguefe_report.maxW_logo}
       maxH = {$plugin.tx_cfcleaguefe_report.maxH_logo}
     }

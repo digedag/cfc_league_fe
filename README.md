@@ -6,6 +6,9 @@ T3sports Frontend
 [![Total Downloads](https://img.shields.io/packagist/dt/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
 [![License](https://img.shields.io/packagist/l/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
 [CHANGELOG](CHANGELOG.md)
+<a href="https://twitter.com/intent/follow?screen_name=T3sports1">
+  <img src="https://img.shields.io/twitter/follow/T3sports1.svg?label=Follow%20@T3sports1" alt="Follow @T3sports1" />
+</a>
 
 Extensive extension for Content Management System TYPO3 to manage sportclubs and competitions. This part of T3sports 
 contains the frontend plugins to show score tables, match reports, player archives...
