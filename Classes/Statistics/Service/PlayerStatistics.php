@@ -162,7 +162,9 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             $this->playersArr = $this->_sortPlayer($this->playersArr, $teams[0]);
         } else {
             // Die Spieler alphabetisch sortieren
-            usort($this->playersArr, 'playerStatsCmpPlayer');
+            usort($this->playersArr, function ($a, $b) {
+                return $this->playerStatsCmpPlayer($a, $b);
+            });
         }
         return $this->playersArr;
     }
@@ -452,18 +454,19 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         }
         return $ret;
     }
+
+    /**
+     * Sortierfunktion um die korrekte Reihenfolge nach Namen zu ermittlen
+     */
+    function playerStatsCmpPlayer($a, $b)
+    {
+        $player1 = $a['player'];
+        $player2 = $b['player'];
+        
+        return strcmp(
+            \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
+            \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1)))
+        );
+    }
 }
 
-/**
- * Sortierfunktion um die korrekte Reihenfolge nach Namen zu ermittlen
- */
-function playerStatsCmpPlayer($a, $b)
-{
-    $player1 = $a['player'];
-    $player2 = $b['player'];
-
-    return strcmp(
-        \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
-        \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1)))
-    );
-}
