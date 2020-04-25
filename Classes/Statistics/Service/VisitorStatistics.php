@@ -104,17 +104,29 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     {
         $sortOrder = $this->configurations->get('statistics.visitors.sortOrder');
         if ($sortOrder == 'home_total') {
-            usort($this->result, 'cmpVisitors_HomeTotal');
+            usort($this->result, function ($a, $b) {
+                return $this->cmpVisitors($a, $b, 'home_total');
+            });
         } elseif ($sortOrder == 'away_total') {
-            usort($this->result, 'cmpVisitors_AwayTotal');
+            usort($this->result, function ($a, $b) {
+                return $this->cmpVisitors($a, $b, 'away_total');
+            });
         } elseif ($sortOrder == 'all_total') {
-            usort($this->result, 'cmpVisitors_AllTotal');
+            usort($this->result, function ($a, $b) {
+                return $this->cmpVisitors($a, $b, 'all_total');
+            });
         } elseif ($sortOrder == 'home_average') {
-            usort($this->result, 'cmpVisitors_HomeAvg');
+            usort($this->result, function ($a, $b) {
+                return $this->cmpVisitors($a, $b, 'home_average');
+            });
         } elseif ($sortOrder == 'away_average') {
-            usort($this->result, 'cmpVisitors_AwayAvg');
+            usort($this->result, function ($a, $b) {
+                return $this->cmpVisitors($a, $b, 'away_average');
+            });
         } elseif ($sortOrder == 'all_average') {
-            usort($this->result, 'cmpVisitors_AllAvg');
+            usort($this->result, function ($a, $b) {
+                return $this->cmpVisitors($a, $b, 'all_average');
+            });
         }
     }
 
@@ -181,41 +193,11 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
         }
         return $dataArray[$teamId];
     }
-}
 
-function cmpVisitors_HomeAvg($a, $b)
-{
-    return cmpVisitors($a, $b, 'home_average');
-}
-
-function cmpVisitors_AwayAvg($a, $b)
-{
-    return cmpVisitors($a, $b, 'away_average');
-}
-
-function cmpVisitors_AllAvg($a, $b)
-{
-    return cmpVisitors($a, $b, 'all_average');
-}
-
-function cmpVisitors_HomeTotal($a, $b)
-{
-    return cmpVisitors($a, $b, 'home_total');
-}
-
-function cmpVisitors_AwayTotal($a, $b)
-{
-    return cmpVisitors($a, $b, 'away_total');
-}
-
-function cmpVisitors_AllTotal($a, $b)
-{
-    return cmpVisitors($a, $b, 'all_total');
-}
-
-function cmpVisitors($a, $b, $attr)
-{
-    $v1 = $a[$attr];
-    $v2 = $b[$attr];
-    return ($v1 == $v2) ? 0 : ($v1 < $v2) ? 1 : - 1;
+    function cmpVisitors($a, $b, $attr)
+    {
+        $v1 = $a[$attr];
+        $v2 = $b[$attr];
+        return ($v1 == $v2) ? 0 : ($v1 < $v2) ? 1 : -1;
+    }
 }
