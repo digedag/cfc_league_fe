@@ -1,2 +1,0 @@
-
-Bitte ins Changelog schauen!

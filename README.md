@@ -1,6 +1,7 @@
 T3sports Frontend
 =================
 
+<a href="https://github.com/digedag/cfc_league_fe"><img src="ext_icon.svg" width="20"></a>
 [![cfc_league_fe](ext_icon.gif)](https://github.com/digedag/cfc_league_fe)
 [![Latest Stable Version](https://img.shields.io/packagist/v/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
 [![Total Downloads](https://img.shields.io/packagist/dt/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
@@ -18,8 +19,7 @@ T3sports is the most extensive extension for sports management for CMS TYPO3. It
 Austria and Switzerland.
 
 **Keep update to date**
-It is **not** recommended to use the TER to install this extension, since there are only rare updates into TER. You should better 
-install and update from this Github repo. There are to ways to do this:
+It is **not** recommended to use the TER to install this extension, since there are only rare updates into TER. You should better install and update from this Github repo. There are three ways to do this:
 
 1. Use composer
 

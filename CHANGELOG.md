@@ -1,11 +1,12 @@
 
-
 Änderungen
 ----------
-v1.4.0 (??.04.2020)
+v1.4.0 (02.05.2020)
  * Support for TYPO3 9.5 LTS added
  * Support for TYPO3 6.2 LTS dropped
  * fix rendering of assigned team logo
+ * fix plugin wizards
+ * some refactorings
 
 v1.3.0 (05.10.2019)
  * always prefer static over dynamic lineup in match reports

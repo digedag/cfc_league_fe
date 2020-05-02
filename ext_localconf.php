@@ -112,4 +112,10 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,
   ]
 );
 
+if (TYPO3_MODE === 'BE') {
+    // Apply PageTSconfig
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:cfc_league_fe/Configuration/PageTS/modWizards.ts">'
+    );
+}
 
