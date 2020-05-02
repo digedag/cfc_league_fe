@@ -19,7 +19,8 @@ language: php
 #  - TYPO3_CORE="typo3/cms=^8.7.0"
 #  - TYPO3_CORE="typo3/minimal=^9.5"
 
-sudo: false
+os: linux
+dist: xenial
 
 addons:
     apt:
