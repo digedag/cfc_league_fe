@@ -6,11 +6,6 @@ defined('TYPO3_MODE') or die();
 call_user_func(function()
 {
     $extKey = 'cfc_league_fe';
-    Tx_Rnbase_Backend_Utility_Icons::getIconRegistry()->registerIcon(
-        't3sports_plugin',
-        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-        ['source' => 'EXT:cfc_league_fe/Resources/Public/Icons/ext_icon.svg']
-    );
 
     ////////////////////////////////
     // Plugin Competition anmelden

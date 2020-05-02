@@ -113,6 +113,12 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_data' /* sv type */,
 );
 
 if (TYPO3_MODE === 'BE') {
+    Tx_Rnbase_Backend_Utility_Icons::getIconRegistry()->registerIcon(
+        't3sports_plugin',
+        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        ['source' => 'EXT:cfc_league_fe/Resources/Public/Icons/ext_icon.svg']
+    );
+    
     // Apply PageTSconfig
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:cfc_league_fe/Configuration/PageTS/modWizards.ts">'
