@@ -47,13 +47,13 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club
      */
     public function getTeams($saisonIds, $agegroups)
     {
-        $what = 'distinct tx_cfcleague_teams.uid, tx_cfcleague_teams.comment, ' . 'tx_cfcleague_teams.name, tx_cfcleague_teams.short_name, ' . 'tx_cfcleague_teams.coaches, tx_cfcleague_teams.players, tx_cfcleague_teams.supporters, ' . 'tx_cfcleague_teams.coaches_comment, tx_cfcleague_teams.players_comment, tx_cfcleague_teams.supporters_comment, ' . 'tx_cfcleague_teams.dam_images';
-        $from = array(
+        $what = 'distinct tx_cfcleague_teams.uid, tx_cfcleague_teams.comment, ' . 'tx_cfcleague_teams.name, tx_cfcleague_teams.short_name, ' . 'tx_cfcleague_teams.coaches, tx_cfcleague_teams.players, tx_cfcleague_teams.supporters, ' . 'tx_cfcleague_teams.coaches_comment, tx_cfcleague_teams.players_comment, tx_cfcleague_teams.supporters_comment, ' . 'tx_cfcleague_teams.t3images';
+        $from = [
             'tx_cfcleague_teams INNER JOIN tx_cfcleague_competition c ON FIND_IN_SET(tx_cfcleague_teams.uid, c.teams) AND c.hidden=0 AND c.deleted=0 ',
             'tx_cfcleague_teams'
-        );
+        ];
         $options = [];
-        $options['where'] = 'tx_cfcleague_teams.club = ' . $this->uid . ' AND c.saison IN (' . $saisonIds . ')' . ' AND c.agegroup IN (' . $agegroups . ')';
+        $options['where'] = 'tx_cfcleague_teams.club = ' . $this->getUid() . ' AND c.saison IN (' . $saisonIds . ')' . ' AND c.agegroup IN (' . $agegroups . ')';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
 
         return Tx_Rnbase_Database_Connection::getInstance()->doSelect($what, $from, $options);

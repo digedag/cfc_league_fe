@@ -193,19 +193,16 @@ Es ist auch möglich die Anzahl der Teams in der Tabelle direkt über das Plugin
 einfach diese Zeile ein: `leagueTableSize = 5 `
 
 ## Umgang mit Bildern
-Mit der Version 0.6.0 wurde eine Umstellung der Bildausgabe vorgenommen. Die Ausgabe der Bilder erfolgt jetzt über eine 
-einheitliche Schnittstelle und kann per Typoscript und einem HTML-Template (fast) beliebig angepasst werden. Es sollte 
-möglich sein, so gut wie jede Javascript-Gallerie einzubinden. Vorlagen für Lightbox und Galleriffic werden bereits mitgeliefert.
+Mit der Version 0.6.0 wurde eine Umstellung der Bildausgabe vorgenommen. Die Ausgabe der Bilder erfolgt jetzt über eine  einheitliche Schnittstelle und kann per Typoscript und einem HTML-Template (fast) beliebig angepasst werden. Es sollte möglich sein, so gut wie jede Javascript-Gallerie einzubinden. Vorlagen für Lightbox und Galleriffic werden bereits mitgeliefert.
 
-Am Beispiel des Spielberichts soll gezeigt werden, wie man eine Gallerie für die Ausgabe der Bilder einbindet. Im HTML-Template 
-des Spiels befindet sich lediglich der Marker ###MATCH_PICTURES###. Diesem ist per Typoscript folgende Konfiguration zugewiesen:
+Am Beispiel des Spielberichts soll gezeigt werden, wie man eine Gallerie für die Ausgabe der Bilder einbindet. Im HTML-Template des Spiels befindet sich lediglich der Marker ###MATCH_PICTURES###. Diesem ist per Typoscript folgende Konfiguration zugewiesen:
 
 ```
 lib.t3sports.match {
   pictures = USER
   pictures {
-    userFunc = tx_rnbase_util_TSDAM->printImages
-    refField = dam_images
+    userFunc = tx_rnbase_util_TSFAL->printImages
+    refField = t3images
     refTable = tx_cfcleague_games
     template = EXT:cfc_league_fe/res/lightboxpics.html
     subpartName = ###PICTURES###

@@ -21,15 +21,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_models_match');
-tx_rnbase::load('tx_cfcleaguefe_models_profile');
-tx_rnbase::load('tx_cfcleaguefe_util_MatchTicker');
-tx_rnbase::load('Tx_Rnbase_Utility_T3General');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
-if (tx_rnbase_util_Extensions::isLoaded('dam')) {
-    require_once (tx_rnbase_util_Extensions::extPath('dam') . 'lib/class.tx_dam_media.php');
-}
 
 /**
  * Model für einen Spielbericht.
@@ -70,46 +62,6 @@ class tx_cfcleaguefe_models_matchreport
     public function getMatch()
     {
         return $this->match;
-    }
-
-    /**
-     * Returns all match pictures as html string
-     *
-     * @return HTML-String for match pictures
-     * @deprecated
-     *
-     */
-    function getPictures()
-    {
-        if (! tx_rnbase_util_Extensions::isLoaded('dam'))
-            return '';
-
-        $damPics = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_images');
-        $out = '';
-        while (list ($uid, $filePath) = each($damPics['files'])) {
-            $out .= $this->_formatter->getDAMImage($filePath, 'matchreport.images.', 'cfc_league');
-        }
-        return $out;
-    }
-
-    /**
-     * Es wird ein Array von String für die Darstellung von Mediendateien geliefert
-     *
-     * @return array of string
-     */
-    function getMedia()
-    {
-        if (! tx_rnbase_util_Extensions::isLoaded('dam'))
-            return '';
-        $arr = array();
-        $damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $this->match->uid, 'dam_media');
-        if (is_object($serviceObj = Tx_Rnbase_Utility_T3General::makeInstanceService('mediaplayer'))) {
-            // Player holen
-            while (list ($uid, $media) = each($damMedia['rows'])) {
-                $arr[] = $serviceObj->getPlayer($media, $this->_configurations->get('matchreport.media.'));
-            }
-        }
-        return $arr;
     }
 
     /**

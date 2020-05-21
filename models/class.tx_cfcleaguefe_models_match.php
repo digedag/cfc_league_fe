@@ -795,7 +795,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
              (SELECT tx_cfcleague_group.name FROM tx_cfcleague_group WHERE tx_cfcleague_group.uid = tx_cfcleague_competition.agegroup) As agegroup,
              date, round, round_name, stadium, status, visitors, link_ticker, tx_cfcleague_games.link_report, LENGTH(game_report) AS has_report
              ' . ($extended ? '
-                , game_report, game_report_author, tx_cfcleague_games.dam_images, referee, assists, system_home, system_guest
+                , game_report, game_report_author, tx_cfcleague_games.t3images, referee, assists, system_home, system_guest
                 , players_home, players_guest, substitutes_home, substitutes_guest
                 , coach_home, coach_guest' : '');
     }
