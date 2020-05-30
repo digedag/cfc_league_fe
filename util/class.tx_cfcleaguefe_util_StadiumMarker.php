@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2009-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,19 +54,18 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
         // Es wird das MarkerArray mit Daten gefüllt
         $ignore = self::findUnusedCols($item->getProperty(), $template, $marker);
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $ignore, $marker . '_', $item->getColumnNames());
-        $wrappedSubpartArray = array();
-        $subpartArray = array();
+        $wrappedSubpartArray = $subpartArray = [];
         $this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
         // Die Adressdaten setzen
-        if ($this->containsMarker($template, $marker . '_ADDRESS'))
+        if ($this->containsMarker($template, $marker . '_ADDRESS')) {
             $template = $this->_addAddress($template, $item->getAddress(), $formatter, $confId . 'address.', $marker . '_ADDRESS');
-        if ($this->containsMarker($template, $marker . '_MAP'))
+        }
+        if ($this->containsMarker($template, $marker . '_MAP')) {
             $template = $this->_addMap($template, $item, $formatter, $confId . 'map.', $marker . '_MAP');
+        }
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
-        return $out;
+        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
     /**
@@ -122,16 +121,15 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
         if ($this->containsMarker($template, $marker . '_DISTANCE') && self::hasGeoData($item)) {
             $lat = doubleval($configurations->get($confId . '_basePosition.latitude'));
             $lng = doubleval($configurations->get($confId . '_basePosition.longitude'));
-            tx_rnbase::load('tx_cfcleaguefe_util_Maps');
             $item->setProperty('distance', tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
         }
     }
 
     public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix)
     {
-        if (! $item->getCity() && ! $item->getZip() && ! $item->getLongitute() && ! $item->getLatitute())
+        if (! $item->getCity() && ! $item->getZip() && ! $item->getLongitute() && ! $item->getLatitute()) {
             return false;
-        tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+        }
 
         $marker = new tx_rnbase_maps_DefaultMarker();
         if ($item->getLongitute() || $item->getLatitute()) {
@@ -169,9 +167,9 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
     {
         $linkId = 'show';
         if ($item->isPersisted()) {
-            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array(
+            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, [
                 'stadium' => $item->getUid()
-            ), $template);
+            ], $template);
         } else {
             $linkMarker = $marker . '_' . strtoupper($linkId) . 'LINK';
             $remove = intval($formatter->configurations->get($confId . 'links.' . $linkId . '.removeIfDisabled'));

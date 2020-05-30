@@ -59,13 +59,9 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model
             $cObj = &tx_cal_registry::Registry('basic', 'cobj');
         }
 
-        $file = $cObj->fileResource($this->conf['view.']['cfc_league_events.']['template']);
-        if ($file == '') {
-            return '<h3>cal: no match template file found:</h3>' . $this->conf['view.']['cfc_league_events.']['template'];
-        }
-
-        $template = \tx_rnbase_util_Templates::getSubpart($file, $subpartMarker);
+        $template = \tx_rnbase_util_Templates::getSubpartFromFile($this->conf['view.']['cfc_league_events.']['template'], $subpartMarker);
         if (! $template) {
+            $marker = [];
             preg_match("/###(.*)###/", $subpartMarker, $marker);
             return 'could not find the -' . $marker[1] . '- subpart-marker in view.cfc_league_events.template: ' . $this->conf['view.']['cfc_league_events.']['template'];
         }

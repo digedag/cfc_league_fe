@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,9 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('tx_rnbase_maps_google_Icon');
-tx_rnbase::load('tx_rnbase_util_Extensions');
 
 /**
  * Utility methods for google maps integration
@@ -40,13 +37,12 @@ class tx_cfcleaguefe_util_Maps
         if (! $file) {
             return '';
         }
-        $templateCode = $configurations->getCObj()->fileResource($file);
-        $subpart = tx_rnbase_util_Templates::getSubpart($templateCode, $subpartName);
-        $order = array(
+        $subpart = tx_rnbase_util_Templates::getSubpartFromFile($file, $subpartName);
+        $order = [
             "\r\n",
             "\n",
             "\r"
-        );
+        ];
         $replace = '';
         return str_replace($order, $replace, $subpart);
     }
@@ -73,8 +69,8 @@ class tx_cfcleaguefe_util_Maps
             $icon = new tx_rnbase_maps_google_Icon($map);
             $icon->setName($iconName);
 
-            $height = intval($imgConf['file.']['maxH']);
-            $width = intval($imgConf['file.']['maxW']);
+            $height = (int) $imgConf['file.']['maxH'];
+            $width = (int) $imgConf['file.']['maxW'];
             $height = $height ? $height : 20;
             $width = $width ? $width : 20;
             $icon->setImage($url, $width, $height);
@@ -114,8 +110,9 @@ class tx_cfcleaguefe_util_Maps
         } else {
             $coord = self::lookupAddress($item->getStreet(), $item->getCity(), '', $item->getZip(), $item->getCountryCode());
         }
-        if ($coord)
+        if ($coord) {
             return self::calculateDistance($coord->getLatitude(), $coord->getLongitude(), $lat, $lng);
+        }
         return 0;
     }
 

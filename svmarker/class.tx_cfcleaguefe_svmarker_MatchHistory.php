@@ -85,13 +85,16 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base {
 		$matches = $srv->search($fields, $options);
 
 		// Wir brauchen das Template
-		$templateCode = $formatter->configurations->getCObj()->fileResource($formatter->configurations->get($confId.'template'));
-		if(!$templateCode) return '<!-- NO TEMPLATE FOUND -->';
-		$subpartName = $formatter->configurations->get($confId.'subpartName');
+		$subpartName = $formatter->getConfigurations()->get($confId.'subpartName');
 		$subpartName = $subpartName ? $subpartName : '###HISTORIC_MATCHES###';
-		$templateCode = tx_rnbase_util_Templates::getSubpart($templateCode, $subpartName);
-		if(!$templateCode) return '<!-- NO SUBPART '.$subpartName.' FOUND -->';
-
+		$templateCode = tx_rnbase_util_Templates::getSubpartFromFile(
+		    $formatter->getConfigurations()->get($confId.'template'),
+		    $subpartName
+		);
+		if(!$templateCode){
+		    return '<!-- NO SUBPART '.$subpartName.' FOUND -->';
+		}
+		
 		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 		$out = $listBuilder->render($matches,
 						false, $templateCode, 'tx_cfcleaguefe_util_MatchMarker',
