@@ -4,256 +4,297 @@
 	<meta>
 		<langDisable>1</langDisable>
 	</meta>
-  <sheets>
-    <sDEF>
-      <ROOT>
-        <TCEforms>
-          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.Common</sheetTitle>
-        </TCEforms>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.Common
+					</sheetTitle>
+				</TCEforms>
 
-        <type>array</type>
-        <el>
-    
-          <action> <!-- Bezeichner ist frei wählbar -->
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                  <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.CompetitionSelection</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_CompetitionSelection</numIndex>
-                  </numIndex>
-                  <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.MatchTable</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_MatchTable</numIndex>
-                  </numIndex>
-                  <numIndex index="2" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LeagueTable</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_LeagueTableShow</numIndex>
-                  </numIndex>
-                  <numIndex index="3" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.TableChart</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_TableChart</numIndex>
-                  </numIndex>
-                  <numIndex index="4" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LiveTickerList</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_LiveTickerList</numIndex>
-                  </numIndex>
-                  <numIndex index="5" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.Statistics</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_Statistics</numIndex>
-                  </numIndex>
-                  <numIndex index="6" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.TeamList</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_TeamList</numIndex>
-                  </numIndex>
-                  <numIndex index="7" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.MatchCrossTable</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_MatchCrossTable</numIndex>
-                  </numIndex>
-                  <numIndex index="10" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.StadiumList</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_StadiumList</numIndex>
-                  </numIndex>
-                  <numIndex index="20" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LeagueTableAllTime</numIndex>
-                    <numIndex index="1">tx_cfcleaguefe_actions_LeagueTableAllTime</numIndex>
-                  </numIndex>
-                </items>
-                <multiple>0</multiple>
-                <maxitems>10</maxitems>
-                <size>10</size>
-              </config>
-            </TCEforms>
-          </action>
-    
-          <saisonSelection> <!-- Bezeichner ist frei wählbar -->
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.saison</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <foreign_table>tx_cfcleague_saison</foreign_table>
-                <foreign_table_where>ORDER BY tx_cfcleague_saison.sorting</foreign_table_where>
-                <enableMultiSelectFilterTextfield>1</enableMultiSelectFilterTextfield>
-                <multiple>0</multiple>
-                <maxitems>200</maxitems>
-                <size>10</size>
-              </config>
-            </TCEforms>
-          </saisonSelection>
-          <saisonSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.saisonInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </saisonSelectionInput>
-    
-          <groupSelection> <!-- Bezeichner ist frei wählbar -->
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.group</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <foreign_table>tx_cfcleague_group</foreign_table>
-                <enableMultiSelectFilterTextfield>1</enableMultiSelectFilterTextfield>
-                <multiple>0</multiple>
-                <maxitems>20</maxitems>
-                <size>10</size>
-               </config>
-            </TCEforms>
-          </groupSelection>
-          <groupSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.groupInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </groupSelectionInput>
-    
-          <competitionSelection> <!-- Bezeichner ist frei wählbar -->
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competition</label>
-              <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_competition</allowed>
-                <multiple>0</multiple>
-                <maxitems>200</maxitems>
-                <size>10</size>
-                <wizards>
-                  <suggest>
-                    <type>suggest</type>
-                  </suggest>
-                </wizards>
-              </config>
-            </TCEforms>
-          </competitionSelection>
-          <competitionSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </competitionSelectionInput>
-          <scope.competition.type>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                  <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_league</numIndex>
-                    <numIndex index="1">1</numIndex>
-                  </numIndex>
-                  <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_ko</numIndex>
-                    <numIndex index="1">2</numIndex>
-                  </numIndex>
-                  <numIndex index="2" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_other</numIndex>
-                    <numIndex index="1">0</numIndex>
-                  </numIndex>
-                  <!-- numIndex index="3" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_combined</numIndex>
-                    <numIndex index="1">100</numIndex>
-                  </numIndex-->
-                </items>
-                <multiple>1</multiple>
-                <maxitems>4</maxitems>
-                <size>4</size>
-              </config>
-            </TCEforms>
-          </scope.competition.type>
-          <scope.competition.obligation>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                  <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.All</numIndex>
-                    <numIndex index="1">0</numIndex>
-                  </numIndex>
-                  <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.Obligate</numIndex>
-                    <numIndex index="1">1</numIndex>
-                  </numIndex>
-                  <numIndex index="2" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.Free</numIndex>
-                    <numIndex index="1">2</numIndex>
-                  </numIndex>
-                </items>
-                <multiple>0</multiple>
-                <maxitems>1</maxitems>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </scope.competition.obligation>
-          <roundSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.roundInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </roundSelectionInput>
-          <clubSelection>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.club</label>
-              <config>
+				<type>array</type>
+				<el>
 
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_club</allowed>
-                <foreign_table>tx_cfcleague_club</foreign_table>
-                <foreign_table_where>ORDER BY city,name</foreign_table_where>
-                <multiple>0</multiple>
-                <maxitems>20</maxitems>
-                <minitems>0</minitems>
-                <autoSizeMax>30</autoSizeMax>
-                <size>15</size>
-                <wizards>
-                  <suggest>
-                    <type>suggest</type>
-                  </suggest>
-                </wizards>
+					<action> <!-- Bezeichner ist frei wählbar -->
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.CompetitionSelection
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_CompetitionSelection
+										</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.MatchTable
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_MatchTable
+										</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LeagueTable
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_LeagueTableShow
+										</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.TableChart
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_TableChart
+										</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LiveTickerList
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_LiveTickerList
+										</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.Statistics
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_Statistics
+										</numIndex>
+									</numIndex>
+									<numIndex index="6" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.TeamList
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_TeamList
+										</numIndex>
+									</numIndex>
+									<numIndex index="7" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.MatchCrossTable
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_MatchCrossTable
+										</numIndex>
+									</numIndex>
+									<numIndex index="10" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.StadiumList
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_StadiumList
+										</numIndex>
+									</numIndex>
+									<numIndex index="20" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.LeagueTableAllTime
+										</numIndex>
+										<numIndex index="1">tx_cfcleaguefe_actions_LeagueTableAllTime
+										</numIndex>
+									</numIndex>
+								</items>
+								<multiple>0</multiple>
+								<maxitems>10</maxitems>
+								<size>10</size>
+							</config>
+						</TCEforms>
+					</action>
 
-              </config>
-            </TCEforms>
-          </clubSelection>
-          <clubSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.clubInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </clubSelectionInput>
-          <scopeTemplate>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.scopeTemplate</label>
-              <config>
-                <type>input</type>
-                <size>24</size>
-                <max>256</max>
-                <eval>trim</eval>
+					<saisonSelection> <!-- Bezeichner ist frei wählbar -->
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.saison
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<foreign_table>tx_cfcleague_saison</foreign_table>
+								<foreign_table_where>ORDER BY tx_cfcleague_saison.sorting
+								</foreign_table_where>
+								<enableMultiSelectFilterTextfield>1
+								</enableMultiSelectFilterTextfield>
+								<multiple>0</multiple>
+								<maxitems>200</maxitems>
+								<size>10</size>
+							</config>
+						</TCEforms>
+					</saisonSelection>
+					<saisonSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.saisonInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</saisonSelectionInput>
+
+					<groupSelection> <!-- Bezeichner ist frei wählbar -->
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.group
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<foreign_table>tx_cfcleague_group</foreign_table>
+								<enableMultiSelectFilterTextfield>1
+								</enableMultiSelectFilterTextfield>
+								<multiple>0</multiple>
+								<maxitems>20</maxitems>
+								<size>10</size>
+							</config>
+						</TCEforms>
+					</groupSelection>
+					<groupSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.groupInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</groupSelectionInput>
+
+					<competitionSelection> <!-- Bezeichner ist frei wählbar -->
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competition
+							</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_cfcleague_competition</allowed>
+								<multiple>0</multiple>
+								<maxitems>200</maxitems>
+								<size>10</size>
+								<wizards>
+									<suggest>
+										<type>suggest</type>
+									</suggest>
+								</wizards>
+							</config>
+						</TCEforms>
+					</competitionSelection>
+					<competitionSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</competitionSelectionInput>
+					<scope.competition.type>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_league
+										</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_ko
+										</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_other
+										</numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+									<!-- numIndex index="3" type="array"> <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_combined</numIndex> 
+										<numIndex index="1">100</numIndex> </numIndex -->
+								</items>
+								<multiple>1</multiple>
+								<maxitems>4</maxitems>
+								<size>4</size>
+							</config>
+						</TCEforms>
+					</scope.competition.type>
+					<scope.competition.obligation>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.All
+										</numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.Obligate
+										</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.Free
+										</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+								</items>
+								<multiple>0</multiple>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</scope.competition.obligation>
+					<roundSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.roundInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</roundSelectionInput>
+					<clubSelection>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.club
+							</label>
+							<config>
+
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_cfcleague_club</allowed>
+								<foreign_table>tx_cfcleague_club</foreign_table>
+								<foreign_table_where>ORDER BY city,name</foreign_table_where>
+								<multiple>0</multiple>
+								<maxitems>20</maxitems>
+								<minitems>0</minitems>
+								<autoSizeMax>30</autoSizeMax>
+								<size>15</size>
+								<wizards>
+									<suggest>
+										<type>suggest</type>
+									</suggest>
+								</wizards>
+
+							</config>
+						</TCEforms>
+					</clubSelection>
+					<clubSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.clubInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</clubSelectionInput>
+					<scopeTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.scopeTemplate
+							</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
 								<wizards type="array">
 									<_PADDING>2</_PADDING>
 									<link type="array">
@@ -271,138 +312,151 @@
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
 										</params>
-										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1
+										</JSopenParams>
 									</link>
 								</wizards>
-              </config>
-            </TCEforms>
-          </scopeTemplate>
-        </el>
-      </ROOT>
-    </sDEF>
+							</config>
+						</TCEforms>
+					</scopeTemplate>
+				</el>
+			</ROOT>
+		</sDEF>
 
-    <s_matchtable>
-      <ROOT>
-        <TCEforms>
-          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.MatchTable</sheetTitle>
-        </TCEforms>
+		<s_matchtable>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.MatchTable
+					</sheetTitle>
+				</TCEforms>
 
-        <type>array</type>
-        <el>
-          <matchtable.match.links.report.pid>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.report_page</label>
-              <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>pages</allowed>
-                <multiple>0</multiple>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </matchtable.match.links.report.pid>
-          <matchtable.fields.MATCH.STATUS.OP_IN_INT>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                  <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_scheduled</numIndex>
-                    <numIndex index="1">0</numIndex>
-                  </numIndex>
-                  <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_running</numIndex>
-                    <numIndex index="1">1</numIndex>
-                  </numIndex>
-                  <numIndex index="2" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_finished</numIndex>
-                    <numIndex index="1">2</numIndex>
-                  </numIndex>
-                  <numIndex index="3" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_invalid</numIndex>
-                    <numIndex index="1">-1</numIndex>
-                  </numIndex>
-                  <numIndex index="4" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_rescheduled</numIndex>
-                    <numIndex index="1">-10</numIndex>
-                  </numIndex>
-                </items>
-                <multiple>1</multiple>
-                <maxitems>10</maxitems>
-                <size>5</size>
-              </config>
-            </TCEforms>
-          </matchtable.fields.MATCH.STATUS.OP_IN_INT>
-          <matchtable.options.limit>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.limit</label>
-              <config>
-                <type>input</type>
-                <checkbox>0</checkbox>
-                <default>0</default>
-                <size>3</size>
-                <max>3</max>
-                <range>
-                  <upper>365</upper>
-                  <lower>0</lower>
-                </range>
-                <eval>int</eval>
-              </config>
-            </TCEforms>
-          </matchtable.options.limit>
+				<type>array</type>
+				<el>
+					<matchtable.match.links.report.pid>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.report_page
+							</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<multiple>0</multiple>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</matchtable.match.links.report.pid>
+					<matchtable.fields.MATCH.STATUS.OP_IN_INT>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_scheduled
+										</numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_running
+										</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_finished
+										</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_invalid
+										</numIndex>
+										<numIndex index="1">-1</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_rescheduled
+										</numIndex>
+										<numIndex index="1">-10</numIndex>
+									</numIndex>
+								</items>
+								<multiple>1</multiple>
+								<maxitems>10</maxitems>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</matchtable.fields.MATCH.STATUS.OP_IN_INT>
+					<matchtable.options.limit>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.limit
+							</label>
+							<config>
+								<type>input</type>
+								<checkbox>0</checkbox>
+								<default>0</default>
+								<size>3</size>
+								<max>3</max>
+								<range>
+									<upper>365</upper>
+									<lower>0</lower>
+								</range>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</matchtable.options.limit>
 
-          <matchtable.timeRangePast>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.time_range.past</label>
-              <config>
-                <type>input</type>
-                <checkbox>0</checkbox>
-                <default>0</default>
-                <size>3</size>
-                <max>3</max>
-                <range>
-                  <upper>365</upper>
-                  <lower>0</lower>
-                </range>
-                <eval>int</eval>
-              </config>
-            </TCEforms>
-          </matchtable.timeRangePast>
+					<matchtable.timeRangePast>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.time_range.past
+							</label>
+							<config>
+								<type>input</type>
+								<checkbox>0</checkbox>
+								<default>0</default>
+								<size>3</size>
+								<max>3</max>
+								<range>
+									<upper>365</upper>
+									<lower>0</lower>
+								</range>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</matchtable.timeRangePast>
 
-          <matchtable.timeRangeFuture>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.time_range.future</label>
-              <config>
-                <type>input</type>
-                <checkbox>0</checkbox>
-                <default>0</default>
-                <size>3</size>
-                <max>3</max>
-                <range>
-                  <upper>365</upper>
-                  <lower>0</lower>
-                </range>
-                <eval>int</eval>
-              </config>
-            </TCEforms>
-          </matchtable.timeRangeFuture>
+					<matchtable.timeRangeFuture>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.time_range.future
+							</label>
+							<config>
+								<type>input</type>
+								<checkbox>0</checkbox>
+								<default>0</default>
+								<size>3</size>
+								<max>3</max>
+								<range>
+									<upper>365</upper>
+									<lower>0</lower>
+								</range>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</matchtable.timeRangeFuture>
 
-          <matchtableTemplate>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
-              <config>
-                <type>input</type>
-                <size>24</size>
-                <max>256</max>
-                <eval>trim</eval>
+					<matchtableTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template
+							</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
 								<wizards type="array">
 									<_PADDING>2</_PADDING>
 									<link type="array">
@@ -420,160 +474,179 @@
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
 										</params>
-										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1
+										</JSopenParams>
 									</link>
 								</wizards>
-              </config>
-            </TCEforms>
-          </matchtableTemplate>
-          <matchtable.options.debug>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </matchtable.options.debug>
+							</config>
+						</TCEforms>
+					</matchtableTemplate>
+					<matchtable.options.debug>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</matchtable.options.debug>
 
-        </el>
-      </ROOT>
-    </s_matchtable>
+				</el>
+			</ROOT>
+		</s_matchtable>
 
-    <s_leaguetable>
-      <ROOT>
-        <TCEforms>
-          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.LeagueTable</sheetTitle>
-        </TCEforms>
+		<s_leaguetable>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.LeagueTable
+					</sheetTitle>
+				</TCEforms>
 
-        <type>array</type>
-        <el>
-          <tablescope> <!-- Bezeichner ist frei wählbar -->
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableScope</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                  <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablescope.Normal</numIndex>
-                    <numIndex index="1">0</numIndex>
-                  </numIndex>
-                  <numIndex index="3" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablescope.FirstHalf</numIndex>
-                    <numIndex index="1">1</numIndex>
-                  </numIndex>
-                  <numIndex index="4" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablescope.SecondHalf</numIndex>
-                    <numIndex index="1">2</numIndex>
-                  </numIndex>
-                </items>
-                <multiple>0</multiple>
-                <maxitems>1</maxitems>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </tablescope>
-          <tablescopeSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableScopeInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </tablescopeSelectionInput>
-          <tabletype> <!-- Home- Away- or Fulltable -->
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableType</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                  <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tabletype.Normal</numIndex>
-                    <numIndex index="1">0</numIndex>
-                  </numIndex>
-                  <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tabletype.Home</numIndex>
-                    <numIndex index="1">1</numIndex>
-                  </numIndex>
-                  <numIndex index="2" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tabletype.Guest</numIndex>
-                    <numIndex index="1">2</numIndex>
-                  </numIndex>
-                </items>
-                <multiple>0</multiple>
-                <maxitems>1</maxitems>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </tabletype>
-          <tabletypeSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableTypeInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </tabletypeSelectionInput>
-          <pointSystemSelectionInput>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.PointSystemInput</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </pointSystemSelectionInput>
-          <leaguetable.useRoundFromScope>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.UseRoundFromScope</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </leaguetable.useRoundFromScope>
-          <leaguetable.noSkipOtherRounds>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.noSkipOtherRounds</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </leaguetable.noSkipOtherRounds>
-          <showLiveTable>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.ShowLiveTable</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </showLiveTable>
+				<type>array</type>
+				<el>
+					<tablescope> <!-- Bezeichner ist frei wählbar -->
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableScope
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablescope.Normal
+										</numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablescope.FirstHalf
+										</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablescope.SecondHalf
+										</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+								</items>
+								<multiple>0</multiple>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</tablescope>
+					<tablescopeSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableScopeInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</tablescopeSelectionInput>
+					<tabletype> <!-- Home- Away- or Fulltable -->
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableType
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tabletype.Normal
+										</numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tabletype.Home
+										</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tabletype.Guest
+										</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+								</items>
+								<multiple>0</multiple>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</tabletype>
+					<tabletypeSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableTypeInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</tabletypeSelectionInput>
+					<pointSystemSelectionInput>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.PointSystemInput
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</pointSystemSelectionInput>
+					<leaguetable.useRoundFromScope>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.UseRoundFromScope
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</leaguetable.useRoundFromScope>
+					<leaguetable.noSkipOtherRounds>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.noSkipOtherRounds
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</leaguetable.noSkipOtherRounds>
+					<showLiveTable>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.ShowLiveTable
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</showLiveTable>
 
-          <markClubs>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.clubs</label>
-              <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_club</allowed>
-                <multiple>0</multiple>
-                <size>5</size>
-                <maxitems>20</maxitems>
-              </config>
-            </TCEforms>
-          </markClubs>
-          <leaguetableTemplate>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
-              <config>
-                <type>input</type>
-                <size>24</size>
-                <max>256</max>
-                <eval>trim</eval>
+					<markClubs>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.leaguetable.clubs
+							</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_cfcleague_club</allowed>
+								<multiple>0</multiple>
+								<size>5</size>
+								<maxitems>20</maxitems>
+							</config>
+						</TCEforms>
+					</markClubs>
+					<leaguetableTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template
+							</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
 								<wizards type="array">
 									<_PADDING>2</_PADDING>
 									<link type="array">
@@ -591,167 +664,154 @@
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
 										</params>
-										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1
+										</JSopenParams>
 									</link>
 								</wizards>
-              </config>
-            </TCEforms>
-          </leaguetableTemplate>
-          <leaguetable.filter.options.debug>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </leaguetable.filter.options.debug>
-        </el>
-      </ROOT>
-    </s_leaguetable>
-    <s_tablechart>
-      <ROOT>
-        <TCEforms>
-          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TableChart</sheetTitle>
-        </TCEforms>
+							</config>
+						</TCEforms>
+					</leaguetableTemplate>
+					<leaguetable.filter.options.debug>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</leaguetable.filter.options.debug>
+				</el>
+			</ROOT>
+		</s_leaguetable>
+		<s_tablechart>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TableChart
+					</sheetTitle>
+				</TCEforms>
 
-        <type>array</type>
-        <el>
-          <tablechart.chartClubs>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablechart.clubs</label>
-              <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>tx_cfcleague_club</allowed>
-                <multiple>0</multiple>
-                <size>5</size>
-                <maxitems>20</maxitems>
-              </config>
-            </TCEforms>
-          </tablechart.chartClubs>
-          <tablechart.library>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableType</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                  <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_flot</numIndex>
-                    <numIndex index="1">flot</numIndex>
-                  </numIndex>
-                  <numIndex index="2" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_jqplot</numIndex>
-                    <numIndex index="1">jqplot</numIndex>
-                  </numIndex>
-                </items>
-                <multiple>0</multiple>
-                <maxitems>1</maxitems>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </tablechart.library>
-          <chart.defaults.colors>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablechart.colors</label>
-              <config>
-                <type>input</type>
-                <size>30</size>
-                <max>200</max>
-                <eval>trim</eval>
-              </config>
-            </TCEforms>
-          </chart.defaults.colors>
-        </el>
-      </ROOT>
-    </s_tablechart>
-    <s_statistics>
-      <!-- 
-        Hinweis: Die Spielerstatistik ist im Plugin Competition, weil sie auf einen Wettbewerb bezogen ist. 
-        Wettbewerbe gibt es in den Reports nicht!
-       -->
-      <ROOT>
-        <TCEforms>
-          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.Statistics</sheetTitle>
-        </TCEforms>
+				<type>array</type>
+				<el>
+					<tablechart.chartClubs>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablechart.clubs
+							</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_cfcleague_club</allowed>
+								<multiple>0</multiple>
+								<size>5</size>
+								<maxitems>20</maxitems>
+							</config>
+						</TCEforms>
+					</tablechart.chartClubs>
+					<tablechart.library>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableType
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_flot
+										</numIndex>
+										<numIndex index="1">flot</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_jqplot
+										</numIndex>
+										<numIndex index="1">jqplot</numIndex>
+									</numIndex>
+								</items>
+								<multiple>0</multiple>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</tablechart.library>
+					<chart.defaults.colors>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablechart.colors
+							</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+								<max>200</max>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</chart.defaults.colors>
+				</el>
+			</ROOT>
+		</s_tablechart>
+		<s_statistics>
+			<!-- Hinweis: Die Spielerstatistik ist im Plugin Competition, weil sie 
+				auf einen Wettbewerb bezogen ist. Wettbewerbe gibt es in den Reports nicht! -->
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.Statistics
+					</sheetTitle>
+				</TCEforms>
 
-        <type>array</type>
-        <el>
-          <statisticTypes>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type</label>
-              <config>
-                <type>select</type>
-                <renderType>selectMultipleSideBySide</renderType>
-                <items type="array">
-                </items>
-                <itemsProcFunc>tx_cfcleaguefe_util_serviceRegistry->lookupStatistics</itemsProcFunc>
-                <multiple>0</multiple>
-                <maxitems>10</maxitems>
-                <size>5</size>
-              </config>
-            </TCEforms>
-          </statisticTypes>
-<!-- TODO: Die Zusatzangaben zu den Spielern muessten dynamisch eingeblendet werden -->
-          <!-- playerStatsSortOrder>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.sortorder</label>
-              <config>
-                <type>radio</type>
-                <items type="array">
-                  <numIndex index="0" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.sortorderAlphabetical</numIndex>
-                    <numIndex index="1">0</numIndex>
-                  </numIndex>
-                  <numIndex index="1" type="array">
-                    <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.sortorderTeam</numIndex>
-                    <numIndex index="1">1</numIndex>
-                  </numIndex>
-                </items>
-              </config>
-            </TCEforms>
-          </playerStatsSortOrder>
+				<type>array</type>
+				<el>
+					<statisticTypes>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<items type="array">
+								</items>
+								<itemsProcFunc>tx_cfcleaguefe_util_serviceRegistry->lookupStatistics
+								</itemsProcFunc>
+								<multiple>0</multiple>
+								<maxitems>10</maxitems>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</statisticTypes>
+					<!-- TODO: Die Zusatzangaben zu den Spielern muessten dynamisch eingeblendet 
+						werden -->
+					<!-- playerStatsSortOrder> <TCEforms> <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.sortorder</label> 
+						<config> <type>radio</type> <items type="array"> <numIndex index="0" type="array"> 
+						<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.sortorderAlphabetical</numIndex> 
+						<numIndex index="1">0</numIndex> </numIndex> <numIndex index="1" type="array"> 
+						<numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.sortorderTeam</numIndex> 
+						<numIndex index="1">1</numIndex> </numIndex> </items> </config> </TCEforms> 
+						</playerStatsSortOrder> <playerStatsTimeout> <TCEforms> <exclude>1</exclude> 
+						<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.timeout</label> 
+						<config> <type>input</type> <default>0</default> <size>5</size> <max>5</max> 
+						<range> <upper>99999</upper> <lower>0</lower> </range> <eval>int</eval> </config> 
+						</TCEforms> </playerStatsTimeout -->
+					<statistic.callbackmode>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.callbackmode
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</statistic.callbackmode>
 
-          <playerStatsTimeout>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.playerstatistics.timeout</label>
-              <config>
-                <type>input</type>
-                <default>0</default>
-                <size>5</size>
-                <max>5</max>
-                <range>
-                  <upper>99999</upper>
-                  <lower>0</lower>
-                </range>
-                <eval>int</eval>
-              </config>
-            </TCEforms>
-          </playerStatsTimeout-->
-          <statistic.callbackmode>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.callbackmode</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </statistic.callbackmode>
-
-          <statisticTemplate>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
-              <config>
-                <type>input</type>
-                <size>24</size>
-                <max>256</max>
-                <eval>trim</eval>
+					<statisticTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template
+							</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
 								<wizards type="array">
 									<_PADDING>2</_PADDING>
 									<link type="array">
@@ -769,65 +829,71 @@
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
 										</params>
-										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1
+										</JSopenParams>
 									</link>
 								</wizards>
-              </config>
-            </TCEforms>
-          </statisticTemplate>
+							</config>
+						</TCEforms>
+					</statisticTemplate>
 
-        </el>
-      </ROOT>
-    </s_statistics>
-    <s_stadiumlist>
-      <ROOT>
-        <TCEforms>
-          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.StadiumList</sheetTitle>
-        </TCEforms>
+				</el>
+			</ROOT>
+		</s_statistics>
+		<s_stadiumlist>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.StadiumList
+					</sheetTitle>
+				</TCEforms>
 
-        <type>array</type>
-        <el>
-          <stadiumlist.stadium.links.show.pid>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_detailspage</label>
-              <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>pages</allowed>
-                <multiple>0</multiple>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </stadiumlist.stadium.links.show.pid>
+				<type>array</type>
+				<el>
+					<stadiumlist.stadium.links.show.pid>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_detailspage
+							</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<multiple>0</multiple>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</stadiumlist.stadium.links.show.pid>
 
-          <stadiumlist.map.showBasePoint>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.showDistanceBasePoint</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </stadiumlist.map.showBasePoint>
-          <stadiumlist.stadium.charbrowser>
-            <TCEforms>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_charbrowser</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </stadiumlist.stadium.charbrowser>
+					<stadiumlist.map.showBasePoint>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.showDistanceBasePoint
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</stadiumlist.map.showBasePoint>
+					<stadiumlist.stadium.charbrowser>
+						<TCEforms>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_common_charbrowser
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</stadiumlist.stadium.charbrowser>
 
-          <stadiumlistTemplate>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
-              <config>
-                <type>input</type>
-                <size>24</size>
-                <max>256</max>
-                <eval>trim</eval>
+					<stadiumlistTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template
+							</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
 								<wizards type="array">
 									<_PADDING>2</_PADDING>
 									<link type="array">
@@ -845,126 +911,136 @@
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
 										</params>
-										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1
+										</JSopenParams>
 									</link>
 								</wizards>
-              </config>
-            </TCEforms>
-          </stadiumlistTemplate>
-          <stadiumlist.options.debug>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </stadiumlist.options.debug>
+							</config>
+						</TCEforms>
+					</stadiumlistTemplate>
+					<stadiumlist.options.debug>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</stadiumlist.options.debug>
 
-        </el>
-      </ROOT>
-    </s_stadiumlist>
-    <s_tickerlist>
-      <ROOT>
-        <TCEforms>
-          <sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TickerList</sheetTitle>
-        </TCEforms>
+				</el>
+			</ROOT>
+		</s_stadiumlist>
+		<s_tickerlist>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TickerList
+					</sheetTitle>
+				</TCEforms>
 
-        <type>array</type>
-        <el>
-          <tickerlist.match.links.ticker.pid>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tickerlist.ticker_page</label>
-              <config>
-                <type>group</type>
-                <internal_type>db</internal_type>
-                <allowed>pages</allowed>
-                <multiple>0</multiple>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </tickerlist.match.links.ticker.pid>
+				<type>array</type>
+				<el>
+					<tickerlist.match.links.ticker.pid>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tickerlist.ticker_page
+							</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<multiple>0</multiple>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</tickerlist.match.links.ticker.pid>
 
-          <tickerlist.match.links.ticker.fixedUrl>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tickerlist.ticker_url</label>
-              <config>
-                <type>input</type>
-                <size>24</size>
-                <max>256</max>
-                <eval>trim</eval>
-              </config>
-            </TCEforms>
-          </tickerlist.match.links.ticker.fixedUrl>
+					<tickerlist.match.links.ticker.fixedUrl>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tickerlist.ticker_url
+							</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</tickerlist.match.links.ticker.fixedUrl>
 
-          <tickerlistTemplate>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template</label>
-              <config>
-                <type>input</type>
-                <size>24</size>
-                <max>256</max>
-                <eval>trim</eval>
-                <wizards type="array">
-                    <_PADDING>2</_PADDING>
-                    <link type="array">
-                        <type>popup</type>
-                        <title>Link</title>
-                        <icon>link_popup.gif</icon>
-                        <module type="array">
-                        	<name>wizard_element_browser</name>
-                        	<urlParameters type="array">
-                                <mode>wizard</mode>
-                                <act>file</act>
-                            </urlParameters>
-                        </module>
-                        <params type="array">
-                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                            <allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
-                        </params>
-                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                    </link>
-				</wizards>
-              </config>
-            </TCEforms>
-          </tickerlistTemplate>
-          <tickerlist.options.debug>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug</label>
-              <config>
-                <type>check</type>
-              </config>
-            </TCEforms>
-          </tickerlist.options.debug>
+					<tickerlistTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.template
+							</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<module type="array">
+											<name>wizard_element_browser</name>
+											<urlParameters type="array">
+												<mode>wizard</mode>
+												<act>file</act>
+											</urlParameters>
+										</module>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1
+										</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+						</TCEforms>
+					</tickerlistTemplate>
+					<tickerlist.options.debug>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.matchtable.debug
+							</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</tickerlist.options.debug>
 
-        </el>
-      </ROOT>
-    </s_tickerlist>
-	<s_tssetup>
-		<ROOT>
-			<TCEforms>
-				<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TSSetup</sheetTitle>
-				<!-- cshFile>LLL:EXT:cfc_league_fe/res/help/locallang_csh_flexform.xml</cshFile-->
-			</TCEforms>
-			<type>array</type>
-			<el>
-				<flexformTS>
-					<TCEforms>
-						<exclude>1</exclude>
-						<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tssetup</label>
-						<config>
-							<type>text</type>
-							<cols>80</cols>
-							<rows>10</rows>
-						</config>
-					</TCEforms>
-				</flexformTS>
-			</el>
-		</ROOT>
-	</s_tssetup>
-  </sheets>
+				</el>
+			</ROOT>
+		</s_tickerlist>
+		<s_tssetup>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TSSetup
+					</sheetTitle>
+					<!-- cshFile>LLL:EXT:cfc_league_fe/res/help/locallang_csh_flexform.xml</cshFile -->
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<flexformTS>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tssetup
+							</label>
+							<config>
+								<type>text</type>
+								<cols>80</cols>
+								<rows>10</rows>
+							</config>
+						</TCEforms>
+					</flexformTS>
+				</el>
+			</ROOT>
+		</s_tssetup>
+	</sheets>
 </T3DataStructure>
