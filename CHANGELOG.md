@@ -1,6 +1,12 @@
 
 Änderungen
 ----------
+v1.4.1 (04.06.2020)
+ * fixed plugin wizard icon
+ * unused code removed
+ * #52 remove occurancies of cObj::fileResource
+ * show stadium details even if no map is possible
+
 v1.4.0 (02.05.2020)
  * Support for TYPO3 9.5 LTS added
  * Support for TYPO3 6.2 LTS dropped
