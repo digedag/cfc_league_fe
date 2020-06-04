@@ -20,6 +20,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                   <numIndex index="0" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.action.CompetitionSelection</numIndex>
@@ -75,6 +76,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.saison</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <foreign_table>tx_cfcleague_saison</foreign_table>
                 <foreign_table_where>ORDER BY tx_cfcleague_saison.sorting</foreign_table_where>
                 <enableMultiSelectFilterTextfield>1</enableMultiSelectFilterTextfield>
@@ -99,6 +101,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.group</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <foreign_table>tx_cfcleague_group</foreign_table>
                 <enableMultiSelectFilterTextfield>1</enableMultiSelectFilterTextfield>
                 <multiple>0</multiple>
@@ -149,6 +152,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionType</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                   <numIndex index="0" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_competition.type_league</numIndex>
@@ -179,6 +183,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                   <numIndex index="0" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.competitionObligation.All</numIndex>
@@ -303,6 +308,7 @@
               <label>LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                   <numIndex index="0" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_scheduled</numIndex>
@@ -448,6 +454,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableScope</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                   <numIndex index="0" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tablescope.Normal</numIndex>
@@ -482,6 +489,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableType</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                   <numIndex index="0" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tabletype.Normal</numIndex>
@@ -629,6 +637,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.TableType</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                   <numIndex index="1" type="array">
                     <numIndex index="0">LLL:EXT:cfc_league_fe/locallang_db.xml:plugin_competition_flexform_tablechart_lib_flot</numIndex>
@@ -678,6 +687,7 @@
               <label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type</label>
               <config>
                 <type>select</type>
+                <renderType>selectMultipleSideBySide</renderType>
                 <items type="array">
                 </items>
                 <itemsProcFunc>tx_cfcleaguefe_util_serviceRegistry->lookupStatistics</itemsProcFunc>
@@ -898,26 +908,26 @@
                 <size>24</size>
                 <max>256</max>
                 <eval>trim</eval>
-								<wizards type="array">
-									<_PADDING>2</_PADDING>
-									<link type="array">
-										<type>popup</type>
-										<title>Link</title>
-										<icon>link_popup.gif</icon>
-										<module type="array">
-											<name>wizard_element_browser</name>
-											<urlParameters type="array">
-												<mode>wizard</mode>
-												<act>file</act>
-											</urlParameters>
-										</module>
-										<params type="array">
-											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
-										</params>
-										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-									</link>
-								</wizards>
+                <wizards type="array">
+                    <_PADDING>2</_PADDING>
+                    <link type="array">
+                        <type>popup</type>
+                        <title>Link</title>
+                        <icon>link_popup.gif</icon>
+                        <module type="array">
+                        	<name>wizard_element_browser</name>
+                        	<urlParameters type="array">
+                                <mode>wizard</mode>
+                                <act>file</act>
+                            </urlParameters>
+                        </module>
+                        <params type="array">
+                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                            <allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+                        </params>
+                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+                    </link>
+				</wizards>
               </config>
             </TCEforms>
           </tickerlistTemplate>
@@ -934,30 +944,27 @@
         </el>
       </ROOT>
     </s_tickerlist>
-		<s_tssetup>
-			<ROOT>
-				<TCEforms>
-					<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TSSetup</sheetTitle>
-					<!-- cshFile>LLL:EXT:cfc_league_fe/res/help/locallang_csh_flexform.xml</cshFile-->
-				</TCEforms>
-				<type>array</type>
-				<el>
-					<flexformTS>
-						<TCEforms>
-							<exclude>1</exclude>
-							<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tssetup</label>
-							<config>
-								<type>text</type>
-								<cols>80</cols>
-								<rows>10</rows>
-							</config>
-						</TCEforms>
-					</flexformTS>
-				</el>
-			</ROOT>
-		</s_tssetup>
-
-
+	<s_tssetup>
+		<ROOT>
+			<TCEforms>
+				<sheetTitle>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tab.TSSetup</sheetTitle>
+				<!-- cshFile>LLL:EXT:cfc_league_fe/res/help/locallang_csh_flexform.xml</cshFile-->
+			</TCEforms>
+			<type>array</type>
+			<el>
+				<flexformTS>
+					<TCEforms>
+						<exclude>1</exclude>
+						<label>LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.tssetup</label>
+						<config>
+							<type>text</type>
+							<cols>80</cols>
+							<rows>10</rows>
+						</config>
+					</TCEforms>
+				</flexformTS>
+			</el>
+		</ROOT>
+	</s_tssetup>
   </sheets>
-
 </T3DataStructure>
