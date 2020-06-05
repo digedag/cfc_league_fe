@@ -1,6 +1,9 @@
 
 Änderungen
 ----------
+v1.5.0 (??.06.2020)
+ * Support for TYPO3 10.4 LTS added
+
 v1.4.1 (04.06.2020)
  * fixed plugin wizard icon
  * unused code removed

@@ -4,8 +4,11 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 // Spiele als Ereignisse für die Extension cal bereitstellen
 
-tx_rnbase::load('tx_cfcleaguefe_util_ServiceRegistry');
-tx_rnbase::load('tx_rnbase_util_SearchBase');
+// Page module hook
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['tx_cfcleaguefe_competition']['plugin'] =
+    \System25\T3sports\Hook\PageLayout::class . '->getPluginSummary';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['tx_cfcleaguefe_report']['plugin'] =
+    \System25\T3sports\Hook\PageLayout::class . '->getPluginSummary';
 
 // Hook for tt_news
 $GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = 'tx_cfcleaguefe_hooks_ttnewsMarkers';
