@@ -137,6 +137,15 @@
 			<label index="plugin_common_charbrowser">Show character browser</label>
 			<label index="plugin_common_detailspage">Details page</label>
 
+			<label index="general_lgl_startingpoint">Startingpoint</label>
+			<label index="general_lgl_recursive">Recursive</label>
+			<label index="general_lgl_recursive_i_0">0 levels (only selected page)</label>
+			<label index="general_lgl_recursive_i_1">1 level</label>
+			<label index="general_lgl_recursive_i_2">2 level</label>
+			<label index="general_lgl_recursive_i_3">3 level</label>
+			<label index="general_lgl_recursive_i_4">4 level</label>
+			<label index="general_lgl_recursive_i_5">5 level</label>
+
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="plugin.competition.label">T3sports: Ligaverwaltung</label>
@@ -251,6 +260,14 @@
 			<label index="plugin.report.flexform.charbrowser">Buchstaben-Menu</label>
 			<label index="plugin_common_detailspage">Detailseite</label>
 
+			<label index="general_lgl_startingpoint">Datensatzsammlung</label>
+			<label index="general_lgl_recursive">Rekursiv</label>
+			<label index="general_lgl_recursive_i_0">0 Ebenen (nur die ausgewählte Seite)</label>
+			<label index="general_lgl_recursive_i_1">1 Ebene</label>
+			<label index="general_lgl_recursive_i_2">2 Ebenen</label>
+			<label index="general_lgl_recursive_i_3">3 Ebenen</label>
+			<label index="general_lgl_recursive_i_4">4 Ebenen</label>
+			<label index="general_lgl_recursive_i_5">5 Ebenen</label>
 		</languageKey>
 	</data>
 </T3locallang>

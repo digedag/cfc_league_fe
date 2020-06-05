@@ -33,7 +33,7 @@ if(((int)$confArr['enableCalService']) > 0 && tx_rnbase_util_Extensions::isLoade
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerStatistics' /* sv key */,
   [
-    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.player', 'description' => 'Statistical data about players', 'subtype' => 'player',
+    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:plugin.competition.flexform.statistics.type.player', 'description' => 'Statistical data about players', 'subtype' => 'player',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'className' => 'System25\T3sports\Statistics\Service\PlayerStatistics',
@@ -42,7 +42,7 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_ScorerStatistics' /* sv key */,
   [
-    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.scorerlist', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
+    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:plugin.competition.flexform.statistics.type.scorerlist', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'className' => 'System25\T3sports\Statistics\Service\ScorerStatistics',
@@ -51,7 +51,7 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_AssistStatistics' /* sv key */,
   [
-    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.assistlist', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
+    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:plugin.competition.flexform.statistics.type.assistlist', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'className' => 'System25\T3sports\Statistics\Service\AssistStatistics',
@@ -60,7 +60,7 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' /* sv key */,
   [
-    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.playersummary', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
+    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:plugin.competition.flexform.statistics.type.playersummary', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'className' => 'System25\T3sports\Statistics\Service\PlayerSummaryStatistics',
@@ -69,7 +69,7 @@ tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv ty
 
 tx_rnbase_util_Extensions::addService($_EXTKEY,  'cfcleague_statistics' /* sv type */,  'tx_cfcleaguefe_sv2_VisitorStatistics' /* sv key */,
   [
-    'title' => 'LLL:EXT:cfc_league_fe/locallang_db.xml:plugin.competition.flexform.statistics.type.visitors', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
+    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:plugin.competition.flexform.statistics.type.visitors', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'className' => 'System25\T3sports\Statistics\Service\VisitorStatistics',
@@ -118,7 +118,7 @@ if (TYPO3_MODE === 'BE') {
         \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         ['source' => 'EXT:cfc_league_fe/Resources/Public/Icons/ext_icon.svg']
     );
-    
+
     // Apply PageTSconfig
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:cfc_league_fe/Configuration/PageTS/modWizards.ts">'
