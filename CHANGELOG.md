@@ -1,7 +1,7 @@
 
 Änderungen
 ----------
-v1.5.0 (06.06.2020)
+v1.5.1 (06.06.2020)
  * Support for TYPO3 10.4 LTS added
  * Show selected actions in plugin overview
  * Some small bugfixes
