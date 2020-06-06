@@ -46,7 +46,7 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
         $data = & $viewData->offsetGet('data');
         if (! count($data))
             return $template; // ohne Daten gibt's keine Marker
-        
+
         $cObj = $configurations->getCObj(0);
         // Jetzt über die einzelnen Statistiken iterieren
         $markerArray = array();
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
             // Init all stats with empty subpart
             $subpartArray['###STATISTIC_' . strtoupper($subtype) . '###'] = '';
         }
-        
+
         foreach ($data as $type => $stats) {
             $service = Tx_Rnbase_Utility_T3General::makeInstanceService('cfcleague_statistics', $type);
             if (! is_object($service)) // Ohne den Service geht nix
@@ -82,11 +82,11 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
     protected function _getSubpartArray($configurations)
     {
         $ret = array();
-        
+
         $cfg = [];
-        $types = tx_cfcleaguefe_util_serviceRegistry::lookupStatistics($cfg);
+        $types = tx_cfcleaguefe_util_ServiceRegistry::lookupStatistics($cfg);
         $types = $types['items'];
-        
+
         foreach ($types as $type) {
             $ret['###STATISTIC_' . strtoupper($type[1]) . '###'] = '';
         }

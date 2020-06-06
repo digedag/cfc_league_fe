@@ -742,7 +742,7 @@
 								<renderType>selectMultipleSideBySide</renderType>
 								<items type="array">
 								</items>
-								<itemsProcFunc>tx_cfcleaguefe_util_serviceRegistry->lookupStatistics
+								<itemsProcFunc>tx_cfcleaguefe_util_ServiceRegistry->lookupStatistics
 								</itemsProcFunc>
 								<multiple>0</multiple>
 								<maxitems>10</maxitems>
