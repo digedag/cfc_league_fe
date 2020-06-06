@@ -28,17 +28,16 @@ tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
 
 /**
  * Controller für die Anzeige eines unbegrenzten Liga-Tabelle
- * TODO: Controller für Hin-Rückrunde entfernen
+ * TODO: Controller für Hin-Rückrunde entfernen.
  */
 class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_LeagueTableShow
 {
-
     /**
      * Zeigt die Tabelle für eine Liga.
      * Die Tabelle wird nur dann berechnet, wenn auf der
      * aktuellen Seite genau ein Wettbewerb ausgewählt ist und dieser Wettbewerb eine Liga ist.
      */
-    function handleRequest(&$parameters, &$configurations, &$viewData)
+    public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         // Die Werte des aktuellen Scope ermitteln
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
@@ -48,7 +47,7 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
         $matches = $service->search($fields, $options);
 
         $dataArr = $this->buildTable($parameters, $configurations, $matches);
-        $viewData = & $configurations->getViewData();
+        $viewData = &$configurations->getViewData();
         $viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
         $viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
 
@@ -60,18 +59,18 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
         return '';
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'leaguetableAllTime';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_LeagueTableAllTime';
     }
 
     /**
-     * Set search criteria
+     * Set search criteria.
      *
      * @param array $fields
      * @param array $options
@@ -95,7 +94,6 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_util_MatchTable
      */
     protected function getMatchTable()
@@ -104,17 +102,18 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
     }
 
     /**
-     * Sammelt die Daten für die Erstellung der Tabelle
+     * Sammelt die Daten für die Erstellung der Tabelle.
      */
     protected function buildTable($parameters, &$configurations, &$matches)
     {
         $tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_AllTimeTableProvider', $parameters, $configurations, $matches, 'leaguetableAllTime.');
 
         $leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-        $arr = Array(
+        $arr = array(
             'table' => $leagueTable->generateTable($tableProvider),
-            'pointsystem' => $tableProvider->cfgPointSystem
+            'pointsystem' => $tableProvider->cfgPointSystem,
         );
+
         return $arr;
     }
 }

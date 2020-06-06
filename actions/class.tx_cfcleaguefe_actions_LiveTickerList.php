@@ -30,16 +30,16 @@ tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
  */
 class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     * Handle request
+     * Handle request.
      *
      * @param arrayobject $parameters
      * @param tx_rnbase_configurations $configurations
      * @param arrayobject $viewdata
+     *
      * @return string error message
      */
-    function handleRequest(&$parameters, &$configurations, &$viewdata)
+    public function handleRequest(&$parameters, &$configurations, &$viewdata)
     {
         $fields = array();
         $options = array();
@@ -64,7 +64,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
 
         $matches = $matchTable->findMatches($saisonUids, $groupUids, $compUids, $club, $roundUid);
 
-        $viewData = & $configurations->getViewData();
+        $viewData = &$configurations->getViewData();
         $viewData->offsetSet('matches', $matches);
 
         // View
@@ -78,7 +78,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
     }
 
     /**
-     * Set search criteria
+     * Set search criteria.
      *
      * @param array $fields
      * @param array $options
@@ -95,26 +95,25 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
         $matchtable = $this->getMatchTable();
         $matchtable->setScope($scopeArr);
-        $teamId = $configurations->get($this->getConfId() . 'teamId');
+        $teamId = $configurations->get($this->getConfId().'teamId');
         $matchtable->setTeams($teamId);
         $matchtable->setTimeRange($configurations->get('tickerlist.timeRangePast'), $configurations->get('tickerlist.timeRangeFuture'));
         $matchtable->setLiveTicker();
-        ; // Nur Live-Tickerspiele holen
+        // Nur Live-Tickerspiele holen
 
         $matchtable->getFields($fields, $options);
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_util_MatchTable
      */
-    function getMatchTable()
+    public function getMatchTable()
     {
         return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
     }
 
     /**
-     * Initializes page browser
+     * Initializes page browser.
      *
      * @param arrayobject $parameters
      * @param tx_rnbase_configurations $configurations
@@ -122,7 +121,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
      * @param array $fields
      * @param array $options
      */
-    function handlePageBrowser(&$parameters, &$configurations, &$viewdata, &$fields, &$options)
+    public function handlePageBrowser(&$parameters, &$configurations, &$viewdata, &$fields, &$options)
     {
         if (is_array($configurations->get('tickerlist.match.pagebrowser.'))) {
             $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
@@ -131,7 +130,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
             $listSize = $service->search($fields, $options);
             unset($options['count']);
             // PageBrowser initialisieren
-            $pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'tickerlist_' . $configurations->getPluginId());
+            $pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'tickerlist_'.$configurations->getPluginId());
             $pageSize = $this->getPageSize($parameters, $configurations);
             // Wurde neu gesucht?
             if ($parameters->offsetGet('NK_newsearch')) {
@@ -146,12 +145,12 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
         }
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'tickerlist';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_LiveTickerList';
     }

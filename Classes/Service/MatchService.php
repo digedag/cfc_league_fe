@@ -4,7 +4,7 @@ namespace System25\T3sports\Service;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2008-2016 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -27,30 +27,29 @@ namespace System25\T3sports\Service;
  * *************************************************************
  */
 
-
 /**
- * Service for accessing match information
+ * Service for accessing match information.
  *
  * @author Rene Nitzsche
  */
 class MatchService extends \Tx_Rnbase_Service_Base
 {
-
     /**
-     * Search database for matches
+     * Search database for matches.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return array of tx_cfcleaguefe_models_match
      */
     public function search($fields, $options)
     {
         $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\MatchSearch::class);
+
         return $searcher->search($fields, $options);
     }
 
     /**
-     *
      * @return \tx_cfcleague_util_MatchTableBuilder
      */
     public function getMatchTable()
@@ -58,4 +57,3 @@ class MatchService extends \Tx_Rnbase_Service_Base
         return \tx_rnbase::makeInstance('tx_cfcleague_util_MatchTableBuilder');
     }
 }
-

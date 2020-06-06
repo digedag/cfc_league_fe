@@ -26,39 +26,43 @@ tx_rnbase::load('tx_cfcleaguefe_table_DefaultMatchProvider');
 tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
- * Match provider
+ * Match provider.
  */
-class tx_cfcleaguefe_table_football_MatchProvider extends tx_cfcleaguefe_table_DefaultMatchProvider {
+class tx_cfcleaguefe_table_football_MatchProvider extends tx_cfcleaguefe_table_DefaultMatchProvider
+{
+    public function getPenalties()
+    {
+        // Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
+        // für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
+        if ($this->getConfigurator()->getTableScope() || $this->getConfigurator()->getTableType()) {
+            return array();
+        }
 
-	public function getPenalties() {
-		// Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
-		// für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
-		if($this->getConfigurator()->getTableScope() || $this->getConfigurator()->getTableType())
-			return array();
+        return $this->getLeague()->getPenalties();
+    }
 
-		return $this->getLeague()->getPenalties();
-	}
-
-	/**
-	 * Entry point for child classes to modify fields and options for match lookup.
-	 * @param array $fields
-	 * @param array $options
-	 */
-	protected function modifyMatchFields(&$fields, &$options) {
-		if($tableScope = $this->getConfigurator()->getTableScope()) {
-			$round = count(Tx_Rnbase_Utility_Strings::intExplode(',',$this->getLeague()->record['teams']));
-			$round = ($round) ? $round - 1 : $round;
-			if($round) {
-				// Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
-				$joined['value'] = $round;
-				$joined['cols'] = array('MATCH.ROUND');
-				$joined['operator'] = $tableScope==1 ? OP_LTEQ_INT : OP_GT_INT;
-				$fields[SEARCH_FIELD_JOINED][] = $joined;
-			}
-		}
-	}
+    /**
+     * Entry point for child classes to modify fields and options for match lookup.
+     *
+     * @param array $fields
+     * @param array $options
+     */
+    protected function modifyMatchFields(&$fields, &$options)
+    {
+        if ($tableScope = $this->getConfigurator()->getTableScope()) {
+            $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getLeague()->record['teams']));
+            $round = ($round) ? $round - 1 : $round;
+            if ($round) {
+                // Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
+                $joined['value'] = $round;
+                $joined['cols'] = array('MATCH.ROUND');
+                $joined['operator'] = 1 == $tableScope ? OP_LTEQ_INT : OP_GT_INT;
+                $fields[SEARCH_FIELD_JOINED][] = $joined;
+            }
+        }
+    }
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/football/class.tx_cfcleaguefe_table_football_MatchProvider.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/football/class.tx_cfcleaguefe_table_football_MatchProvider.php']);
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/table/football/class.tx_cfcleaguefe_table_football_MatchProvider.php'];
 }

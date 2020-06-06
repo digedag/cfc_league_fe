@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Utility;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2010-2020 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -27,7 +28,7 @@ namespace System25\T3sports\Utility;
  */
 
 /**
- * Liefert Sternzeichen zu einem Datum
+ * Liefert Sternzeichen zu einem Datum.
  */
 class Signs
 {
@@ -36,11 +37,12 @@ class Signs
     public static function getInstance()
     {
         static $instance;
-        if (! isset($instance)) {
+        if (!isset($instance)) {
             $c = __CLASS__;
             $instance = new $c();
             $instance->createSigns();
         } // if
+
         return $instance;
     }
 
@@ -52,6 +54,7 @@ class Signs
                 return $value;
             }
         }
+
         return 'unbekannt';
     }
 
@@ -60,19 +63,19 @@ class Signs
         global $TSFE;
         $langFile = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml';
         $this->signs = [
-            date('z', strtotime("2006-01-20")) => $TSFE->sL($langFile.':plugin.report.sign.capricorn'),
-            date('z', strtotime("2006-02-19")) => $TSFE->sL($langFile.':plugin.report.sign.aquarius'),
-            date('z', strtotime("2006-03-20")) => $TSFE->sL($langFile.':plugin.report.sign.pisces'),
-            date('z', strtotime("2006-04-20")) => $TSFE->sL($langFile.':plugin.report.sign.aries'),
-            date('z', strtotime("2006-05-20")) => $TSFE->sL($langFile.':plugin.report.sign.taurus'),
-            date('z', strtotime("2006-06-20")) => $TSFE->sL($langFile.':plugin.report.sign.gemini'),
-            date('z', strtotime("2006-07-22")) => $TSFE->sL($langFile.':plugin.report.sign.cancer'),
-            date('z', strtotime("2006-08-23")) => $TSFE->sL($langFile.':plugin.report.sign.leo'),
-            date('z', strtotime("2006-09-23")) => $TSFE->sL($langFile.':plugin.report.sign.virgo'),
-            date('z', strtotime("2006-10-23")) => $TSFE->sL($langFile.':plugin.report.sign.libra'),
-            date('z', strtotime("2006-11-22")) => $TSFE->sL($langFile.':plugin.report.sign.scorpio'),
-            date('z', strtotime("2006-12-21")) => $TSFE->sL($langFile.':plugin.report.sign.sagittarius'),
-            date('z', strtotime("2004-12-31")) => $TSFE->sL($langFile.':plugin.report.sign.capricorn')
+            date('z', strtotime('2006-01-20')) => $TSFE->sL($langFile.':plugin.report.sign.capricorn'),
+            date('z', strtotime('2006-02-19')) => $TSFE->sL($langFile.':plugin.report.sign.aquarius'),
+            date('z', strtotime('2006-03-20')) => $TSFE->sL($langFile.':plugin.report.sign.pisces'),
+            date('z', strtotime('2006-04-20')) => $TSFE->sL($langFile.':plugin.report.sign.aries'),
+            date('z', strtotime('2006-05-20')) => $TSFE->sL($langFile.':plugin.report.sign.taurus'),
+            date('z', strtotime('2006-06-20')) => $TSFE->sL($langFile.':plugin.report.sign.gemini'),
+            date('z', strtotime('2006-07-22')) => $TSFE->sL($langFile.':plugin.report.sign.cancer'),
+            date('z', strtotime('2006-08-23')) => $TSFE->sL($langFile.':plugin.report.sign.leo'),
+            date('z', strtotime('2006-09-23')) => $TSFE->sL($langFile.':plugin.report.sign.virgo'),
+            date('z', strtotime('2006-10-23')) => $TSFE->sL($langFile.':plugin.report.sign.libra'),
+            date('z', strtotime('2006-11-22')) => $TSFE->sL($langFile.':plugin.report.sign.scorpio'),
+            date('z', strtotime('2006-12-21')) => $TSFE->sL($langFile.':plugin.report.sign.sagittarius'),
+            date('z', strtotime('2004-12-31')) => $TSFE->sL($langFile.':plugin.report.sign.capricorn'),
         ];
     }
 }

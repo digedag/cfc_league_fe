@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Statistics\Service;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -29,15 +30,14 @@ namespace System25\T3sports\Statistics\Service;
 /**
  * Service for assist statistics
  * Since this list is similar to player statistics, it is based on that service.
- * It simply modifies the result
+ * It simply modifies the result.
  *
  * @author Rene Nitzsche
  */
 class AssistStatistics extends PlayerStatistics
 {
-
     /**
-     * Liefert die Liste der besten Vorlagengeber
+     * Liefert die Liste der besten Vorlagengeber.
      *
      * @return array
      */
@@ -47,9 +47,9 @@ class AssistStatistics extends PlayerStatistics
     }
 
     /**
-     * Sucht die besten Vorlagengeber aus der Liste und liefert sie sortiert in einem Array zurück
+     * Sucht die besten Vorlagengeber aus der Liste und liefert sie sortiert in einem Array zurück.
      *
-     * @return Array mit den Datensätzen der Vorlagengeber
+     * @return array mit den Datensätzen der Vorlagengeber
      */
     private function _findAssists(&$playerData)
     {
@@ -59,13 +59,13 @@ class AssistStatistics extends PlayerStatistics
                 $ret[] = $playerStats;
             }
         }
-        usort($ret, function($a, $b) {
+        usort($ret, function ($a, $b) {
             $goal1 = $a['goals_assist'];
             $goal2 = $b['goals_assist'];
 
-            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2) ? 1 : - 1;
+            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2) ? 1 : -1;
         });
+
         return $ret;
     }
 }
-

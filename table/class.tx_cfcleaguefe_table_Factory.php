@@ -24,35 +24,36 @@
  ***************************************************************/
 
 /**
- * Factory for table classes
+ * Factory for table classes.
  */
 class tx_cfcleaguefe_table_Factory
 {
-
     /**
-     *
      * @param tx_cfcleague_util_MatchTable $matchTable
      * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
      * @param string $confId
+     *
      * @return tx_cfcleaguefe_table_DefaultMatchProvider
      */
     public static function createMatchProvider($tableType, $configurations, $confId)
     {
-        $clazz = $configurations->get($confId . $tableType . '.matchProviderClass');
+        $clazz = $configurations->get($confId.$tableType.'.matchProviderClass');
         $clazz = $clazz ? $clazz : 'tx_cfcleaguefe_table_DefaultMatchProvider';
         $prov = tx_rnbase::makeInstance($clazz, $configurations, $confId);
+
         return $prov;
     }
 
     /**
-     *
      * @param string $type
+     *
      * @return tx_cfcleaguefe_table_ITableType
      */
     public static function createTableType($type)
     {
         tx_rnbase::load('tx_rnbase_util_Misc');
         $srv = tx_rnbase_util_Misc::getService('t3sports_sports', $type);
+
         return $srv->getLeagueTable();
     }
 }

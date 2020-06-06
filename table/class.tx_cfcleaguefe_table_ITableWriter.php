@@ -28,14 +28,14 @@
  */
 interface tx_cfcleaguefe_table_ITableWriter
 {
-
     /**
-     * Set table data by round
+     * Set table data by round.
      *
      * @param tx_cfcleaguefe_table_ITableType $table
      * @param string $template
      * @param tx_rnbase_configurations $configurations
      * @param string $confId
+     *
      * @return string
      */
     public function writeTable($table, $template, $configurations, $confId);

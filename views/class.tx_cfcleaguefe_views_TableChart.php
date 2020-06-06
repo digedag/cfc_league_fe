@@ -30,9 +30,8 @@ tx_rnbase::load('tx_rnbase_util_Templates');
  */
 class tx_cfcleaguefe_views_TableChart extends tx_rnbase_view_Base
 {
-
     /**
-     * Erstellen des Frontend-Outputs
+     * Erstellen des Frontend-Outputs.
      */
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
@@ -41,9 +40,10 @@ class tx_cfcleaguefe_views_TableChart extends tx_rnbase_view_Base
         $markerArray = [
             '###JSON###' => $json,
         ];
-        $lib = $configurations->get($this->getController()->getConfId() . 'library');
-        $template = tx_rnbase_util_Templates::getSubpart($template, '###' . strtoupper($lib) . '###');
+        $lib = $configurations->get($this->getController()->getConfId().'library');
+        $template = tx_rnbase_util_Templates::getSubpart($template, '###'.strtoupper($lib).'###');
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray); // , $wrappedSubpartArray);
+
         return $out;
     }
 

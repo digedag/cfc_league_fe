@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Statistics;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -27,18 +28,18 @@ namespace System25\T3sports\Statistics;
  */
 
 /**
- * Marker class for player summary statistics
+ * Marker class for player summary statistics.
  *
  * @author Rene Nitzsche
  */
 class PlayerSummaryStatisticsMarker extends \tx_rnbase_util_BaseMarker
 {
-
-    function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker)
+    public function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker)
     {
         $labelArr = $this->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
-        $markerArray = $formatter->getItemMarkerArrayWrapped($stats, $statsConfId, 0, $statsMarker . '_');
+        $markerArray = $formatter->getItemMarkerArrayWrapped($stats, $statsConfId, 0, $statsMarker.'_');
         $markerArray = array_merge($markerArray, $labelArr);
+
         return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
     }
 }

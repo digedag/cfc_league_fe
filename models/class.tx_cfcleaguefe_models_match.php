@@ -32,40 +32,44 @@ tx_rnbase::load('Tx_Rnbase_Utility_Strings');
  */
 class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 {
-
     private static $instances = array();
 
-    var $_profiles, $_matchNotes, $_teamHome, $_teamGuest;
+    public $_profiles;
+    public $_matchNotes;
+    public $_teamHome;
+    public $_teamGuest;
 
-    var $_report;
+    public $_report;
 
-    function __construct($rowOrUid)
+    public function __construct($rowOrUid)
     {
         parent::__construct($rowOrUid);
         $this->initResult();
     }
 
-    function getTableName()
+    public function getTableName()
     {
         return 'tx_cfcleague_games';
     }
 
     /**
-     * Notwendige Initialisierung für das Ergebnis des Spieldatensatzes
+     * Notwendige Initialisierung für das Ergebnis des Spieldatensatzes.
      */
     public function initResult()
     {
-        if ($this->resultInited)
+        if ($this->resultInited) {
             return;
+        }
 
         // Um das Endergebnis zu ermitteln, muss bekannt sein, wieviele Spielabschnitte
         // es gibt. Dies steht im Wettbewerb
         $comp = $this->getCompetition();
         $this->record['matchparts'] = $comp->getMatchParts();
-        if ($comp->isAddPartResults())
+        if ($comp->isAddPartResults()) {
             $this->initResultAdded($comp, $comp->getMatchParts());
-        else
+        } else {
             $this->initResultSimple($comp, $comp->getMatchParts());
+        }
         $this->resultInited = true;
     }
 
@@ -77,8 +81,8 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      */
     private function initResultSimple($comp, $matchParts)
     {
-        $goalsHome = $this->record['goals_home_' . $matchParts];
-        $goalsGuest = $this->record['goals_guest_' . $matchParts];
+        $goalsHome = $this->record['goals_home_'.$matchParts];
+        $goalsGuest = $this->record['goals_guest_'.$matchParts];
         // Gab es Verländerung oder Elfmeterschiessen
         if ($this->isPenalty()) {
             $goalsHome = $this->record['goals_home_ap'];
@@ -104,9 +108,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 
         // Teilergebnisse holen
         $matchParts = $matchParts > 0 ? $matchParts : 1;
-        for ($i = 1; $i <= $matchParts; $i ++) {
-            $goalsHome += $this->record['goals_home_' . $i];
-            $goalsGuest += $this->record['goals_guest_' . $i];
+        for ($i = 1; $i <= $matchParts; ++$i ) {
+            $goalsHome += $this->record['goals_home_'.$i];
+            $goalsGuest += $this->record['goals_guest_'.$i];
         }
         // Gab es Verländerung oder Elfmeterschiessen
         if ($this->isPenalty()) {
@@ -123,21 +127,25 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     public function getGoalsHome($matchPart = '')
     {
         $ret = $this->record['goals_home'];
-        if (strlen($matchPart))
-            $ret = $this->record['goals_home_' . (($matchPart == 'last') ? $this->record['matchparts'] : $matchPart)];
+        if (strlen($matchPart)) {
+            $ret = $this->record['goals_home_'.(('last' == $matchPart) ? $this->record['matchparts'] : $matchPart)];
+        }
+
         return $ret;
     }
 
     public function getGoalsGuest($matchPart = '')
     {
         $ret = $this->record['goals_guest'];
-        if (strlen($matchPart))
-            $ret = $this->record['goals_guest_' . (($matchPart == 'last') ? $this->record['matchparts'] : $matchPart)];
+        if (strlen($matchPart)) {
+            $ret = $this->record['goals_guest_'.(('last' == $matchPart) ? $this->record['matchparts'] : $matchPart)];
+        }
+
         return $ret;
     }
 
     /**
-     * Returns the match report
+     * Returns the match report.
      *
      * @return tx_cfcleaguefe_models_matchreport
      */
@@ -147,7 +155,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     }
 
     /**
-     * Set the instance of matchreport
+     * Set the instance of matchreport.
      *
      * @param tx_cfcleaguefe_models_matchreport $report
      */
@@ -158,11 +166,11 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 
     public function getResult()
     {
-        return $this->record['status'] > 0 ? $this->getGoalsHome() . ' : ' . $this->getGoalsGuest() : '- : -';
+        return $this->record['status'] > 0 ? $this->getGoalsHome().' : '.$this->getGoalsGuest() : '- : -';
     }
 
     /**
-     * Returns the state as string
+     * Returns the state as string.
      *
      * @return string
      */
@@ -172,65 +180,66 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
         tx_rnbase_util_TCA::loadTCA('tx_cfcleague_games');
         $items = $GLOBALS['TCA']['tx_cfcleague_games']['columns']['status']['config']['items'];
         foreach ($items as $item) {
-            if ($item[1] == $this->record['status'])
+            if ($item[1] == $this->record['status']) {
                 return $GLOBALS['LANG']->sL($item[0]);
+            }
         }
+
         return '';
     }
 
     /**
-     * Returns true if match is finished
+     * Returns true if match is finished.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFinished()
     {
-        return intval($this->record['status']) == 2;
+        return 2 == intval($this->record['status']);
     }
 
     /**
-     * Returns true if match is running
+     * Returns true if match is running.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRunning()
     {
-        return intval($this->record['status']) == 1;
+        return 1 == intval($this->record['status']);
     }
 
     /**
-     * Returns true if match has extra time
+     * Returns true if match has extra time.
      *
-     * @return boolean
+     * @return bool
      */
     public function isExtraTime()
     {
-        return intval($this->record['is_extratime']) == 1;
+        return 1 == intval($this->record['is_extratime']);
     }
 
     /**
-     * Returns true if match has extra time
+     * Returns true if match has extra time.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPenalty()
     {
-        return intval($this->record['is_penalty']) == 1;
+        return 1 == intval($this->record['is_penalty']);
     }
 
     /**
      * Liefert true, wenn für das Spiel ein Spielbericht vorliegt.
      */
-    function hasReport()
+    public function hasReport()
     {
         return (intval($this->record['has_report']) + intval($this->record['link_report'])) > 0;
     }
 
     /**
-     *
      * @return true if live ticker is turn on
      */
-    function isTicker()
+    public function isTicker()
     {
         return $this->record['link_ticker'] > 0;
     }
@@ -238,9 +247,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     /**
      * Returns true of match is a dummy (free of play).
      *
-     * @return boolean
+     * @return bool
      */
-    function isDummy()
+    public function isDummy()
     {
         // Aus Performancegründen fragen wir hier den eigenen Record ab
         return $this->getHome()->isDummy() || $this->getGuest()->isDummy();
@@ -249,11 +258,12 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     /**
      * Liefert alle MatchNotes des Spiels als Referenz auf ein Array.
      * Die Ticker werden in chronologischer Reihenfolge geliefert.
-     * Alle MatchNotes haben eine Referenz auf das zugehörige Spiel
+     * Alle MatchNotes haben eine Referenz auf das zugehörige Spiel.
      */
-    function &getMatchNotes()
+    public function &getMatchNotes()
     {
         $this->_resolveMatchNotes();
+
         return $this->_matchNotes;
     }
 
@@ -261,29 +271,32 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * Fügt diesem Match eine neue Note hinzu.
      * Die Notes werden mit diesem Spiel verlinkt.
      */
-    function addMatchNote(&$note)
+    public function addMatchNote(&$note)
     {
-        if (! isset($this->_matchNotes))
-            $this->_matchNotes = array(); // Neues TickerArray erstellen
+        if (!isset($this->_matchNotes)) {
+            $this->_matchNotes = array();
+        } // Neues TickerArray erstellen
         $note->setMatch($this);
         $this->_matchNotes[] = $note;
         // Zusätzlich die Notes nach ihrem Typ sortieren
         $this->_matchNoteTypes[intval($note->record['type'])][] = $note;
     }
 
-    function &getMatchNotesByType($type)
+    public function &getMatchNotesByType($type)
     {
         if (is_array($type)) {
             $ret = array();
-            for ($i = 0, $size = count($type); $i < $size; $i ++) {
+            for ($i = 0, $size = count($type); $i < $size; ++$i ) {
                 $notes = $this->_matchNoteTypes[intval($type[$i])];
                 if (is_array($notes)) {
                     $ret = array_merge($ret, $notes);
                 }
             }
+
             return $ret;
-        } else
+        } else {
             return $this->_matchNoteTypes[intval($type)];
+        }
     }
 
     /**
@@ -291,14 +304,15 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * Sollten sie schon geladen sein, dann
      * wird nix gemacht.
      */
-    function _resolveMatchNotes($orderBy = 'asc')
+    public function _resolveMatchNotes($orderBy = 'asc')
     {
-        if (isset($this->_matchNotes))
-            return; // Die Ticker sind schon geladen
+        if (isset($this->_matchNotes)) {
+            return;
+        } // Die Ticker sind schon geladen
 
         $what = '*';
         $from = 'tx_cfcleague_match_notes';
-        $options['where'] = 'game = ' . $this->uid;
+        $options['where'] = 'game = '.$this->uid;
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_match_note';
         // HINT: Die Sortierung nach dem Typ ist für die Auswechslungen wichtig.
         $options['orderby'] = 'minute asc, extra_time asc, uid asc';
@@ -306,7 +320,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 
         // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
         $anz = count($this->_matchNotes);
-        for ($i = 0; $i < $anz; $i ++) {
+        for ($i = 0; $i < $anz; ++$i ) {
             $this->_matchNotes[$i]->setMatch($this);
             // Zusätzlich die Notes nach ihrem Typ sortieren
             $this->_matchNoteTypes[intval($this->_matchNotes[$i]->record['type'])][] = $this->_matchNotes[$i];
@@ -314,59 +328,61 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     }
 
     /**
-     * Liefert das Heim-Team als Objekt
+     * Liefert das Heim-Team als Objekt.
      *
      * @return tx_cfcleaguefe_models_team
      */
-    function getHome()
+    public function getHome()
     {
         $this->_teamHome = isset($this->_teamHome) ? $this->_teamHome : $this->_getTeam($this->record['home']);
+
         return $this->_teamHome;
     }
 
     /**
-     * Setzt das Heim-Team
+     * Setzt das Heim-Team.
      */
-    function setHome(&$team)
+    public function setHome(&$team)
     {
         $this->_teamHome = $team;
     }
 
     /**
-     * Liefert das Gast-Team als Objekt
+     * Liefert das Gast-Team als Objekt.
      *
      * @return tx_cfcleaguefe_models_team
      */
-    function getGuest()
+    public function getGuest()
     {
         $this->_teamGuest = isset($this->_teamGuest) ? $this->_teamGuest : $this->_getTeam($this->record['guest']);
+
         return $this->_teamGuest;
     }
 
-    function getHomeNameShort()
+    public function getHomeNameShort()
     {
         return $this->getHome()->getNameShort();
     }
 
-    function getGuestNameShort()
+    public function getGuestNameShort()
     {
         return $this->getGuest()->getNameShort();
     }
 
     /**
-     * Setzt das Gast-Team
+     * Setzt das Gast-Team.
      */
-    function setGuest(&$team)
+    public function setGuest(&$team)
     {
         $this->_teamGuest = $team;
     }
 
     /**
-     * Liefert den Referee als Datenobjekt
+     * Liefert den Referee als Datenobjekt.
      *
      * @return tx_cfcleaguefe_models_profile
      */
-    function getReferee()
+    public function getReferee()
     {
         $ret = null;
         if ($this->record['referee']) {
@@ -374,13 +390,14 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             // Wir suchen jetzt den Schiedsrichter
             $ret = $this->_profiles[$this->record['referee']];
         }
+
         return $ret;
     }
 
     /**
-     * Liefert den Heimtrainer als Datenobjekt
+     * Liefert den Heimtrainer als Datenobjekt.
      */
-    function getCoachHome()
+    public function getCoachHome()
     {
         $ret = null;
         if ($this->record['coach_home']) {
@@ -388,13 +405,14 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             // Wir suchen jetzt den Trainer
             $ret = $this->_profiles[$this->record['coach_home']];
         }
+
         return $ret;
     }
 
     /**
-     * Liefert den Gasttrainer als Datenobjekt
+     * Liefert den Gasttrainer als Datenobjekt.
      */
-    function getCoachGuest()
+    public function getCoachGuest()
     {
         $ret = null;
         if ($this->record['coach_guest']) {
@@ -402,13 +420,14 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             // Wir suchen jetzt den Trainer
             $ret = $this->_profiles[$this->record['coach_guest']];
         }
+
         return $ret;
     }
 
     /**
-     * Liefert die Schiedsrichterassistenten als Datenobjekte in einem Array
+     * Liefert die Schiedsrichterassistenten als Datenobjekte in einem Array.
      */
-    function getAssists()
+    public function getAssists()
     {
         return $this->_getProfiles($this->record['assists']);
     }
@@ -416,70 +435,77 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     protected $sets = null;
 
     /**
-     * Return sets if available
+     * Return sets if available.
      *
      * @return array[tx_cfcleague_models_Set]
      */
     public function getSets()
     {
-        if (! is_array($this->sets)) {
+        if (!is_array($this->sets)) {
             tx_rnbase::load('tx_cfcleague_models_Set');
             $this->sets = tx_cfcleague_models_Set::buildFromString($this->record['sets']);
             $this->sets = $this->sets ? $this->sets : array();
         }
+
         return $this->sets;
     }
 
     /**
-     * Liefert die Spieler des Heimteams der Startelf als Datenobjekte in einem Array
+     * Liefert die Spieler des Heimteams der Startelf als Datenobjekte in einem Array.
      *
      * @param $all wenn
      *            > 0 werden auch die Ersatzspieler mit geliefert
-     * @return Array Key ist UID, Value ist Profile als Object
+     *
+     * @return array Key ist UID, Value ist Profile als Object
      */
-    function getPlayersHome($all = 0)
+    public function getPlayersHome($all = 0)
     {
         $ids = $this->record['players_home'];
         if ($all > 0 && strlen($this->record['substitutes_home']) > 0) {
             // Auch Ersatzspieler anhängen
-            if (strlen($ids) > 0)
-                $ids = $ids . ',' . $this->record['substitutes_home'];
+            if (strlen($ids) > 0) {
+                $ids = $ids.','.$this->record['substitutes_home'];
+            }
         }
+
         return $this->_getProfiles($ids);
     }
 
     /**
-     * Liefert die Spieler des Gastteams der Startelf als Datenobjekte in einem Array
+     * Liefert die Spieler des Gastteams der Startelf als Datenobjekte in einem Array.
      *
      * @param $all wenn
      *            > 0 werden auch die Ersatzspieler mit geliefert
-     * @return Array Key ist UID, Value ist Profile als Object
+     *
+     * @return array Key ist UID, Value ist Profile als Object
      */
-    function getPlayersGuest($all = 0)
+    public function getPlayersGuest($all = 0)
     {
         $ids = $this->record['players_guest'];
         if ($all > 0 && strlen($this->record['substitutes_guest']) > 0) {
             // Auch Ersatzspieler anhängen
-            if (strlen($ids) > 0)
-                $ids = $ids . ',' . $this->record['substitutes_guest'];
+            if (strlen($ids) > 0) {
+                $ids = $ids.','.$this->record['substitutes_guest'];
+            }
         }
+
         return $this->_getProfiles($ids);
     }
 
     /**
-     * Liefert die Ersatzspieler des Heimteams als Datenobjekte in einem Array
+     * Liefert die Ersatzspieler des Heimteams als Datenobjekte in einem Array.
      *
-     * @return Array Key ist UID, Value ist Profile als Object
+     * @return array Key ist UID, Value ist Profile als Object
      */
-    function getSubstitutesHome()
+    public function getSubstitutesHome()
     {
         return $this->_getProfiles($this->record['substitutes_home']);
     }
 
     /**
-     * Liefert die Ersatzspieler des Gastteams als Datenobjekte in einem Array
+     * Liefert die Ersatzspieler des Gastteams als Datenobjekte in einem Array.
      */
-    function getSubstitutesGuest()
+    public function getSubstitutesGuest()
     {
         return $this->_getProfiles($this->record['substitutes_guest']);
     }
@@ -489,42 +515,51 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      *
      * @param $playerUid int
      *            UID eines Spielers
+     *
      * @return 1 - Heimteam, 2- Gastteam, 0 - unbekannt
      */
-    function getTeam4Player($playerUid)
+    public function getTeam4Player($playerUid)
     {
         $playerUid = intval($playerUid);
-        if (! $playerUid)
-            return 0; // Keine ID vorhanden
+        if (!$playerUid) {
+            return 0;
+        } // Keine ID vorhanden
         $uids = array();
-        if ($this->record['players_home'])
+        if ($this->record['players_home']) {
             $uids[] = $this->record['players_home'];
-        if ($this->record['substitutes_home'])
+        }
+        if ($this->record['substitutes_home']) {
             $uids[] = $this->record['substitutes_home'];
+        }
         $uids = implode($uids, ',');
         $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uids);
-        if (in_array($playerUid, $uids))
+        if (in_array($playerUid, $uids)) {
             return 1;
+        }
 
         $uids = array();
-        if ($this->record['players_guest'])
+        if ($this->record['players_guest']) {
             $uids[] = $this->record['players_guest'];
-        if ($this->record['substitutes_guest'])
+        }
+        if ($this->record['substitutes_guest']) {
             $uids[] = $this->record['substitutes_guest'];
+        }
         $uids = implode($uids, ',');
         $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uids);
-        if (in_array($playerUid, $uids))
+        if (in_array($playerUid, $uids)) {
             return 2;
+        }
+
         return 0;
     }
 
     /**
      * Liefert die Profiles des UID-Strings als Array.
-     * Key ist die UID, Value das Profile
+     * Key ist die UID, Value das Profile.
      *
-     * @return Array Key ist UID, Value ist Profile als Object
+     * @return array Key ist UID, Value ist Profile als Object
      */
-    function _getProfiles($uidStr)
+    public function _getProfiles($uidStr)
     {
         $ret = array();
         if ($uidStr) {
@@ -540,9 +575,10 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             // $ret = array();
             $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uidStr);
             foreach ($uids as $uid) {
-                $ret[$uid] = & $this->_profiles[$uid];
+                $ret[$uid] = &$this->_profiles[$uid];
             }
         }
+
         return $ret;
     }
 
@@ -551,36 +587,45 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * Dies wird aber nur gemacht
      * wenn die entsprechenden IDs noch nicht geladen sind.
      *
-     * @return Array Key ist UID, Value ist Profile als Object
+     * @return array Key ist UID, Value ist Profile als Object
      */
-    function _resolveProfiles()
+    public function _resolveProfiles()
     {
-        if (isset($this->_profiles))
-            return; // Die Profile sind schon geladen
-                                                // Wir sammeln zunächst die UIDs zusammen
+        if (isset($this->_profiles)) {
+            return;
+        } // Die Profile sind schon geladen
+        // Wir sammeln zunächst die UIDs zusammen
         $uids = array();
-        if ($this->record['referee'])
+        if ($this->record['referee']) {
             $uids[] = $this->record['referee'];
-        if ($this->record['assists'])
+        }
+        if ($this->record['assists']) {
             $uids[] = $this->record['assists'];
-        if ($this->record['coach_home'])
+        }
+        if ($this->record['coach_home']) {
             $uids[] = $this->record['coach_home'];
-        if ($this->record['coach_guest'])
+        }
+        if ($this->record['coach_guest']) {
             $uids[] = $this->record['coach_guest'];
-        if ($this->record['players_home'])
+        }
+        if ($this->record['players_home']) {
             $uids[] = $this->record['players_home'];
-        if ($this->record['players_guest'])
+        }
+        if ($this->record['players_guest']) {
             $uids[] = $this->record['players_guest'];
-        if ($this->record['substitutes_home'])
+        }
+        if ($this->record['substitutes_home']) {
             $uids[] = $this->record['substitutes_home'];
-        if ($this->record['substitutes_guest'])
+        }
+        if ($this->record['substitutes_guest']) {
             $uids[] = $this->record['substitutes_guest'];
+        }
 
         $uids = implode($uids, ',');
 
         $what = '*';
         $from = 'tx_cfcleague_profiles';
-        $options['where'] = 'uid IN (' . $uids . ')';
+        $options['where'] = 'uid IN ('.$uids.')';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
 
         $rows = tx_rnbase_util_DB::doSelect($what, $from, $options);
@@ -594,16 +639,18 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     }
 
     /**
-     * Liefert das Team als Objekt
+     * Liefert das Team als Objekt.
      */
-    function _getTeam($uid)
+    public function _getTeam($uid)
     {
-        if (! $uid)
-            throw new Exception('Invalid match with uid ' . $this->getUid() . ': At least one team is not set.');
+        if (!$uid) {
+            throw new Exception('Invalid match with uid '.$this->getUid().': At least one team is not set.');
+        }
         // TODO: Umstellen auf tx_cfcleague_models_team
         // $team = tx_cfcleague_util_ServiceRegistry::getTeamService()->getTeam($uid);
         tx_rnbase::load('tx_cfcleaguefe_models_team');
         $team = tx_cfcleaguefe_models_team::getTeamInstance($uid);
+
         return $team;
     }
 
@@ -612,38 +659,42 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * Wenn ein Formatter übergeben wird, dann wird dieser formatiert,
      * ansonsten wird der eigentliche Wert geliefert.
      */
-    function getDate($formatter = 0, $configKey = 'match.date.')
+    public function getDate($formatter = 0, $configKey = 'match.date.')
     {
-        if ($formatter)
+        if ($formatter) {
             return $formatter->wrap($this->record['date'], $configKey);
-        else
+        } else {
             return $this->record['date'];
+        }
         // return $this->_formatter->stdWrap($this->match->record['date'],$this->_configurations->get('report.date.'));
     }
 
     /**
-     * Liefert das Stadion
+     * Liefert das Stadion.
      *
      * @return tx_cfcleague_models_Stadium Arena as object or false
      */
     public function getArena()
     {
-        if (! intval($this->getProperty('arena')))
+        if (!intval($this->getProperty('arena'))) {
             return false;
+        }
         tx_rnbase::load('tx_cfcleague_models_Stadium');
+
         return tx_cfcleague_models_Stadium::getStadiumInstance($this->getProperty('arena'));
     }
 
-    function getStadium($formatter = 0, $configKey = 'match.stadium.')
+    public function getStadium($formatter = 0, $configKey = 'match.stadium.')
     {
-        if ($formatter)
+        if ($formatter) {
             return $formatter->wrap($this->record['stadium'], $configKey);
-        else
+        } else {
             return $this->record['stadium'];
+        }
     }
 
     /**
-     * Returns the visitors of match
+     * Returns the visitors of match.
      *
      * @return int
      */
@@ -653,25 +704,27 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     }
 
     /**
-     * Liefert den Autor des Spielberichts
+     * Liefert den Autor des Spielberichts.
      */
-    function getReportAuthor($formatter = 0, $configKey = 'match.author.')
+    public function getReportAuthor($formatter = 0, $configKey = 'match.author.')
     {
-        if ($formatter)
+        if ($formatter) {
             return $formatter->wrap($this->record['game_report_author'], $configKey);
-        else
+        } else {
             return $this->record['game_report_author'];
+        }
     }
 
     /**
-     * Liefert den Spielbericht
+     * Liefert den Spielbericht.
      */
-    function getReport($formatter = 0, $configKey = 'match.report.')
+    public function getReport($formatter = 0, $configKey = 'match.report.')
     {
         if ($formatter) {
             return $formatter->wrap($this->record['game_report'], $configKey);
-        } else
+        } else {
             return $this->record['game_report'];
+        }
     }
 
     /**
@@ -682,46 +735,50 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * @param string $matchPart
      *            The matchpart is 1,2,3...,et,ap,last
      */
-    function getToto($matchPart = '')
+    public function getToto($matchPart = '')
     {
         $goalsHome = $this->getGoalsHome($matchPart);
         $goalsGuest = $this->getGoalsGuest($matchPart);
 
         $goalsDiff = $goalsHome - $goalsGuest;
 
-        if ($goalsDiff == 0)
+        if (0 == $goalsDiff) {
             return 0;
+        }
+
         return ($goalsDiff < 0) ? 2 : 1;
     }
 
     /**
-     * Returns the match round
+     * Returns the match round.
      *
      * @return int
      */
-    function getRound()
+    public function getRound()
     {
         return intval($this->record['round']);
     }
 
     /**
-     * Returns the competition
+     * Returns the competition.
      *
      * @return tx_cfcleague_models_Competition
      */
     public function getCompetition()
     {
-        if (! $this->competition) {
+        if (!$this->competition) {
             tx_rnbase::load('tx_cfcleague_models_Competition');
             $this->competition = tx_cfcleague_models_Competition::getCompetitionInstance($this->getProperty('competition'));
-            if (! is_object($this->competition)) {
+            if (!is_object($this->competition)) {
                 tx_rnbase::load('tx_rnbase_util_Logger');
-                tx_rnbase_util_Logger::warn('Match with UID ' . $this->getUid() . ' has no valid competition!', 't3sports', array(
-                    'match' => $this->getProperty()
+                tx_rnbase_util_Logger::warn('Match with UID '.$this->getUid().' has no valid competition!', 't3sports', array(
+                    'match' => $this->getProperty(),
                 ));
-                throw new Exception('Match with UID ' . $this->getUid() . ' has no valid competition!');
+
+                throw new Exception('Match with UID '.$this->getUid().' has no valid competition!');
             }
         }
+
         return $this->competition;
     }
 
@@ -731,9 +788,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     }
 
     /**
-     * Liefert keine Daten zum Wettbewerb
+     * Liefert keine Daten zum Wettbewerb.
      */
-    function getWhatMedium()
+    public function getWhatMedium()
     {
         return '
              tx_cfcleague_games.uid, home, t1.name as home_name, guest, t2.name as guest_name,
@@ -754,18 +811,18 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * erstellt: <ul>
      * <li>tx_cfcleague_games
      * <li>tx_cfcleague_teams
-     * </ul>
+     * </ul>.
      *
      * @return ein Array mit From-Clause und 'tx_cfcleague_games'
      */
-    function getFromMedium()
+    public function getFromMedium()
     {
-        return Array(
+        return array(
             '
        tx_cfcleague_games
          INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid
          INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid',
-            'tx_cfcleague_games'
+            'tx_cfcleague_games',
         );
     }
 
@@ -777,7 +834,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * @param $extended Optional
      *            kann auch der Spielbericht mit geladen werden
      */
-    function getWhatFull($extended = 0)
+    public function getWhatFull($extended = 0)
     {
         return '
              tx_cfcleague_games.uid, home, t1.name as home_name, guest, t2.name as guest_name,
@@ -794,7 +851,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
              tx_cfcleague_competition.name As competition_name,tx_cfcleague_competition.short_name As competition_short_name, tx_cfcleague_competition.type As competition_type,
              (SELECT tx_cfcleague_group.name FROM tx_cfcleague_group WHERE tx_cfcleague_group.uid = tx_cfcleague_competition.agegroup) As agegroup,
              date, round, round_name, stadium, status, visitors, link_ticker, tx_cfcleague_games.link_report, LENGTH(game_report) AS has_report
-             ' . ($extended ? '
+             '.($extended ? '
                 , game_report, game_report_author, tx_cfcleague_games.t3images, referee, assists, system_home, system_guest
                 , players_home, players_guest, substitutes_home, substitutes_guest
                 , coach_home, coach_guest' : '');
@@ -807,20 +864,20 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * <li>tx_cfcleague_games
      * <li>tx_cfcleague_competition
      * <li>tx_cfcleague_teams
-     * </ul>
+     * </ul>.
      *
      * @return ein Array mit From-Clause und 'tx_cfcleague_games'
      */
-    function getFromFull()
+    public function getFromFull()
     {
         // CHECK: Funktioniert das auch bei MySQL4??
-        return Array(
+        return array(
             '
        tx_cfcleague_games
          INNER JOIN tx_cfcleague_competition ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid
          INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid
          INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid',
-            'tx_cfcleague_games'
+            'tx_cfcleague_games',
         );
 
         /*
@@ -842,6 +899,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * bei zwei Anfragen für die selbe UID nur ein DB Zugriff erfolgt.
      *
      * @param int $uid
+     *
      * @return tx_cfcleaguefe_models_match
      */
     public static function getMatchInstance($uid)
@@ -850,9 +908,10 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
         if (!$uid) {
             throw new Exception('Invalid uid for match');
         }
-        if (! is_object(self::$instances[$uid])) {
-            self::$instances[$uid] = new tx_cfcleaguefe_models_match($uid);
+        if (!is_object(self::$instances[$uid])) {
+            self::$instances[$uid] = new self($uid);
         }
+
         return self::$instances[$uid];
     }
 

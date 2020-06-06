@@ -1,5 +1,4 @@
 <?php
-use System25\Cfc_league_fe\Chart\Builder;
 
 /***************************************************************
 *  Copyright notice
@@ -28,66 +27,79 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
- * Service to output a chart to compare two match opponents
+ * Service to output a chart to compare two match opponents.
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base {
+class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base
+{
+    public function addChart($params, $parent)
+    {
+        $marker = $params['marker'];
+        $confId = $params['confid'];
+        $template = $params['template'];
+        if (!tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
+            !tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) {
+            return;
+        }
+        $formatter = $params['formatter'];
+        $chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
+        //		$chart = '<!-- TODO: convert to JS -->';
+        $markerArray = $subpartArray = $wrappedSubpartArray = array();
+        $markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
+        $markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
+        $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+    }
 
-	public function addChart($params, $parent) {
-		$marker = $params['marker'];
-		$confId = $params['confid'];
-		$template = $params['template'];
-		if(!tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
-			!tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) return;
-		$formatter = $params['formatter'];
-		$chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
-//		$chart = '<!-- TODO: convert to JS -->';
-		$markerArray = $subpartArray = $wrappedSubpartArray = array();
-		$markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
-		$markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
-		$params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-	}
-	/**
-	 * Generate chart
-	 * FIXME: Umstellen auf ChartJS
-	 *
-	 * @param array $params
-	 * @param tx_rnbase_util_FormatUtil $formatter
-	 * @param string $confId matchreport.match.
-	 */
-	protected function getMarkerValue($params, $formatter, $confId) {
-		if(!isset($params['match'])) return false;
-		/* @var $match tx_cfcleaguefe_models_match */
-		$match = $params['match'];
-		$competition = $match->getCompetition();
-		if(!$competition->isTypeLeague()) return '';
+    /**
+     * Generate chart
+     * FIXME: Umstellen auf ChartJS.
+     *
+     * @param array $params
+     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string $confId matchreport.match.
+     */
+    protected function getMarkerValue($params, $formatter, $confId)
+    {
+        if (!isset($params['match'])) {
+            return false;
+        }
+        /* @var $match tx_cfcleaguefe_models_match */
+        $match = $params['match'];
+        $competition = $match->getCompetition();
+        if (!$competition->isTypeLeague()) {
+            return '';
+        }
 
-		$configurations = $formatter->getConfigurations();
+        $configurations = $formatter->getConfigurations();
 
-		tx_rnbase::load('tx_cfcleaguefe_table_Builder');
-		tx_rnbase::load('tx_cfcleague_models_Match');
-		$table = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($competition,
-				$competition->getMatches(tx_cfcleague_models_Match::MATCH_STATUS_FINISHED), $configurations, $confId);
+        tx_rnbase::load('tx_cfcleaguefe_table_Builder');
+        tx_rnbase::load('tx_cfcleague_models_Match');
+        $table = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches(
+            $competition,
+            $competition->getMatches(tx_cfcleague_models_Match::MATCH_STATUS_FINISHED),
+            $configurations,
+            $confId
+        );
 
-		/* @var $builder System25\T3sports\Chart\ChartBuilder */
-		$builder = tx_rnbase::makeInstance(System25\T3sports\Chart\ChartBuilder::class);
-		$json = $builder->buildJson($table, [$match->getHome()->getClubUid(), $match->getGuest()->getClubUid()], $formatter->getConfigurations(), $confId);
+        /* @var $builder System25\T3sports\Chart\ChartBuilder */
+        $builder = tx_rnbase::makeInstance(System25\T3sports\Chart\ChartBuilder::class);
+        $json = $builder->buildJson($table, [$match->getHome()->getClubUid(), $match->getGuest()->getClubUid()], $formatter->getConfigurations(), $confId);
 
-		$chartTemplate = tx_rnbase_util_Templates::getSubpartFromFile($configurations->get($confId.'template.file'), $configurations->get($confId.'template.subpart'));
+        $chartTemplate = tx_rnbase_util_Templates::getSubpartFromFile($configurations->get($confId.'template.file'), $configurations->get($confId.'template.subpart'));
 
-		$markerArray = $subpartArray = $wrappedSubpartArray = array();
-		$markerArray['###JSON###'] = $json;
-		$chartTemplate = tx_rnbase_util_Templates::substituteMarkerArrayCached($chartTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $markerArray = $subpartArray = $wrappedSubpartArray = array();
+        $markerArray['###JSON###'] = $json;
+        $chartTemplate = tx_rnbase_util_Templates::substituteMarkerArrayCached($chartTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
 
-		return $chartTemplate;
-	}
-	/**
-	 * @return tx_cfcleaguefe_util_MatchTable
-	 */
-	protected function getMatchTable() {
-		return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
-	}
+        return $chartTemplate;
+    }
+
+    /**
+     * @return tx_cfcleaguefe_util_MatchTable
+     */
+    protected function getMatchTable()
+    {
+        return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
+    }
 }
-
-

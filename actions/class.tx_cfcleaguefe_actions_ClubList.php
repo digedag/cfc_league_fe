@@ -24,19 +24,16 @@
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
-/**
- */
 class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     *
      * @param array_object $parameters
      * @param tx_rnbase_configurations $configurations
      * @param array $viewData
+     *
      * @return string error msg or null
      */
-    function handleRequest(&$parameters, &$configurations, &$viewData)
+    public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
         $this->conf = $configurations;
@@ -51,11 +48,12 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
         $this->handlePageBrowser($parameters, $configurations, $viewData, $fields, $options);
         $items = $srv->searchClubs($fields, $options);
         $viewData->offsetSet('items', $items);
+
         return null;
     }
 
     /**
-     * Pagebrowser vorbereiten
+     * Pagebrowser vorbereiten.
      *
      * @param array_object $parameters
      * @param tx_rnbase_configurations $configurations
@@ -65,7 +63,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
      */
     protected function handlePageBrowser(&$parameters, &$configurations, &$viewdata, &$fields, &$options)
     {
-        if (is_array($configurations->get($this->getConfId() . 'club.pagebrowser.'))) {
+        if (is_array($configurations->get($this->getConfId().'club.pagebrowser.'))) {
             $service = tx_cfcleague_util_ServiceRegistry::getTeamService();
             // Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Orgs zu ermitteln
             $options['count'] = 1;
@@ -73,7 +71,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
             unset($options['count']);
             // PageBrowser initialisieren
             $pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'club');
-            $pageSize = intval($configurations->get($this->getConfId() . 'club.pagebrowser.limit'));
+            $pageSize = intval($configurations->get($this->getConfId().'club.pagebrowser.limit'));
             $pageBrowser->setState($parameters, $listSize, $pageSize);
             $limit = $pageBrowser->getState();
             $options = array_merge($options, $limit);
@@ -83,9 +81,9 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
 
     protected function handleCharBrowser(&$parameters, &$configurations, &$viewData, &$fields, &$options)
     {
-        if ($configurations->get($this->getConfId() . 'club.charbrowser')) {
+        if ($configurations->get($this->getConfId().'club.charbrowser')) {
             $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
-            $colName = $configurations->get($this->getConfId() . 'club.charbrowser.column');
+            $colName = $configurations->get($this->getConfId().'club.charbrowser.column');
             $colName = $colName ? $colName : 'name';
 
             $pagerData = $this->findPagerData($srv, $configurations, $colName);
@@ -97,18 +95,19 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
         $filter = $viewData->offsetGet('filter');
         // Der CharBrowser beachten wir nur, wenn keine Suche aktiv ist
         // TODO: Der Filter sollte eine Methode haben, die sagt, ob ein Formular aktiv ist
-        if ($firstChar && ! $filter->inputData) {
+        if ($firstChar && !$filter->inputData) {
             $specials = tx_rnbase_util_SearchBase::getSpecialChars();
             $firsts = $specials[$firstChar];
             if ($firsts) {
                 $firsts = implode('\', \'', $firsts);
-            } else
+            } else {
                 $firsts = $firstChar;
+            }
 
-            if ($fields[SEARCH_FIELD_CUSTOM])
+            if ($fields[SEARCH_FIELD_CUSTOM]) {
                 $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
-            $fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(" . $colName . "),1) IN ('$firsts') ";
-            ;
+            }
+            $fields[SEARCH_FIELD_CUSTOM] .= 'LEFT(UCASE('.$colName."),1) IN ('$firsts') ";
         }
     }
 
@@ -123,11 +122,11 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
     protected function findPagerData(&$service, &$configurations, $colName)
     {
         $options = [];
-        $options['what'] = 'LEFT(UCASE(' . $colName . '),1) As first_char, count(LEFT(UCASE(' . $colName . '),1)) As size';
-        $options['groupby'] = 'LEFT(UCASE(' . $colName . '),1)';
+        $options['what'] = 'LEFT(UCASE('.$colName.'),1) As first_char, count(LEFT(UCASE('.$colName.'),1)) As size';
+        $options['groupby'] = 'LEFT(UCASE('.$colName.'),1)';
         $fields = array();
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId() . 'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId() . 'options.');
+        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
+        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
 
         $rows = $service->searchClubs($fields, $options);
 
@@ -143,8 +142,9 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
         foreach ($rows as $row) {
             if (array_key_exists(($row['first_char']), $wSpecials)) {
                 $ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];
-            } else
+            } else {
                 $ret[$row['first_char']] = $row['size'];
+            }
         }
 
         $current = 0;
@@ -156,15 +156,16 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
             'list' => $ret,
             'default' => $current,
         ];
+
         return $data;
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'clublist';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_ClubList';
     }

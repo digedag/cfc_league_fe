@@ -28,7 +28,6 @@
  */
 interface tx_cfcleaguefe_table_IMatchProvider
 {
-
     /**
      * The base competition.
      * It is normally used to retrieve some basic
@@ -39,21 +38,21 @@ interface tx_cfcleaguefe_table_IMatchProvider
     public function getBaseCompetition();
 
     /**
-     * Match penalties to handle
+     * Match penalties to handle.
      *
      * @return array[tx_cfcleaguefe_models_penalty]
      */
     public function getPenalties();
 
     /**
-     * Teams to handle
+     * Teams to handle.
      *
      * @return array[tx_cfcleaguefe_models_team]
      */
     public function getTeams();
 
     /**
-     * Matches sorted by rounds
+     * Matches sorted by rounds.
      *
      * @return array[int][tx_cfcleaguefe_models_match]
      */

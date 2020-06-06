@@ -23,18 +23,15 @@
  ***************************************************************/
 tx_rnbase::load('tx_rnbase_util_ListMarkerInfo');
 
-/**
- */
 class tx_cfcleaguefe_util_MatchMarkerListInfo extends tx_rnbase_util_ListMarkerInfo
 {
-
     public function init($template, &$formatter, $marker)
     {
         // Im Template ist noch das Template für Spielfrei enthalten
-        $this->freeTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###' . $marker . '_FREE###');
+        $this->freeTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###'.$marker.'_FREE###');
         // Dieses enfernen wir jetzt direkt aus dem Template
-        $subpartArray = ['###' . $marker . '_FREE###' => ''];
-        $this->template =  \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [], $subpartArray);
+        $subpartArray = ['###'.$marker.'_FREE###' => ''];
+        $this->template = \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [], $subpartArray);
     }
 
     public function getTemplate(&$item)

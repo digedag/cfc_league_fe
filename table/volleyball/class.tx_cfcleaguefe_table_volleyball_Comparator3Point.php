@@ -25,11 +25,10 @@ tx_rnbase::load('tx_cfcleaguefe_table_volleyball_IComparator');
 
 /**
  * Comperator methods for volleyball league tables with 3 point system.
- * http://sourceforge.net/apps/trac/cfcleague/ticket/74
+ * http://sourceforge.net/apps/trac/cfcleague/ticket/74.
  */
 class tx_cfcleaguefe_table_volleyball_Comparator3Point implements tx_cfcleaguefe_table_volleyball_IComparator
 {
-
     public function setTeamData(array &$teamdata)
     {
         $this->_teamData = $teamdata;
@@ -42,15 +41,17 @@ class tx_cfcleaguefe_table_volleyball_Comparator3Point implements tx_cfcleaguefe
      * 2. Anzahl gewonnener Spiele
      * 3. Satzquotient
      * 4. Ballpunktequotient
-     * 5. direkter Vergleich
+     * 5. direkter Vergleich.
      */
     public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if ($t1['static_position'])
+        if ($t1['static_position']) {
             return 1;
-        if ($t2['static_position'])
-            return - 1;
+        }
+        if ($t2['static_position']) {
+            return -1;
+        }
 
         // Zuerst die Punkte
         if ($t1['points'] == $t2['points']) {
@@ -79,17 +80,22 @@ class tx_cfcleaguefe_table_volleyball_Comparator3Point implements tx_cfcleaguefe
                             if ($t1H2HDiff == $t2H2HDiff) {
                                 return 0; // Gleichstand. Entscheidungsspiel wird nicht beachtet
                             }
-                            return $t1H2HDiff > $t2H2HDiff ? - 1 : 1;
+
+                            return $t1H2HDiff > $t2H2HDiff ? -1 : 1;
                         }
-                        return $t1H2HPoints > $t2H2HPoints ? - 1 : 1;
+
+                        return $t1H2HPoints > $t2H2HPoints ? -1 : 1;
                     }
-                    return $t1balls > $t2balls ? - 1 : 1;
+
+                    return $t1balls > $t2balls ? -1 : 1;
                 }
-                return $t1setquot > $t2setquot ? - 1 : 1;
+
+                return $t1setquot > $t2setquot ? -1 : 1;
             }
-            return $t1['winCount'] > $t2['winCount'] ? - 1 : 1;
+
+            return $t1['winCount'] > $t2['winCount'] ? -1 : 1;
         }
-        return $t1['points'] > $t2['points'] ? - 1 : 1;
+
+        return $t1['points'] > $t2['points'] ? -1 : 1;
     }
 }
-

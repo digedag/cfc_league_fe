@@ -24,17 +24,17 @@
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
- * Action für die Anzeige eines Spielberichts
+ * Action für die Anzeige eines Spielberichts.
  */
 class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     * handle request
+     * handle request.
      *
      * @param arrayobject $parameters
      * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
      * @param arrayobject $viewData
+     *
      * @return string
      */
     protected function handleRequest(&$parameters, &$configurations, &$viewData)
@@ -42,16 +42,17 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
         // Die MatchID ermittlen
         // Ist sie fest definiert?
         $matchId = intval($configurations->get('matchreportMatchUid'));
-        if (! $matchId) {
+        if (!$matchId) {
             $matchId = intval($parameters->offsetGet('matchId'));
-            if ($matchId == 0)
+            if (0 == $matchId) {
                 return 'No matchId found!';
+            }
         }
         // Das Spiel laden
         try {
-            if ($configurations->get($this->getConfId() . 'viewClassName') != null) {
+            if (null != $configurations->get($this->getConfId().'viewClassName')) {
                 $match = tx_rnbase::makeInstance('tx_cfcleague_models_Match', $matchId);
-                if (! $match->isValid()) {
+                if (!$match->isValid()) {
                     throw new Exception('Match is not valid');
                 }
                 $viewData->offsetSet('match', $match); // Den Spielreport für den View bereitstellen
@@ -61,8 +62,9 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
                 $viewData->offsetSet('match', $matchReport->getMatch()); // Den Spielreport für den View bereitstellen
             }
         } catch (Exception $e) {
-            throw tx_rnbase::makeInstance('Tx_Rnbase_Exception_PageNotFound404', $e->getMessage() . "\nX-t3sports-msg: match not found\nX-t3sports-match: " . $matchId);
+            throw tx_rnbase::makeInstance('Tx_Rnbase_Exception_PageNotFound404', $e->getMessage()."\nX-t3sports-msg: match not found\nX-t3sports-match: ".$matchId);
         }
+
         return null;
     }
 
@@ -76,4 +78,3 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
         return 'tx_cfcleaguefe_views_MatchReport';
     }
 }
-

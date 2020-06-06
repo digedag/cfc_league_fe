@@ -30,7 +30,7 @@ tx_rnbase::load('tx_cfcleaguefe_util_Statistics');
 tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
- * Controller für die Anzeige von Spielerstatistiken
+ * Controller für die Anzeige von Spielerstatistiken.
  *
  * Zunächst ist wichtig welche Spieler betrachtet werden sollen. Dieser
  * Scope ist zunächst auf die Spieler eines Teams und damit auch einer
@@ -46,13 +46,13 @@ tx_rnbase::load('Tx_Rnbase_Utility_Strings');
  */
 class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     * handle request
+     * handle request.
      *
-     * @param arrayobject $parameters            
-     * @param tx_rnbase_configurations $configurations            
-     * @param arrayobject $viewData            
+     * @param arrayobject $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param arrayobject $viewData
+     *
      * @return string
      */
     protected function handleRequest(&$parameters, &$configurations, &$viewData)
@@ -60,28 +60,29 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
         // Die notwendigen Statistikklassen ermitteln
         $types = Tx_Rnbase_Utility_Strings::trimExplode(',', $configurations->get('statisticTypes'), 1);
-        if (! count($types)) {
+        if (!count($types)) {
             // Abbruch kein Typ angegeben
             return $configurations->getLL('statistics_noTypeFound');
         }
         $services = array();
         foreach ($types as $type) {
             $service = tx_rnbase::makeInstanceService('cfcleague_statistics', $type);
-            if (is_object($service))
+            if (is_object($service)) {
                 $services[$type] = $service;
+            }
         }
         $mode = $configurations->get('statistic.callbackmode');
         if ($mode) {
             $stats = tx_cfcleaguefe_util_Statistics::createInstance();
             $data = $stats->createStatisticsCallback($scopeArr, $services, $configurations, $parameters);
         } else {
-            $matches = & tx_cfcleaguefe_util_MatchTicker::getMatches4Scope($scopeArr);
+            $matches = &tx_cfcleaguefe_util_MatchTicker::getMatches4Scope($scopeArr);
             $data = tx_cfcleaguefe_util_Statistics::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
         }
-        
+
         // Aufruf der Statistik
         $viewData->offsetSet('data', $data); // Services bereitstellen
-        
+
         return null;
     }
 
@@ -95,5 +96,3 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
         return 'tx_cfcleaguefe_views_Statistics';
     }
 }
-
-

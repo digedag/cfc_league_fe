@@ -23,11 +23,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- */
 class tx_cfcleaguefe_table_PointOptions
 {
     const AFTER_EXTRA_TIME = 'afterExtraTime';
+
     const AFTER_EXTRA_PENALTY = 'afterExtraPenalty';
 
     private $options;
@@ -38,7 +37,6 @@ class tx_cfcleaguefe_table_PointOptions
     }
 
     /**
-     *
      * @param string $key
      * @param mixed $value
      */
@@ -46,10 +44,11 @@ class tx_cfcleaguefe_table_PointOptions
     {
         $this->options[$key] = $value;
     }
+
     /**
-     *
      * @param string $key
-     * @return mixed|NULL
+     *
+     * @return mixed|null
      */
     public function getOption($key)
     {

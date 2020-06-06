@@ -25,25 +25,25 @@ namespace System25\T3sports\Filter;
  ***************************************************************/
 
 /**
- * Default filter for stadiums
+ * Default filter for stadiums.
  *
  * @author Rene Nitzsche
  */
-class StadiumFilter extends \tx_rnbase_filter_BaseFilter {
-	/**
-	 * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @param \tx_rnbase_IParameters $parameters
-	 * @param \tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 */
-	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
-  	$options['distinct'] = 1;
-  	$scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
-		\tx_cfcleague_search_Builder::buildStadiumByScope($fields, $scopeArr);
-	}
-
+class StadiumFilter extends \tx_rnbase_filter_BaseFilter
+{
+    /**
+     * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
+     *
+     * @param array $fields
+     * @param array $options
+     * @param \tx_rnbase_IParameters $parameters
+     * @param \tx_rnbase_configurations $configurations
+     * @param string $confId
+     */
+    protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
+    {
+        $options['distinct'] = 1;
+        $scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+        \tx_cfcleague_search_Builder::buildStadiumByScope($fields, $scopeArr);
+    }
 }
-

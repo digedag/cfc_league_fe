@@ -1,4 +1,5 @@
 <?php
+
 namespace System25\T3sports\Twig\Data;
 
 /***************************************************************
@@ -24,22 +25,23 @@ namespace System25\T3sports\Twig\Data;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 /**
- * Provide additional data for match notes
+ * Provide additional data for match notes.
  */
 class MatchNote
 {
-
     protected $profileSrv;
+
     /** @var \tx_cfcleague_models_MatchNote[] */
     protected $matchNote;
+
     /** @var Player */
     protected $player;
+
     /** @var Player */
     protected $player2;
+
     /**
-     *
      * @param \tx_cfcleague_models_MatchNote $note
      * @param Player $player
      */
@@ -68,18 +70,20 @@ class MatchNote
     public function isHome()
     {
         $ret = $this->matchNote->isHome();
-        if($this->matchNote->isGoalOwn()) {
+        if ($this->matchNote->isGoalOwn()) {
             $ret = !$ret;
         }
+
         return $ret;
     }
 
     public function isGuest()
     {
         $ret = $this->matchNote->isGuest();
-        if($this->matchNote->isGoalOwn()) {
+        if ($this->matchNote->isGoalOwn()) {
             $ret = !$ret;
         }
+
         return $ret;
     }
 
@@ -87,6 +91,7 @@ class MatchNote
     {
         return $this->matchNote->getProperty('goals_home');
     }
+
     public function getGoalsGuest()
     {
         return $this->matchNote->getProperty('goals_guest');
@@ -99,7 +104,7 @@ class MatchNote
 
     public function isChange()
     {
-        return $this->getType() == \tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT;
+        return \tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT == $this->getType();
     }
 
     public function isGoal()
@@ -110,19 +115,19 @@ class MatchNote
             \tx_cfcleague_models_MatchNote::TYPE_GOAL_PENALTY,
             \tx_cfcleague_models_MatchNote::TYPE_GOAL_OWN,
         ];
+
         return in_array($this->getType(), $goalTypes);
     }
 
     /**
-     *
      * @return \tx_cfcleague_models_MatchNote
      */
     public function getMatchNote()
     {
         return $this->matchNote;
     }
+
     /**
-     *
      * @return Player
      */
     public function getPlayer()
@@ -138,7 +143,7 @@ class MatchNote
     public function setPlayer2(Player $player2)
     {
         $this->player2 = $player2;
+
         return $this;
     }
 }
-

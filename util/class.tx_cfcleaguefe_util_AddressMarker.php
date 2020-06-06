@@ -25,13 +25,11 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
- * Diese Klasse ist für die Erstellung von Markerarrays von Adressen verantwortlich
+ * Diese Klasse ist für die Erstellung von Markerarrays von Adressen verantwortlich.
  */
 class tx_cfcleaguefe_util_AddressMarker extends tx_rnbase_util_BaseMarker
 {
-
     /**
-     *
      * @param string $template
      *            das HTML-Template
      * @param tx_cfcleaguefe_models_address $address
@@ -45,19 +43,21 @@ class tx_cfcleaguefe_util_AddressMarker extends tx_rnbase_util_BaseMarker
      * @param string $clubMarker
      *            Name des Markers für den Club, z.B. CLUB
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
-     * @return String das geparste Template
+     *
+     * @return string das geparste Template
      */
     public function parseTemplate($template, &$address, &$formatter, $confId, $links = 0, $addressMarker = 'ADDRESS')
     {
-        if (! is_object($address)) {
+        if (!is_object($address)) {
             // Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
             $address = self::getEmptyInstance('tx_cfcleaguefe_models_address');
         }
         $ignore = self::findUnusedCols($address->getProperty(), $template, $addressMarker);
         // Es wird das MarkerArray mit den Daten des Teams gefüllt.
-        $markerArray = $formatter->getItemMarkerArrayWrapped($address->getProperty(), $confId, $ignore, $addressMarker . '_', $address->getColumnNames());
+        $markerArray = $formatter->getItemMarkerArrayWrapped($address->getProperty(), $confId, $ignore, $addressMarker.'_', $address->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
         return $out;
     }
 }

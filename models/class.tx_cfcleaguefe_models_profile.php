@@ -28,7 +28,6 @@
  */
 class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
 {
-
     public function getTableName()
     {
         return 'tx_cfcleague_profiles';
@@ -36,12 +35,13 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
 
     public function __construct($rowOrUid)
     {
-        if (! is_array($rowOrUid) && intval($rowOrUid) < 0) {
+        if (!is_array($rowOrUid) && intval($rowOrUid) < 0) {
             // Unbekannter Spieler
             $this->uid = $rowOrUid;
             $this->record['uid'] = $rowOrUid;
-        } else
+        } else {
             parent::tx_rnbase_model_base($rowOrUid);
+        }
     }
 
     /**
@@ -54,9 +54,9 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
      * @param array $conf
      *            Configuration array
      */
-    static function wrap(&$formatter, $confId, $profile)
+    public static function wrap(&$formatter, $confId, $profile)
     {
-        if (! is_object($profile)) {
+        if (!is_object($profile)) {
             // Es wurde kein Profil übergeben, also gibt es nicht weiter zu tun
             return $formatter->wrap('', $confId);
         }
@@ -72,13 +72,13 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         $arr = array();
         // Über alle Felder im record iterieren
         foreach ($profile->record as $key => $val) {
-            if ($conf[$key] || $conf[$key . '.']) {
-                $value = $formatter->wrap($profile->record[$key], $confId . $key . '.', $profile->record);
+            if ($conf[$key] || $conf[$key.'.']) {
+                $value = $formatter->wrap($profile->record[$key], $confId.$key.'.', $profile->record);
                 if (strlen($value) > 0) {
-                    $weight = intval($formatter->configurations->get($confId . $key . '.s_weight'));
+                    $weight = intval($formatter->configurations->get($confId.$key.'.s_weight'));
                     $arr[] = array(
                         $value,
-                        $weight
+                        $weight,
                     );
                     $value = '';
                 }
@@ -87,12 +87,12 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
 
         $ticker = $profile->isChangedOut();
         if (is_object($ticker) && $conf['ifChangedOut.']['ticker.']) {
-            $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId . 'ifChangedOut.ticker.', $ticker);
+            $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId.'ifChangedOut.ticker.', $ticker);
             if (strlen($value) > 0) {
-                $weight = intval($formatter->configurations->get($confId . 'ifChangedOut.s_weight'));
+                $weight = intval($formatter->configurations->get($confId.'ifChangedOut.s_weight'));
                 $arr[] = array(
                     $value,
-                    $weight
+                    $weight,
                 );
                 $value = '';
             }
@@ -100,18 +100,20 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
 
         $ticker = $profile->isPenalty();
         if (is_object($ticker) && $conf['ifPenalty.']['ticker.']) {
-            $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId . 'ifPenalty.ticker.', $ticker);
+            $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId.'ifPenalty.ticker.', $ticker);
             if (strlen($value) > 0) {
-                $weight = intval($formatter->configurations->get($confId . 'ifPenalty.s_weight'));
+                $weight = intval($formatter->configurations->get($confId.'ifPenalty.s_weight'));
                 $arr[] = array(
                     $value,
-                    $weight
+                    $weight,
                 );
                 $value = '';
             }
         }
-        if (! count($arr)) // Wenn das Array leer ist, wird nix gezeigt
+        if (!count($arr)) { // Wenn das Array leer ist, wird nix gezeigt
+
             return $formatter->wrap('', $confId, $profile->record);
+        }
 
         // Jetzt die Teile sortieren
         usort($arr, 'cmpWeight');
@@ -151,33 +153,37 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     }
 
     /**
-     * Returns the team notes for this player
+     * Returns the team notes for this player.
      *
      * @param tx_cfcleaguefe_models_team $team
      */
     public function getTeamNotes(&$team)
     {
         $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+
         return $srv->getTeamNotes($this, $team);
     }
 
     /**
-     * Liefert den kompletten Namen der Person
+     * Liefert den kompletten Namen der Person.
      *
      * @param int $reverse Wenn 1 dann ist die Form <Nachname, Vorname>
      */
-    function getName($reverse = 0)
+    public function getName($reverse = 0)
     {
         if ($reverse) {
             $ret = $this->record['last_name'];
-            if ($this->record['first_name'])
-                $ret .= ', ' . $this->record['first_name'];
+            if ($this->record['first_name']) {
+                $ret .= ', '.$this->record['first_name'];
+            }
         } else {
             $ret = $this->record['first_name'];
-            if ($this->record['first_name'])
+            if ($this->record['first_name']) {
                 $ret .= ' ';
+            }
             $ret .= $this->record['last_name'];
         }
+
         return $ret;
     }
 
@@ -186,8 +192,9 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
      */
     public function addMatchNote(&$note)
     {
-        if (! isset($this->_matchNotes))
-            $this->_matchNotes = array(); // Neues TickerArray erstellen
+        if (!isset($this->_matchNotes)) {
+            $this->_matchNotes = array();
+        } // Neues TickerArray erstellen
         $this->_matchNotes[] = $note;
         // Wir prüfen direkt auf Teamcaptain
         $this->check4Captain($note);
@@ -205,7 +212,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
      * Returns 1 if player is team captain in a match.
      * Works if match_notes set.
      */
-    function isCaptain()
+    public function isCaptain()
     {
         return intval($this->record['teamCaptain']);
     }
@@ -214,21 +221,24 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
      * Returns a match_note if player was changed out during a match.
      * Works if match_notes set.
      */
-    function isChangedOut()
+    public function isChangedOut()
     {
         if (is_array($this->_matchNotes)) {
-            for ($i = 0; $i < count($this->_matchNotes); $i ++) {
+            for ($i = 0; $i < count($this->_matchNotes); ++$i ) {
                 $note = $this->_matchNotes[$i];
-                if ($note->isType(80))
+                if ($note->isType(80)) {
                     return $note;
+                }
             }
         }
+
         return 0;
     }
 
     /**
      * Returns a match_note if player received a penalty card during a match.
      * Works if match_notes set.
+     *
      * @return
      */
     public function isPenalty()
@@ -236,12 +246,14 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         // Die Matchnotes müssen absteigend durchsucht werden, da die letzte Strafe entscheidend ist
         if (is_array($this->_matchNotes)) {
             $arr = array_reverse($this->_matchNotes);
-            for ($i = 0; $i < count($arr); $i ++) {
+            for ($i = 0; $i < count($arr); ++$i ) {
                 $note = $arr[$i];
-                if ($note->isPenalty())
+                if ($note->isPenalty()) {
                     return $note;
+                }
             }
         }
+
         return 0;
     }
 
@@ -256,28 +268,29 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         // Zunächst alle Daten initialisieren
         tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
         $types = tx_cfcleaguefe_models_teamNoteType::getAll();
-        for ($i = 0, $cnt = count($types); $i < $cnt; $i ++) {
+        for ($i = 0, $cnt = count($types); $i < $cnt; ++$i ) {
             $type = $types[$i];
-            $this->setProperty('tn' . $type->getMarker(), '');
-            $this->setProperty('tn' . $type->getMarker() . '_type', '0');
+            $this->setProperty('tn'.$type->getMarker(), '');
+            $this->setProperty('tn'.$type->getMarker().'_type', '0');
         }
 
         if (is_object($team)) {
             // Mit Team können die TeamNotes geholt werden
             $notes = $this->getTeamNotes($team);
-            for ($i = 0, $cnt = count($notes); $i < $cnt; $i ++) {
+            for ($i = 0, $cnt = count($notes); $i < $cnt; ++$i ) {
                 $note = $notes[$i];
                 $noteType = $note->getType();
-                $this->setProperty('tn' . $noteType->getMarker(), $note->getUid());
+                $this->setProperty('tn'.$noteType->getMarker(), $note->getUid());
                 // $this->record['tn'.$noteType->getMarker()] = $note->getValue();
-                $this->setProperty('tn' . $noteType->getMarker() . '_type', $note->getProperty('mediatype'));
+                $this->setProperty('tn'.$noteType->getMarker().'_type', $note->getProperty('mediatype'));
             }
         }
     }
 
     /**
      * Liefert true, wenn für den Spieler eine Einzelansicht verlinkt werden soll.
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasReport()
     {
@@ -286,12 +299,13 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
 
     /**
      * Liefert das Sternzeichen der Person.
+     *
      * @return string
      */
     public function getSign()
     {
         $signs = System25\T3sports\Utility\Signs::getInstance();
-        return intval($this->getProperty('birthday')) != 0 ? $signs->getSign($this->getProperty('birthday')) : '';
+
+        return 0 != intval($this->getProperty('birthday')) ? $signs->getSign($this->getProperty('birthday')) : '';
     }
 }
-

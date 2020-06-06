@@ -26,23 +26,24 @@ namespace System25\T3sports\Service;
  ***************************************************************/
 
 /**
- * Service for accessing competition information
+ * Service for accessing competition information.
  *
  * @author Rene Nitzsche
  */
 class CompetitionService extends \Tx_Rnbase_Service_Base
 {
-
     /**
-     * Search database for competitions
+     * Search database for competitions.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return [\tx_cfcleaguefe_models_competition]
      */
     public function search($fields, $options)
     {
         $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\CompetitionSearch::class);
+
         return $searcher->search($fields, $options);
     }
 }

@@ -28,22 +28,23 @@ tx_rnbase::load('tx_cfcleaguefe_table_volleyball_IComparator');
  */
 class tx_cfcleaguefe_table_volleyball_Comparator implements tx_cfcleaguefe_table_volleyball_IComparator
 {
-
     public function setTeamData(array &$teamdata)
     {
         $this->_teamData = $teamdata;
     }
 
     /**
-     * Funktion zur Sortierung der Tabellenzeilen
+     * Funktion zur Sortierung der Tabellenzeilen.
      */
     public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if ($t1['static_position'])
+        if ($t1['static_position']) {
             return 1;
-        if ($t2['static_position'])
-            return - 1;
+        }
+        if ($t2['static_position']) {
+            return -1;
+        }
 
         if ($t1['points'] == $t2['points']) {
             // Im 2-Punkte-Modus sind die Minuspunkte ausschlaggebend
@@ -59,16 +60,19 @@ class tx_cfcleaguefe_table_volleyball_Comparator implements tx_cfcleaguefe_table
                         if ($t1['matchCount'] == $t2['matchCount']) {
                             return 0; // Punkt und Torgleich
                         }
+
                         return $t1['matchCount'] > $t2['matchCount'];
                     }
-                    return $t1['sets1'] > $t2['sets1'] ? - 1 : 1;
+
+                    return $t1['sets1'] > $t2['sets1'] ? -1 : 1;
                 }
-                return $t1diff > $t2diff ? - 1 : 1;
+
+                return $t1diff > $t2diff ? -1 : 1;
             }
             // Bei den Minuspunkten ist weniger mehr
-            return $t1['points2'] < $t2['points2'] ? - 1 : 1;
+            return $t1['points2'] < $t2['points2'] ? -1 : 1;
         }
-        return $t1['points'] > $t2['points'] ? - 1 : 1;
+
+        return $t1['points'] > $t2['points'] ? -1 : 1;
     }
 }
-

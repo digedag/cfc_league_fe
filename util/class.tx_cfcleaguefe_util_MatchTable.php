@@ -25,14 +25,13 @@
 tx_rnbase::load('tx_cfcleague_util_MatchTableBuilder');
 /**
  * This is a facade to build search queries for matches from database.
+ *
  * @deprecated use tx_cfcleague_util_MatchTableBuilder
  */
-class tx_cfcleaguefe_util_MatchTable extends tx_cfcleague_util_MatchTableBuilder  {
+class tx_cfcleaguefe_util_MatchTable extends tx_cfcleague_util_MatchTableBuilder
+{
 }
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTable.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTable.php']);
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_MatchTable.php'];
 }
-
-?>

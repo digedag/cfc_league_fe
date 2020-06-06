@@ -44,9 +44,9 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
      * Die Tabelle wird nur dann berechnet, wenn auf der
      * aktuellen Seite genau ein Wettbewerb ausgewählt ist und dieser Wettbewerb eine Liga ist.
      */
-    function handleRequest(&$parameters, &$configurations, &$viewData)
+    public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
-        if($configurations->getBool('showLiveTable')) {
+        if ($configurations->getBool('showLiveTable')) {
             $configurations->convertToUserInt();
         }
 
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
             'scopeArray' => &$scopeArr,
             'parameters' => $parameters,
             'configurations' => $configurations,
-            'confId' => $this->getConfId()
+            'confId' => $this->getConfId(),
         ), $this);
         $saisonUids = $scopeArr['SAISON_UIDS'];
         $groupUids = $scopeArr['GROUP_UIDS'];
@@ -66,7 +66,7 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
         $out = ' ';
         // Sollte kein Wettbewerb ausgewählt bzw. konfiguriert worden sein, dann suchen wir eine
         // passende Liga
-        if (strlen($compUids) == 0) {
+        if (0 == strlen($compUids)) {
             $comps = tx_cfcleague_models_Competition::findAll($saisonUids, $groupUids, $compUids, '1');
             if (count($comps) > 0) {
                 $currCompetition = $comps[0];
@@ -82,7 +82,7 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
             if (isset($compUids) && tx_rnbase_util_Math::testInt($compUids)) {
                 // Wir müssen den Typ des Wettbewerbs ermitteln.
                 $currCompetition = tx_rnbase::makeInstance('tx_cfcleague_models_competition', $compUids);
-                if (intval($currCompetition->record['type']) != 1) {
+                if (1 != intval($currCompetition->record['type'])) {
                     return $out;
                 }
             }
@@ -97,14 +97,13 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
         return '';
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'leaguetable';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_LeagueTable';
     }
 }
-

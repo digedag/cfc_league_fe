@@ -26,14 +26,14 @@ tx_rnbase::load('tx_cfcleague_models_Address');
 
 /**
  * Model für tt_address.
+ *
  * @deprecated
  * @see tx_cfcleague_models_Address
  */
-class tx_cfcleaguefe_models_address extends tx_cfcleague_models_Address {
+class tx_cfcleaguefe_models_address extends tx_cfcleague_models_Address
+{
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_address.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_address.php']);
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_address.php'];
 }
-
-?>

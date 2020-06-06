@@ -24,13 +24,11 @@
 tx_rnbase::load('tx_cfcleaguefe_table_IMatchProvider');
 
 /**
- * Match provider
+ * Match provider.
  */
 class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_IMatchProvider
 {
-
     /**
-     *
      * @var tx_rnbase_configurations
      */
     private $configurations;
@@ -42,7 +40,6 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
     private $scope;
 
     /**
-     *
      * @var tx_cfcleague_util_MatchTableBuilder
      */
     private $matchTable;
@@ -74,7 +71,6 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_table_IConfigurator
      */
     public function getConfigurator()
@@ -119,10 +115,9 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
         tx_cfcleague_search_Builder::setField($fields, 'TEAM.CLUB', OP_IN_INT, $this->scope['CLUB_UIDS']);
 
         if (intval($this->scope['COMP_OBLIGATION'])) {
-            if (intval($this->scope['COMP_OBLIGATION']) == 1) {
+            if (1 == intval($this->scope['COMP_OBLIGATION'])) {
                 $fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = 1;
-            }
-            else {
+            } else {
                 $fields['COMPETITION.OBLIGATION'][OP_NOTEQ_INT] = 1;
             }
         }
@@ -135,18 +130,19 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
         $teams = tx_cfcleague_util_ServiceRegistry::getTeamService()->searchTeams($fields, $options);
         $useClubs = $this->useClubs();
         foreach ($teams as $team) {
-            if (! $useClubs) {
-                if ($team->getUid() && ! array_key_exists($team->getUid(), $this->teams)) {
+            if (!$useClubs) {
+                if ($team->getUid() && !array_key_exists($team->getUid(), $this->teams)) {
                     $this->teams[$team->getUid()] = $team;
                 }
             } else {
                 $club = $team->getClub();
-                if ($club->getUid() && ! array_key_exists($club->getUid(), $this->teams)) {
+                if ($club->getUid() && !array_key_exists($club->getUid(), $this->teams)) {
                     $club->setProperty('club', $club->getUid()); // necessary for mark clubs
                     $this->teams[$club->getUid()] = $club;
                 }
             }
         }
+
         return $this->teams;
     }
 
@@ -160,11 +156,11 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
         $options['what'] = 'count(DISTINCT COMPETITION.SAISON) AS `saison`';
         $compSrv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
         $result = $compSrv->search($fields, $options);
+
         return intval($result[0]['saison']) > 1;
     }
 
     /**
-     *
      * @return tx_cfcleague_models_Competition
      */
     public function getBaseCompetition()
@@ -174,14 +170,15 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
 
     /**
      * If table is written for a single league, this league will be returned.
-     * return tx_cfcleague_models_Competition or false
+     * return tx_cfcleague_models_Competition or false.
      */
     protected function getLeague()
     {
-        if ($this->league === 0) {
+        if (0 === $this->league) {
             // Den Wettbewerb müssen wir initial auf Basis des Scopes laden.
             $this->league = self::getLeagueFromScope($this->scope);
         }
+
         return $this->league;
     }
 
@@ -194,25 +191,26 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
     {
         $rounds = array();
         $matches = $this->getMatches();
-        for ($i = 0, $cnt = count($matches); $i < $cnt; $i ++) {
+        for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i ) {
             $match = $matches[$i];
             $rounds[$match->record['round']][] = $match;
         }
+
         return $rounds;
     }
 
     /**
-     * Liefert die Gesamtzahl der Spieltage einer Saison
+     * Liefert die Gesamtzahl der Spieltage einer Saison.
      */
     public function getMaxRounds()
     {
         // TODO: Das geht nur, wenn der Scope auf eine Liga zeigt
         $league = $this->getLeague();
+
         return $league ? count($league->getRounds()) : 0;
     }
 
     /**
-     *
      * @return tx_cfcleague_util_MatchTableBuilder
      */
     private function getMatchTable()
@@ -225,8 +223,8 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
         $matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
         $matchTable = $matchSrv->getMatchTableBuilder();
         $matchTable->setStatus($this->getMatchStatus()); // Status der Spiele
-                                                         // Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem
-                                                         // in der Plugineinstellung. Somit funktionieren aber auch gleich die Alltimetabellen
+        // Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem
+        // in der Plugineinstellung. Somit funktionieren aber auch gleich die Alltimetabellen
         $matchTable->setScope($this->scope);
         // $matchTable->setCompetitionTypes(1);
 
@@ -241,14 +239,17 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
             $matchTable->setScope($scopeArr);
         }
         $this->matchTable = $matchTable;
+
         return $this->matchTable;
     }
 
     private function getMatchStatus()
     {
-        $status = $this->configurations->get($this->confId . 'filter.matchstatus');
-        if (! $status)
+        $status = $this->configurations->get($this->confId.'filter.matchstatus');
+        if (!$status) {
             $status = $this->configurations->get('showLiveTable') ? '1,2' : '2';
+        }
+
         return $status;
     }
 
@@ -263,8 +264,9 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
      */
     protected function getMatches()
     {
-        if (is_array($this->matches))
+        if (is_array($this->matches)) {
             return $this->matches;
+        }
 
         $matchTable = $this->getMatchTable();
         $fields = array();
@@ -274,11 +276,12 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
         // Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
         // die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
         // Haben wir eine $currRound
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $this->configurations, $this->confId . 'filter.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $this->configurations, $this->confId . 'filter.options.');
+        tx_rnbase_util_SearchBase::setConfigFields($fields, $this->configurations, $this->confId.'filter.fields.');
+        tx_rnbase_util_SearchBase::setConfigOptions($options, $this->configurations, $this->confId.'filter.options.');
 
         $this->modifyMatchFields($fields, $options);
         $this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
+
         return $this->matches;
     }
 
@@ -289,7 +292,8 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
      * @param array $options
      */
     protected function modifyMatchFields(&$fields, &$options)
-    {}
+    {
+    }
 
     public function getPenalties()
     {
@@ -303,14 +307,15 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
     }
 
     /**
-     * Returns the first league found from given scope
+     * Returns the first league found from given scope.
      *
      * @param array $scopeArr
+     *
      * @return tx_cfcleague_models_Competition
      */
     public static function getLeagueFromScope($scopeArr)
     {
-        if (! ($scopeArr['COMP_UIDS'] && $scopeArr['COMP_UIDS'] == intval($scopeArr['COMP_UIDS']))) {
+        if (!($scopeArr['COMP_UIDS'] && $scopeArr['COMP_UIDS'] == intval($scopeArr['COMP_UIDS']))) {
             $matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
             $matchTable = $matchSrv->getMatchTableBuilder();
             $matchTable->setScope($scopeArr);
@@ -323,14 +328,17 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
             $result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
             // es wird immer nur der 1. Wettbewerb verwendet
             $leagueUid = count($result) ? $result[0]['competition'] : false;
-        } else
+        } else {
             $leagueUid = intval($scopeArr['COMP_UIDS']);
-        if (! $leagueUid)
+        }
+        if (!$leagueUid) {
             throw new Exception('Could not find a valid competition.');
-
+        }
         $league = tx_cfcleague_models_Competition::getCompetitionInstance($leagueUid);
-        if (! $league->isValid())
-            throw new Exception('Competition with uid ' . intval($leagueUid) . ' is not valid!');
+        if (!$league->isValid()) {
+            throw new Exception('Competition with uid '.intval($leagueUid).' is not valid!');
+        }
+
         return $league;
     }
 
@@ -346,4 +354,3 @@ class tx_cfcleaguefe_table_DefaultMatchProvider implements tx_cfcleaguefe_table_
         return $this->getLeague()->getTableMarks();
     }
 }
-

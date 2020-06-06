@@ -24,7 +24,6 @@
 
 tx_rnbase::load('tx_rnbase_model_base');
 
-
 /**
  * Model für eine Ligastrafe.
  * Diese Strafe werden für die Berechnung der Ligatabelle verwendet und sollen
@@ -33,15 +32,19 @@ tx_rnbase::load('tx_rnbase_model_base');
  * kann ein Team unabhängig vom Punktestand auf einen bestimmten Tabellenplatz
  * gesetzt werden. Dies ist z.B. bei Lizenzentzug notwendig.
  */
-class tx_cfcleaguefe_models_competition_penalty extends tx_rnbase_model_base {
-  function getTableName(){return 'tx_cfcleague_competition_penalty';}
-  function isCorrection() {
-  	return $this->record['correction'] > 0;
-  }
+class tx_cfcleaguefe_models_competition_penalty extends tx_rnbase_model_base
+{
+    public function getTableName()
+    {
+        return 'tx_cfcleague_competition_penalty';
+    }
+
+    public function isCorrection()
+    {
+        return $this->record['correction'] > 0;
+    }
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition_penalty.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition_penalty.php']);
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition_penalty.php'];
 }
-
-?>

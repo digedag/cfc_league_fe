@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Search;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2008-2019 Rene Nitzsche
  * Contact: rene@system25.de
@@ -26,18 +27,18 @@ namespace System25\T3sports\Search;
  */
 
 /**
- * Class to search comptitions from database
+ * Class to search comptitions from database.
  *
  * @author Rene Nitzsche
  */
 class CompetitionSearch extends \tx_rnbase_util_SearchBase
 {
-
     protected function getTableMappings()
     {
         $tableMapping = [];
         $tableMapping['TEAM'] = 'tx_cfcleague_teams';
         $tableMapping['COMPETITION'] = 'tx_cfcleague_competition';
+
         return $tableMapping;
     }
 
@@ -57,6 +58,7 @@ class CompetitionSearch extends \tx_rnbase_util_SearchBase
         if (isset($tableAliases['TEAM'])) {
             $join .= ' JOIN tx_cfcleague_teams ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )';
         }
+
         return $join;
     }
 }

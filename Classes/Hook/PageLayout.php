@@ -2,17 +2,15 @@
 
 namespace System25\T3sports\Hook;
 
-
-use Sys25\RnBase\Utility\TYPO3;
-
 class PageLayout
 {
     const LLPATH = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:';
 
     /**
-     * Returns information about plugin
+     * Returns information about plugin.
      *
      * @param array $params Parameters to the hook
+     *
      * @return string Information about plugin
      */
     public function getPluginSummary(array $params)
@@ -29,9 +27,8 @@ class PageLayout
             $labels = [];
             $actionList = \tx_rnbase_util_Strings::trimExplode(',', $actions);
             foreach ($actionList as $action) {
-                $labels[] = $this->getLanguageService()->sL(self::LLPATH . $this->getActionLabel($action, $pluginType));
+                $labels[] = $this->getLanguageService()->sL(self::LLPATH.$this->getActionLabel($action, $pluginType));
             }
-
         }
 
         $data = [
@@ -40,8 +37,10 @@ class PageLayout
         ];
         /* @var $tables \Tx_Rnbase_Backend_Utility_Tables */
         $tables = \tx_rnbase::makeInstance('Tx_Rnbase_Backend_Utility_Tables');
+
         return $tables->buildTable($data);
     }
+
     private function getActionLabel($action, $pluginType)
     {
         $map = ['LeagueTableShow' => 'LeagueTable'];
@@ -55,12 +54,13 @@ class PageLayout
 
     /**
      * Get field value from flexform configuration,
-     * including checks if flexform configuration is available
+     * including checks if flexform configuration is available.
      *
      * @param array $flexform
      * @param string $key name of the key
      * @param string $sheet name of the sheet
-     * @return string|NULL if nothing found, value if found
+     *
+     * @return string|null if nothing found, value if found
      */
     private function getFieldFromFlexform($flexform, $key, $sheet = 'sDEF')
     {
@@ -68,15 +68,15 @@ class PageLayout
             $flexform = $flexform['data'];
             if (isset($flexform[$sheet]['lDEF'][$key]['vDEF'])
                 ) {
-                    return $flexform[$sheet]['lDEF'][$key]['vDEF'];
-                }
+                return $flexform[$sheet]['lDEF'][$key]['vDEF'];
+            }
         }
 
         return null;
     }
 
     /**
-     * Return language service instance
+     * Return language service instance.
      *
      * @return \TYPO3\CMS\Core\Localization\LanguageService
      */

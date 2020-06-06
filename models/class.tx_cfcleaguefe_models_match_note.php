@@ -42,20 +42,19 @@ tx_rnbase::load('Tx_Rnbase_Utility_Strings');
  * type.changeout -> 80
  * type.changein -> 81
  * type.captain -> 200
- * </pre>
+ * </pre>.
  */
 class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 {
-
-    var $match;
+    public $match;
 
     /**
-     * Die Instanz des unbekannten Spielers
+     * Die Instanz des unbekannten Spielers.
      */
     private static $unknownPlayer;
 
     /**
-     * Die Instanz des fehlenden Profils
+     * Die Instanz des fehlenden Profils.
      */
     private static $notFoundProfile;
 
@@ -76,16 +75,18 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * @param string $confId
      * @param tx_cfcleaguefe_models_match_note $ticker
      */
-    static function wrap($formatter, $confId, $ticker)
+    public static function wrap($formatter, $confId, $ticker)
     {
-        if ($formatter->configurations->get($confId . 'hide') == '1') // Die Meldung soll nicht gezeigt werden
+        if ('1' == $formatter->configurations->get($confId.'hide')) { // Die Meldung soll nicht gezeigt werden
+
             return '';
+        }
 
         // Wenn der Ticker für den eigene Vereins ist, einen Eintrag im Register setzen
         $GLOBALS['TSFE']->register['T3SPORTS_NOTE_FAVCLUB'] = $ticker->isFavClub(); // XXX: Access to image size by TS
 
         $arr = array();
-        $conf = $formatter->configurations->get($confId . 'profile.');
+        $conf = $formatter->configurations->get($confId.'profile.');
         // Angezeigt wird ein Spieler, sobald etwas im TS steht
         if ($conf && is_object($ticker)) {
             // Bei einem Wechsel ist profile für den ausgewechselten Spieler
@@ -95,32 +96,32 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
                 $player = $ticker->getPlayerInstance();
             }
             // $value = $player->wrap($formatter, $conf['profile.']);
-            $value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId . 'profile.', $player);
+            $value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId.'profile.', $player);
             if (strlen($value) > 0) {
                 $arr[] = array(
                     $value,
-                    $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0
+                    $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0,
                 );
                 $value = '';
             }
         }
 
         // Bei Spielerwechseln gibt es noch ein zweites Profil
-        $conf = $formatter->configurations->get($confId . 'profile2.');
+        $conf = $formatter->configurations->get($confId.'profile2.');
         if ($conf && is_object($ticker) && $ticker->isChange()) {
             $player2 = $ticker->getPlayerChangeIn();
-            if (! is_object($player2)) {
+            if (!is_object($player2)) {
                 // Hier liegt vermutlich ein Fehler bei der Dateneingabe vor
                 // Es wird ein Hinweistext gezeigt
                 $value = 'ERROR!';
             } else {
-                $value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId . 'profile2.', $player2);
+                $value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId.'profile2.', $player2);
             }
             // $value = $player2->wrap($formatter, $conf['profile2.']);
             if (strlen($value) > 0) {
                 $arr[] = array(
                     $value,
-                    $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0
+                    $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0,
                 );
                 $value = '';
             }
@@ -128,7 +129,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         $cObj = $formatter->configurations->getCObj(1);
         $cObj->data = $ticker->record;
         foreach ($ticker->record as $key => $val) {
-            $conf = $formatter->configurations->get($confId . $key . '.');
+            $conf = $formatter->configurations->get($confId.$key.'.');
             if ($conf) {
                 $cObj->setCurrentVal($ticker->record[$key]);
                 $value = $cObj->stdWrap($ticker->record[$key], $conf);
@@ -136,7 +137,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
                 if (strlen($value) > 0) {
                     $arr[] = array(
                         $value,
-                        $conf['s_weight'] ? intval($conf['s_weight']) : 0
+                        $conf['s_weight'] ? intval($conf['s_weight']) : 0,
                     );
                     $value = '';
                 }
@@ -152,7 +153,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         }
 
         // Der Seperator sollte mit zwei Pipes eingeschlossen sein
-        $sep = $formatter->configurations->get($confId . 'seperator');
+        $sep = $formatter->configurations->get($confId.'seperator');
         $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
         $ret = implode($sep, $ret);
 
@@ -163,7 +164,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     /**
      * Liefert bei einem Wechsel den eingewechselten Spieler.
      */
-    function getPlayerChangeIn()
+    public function getPlayerChangeIn()
     {
         return $this->_getPlayerChange(0);
     }
@@ -171,7 +172,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     /**
      * Liefert bei einem Wechsel den ausgewechselten Spieler.
      */
-    function getPlayerChangeOut()
+    public function getPlayerChangeOut()
     {
         return $this->_getPlayerChange(1);
     }
@@ -181,40 +182,41 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Diese kommt in der Form 0:0
      * Für eine formatierte Ausgabe sollte die Methode wrap verwendete werden.
      */
-    function getScore()
+    public function getScore()
     {
-        return $this->record['goals_home'] . ' : ' . $this->record['goals_guest'];
+        return $this->record['goals_home'].' : '.$this->record['goals_guest'];
     }
 
     /**
-     * Liefert true wenn die Meldung eine Strafe ist (Karten)
+     * Liefert true wenn die Meldung eine Strafe ist (Karten).
      */
-    function isPenalty()
+    public function isPenalty()
     {
         $type = intval($this->record['type']);
-        return ($type >= 70 && $type < 80);
+
+        return $type >= 70 && $type < 80;
     }
 
     /**
-     * Liefert true wenn die Meldung eine gelb/rote Karte ist
+     * Liefert true wenn die Meldung eine gelb/rote Karte ist.
      */
-    function isYellowRedCard()
+    public function isYellowRedCard()
     {
         return $this->isType(71);
     }
 
     /**
-     * Liefert true wenn die Meldung eine rote Karte ist
+     * Liefert true wenn die Meldung eine rote Karte ist.
      */
-    function isRedCard()
+    public function isRedCard()
     {
         return $this->isType(72);
     }
 
     /**
-     * Liefert true wenn die Meldung eine gelbe Karte ist
+     * Liefert true wenn die Meldung eine gelbe Karte ist.
      */
-    function isYellowCard()
+    public function isYellowCard()
     {
         return $this->isType(70);
     }
@@ -226,11 +228,13 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Typ der Meldung (noteType und noteIgnoreType) überprüft.
      *
      * @param array $conf
-     * @return boolean
+     *
+     * @return bool
      */
-    function isVisible($conf)
+    public function isVisible($conf)
     {
         $minMinute = intval($conf['noteMinimumMinute']);
+
         return $minMinute <= $this->record['minute'] && $this->isType($conf);
     }
 
@@ -243,7 +247,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      *
      * @param array $typeNumberOrArray
      */
-    function isType($typeNumberOrArray)
+    public function isType($typeNumberOrArray)
     {
         $ret = false;
         if (is_array($typeNumberOrArray)) {
@@ -254,35 +258,36 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
             $ignoreTypes = $typeArr['noteIgnoreType'] ? Tx_Rnbase_Utility_Strings::intExplode(',', $typeArr['noteIgnoreType']) : array();
 
             // Wenn Typen definiert sind, dann wird ignoreType nicht betrachtet
-            if (in_array($this->getType(), $types) || (! count($types) && ! count($ignoreTypes)) || (! in_array($this->getType(), $ignoreTypes) && count($ignoreTypes))) {
-
+            if (in_array($this->getType(), $types) || (!count($types) && !count($ignoreTypes)) || (!in_array($this->getType(), $ignoreTypes) && count($ignoreTypes))) {
                 // Wird nach Home/Guest unterschieden?
                 if (array_key_exists('noteTeam', $typeArr) && strlen($typeArr['noteTeam'])) {
                     // Eigentore beim jeweils anderen Team zeigen
-                    if (strtoupper($typeArr['noteTeam']) == 'HOME' && ($this->isGoalOwn() ? $this->isGuest() : $this->isHome())) {
+                    if ('HOME' == strtoupper($typeArr['noteTeam']) && ($this->isGoalOwn() ? $this->isGuest() : $this->isHome())) {
                         $ret = true;
-                    } elseif (strtoupper($typeArr['noteTeam']) == 'GUEST' && ($this->isGoalOwn() ? $this->isHome() : $this->isGuest())) {
+                    } elseif ('GUEST' == strtoupper($typeArr['noteTeam']) && ($this->isGoalOwn() ? $this->isHome() : $this->isGuest())) {
                         $ret = true;
                     }
-                } else
+                } else {
                     $ret = true;
+                }
             }
         } else {
             $type = $this->getType();
             $ret = ($type == intval($typeNumberOrArray));
         }
+
         return $ret;
     }
 
     /**
      * Liefert den Namen des Tickertyps.
      * Dafür ist die aktuelle Config notwendig,
-     * da der Wert über das Flexform ermittelt wird
+     * da der Wert über das Flexform ermittelt wird.
      */
-    function getTypeName(&$configurations)
+    public function getTypeName(&$configurations)
     {
         global $LANG, $TSFE;
-        if ($this->getType() == 100) {
+        if (100 == $this->getType()) {
             return '';
         }
 
@@ -293,10 +298,11 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
                 return $TSFE->sL($type[0]);
             }
         }
+
         return '';
     }
 
-    function getExtraTime()
+    public function getExtraTime()
     {
         return $this->record['extra_time'];
     }
@@ -306,64 +312,68 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Dieser hat die ID -1 und
      * wird für MatchNotes verwendet, wenn der Spieler nicht bekannt ist.
      */
-    function getUnknownPlayer()
+    public function getUnknownPlayer()
     {
-        if (! is_object(tx_cfcleaguefe_models_match_note::$unknownPlayer)) {
-            tx_cfcleaguefe_models_match_note::$unknownPlayer = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', '-1');
+        if (!is_object(self::$unknownPlayer)) {
+            self::$unknownPlayer = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', '-1');
         }
-        return tx_cfcleaguefe_models_match_note::$unknownPlayer;
+
+        return self::$unknownPlayer;
     }
 
     /**
      * Liefert die Singleton-Instanz eines nicht gefundenen Profils.
      * Dieses hat die ID -2 und
      * wird für MatchNotes verwendet, wenn das Profil nicht mehr in der Datenbank gefunden wurde.
-     * FIXME: Vermutlich ist diese Funktionalität in der Matchklasse besser aufgehoben
+     * FIXME: Vermutlich ist diese Funktionalität in der Matchklasse besser aufgehoben.
      */
-    function &getNotFoundProfile()
+    public function &getNotFoundProfile()
     {
-        if (! is_object(tx_cfcleaguefe_models_match_note::$notFoundProfile)) {
-            tx_cfcleaguefe_models_match_note::$notFoundProfile = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', '-2');
+        if (!is_object(self::$notFoundProfile)) {
+            self::$notFoundProfile = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', '-2');
         }
-        return tx_cfcleaguefe_models_match_note::$notFoundProfile;
+
+        return self::$notFoundProfile;
     }
 
     /**
      * Liefert das Profil des an der Aktion beteiligten Spielers der Heimmannschaft.
-     * Wenn nicht vorhanden wird der Spieler "Unbekannt" geliefert
+     * Wenn nicht vorhanden wird der Spieler "Unbekannt" geliefert.
      */
     protected function getInstancePlayerHome()
     {
         // Innerhalb der Matchnote gibt es das Konstrukt des unbekannten Spielers. Dieser
         // Wird verwendet, wenn der eigentliche Spieler nicht mehr in der Datenbank gefunden
         // wird, oder wenn die ID des Spielers -1 ist.
-        if (intval($this->record['player_home']) == 0) { // ID 0 ist nicht vergeben
-            $player = NULL;
-        } elseif (intval($this->record['player_home']) == - 1) {
+        if (0 == intval($this->record['player_home'])) { // ID 0 ist nicht vergeben
+            $player = null;
+        } elseif (-1 == intval($this->record['player_home'])) {
             $player = $this->getUnknownPlayer();
         } else {
             $players = $this->match->getPlayersHome(1); // Spieler und Wechselspieler holen
-            $player = & $players[$this->record['player_home']];
+            $player = &$players[$this->record['player_home']];
         }
+
         return $player;
     }
 
     /**
-     * Liefert das Profil, des an der Aktion beteiligten Spielers der Gastmannschaft
+     * Liefert das Profil, des an der Aktion beteiligten Spielers der Gastmannschaft.
      */
     protected function getInstancePlayerGuest()
     {
-        if (intval($this->record['player_guest']) == 0) { // ID 0 ist nicht vergeben
-            $player = NULL;
-        } elseif (intval($this->record['player_guest']) == - 1) {
-            $player = & $this->getUnknownPlayer();
+        if (0 == intval($this->record['player_guest'])) { // ID 0 ist nicht vergeben
+            $player = null;
+        } elseif (-1 == intval($this->record['player_guest'])) {
+            $player = &$this->getUnknownPlayer();
         } else {
             $players = $this->match->getPlayersGuest(1);
-            $player = & $players[$this->record['player_guest']];
-            if (! is_object($player)) {
-                $player = & $this->getNotFoundProfile();
+            $player = &$players[$this->record['player_guest']];
+            if (!is_object($player)) {
+                $player = &$this->getNotFoundProfile();
             }
         }
+
         return $player;
     }
 
@@ -380,6 +390,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         if ($this->isGuest()) {
             return $this->getInstancePlayerGuest();
         }
+
         return 0;
     }
 
@@ -389,37 +400,37 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      *
      * @param tx_cfcleaguefe_models_match $match
      */
-    function setMatch(&$match)
+    public function setMatch(&$match)
     {
         $this->match = $match;
     }
 
     /**
-     * Liefert das Spiel
+     * Liefert das Spiel.
      *
      * @return tx_cfcleaguefe_models_match
      */
-    function getMatch()
+    public function getMatch()
     {
         return $this->match;
     }
 
     /**
-     * Returns the team of the player assigned to this match note
-     * @return NULL|tx_cfcleaguefe_models_team
+     * Returns the team of the player assigned to this match note.
+     *
+     * @return null|tx_cfcleaguefe_models_team
      */
     public function getTeam()
     {
         $team = null;
-        if ($this->isHome() ) {
+        if ($this->isHome()) {
             $team = $this->getMatch()->getHome();
-        }
-        elseif($this->isGuest()) {
+        } elseif ($this->isGuest()) {
             $team = $this->getMatch()->getGuest();
         }
+
         return $team;
     }
-
 
     /**
      * Ermittelt für die übergebenen Spiele die MatchNotes.
@@ -427,21 +438,23 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * werden nur die Notes mit dem Typ < 100 geliefert. Die MatchNotes werden direkt
      * in den übergebenen Matches gesetzt.
      * Die ermittelten MatchNotes haben keine Referenz auf das zugehörige Match!
+     *
      * @param tx_cfcleaguefe_models_match[] $matches
      * @param int $types
+     *
      * @return
      */
     public static function &retrieveMatchNotes(&$matches, $types = 1)
     {
-        if (! count($matches)) {
+        if (!count($matches)) {
             return $matches;
         }
         // Die Spiele in einen Hash legen, damit wir sofort Zugriff auf ein Spiel haben
         $matchesHash = [];
         $matchIds = [];
         $anz = count($matches);
-        for ($i = 0; $i < $anz; $i ++) {
-            $matchesHash[$matches[$i]->getUid()] = & $matches[$i];
+        for ($i = 0; $i < $anz; ++$i ) {
+            $matchesHash[$matches[$i]->getUid()] = &$matches[$i];
             $matchIds[] = $matches[$i]->getUid();
         }
 
@@ -449,7 +462,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
         $what = '*';
         $from = 'tx_cfcleague_match_notes';
-        $options['where'] = 'game IN (' . $matchIds . ')';
+        $options['where'] = 'game IN ('.$matchIds.')';
         if ($types) {
             $options['where'] .= ' AND type < 100';
         }
@@ -460,7 +473,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
         // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
         $anz = count($matchNotes);
-        for ($i = 0; $i < $anz; $i ++) {
+        for ($i = 0; $i < $anz; ++$i ) {
             // Hier darf nur mit Referenzen gearbeitet werden
             // $matchNotes[$i]->setMatch($matchesHash[$matchNotes[$i]->record['game']]);
             $matchesHash[$matchNotes[$i]->getProperty('game')]->addMatchNote($matchNotes[$i]);
@@ -486,21 +499,23 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         } else {
             return 1;
         }
+
         return 0;
     }
 
     protected function &_getFlexForm(&$configurations)
     {
         static $flex;
-        if (! is_array($flex)) {
-            $flex = Tx_Rnbase_Utility_T3General::getURL(tx_rnbase_util_Extensions::extPath($configurations->getExtensionKey()) . $configurations->get('flexform'));
+        if (!is_array($flex)) {
+            $flex = Tx_Rnbase_Utility_T3General::getURL(tx_rnbase_util_Extensions::extPath($configurations->getExtensionKey()).$configurations->get('flexform'));
             $flex = Tx_Rnbase_Utility_T3General::xml2array($flex);
         }
+
         return $flex;
     }
 
     /**
-     * Liefert die möglichen Werte für ein Attribut aus einem FlexForm-Array
+     * Liefert die möglichen Werte für ein Attribut aus einem FlexForm-Array.
      */
     protected function _getItemsArrayFromFlexForm($flexArr, $sheetName, $valueName)
     {
@@ -508,7 +523,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     }
 
     /**
-     * Whether or not the match note is for favorite club
+     * Whether or not the match note is for favorite club.
      *
      * @return int 0/1
      */
@@ -522,16 +537,19 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         } elseif ($this->isGuest()) {
             $team = $match->getGuest();
         }
-        if (! is_object($team))
+        if (!is_object($team)) {
             return 0;
+        }
         $club = $team->getClub();
-        if (! is_object($club))
+        if (!is_object($club)) {
             return 0;
+        }
+
         return $club->isFavorite() ? 1 : 0;
     }
 
     /**
-     * Liefert den ausgewechselten Spieler, wenn der Tickertyp ein Wechsel ist
+     * Liefert den ausgewechselten Spieler, wenn der Tickertyp ein Wechsel ist.
      *
      * @param int $type
      *            0 liefert den eingewechselten Spieler, 1 den ausgewechselten
@@ -543,25 +561,28 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
             // Heim oder Gast?
             if ($this->record['player_home']) {
                 $players = $this->match->getPlayersHome(1);
-                $playerField = $this->record['type'] == '80' ? ($type ? 'player_home' : 'player_home_2') : ($type ? 'player_home_2' : 'player_home');
+                $playerField = '80' == $this->record['type'] ? ($type ? 'player_home' : 'player_home_2') : ($type ? 'player_home_2' : 'player_home');
             } else {
                 $players = $this->match->getPlayersGuest(1);
-                $playerField = $this->record['type'] == '80' ? ($type ? 'player_guest' : 'player_guest_2') : ($type ? 'player_guest_2' : 'player_guest');
+                $playerField = '80' == $this->record['type'] ? ($type ? 'player_guest' : 'player_guest_2') : ($type ? 'player_guest_2' : 'player_guest');
             }
-            if ($this->record[$playerField] < 0)
+            if ($this->record[$playerField] < 0) {
                 return $this->getUnknownPlayer();
+            }
+
             return $players[$this->record[$playerField]];
         }
     }
 }
 
 /**
- * Sortierfunktion, um die korrekte Reihenfolge nach weights zu ermittlen
+ * Sortierfunktion, um die korrekte Reihenfolge nach weights zu ermittlen.
  */
 function cmpWeight($a, $b)
 {
     if ($a[1] == $b[1]) {
         return 0;
     }
-    return ($a[1] < $b[1]) ? - 1 : 1;
+
+    return ($a[1] < $b[1]) ? -1 : 1;
 }

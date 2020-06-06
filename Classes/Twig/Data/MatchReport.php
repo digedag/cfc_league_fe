@@ -1,4 +1,5 @@
 <?php
+
 namespace System25\T3sports\Twig\Data;
 
 /***************************************************************
@@ -25,14 +26,17 @@ namespace System25\T3sports\Twig\Data;
 ***************************************************************/
 
 /**
- * Provide additional data for match
+ * Provide additional data for match.
+ *
  * @author rene
  */
 class MatchReport
 {
     protected $match;
+
     /** @var \tx_cfcleague_models_MatchNote[] */
     protected $tickerArr;
+
     /** @var \tx_cfcleague_models_MatchNote[] */
     protected $tickerByTeam = [
         'home' => [],
@@ -41,9 +45,11 @@ class MatchReport
 
     /** @var \System25\T3sports\Twig\Data\Player[] */
     protected $players = [];
+
     protected $playersByLastname = [];
 
     protected $profileSrv;
+
     public function __construct(\tx_cfcleague_models_Match $match)
     {
         $this->match = $match;
@@ -57,9 +63,10 @@ class MatchReport
     }
 
     /**
-     * Build the lineup structure for home team
+     * Build the lineup structure for home team.
      *
      * @param string $confId
+     *
      * @return []
      */
     public function getLineupHome()
@@ -68,9 +75,10 @@ class MatchReport
     }
 
     /**
-     * Substitutes for home team
+     * Substitutes for home team.
      *
      * @param string $confId
+     *
      * @return \System25\T3sports\Twig\Data\Player[]
      */
     public function getSubstitutesHome()
@@ -80,12 +88,13 @@ class MatchReport
         foreach ($players as $player) {
             $ret[] = $this->substPlayer($player);
         }
+
         return $ret;
     }
 
     /**
-     *
      * @param string $all
+     *
      * @return \tx_cfcleague_models_Profile[]
      */
     public function getPlayersHome($all = false)
@@ -94,9 +103,10 @@ class MatchReport
     }
 
     /**
-     * Build the lineup structure for guest team
+     * Build the lineup structure for guest team.
      *
      * @param string $confId
+     *
      * @return string
      */
     public function getLineupGuest()
@@ -105,8 +115,8 @@ class MatchReport
     }
 
     /**
-     *
      * @param string $all
+     *
      * @return \tx_cfcleague_models_Profile[]
      */
     public function getPlayersGuest($all = false)
@@ -115,9 +125,10 @@ class MatchReport
     }
 
     /**
-     * Substitutes for guest team
+     * Substitutes for guest team.
      *
      * @param string $confId
+     *
      * @return \System25\T3sports\Twig\Data\Player[]
      */
     public function getSubstitutesGuest()
@@ -127,26 +138,27 @@ class MatchReport
         foreach ($players as $player) {
             $ret[] = $this->substPlayer($player);
         }
+
         return $ret;
     }
 
     /**
-     *
      * @return \tx_cfcleague_models_Profile
      */
     public function getCoachHome()
     {
         $ret = $this->profileSrv->loadProfiles($this->match->getProperty('coach_home'));
+
         return empty($ret) ? null : reset($ret);
     }
 
     /**
-     *
      * @return \tx_cfcleague_models_Profile
      */
     public function getCoachGuest()
     {
         $ret = $this->profileSrv->loadProfiles($this->match->getProperty('coach_guest'));
+
         return empty($ret) ? null : reset($ret);
     }
 
@@ -156,7 +168,6 @@ class MatchReport
     }
 
     /**
-     *
      * @return \System25\T3sports\Twig\Data\MatchNote[]
      */
     public function getMatchNotesHome()
@@ -165,7 +176,6 @@ class MatchReport
     }
 
     /**
-     *
      * @return \System25\T3sports\Twig\Data\MatchNote[]
      */
     public function getMatchNotesGuest()
@@ -174,7 +184,6 @@ class MatchReport
     }
 
     /**
-     *
      * @return \tx_cfcleague_models_Profile[]
      */
     public function getAssists()
@@ -183,9 +192,9 @@ class MatchReport
     }
 
     /**
-     *
      * @param \tx_cfcleague_models_Profile[] $players
      * @param string $system
+     *
      * @return []
      */
     protected function getLineup($players, $system)
@@ -196,20 +205,21 @@ class MatchReport
         $partCnt = 0;
         $partArr = array();
         $splitSum = $system[$partCnt];
-        for ($i = 0; $i < count($players); $i ++) {
+        for ($i = 0; $i < count($players); ++$i ) {
             $partArr[$partCnt][] = $this->substPlayer($players[$i]);
             // Muss umgeschaltet werden?
             if (count($partArr[$partCnt]) >= $splitSum) {
-                $partCnt ++;
+                ++$partCnt;
                 $splitSum = $system[$partCnt];
             }
         }
 
         return $partArr;
     }
+
     /**
-     *
      * @param \tx_cfcleague_models_Profile $player
+     *
      * @return \System25\T3sports\Twig\Data\Player
      */
     protected function substPlayer(\tx_cfcleague_models_Profile $player)
@@ -220,19 +230,20 @@ class MatchReport
 
     /**
      * Initialisiert die MatchNotes.
-     * Diese werden auch den Spieler zugeordnet
+     * Diese werden auch den Spieler zugeordnet.
      */
     protected function initMatchTicker()
     {
-        if (! is_array($this->tickerArr)) {
+        if (!is_array($this->tickerArr)) {
             $this->tickerArr = [];
             // Der Ticker wird immer chronologisch ermittelt
-            $matchNotes =& \tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
+            $matchNotes = &\tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
-            for ($i = 0; $i < count($matchNotes); $i ++) {
+            for ($i = 0; $i < count($matchNotes); ++$i ) {
                 $note = $matchNotes[$i];
                 $player = null;
                 $matchNote = null;
+
                 try {
                     $playerUid = $note->getPlayer();
                     $player = null;
@@ -244,7 +255,7 @@ class MatchReport
                     if ($player) {
                         $player->addMatchNote($matchNote);
                     }
-                    if($matchNote->isChange()) {
+                    if ($matchNote->isChange()) {
                         $player2 = \tx_cfcleague_models_Profile::getProfileInstance($matchNote->getMatchNote()->getPlayer2());
                         $player2 = $this->buildPlayer($player2);
                         $matchNote->setPlayer2($player2);
@@ -253,14 +264,14 @@ class MatchReport
                     if ($player) {
                         $this->tickerByTeam[$matchNote->getMatchNote()->isHome() ? 'home' : 'guest'][] = $matchNote;
                     }
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                 }
             }
         }
     }
+
     /**
-     * mark players with same lastname as not unique
+     * mark players with same lastname as not unique.
      */
     protected function uniquePlayerNames()
     {
@@ -272,9 +283,10 @@ class MatchReport
             }
         }
     }
+
     /**
-     *
      * @param \tx_cfcleague_models_Profile $player
+     *
      * @return \System25\T3sports\Twig\Data\Player
      */
     protected function buildPlayer($player)
@@ -282,8 +294,7 @@ class MatchReport
         if (is_object($player)) {
             if (isset($this->players[$player->getUid()])) {
                 $player = $this->players[$player->getUid()];
-            }
-            else {
+            } else {
                 $player = new \System25\T3sports\Twig\Data\Player($player);
                 // Keep a reference to each player
                 $this->players[$player->getUid()] = $player;
@@ -299,6 +310,7 @@ class MatchReport
                 }
             }
         }
+
         return $player;
     }
 }

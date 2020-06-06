@@ -1,11 +1,12 @@
 <?php
+
 namespace System25\T3sports\Statistics\Service;
 
 use System25\T3sports\Statistics\PlayerSummaryStatisticsMarker;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -31,23 +32,22 @@ use System25\T3sports\Statistics\PlayerSummaryStatisticsMarker;
 /**
  * Service for summery of player statistics
  * Since this list is similar to player statistics, it is based on that service.
- * It simply modifies the result
+ * It simply modifies the result.
  *
  * @author Rene Nitzsche
  */
 class PlayerSummaryStatistics extends PlayerStatistics
 {
-
     private $result = [];
 
     /**
-     * Array with competition IDs of handled matches
+     * Array with competition IDs of handled matches.
      */
     private $compIds = [];
 
     /**
+     * {@inheritdoc}
      *
-     * {@inheritDoc}
      * @see \System25\T3sports\Statistics\Service\PlayerStatistics::handleMatch()
      */
     public function handleMatch($match, $clubId)
@@ -59,24 +59,26 @@ class PlayerSummaryStatistics extends PlayerStatistics
     }
 
     /**
-     * Liefert allgemeine Daten zur Spielerstatistik
+     * Liefert allgemeine Daten zur Spielerstatistik.
      *
      * @return array
      */
     public function getResult()
     {
-        if (! array_key_exists('numberOfUsedMatches', $this->result)) {
+        if (!array_key_exists('numberOfUsedMatches', $this->result)) {
             $this->result['numberOfUsedMatches'] = 0;
         }
         $teams = $this->getTeams($this->getScopeArray());
         $this->_setAdditionalData($this->getScopeArray(), $teams, array_unique($this->compIds));
+
         return $this->result;
     }
 
     /**
-     * Returns the marker instance to map result data to HTML markers
+     * Returns the marker instance to map result data to HTML markers.
      *
      * @param \tx_rnbase_configurations $configurations
+     *
      * @return PlayerSummaryStatisticsMarker
      */
     public function getMarker($configurations)
@@ -85,9 +87,9 @@ class PlayerSummaryStatistics extends PlayerStatistics
     }
 
     /**
-     * Einige Zusatzdaten ermitteln
+     * Einige Zusatzdaten ermitteln.
      */
-    function _setAdditionalData(&$scopeArr, &$teams, &$compUids)
+    public function _setAdditionalData(&$scopeArr, &$teams, &$compUids)
     {
         // Wir zählen wieviele Spiele die Wettbewerbe haben, die in der
         // Statistik betrachtet wurden.
@@ -104,6 +106,7 @@ class PlayerSummaryStatistics extends PlayerStatistics
             $matchCount = $comp->getNumberOfMatches(implode($teamIds, ',')); // Spiele gesamt
             $this->result['numberOfMatches'] = $this->result['numberOfMatches'] + $matchCount;
         }
+
         return $ret;
     }
 }

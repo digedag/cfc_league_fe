@@ -34,7 +34,6 @@
  */
 class tx_cfcleaguefe_util_ScopeController
 {
-
     // Speichert die UID des aktuellen cObject
     private static $_cObjectUID = array();
 
@@ -48,16 +47,17 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @param tx_rnbase_IParameters $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param boolean $useObjects Wenn true werden ganze Objekte
-     * @return Array mit den UIDs als String
+     * @param bool $useObjects Wenn true werden ganze Objekte
+     *
+     * @return array mit den UIDs als String
      */
     public static function handleCurrentScope($parameters, $configurations, $useObjects = false)
     {
         $cObjUid = $configurations->getCObj()->data['uid'];
         // Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
-        if (! $cObjUid || ! isset(self::$_cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
+        if (!$cObjUid || !isset(self::$_cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
             // Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
-            $ret = Array();
+            $ret = array();
             $ret['SAISON_UIDS'] = self::handleCurrentSaison($parameters, $configurations, $useObjects);
             $ret['GROUP_UIDS'] = self::handleCurrentCompetitionGroup($parameters, $configurations, $useObjects);
             $ret['TEAMGROUP_UIDS'] = self::handleCurrentTeamGroup($parameters, $configurations, $useObjects);
@@ -68,10 +68,11 @@ class tx_cfcleaguefe_util_ScopeController
             // Die Daten für das Plugin cachen
             self::$_cObjectUID[$cObjUid] = $ret;
             // die variablen Parameter in ein T3-Register schreiben
-            if (! intval($configurations->get('scope.noScopeParams'))) {
+            if (!intval($configurations->get('scope.noScopeParams'))) {
                 self::setScopeParams($configurations);
             }
         }
+
         return self::$_cObjectUID[$cObjUid];
     }
 
@@ -83,13 +84,14 @@ class tx_cfcleaguefe_util_ScopeController
      */
     private static function setScopeParams(&$configurations)
     {
-        if (! count(self::$_scopeParams))
+        if (!count(self::$_scopeParams)) {
             return;
+        }
 
         $params = '';
         $qualifier = $configurations->getQualifier();
         foreach (self::$_scopeParams as $key => $value) {
-            $params .= '&' . $qualifier . '[' . $key . ']=' . rawurlencode($value);
+            $params .= '&'.$qualifier.'['.$key.']='.rawurlencode($value);
         }
         $GLOBALS['TSFE']->register['T3SPORTS_SCOPEPARAMS'] = $params;
     }
@@ -101,11 +103,12 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @param tx_rnbase_IParameters $parameters
      * @param tx_rnbase_configurations $configurations
-     * @return String Die UIDs als String
+     *
+     * @return string Die UIDs als String
      */
     private static function handleCurrentSaison($parameters, &$configurations, $useObjects = false)
     {
-        $viewData = & $configurations->getViewData();
+        $viewData = &$configurations->getViewData();
         $saisonUids = $configurations->get('saisonSelection');
 
         // Soll eine SelectBox für Saison gezeigt werden?
@@ -120,6 +123,7 @@ class tx_cfcleaguefe_util_ScopeController
             $configurations->addKeepVar('saison', $saisonUids);
             self::$_scopeParams['saison'] = $saisonUids;
         }
+
         return $saisonUids;
     }
 
@@ -128,11 +132,11 @@ class tx_cfcleaguefe_util_ScopeController
      * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
      * vorbereitet und in die viewData der Config gelegt.
      *
-     * @return String Die UIDs als String
+     * @return string Die UIDs als String
      */
     private static function handleCurrentCompetitionGroup($parameters, $configurations, $useObjects = false)
     {
-        $viewData = & $configurations->getViewData();
+        $viewData = &$configurations->getViewData();
         $groupUids = $configurations->get('groupSelection');
 
         // Soll eine SelectBox für Altersgruppe gezeigt werden?
@@ -145,6 +149,7 @@ class tx_cfcleaguefe_util_ScopeController
             $configurations->addKeepVar('group', $groupUids);
             self::$_scopeParams['group'] = $groupUids;
         }
+
         return $groupUids;
     }
 
@@ -153,7 +158,7 @@ class tx_cfcleaguefe_util_ScopeController
      * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
      * vorbereitet und in die viewData der Config gelegt.
      *
-     * @return String Die UIDs als String
+     * @return string Die UIDs als String
      */
     private static function handleCurrentTeamGroup($parameters, &$configurations, $useObjects = false)
     {
@@ -170,6 +175,7 @@ class tx_cfcleaguefe_util_ScopeController
             $configurations->addKeepVar('teamgroup', $groupUids);
             self::$_scopeParams['teamgroup'] = $groupUids;
         }
+
         return $groupUids;
     }
 
@@ -178,7 +184,7 @@ class tx_cfcleaguefe_util_ScopeController
      * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
      * vorbereitet und in die viewData der Config gelegt.
      *
-     * @return String Die UIDs als String
+     * @return string Die UIDs als String
      */
     private static function handleCurrentClub($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $useObjects = false)
     {
@@ -196,6 +202,7 @@ class tx_cfcleaguefe_util_ScopeController
             $configurations->addKeepVar('club', $clubUids);
             self::$_scopeParams['club'] = $clubUids;
         }
+
         return $clubUids;
     }
 
@@ -204,7 +211,7 @@ class tx_cfcleaguefe_util_ScopeController
      * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
      * vorbereitet und in die viewData der Config gelegt.
      *
-     * @return String Die UIDs als String
+     * @return string Die UIDs als String
      */
     private static function handleCurrentCompetition(&$scopeArr, $parameters, $configurations, $saisonUids, $groupUids, $useObjects = false)
     {
@@ -213,7 +220,7 @@ class tx_cfcleaguefe_util_ScopeController
 
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
         // Wenn die RoundSelection aktiviert ist, dann wird die Wettbewerbs-Selection automatisch mit aktiviert
-        if ($configurations->get('competitionSelectionInput') || ($configurations->get('roundSelectionInput') && ! tx_rnbase_util_Math::testInt($compUids))) {
+        if ($configurations->get('competitionSelectionInput') || ($configurations->get('roundSelectionInput') && !tx_rnbase_util_Math::testInt($compUids))) {
             // Die UIDs der Wettkämpfe in Objekte umwandeln, um eine Selectbox zu bauen
             // Suche der Wettbewerbe über den Service
             $compServ = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
@@ -249,32 +256,34 @@ class tx_cfcleaguefe_util_ScopeController
      * Die Spielrunde wird bei folgenden Bedingungen eingeblendet:<ul>
      * <li> Es ist nur ein Wettbewerb ausgewählt
      * <li> Im Flexform ist der Wert roundSelectionInput gesetzt
-     * </ul>
+     * </ul>.
      *
      * @param
      *            compUids String die UIDs der aktuell eingestellten Wettbewerbe
-     * @return String Die UIDs als String
+     *
+     * @return string Die UIDs als String
      */
     private static function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
     {
-        $viewData = & $configurations->getViewData();
+        $viewData = &$configurations->getViewData();
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
         if ($configurations->get('roundSelectionInput') && (isset($compUids) && tx_rnbase_util_Math::testInt($compUids))) {
             $currCompetition = new tx_cfcleaguefe_models_competition($compUids);
             // Die Spielrunden ermitteln
             $rounds = $currCompetition->getRounds();
-            $dataArr = tx_cfcleaguefe_util_ScopeController::prepareRoundSelect($rounds, $parameters, $configurations, 'scope.rounds.', $useObjects ? '' : 'uid');
+            $dataArr = self::prepareRoundSelect($rounds, $parameters, $configurations, 'scope.rounds.', $useObjects ? '' : 'uid');
             $roundUid = $dataArr[1];
             $viewData->offsetSet('round_select', $dataArr);
             $configurations->addKeepVar('round', $roundUid);
         }
+
         return $roundUid;
     }
 
     /**
      * Liefert ein Array für die Erstellung der Select-Box für eine Model-Klasse
      * Das Ergebnis-Array hat zwei Einträge: Index 0 enthält das Wertearray, Index 1 das
-     * aktuelle Element
+     * aktuelle Element.
      *
      * @param string $displayAttrName Der
      *            Name eines Attributs, um dessen Wert anzuzeigen. Wenn der
@@ -285,7 +294,7 @@ class tx_cfcleaguefe_util_ScopeController
         $ret = array();
         if (count($objects)) {
             foreach ($objects as $object) {
-                $ret[0][$object->getUid()] = strlen($displayAttrName) == 0 ? $object : $object->getProperty($displayAttrName);
+                $ret[0][$object->getUid()] = 0 == strlen($displayAttrName) ? $object : $object->getProperty($displayAttrName);
             }
             $paramValue = $parameters->offsetGet($parameterName);
             // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
@@ -294,40 +303,43 @@ class tx_cfcleaguefe_util_ScopeController
             }
             $ret[1] = $ret[1] ? $ret[1] : $objects[0]->getUid();
         }
+
         return $ret;
     }
 
     /**
-     * Liefert ein Array für die Erstellung der Select-Box für die Spielrunden einer Liga
+     * Liefert ein Array für die Erstellung der Select-Box für die Spielrunden einer Liga.
      *
      * @param $rounds
      * @param tx_rnbase_IParameters $parameters
      * @param tx_rnbase_configurations $configurations
      * @param $confId
      * @param string $displayAttrName
+     *
      * @return array
+     *
      * @internal param $array [tx_cfcleaguefe_models_competition_round] $rounds
      */
     private static function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
     {
         $ret = [];
         if (count($rounds)) {
-            $skipOtherRounds = FALSE;
+            $skipOtherRounds = false;
             $default = $rounds[0]->getUid();
             foreach ($rounds as $object) {
                 // Die Daten für die Auswahlbox füllen
-                $ret[0][$object->getUid()] = strlen($displayAttrName) == 0 ? $object : $object->getProperty($displayAttrName);
+                $ret[0][$object->getUid()] = 0 == strlen($displayAttrName) ? $object : $object->getProperty($displayAttrName);
                 // Aktuellen Spieltag suchen. Hier sollte das aktuelle Datum mit berücksichtigt werden
-                if (! $skipOtherRounds && $object->getProperty('finished')) {
+                if (!$skipOtherRounds && $object->getProperty('finished')) {
                     $default = $object->getUid();
                 }
                 // Bei einer Lücke in den beendeten Spieltagen die Spieltage nach der Lücke ignorieren
-                if (! $skipOtherRounds && ! $object->getProperty('finished') && !$configurations->getBool('leaguetable.noSkipOtherRounds')) {
-                    $skipOtherRounds = TRUE;
+                if (!$skipOtherRounds && !$object->getProperty('finished') && !$configurations->getBool('leaguetable.noSkipOtherRounds')) {
+                    $skipOtherRounds = true;
                 }
             }
             // Ist ein fester Wert für die aktuelle Spielrunde konfiguriert?
-            if (($fixedRound = $configurations->getInt($confId . 'fixedCurrent')) > 0) {
+            if (($fixedRound = $configurations->getInt($confId.'fixedCurrent')) > 0) {
                 $default = $fixedRound;
             }
             // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
@@ -337,6 +349,7 @@ class tx_cfcleaguefe_util_ScopeController
             }
             $ret[1] = isset($ret[1]) ? $ret[1] : $default;
         }
+
         return $ret;
     }
 }

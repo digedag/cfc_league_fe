@@ -24,7 +24,7 @@
 tx_rnbase::load('tx_cfcleague_util_Cache');
 tx_rnbase::load('tx_rnbase_util_Queue');
 tx_rnbase::load('tx_rnbase_util_Extensions');
-require_once (tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'models/class.tx_cfcleaguefe_models_match_note.php');
+require_once tx_rnbase_util_Extensions::extPath('cfc_league_fe').'models/class.tx_cfcleaguefe_models_match_note.php';
 
 /**
  * Controllerklasse für den MatchTicker.
@@ -44,7 +44,6 @@ require_once (tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'models/clas
  */
 class tx_cfcleaguefe_util_MatchTicker
 {
-
     /**
      * Liefert alle Spiele des Scopes mit den geladenen Tickermeldungen.
      */
@@ -64,6 +63,7 @@ class tx_cfcleaguefe_util_MatchTicker
 
         // Jetzt holen wir die Tickermeldungen für diese Spiele
         $matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
+
         return $matches;
     }
 
@@ -75,31 +75,34 @@ class tx_cfcleaguefe_util_MatchTicker
      * @param tx_cfcleaguefe_models_match $match
      * @param mixed $types
      *            unused!
+     *
      * @return tx_cfcleaguefe_models_match_note[]
      */
     public static function &getTicker4Match($match, $types = 0)
     {
-        $arr = tx_cfcleague_util_Cache::get('matchnotes_' . $match->getUid());
-        if ($arr)
+        $arr = tx_cfcleague_util_Cache::get('matchnotes_'.$match->getUid());
+        if ($arr) {
             return $arr;
+        }
 
-        $arr = & $match->getMatchNotes();
+        $arr = &$match->getMatchNotes();
 
         // Die Notes werden jetzt noch einmal aufbereitet
         $ret = array();
         $anz = count($arr);
 
-        for ($i = 0; $i < $anz; $i ++) {
+        for ($i = 0; $i < $anz; ++$i ) {
             $ticker = $arr[$i];
             // Datensatz im Zielarray ablegen
             $ret[] = $ticker;
 
             $tickerRemoved = self::_handleChange($ret, $ticker);
-            if (! $tickerRemoved) {
+            if (!$tickerRemoved) {
                 self::_handleResult($ret[count($ret) - 1]);
             }
         }
-        tx_cfcleague_util_Cache::add('matchnotes_' . $match->getUid(), $ret);
+        tx_cfcleague_util_Cache::add('matchnotes_'.$match->getUid(), $ret);
+
         return $ret;
     }
 
@@ -114,7 +117,7 @@ class tx_cfcleaguefe_util_MatchTicker
     private static function _handleResult(&$ticker)
     {
         static $goals_home, $goals_guest;
-        if (! isset($goals_home)) {
+        if (!isset($goals_home)) {
             $goals_home = 0;
             $goals_guest = 0;
         }
@@ -142,20 +145,22 @@ class tx_cfcleaguefe_util_MatchTicker
      *            Referenz auf Array mit den bisher gefundenen Ticker-Daten
      * @param tx_cfcleaguefe_models_match_note $ticker
      *            der zuletzt hinzugefügte Ticker
-     * @return boolean wether or not the ticker record was removed
+     *
+     * @return bool wether or not the ticker record was removed
      */
     private static function _handleChange(&$ret, &$ticker)
     {
         $isRemoved = false;
-        if (! $ticker->isChange())
+        if (!$ticker->isChange()) {
             return $isRemoved;
+        }
         // TODO: Es muss immer die Auswechslung erhalten bleiben!
         // 1. Ein- und Auswechslungen zusammenfassen
         static $changeInHome, $changeInGuest; // Hier liegen die IDX von Einwechslungen im Zielarray
         static $changeOutHome, $changeOutGuest; // Hier die AUswechslungen
 
         // Bevor es losgeht, müssen einmalig die Arrays initialisiert werden
-        if (! is_object($changeInHome)) {
+        if (!is_object($changeInHome)) {
             $changeInHome = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
             $changeOutHome = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
             $changeInGuest = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
@@ -163,10 +168,10 @@ class tx_cfcleaguefe_util_MatchTicker
         }
 
         if ($ticker->isHome()) {
-            if ($ticker->getType() == '81') { // Wenn Einwechslung
-                                             // Gibt es schon die Auswechslung?
-                if (! $changeOutHome->isEmpty()) {
-                    $change = & $changeOutHome->get();
+            if ('81' == $ticker->getType()) { // Wenn Einwechslung
+                // Gibt es schon die Auswechslung?
+                if (!$changeOutHome->isEmpty()) {
+                    $change = &$changeOutHome->get();
                     $change->setProperty('player_home_2', $ticker->getProperty('player_home'));
                     $change->setProperty('comment2', $ticker->getProperty('comment'));
                 } else {
@@ -177,11 +182,11 @@ class tx_cfcleaguefe_util_MatchTicker
                 $isRemoved = true;
             }
 
-            if ($ticker->getType() == '80') { // Wenn Auswechslung
-                                             // Gibt es schon die Einwechslung?
-                if (! $changeInHome->isEmpty()) {
+            if ('80' == $ticker->getType()) { // Wenn Auswechslung
+                // Gibt es schon die Einwechslung?
+                if (!$changeInHome->isEmpty()) {
                     // Wartet schon so ein Wechsel
-                    $change = & $changeInHome->get();
+                    $change = &$changeInHome->get();
                     $ticker->setProperty('player_home_2', $change->getProperty('player_home'));
                     $change->setProperty('comment2', $ticker->getProperty('comment'));
                 } else {
@@ -191,12 +196,11 @@ class tx_cfcleaguefe_util_MatchTicker
             }
         } // end if HOME
         elseif ($ticker->isGuest()) {
-
-            if ($ticker->getType() == '81') { // Ist Einwechslung
-                                             // Gibt es schon die Auswechslung?
-                if (! $changeOutGuest->isEmpty()) {
+            if ('81' == $ticker->getType()) { // Ist Einwechslung
+                // Gibt es schon die Auswechslung?
+                if (!$changeOutGuest->isEmpty()) {
                     // Die Auswechslung holen
-                    $change = & $changeOutGuest->get();
+                    $change = &$changeOutGuest->get();
                     $change->setProperty('player_guest_2', $ticker->getProperty('player_guest'));
                     $change->setProperty('comment2', $ticker->getProperty('comment'));
                 } else {
@@ -206,11 +210,11 @@ class tx_cfcleaguefe_util_MatchTicker
                 array_pop($ret); // Die Einwechslung fliegt aus dem Ticker
                 $isRemoved = true;
             }
-            if ($ticker->getType() == '80') { // Auswechslung
-                                             // Gibt es schon die Einwechslung?
-                if (! $changeInGuest->isEmpty()) {
+            if ('80' == $ticker->getType()) { // Auswechslung
+                // Gibt es schon die Einwechslung?
+                if (!$changeInGuest->isEmpty()) {
                     // Es muss immer die Auswechslung erhalten bleiben
-                    $change = & $changeInGuest->get();
+                    $change = &$changeInGuest->get();
                     $ticker->setProperty('player_guest_2', $change->getProperty('player_guest'));
                     $change->setProperty('comment2', $ticker->getProperty('comment'));
                 } else {
@@ -219,6 +223,7 @@ class tx_cfcleaguefe_util_MatchTicker
                 }
             }
         } // end if GUEST
+
         return $isRemoved;
     }
 
@@ -238,4 +243,3 @@ class tx_cfcleaguefe_util_MatchTicker
      * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.changein", '81'),
      */
 }
-

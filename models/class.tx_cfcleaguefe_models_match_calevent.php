@@ -21,8 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-require_once (tx_rnbase_util_Extensions::extPath('cal') . 'controller/class.tx_cal_registry.php');
-require_once (tx_rnbase_util_Extensions::extPath('cal') . 'model/class.tx_cal_phpicalendar_model.php');
+require_once tx_rnbase_util_Extensions::extPath('cal').'controller/class.tx_cal_registry.php';
+require_once tx_rnbase_util_Extensions::extPath('cal').'model/class.tx_cal_phpicalendar_model.php';
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
@@ -32,16 +32,15 @@ tx_rnbase::load('tx_rnbase_util_Templates');
  */
 class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model
 {
+    public $location;
 
-    var $location;
+    public $isException;
 
-    var $isException;
+    public $category;
 
-    var $category;
+    public $_match;
 
-    var $_match;
-
-    function __construct(&$controller, &$match, $isException, $serviceKey)
+    public function __construct(&$controller, &$match, $isException, $serviceKey)
     {
         $this->tx_cal_model($controller, $serviceKey);
         $this->createEvent($match, $isException);
@@ -51,19 +50,20 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model
     /**
      * Wir überschreiben die Methode der Basisklasse, damit wir die eigenen Marker verwenden können.
      */
-    function fillTemplate($subpartMarker)
+    public function fillTemplate($subpartMarker)
     {
-        if (is_object($this->cObj))
+        if (is_object($this->cObj)) {
             $cObj = $this->cObj;
-        else {
+        } else {
             $cObj = &tx_cal_registry::Registry('basic', 'cobj');
         }
 
         $template = \tx_rnbase_util_Templates::getSubpartFromFile($this->conf['view.']['cfc_league_events.']['template'], $subpartMarker);
-        if (! $template) {
+        if (!$template) {
             $marker = [];
-            preg_match("/###(.*)###/", $subpartMarker, $marker);
-            return 'could not find the -' . $marker[1] . '- subpart-marker in view.cfc_league_events.template: ' . $this->conf['view.']['cfc_league_events.']['template'];
+            preg_match('/###(.*)###/', $subpartMarker, $marker);
+
+            return 'could not find the -'.$marker[1].'- subpart-marker in view.cfc_league_events.template: '.$this->conf['view.']['cfc_league_events.']['template'];
         }
 
         $configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
@@ -78,10 +78,11 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model
         // Die Original-Marker von Cal mit einbinden
         $markerArray = $rems = $wrapped = [];
         $this->getMarker($template, $markerArray, $rems, $wrapped, $this->conf['view']);
+
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $rems, $wrapped);
     }
 
-    function createEvent(&$match)
+    public function createEvent(&$match)
     {
         $this->_match = $match;
 
@@ -111,54 +112,53 @@ class tx_cfcleaguefe_models_match_calevent extends tx_cal_phpicalendar_model
     }
 
     /**
-     * Returns the headerstyle name
+     * Returns the headerstyle name.
      */
-    function getHeaderStyle()
+    public function getHeaderStyle()
     {
         return $this->conf['view.']['cfc_league_events.']['headerStyle'];
     }
 
     /**
-     * Returns the bodystyle name
+     * Returns the bodystyle name.
      */
-    function getBodyStyle()
+    public function getBodyStyle()
     {
-        return $this->conf['view.']['cfc_league_events.']["bodyStyle"];
+        return $this->conf['view.']['cfc_league_events.']['bodyStyle'];
     }
 
-    function getSubheader()
+    public function getSubheader()
     {
         return $this->subheader;
     }
 
-    function setSubheader($s)
+    public function setSubheader($s)
     {
         $this->subheader = $s;
     }
 
-    function getImage()
+    public function getImage()
     {
         return $this->image;
     }
 
-    function setImage($s)
+    public function setImage($s)
     {
         $this->image = $s;
     }
 
-    function getUntil()
+    public function getUntil()
     {
         return 0;
     }
 
-    function getCategory()
+    public function getCategory()
     {
         return $this->category;
     }
 
-    function setCategory($cat)
+    public function setCategory($cat)
     {
         $this->category = $cat;
     }
 }
-

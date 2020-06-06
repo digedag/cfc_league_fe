@@ -24,35 +24,44 @@
 
 tx_rnbase::load('tx_rnbase_model_base');
 
-
 /**
  * Model for a team note.
  */
-class tx_cfcleaguefe_models_teamNote extends tx_rnbase_model_base {
-	function getTableName(){return 'tx_cfcleague_team_notes';}
+class tx_cfcleaguefe_models_teamNote extends tx_rnbase_model_base
+{
+    public function getTableName()
+    {
+        return 'tx_cfcleague_team_notes';
+    }
 
-	/**
-	 * Returns the value according to media type
-	 *
-	 * @return mixed
-	 */
-	public function getValue() {
-		if($this->getProperty('mediatype') == 0) // Text
-			return $this->getProperty('comment');
-		elseif($this->getProperty('mediatype') == 1) // DAM-Media
-			return $this->getProperty('media');
-		elseif($this->getProperty('mediatype') == 2) // Integer
-			return $this->getProperty('number');
-	}
-	/**
-	 * Returns the NoteType
-	 *
-	 * @return tx_cfcleaguefe_models_teamNoteType
-	 */
-	public function getType() {
-		tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
-		return tx_cfcleaguefe_models_teamNoteType::getTeamNoteInstance($this->getProperty('type'));
-	}
+    /**
+     * Returns the value according to media type.
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        if (0 == $this->getProperty('mediatype')) { // Text
 
+            return $this->getProperty('comment');
+        } elseif (1 == $this->getProperty('mediatype')) { // DAM-Media
+
+            return $this->getProperty('media');
+        } elseif (2 == $this->getProperty('mediatype')) { // Integer
+
+            return $this->getProperty('number');
+        }
+    }
+
+    /**
+     * Returns the NoteType.
+     *
+     * @return tx_cfcleaguefe_models_teamNoteType
+     */
+    public function getType()
+    {
+        tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
+
+        return tx_cfcleaguefe_models_teamNoteType::getTeamNoteInstance($this->getProperty('type'));
+    }
 }
-

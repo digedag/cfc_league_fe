@@ -1,7 +1,8 @@
 <?php
+
 namespace System25\T3sports\Search;
 
-/**
+/*
  * *************************************************************
  * Copyright notice
  *
@@ -29,13 +30,12 @@ define('MATCHSRV_FIELD_MATCH_ROUND', 'MATCH.ROUND');
 define('MATCHSRV_FIELD_MATCH_DATE', 'MATCH.DATE');
 
 /**
- * Class to search matches from database
+ * Class to search matches from database.
  *
  * @author Rene Nitzsche
  */
 class MatchSearch extends \tx_rnbase_util_SearchBase
 {
-
     protected function getTableMappings()
     {
         $tableMapping = [];
@@ -45,8 +45,9 @@ class MatchSearch extends \tx_rnbase_util_SearchBase
         $tableMapping['TEAM2'] = 't2';
         // Hook to append other tables
         \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getTableMapping_hook', array(
-            'tableMapping' => &$tableMapping
+            'tableMapping' => &$tableMapping,
         ), $this);
+
         return $tableMapping;
     }
 
@@ -55,7 +56,7 @@ class MatchSearch extends \tx_rnbase_util_SearchBase
         return 'tx_cfcleague_games';
     }
 
-    function getWrapperClass()
+    public function getWrapperClass()
     {
         return 'tx_cfcleaguefe_models_match';
     }
@@ -75,9 +76,9 @@ class MatchSearch extends \tx_rnbase_util_SearchBase
         // Hook to append other tables
         \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getJoins_hook', array(
             'join' => &$join,
-            'tableAliases' => $tableAliases
+            'tableAliases' => $tableAliases,
         ), $this);
+
         return $join;
     }
 }
-

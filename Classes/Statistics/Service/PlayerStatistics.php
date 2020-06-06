@@ -28,17 +28,16 @@ use System25\T3sports\Statistics\PlayerStatisticsMarker;
  ***************************************************************/
 
 /**
- * Service for player statistics
+ * Service for player statistics.
  *
  * @author Rene Nitzsche
  */
 class PlayerStatistics extends \Tx_Rnbase_Service_Base
 {
-
     /**
      * Für jeden Spieler wird ein Datenarray erstellt
      * In jedem Datenarray liegt für jede Info ein Zähler,
-     * sowie zusätzlich noch eine Referenz auf den Spieler
+     * sowie zusätzlich noch eine Referenz auf den Spieler.
      */
     private $playersArr = [];
 
@@ -63,7 +62,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         'goals_home',
         'goals_away',
         'goals_assist',
-        'goals_joker'
+        'goals_joker',
     );
 
     /**
@@ -77,17 +76,16 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         $this->configurations = $configurations;
     }
 
-    static $total = 0;
+    public static $total = 0;
 
     /**
-     * Ein einzelnes Spiel auswerten
+     * Ein einzelnes Spiel auswerten.
      *
      * @param \tx_cfcleaguefe_models_match $match
      * @param int $clubId
      */
     public function handleMatch($match, $clubId)
     {
-
         // Zunächst müssen alle Spieler des Spiels ermittelt werden
         // Jeder Spieler, der am Spiel beteiligt ist, steht in der Aufstellung oder als
         // Wechselspieler im Match.
@@ -96,36 +94,40 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         if ($this->isObservedTeam($team)) {
             $players = $this->getPlayer($match, true); // All Spieler des Heimteams holen
 
-            if (is_array($players))
+            if (is_array($players)) {
                 foreach ($players as $player) {
                     // Jeden Spieler aktualisieren
                     $this->_countMatch4Player($player, $match, $this->playersArr);
                 }
+            }
         }
         $team = $match->getGuest();
         if ($this->isObservedTeam($team)) {
             // Nochmal die Spieler des Auswärtsteams
             $players = $this->getPlayer($match, false); // All Spieler des Gastteams holen
-            if (is_array($players))
+            if (is_array($players)) {
                 foreach ($players as $player) {
                     // Jeden Spieler aktualisieren
                     $this->_countMatch4Player($player, $match, $this->playersArr);
                 }
+            }
         }
     }
 
     /**
-     * Entscheidet, ob die Spieler des Teams in die Statistik eingehen
+     * Entscheidet, ob die Spieler des Teams in die Statistik eingehen.
      *
      * @param \tx_cfcleaguefe_models_team $team
-     * @return boolean
+     *
+     * @return bool
      */
     protected function isObservedTeam($team)
     {
         $clubId = $this->scopeArr['CLUB_UIDS'];
-        $ret = $team->getProperty('club') == $clubId || ! $clubId;
+        $ret = $team->getProperty('club') == $clubId || !$clubId;
         $groupId = $this->scopeArr['TEAMGROUP_UIDS'];
-        $ret = $ret && ($team->getProperty('agegroup') == $groupId || ! $groupId);
+        $ret = $ret && ($team->getProperty('agegroup') == $groupId || !$groupId);
+
         return $ret;
     }
 
@@ -133,8 +135,9 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * Liefert die Spieler eines beteiligten Teams.
      *
      * @param \tx_cfcleaguefe_models_match $match
-     * @param boolean $home
+     * @param bool $home
      *            true, wenn das Heimteam geholt werden soll
+     *
      * @return array[\tx_cfcleaguefe_models_profile]
      */
     protected function getPlayer($match, $home)
@@ -142,12 +145,13 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         $players = $home ? $match->getPlayersHome(1) : $match->getPlayersGuest(1);
         // Fehlerhafte Spieler entfernen
         foreach ($players as $key => $player) {
-            if (! is_object($player)) {
-                \tx_rnbase_util_Logger::warn('Player with UID ' . $key . ' not found. Probably the profile was deleted, but still has references.', 'cfc_league_fe');
+            if (!is_object($player)) {
+                \tx_rnbase_util_Logger::warn('Player with UID '.$key.' not found. Probably the profile was deleted, but still has references.', 'cfc_league_fe');
                 unset($players[$key]);
             }
         }
         reset($players);
+
         return $players;
     }
 
@@ -157,7 +161,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         // Is there exactly one team?
         $teams = $this->getTeams($this->getScopeArray());
 
-        if (count($teams) == 1 && intval($this->configurations->get('statistics.player.profileSortOrder')) == 1) {
+        if (1 == count($teams) && 1 == intval($this->configurations->get('statistics.player.profileSortOrder'))) {
             // sort by team members
             $this->playersArr = $this->_sortPlayer($this->playersArr, $teams[0]);
         } else {
@@ -166,11 +170,12 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
                 return $this->playerStatsCmpPlayer($a, $b);
             });
         }
+
         return $this->playersArr;
     }
 
     /**
-     * Returns the marker instance to map result data to HTML markers
+     * Returns the marker instance to map result data to HTML markers.
      *
      * @param \tx_rnbase_configurations $configurations
      */
@@ -180,7 +185,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     }
 
     /**
-     * Kindklassen Zugriff auf das Ergebnisarray bieten
+     * Kindklassen Zugriff auf das Ergebnisarray bieten.
      *
      * @return array
      */
@@ -190,22 +195,24 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     }
 
     /**
-     * Find teams that were handled by this scope
+     * Find teams that were handled by this scope.
      *
      * @param array $scopeArr
+     *
      * @return array of tx_cfcleagefe_models_team
      */
     protected function getTeams($scopeArr)
     {
         $teams = call_user_func(array(
             'tx_cfcleaguefe_models_team',
-            "getTeams"
+            'getTeams',
         ), $scopeArr['COMP_UIDS'], $scopeArr['CLUB_UIDS']);
+
         return $teams;
     }
 
     /**
-     * Kindklassen Zugriff auf das Scopearray bieten
+     * Kindklassen Zugriff auf das Scopearray bieten.
      *
      * @return array
      */
@@ -226,7 +233,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * - CARD_YELLOW Anzahl Gelb Karten
      * - CARD_RED Anzahl rote Karten
      * - GOAL_ALL Gesamtzahl der Tore des Spieler
-     * </pre>
+     * </pre>.
      *
      * @param \tx_cfcleaguefe_models_profile $player
      *            Spieler, der gezählt werden soll
@@ -244,13 +251,11 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         // In welchem Team steht der Spieler?
         $team = $match->getTeam4Player($player->uid);
 
-        if ($team == 1) {
+        if (1 == $team) {
             $startPlayer = $match->getPlayersHome();
-        }
-        elseif ($team == 2) {
+        } elseif (2 == $team) {
             $startPlayer = $match->getPlayersGuest();
-        }
-        else {
+        } else {
             // Wenn der Spieler nicht im Spiel vorkommt, können wir abbrechen
             return;
         }
@@ -266,17 +271,17 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             }
 
             // Nicht ausgewechselt, aber wurde der Spieler vom Platz gestellt?
-            if (intval($min) == 0) {
+            if (0 == intval($min)) {
                 $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
-                if ($min != 0) {
+                if (0 != $min) {
                     $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
                     $isYellowRed = true;
                 }
             }
             // Keine gelbrote, aber vielleicht rot?
-            if (intval($min) == 0) {
+            if (0 == intval($min)) {
                 $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
-                if ($min != 0) {
+                if (0 != $min) {
                     $playerData['card_red'] = intval($playerData['card_red']) + 1;
                 }
             }
@@ -302,16 +307,16 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
                 }
 
                 // Wurde der Spieler vom Platz gestellt?
-                if (intval($min2) == 0) {
+                if (0 == intval($min2)) {
                     $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
-                    if ($min2 != 0) {
+                    if (0 != $min2) {
                         $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
                         $isYellowRed = true;
                     }
                 }
-                if (intval($min2) == 0) {
+                if (0 == intval($min2)) {
                     $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
-                    if ($min2 != 0) {
+                    if (0 != $min2) {
                         $playerData['card_red'] = intval($playerData['card_red']) + 1;
                     }
                 }
@@ -327,16 +332,16 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         }
         if ($ignorePlayer) {
             // Bug 1864066 - Spieler, die nicht im Spiel waren können trotzdem rote Karten bekommen
-            if (\tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match) != 0) {
+            if (0 != \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match)) {
                 $playerData['card_red'] = intval($playerData['card_red']) + 1;
             }
         }
-        if (! $ignorePlayer) {
+        if (!$ignorePlayer) {
             // Der Spieler war im Spiel. Wir suchen die restlichen Daten
             // Bug 1864071 - Gelbe Karten nur zählen, wenn nicht gelbrot
-            if (! $isYellowRed) {
+            if (!$isYellowRed) {
                 $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
-                if ($min != 0) {
+                if (0 != $min) {
                     $playerData['card_yellow'] = intval($playerData['card_yellow']) + 1;
                 }
             }
@@ -365,14 +370,14 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             // Die Anzahl der Notes im Spiel für den Spieler hinzufügen
             $playerData[$key] = intval($playerData[$key]) + count($notes);
         }
-        $playerData[$key . '_per_match'] = intval($playerData[$key]) / intval($playerData['match_count']);
+        $playerData[$key.'_per_match'] = intval($playerData[$key]) / intval($playerData['match_count']);
     }
 
     /**
      * Zählt die Tore für einen Spieler.
      * Der Typ ist entweder 0 für alle Tore oder
      * entspricht dem MatchNote-Typ für ein bestimmtes Tor. Wenn der Typ 0 ist, dann werden
-     * auch auch die Werte für GOALS_HOME, GOALS_AWAY und GOALS_JOKER aktualisiert
+     * auch auch die Werte für GOALS_HOME, GOALS_AWAY und GOALS_JOKER aktualisiert.
      *
      * @param int $type 0 oder MatchNote-Typ
      * @param string $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
@@ -387,13 +392,12 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         if (is_array($notes)) {
             // Die Anzahl der Tore im Spiel für den Spieler hinzufügen
             $playerData[$key] = intval($playerData[$key]) + count($notes);
-            if ($type == 0) {
+            if (0 == $type) {
                 // Hier zählen wir zusätzlich weitere Daten
                 $firstNote = $notes[0];
                 if ($firstNote->isHome()) {
                     $playerData['goals_home'] = intval($playerData['goals_home']) + count($notes);
-                }
-                else {
+                } else {
                     $playerData['goals_away'] = intval($playerData['goals_away']) + count($notes);
                 }
                 if (\tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match)) {
@@ -402,10 +406,10 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             }
         }
         // Tore pro Spiel berechnen
-        $playerData[$key . '_per_match'] = intval($playerData[$key]) / intval($playerData['match_count']);
+        $playerData[$key.'_per_match'] = intval($playerData[$key]) / intval($playerData['match_count']);
         // Spielminuten pro Tor (hier DIV/0 verhindern)
         if (intval($playerData[$key])) {
-            $playerData[$key . '_after_minutes'] = intval($playerData['match_minutes']) / intval($playerData[$key]);
+            $playerData[$key.'_after_minutes'] = intval($playerData['match_minutes']) / intval($playerData[$key]);
         }
     }
 
@@ -415,9 +419,9 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * vorhanden sein, dann wird es angelegt. Außerdem wird jeder Statistikeintrag mit 0 initialisiert.
      * Die ist notwendig, damit später alle Marker im HTML-Template ersetzt werden.
      */
-    function &_getPlayerData(&$players, $player)
+    public function &_getPlayerData(&$players, $player)
     {
-        if (! array_key_exists($player->uid, $players)) {
+        if (!array_key_exists($player->uid, $players)) {
             $players[$player->uid] = array();
             // Alle Daten initialisieren
             foreach ($this->statData as $col) {
@@ -425,16 +429,17 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             }
             $players[$player->uid]['player'] = $player;
         }
+
         return $players[$player->uid];
     }
 
     /**
-     * Sortiert die Spieler entsprechend der Reihenfolge im Team
+     * Sortiert die Spieler entsprechend der Reihenfolge im Team.
      *
      * @param \tx_cfcleaguefe_models_profile[] $players
      * @param \tx_cfcleaguefe_models_team $team
      */
-    function _sortPlayer($players, $team)
+    public function _sortPlayer($players, $team)
     {
         $ret = array();
         if (strlen(trim($team->getProperty('players'))) > 0) {
@@ -452,21 +457,21 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             // Wenn keine Spieler im Team geladen sind, dann wird das Array unverändert zurückgegeben
             return $players;
         }
+
         return $ret;
     }
 
     /**
-     * Sortierfunktion um die korrekte Reihenfolge nach Namen zu ermittlen
+     * Sortierfunktion um die korrekte Reihenfolge nach Namen zu ermittlen.
      */
-    function playerStatsCmpPlayer($a, $b)
+    public function playerStatsCmpPlayer($a, $b)
     {
         $player1 = $a['player'];
         $player2 = $b['player'];
-        
+
         return strcmp(
             \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
             \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1)))
         );
     }
 }
-

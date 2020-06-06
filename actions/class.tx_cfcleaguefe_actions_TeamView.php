@@ -25,25 +25,25 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 
 /**
- * Controller für die Anzeige eines Teams
+ * Controller für die Anzeige eines Teams.
  */
 class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     * handle request
+     * handle request.
      *
      * @param arrayobject $parameters
      * @param tx_rnbase_configurations $configurations
      * @param arrayobject $viewData
+     *
      * @return string
      */
-    function handleRequest(&$parameters, &$configurations, &$viewData)
+    public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         $teams = array();
         // Im Flexform kann direkt ein Team ausgwählt werden
         $teamId = intval($configurations->get('teamviewTeam'));
-        if (! $teamId) {
+        if (!$teamId) {
             // Alternativ ist eine Parameterübergabe möglich
             $teamId = intval($parameters->offsetGet('teamId'));
             // Wenn die TeamID über den Parameter übergeben wird, dann müssen wir sie aus den
@@ -60,7 +60,7 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
             $club = $configurations->get('teamviewClub');
 
             // Ohne Club können wir nichts zeigen
-            if (intval($club) == 0) {
+            if (0 == intval($club)) {
                 return 'Error: No club defined.';
             }
 
@@ -71,7 +71,7 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
             $teams[] = $team;
         }
 
-        $viewData = & $configurations->getViewData();
+        $viewData = &$configurations->getViewData();
         // Wir zeigen immer nur das erste Team im Ergebnis, selbst wenn es durch Fehlkonfiguration
         // mehrere sein sollten
         $viewData->offsetSet('team', $teams[0]);
@@ -79,12 +79,12 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
         return null;
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'teamview';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_TeamView';
     }

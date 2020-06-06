@@ -27,7 +27,6 @@
  */
 class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
 {
-
     private $_players;
 
     private $_coaches;
@@ -37,7 +36,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     private $agegroup = null;
 
     /**
-     * Array with loaded team instances
+     * Array with loaded team instances.
      */
     private static $instances;
 
@@ -52,19 +51,21 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     }
 
     /**
-     * Liefert den Verein des Teams als Objekt
+     * Liefert den Verein des Teams als Objekt.
      *
      * @return tx_cfcleaguefe_models_club Verein als Objekt oder 0
      */
     public function getClub()
     {
-        if (! $this->getProperty('club'))
+        if (!$this->getProperty('club')) {
             return 0;
+        }
+
         return tx_cfcleaguefe_models_club::getClubInstance($this->getProperty('club'));
     }
 
     /**
-     * Returns the UID of club
+     * Returns the UID of club.
      *
      * @return int
      */
@@ -82,19 +83,22 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     public function getAgeGroup()
     {
-        if (! $this->agegroup) {
-            if (intval($this->getProperty('agegroup')))
+        if (!$this->agegroup) {
+            if (intval($this->getProperty('agegroup'))) {
                 $this->agegroup = tx_cfcleague_models_Group::getGroupInstance($this->getProperty('agegroup'));
-            if (! $this->agegroup) {
+            }
+            if (!$this->agegroup) {
                 $comps = $this->getCompetitions(true);
-                for ($i = 0, $cnt = count($comps); $i < $cnt; $i ++) {
+                for ($i = 0, $cnt = count($comps); $i < $cnt; ++$i ) {
                     if (is_object($comps[$i]->getGroup())) {
                         $this->agegroup = $comps[$i]->getGroup();
+
                         break;
                     }
                 }
             }
         }
+
         return $this->agegroup;
     }
 
@@ -110,10 +114,11 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     }
 
     /**
-     * Returns the competitons of this team
+     * Returns the competitons of this team.
      *
-     * @param boolean $obligateOnly
+     * @param bool $obligateOnly
      *            if true, only obligate competitions are returned
+     *
      * @return array of tx_cfcleaguefe_models_competition
      */
     public function getCompetitions($obligateOnly = false)
@@ -121,6 +126,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
         $fields = $options = [];
         \System25\T3sports\Search\SearchBuilder::buildCompetitionByTeam($fields, $this->getUid(), $obligateOnly);
         $srv = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
+
         return $srv->search($fields, $options);
     }
 
@@ -131,9 +137,11 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     public function getCoaches()
     {
-        if (is_array($this->_coaches))
+        if (is_array($this->_coaches)) {
             return $this->_coaches;
+        }
         $this->_coaches = $this->_getTeamMember('coaches');
+
         return $this->_coaches;
     }
 
@@ -144,9 +152,11 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     public function getSupporters()
     {
-        if (is_array($this->_supporters))
+        if (is_array($this->_supporters)) {
             return $this->_supporters;
+        }
         $this->_supporters = $this->_getTeamMember('supporters');
+
         return $this->_supporters;
     }
 
@@ -157,14 +167,17 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     public function getPlayers()
     {
-        if (is_array($this->_players))
+        if (is_array($this->_players)) {
             return $this->_players;
+        }
         $this->_players = $this->_getTeamMember('players');
+
         return $this->_players;
     }
 
     /**
      * Liefert true, wenn für das Team eine Einzelansicht verlinkt werden kann.
+     *
      * @return
      */
     public function hasReport()
@@ -173,19 +186,22 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     }
 
     /**
-     * Returns cached instances of teams
+     * Returns cached instances of teams.
      *
      * @param int $teamUid
+     *
      * @return tx_cfcleaguefe_models_team
      */
     public static function getTeamInstance($teamUid)
     {
         $uid = intval($teamUid);
-        if (! $uid)
-            throw new Exception('Team uid expected. Was: >' . $teamUid . '<', - 1);
-        if (! self::$instances[$uid]) {
+        if (!$uid) {
+            throw new Exception('Team uid expected. Was: >'.$teamUid.'<', -1);
+        }
+        if (!self::$instances[$uid]) {
             self::$instances[$uid] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_team', $teamUid);
         }
+
         return self::$instances[$uid];
     }
 
@@ -198,6 +214,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      * Liefert Mitglieder des Teams als Array.
      * Teammitglieder sind Spieler, Trainer und Betreuer.
      * Die gefundenen Profile werden sortiert in der Reihenfolge im Team geliefert.
+     *
      * @column Name der DB-Spalte mit den gesuchten Team-Mitgliedern
      */
     protected function _getTeamMember($column)
@@ -205,17 +222,19 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
         if (strlen(trim($this->getProperty($column))) > 0) {
             $what = '*';
             $from = 'tx_cfcleague_profiles';
-            $options['where'] = 'uid IN (' . $this->getProperty($column) . ')';
+            $options['where'] = 'uid IN ('.$this->getProperty($column).')';
             $options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
 
             $rows = tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
+
             return $this->sortPlayer($rows, $column);
         }
+
         return array();
     }
 
     /**
-     * Sortiert die Personen (Spieler/Trainer) entsprechend der Reihenfolge im Team
+     * Sortiert die Personen (Spieler/Trainer) entsprechend der Reihenfolge im Team.
      *
      * @param $profiles array
      *            of tx_cfcleaguefe_models_profile
@@ -236,36 +255,39 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
             // Wenn keine Spieler im Team geladen sind, dann wird das Array unverändert zurückgegeben
             return $profiles;
         }
+
         return $ret;
     }
 
     /**
      * Check if team is a dummy for free_of_match.
      *
-     * @return boolean
+     * @return bool
      */
     public function isDummy()
     {
-        return intval($this->getProperty('dummy')) != 0;
+        return 0 != intval($this->getProperty('dummy'));
     }
 
     /**
      * Return all teams by an array of uids.
      *
      * @param mixed $teamIds
+     *
      * @return array of tx_cfcleaguefe_models_team
      */
-    function getTeamsByUid($teamIds)
+    public function getTeamsByUid($teamIds)
     {
-        if (! is_array($teamIds)) {
+        if (!is_array($teamIds)) {
             $teamIds = Tx_Rnbase_Utility_Strings::intExplode(',', $teamIds);
         }
-        if (! count($teamIds))
+        if (!count($teamIds)) {
             return array();
+        }
         $teamIds = implode($teamIds, ',');
         $what = '*';
         $from = 'tx_cfcleague_teams';
-        $options['where'] = 'tx_cfcleague_teams.uid IN (' . $teamIds . ') ';
+        $options['where'] = 'tx_cfcleague_teams.uid IN ('.$teamIds.') ';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
 
         return tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
@@ -274,6 +296,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     /**
      * Returns Teams by competition and club.
      * This method can be used static.
+     *
      * @return tx_cfcleaguefe_models_team[]
      */
     public static function getTeams($competitionIds, $clubIds)
@@ -283,15 +306,15 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
 
         // $what = tx_cfcleaguefe_models_team::getWhat();
         $what = 'tx_cfcleague_teams.*';
-        $from = Array(
+        $from = array(
             '
 			tx_cfcleague_teams
 				JOIN tx_cfcleague_competition ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )',
-            'tx_cfcleague_teams'
+            'tx_cfcleague_teams',
         );
 
-        $options['where'] = 'tx_cfcleague_teams.club IN (' . $clubIds . ') AND ';
-        $options['where'] .= 'tx_cfcleague_competition.uid IN (' . $competitionIds . ') ';
+        $options['where'] = 'tx_cfcleague_teams.club IN ('.$clubIds.') AND ';
+        $options['where'] .= 'tx_cfcleague_competition.uid IN ('.$competitionIds.') ';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
 
         return tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
@@ -305,4 +328,3 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
          */
     }
 }
-

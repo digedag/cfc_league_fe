@@ -24,24 +24,24 @@
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
- * Controller für die Anzeige eines Stadien
+ * Controller für die Anzeige eines Stadien.
  */
 class tx_cfcleaguefe_actions_StadiumView extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     * handle request
+     * handle request.
      *
      * @param arrayobject $parameters
      * @param tx_rnbase_configurations $configurations
      * @param arrayobject $viewData
+     *
      * @return string
      */
-    function handleRequest(&$parameters, &$configurations, &$viewData)
+    public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         // Im Flexform kann direkt ein Team ausgwählt werden
         $itemId = intval($configurations->get('stadiumview.stadium'));
-        if (! $itemId) {
+        if (!$itemId) {
             // Alternativ ist eine Parameterübergabe möglich
             $itemId = intval($parameters->offsetGet('stadium'));
         }
@@ -52,12 +52,12 @@ class tx_cfcleaguefe_actions_StadiumView extends tx_rnbase_action_BaseIOC
         return null;
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'stadiumview';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_StadiumView';
     }

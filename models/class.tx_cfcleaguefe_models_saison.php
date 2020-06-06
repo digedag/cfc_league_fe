@@ -28,7 +28,6 @@ tx_rnbase::load('tx_rnbase_model_base');
  */
 class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base
 {
-
     public function getTableName()
     {
         return 'tx_cfcleague_saison';
@@ -44,7 +43,7 @@ class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base
     {
         $options = array();
         if (is_string($uids) && strlen($uids) > 0) {
-            $options['where'] = 'uid IN (' . $uids . ')';
+            $options['where'] = 'uid IN ('.$uids.')';
         } else {
             $options['where'] = '1';
         }

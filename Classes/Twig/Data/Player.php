@@ -1,4 +1,5 @@
 <?php
+
 namespace System25\T3sports\Twig\Data;
 
 /***************************************************************
@@ -24,19 +25,22 @@ namespace System25\T3sports\Twig\Data;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 /**
- * Provide additional data for player
+ * Provide additional data for player.
+ *
  * @author rene
  */
 class Player
 {
     /** @var \tx_cfcleague_models_MatchNote[] */
     protected $matchNotes = [];
+
     protected $matchNotesByType = [];
 
     protected $profileSrv;
+
     protected $profile;
+
     protected $uniqueName = true;
 
     public function __construct(\tx_cfcleague_models_Profile $profile)
@@ -60,8 +64,8 @@ class Player
     }
 
     /**
-     *
      * @param int $type
+     *
      * @return boolean
      */
     public function hasMatchNoteType($type)
@@ -70,8 +74,8 @@ class Player
     }
 
     /**
-     *
      * @param int $type
+     *
      * @return \tx_cfcleague_models_MatchNote[]
      */
     public function getMatchNotesByType($type)
@@ -80,7 +84,6 @@ class Player
     }
 
     /**
-     *
      * @return boolean
      */
     public function isCardYellow()
@@ -89,7 +92,6 @@ class Player
     }
 
     /**
-     *
      * @return \tx_cfcleague_models_MatchNote[]
      */
     public function getChangedOut()
@@ -98,7 +100,6 @@ class Player
     }
 
     /**
-     *
      * @return boolean
      */
     public function isCardYellowRed()
@@ -107,15 +108,14 @@ class Player
     }
 
     /**
-     *
      * @return boolean
      */
     public function isCardRed()
     {
         return $this->hasMatchNoteType(\tx_cfcleague_models_MatchNote::TYPE_CARD_RED);
     }
+
     /**
-     *
      * @return boolean
      */
     public function isCaptain()
@@ -124,15 +124,14 @@ class Player
     }
 
     /**
-     *
      * @return \tx_cfcleague_models_MatchNote[]
      */
     public function getMatchNotes()
     {
         return $this->matchNotes;
     }
+
     /**
-     *
      * @return \tx_cfcleague_models_Profile
      */
     public function getProfile()
@@ -141,7 +140,8 @@ class Player
     }
 
     /**
-     * whether or not the lastname of this player is unique in this match
+     * whether or not the lastname of this player is unique in this match.
+     *
      * @return boolean
      */
     public function getUniqueName()
@@ -152,8 +152,7 @@ class Player
     public function setUniqueName($uniqueName)
     {
         $this->uniqueName = $uniqueName;
+
         return $this;
     }
-
 }
-

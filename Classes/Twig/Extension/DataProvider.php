@@ -1,4 +1,5 @@
 <?php
+
 namespace System25\T3sports\Twig\Extension;
 
 /***************************************************************
@@ -24,9 +25,6 @@ namespace System25\T3sports\Twig\Extension;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-/**
- */
 class DataProvider extends \Twig_Extension
 {
     public function getFunctions()
@@ -42,7 +40,7 @@ class DataProvider extends \Twig_Extension
     }
 
     /**
-     * Get Extension name
+     * Get Extension name.
      *
      * @return string
      */
@@ -51,4 +49,3 @@ class DataProvider extends \Twig_Extension
         return 't3sports_DataProvider';
     }
 }
-

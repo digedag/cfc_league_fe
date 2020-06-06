@@ -28,11 +28,10 @@ tx_rnbase::load('tx_cfcleaguefe_table_football_Configurator');
  */
 class tx_cfcleaguefe_table_handball_Configurator extends tx_cfcleaguefe_table_football_Configurator
 {
-
     /**
-     * Whether or not loose points are count
+     * Whether or not loose points are count.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCountLoosePoints()
     {
@@ -55,7 +54,7 @@ class tx_cfcleaguefe_table_handball_Configurator extends tx_cfcleaguefe_table_fo
     }
 
     /**
-     * 0- 2-Punktsystem
+     * 0- 2-Punktsystem.
      */
     public function getPointSystem()
     {
@@ -63,19 +62,20 @@ class tx_cfcleaguefe_table_handball_Configurator extends tx_cfcleaguefe_table_fo
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_table_football_IComparator
      */
     public function getComparator()
     {
         $compareClass = $this->cfgComparatorClass ? $this->cfgComparatorClass : 'tx_cfcleaguefe_table_football_Comparator';
         $comparator = tx_rnbase::makeInstance($compareClass);
-        if (! is_object($comparator))
-            throw new Exception('Could not instanciate comparator: ' . $compareClass);
-
+        if (!is_object($comparator)) {
+            throw new Exception('Could not instanciate comparator: '.$compareClass);
+        }
         tx_rnbase::load('tx_cfcleaguefe_table_football_IComparator');
-        if (! ($comparator instanceof tx_cfcleaguefe_table_football_IComparator))
-            throw new Exception('Comparator is no instance of tx_cfcleaguefe_table_football_IComparator: ' . get_class($comparator));
+        if (!($comparator instanceof tx_cfcleaguefe_table_football_IComparator)) {
+            throw new Exception('Comparator is no instance of tx_cfcleaguefe_table_football_IComparator: '.get_class($comparator));
+        }
+
         return $comparator;
     }
 
@@ -104,4 +104,3 @@ class tx_cfcleaguefe_table_handball_Configurator extends tx_cfcleaguefe_table_fo
         $this->cfgComparatorClass = $this->getConfValue('comparatorClass');
     }
 }
-

@@ -25,34 +25,34 @@ tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
- * Viewklasse für die Anzeige eines Personenprofils
+ * Viewklasse für die Anzeige eines Personenprofils.
  */
 class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base
 {
-
     /**
-     * Create fe output
+     * Create fe output.
      *
      * @param string $template
      * @param arrayobject $viewData
      * @param tx_rnbase_configurations $configurations
      * @param tx_rnbase_util_FormatUtil $formatter
+     *
      * @return string
      */
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         $markerArray = array(); // Eventuell später für allgemeine Daten oder Labels
         $subpartArray = array();
-        
-        $listCnt = & $viewData->offsetGet('listsize');
-        $profiles = & $viewData->offsetGet('profiles');
-        
+
+        $listCnt = &$viewData->offsetGet('listsize');
+        $profiles = &$viewData->offsetGet('profiles');
+
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
         $out = $listBuilder->render($profiles, $viewData, $template, 'tx_cfcleaguefe_util_ProfileMarker', 'profilelist.profile.', 'PROFILE', $formatter);
-        
+
         // Zum Schluß das Haupttemplate zusammenstellen
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray); // , $wrappedSubpartArray);
-        
+
         return $out;
     }
 

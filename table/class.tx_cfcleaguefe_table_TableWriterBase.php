@@ -28,23 +28,23 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableWriter');
  */
 abstract class tx_cfcleaguefe_table_TableWriterBase implements tx_cfcleaguefe_table_ITableWriter
 {
-
     /**
-     *
      * @param tx_cfcleaguefe_table_ITableType $table
      * @param string $template
      * @param tx_rnbase_configurations $configurations
      * @param string $confId
+     *
      * @return string
      */
     public function writeTable($table, $template, $configurations, $confId)
     {
-        $mainSubpart = 'SPORTS_' . strtoupper($table->getTypeID());
+        $mainSubpart = 'SPORTS_'.strtoupper($table->getTypeID());
         if (tx_rnbase_util_BaseMarker::containsMarker($template, $mainSubpart)) {
-            $template = tx_rnbase_util_Templates::getSubpart($template, '###' . $mainSubpart . '###');
+            $template = tx_rnbase_util_Templates::getSubpart($template, '###'.$mainSubpart.'###');
         }
+
         return $this->renderTable($table, $template, $configurations, $confId);
     }
 
-    protected abstract function renderTable($table, $template, $configurations, $confId);
+    abstract protected function renderTable($table, $template, $configurations, $confId);
 }

@@ -28,31 +28,31 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Viewklasse für die Anzeige einer Teamliste.
- * Isn't it tiny! ;-)
+ * Isn't it tiny! ;-).
  */
 class tx_cfcleaguefe_views_TeamList extends tx_rnbase_view_Base
 {
-
     /**
-     * Erstellen des Frontend-Outputs
+     * Erstellen des Frontend-Outputs.
      */
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-
         // Die ViewData bereitstellen
-        $teams = & $viewData->offsetGet('teams');
+        $teams = &$viewData->offsetGet('teams');
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
         $template = $listBuilder->render($teams, $viewData, $template, 'tx_cfcleaguefe_util_TeamMarker', 'teamlist.team.', 'TEAM', $formatter);
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'TEAMMAP'))
+        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'TEAMMAP')) {
             $markerArray['###TEAMMAP###'] = $this->getMap($teams, $configurations, $this->getController()
-                ->getConfId() . 'map.', 'TEAM');
+                ->getConfId().'map.', 'TEAM');
+        }
 
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray); // , $wrappedSubpartArray);
+
         return $out;
     }
 
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###TEAM_LIST###';
     }
@@ -60,6 +60,7 @@ class tx_cfcleaguefe_views_TeamList extends tx_rnbase_view_Base
     private function getMap($items, $configurations, $confId, $markerPrefix)
     {
         $ret = '###LABEL_mapNotAvailable###';
+
         try {
             $map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $confId);
 
@@ -67,17 +68,18 @@ class tx_cfcleaguefe_views_TeamList extends tx_rnbase_view_Base
             $template = tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###TEAM_MAP_MARKER###');
             $itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
             foreach ($items as $item) {
-                $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId . 'team.', $markerPrefix);
-                if (! $marker)
+                $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'team.', $markerPrefix);
+                if (!$marker) {
                     continue;
-                tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId() . 'map.icon.teamlogo.', $marker, 'team_' . $item->getUid(), $item->getLogoPath());
+                }
+                tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.teamlogo.', $marker, 'team_'.$item->getUid(), $item->getLogoPath());
                 $map->addMarker($marker);
             }
             $ret = $map->draw();
         } catch (Exception $e) {
             $ret = '###LABEL_mapNotAvailable###';
         }
+
         return $ret;
     }
 }
-

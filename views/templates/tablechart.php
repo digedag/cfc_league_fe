@@ -1,4 +1,4 @@
 <?php
-  $viewData =& $configurations->getViewData();
+
+  $viewData = &$configurations->getViewData();
   echo $viewData->offsetGet('plot');
-?>

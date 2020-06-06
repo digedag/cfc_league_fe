@@ -30,16 +30,14 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
  */
 class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_table_ITableType
 {
-
     protected $_teamData = array();
 
     /**
-     * Set configuration
+     * Set configuration.
      *
      * @param tx_rnbase_configurations $configuration
      * @param
      *            string confId
-     * @return void
      */
     public function setConfigurations($configuration, $confId)
     {
@@ -49,16 +47,17 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 
     protected function getConfValue($key)
     {
-        if (! is_object($this->configuration))
+        if (!is_object($this->configuration)) {
             return false;
-        return $this->configuration->get($this->confId . $key);
+        }
+
+        return $this->configuration->get($this->confId.$key);
     }
 
     /**
-     * Set match provider
+     * Set match provider.
      *
      * @param tx_cfcleaguefe_table_IMatchProvider $matchProvider
-     * @return void
      */
     public function setMatchProvider(tx_cfcleaguefe_table_IMatchProvider $matchProvider)
     {
@@ -66,7 +65,6 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_table_IMatchProvider
      */
     public function getMatchProvider()
@@ -75,21 +73,21 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_table_football_Configurator
      */
     public function getConfigurator($forceNew = false)
     {
-        if ($forceNew || ! is_object($this->configurator)) {
+        if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
             $configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_football_Configurator';
             $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
         }
+
         return $this->configurator;
     }
 
     /**
-     * Returns the final table data
+     * Returns the final table data.
      *
      * @return tx_cfcleaguefe_table_ITableResult
      */
@@ -108,7 +106,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         $rounds = $this->getMatchProvider()->getRounds();
         $comparator = $configurator->getComparator();
 
-        if (! empty($rounds)) {
+        if (!empty($rounds)) {
             foreach ($rounds as $round => $roundMatches) {
                 $this->handleMatches($roundMatches, $configurator);
                 // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
@@ -116,7 +114,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
                 $comparator->setTeamData($teamData);
                 usort($teamData, array(
                     $comparator,
-                    'compare'
+                    'compare',
                 ));
                 // Nun setzen wir die Tabellenstände
                 reset($teamData);
@@ -130,7 +128,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             $comparator->setTeamData($teamData);
             usort($teamData, array(
                 $comparator,
-                'compare'
+                'compare',
             ));
             reset($teamData);
             // Nochmal sortieren und die statischen Positionen setzen
@@ -143,7 +141,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 
     protected function addScore4Round($round, $teamData, $tableData)
     {
-        for ($i = 0; $i < count($teamData); $i ++) {
+        for ($i = 0; $i < count($teamData); ++$i ) {
             $newPosition = $i + 1;
             $team = $teamData[$i];
             if ($this->_teamData[$team['teamId']]['position']) {
@@ -158,16 +156,16 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     }
 
     /**
-     * #27 static positions in league table defined by penalty records
+     * #27 static positions in league table defined by penalty records.
      *
      * @param array $teamData
      */
     protected function handleStaticPositions(&$teamData)
     {
         $statics = [];
-        $maxIdx = count($teamData) -1;
-        foreach ($teamData As $currentIdx => $team) {
-            if(isset($team['static_position'])) {
+        $maxIdx = count($teamData) - 1;
+        foreach ($teamData as $currentIdx => $team) {
+            if (isset($team['static_position'])) {
                 $idx = $team['static_position'];
                 $idx = $idx > 0 ? $idx - 1 : $maxIdx;
                 $idx = $idx > $maxIdx ? $maxIdx : $idx;
@@ -178,7 +176,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
                 ];
             }
         }
-        foreach ($statics As $data) {
+        foreach ($statics as $data) {
             array_splice($teamData, $data['old'], 1);
             array_splice($teamData, $data['new'], 0, [$data['team']]);
         }
@@ -190,7 +188,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     }
 
     /**
-     * Lädt die Namen der Teams in der Tabelle
+     * Lädt die Namen der Teams in der Tabelle.
      *
      * @param tx_cfcleaguefe_models_competition $tableProvider
      */
@@ -200,12 +198,15 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         $teams = $configurator->getTeams();
         foreach ($teams as $team) {
             $teamId = $configurator->getTeamId($team);
-            if (! $teamId)
-                continue; // Ignore teams without given id
-            if ($team->isDummy())
-                continue; // Ignore dummy teams
-            if (array_key_exists($teamId, $this->_teamData))
+            if (!$teamId) {
                 continue;
+            } // Ignore teams without given id
+            if ($team->isDummy()) {
+                continue;
+            } // Ignore dummy teams
+            if (array_key_exists($teamId, $this->_teamData)) {
+                continue;
+            }
 
             $this->_teamData[$teamId]['team'] = $team;
             $this->_teamData[$teamId]['teamId'] = $teamId;
@@ -217,7 +218,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             // isLooseCount sollte zunächst über den matchProvider geholt werden
             // Später sollte eine Steuerklasse zwischengeschaltet sein, die ggf. die Information
             // aus der GUI holt.
-            $this->_teamData[$teamId]['points2'] = ($configurator->isCountLoosePoints()) ? 0 : - 1;
+            $this->_teamData[$teamId]['points2'] = ($configurator->isCountLoosePoints()) ? 0 : -1;
             $this->_teamData[$teamId]['goals1'] = 0;
             $this->_teamData[$teamId]['goals2'] = 0;
             $this->_teamData[$teamId]['goals_diff'] = 0;
@@ -237,25 +238,27 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             if (count($markClubs)) {
                 $this->_teamData[$teamId]['markClub'] = in_array($team->getProperty('club'), $markClubs) ? 1 : 0;
             }
-            $this->_teamData[$teamId]['markClubsIsRunningGame'] =  in_array($team->getProperty('club'),  $configurator->getRunningClubGames()) ? 1 : 0;
+            $this->_teamData[$teamId]['markClubsIsRunningGame'] = in_array($team->getProperty('club'), $configurator->getRunningClubGames()) ? 1 : 0;
 
             $this->initTeam($teamId);
         }
     }
 
     /**
-     * This methods is intended to be overwritten by subclasses to init team data
+     * This methods is intended to be overwritten by subclasses to init team data.
      *
      * @param int $teamId
      */
     protected function initTeam($teamId)
-    {}
+    {
+    }
 
     /**
      * Returns position change, either UP or DOWN or EQ.
      *
      * @param int $oldPosition
      * @param int $newPosition
+     *
      * @return string UP, DOWN or EQ
      */
     protected function getPositionChange($oldPosition, $newPosition)
@@ -279,28 +282,30 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             if (array_key_exists($penalty->getProperty('team'), $this->_teamData)) {
                 // Die Strafe wird für den View mit abgespeichert
                 // Falls es eine Korrektur ist, dann nicht speichern
-                if (! $penalty->isCorrection())
+                if (!$penalty->isCorrection()) {
                     $this->_teamData[$penalty->getProperty('team')]['penalties'][] = $penalty;
-                    // Die Punkte abziehen
-                    $this->_teamData[$penalty->getProperty('team')]['points'] -= $penalty->getProperty('points_pos');
-                    $this->_teamData[$penalty->getProperty('team')]['points2'] += $penalty->getProperty('points_neg');
+                }
+                // Die Punkte abziehen
+                $this->_teamData[$penalty->getProperty('team')]['points'] -= $penalty->getProperty('points_pos');
+                $this->_teamData[$penalty->getProperty('team')]['points2'] += $penalty->getProperty('points_neg');
 
-                    $this->addGoals($penalty->getProperty('team'), ($penalty->getProperty('goals_pos') * - 1), $penalty->getProperty('goals_neg'));
+                $this->addGoals($penalty->getProperty('team'), ($penalty->getProperty('goals_pos') * -1), $penalty->getProperty('goals_neg'));
 
-                    $this->_teamData[$penalty->getProperty('team')]['matchCount'] += $penalty->getProperty('matches');
-                    $this->_teamData[$penalty->getProperty('team')]['winCount'] += $penalty->getProperty('wins');
-                    $this->_teamData[$penalty->getProperty('team')]['drawCount'] += $penalty->getProperty('draws');
-                    $this->_teamData[$penalty->getProperty('team')]['loseCount'] += $penalty->getProperty('loses');
+                $this->_teamData[$penalty->getProperty('team')]['matchCount'] += $penalty->getProperty('matches');
+                $this->_teamData[$penalty->getProperty('team')]['winCount'] += $penalty->getProperty('wins');
+                $this->_teamData[$penalty->getProperty('team')]['drawCount'] += $penalty->getProperty('draws');
+                $this->_teamData[$penalty->getProperty('team')]['loseCount'] += $penalty->getProperty('loses');
 
-                    // Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht
-                    if($penalty->getProperty('static_position'))
-                        $this->_teamData[$penalty->getProperty('team')]['static_position'] = (int) $penalty->getProperty('static_position');
+                // Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht
+                if ($penalty->getProperty('static_position')) {
+                    $this->_teamData[$penalty->getProperty('team')]['static_position'] = (int) $penalty->getProperty('static_position');
+                }
             }
         }
     }
 
     /**
-     * Addiert Tore zu einem Team
+     * Addiert Tore zu einem Team.
      */
     protected function addGoals($teamId, $goals1, $goals2)
     {
@@ -310,7 +315,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     }
 
     /**
-     * Die Spiele werden zum aktuellen Tabellenstand hinzugerechnet
+     * Die Spiele werden zum aktuellen Tabellenstand hinzugerechnet.
      *
      * @param array[tx_cfcleague_models_Match] $matches
      * @param tx_cfcleaguefe_table_football_Configurator $configurator
@@ -319,7 +324,6 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     {
         // Wir laufen jetzt über alle Spiele und legen einen Punktespeicher für jedes Team an
         foreach ($matches as $match) {
-
             if ($match->isDummy()) {
                 continue; // Ignore Dummy-Matches
             }
@@ -328,7 +332,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             $toto = $match->getToto();
             tx_rnbase_util_Misc::callHook('cfc_league_fe', 'leagueTableFootball_handleMatches', array(
                 'match' => &$match,
-                'teamdata' => &$this->_teamData
+                'teamdata' => &$this->_teamData,
             ), $this);
 
             // Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
@@ -336,9 +340,11 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             switch ($configurator->getTableType()) {
                 case 1:
                     $this->countHome($match, $toto, $configurator);
+
                     break;
                 case 2:
                     $this->countGuest($match, $toto, $configurator);
+
                     break;
                 default:
                     $this->countStandard($match, $toto, $configurator);
@@ -347,6 +353,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 
         unset($this->_teamData[0]); // Remove dummy data from teams without id
     }
+
     /**
      * Check if teams in match are configured in competition. This is a data error check to
      * avoid unexpected situations in table rendering.
@@ -357,22 +364,16 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     {
         $home = $match->getHome();
         if (!array_key_exists($home->getUid(), $this->_teamData)) {
-            throw new Exception(sprintf(
-                'Team with uid (%d) in match (%d) is not part of this selected competitions',
-                $home->getUid(), $match->getUid()
-                ));
+            throw new Exception(sprintf('Team with uid (%d) in match (%d) is not part of this selected competitions', $home->getUid(), $match->getUid()));
         }
         $guest = $match->getGuest();
         if (!array_key_exists($guest->getUid(), $this->_teamData)) {
-            throw new Exception(sprintf(
-                'Team with uid (%d) in match (%d) is not part of this selected competitions',
-                $guest->getUid(), $match->getUid()
-                ));
+            throw new Exception(sprintf('Team with uid (%d) in match (%d) is not part of this selected competitions', $guest->getUid(), $match->getUid()));
         }
     }
 
     /**
-     * Zählt die Punkte für eine normale Tabelle
+     * Zählt die Punkte für eine normale Tabelle.
      *
      * @param tx_cfcleague_models_Match $match
      * @param int $toto
@@ -388,7 +389,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         // Für H2H modus das Spielergebnis merken
         $this->addResult($homeId, $guestId, $match->getResult());
 
-        if ($toto == 0) { // Unentschieden
+        if (0 == $toto) { // Unentschieden
             $this->addPoints($homeId, $configurator->getPointsDraw());
             $this->addPoints($guestId, $configurator->getPointsDraw());
             if ($configurator->isCountLoosePoints()) {
@@ -398,7 +399,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 
             $this->addDrawCount($homeId);
             $this->addDrawCount($guestId);
-        } elseif ($toto == 1) { // Heimsieg
+        } elseif (1 == $toto) { // Heimsieg
             $this->addPoints($homeId, $configurator->getPointsWin());
             $this->addPoints($guestId, $configurator->getPointsLoose());
             if ($configurator->isCountLoosePoints()) {
@@ -439,13 +440,13 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         $this->addMatchCount($homeId);
         $this->addResult($homeId, $guestId, $match->getGuest());
 
-        if ($toto == 0) { // Unentschieden
+        if (0 == $toto) { // Unentschieden
             $this->addPoints($homeId, $configurator->getPointsDraw());
             if ($configurator->isCountLoosePoints()) {
                 $this->addPoints2($homeId, $configurator->getPointsDraw());
             }
             $this->addDrawCount($homeId);
-        } elseif ($toto == 1) { // Heimsieg
+        } elseif (1 == $toto) { // Heimsieg
             $this->addPoints($homeId, $configurator->getPointsWin());
             $this->addWinCount($homeId);
         } else { // Auswärtssieg
@@ -476,13 +477,13 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         $this->addMatchCount($guestId);
         $this->addResult($homeId, $guestId, $match->getGuest());
 
-        if ($toto == 0) { // Unentschieden
+        if (0 == $toto) { // Unentschieden
             $this->addPoints($guestId, $configurator->getPointsDraw());
             if ($configurator->isCountLoosePoints()) {
                 $this->addPoints2($guestId, $configurator->getPointsDraw());
             }
             $this->addDrawCount($guestId);
-        } elseif ($toto == 1) { // Heimsieg
+        } elseif (1 == $toto) { // Heimsieg
             $this->addPoints($guestId, $configurator->getPointsLoose());
             if ($configurator->isCountLoosePoints()) {
                 $this->addPoints2($guestId, $configurator->getPointsWin());
@@ -503,7 +504,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     }
 
     /**
-     * Addiert Punkte zu einem Team
+     * Addiert Punkte zu einem Team.
      */
     protected function addPoints($teamId, $points)
     {
@@ -521,7 +522,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     }
 
     /**
-     * Addiert die absolvierten Spiele zu einem Team
+     * Addiert die absolvierten Spiele zu einem Team.
      */
     protected function addMatchCount($teamId)
     {
@@ -548,4 +549,3 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
         return 'football';
     }
 }
-

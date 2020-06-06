@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Search;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2008-2019 Rene Nitzsche
  * Contact: rene@system25.de
@@ -26,20 +27,20 @@ namespace System25\T3sports\Search;
  */
 
 /**
- * Mit dem Builder werden haufig auftretende Suchanfragen zusammengebaut
+ * Mit dem Builder werden haufig auftretende Suchanfragen zusammengebaut.
  *
  * @author Rene Nitzsche
  */
 class SearchBuilder
 {
-
     /**
-     * Search for competition by scope data
+     * Search for competition by scope data.
      *
      * @param array $fields
      * @param string $teamUids
      *            comma separated list of team UIDs
-     * @return boolean true if condition is set
+     *
+     * @return bool true if condition is set
      */
     public static function buildCompetitionByScope(&$fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids)
     {
@@ -65,41 +66,47 @@ class SearchBuilder
         // Pflichtwettbewerbe
         $obligate = intval($configurations->get('scope.competition.obligation'));
         if ($obligate) {
-            if ($obligate == 1)
+            if (1 == $obligate) {
                 $fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = 1;
-            else
+            } else {
                 $fields['COMPETITION.OBLIGATION'][OP_NOTEQ_INT] = 1;
+            }
             $result = true;
         }
+
         return $result;
     }
 
     /**
-     * Search for competition by teams
+     * Search for competition by teams.
      *
      * @param array $fields
      * @param string $teamUids
      *            comma separated list of team UIDs
-     * @return boolean true if condition is set
+     *
+     * @return bool true if condition is set
      */
     public static function buildCompetitionByTeam(&$fields, $teamUids, $obligateOnly = 'false')
     {
         $result = false;
         if (strlen(trim($teamUids))) {
             $fields['TEAM.UID'][OP_EQ_INT] = $teamUids;
-            if ($obligateOnly)
+            if ($obligateOnly) {
                 $fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = '1';
+            }
             $result = true;
         }
+
         return $result;
     }
 
     /**
-     * Search for matches by scope
+     * Search for matches by scope.
      *
      * @param array $fields
      * @param string $clubUids
      *            club uids
+     *
      * @return true
      */
     public static function buildMatchByClub(&$fields, $clubUids)
@@ -108,7 +115,7 @@ class SearchBuilder
             $joined['value'] = trim($clubUids);
             $joined['cols'] = array(
                 'TEAM1.CLUB',
-                'TEAM2.CLUB'
+                'TEAM2.CLUB',
             );
             $joined['operator'] = OP_IN_INT;
             $fields[SEARCH_FIELD_JOINED][] = $joined;
@@ -117,11 +124,12 @@ class SearchBuilder
     }
 
     /**
-     * Search for matches by teamUids
+     * Search for matches by teamUids.
      *
      * @param array $fields
      * @param string $teamUids
      *            comma separated uid string
+     *
      * @return true
      */
     public static function buildMatchByTeam(&$fields, $teamUids)
@@ -131,7 +139,7 @@ class SearchBuilder
             $joined['value'] = trim($teamUids);
             $joined['cols'] = array(
                 'MATCH.HOME',
-                'MATCH.GUEST'
+                'MATCH.GUEST',
             );
             $joined['operator'] = OP_IN_INT;
             $fields[SEARCH_FIELD_JOINED][] = $joined;
@@ -139,11 +147,12 @@ class SearchBuilder
     }
 
     /**
-     * Search for matches by agegroup of teams
+     * Search for matches by agegroup of teams.
      *
      * @param array $fields
      * @param string $groupUids
      *            comma separated uid string
+     *
      * @return true
      */
     public static function buildMatchByTeamAgeGroup(&$fields, $groupUids)
@@ -153,7 +162,7 @@ class SearchBuilder
             $joined['value'] = trim($groupUids);
             $joined['cols'] = array(
                 'TEAM1.AGEGROUP',
-                'TEAM2.AGEGROUP'
+                'TEAM2.AGEGROUP',
             );
             $joined['operator'] = OP_IN_INT;
             $fields[SEARCH_FIELD_JOINED][] = $joined;
@@ -167,14 +176,16 @@ class SearchBuilder
             $fields[$field][$operator] = $value;
             $result = true;
         }
+
         return $result;
     }
 
     /**
-     * Search for teams by scope
+     * Search for teams by scope.
      *
      * @param array $fields
      * @param array $scope Scope Array
+     *
      * @return true
      */
     public static function buildTeamByScope(&$fields, $scope)
@@ -185,6 +196,7 @@ class SearchBuilder
         $result = self::setField($fields, 'COMPETITION.UID', OP_IN_INT, $scope['COMP_UIDS']) || $result;
         $result = self::setField($fields, 'TEAM.CLUB', OP_IN_INT, $scope['CLUB_UIDS']) || $result;
         $fields['TEAM.DUMMY'][OP_EQ_INT] = 0; // Ignore dummies
+
         return true;
     }
 }

@@ -23,11 +23,9 @@
  ***************************************************************/
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
-/**
- */
 class tx_cfcleaguefe_util_MatchMarkerBuilderInfo extends tx_rnbase_util_ListBuilderInfo
 {
-    function getListMarkerInfo()
+    public function getListMarkerInfo()
     {
         return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerListInfo');
     }

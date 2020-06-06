@@ -25,71 +25,79 @@
 tx_rnbase::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
 
 /**
- * The a table provider used to build table from all given matches
+ * The a table provider used to build table from all given matches.
  */
-class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_util_league_DefaultTableProvider{
+class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_util_league_DefaultTableProvider
+{
+    private $matches;
 
-	private $matches;
-	private $teams;
+    private $teams;
 
-	function __construct($parameters, $configurations, $matches, $confId='') {
-		$this->setConfigurations($configurations, $confId);
-		$this->setParameters($parameters);
+    public function __construct($parameters, $configurations, $matches, $confId = '')
+    {
+        $this->setConfigurations($configurations, $confId);
+        $this->setParameters($parameters);
 
-		$this->matches = $matches;
-		$this->init();
-	}
+        $this->matches = $matches;
+        $this->init();
+    }
 
-	/**
-	 * Return all clubs of given matches. Since this is an alltime table, teams are useless. It exists one saison
-	 * only! Thats why we return clubs.
-	 *
-	 * @return array[tx_cfcleaguefe_models_club]
-	 */
-	function getTeams() {
-		if(is_array($this->teams))
-			return $this->teams;
-		$this->teams = array();
-		for($i=0, $cnt = count($this->matches); $i < $cnt; $i++) {
-			$match = $this->matches[$i];
-			$club = $match->getHome()->getClub();
-			if($club->uid && !array_key_exists($club->uid, $this->teams)) {
-				$club->record['club'] = $club->uid; // necessary for mark clubs
-				$this->teams[$club->uid] = $club;
-			}
-			$club = $match->getGuest()->getClub();
-			if($club->uid && !array_key_exists($club->uid, $this->teams)) {
-				$club->record['club'] = $club->uid; // necessary for mark clubs
-				$this->teams[$club->uid] = $club;
-			}
-		}
-		return $this->teams;
-	}
+    /**
+     * Return all clubs of given matches. Since this is an alltime table, teams are useless. It exists one saison
+     * only! Thats why we return clubs.
+     *
+     * @return array[tx_cfcleaguefe_models_club]
+     */
+    public function getTeams()
+    {
+        if (is_array($this->teams)) {
+            return $this->teams;
+        }
+        $this->teams = array();
+        for ($i = 0, $cnt = count($this->matches); $i < $cnt; ++$i) {
+            $match = $this->matches[$i];
+            $club = $match->getHome()->getClub();
+            if ($club->uid && !array_key_exists($club->uid, $this->teams)) {
+                $club->record['club'] = $club->uid; // necessary for mark clubs
+                $this->teams[$club->uid] = $club;
+            }
+            $club = $match->getGuest()->getClub();
+            if ($club->uid && !array_key_exists($club->uid, $this->teams)) {
+                $club->record['club'] = $club->uid; // necessary for mark clubs
+                $this->teams[$club->uid] = $club;
+            }
+        }
 
-	function getRounds() {
-    return array(0 => $this->matches);
-	}
+        return $this->teams;
+    }
 
-	function getPenalties() {
-		return array(); // Bring hier wohl nichts...
-	}
+    public function getRounds()
+    {
+        return array(0 => $this->matches);
+    }
 
-	protected function init() {
-		$parameters = $this->getParameters();
-		// Der TableScope wirkt sich auf die betrachteten Spiele (Hin-Rückrunde) aus
-		$this->cfgTableScope = 0; // Normale Tabelle
-		$this->cfgTableType = $this->getConfigurations()->get($this->confId.'tabletype');
-		if($this->getConfigurations()->get($this->confId.'tabletypeSelectionInput')) {
-			$this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
-		}
-		$this->cfgPointSystem = $this->getConfigurations()->get($this->confId.'pointSystem');
-		if($this->getConfigurations()->get($this->confId.'pointSystemSelectionInput')) {
-			$this->cfgPointSystem = $parameters->offsetGet('pointsystem') ? $parameters->offsetGet('pointsystem') : $this->cfgPointSystem;
-		}
-	}
+    public function getPenalties()
+    {
+        return array(); // Bring hier wohl nichts...
+    }
 
-	function getTeamId($team) {
-		return $team->getProperty('club');
-	}
+    protected function init()
+    {
+        $parameters = $this->getParameters();
+        // Der TableScope wirkt sich auf die betrachteten Spiele (Hin-Rückrunde) aus
+        $this->cfgTableScope = 0; // Normale Tabelle
+        $this->cfgTableType = $this->getConfigurations()->get($this->confId.'tabletype');
+        if ($this->getConfigurations()->get($this->confId.'tabletypeSelectionInput')) {
+            $this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
+        }
+        $this->cfgPointSystem = $this->getConfigurations()->get($this->confId.'pointSystem');
+        if ($this->getConfigurations()->get($this->confId.'pointSystemSelectionInput')) {
+            $this->cfgPointSystem = $parameters->offsetGet('pointsystem') ? $parameters->offsetGet('pointsystem') : $this->cfgPointSystem;
+        }
+    }
 
+    public function getTeamId($team)
+    {
+        return $team->getProperty('club');
+    }
 }

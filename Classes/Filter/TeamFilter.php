@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Filter;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2010-2019 Rene Nitzsche
  * Contact: rene@system25.de
@@ -26,15 +27,14 @@ namespace System25\T3sports\Filter;
  */
 
 /**
- * Default filter for teams
+ * Default filter for teams.
  *
  * @author Rene Nitzsche
  */
 class TeamFilter extends \tx_rnbase_filter_BaseFilter
 {
-
     /**
-     * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen
+     * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
      *
      * @param array $fields
      * @param array $options

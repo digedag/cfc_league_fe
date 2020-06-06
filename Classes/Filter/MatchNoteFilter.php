@@ -25,15 +25,14 @@ namespace System25\T3sports\Filter;
  ***************************************************************/
 
 /**
- * Default filter for match notes
+ * Default filter for match notes.
  *
  * @author Rene Nitzsche
  */
 class MatchNoteFilter extends \tx_rnbase_filter_BaseFilter
 {
-
     /**
-     * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen
+     * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
      *
      * @param array $fields
      * @param array $options

@@ -1,11 +1,12 @@
 <?php
+
 namespace System25\T3sports\Statistics\Service;
 
 use System25\T3sports\Statistics\TeamStatisticsMarker;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -30,15 +31,14 @@ use System25\T3sports\Statistics\TeamStatisticsMarker;
 
 /**
  * Service for visitor statistics
- * Count how visitors of all teams
+ * Count how visitors of all teams.
  *
  * @author Rene Nitzsche
  */
 class VisitorStatistics extends \Tx_Rnbase_Service_Base
 {
-
     /**
-     * Array with statistical results
+     * Array with statistical results.
      */
     private $result = [];
 
@@ -51,7 +51,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
         'away_average',
         'all_matchcount',
         'all_total',
-        'all_average'
+        'all_average',
     );
 
     public function prepare($scope, &$configurations, &$parameters)
@@ -62,7 +62,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     }
 
     /**
-     * Handle single match
+     * Handle single match.
      *
      * @param \tx_cfcleaguefe_models_match $match
      * @param int $clubId
@@ -80,7 +80,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     }
 
     /**
-     * Liefert die Liste der besten Vorlagengeber
+     * Liefert die Liste der besten Vorlagengeber.
      *
      * @return array
      */
@@ -88,7 +88,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     {
         // den Zuschauerschnitt berechnen
         $teamIds = array_keys($this->result);
-        for ($i = 0, $size = count($teamIds); $i < $size; $i ++) {
+        for ($i = 0, $size = count($teamIds); $i < $size; ++$i ) {
             $this->setAverage($teamIds[$i], 'home');
             $this->setAverage($teamIds[$i], 'away');
             $this->setAverage($teamIds[$i], 'all');
@@ -103,27 +103,27 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     private function sortResult()
     {
         $sortOrder = $this->configurations->get('statistics.visitors.sortOrder');
-        if ($sortOrder == 'home_total') {
+        if ('home_total' == $sortOrder) {
             usort($this->result, function ($a, $b) {
                 return $this->cmpVisitors($a, $b, 'home_total');
             });
-        } elseif ($sortOrder == 'away_total') {
+        } elseif ('away_total' == $sortOrder) {
             usort($this->result, function ($a, $b) {
                 return $this->cmpVisitors($a, $b, 'away_total');
             });
-        } elseif ($sortOrder == 'all_total') {
+        } elseif ('all_total' == $sortOrder) {
             usort($this->result, function ($a, $b) {
                 return $this->cmpVisitors($a, $b, 'all_total');
             });
-        } elseif ($sortOrder == 'home_average') {
+        } elseif ('home_average' == $sortOrder) {
             usort($this->result, function ($a, $b) {
                 return $this->cmpVisitors($a, $b, 'home_average');
             });
-        } elseif ($sortOrder == 'away_average') {
+        } elseif ('away_average' == $sortOrder) {
             usort($this->result, function ($a, $b) {
                 return $this->cmpVisitors($a, $b, 'away_average');
             });
-        } elseif ($sortOrder == 'all_average') {
+        } elseif ('all_average' == $sortOrder) {
             usort($this->result, function ($a, $b) {
                 return $this->cmpVisitors($a, $b, 'all_average');
             });
@@ -131,9 +131,10 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     }
 
     /**
-     * Returns the marker instance to map result data to HTML markers
+     * Returns the marker instance to map result data to HTML markers.
      *
      * @param \tx_rnbase_configurations $configurations
+     *
      * @return TeamStatisticsMarker
      */
     public function getMarker($configurations)
@@ -142,7 +143,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     }
 
     /**
-     * Zählt die Zuschauer eines Spiels
+     * Zählt die Zuschauer eines Spiels.
      *
      * @param int $teamId
      *            ID des Teams
@@ -153,13 +154,13 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
      */
     private function countVisitors($teamId, $type, $visitors)
     {
-        $teamData = & $this->_getData($this->result, $teamId);
-        $teamData[$type . '_matchcount'] = intval($teamData[$type . '_matchcount']) + 1;
-        $teamData[$type . '_total'] = intval($teamData[$type . '_total']) + $visitors;
+        $teamData = &$this->_getData($this->result, $teamId);
+        $teamData[$type.'_matchcount'] = intval($teamData[$type.'_matchcount']) + 1;
+        $teamData[$type.'_total'] = intval($teamData[$type.'_total']) + $visitors;
     }
 
     /**
-     * Berechnet den Durchschnittswert der Zuschauer
+     * Berechnet den Durchschnittswert der Zuschauer.
      *
      * @param int $teamId
      *            ID des Teams
@@ -168,10 +169,10 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
      */
     private function setAverage($teamId, $type)
     {
-        $matches = $this->result[$teamId][$type . '_matchcount'];
+        $matches = $this->result[$teamId][$type.'_matchcount'];
         if ($matches) {
-            $visitors = $this->result[$teamId][$type . '_total'];
-            $this->result[$teamId][$type . '_average'] = intval($visitors / $matches);
+            $visitors = $this->result[$teamId][$type.'_total'];
+            $this->result[$teamId][$type.'_average'] = intval($visitors / $matches);
         }
     }
 
@@ -183,7 +184,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
      */
     private function &_getData(&$dataArray, $teamId)
     {
-        if (! array_key_exists($teamId, $dataArray)) {
+        if (!array_key_exists($teamId, $dataArray)) {
             $dataArray[$teamId] = array();
             // Alle Daten initialisieren
             foreach ($this->statData as $col) {
@@ -191,13 +192,15 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
             }
             $dataArray[$teamId]['team'] = $teamId;
         }
+
         return $dataArray[$teamId];
     }
 
-    function cmpVisitors($a, $b, $attr)
+    public function cmpVisitors($a, $b, $attr)
     {
         $v1 = $a[$attr];
         $v2 = $b[$attr];
+
         return ($v1 == $v2) ? 0 : ($v1 < $v2) ? 1 : -1;
     }
 }
