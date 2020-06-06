@@ -4,7 +4,7 @@ namespace System25\T3sports\Search;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2008-2019 Rene Nitzsche
  * Contact: rene@system25.de
@@ -27,17 +27,17 @@ namespace System25\T3sports\Search;
  */
 
 /**
- * Class to search profiles from database
+ * Class to search profiles from database.
  *
  * @author Rene Nitzsche
  */
 class ProfileSearch extends \tx_rnbase_util_SearchBase
 {
-
     protected function getTableMappings()
     {
         $tableMapping = [];
         $tableMapping['PROFILE'] = 'tx_cfcleague_profiles';
+
         return $tableMapping;
     }
 
@@ -46,7 +46,7 @@ class ProfileSearch extends \tx_rnbase_util_SearchBase
         return 'tx_cfcleague_profiles';
     }
 
-    function getWrapperClass()
+    public function getWrapperClass()
     {
         return 'tx_cfcleaguefe_models_profile';
     }
@@ -54,7 +54,7 @@ class ProfileSearch extends \tx_rnbase_util_SearchBase
     protected function getJoins($tableAliases)
     {
         $join = '';
+
         return $join;
     }
 }
-

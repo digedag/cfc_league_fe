@@ -25,33 +25,41 @@
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
- * Controller für die Anzeige eines Vereins
+ * Controller für die Anzeige eines Vereins.
  */
-class tx_cfcleaguefe_actions_ClubView extends tx_rnbase_action_BaseIOC {
+class tx_cfcleaguefe_actions_ClubView extends tx_rnbase_action_BaseIOC
+{
+    /**
+     * handle request.
+     *
+     * @param arrayobject $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param arrayobject $viewData
+     *
+     * @return string
+     */
+    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    {
+        // Im Flexform kann direkt ein Team ausgwählt werden
+        $itemId = intval($configurations->get($this->getConfId().'club'));
+        if (!$itemId) {
+            // Alternativ ist eine Parameterübergabe möglich
+            $itemId = intval($parameters->offsetGet('club'));
+        }
 
-	/**
-	 * handle request
-	 *
-	 * @param arrayobject $parameters
-	 * @param tx_rnbase_configurations $configurations
-	 * @param arrayobject $viewData
-	 * @return string
-	 */
-	function handleRequest(&$parameters, &$configurations, &$viewData) {
+        $item = tx_rnbase::makeInstance('tx_cfcleague_models_Club', $itemId);
+        $viewData->offsetSet('item', $item);
 
-		// Im Flexform kann direkt ein Team ausgwählt werden
-		$itemId = intval($configurations->get($this->getConfId().'club'));
-		if(!$itemId) {
-			// Alternativ ist eine Parameterübergabe möglich
-			$itemId = intval($parameters->offsetGet('club'));
-		}
+        return null;
+    }
 
-		$item = tx_rnbase::makeInstance('tx_cfcleague_models_Club', $itemId);
-		$viewData->offsetSet('item', $item);
+    public function getTemplateName()
+    {
+        return 'clubview';
+    }
 
-		return null;
-	}
-	function getTemplateName() {return 'clubview';}
-	function getViewClassName() { return 'tx_cfcleaguefe_views_ClubView'; }
-
+    public function getViewClassName()
+    {
+        return 'tx_cfcleaguefe_views_ClubView';
+    }
 }

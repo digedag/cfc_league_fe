@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Tests;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -27,7 +28,6 @@ namespace System25\T3sports\Tests;
  */
 class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
 {
-
     /**
      * @group unit
      */
@@ -43,7 +43,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations([
-            'tableType' => '0'
+            'tableType' => '0',
         ], 'cfc_league_fe');
         $prov = new \tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config, $league);
         $prov->setMatches($matches);
@@ -64,7 +64,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations([
-            'tableType' => '0'
+            'tableType' => '0',
         ], 'cfc_league_fe');
         $prov = new \tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config, $league);
         $prov->setMatches($league->getMatches(2));
@@ -73,7 +73,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
         $result = $leagueTable->generateTable($prov);
 
         $this->assertTrue(is_array($result), 'Got no result array');
-        $this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: ' . count($result));
+        $this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: '.count($result));
 
         // Tabelle 2-P.
         // T3 - 2 3:0 4:0
@@ -96,7 +96,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations([
-            'tableType' => '0'
+            'tableType' => '0',
         ], 'cfc_league_fe');
         $prov = new \tx_cfcleaguefe_util_league_DefaultTableProvider($params, $config, $league);
         $prov->setMatches($league->getMatches(2));
@@ -110,7 +110,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
         // T2 - 2 3:2 4
         // T4 - 3 1:7 0
         $this->assertTrue(is_array($result), 'Got no result array');
-        $this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: ' . count($result));
+        $this->assertEquals(4, count($result), 'Table should contain 4 teams, but is: '.count($result));
         $this->assertEquals(3, $result[0]['teamId'], 'Team 3 should be 1. place');
         $this->assertEquals(1, $result[1]['teamId'], 'Team 1 should be 2. place');
         $this->assertEquals(2, $result[2]['teamId'], 'Team 2 should be 3. place');
@@ -118,30 +118,33 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
         $this->assertEquals(6, $result[0]['points'], 'Team 3 should has wrong points');
         $this->assertEquals(0, $result[3]['points'], 'Team 4 should has wrong points');
         // Alle Teams müssen bei den Minuspunkten -1 haben
-        for ($i = 0, $size = count($result); $i < $size; $i ++) {
-            $this->assertEquals(- 1, $result[$i]['points2'], 'Team at ' . ($i + 1) . '. place wrong neg points');
+        for ($i = 0, $size = count($result); $i < $size; ++$i ) {
+            $this->assertEquals(-1, $result[$i]['points2'], 'Team at '.($i + 1).'. place wrong neg points');
         }
     }
 
     private function getFixturePath($filename)
     {
-        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'Tests/fixtures/' . $filename;
+        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)
     {
         // Sicherstellen, daß die Klasse geladen wurde
         foreach ($yamlData as $arr) {
-            if (isset($arr['record']) && is_array($arr['record']))
+            if (isset($arr['record']) && is_array($arr['record'])) {
                 $ret[] = new $clazzName($arr['record']);
+            }
         }
+
         return $ret;
     }
 
     /**
-     * Returns a league from yaml file
+     * Returns a league from yaml file.
      *
      * @param string $leagueName
+     *
      * @return \tx_cfcleaguefe_models_competition
      */
     protected function prepareLeague($leagueName)

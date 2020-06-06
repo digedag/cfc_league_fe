@@ -23,7 +23,7 @@
  ***************************************************************/
 
 /**
- * Utility methods for google maps integration
+ * Utility methods for google maps integration.
  *
  * @author René Nitzsche <rene[at]system25.de>
  */
@@ -33,22 +33,23 @@ class tx_cfcleaguefe_util_Maps
 
     public static function getMapTemplate($configurations, $confId, $subpartName)
     {
-        $file = $configurations->get($confId . 'template');
-        if (! $file) {
+        $file = $configurations->get($confId.'template');
+        if (!$file) {
             return '';
         }
         $subpart = tx_rnbase_util_Templates::getSubpartFromFile($file, $subpartName);
         $order = [
             "\r\n",
             "\n",
-            "\r"
+            "\r",
         ];
         $replace = '';
+
         return str_replace($order, $replace, $subpart);
     }
 
     /**
-     * Setzt ein Icon für die Map
+     * Setzt ein Icon für die Map.
      *
      * @param tx_rnbase_configurations $configurations
      * @param string $confId
@@ -83,14 +84,15 @@ class tx_cfcleaguefe_util_Maps
 
     /**
      * Calculate distance for two long/lat-points.
-     * Method used from wec_map
+     * Method used from wec_map.
      *
-     * @param double $lat1
-     * @param double $lon1
-     * @param double $lat2
-     * @param double $lon2
+     * @param float $lat1
+     * @param float $lon1
+     * @param float $lat2
+     * @param float $lon2
      * @param string $distanceType
-     * @return double
+     *
+     * @return float
      */
     public static function calculateDistance($lat1, $lon1, $lat2, $lon2, $distanceType = 'K')
     {
@@ -98,8 +100,9 @@ class tx_cfcleaguefe_util_Maps
         $l2 = deg2rad($lat2);
         $o1 = deg2rad($lon1);
         $o2 = deg2rad($lon2);
-        $radius = $distanceType == 'K' ? 6372.795 : 3959.8712;
+        $radius = 'K' == $distanceType ? 6372.795 : 3959.8712;
         $distance = 2 * $radius * asin(min(1, sqrt(pow(sin(($l2 - $l1) / 2), 2) + cos($l1) * cos($l2) * pow(sin(($o2 - $o1) / 2), 2))));
+
         return $distance;
     }
 
@@ -113,25 +116,27 @@ class tx_cfcleaguefe_util_Maps
         if ($coord) {
             return self::calculateDistance($coord->getLatitude(), $coord->getLongitude(), $lat, $lng);
         }
+
         return 0;
     }
 
     /**
-     * Address lookup
+     * Address lookup.
      *
      * @param string $street
      * @param string $city
      * @param string $state
      * @param string $zip
      * @param string $country
+     *
      * @return tx_rnbase_maps_ICoord or false
      */
     public static function lookupAddress($street, $city, $state, $zip, $country)
     {
-        if (! tx_rnbase_util_Extensions::isLoaded('wec_map')) {
+        if (!tx_rnbase_util_Extensions::isLoaded('wec_map')) {
             return false;
         }
-        require_once (tx_rnbase_util_Extensions::extPath('wec_map') . 'class.tx_wecmap_cache.php');
+        require_once tx_rnbase_util_Extensions::extPath('wec_map').'class.tx_wecmap_cache.php';
 
         $lookupTable = tx_rnbase::makeInstance('tx_wecmap_cache');
         $latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, self::getKey());
@@ -139,17 +144,19 @@ class tx_cfcleaguefe_util_Maps
         $coord = tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
         $coord->setLongitude($latlong['long']);
         $coord->setLatitude($latlong['lat']);
+
         return $coord;
     }
 
     private static function getKey()
     {
-        if (! self::$key) {
-            require_once (tx_rnbase_util_Extensions::extPath('wec_map') . 'class.tx_wecmap_domainmgr.php');
+        if (!self::$key) {
+            require_once tx_rnbase_util_Extensions::extPath('wec_map').'class.tx_wecmap_domainmgr.php';
             /* @var $domainmgr tx_wecmap_domainmgr */
             $domainmgr = tx_rnbase::makeInstance('tx_wecmap_domainmgr');
             self::$key = $domainmgr->getServerKey();
         }
+
         return self::$key;
     }
 }

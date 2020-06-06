@@ -1,7 +1,9 @@
-<?php if (!defined ('TYPO3_MODE')) 	die ('Access denied.'); ?>
+<?php if (!defined('TYPO3_MODE')) {
+    die('Access denied.');
+} ?>
 <?php
   tx_rnbase::load('tx_rnbase_util_FormUtil');
-  $viewData =& $configurations->getViewData();
+  $viewData = &$configurations->getViewData();
   $pointSystem = $viewData->offsetGet('tablePointSystem'); // Das verwendete Punktesystem holen
 
   $league = $viewData->offsetGet('league'); // Die aktuelle Liga
@@ -13,28 +15,34 @@
 </style>
 
 <div class="cfcleague-leaguetable-form">
-<form action="<? echo $link->makeUrl(); ?>">
-<?
+<form action="<?php echo $link->makeUrl(); ?>">
+<?php
   $keepVars = $configurations->getKeepVars();
   $keepVars = $keepVars->getArrayCopy();
 
-  if($viewData->offsetGet('tabletype_select')) {
-    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[tabletype]',
-            $viewData->offsetGet('tabletype_select'),
-            'onchange="submit();"') . '<br />';
-    unset($keepVars[$configurations->createParamName('tabletype')]);
+  if ($viewData->offsetGet('tabletype_select')) {
+      echo tx_rnbase_util_FormUtil::createSelect(
+          $configurations->getQualifier().'[tabletype]',
+          $viewData->offsetGet('tabletype_select'),
+          'onchange="submit();"'
+      ).'<br />';
+      unset($keepVars[$configurations->createParamName('tabletype')]);
   }
-  if($viewData->offsetGet('tablescope_select')) {
-    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[tablescope]',
-            $viewData->offsetGet('tablescope_select'),
-            'onchange="submit();"') . '<br />';
-    unset($keepVars[$configurations->createParamName('tablescope')]);
+  if ($viewData->offsetGet('tablescope_select')) {
+      echo tx_rnbase_util_FormUtil::createSelect(
+          $configurations->getQualifier().'[tablescope]',
+          $viewData->offsetGet('tablescope_select'),
+          'onchange="submit();"'
+      ).'<br />';
+      unset($keepVars[$configurations->createParamName('tablescope')]);
   }
-  if($viewData->offsetGet('pointsystem_select')) {
-    echo tx_rnbase_util_FormUtil::createSelect($configurations->getQualifier() . '[pointsystem]',
-            $viewData->offsetGet('pointsystem_select'),
-            'onchange="submit();"') . '<br />';
-    unset($keepVars[$configurations->createParamName('pointsystem')]);
+  if ($viewData->offsetGet('pointsystem_select')) {
+      echo tx_rnbase_util_FormUtil::createSelect(
+          $configurations->getQualifier().'[pointsystem]',
+          $viewData->offsetGet('pointsystem_select'),
+          'onchange="submit();"'
+      ).'<br />';
+      unset($keepVars[$configurations->createParamName('pointsystem')]);
   }
 
   echo tx_rnbase_util_FormUtil::getAsHiddenFields($keepVars);
@@ -51,20 +59,26 @@
   $data = $viewData->offsetGet('tableData');
 
   $cnt = 0;
-  foreach($data As $row){
-    $css = ($cnt++) % 2;
-    if($row['penalties']) $penalties[] = $row['penalties'];
-?>
-<tr class="cfcleague-leaguetable-row<? echo $css ?><? if($row['markClub']){ ?> cfcleague-leaguetable-rowTeam<? } ?><? if(is_array($marks) && array_key_exists($cnt, $marks)){ ?> cfcleague-leaguetable-row_<? echo $marks[$cnt][0]; } ?>">
-  <td><? echo $cnt ?>.</td>
-  <td><? echo $row['teamName']; if($row['penalties']) { echo '*'; } ?> </td>
-  <td><? echo $row['matchCount'] ?></td>
-  <td><? echo $row['winCount'] ?></td>
-  <td><? echo $row['drawCount'] ?></td>
-  <td><? echo $row['loseCount'] ?></td>
-  <td><? echo $row['goals1'] ?>:<? echo $row['goals2'] ?></td>
-  <td><? echo ($row['goals1'] - $row['goals2']) ?></td>
-  <td><? echo $row['points'] ?><? if($pointSystem == 1){ echo ':' . $row['points2'];}?> </td>
+  foreach ($data as $row) {
+      $css = ($cnt++) % 2;
+      if ($row['penalties']) {
+          $penalties[] = $row['penalties'];
+      } ?>
+<tr class="cfcleague-leaguetable-row<?php echo $css; ?><?php if ($row['markClub']) { ?> cfcleague-leaguetable-rowTeam<?php } ?><?php if (is_array($marks) && array_key_exists($cnt, $marks)) { ?> cfcleague-leaguetable-row_<?php echo $marks[$cnt][0]; } ?>">
+  <td><?php echo $cnt; ?>.</td>
+  <td><?php echo $row['teamName'];
+      if ($row['penalties']) {
+          echo '*';
+      } ?> </td>
+  <td><?php echo $row['matchCount']; ?></td>
+  <td><?php echo $row['winCount']; ?></td>
+  <td><?php echo $row['drawCount']; ?></td>
+  <td><?php echo $row['loseCount']; ?></td>
+  <td><?php echo $row['goals1']; ?>:<?php echo $row['goals2']; ?></td>
+  <td><?php echo $row['goals1'] - $row['goals2']; ?></td>
+  <td><?php echo $row['points']; ?><?php if (1 == $pointSystem) {
+          echo ':'.$row['points2'];
+      } ?> </td>
 
 </tr>
 <?php
@@ -72,16 +86,16 @@
 ?>
 </table>
 
-<? if($penalties) { ?>
+<?php if ($penalties) { ?>
 <div class="cfcleague-leaguetable-comments">
 <h3>Hinweise</h3>
-<?   foreach($penalties As $penaltyArr) { ?>
+<?php   foreach ($penalties as $penaltyArr) { ?>
 <p class="cfcleague-leaguetable-comment">
-<?        foreach($penaltyArr As $penalty) {
-          echo '* '. $penalty->record['comment'] . '<br />';
-       } ?>
+<?php        foreach ($penaltyArr as $penalty) {
+    echo '* '.$penalty->record['comment'].'<br />';
+} ?>
 </p>
-<?     } ?>
+<?php     } ?>
 </div>
-<? } ?>
+<?php } ?>
 </div>

@@ -26,22 +26,24 @@ namespace System25\T3sports\Service;
 ***************************************************************/
 
 /**
- * Service for accessing team information
+ * Service for accessing team information.
  *
  * @author Rene Nitzsche
  */
 class TeamService extends \Tx_Rnbase_Service_Base
 {
+    /**
+     * Search database for teams.
+     *
+     * @param array $fields
+     * @param array $options
+     *
+     * @return [\tx_cfcleaguefe_models_team]
+     */
+    public function search($fields, $options)
+    {
+        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\TeamSearch::class);
 
-	/**
-	 * Search database for teams
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @return [\tx_cfcleaguefe_models_team]
-	 */
-	function search($fields, $options) {
-	    $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\TeamSearch::class);
-		return $searcher->search($fields, $options);
-	}
+        return $searcher->search($fields, $options);
+    }
 }

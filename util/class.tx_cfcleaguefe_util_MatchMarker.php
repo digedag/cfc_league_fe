@@ -26,11 +26,10 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
- * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich
+ * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich.
  */
 class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
 {
-
     private $recursion = 0;
 
     /** @var tx_cfcleaguefe_util_TeamMarker */
@@ -40,7 +39,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
     private $competitionMarker;
 
     /**
-     * Erstellt eine neue Instanz
+     * Erstellt eine neue Instanz.
      *
      * @param $options Array
      *            with options. not used until now.
@@ -54,10 +53,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
     }
 
     /**
-     *
      * {@inheritdoc}
      *
      * @param tx_cfcleaguefe_models_match $match
+     *
      * @see tx_rnbase_util_SimpleMarker::prepareTemplate()
      */
     protected function prepareTemplate($template, $match, $formatter, $confId, $marker)
@@ -68,7 +67,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
-            'formatter' => $formatter
+            'formatter' => $formatter,
         ), $this);
 
         // Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
@@ -77,20 +76,20 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $this->pullTT();
 
         $this->pushTT('parse home team');
-        if (self::containsMarker($template, $marker . '_HOME')) {
-            $template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId . 'home.', $marker . '_HOME');
+        if (self::containsMarker($template, $marker.'_HOME')) {
+            $template = $this->teamMarker->parseTemplate($template, $match->getHome(), $formatter, $confId.'home.', $marker.'_HOME');
         }
         $this->pullTT();
         $this->pushTT('parse guest team');
-        if (self::containsMarker($template, $marker . '_GUEST')) {
-            $template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId . 'guest.', $marker . '_GUEST');
+        if (self::containsMarker($template, $marker.'_GUEST')) {
+            $template = $this->teamMarker->parseTemplate($template, $match->getGuest(), $formatter, $confId.'guest.', $marker.'_GUEST');
         }
         $this->pushTT('parse arena');
-        if (self::containsMarker($template, $marker . '_ARENA_')) {
-            $template = $this->_addArena($template, $match, $formatter, $confId . 'arena.', $marker . '_ARENA');
+        if (self::containsMarker($template, $marker.'_ARENA_')) {
+            $template = $this->_addArena($template, $match, $formatter, $confId.'arena.', $marker.'_ARENA');
         }
-        if (self::containsMarker($template, $marker . '_SETRESULTS')) {
-            $template = $this->_addSetResults($template, $match, $formatter, $confId . 'setresults.', $marker . '_SETRESULT');
+        if (self::containsMarker($template, $marker.'_SETRESULTS')) {
+            $template = $this->_addSetResults($template, $match, $formatter, $confId.'setresults.', $marker.'_SETRESULT');
         }
         $this->pullTT();
 
@@ -101,15 +100,14 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $this->pullTT();
 
         // Add competition
-        if (self::containsMarker($template, $marker . '_COMPETITION_')) {
-            $template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId . 'competition.', $marker . '_COMPETITION');
+        if (self::containsMarker($template, $marker.'_COMPETITION_')) {
+            $template = $this->competitionMarker->parseTemplate($template, $match->getCompetition(), $formatter, $confId.'competition.', $marker.'_COMPETITION');
         }
 
         return $template;
     }
 
     /**
-     *
      * {@inheritdoc}
      *
      * @see tx_rnbase_util_SimpleMarker::finishTemplate()
@@ -117,7 +115,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
     protected function finishTemplate($template, $match, $formatter, $confId, $marker)
     {
         // Nochmal nach Markern schauen, falls SubTemplates aus dem TS neue Marker verwendet haben
-        if (self::containsMarker($template, $marker . '_') && $this->recursion == 0) {
+        if (self::containsMarker($template, $marker.'_') && 0 == $this->recursion) {
             // einmalige Rekursion starten
             $this->recursion += 1;
             $template = $this->parseTemplate($template, $match, $formatter, $confId, $marker);
@@ -127,13 +125,14 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
-            'formatter' => $formatter
+            'formatter' => $formatter,
         ), $this);
+
         return $template;
     }
 
     /**
-     * Integriert die Satzergebnisse
+     * Integriert die Satzergebnisse.
      *
      * @param string $template
      * @param tx_cfcleaguefe_models_match $item
@@ -146,34 +145,38 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
      */
     protected function _addSetResults($template, $item, $formatter, $confId, $markerPrefix)
     {
-        if (strlen(trim($template)) == 0)
+        if (0 == strlen(trim($template))) {
             return '';
+        }
         $sets = $item->getSets();
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
         $out = $listBuilder->render($sets, false, $template, 'tx_rnbase_util_SimpleMarker', $confId, $markerPrefix, $formatter, $options);
+
         return $out;
     }
 
     /**
-     * Bindet die Arena ein
+     * Bindet die Arena ein.
      *
      * @param string $template
      * @param tx_cfcleaguefe_models_match $item
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
+     *
      * @return string
      */
     protected function _addArena($template, $item, $formatter, $confId, $markerPrefix)
     {
         $sub = $item->getArena();
-        if (! $sub) {
+        if (!$sub) {
             // Kein Stadium vorhanden. Leere Instanz anlegen und altname setzen
             $sub = tx_rnbase_util_BaseMarker::getEmptyInstance('tx_cfcleague_models_Stadium');
         }
         $sub->setProperty('altname', $item->getProperty('stadium'));
         $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
         $template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
+
         return $template;
     }
 
@@ -196,7 +199,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             // Zuerst die Teams prüfen
             $groupId = $match->getHome()->getAgeGroupUid();
             $groupId = $groupId ? $groupId : $match->getGuest()->getAgeGroupUid();
-            if (! $groupId) {
+            if (!$groupId) {
                 $competition = $match->getCompetition();
                 $group = $competition->getGroup(false);
                 $groupId = $group ? $group->getUid() : 0;
@@ -210,17 +213,19 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $match->setProperty('firstpicture', $match->getProperty('dam_images'));
 
         $report = $match->getMatchReport();
-        if (! is_object($report)) {
+        if (!is_object($report)) {
             return;
         }
         // Die Aufstellungen setzen
         $configurations = $formatter->getConfigurations();
 
-        $match->setProperty('lineup_home',
+        $match->setProperty(
+            'lineup_home',
             $this->lookupStaticField($match, $configurations->get('matchreport.lineuphome.staticField')) ?:
                     $report->getLineupHome('matchreport.lineuphome.')
         );
-        $match->setProperty('lineup_guest',
+        $match->setProperty(
+            'lineup_guest',
             $this->lookupStaticField($match, $configurations->get('matchreport.lineupguest.staticField')) ?:
                 $report->getLineupGuest('matchreport.lineupguest.')
         );
@@ -231,8 +236,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $match->setProperty('refereenames', $report->getRefereeName('matchreport.refereenames.'));
         $match->setProperty('assistsnames', $report->getAssistNames('matchreport.assistsnames.'));
     }
+
     /**
-     *
      * @param tx_cfcleaguefe_models_match $match
      * @param string $fieldName
      */
@@ -241,56 +246,59 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         if ($fieldName) {
             return $match->getProperty($fieldName);
         }
+
         return null;
     }
 
     /**
-     * Add dynamic defined markers for profiles and matchnotes
+     * Add dynamic defined markers for profiles and matchnotes.
      *
      * @param string $template
      * @param tx_cfcleaguefe_models_match $match
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $matchConfId
      * @param string $matchMarker
+     *
      * @return string
      */
     private function addDynamicMarkers($template, $match, $formatter, $matchConfId, $matchMarker)
     {
         $report = $match->getMatchReport();
-        if (! is_object($report)) {
+        if (!is_object($report)) {
             return $template;
         }
 
-        $dynaMarkers = $formatter->getConfigurations()->getKeyNames($matchConfId . 'dynaMarkers.');
-        for ($i = 0, $size = count($dynaMarkers); $i < $size; $i ++) {
-            $typeArr = $formatter->getConfigurations()->get($matchConfId . 'dynaMarkers.' . $dynaMarkers[$i] . '.');
-            $match->setProperty($dynaMarkers[$i], $report->getTickerList($matchConfId . 'dynaMarkers.' . $dynaMarkers[$i] . '.'));
+        $dynaMarkers = $formatter->getConfigurations()->getKeyNames($matchConfId.'dynaMarkers.');
+        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i ) {
+            $typeArr = $formatter->getConfigurations()->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i].'.');
+            $match->setProperty($dynaMarkers[$i], $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i].'.'));
         }
     }
 
     /**
-     * Add dynamic defined markers for profiles and matchnotes
+     * Add dynamic defined markers for profiles and matchnotes.
      *
      * @param string $template
      * @param tx_cfcleaguefe_models_match $match
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $matchConfId
      * @param string $matchMarker
+     *
      * @return string
      */
     private function addTickerLists($template, $match, $formatter, $matchConfId, $matchMarker)
     {
         $configurations = $formatter->getConfigurations();
-        $dynaMarkers = $configurations->getKeyNames($matchConfId . 'tickerLists.');
+        $dynaMarkers = $configurations->getKeyNames($matchConfId.'tickerLists.');
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
-        for ($i = 0, $size = count($dynaMarkers); $i < $size; $i ++) {
+        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i ) {
             // Prüfen ob der Marker existiert
-            $markerPrefix = $matchMarker . '_' . strtoupper($dynaMarkers[$i]);
-            if (! self::containsMarker($template, $markerPrefix)) {
+            $markerPrefix = $matchMarker.'_'.strtoupper($dynaMarkers[$i]);
+            if (!self::containsMarker($template, $markerPrefix)) {
                 continue;
             }
-            $confId = $matchConfId . 'tickerLists.' . $dynaMarkers[$i] . '.';
+            $confId = $matchConfId.'tickerLists.'.$dynaMarkers[$i].'.';
             // Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte
             // stehen schon im report bereit
             $srv = tx_cfcleague_util_ServiceRegistry::getMatchService();
@@ -298,38 +306,41 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             $fields['MATCHNOTE.GAME'][OP_EQ_INT] = $match->getUid();
             $options = array();
             $options['what'] = 'uid';
-            tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId . 'filter.fields.');
-            tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId . 'filter.options.');
+            tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
+            tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
             $children = $srv->searchMatchNotes($fields, $options);
             // Die gefundenen Notes werden jetzt durch ihre aufbereiteten Duplikate ersetzt
             $items = array();
             $tickerHash = $this->getTickerHash($match);
-            for ($ci = 0, $cnt = count($children); $ci < $cnt; $ci ++) {
+            for ($ci = 0, $cnt = count($children); $ci < $cnt; ++$ci ) {
                 if (array_key_exists($children[$ci]['uid'], $tickerHash)) {
                     $items[] = $tickerHash[$children[$ci]['uid']];
                 }
             }
             $template = $listBuilder->render($items, false, $template, 'tx_cfcleaguefe_util_MatchNoteMarker', $confId, $markerPrefix, $formatter);
         }
+
         return $template;
     }
 
     /**
      * Liefert die Ticker als Hash.
-     * Key ist die UID des Datensatzes
+     * Key ist die UID des Datensatzes.
      *
      * @param tx_cfcleague_models_Match $match
+     *
      * @return array
      */
     protected function getTickerHash($match)
     {
-        if (! is_array($this->tickerHash)) {
+        if (!is_array($this->tickerHash)) {
             $this->tickerHash = array();
-            $tickerArr = & tx_cfcleaguefe_util_MatchTicker::getTicker4Match($match);
-            for ($i = 0, $cnt = count($tickerArr); $i < $cnt; $i ++) {
+            $tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($match);
+            for ($i = 0, $cnt = count($tickerArr); $i < $cnt; ++$i ) {
                 $this->tickerHash[$tickerArr[$i]->getUid()] = $tickerArr[$i];
             }
         }
+
         return $this->tickerHash;
     }
 
@@ -349,19 +360,19 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
     protected function setMatchSubparts($template, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $match, $formatter)
     {
         // Je Spielstatus wird ein anderer Subpart gefüllt
-        for ($i = - 1; $i < 3; $i ++) {
-            $subpartArray['###RESULT_STATUS_' . $i . '###'] = '';
+        for ($i = -1; $i < 3; ++$i ) {
+            $subpartArray['###RESULT_STATUS_'.$i.'###'] = '';
         }
         $subpartArray['###RESULT_STATUS_-10###'] = '';
 
-        $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###RESULT_STATUS_' . $match->getStatus() . '###');
+        $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###RESULT_STATUS_'.$match->getStatus().'###');
         if ($subTemplate) {
-            $subpartArray['###RESULT_STATUS_' . $match->getStatus() . '###'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
+            $subpartArray['###RESULT_STATUS_'.$match->getStatus().'###'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
         }
     }
 
     /**
-     * Die vorhandenen Mediadateien hinzufügen
+     * Die vorhandenen Mediadateien hinzufügen.
      *
      * @param array $gSubpartArray
      * @param array $firstMarkerArray
@@ -370,59 +381,64 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
      * @param string $template
      * @param string $baseConfId
      * @param string $baseMarker
+     *
      * @deprecated wird wohl nicht mehr verwendet...
      */
     private function _addMedia($match, $formatter, $template, $baseConfId, $baseMarker)
     {
         // Prüfen, ob Marker vorhanden sind
-        if (! self::containsMarker($template, $baseMarker . '_MEDIAS'))
+        if (!self::containsMarker($template, $baseMarker.'_MEDIAS')) {
             return $template;
+        }
 
         $gSubpartArray = $firstMarkerArray = array();
 
-        if (! tx_rnbase_util_Extensions::isLoaded('dam')) {
+        if (!tx_rnbase_util_Extensions::isLoaded('dam')) {
             // Not supported without DAM!
-            $gSubpartArray['###' . $baseMarker . '_MEDIAS###'] = '';
+            $gSubpartArray['###'.$baseMarker.'_MEDIAS###'] = '';
             $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
+
             return $out;
         }
 
         $damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->getUid(), 'dam_media');
-        if (count($damMedia['files']) == 0) { // Keine Daten vorhanden
-                                             // Alle Marker löschen
-            $gSubpartArray['###' . $baseMarker . '_MEDIAS###'] = '';
+        if (0 == count($damMedia['files'])) { // Keine Daten vorhanden
+            // Alle Marker löschen
+            $gSubpartArray['###'.$baseMarker.'_MEDIAS###'] = '';
             $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
+
             return $out;
         }
 
         // Zuerst wieder das Template laden
-        $gPictureTemplate = tx_rnbase_util_Templates::getSubpart($template, '###' . $baseMarker . '_MEDIAS###');
+        $gPictureTemplate = tx_rnbase_util_Templates::getSubpart($template, '###'.$baseMarker.'_MEDIAS###');
 
-        $pictureTemplate = tx_rnbase_util_Templates::getSubpart($gPictureTemplate, '###' . $baseMarker . '_MEDIA###');
+        $pictureTemplate = tx_rnbase_util_Templates::getSubpart($gPictureTemplate, '###'.$baseMarker.'_MEDIA###');
         $markerArray = array();
         $out = '';
         $serviceObj = Tx_Rnbase_Utility_T3General::makeInstanceService('mediaplayer');
 
         // Alle Daten hinzufügen
-        while (list ($uid, $filePath) = each($damMedia['files'])) {
+        while (list($uid, $filePath) = each($damMedia['files'])) {
             $media = tx_rnbase::makeInstance('tx_dam_media', $filePath);
-            $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId . 'media.', $baseMarker . '_MEDIA');
-            $markerArray['###' . $baseMarker . '_MEDIA_PLAYER###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId . 'media.')) : '<b>No media service available</b>';
+            $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.', $baseMarker.'_MEDIA');
+            $markerArray['###'.$baseMarker.'_MEDIA_PLAYER###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
             $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($pictureTemplate, $markerArray);
         }
         // Der String mit den Bilder ersetzt jetzt den Subpart ###MATCH_MEDIAS_2###
         if (strlen(trim($out)) > 0) {
-            $subpartArray['###' . $baseMarker . '_MEDIA###'] = $out;
+            $subpartArray['###'.$baseMarker.'_MEDIA###'] = $out;
             $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); // , $wrappedSubpartArray);
         }
-        $gSubpartArray['###' . $baseMarker . '_MEDIAS###'] = $out;
+        $gSubpartArray['###'.$baseMarker.'_MEDIAS###'] = $out;
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
+
         return $out;
     }
 
     /**
      * Links vorbereiten
-     * TODO: auf Linkerzeugung im SimpleMarker umstellen
+     * TODO: auf Linkerzeugung im SimpleMarker umstellen.
      *
      * @param tx_cfcleaguefe_models_match $match
      * @param string $marker
@@ -441,22 +457,22 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
 
         if ($match->hasReport()) {
             $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array(
-                'matchId' => $match->getUid()
+                'matchId' => $match->getUid(),
             ), $template);
         } else {
-            $linkMarker = $marker . '_' . strtoupper($linkId) . 'LINK';
-            $remove = intval($formatter->getConfigurations()->get($confId . 'links.' . $linkId . '.removeIfDisabled'));
+            $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
+            $remove = intval($formatter->getConfigurations()->get($confId.'links.'.$linkId.'.removeIfDisabled'));
             $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
         }
         $linkId = 'ticker';
-        $force = $formatter->getConfigurations()->getBool($confId . 'links.' . $linkId . '.force', true);
+        $force = $formatter->getConfigurations()->getBool($confId.'links.'.$linkId.'.force', true);
         if ($match->isTicker() || $force) {
             $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array(
-                'matchId' => $match->getUid()
+                'matchId' => $match->getUid(),
             ), $template);
         } else {
-            $linkMarker = $marker . '_' . strtoupper($linkId) . 'LINK';
-            $remove = intval($formatter->getConfigurations()->get($confId . 'links.' . $linkId . '.removeIfDisabled'));
+            $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
+            $remove = intval($formatter->getConfigurations()->get($confId.'links.'.$linkId.'.removeIfDisabled'));
             $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
         }
         $formatter->getConfigurations()->getCObj()->data = $cObjData;
@@ -464,4 +480,3 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $this->setMatchSubparts($template, $markerArray, $subpartArray, $wrappedSubpartArray, $match, $formatter);
     }
 }
-

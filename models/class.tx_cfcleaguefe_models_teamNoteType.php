@@ -24,59 +24,74 @@
 
 tx_rnbase::load('Tx_Rnbase_Database_Connection');
 
-
 /**
  * Model for a note type.
  */
-class tx_cfcleaguefe_models_teamNoteType extends tx_rnbase_model_base {
-  private static $instances = array();
+class tx_cfcleaguefe_models_teamNoteType extends tx_rnbase_model_base
+{
+    private static $instances = array();
 
-  function getTableName(){return 'tx_cfcleague_note_types';}
+    public function getTableName()
+    {
+        return 'tx_cfcleague_note_types';
+    }
 
-  /**
-   * Liefert den Namen des Markers
-   *
-   * @return string
-   */
-  function getMarker() {
-  	return $this->getProperty('marker');
-  }
-  /**
-   * Liefert die Instance eines Landes
-   *
-   * @param int $uid
-   * @return tx_cfcleaguefe_models_teamNoteType
-   */
-  static public function getTeamNoteInstance($uid) {
-  	self::_init();
-  	return self::$instances[$uid];
-  }
-  /**
-   * Returns an array with all types
-   *
-   * @return array
-   */
-  static public function getAll() {
-  	self::_init();
-  	return array_values(self::$instances);
-  }
+    /**
+     * Liefert den Namen des Markers.
+     *
+     * @return string
+     */
+    public function getMarker()
+    {
+        return $this->getProperty('marker');
+    }
 
-	/**
-	 * Lädt alle Instanzen aus der DB und legt sie in das Array self::$instances.
-	 * Key ist die UID des Records.
-	 */
-	private static function _init() {
-		if(count(self::$instances))
-			return;
+    /**
+     * Liefert die Instance eines Landes.
+     *
+     * @param int $uid
+     *
+     * @return tx_cfcleaguefe_models_teamNoteType
+     */
+    public static function getTeamNoteInstance($uid)
+    {
+        self::_init();
 
-		$options['wrapperclass'] = 'tx_cfcleaguefe_models_teamNoteType';
+        return self::$instances[$uid];
+    }
 
-		$result = Tx_Rnbase_Database_Connection::getInstance()->doSelect('*',
-				'tx_cfcleague_note_types',$options);
+    /**
+     * Returns an array with all types.
+     *
+     * @return array
+     */
+    public static function getAll()
+    {
+        self::_init();
 
-		foreach($result As $type) {
-			self::$instances[$type->uid] = $type;
-		}
-	}
+        return array_values(self::$instances);
+    }
+
+    /**
+     * Lädt alle Instanzen aus der DB und legt sie in das Array self::$instances.
+     * Key ist die UID des Records.
+     */
+    private static function _init()
+    {
+        if (count(self::$instances)) {
+            return;
+        }
+
+        $options['wrapperclass'] = 'tx_cfcleaguefe_models_teamNoteType';
+
+        $result = Tx_Rnbase_Database_Connection::getInstance()->doSelect(
+            '*',
+            'tx_cfcleague_note_types',
+            $options
+        );
+
+        foreach ($result as $type) {
+            self::$instances[$type->uid] = $type;
+        }
+    }
 }
-

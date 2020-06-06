@@ -24,13 +24,11 @@
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
- * Diese Klasse ist für die Erstellung von Markerarrays der Altersgruppen verantwortlich
+ * Diese Klasse ist für die Erstellung von Markerarrays der Altersgruppen verantwortlich.
  */
 class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker
 {
-
     /**
-     *
      * @param string $template
      *            das HTML-Template
      * @param tx_cfcleague_models_Group $group
@@ -41,11 +39,12 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker
      *            Pfad der TS-Config des Vereins, z.B. 'listView.group.'
      * @param string $marker
      *            Name des Markers
-     * @return String das geparste Template
+     *
+     * @return string das geparste Template
      */
     public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'GROUP')
     {
-        if (! is_object($item)) {
+        if (!is_object($item)) {
             // Ist kein Objekt vorhanden wird ein leeres Objekt verwendet.
             $item = self::getEmptyInstance('tx_cfcleague_models_Group');
         }
@@ -54,10 +53,10 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
-            'formatter' => $formatter
+            'formatter' => $formatter,
         ), $this);
         // Es wird das MarkerArray mit den Daten des Records gefüllt.
-        $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, 0, $marker . '_', $item->getColumnNames());
+        $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, 0, $marker.'_', $item->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
         $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
@@ -66,8 +65,9 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
-            'formatter' => $formatter
+            'formatter' => $formatter,
         ), $this);
+
         return $template;
     }
 }

@@ -28,27 +28,26 @@ tx_rnbase::load('tx_cfcleaguefe_table_football_Table');
  * Since handball is very similar to football, the same code base is used.
  * Rules:
  * 2 points for winner
- * 1 point if draw for each team
+ * 1 point if draw for each team.
  */
 class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_Table
 {
-
     /**
-     *
      * @return tx_cfcleaguefe_table_handball_Configurator
      */
     public function getConfigurator($forceNew = false)
     {
-        if ($forceNew || ! is_object($this->configurator)) {
+        if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
             $configuratorClass = $configuratorClass ? $configuratorClass : 'tx_cfcleaguefe_table_handball_Configurator';
             $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
         }
+
         return $this->configurator;
     }
 
     /**
-     * Zählt die Punkte für eine normale Tabelle
+     * Zählt die Punkte für eine normale Tabelle.
      *
      * @param tx_cfcleague_models_Match $match
      * @param int $toto
@@ -67,7 +66,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
             tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_TIME => $match->isExtraTime(),
             tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_PENALTY => $match->isPenalty(),
         ]);
-        if ($toto == 0) { // Unentschieden
+        if (0 == $toto) { // Unentschieden
             $this->addPoints($homeId, $configurator->getPointsDraw($options));
             $this->addPoints($guestId, $configurator->getPointsDraw($options));
             if ($configurator->isCountLoosePoints()) {
@@ -77,7 +76,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
 
             $this->addDrawCount($homeId);
             $this->addDrawCount($guestId);
-        } elseif ($toto == 1) { // Heimsieg
+        } elseif (1 == $toto) { // Heimsieg
             $this->addPoints($homeId, $configurator->getPointsWin($options));
             $this->addPoints($guestId, $configurator->getPointsLoose($options));
             if ($configurator->isCountLoosePoints()) {
@@ -136,29 +135,31 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
             tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_PENALTY => $match->isPenalty(),
         ]);
 
-        if ($toto == 0) { // Unentschieden
+        if (0 == $toto) { // Unentschieden
             $this->addPoints($homeId, $configurator->getPointsDraw($options));
             if ($configurator->isCountLoosePoints()) {
                 $this->addPoints2($homeId, $configurator->getPointsDraw($options));
             }
             $this->addDrawCount($homeId);
-        } elseif ($toto == 1) { // Heimsieg
+        } elseif (1 == $toto) { // Heimsieg
             $this->addPoints($homeId, $configurator->getPointsWin($options));
             $this->addWinCount($homeId);
-            if ($match->isPenalty())
+            if ($match->isPenalty()) {
                 $this->addWinCountPenalty($homeId);
-            elseif ($match->isExtraTime())
+            } elseif ($match->isExtraTime()) {
                 $this->addWinCountOvertime($homeId);
+            }
         } else { // Auswärtssieg
             $this->addPoints($homeId, $configurator->getPointsLoose($options));
             if ($configurator->isCountLoosePoints()) {
                 $this->addPoints2($homeId, $configurator->getPointsWin($options));
             }
             $this->addLoseCount($homeId);
-            if ($match->isPenalty())
+            if ($match->isPenalty()) {
                 $this->addLooseCountPenalty($homeId);
-            elseif ($match->isExtraTime())
+            } elseif ($match->isExtraTime()) {
                 $this->addLooseCountOvertime($homeId);
+            }
         }
         // Jetzt die Tore summieren
         $this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
@@ -185,29 +186,31 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
             tx_cfcleaguefe_table_PointOptions::AFTER_EXTRA_PENALTY => $match->isPenalty(),
         ]);
 
-        if ($toto == 0) { // Unentschieden
+        if (0 == $toto) { // Unentschieden
             $this->addPoints($guestId, $configurator->getPointsDraw($options));
             if ($configurator->isCountLoosePoints()) {
                 $this->addPoints2($guestId, $configurator->getPointsDraw($options));
             }
             $this->addDrawCount($guestId);
-        } elseif ($toto == 1) { // Heimsieg
+        } elseif (1 == $toto) { // Heimsieg
             $this->addPoints($guestId, $configurator->getPointsLoose($options));
             if ($configurator->isCountLoosePoints()) {
                 $this->addPoints2($guestId, $configurator->getPointsWin($options));
             }
             $this->addLoseCount($guestId);
-            if ($match->isPenalty())
+            if ($match->isPenalty()) {
                 $this->addLooseCountPenalty($guestId);
-            elseif ($match->isExtraTime())
+            } elseif ($match->isExtraTime()) {
                 $this->addLooseCountOvertime($guestId);
+            }
         } else { // Auswärtssieg
             $this->addPoints($guestId, $configurator->getPointsWin($options));
             $this->addWinCount($guestId);
-            if ($match->isPenalty())
+            if ($match->isPenalty()) {
                 $this->addWinCountPenalty($guestId);
-            elseif ($match->isExtraTime())
+            } elseif ($match->isExtraTime()) {
                 $this->addWinCountOvertime($guestId);
+            }
         }
 
         // Jetzt die Tore summieren
@@ -215,7 +218,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
     }
 
     /**
-     * Addiert Siege nach Penalty
+     * Addiert Siege nach Penalty.
      */
     protected function addWinCountPenalty($teamId)
     {
@@ -223,7 +226,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
     }
 
     /**
-     * Addiert Niederlagen nach Penalty
+     * Addiert Niederlagen nach Penalty.
      */
     protected function addLooseCountPenalty($teamId)
     {
@@ -231,7 +234,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
     }
 
     /**
-     * Addiert Siege nach Verlängerung
+     * Addiert Siege nach Verlängerung.
      */
     protected function addWinCountOvertime($teamId)
     {
@@ -239,7 +242,7 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
     }
 
     /**
-     * Addiert Niederlagen nach Verlängerung
+     * Addiert Niederlagen nach Verlängerung.
      */
     protected function addLooseCountOvertime($teamId)
     {
@@ -259,4 +262,3 @@ class tx_cfcleaguefe_table_handball_Table extends tx_cfcleaguefe_table_football_
         return 'icehockey';
     }
 }
-

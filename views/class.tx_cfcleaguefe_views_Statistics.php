@@ -27,25 +27,26 @@ tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
- * Viewklasse für die Anzeige der Statistiken
+ * Viewklasse für die Anzeige der Statistiken.
  */
 class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
 {
-
     /**
-     * Create fe output
+     * Create fe output.
      *
      * @param string $template
      * @param arrayobject $viewData
      * @param tx_rnbase_configurations $configurations
      * @param tx_rnbase_util_FormatUtil $formatter
+     *
      * @return string
      */
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-        $data = & $viewData->offsetGet('data');
-        if (! count($data))
-            return $template; // ohne Daten gibt's keine Marker
+        $data = &$viewData->offsetGet('data');
+        if (!count($data)) {
+            return $template;
+        } // ohne Daten gibt's keine Marker
 
         $cObj = $configurations->getCObj(0);
         // Jetzt über die einzelnen Statistiken iterieren
@@ -55,28 +56,32 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
         $services = tx_rnbase_util_Misc::lookupServices('cfcleague_statistics');
         foreach ($services as $subtype => $info) {
             // Init all stats with empty subpart
-            $subpartArray['###STATISTIC_' . strtoupper($subtype) . '###'] = '';
+            $subpartArray['###STATISTIC_'.strtoupper($subtype).'###'] = '';
         }
 
         foreach ($data as $type => $stats) {
             $service = Tx_Rnbase_Utility_T3General::makeInstanceService('cfcleague_statistics', $type);
-            if (! is_object($service)) // Ohne den Service geht nix
+            if (!is_object($service)) { // Ohne den Service geht nix
+
                 continue;
-            $srvTemplate = tx_rnbase_util_Templates::getSubpart($template, '###STATISTIC_' . strtoupper($type) . '###');
+            }
+            $srvTemplate = tx_rnbase_util_Templates::getSubpart($template, '###STATISTIC_'.strtoupper($type).'###');
             // Der Service muss jetzt den Marker liefert
             $srvMarker = $service->getMarker($configurations);
-            $subpartArray['###STATISTIC_' . strtoupper($type) . '###'] = $srvMarker->parseTemplate($srvTemplate, $stats, $configurations->getFormatter(), 'statistics.' . $type . '.', strtoupper($type));
+            $subpartArray['###STATISTIC_'.strtoupper($type).'###'] = $srvMarker->parseTemplate($srvTemplate, $stats, $configurations->getFormatter(), 'statistics.'.$type.'.', strtoupper($type));
         }
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); // , $wrappedSubpartArray);
+
         return $out;
     }
 
     /**
      * Erstellt das initiale Subpart-Array.
      * Alle möglichen Servicetemplates sind
-     * bereits leer enthalten
+     * bereits leer enthalten.
      *
      * @param tx_rnbase_configurations $configurations
+     *
      * @return array
      */
     protected function _getSubpartArray($configurations)
@@ -88,8 +93,9 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
         $types = $types['items'];
 
         foreach ($types as $type) {
-            $ret['###STATISTIC_' . strtoupper($type[1]) . '###'] = '';
+            $ret['###STATISTIC_'.strtoupper($type[1]).'###'] = '';
         }
+
         return $ret;
     }
 
@@ -103,4 +109,3 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
         return '###STATISTICS###';
     }
 }
-

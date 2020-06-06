@@ -26,13 +26,12 @@ tx_rnbase::load('tx_rnbase_util_Misc');
 
 /**
  * Keine echte Registry, aber eine zentrale Klasse für den Zugriff auf verschiedene
- * Services
+ * Services.
  */
 class tx_cfcleaguefe_util_ServiceRegistry
 {
-
     /**
-     * Liefert die vorhandenen Statistic-Services für die Auswahl im Flexform
+     * Liefert die vorhandenen Statistic-Services für die Auswahl im Flexform.
      */
     public static function lookupStatistics($config)
     {
@@ -40,19 +39,20 @@ class tx_cfcleaguefe_util_ServiceRegistry
         tx_rnbase::load('tx_rnbase_util_Lang');
         foreach ($services as $subtype => $info) {
             $title = $info['title'];
-            if (substr($title, 0, 4) === 'LLL:') {
+            if ('LLL:' === substr($title, 0, 4)) {
                 $title = tx_rnbase_util_Lang::sL($title);
             }
             $config['items'][] = array(
                 $title,
-                $subtype
+                $subtype,
             );
         }
+
         return $config;
     }
 
     /**
-     * Liefert den Profile-Service
+     * Liefert den Profile-Service.
      *
      * @return System25\T3sports\Service\ProfileService
      */
@@ -62,7 +62,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     }
 
     /**
-     * Liefert den Match-Service
+     * Liefert den Match-Service.
      *
      * @return \System25\T3sports\Service\MatchService
      */
@@ -72,7 +72,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     }
 
     /**
-     * Liefert den Team-Service
+     * Liefert den Team-Service.
      *
      * @return \System25\T3sports\Service\TeamService
      */
@@ -82,7 +82,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
     }
 
     /**
-     * Liefert den Wettbewerbsservice
+     * Liefert den Wettbewerbsservice.
      *
      * @return \System25\T3sports\Service\CompetitionService
      */

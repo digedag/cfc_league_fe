@@ -25,11 +25,10 @@ tx_rnbase::load('tx_rnbase_util_SimpleMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
- * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich
+ * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich.
  */
 class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
 {
-
     private $options;
 
     /**
@@ -47,7 +46,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
     }
 
     /**
-     * Initialisiert die Labels für die Profile-Klasse
+     * Initialisiert die Labels für die Profile-Klasse.
      *
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param array $defaultMarkerArr
@@ -58,7 +57,6 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
     }
 
     /**
-     *
      * @param string $template das HTML-Template
      * @param tx_cfcleaguefe_models_profile $profile
      *            das Profil
@@ -69,6 +67,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
      * @param string $marker Name
      *            des Markers für ein Profil, z.B. PROFILE, COACH, SUPPORTER
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
+     *
      * @return string das geparste Template
      */
     protected function prepareTemplate($template, $profile, $formatter, $confId, $marker = 'PROFILE')
@@ -79,7 +78,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
 
         tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_initRecord', array(
             'item' => &$profile,
-            'template' => &$template
+            'template' => &$template,
         ), $this);
 
         $profile->setProperty('sign', $profile->getSign());
@@ -88,7 +87,6 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
     }
 
     /**
-     *
      * {@inheritdoc}
      *
      * @see tx_rnbase_util_SimpleMarker::finishTemplate()
@@ -100,13 +98,14 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
             'template' => &$template,
             'confId' => $confId,
             'marker' => $marker,
-            'conf' => $formatter->getConfigurations()
+            'conf' => $formatter->getConfigurations(),
         ), $this);
+
         return $template;
     }
 
     /**
-     * Links vorbereiten
+     * Links vorbereiten.
      *
      * @param tx_cfcleaguefe_models_profile $profile
      * @param string $marker
@@ -122,7 +121,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
         // $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
         if ($profile->hasReport()) {
             $params = array(
-                'profileId' => $profile->getUid()
+                'profileId' => $profile->getUid(),
             );
             if (is_object($this->options['team'])) {
                 // Transfer current team to profile view
@@ -130,11 +129,11 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
             }
             $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showprofile', $marker, $params, $template);
         } else {
-            $linkMarker = $marker . '_' . strtoupper('showprofile') . 'LINK';
+            $linkMarker = $marker.'_'.strtoupper('showprofile').'LINK';
             $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
         }
         $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'refereematches', $marker, array(
-            'refereeId' => $profile->getUid()
+            'refereeId' => $profile->getUid(),
         ), $template);
     }
 }

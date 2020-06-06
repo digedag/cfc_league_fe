@@ -28,18 +28,17 @@ tx_rnbase::load('tx_rnbase_view_Base');
  */
 class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base
 {
-
     /**
-     * Erstellung des Outputstrings
+     * Erstellung des Outputstrings.
      */
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
-        
+
         /* @var $prov tx_rnbase_util_ListProvider */
         $prov = $viewData->offsetGet('provider');
         $out = $listBuilder->renderEach($prov, $viewData, $template, 'tx_cfcleaguefe_util_MatchMarker', 'matchtable.match.', 'MATCH', $formatter);
-        
+
         return $out;
     }
 
@@ -48,4 +47,3 @@ class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base
         return '###MATCHTABLE###';
     }
 }
-

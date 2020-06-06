@@ -28,7 +28,6 @@ tx_rnbase::load('tx_cfcleaguefe_table_football_IComparator');
  */
 class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_table_football_IComparator
 {
-
     public function setTeamData(array &$teamdata)
     {
         $this->_teamData = $teamdata;
@@ -36,7 +35,7 @@ class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_tabl
 
     /**
      * Funktion zur Sortierung der Tabellenzeilen nach dem Head-to-head modus.
-     * Bei Punktgleichstand zählt hier zuerst der direkte Vergleich
+     * Bei Punktgleichstand zählt hier zuerst der direkte Vergleich.
      */
     public function compare($t1, $t2)
     {
@@ -44,10 +43,12 @@ class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_tabl
         $isH2HComparison = true; // = "is Head-to-head-comparison"
 
         // Zwangsabstieg prüfen
-        if ($t1['static_position'])
+        if ($t1['static_position']) {
             return 1;
-        if ($t2['static_position'])
-            return - 1;
+        }
+        if ($t2['static_position']) {
+            return -1;
+        }
 
         if ($t1['points'] == $t2['points']) {
             // Im 2-Punkte-Modus sind die Minuspunkte auschlaggebend
@@ -61,13 +62,13 @@ class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_tabl
                 $t1H2HPoints = $baseData['t1H2HPoints'];
                 $t2H2HPoints = $baseData['t2H2HPoints'];
 
-                if ($t1H2HPoints == $t2H2HPoints || ! $isH2HComparison) {
+                if ($t1H2HPoints == $t2H2HPoints || !$isH2HComparison) {
                     // dann eben zuerst die Tordifferenz der 2 Spiele prüfen (Hin- und Rückspiel)
                     $t1H2HDiff = 0 + $t1vst2[0] + $t2vst1[1] - $t1vst2[1] - $t2vst1[0];
                     $t2H2HDiff = 0 + $t1vst2[1] + $t2vst1[0] - $t1vst2[0] - $t2vst1[1];
-                    if ($t1H2HDiff == $t2H2HDiff || ! $isH2HComparison) {
+                    if ($t1H2HDiff == $t2H2HDiff || !$isH2HComparison) {
                         // jetzt prüfen, wer mehr Auswärtstore geschossen hat
-                        if ($t1vst2[1] == $t2vst1[1] || ! $isH2HComparison) {
+                        if ($t1vst2[1] == $t2vst1[1] || !$isH2HComparison) {
                             // jetzt die allgemeine Tordifferenz prüfen
                             $t1diff = $t1['goals1'] - $t1['goals2'];
                             $t2diff = $t2['goals1'] - $t2['goals2'];
@@ -78,22 +79,29 @@ class tx_cfcleaguefe_table_football_ComparatorH2H implements tx_cfcleaguefe_tabl
                                     if ($t1['matchCount'] == $t2['matchCount']) {
                                         return 0; // Punkt und Torgleich
                                     }
+
                                     return $t1['matchCount'] > $t2['matchCount'];
                                 }
-                                return $t1['goals1'] > $t2['goals1'] ? - 1 : 1;
+
+                                return $t1['goals1'] > $t2['goals1'] ? -1 : 1;
                             }
-                            return $t1diff > $t2diff ? - 1 : 1;
+
+                            return $t1diff > $t2diff ? -1 : 1;
                         }
-                        return $t2vst1[1] > $t1vst2[1] ? - 1 : 1;
+
+                        return $t2vst1[1] > $t1vst2[1] ? -1 : 1;
                     }
-                    return $t1H2HDiff > $t2H2HDiff ? - 1 : 1;
+
+                    return $t1H2HDiff > $t2H2HDiff ? -1 : 1;
                 }
-                return $t1H2HPoints > $t2H2HPoints ? - 1 : 1;
+
+                return $t1H2HPoints > $t2H2HPoints ? -1 : 1;
             }
             // Bei den Minuspunkten ist weniger mehr
-            return $t1['points2'] < $t2['points2'] ? - 1 : 1;
+            return $t1['points2'] < $t2['points2'] ? -1 : 1;
         }
-        return $t1['points'] > $t2['points'] ? - 1 : 1;
+
+        return $t1['points'] > $t2['points'] ? -1 : 1;
         /* CDe end */
     }
 }

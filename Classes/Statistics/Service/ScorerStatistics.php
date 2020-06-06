@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Statistics\Service;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -29,15 +30,14 @@ namespace System25\T3sports\Statistics\Service;
 /**
  * Service for scorer statistics
  * Since this list is similar to player statistics, it is based on that service.
- * It simply modifies the result
+ * It simply modifies the result.
  *
  * @author Rene Nitzsche
  */
 class ScorerStatistics extends PlayerStatistics
 {
-
     /**
-     * Liefert die Liste der besten Torschützen
+     * Liefert die Liste der besten Torschützen.
      *
      * @return array
      */
@@ -47,9 +47,9 @@ class ScorerStatistics extends PlayerStatistics
     }
 
     /**
-     * Sucht die besten Torschützen aus der Liste und liefert sie sortiert in einem Array zurück
+     * Sucht die besten Torschützen aus der Liste und liefert sie sortiert in einem Array zurück.
      *
-     * @return Array mit den Datensätzen der Torschützen
+     * @return array mit den Datensätzen der Torschützen
      */
     private function _findScorer(&$playerData)
     {
@@ -63,10 +63,9 @@ class ScorerStatistics extends PlayerStatistics
             $goal1 = $a['goals_all'];
             $goal2 = $b['goals_all'];
 
-            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2) ? 1 : - 1;
+            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2) ? 1 : -1;
         });
+
         return $ret;
     }
 }
-
-

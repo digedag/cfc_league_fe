@@ -28,16 +28,14 @@ tx_rnbase::load('tx_cfcleaguefe_table_ITableResult');
  */
 class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableResult
 {
-
     private $tableData = array();
 
     /**
-     * Add score for round
+     * Add score for round.
      *
      * @param int $round
      *            round starts with 1
      * @param array $scoreLine
-     * @return void
      */
     public function addScore($round, $scoreLine)
     {
@@ -54,26 +52,29 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
      * If round is 0 the highest available round is returned.
      *
      * @param int $round
+     *
      * @return array
      */
     public function getScores($round = 0)
     {
-        if ($round == 0) {
+        if (0 == $round) {
             $rounds = array_keys($this->tableData);
             $round = $rounds[count($rounds) - 1];
-        } elseif (! array_key_exists($round, $this->tableData)) {
+        } elseif (!array_key_exists($round, $this->tableData)) {
             // Wenn für den übergebenen Spieltag keine Daten vorhanden sind, wird der nächst vorher liegende Spieltag geliefert.
             $rounds = array_keys($this->tableData);
             $usedRound = 1;
             foreach ($rounds as $availableRound) {
-                if ($availableRound <= $round)
+                if ($availableRound <= $round) {
                     $usedRound = $availableRound;
-                else
+                } else {
                     break;
+                }
             }
             $round = $usedRound;
         }
         $ret = $this->tableData[$round];
+
         return is_array($ret) ? $ret : array();
     }
 
@@ -98,7 +99,6 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
     }
 
     /**
-     *
      * @return tx_cfcleague_competition
      */
     public function getCompetition()
@@ -107,7 +107,6 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
     }
 
     /**
-     *
      * @param tx_cfcleague_competition $competition
      */
     public function setCompetition($competition)
@@ -116,7 +115,6 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_table_IConfigurator
      */
     public function getConfigurator()
@@ -125,7 +123,6 @@ class tx_cfcleaguefe_table_TableResult implements tx_cfcleaguefe_table_ITableRes
     }
 
     /**
-     *
      * @param tx_cfcleaguefe_table_IConfigurator $configurator
      */
     public function setConfigurator($configurator)

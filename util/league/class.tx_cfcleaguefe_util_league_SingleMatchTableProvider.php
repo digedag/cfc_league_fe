@@ -25,42 +25,50 @@
 tx_rnbase::load('tx_cfcleaguefe_util_league_DefaultTableProvider');
 
 /**
- * The a table provider used to compare two opponents of a single match
+ * The a table provider used to compare two opponents of a single match.
  */
-class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe_util_league_DefaultTableProvider{
+class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe_util_league_DefaultTableProvider
+{
+    private $match;
 
-	private $match;
+    public function __construct($match, $parameters, $configurations, $league, $confId = '')
+    {
+        parent::__construct($parameters, $configurations, $league, $confId);
+        $this->match = $match;
+    }
 
-	function __construct($match, $parameters, $configurations, $league, $confId='') {
-		parent::__construct($parameters, $configurations, $league, $confId);
-		$this->match = $match;
-	}
+    public function getChartClubs()
+    {
+        // Die Clubs aus dem Spiel ermitteln
+        $clubs = array();
+        $clubId = $this->match->getHome()->record['club'];
+        if ($clubId) {
+            $clubs[] = $clubId;
+        }
+        $clubId = $this->match->getGuest()->record['club'];
+        if ($clubId) {
+            $clubs[] = $clubId;
+        }
 
-	function getChartClubs(){
-		// Die Clubs aus dem Spiel ermitteln
-		$clubs = array();
-		$clubId = $this->match->getHome()->record['club'];
-		if($clubId) $clubs[] = $clubId;
-		$clubId = $this->match->getGuest()->record['club'];
-		if($clubId) $clubs[] = $clubId;
+        return $clubs;
+    }
 
-		return $clubs;
-	}
-	function getMarkClubs(){
-		return array();
-	}
+    public function getMarkClubs()
+    {
+        return array();
+    }
 
-	function getPenalties() {
-		return $this->getLeague()->getPenalties();
-	}
-	function getMatches() {
-    return $this->getLeague()->getMatches(2, $this->cfgTableScope);
-	}
+    public function getPenalties()
+    {
+        return $this->getLeague()->getPenalties();
+    }
+
+    public function getMatches()
+    {
+        return $this->getLeague()->getMatches(2, $this->cfgTableScope);
+    }
 }
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/league/class.tx_cfcleaguefe_util_league_SingleMatchTableProvider.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/league/class.tx_cfcleaguefe_util_league_SingleMatchTableProvider.php']);
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/league/class.tx_cfcleaguefe_util_league_SingleMatchTableProvider.php'];
 }
-
-?>

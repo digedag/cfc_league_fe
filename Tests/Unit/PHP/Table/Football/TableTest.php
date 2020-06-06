@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Tests\Table\Football;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2011-2020 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -27,9 +28,9 @@ namespace System25\T3sports\Tests\Table\Football;
  */
 class TableTest extends \tx_rnbase_tests_BaseTestCase
 {
-
     /**
-     * FIXME
+     * FIXME.
+     *
      * @_group unit
      */
     public function test_LeagueTableWithDummyTeam()
@@ -42,7 +43,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
         $matches = $league->getMatches(2);
         $params = new \ArrayObject();
         $config = $this->createConfigurations([
-            'tableType' => '0'
+            'tableType' => '0',
         ], 'cfc_league_fe');
         $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 
@@ -56,7 +57,8 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
     }
 
     /**
-     * FIXME
+     * FIXME.
+     *
      * @_group unit
      */
     public function test_LeagueTableWithTwoPointSystem()
@@ -68,7 +70,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations([
-            'tableType' => '0'
+            'tableType' => '0',
         ], 'cfc_league_fe');
 
         $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
@@ -93,7 +95,8 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
     }
 
     /**
-     * FIXME
+     * FIXME.
+     *
      * @_group unit
      */
     public function test_LeagueTableWithThreePointSystem()
@@ -104,7 +107,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations(array(
-            'tableType' => '0'
+            'tableType' => '0',
         ), 'cfc_league_fe');
         $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams());
@@ -120,7 +123,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
 
         $this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');
         $this->assertEquals(6, $scoreLine[0]['points'], 'Team 3 should have 6 points');
-        $this->assertEquals(- 1, $scoreLine[0]['points2'], 'Team 3 should have no negative points in 3 point system.');
+        $this->assertEquals(-1, $scoreLine[0]['points2'], 'Team 3 should have no negative points in 3 point system.');
         $this->assertEquals(3, $scoreLine[0]['teamId'], 'Team 3 should be 1. place');
         $this->assertEquals(1, $scoreLine[1]['teamId'], 'Team 1 should be 2. place');
         $this->assertEquals(2, $scoreLine[2]['teamId'], 'Team 2 should be 3. place');
@@ -128,32 +131,35 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
         $this->assertEquals(6, $scoreLine[0]['points'], 'Team 3 should has wrong points');
         $this->assertEquals(0, $scoreLine[3]['points'], 'Team 4 should has wrong points');
         // Alle Teams müssen bei den Minuspunkten -1 haben
-        for ($i = 0, $size = count($scoreLine); $i < $size; $i ++) {
-            $this->assertEquals(- 1, $scoreLine[$i]['points2'], 'Team at ' . ($i + 1) . '. place wrong neg points');
+        for ($i = 0, $size = count($scoreLine); $i < $size; ++$i ) {
+            $this->assertEquals(-1, $scoreLine[$i]['points2'], 'Team at '.($i + 1).'. place wrong neg points');
         }
     }
 
     private function getFixturePath($filename)
     {
-        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'Tests/fixtures/' . $filename;
+        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)
     {
         foreach ($yamlData as $arr) {
-            if (isset($arr['record']) && is_array($arr['record']))
+            if (isset($arr['record']) && is_array($arr['record'])) {
                 $ret[] = new $clazzName($arr['record']);
+            }
         }
+
         return $ret;
     }
 
     /**
-     * Returns a league from yaml file
+     * Returns a league from yaml file.
      *
      * @param string $leagueName
+     *
      * @return \tx_cfcleaguefe_models_competition
      */
-    function prepareLeague($leagueName)
+    public function prepareLeague($leagueName)
     {
         // Laden der Daten
         $data = \tx_rnbase_util_Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));

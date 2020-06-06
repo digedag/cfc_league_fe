@@ -24,19 +24,19 @@
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
- * Controller für die Anzeige eines Personenprofils
+ * Controller für die Anzeige eines Personenprofils.
  */
 class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
 {
-
-    static $exclude = array();
+    public static $exclude = array();
 
     /**
-     * handle request
+     * handle request.
      *
-     * @param arrayobject $parameters            
-     * @param tx_rnbase_configurations $configurations            
-     * @param arrayobject $viewData            
+     * @param arrayobject $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param arrayobject $viewData
+     *
      * @return string
      */
     protected function handleRequest(&$parameters, &$configurations, &$viewData)
@@ -44,15 +44,17 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
         $fields = array();
         $options = array();
         $this->initSearch($fields, $options, $parameters, $configurations);
-        
+
         $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
         $profiles = $service->search($fields, $options);
         $profile = count($profiles) ? $profiles[0] : null;
-        if (! $profile)
+        if (!$profile) {
             return 'No profile found!';
-        
+        }
+
         $viewData->offsetSet('profile', $profile);
         self::$exclude[] = $profile->uid;
+
         return '';
     }
 
@@ -61,7 +63,7 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
         // ggf. die Konfiguration aus der TS-Config lesen
         tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profileview.fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profileview.options.');
-        
+
         $options['limit'] = 1;
         if (intval($configurations->get('profileview.excludeAlreadyDisplayed'))) {
             // Doppelte Anzeige von Personen vermeiden
@@ -92,4 +94,3 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
         return 'tx_cfcleaguefe_views_ProfileView';
     }
 }
-

@@ -25,12 +25,11 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
 /**
- * Controller für die Anzeige einer Teamliste
+ * Controller für die Anzeige einer Teamliste.
  */
 class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC
 {
-
-    function handleRequest(&$parameters, &$configurations, &$viewdata)
+    public function handleRequest(&$parameters, &$configurations, &$viewdata)
     {
         // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
         // ggf. die Konfiguration aus der TS-Config lesen
@@ -41,24 +40,24 @@ class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC
         $options = array();
         $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 
-        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId() . 'team.pagebrowser', $viewdata, $fields, $options, array(
+        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'team.pagebrowser', $viewdata, $fields, $options, array(
             'searchcallback' => array(
                 $srv,
-                'search'
+                'search',
             ),
-            'pbid' => 'teams'
+            'pbid' => 'teams',
         ));
 
         $teams = $srv->search($fields, $options);
         $viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'teamlist';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_TeamList';
     }

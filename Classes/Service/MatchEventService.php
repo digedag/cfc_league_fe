@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Service;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -27,30 +28,28 @@ namespace System25\T3sports\Service;
  */
 
 /**
- *
  * @author Rene Nitzsche
  */
 class MatchEventService extends \tx_cal_event_service
 {
+    public $callegenddescription;
 
-    var $callegenddescription;
+    public $calnumber = 6;
 
-    var $calnumber = 6;
+    public $subheader;
 
-    var $subheader;
+    public $image;
 
-    var $image;
-
-    var $category = 'Matches';
+    public $category = 'Matches';
 
     /* @var $configurations \tx_rnbase_configurations */
 
     /**
      * Finds all matches.
      *
-     * @return array The array of events represented by the model.
+     * @return array the array of events represented by the model
      */
-    function findAllWithin($start_date, $end_date, $pidList)
+    public function findAllWithin($start_date, $end_date, $pidList)
     {
         /* @var $this->configurations tx_rnbase_configurations */
         $configurations = \tx_rnbase::makeInstance('tx_rnbase_configurations');
@@ -63,25 +62,26 @@ class MatchEventService extends \tx_cal_event_service
         $end_date = is_object($end_date) ? $end_date->getTime() : $end_date;
         $matchTable->setDateRange($start_date, $end_date);
         $matchTable->setPidList($pidList);
-        $matchTable->setSaisons($configurations->get($confId . 'saisonSelection'));
-        $matchTable->setAgeGroups($configurations->get($confId . 'groupSelection'));
-        $matchTable->setCompetitions($configurations->get($confId . 'competitionSelection'));
-        $matchTable->setClubs($configurations->get($confId . 'clubSelection'));
-        $matchTable->setIgnoreDummy($configurations->getBool($confId . 'ignoreDummy', false, false));
-        $matchTable->setCompetitionTypes($configurations->get($confId . 'competitionTypes'));
-        $matchTable->setCompetitionObligation($configurations->getInt($confId . 'competitionObligation'));
-        $matchTable->setLimit($configurations->getInt($confId . 'limit'));
+        $matchTable->setSaisons($configurations->get($confId.'saisonSelection'));
+        $matchTable->setAgeGroups($configurations->get($confId.'groupSelection'));
+        $matchTable->setCompetitions($configurations->get($confId.'competitionSelection'));
+        $matchTable->setClubs($configurations->get($confId.'clubSelection'));
+        $matchTable->setIgnoreDummy($configurations->getBool($confId.'ignoreDummy', false, false));
+        $matchTable->setCompetitionTypes($configurations->get($confId.'competitionTypes'));
+        $matchTable->setCompetitionObligation($configurations->getInt($confId.'competitionObligation'));
+        $matchTable->setLimit($configurations->getInt($confId.'limit'));
         $matchTable->setLiveTicker($configurations->getBool('view.cfc_league_events.livetickerOnly', false, false));
 
         $fields = array();
         $options = array();
-        if ($this->conf['view.']['cfc_league_events.']['debug'])
+        if ($this->conf['view.']['cfc_league_events.']['debug']) {
             $options['debug'] = 1;
+        }
         $matchTable->getFields($fields, $options);
 
-        \tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId . 'fields.');
+        \tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'fields.');
         // Optionen
-        \tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId . 'options.');
+        \tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'options.');
 
         $srv = \tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
         $matches = $srv->search($fields, $options);
@@ -91,11 +91,12 @@ class MatchEventService extends \tx_cal_event_service
         foreach ($matches as $match) {
             $events[date('Ymd', $match->record['date'])][date('Hi', $match->record['date'])][$match->uid] = $this->createEvent($match, false);
         }
+
         return $events;
     }
 
     /**
-     * Returns a new matchtable instance
+     * Returns a new matchtable instance.
      *
      * @return \tx_cfcleague_util_MatchTableBuilder
      */
@@ -107,9 +108,9 @@ class MatchEventService extends \tx_cal_event_service
     /**
      * Finds a single event.
      *
-     * @return object The event represented by the model.
+     * @return object the event represented by the model
      */
-    function find($uid, $pidList)
+    public function find($uid, $pidList)
     {
         $this->_init();
         $match = \tx_rnbase::makeInstance('tx_cfcleaguefe_models_match', $uid);
@@ -124,18 +125,19 @@ class MatchEventService extends \tx_cal_event_service
         return $event;
     }
 
-    function createEvent($match, $isException)
+    public function createEvent($match, $isException)
     {
         $event = \tx_rnbase::makeInstance('tx_cfcleaguefe_models_match_calevent', $this->controller, $match, $isException, $this->getServiceKey());
+
         return $event;
     }
 
     /**
      * Gets the legend description.
      *
-     * @return array The legend array.
+     * @return array the legend array
      */
-    function getCalLegendDescription()
+    public function getCalLegendDescription()
     {
         return $this->callegenddescription;
     }
@@ -148,25 +150,26 @@ class MatchEventService extends \tx_cal_event_service
      * @param string $endtime date string
      * @param string $searchword
      * @param array $locationIds
+     *
      * @return array
      */
-    function search($pidList = '', $starttime, $endtime, $searchword, $locationIds)
+    public function search($pidList = '', $starttime, $endtime, $searchword, $locationIds)
     {
         return [];
         // return parent::search($pidList, $starttime, $endtime, $searchword, $locationIds);
     }
 
-    function _init()
+    public function _init()
     {
         $legendArray = array(
-            "title" => $this->conf['view.']['cfc_league_events.']['legendDescription']
+            'title' => $this->conf['view.']['cfc_league_events.']['legendDescription'],
         );
         $this->callegenddescription = array(
             $this->conf['view.']['cfc_league_events.']['legendCalendarName'] => array(
                 array(
-                    $this->conf['view.']['cfc_league_events.']['headerStyle'] => $legendArray
-                )
-            )
+                    $this->conf['view.']['cfc_league_events.']['headerStyle'] => $legendArray,
+                ),
+            ),
         );
     }
 }

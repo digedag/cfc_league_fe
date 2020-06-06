@@ -30,16 +30,16 @@ tx_rnbase::load('Tx_Rnbase_Utility_T3General');
  */
 class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_TableWriterBase
 {
-
     protected static $token = '';
 
     /**
-     * Set table data by round
+     * Set table data by round.
      *
      * @param tx_cfcleaguefe_table_ITableType $table
      * @param string $template
      * @param tx_rnbase_configurations $configurations
      * @param string $confId
+     *
      * @return string
      */
     public function renderTable($table, $template, $configurations, $confId)
@@ -49,24 +49,25 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         // Zuerst den Wettbewerb
         if (tx_rnbase_util_BaseMarker::containsMarker($template, 'LEAGUE_')) {
             $compMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
-            $template = $compMarker->parseTemplate($template, $result->getCompetition(), $configurations->getFormatter(), $confId . 'league.', 'LEAGUE');
+            $template = $compMarker->parseTemplate($template, $result->getCompetition(), $configurations->getFormatter(), $confId.'league.', 'LEAGUE');
         }
         // $start = microtime(true);
         $penalties = array(); // Strafen sammeln
         $subpartArray = [
-            '###ROWS###' => $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $result, $penalties, $table->getMatchProvider(), $configurations, $confId)
+            '###ROWS###' => $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $result, $penalties, $table->getMatchProvider(), $configurations, $confId),
         ];
         // Jetzt die Strafen auflisten
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-        $template = $listBuilder->render($penalties, false, $template, 'tx_rnbase_util_SimpleMarker', $confId . 'penalty.', 'PENALTY', $formatter, array(
-            'classname' => 'tx_cfcleague_models_CompetitionPenalty'
+        $template = $listBuilder->render($penalties, false, $template, 'tx_rnbase_util_SimpleMarker', $confId.'penalty.', 'PENALTY', $formatter, array(
+            'classname' => 'tx_cfcleague_models_CompetitionPenalty',
         ));
 
         $markerArray = [];
         // Die Tabellensteuerung
-        $subpartArray['###CONTROLS###'] = $this->createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'), $result->getConfigurator(), $configurations, $confId . 'controls.');
+        $subpartArray['###CONTROLS###'] = $this->createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'), $result->getConfigurator(), $configurations, $confId.'controls.');
 
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+
         return $out;
     }
 
@@ -85,14 +86,14 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         $marks = $result->getMarks();
 
         $round = 0;
-        if (intval($configurations->get($confId . 'useRoundFromScope'))) {
+        if (intval($configurations->get($confId.'useRoundFromScope'))) {
             $scope = $matchProvider->getScope();
             $round = intval($scope['ROUND_UIDS']);
         }
         $tableData = $result->getScores($round);
 
         // Sollen alle Teams gezeigt werden?
-        $tableSize = intval($configurations->get($confId . 'tablecfg.tableSize'));
+        $tableSize = intval($configurations->get($confId.'tablecfg.tableSize'));
         if ($tableSize && $tableSize < count($tableData)) {
             // Es sollen weniger Teams gezeigt werden als vorhanden sind
             // Diesen Ausschnitt müssen wir jetzt ermitteln
@@ -104,7 +105,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
         $parts = array();
         // Die einzelnen Zeilen zusammenbauen
-        $rowRoll = intval($configurations->get($confId . 'table.roll.value'));
+        $rowRoll = intval($configurations->get($confId.'table.roll.value'));
         $rowRollCnt = 0;
 
         foreach ($tableData as $row) {
@@ -117,15 +118,16 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
             $team = $row['team'];
             unset($row['team']); // Gibt sonst Probleme mit PHP5.2
             $team->setProperty($row + $team->getProperty());
-            $parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId . 'table.', 'ROW');
+            $parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId.'table.', 'ROW');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }
 
         // Jetzt die einzelnen Teile zusammenfügen
         $markerArray = [];
         $subpartArray = [
-            '###ROW###' => implode($parts, $configurations->get($confId . 'table.implode')),
+            '###ROW###' => implode($parts, $configurations->get($confId.'table.implode')),
         ];
+
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
 
@@ -148,9 +150,10 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
             if ($row['markClub']) {
                 $markIdx = $cnt;
                 $mark = 1;
+
                 break;
             }
-            $cnt ++;
+            ++$cnt;
         }
 
         if ($mark) {
@@ -174,12 +177,13 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         if (is_array($row['penalties'])) {
             $penalties = array_merge($penalties, $row['penalties']);
             $row['penalties'] = count($row['penalties']);
-        } else
+        } else {
             $row['penalties'] = 0;
+        }
     }
 
     /**
-     * Setzt die Tabellenmarkierungen für eine Zeile
+     * Setzt die Tabellenmarkierungen für eine Zeile.
      */
     protected function setMark(&$row, &$marks)
     {
@@ -205,7 +209,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         $subpartArray = array(
             '###CONTROL_TABLETYPE###' => '',
             '###CONTROL_TABLESCOPE###' => '',
-            '###CONTROL_POINTSYSTEM###' => ''
+            '###CONTROL_POINTSYSTEM###' => '',
         );
 
         // Tabletype => Home/Away
@@ -213,27 +217,27 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
             $items = array(
                 0,
                 1,
-                2
+                2,
             );
             // Wir bereiten die Selectbox vor
-            $arr = Array(
+            $arr = array(
                 $items,
-                $configurator->getTableType()
+                $configurator->getTableType(),
             );
             // $arr = Array($items, ($parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : 0));
             $subpartArray['###CONTROL_TABLETYPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $arr, $link, 'TABLETYPE', $configurations, $confId);
         }
 
-        if ($configurations->get('tablescopeSelectionInput') || $configurations->get($confId . 'tablescopeSelectionInput')) {
+        if ($configurations->get('tablescopeSelectionInput') || $configurations->get($confId.'tablescopeSelectionInput')) {
             $items = array(
                 0,
                 1,
-                2
+                2,
             );
             // Wir bereiten die Selectbox vor
-            $arr = Array(
+            $arr = array(
                 $items,
-                $configurator->getTableScope()
+                $configurator->getTableScope(),
             );
             $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, $link, 'TABLESCOPE', $configurations, $confId);
         }
@@ -256,11 +260,12 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
             $arr = array(
                 $items,
-                $configurator->getPointSystem()
+                $configurator->getPointSystem(),
             );
             $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, $link, 'POINTSYSTEM', $configurations, $confId);
         }
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+
         return $out;
     }
 
@@ -294,38 +299,39 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         // $link->label($token);
         // }
 
-        $currentNoLink = intval($configurations->get($confId . $confName . '.current.noLink'));
+        $currentNoLink = intval($configurations->get($confId.$confName.'.current.noLink'));
 
         $token = self::getToken();
         $markerArray = array();
         // Jetzt über die vorhandenen Items iterieren
-        while (list ($key, $value) = each($itemsArr[0])) {
+        while (list($key, $value) = each($itemsArr[0])) {
             $link = $configurations->createLink();
             $link->label($token);
-            $link->initByTS($configurations, $confId . $confName . '.link.', array(
-                $confName => $key
+            $link->initByTS($configurations, $confId.$confName.'.link.', array(
+                $confName => $key,
             ));
 
             $isCurrent = ($key == $currItem);
-            $markerLabel = $formatter->wrap($key, $confId . $confName . '.' . $key . '.');
+            $markerLabel = $formatter->wrap($key, $confId.$confName.'.'.$key.'.');
 
             $data['iscurrent'] = $isCurrent ? 1 : 0;
             $data['value'] = $value;
 
-            $tempArray = $formatter->getItemMarkerArrayWrapped($data, $confId . $confName . '.', 0, 'CONTROL_' . $markerName . '_' . $markerLabel . '_');
-            $tempArray['###CONTROL_' . $markerName . '_' . $markerLabel . '###'] = $tempArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_VALUE###'];
+            $tempArray = $formatter->getItemMarkerArrayWrapped($data, $confId.$confName.'.', 0, 'CONTROL_'.$markerName.'_'.$markerLabel.'_');
+            $tempArray['###CONTROL_'.$markerName.'_'.$markerLabel.'###'] = $tempArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_VALUE###'];
             $markerArray = array_merge($markerArray, $tempArray);
-            $url = $formatter->wrap($link->makeUrl(false), $confId . $confName . ($isCurrent ? '.current.' : '.normal.'));
-            $markerArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK_URL###'] = $url;
-            $markerArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINKURL###'] = $url;
+            $url = $formatter->wrap($link->makeUrl(false), $confId.$confName.($isCurrent ? '.current.' : '.normal.'));
+            $markerArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK_URL###'] = $url;
+            $markerArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINKURL###'] = $url;
 
             $linkStr = ($currentNoLink && $key == $currItem) ? $token : $link->makeTag();
             // Einen zusätzliche Wrap um das generierte Element inkl. Link
-            $linkStr = $formatter->wrap($linkStr, $confId . $confName . ($isCurrent ? '.current.' : '.normal.'));
-            $wrappedSubpartArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK###'] = explode($token, $linkStr);
+            $linkStr = $formatter->wrap($linkStr, $confId.$confName.($isCurrent ? '.current.' : '.normal.'));
+            $wrappedSubpartArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK###'] = explode($token, $linkStr);
         }
 
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
         return $out;
     }
 
@@ -336,8 +342,10 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
      */
     protected static function getToken()
     {
-        if (! self::$token)
+        if (!self::$token) {
             self::$token = md5(microtime());
+        }
+
         return self::$token;
     }
 }

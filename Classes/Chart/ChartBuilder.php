@@ -25,59 +25,55 @@ namespace System25\T3sports\Chart;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-/**
- */
 class ChartBuilder
 {
+    /**
+     * @param \tx_cfcleaguefe_table_ITableType $table
+     */
+    public function buildJson($table, $clubIds, $configurations, $confId)
+    {
+        // Aus den Table-Daten jetzt die DataSets erzeugen
+        $chartData = [];
+        // Anzahl der Plätze
+        $chartData['ymax'] = count($table->getTableData()->getScores());
+        // Anzahl der Spielrunden
+        $chartData['xmax'] = $table->getMatchProvider()->getMaxRounds();
 
-	/**
-	 *
-	 * @param \tx_cfcleaguefe_table_ITableType $table
-	 */
-	public function buildJson($table, $clubIds, $configurations, $confId)
-	{
-		// Aus den Table-Daten jetzt die DataSets erzeugen
-		$chartData = [];
-		// Anzahl der Plätze
-		$chartData['ymax'] = count($table->getTableData()->getScores());
-		// Anzahl der Spielrunden
-		$chartData['xmax'] = $table->getMatchProvider()->getMaxRounds();
+        $cObj = $configurations->getCObj();
+        $cObjData = $cObj->data;
 
-		$cObj = $configurations->getCObj();
-		$cObjData = $cObj->data;
+        $dataSets = [];
+        $data = $table->getTableData();
+        for ($i = 1; $i <= $data->getRoundSize(); ++$i) {
+            $scores = $data->getScores($i);
+            foreach ($scores as $scoreArr) {
+                if (in_array($scoreArr['clubId'], $clubIds)) {
+                    $point = [$i, $scoreArr['position']];
+                    if (!isset($dataSets[$scoreArr['teamId']])) {
+                        // Basisdaten setzen
+                        $team = $scoreArr['team'];
+                        $cObj->data = $team->getProperty();
+                        $logo = $cObj->cObjGetSingle(
+                            $configurations->get($confId.'team.logo'),
+                            $configurations->get($confId.'team.logo.')
+                        );
+                        $dataSets[$scoreArr['teamId']] = [
+                                'info' => [
+                                        'teamid' => $team->getProperty('uid'),
+                                        'clubid' => $scoreArr['clubId'],
+                                        'name' => $team->getProperty('name'),
+                                        'short_name' => $team->getProperty('short_name'),
+                                        'logo' => $logo,
+                                ],
+                        ];
+                    }
+                    $dataSets[$scoreArr['teamId']]['data'][] = $point;
+                }
+            }
+        }
+        $cObj->data = $cObjData;
+        $chartData['datasets'] = array_values($dataSets);
 
-		$dataSets = [];
-		$data = $table->getTableData();
-		for($i=1; $i <= $data->getRoundSize(); $i++) {
-			$scores = $data->getScores($i);
-			foreach ($scores As $scoreArr) {
-				if(in_array($scoreArr['clubId'], $clubIds)) {
-					$point = [$i, $scoreArr['position']];
-					if(!isset($dataSets[$scoreArr['teamId']])) {
-						// Basisdaten setzen
-						$team = $scoreArr['team'];
-						$cObj->data = $team->getProperty();
-						$logo = $cObj->cObjGetSingle(
-								$configurations->get($confId.'team.logo'), $configurations->get($confId.'team.logo.'));
-						$dataSets[$scoreArr['teamId']] = [
-								'info' => [
-										'teamid'=> $team->getProperty('uid'),
-										'clubid'=> $scoreArr['clubId'],
-										'name'=> $team->getProperty('name'),
-										'short_name'=> $team->getProperty('short_name'),
-										'logo' => $logo,
-								],
-						];
-					}
-					$dataSets[$scoreArr['teamId']]['data'][] = $point;
-				}
-			}
-		}
-		$cObj->data = $cObjData;
-		$chartData['datasets'] = array_values($dataSets);
-
-		return json_encode($chartData, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_QUOT);
-	}
+        return json_encode($chartData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_QUOT);
+    }
 }
-

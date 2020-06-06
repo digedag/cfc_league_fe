@@ -28,14 +28,14 @@
  */
 class tx_cfcleaguefe_util_StatisticsHelper
 {
-
     /**
      * No instance necessary.
      *
      * @return tx_cfcleaguefe_util_StatisticsHelper
      */
     private function __construct()
-    {}
+    {
+    }
 
     /**
      * Allgemeine Prüffunktion auf einen bestimmten Note-Typ für einen Spieler.
@@ -55,7 +55,7 @@ class tx_cfcleaguefe_util_StatisticsHelper
         $ret = [];
         $tickerArr = &$match->getMatchNotesByType($type);
 
-        for ($i = 0; $i < count($tickerArr); $i ++) {
+        for ($i = 0; $i < count($tickerArr); ++$i ) {
             $matchNote = &$tickerArr[$i];
             $notePlayer = $matchNote->getPlayerInstance();
             if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
@@ -64,16 +64,17 @@ class tx_cfcleaguefe_util_StatisticsHelper
                 }
             }
         }
+
         return count($ret) > 0 ? $ret : 0;
     }
 
     /**
-     * Alle Typen für ein Tor
+     * Alle Typen für ein Tor.
      */
     private static $goalTypes = array(
         10,
         11,
-        12
+        12,
     );
 
     /**
@@ -90,22 +91,23 @@ class tx_cfcleaguefe_util_StatisticsHelper
      */
     public static function isGoal($type, $player, $match)
     {
-        $tickerType = $type == 0 ? self::$goalTypes : $type;
+        $tickerType = 0 == $type ? self::$goalTypes : $type;
         $tickerArr = &$match->getMatchNotesByType($tickerType);
 
         $ret = [];
-        for ($i = 0; $i < count($tickerArr); $i ++) {
+        for ($i = 0; $i < count($tickerArr); ++$i ) {
             $matchNote = &$tickerArr[$i];
             $notePlayer = $matchNote->getPlayerInstance();
             if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
                 $ret[] = $matchNote;
             }
         }
+
         return count($ret) > 0 ? $ret : 0;
     }
 
     /**
-     * Prüft, ob der Spieler eine gelbe Karte gesehen hat
+     * Prüft, ob der Spieler eine gelbe Karte gesehen hat.
      *
      * @param tx_cfcleaguefe_models_profile $player
      * @param tx_cfcleaguefe_models_match $match
@@ -113,11 +115,11 @@ class tx_cfcleaguefe_util_StatisticsHelper
      */
     public static function isCardYellow($player, $match)
     {
-        return tx_cfcleaguefe_util_StatisticsHelper::_isCard('Y', $player, $match);
+        return self::_isCard('Y', $player, $match);
     }
 
     /**
-     * Prüft, ob der Spieler eine gelb-rote Karte gesehen hat
+     * Prüft, ob der Spieler eine gelb-rote Karte gesehen hat.
      *
      * @param tx_cfcleaguefe_models_profile $player
      * @param tx_cfcleaguefe_models_match $match
@@ -125,11 +127,11 @@ class tx_cfcleaguefe_util_StatisticsHelper
      */
     public static function isCardRed($player, $match)
     {
-        return tx_cfcleaguefe_util_StatisticsHelper::_isCard('R', $player, $match);
+        return self::_isCard('R', $player, $match);
     }
 
     /**
-     * Prüft, ob der Spieler eine rote Karte gesehen hat
+     * Prüft, ob der Spieler eine rote Karte gesehen hat.
      *
      * @param tx_cfcleaguefe_models_profile $player
      * @param tx_cfcleaguefe_models_match $match
@@ -137,11 +139,11 @@ class tx_cfcleaguefe_util_StatisticsHelper
      */
     public static function isCardYellowRed($player, $match)
     {
-        return tx_cfcleaguefe_util_StatisticsHelper::_isCard('YR', $player, $match);
+        return self::_isCard('YR', $player, $match);
     }
 
     /**
-     * Prüft, ob der Spieler eine Karte gesehen hat
+     * Prüft, ob der Spieler eine Karte gesehen hat.
      *
      * @param string $type
      *            Typ der Karte: Y,R,YR
@@ -151,21 +153,20 @@ class tx_cfcleaguefe_util_StatisticsHelper
      */
     private static function _isCard($type, $player, $match)
     {
-        $tickerType = $type == 'Y' ? 70 : ($type == 'YR' ? 71 : 72);
+        $tickerType = 'Y' == $type ? 70 : ('YR' == $type ? 71 : 72);
         $tickerArr = &$match->getMatchNotesByType($tickerType);
 
-        for ($i = 0; $i < count($tickerArr); $i ++) {
+        for ($i = 0; $i < count($tickerArr); ++$i ) {
             $matchNote = &$tickerArr[$i];
             $notePlayer = $matchNote->getPlayerInstance();
             if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
-                if ($type == 'Y' && $matchNote->isYellowCard()) {
-
+                if ('Y' == $type && $matchNote->isYellowCard()) {
                     return $matchNote->getMinute();
                 }
-                if ($type == 'R' && $matchNote->isRedCard()) {
+                if ('R' == $type && $matchNote->isRedCard()) {
                     return $matchNote->getMinute();
                 }
-                if ($type == 'YR' && $matchNote->isYellowRedCard()) {
+                if ('YR' == $type && $matchNote->isYellowRedCard()) {
                     return $matchNote->getMinute();
                 }
             }
@@ -173,27 +174,27 @@ class tx_cfcleaguefe_util_StatisticsHelper
     }
 
     /**
-     * Prüft, ob der Spieler eingewechselt wurde
+     * Prüft, ob der Spieler eingewechselt wurde.
      *
      * @returns liefert die Spielminute oder 0
      */
     public static function isChangedIn(&$player, &$match)
     {
-        return tx_cfcleaguefe_util_StatisticsHelper::_isPlayerChanged('IN', $player, $match);
+        return self::_isPlayerChanged('IN', $player, $match);
     }
 
     /**
-     * Prüft, ob der Spieler ausgewechselt wurde
+     * Prüft, ob der Spieler ausgewechselt wurde.
      *
      * @returns liefert die Spielminute oder 0
      */
     public static function isChangedOut(&$player, &$match)
     {
-        return tx_cfcleaguefe_util_StatisticsHelper::_isPlayerChanged('OUT', $player, $match);
+        return self::_isPlayerChanged('OUT', $player, $match);
     }
 
     /**
-     * Prüft, ob der Spieler ausgewechselt wurde und liefert in diesem Fall die Spielminute
+     * Prüft, ob der Spieler ausgewechselt wurde und liefert in diesem Fall die Spielminute.
      *
      * @param string $inOut
      *            - Werte sind 'in' oder 'out'
@@ -202,10 +203,10 @@ class tx_cfcleaguefe_util_StatisticsHelper
      */
     private static function _isPlayerChanged($inOut, &$player, &$match)
     {
-        $tickerArr = &$match->getMatchNotesByType(($inOut == 'IN') ? 81 : 80);
-        for ($i = 0, $size = count($tickerArr); $i < $size; $i ++) {
+        $tickerArr = &$match->getMatchNotesByType(('IN' == $inOut) ? 81 : 80);
+        for ($i = 0, $size = count($tickerArr); $i < $size; ++$i ) {
             $matchNote = &$tickerArr[$i];
-            $playerChange = ($inOut == 'IN') ? $matchNote->getPlayerChangeIn() : $matchNote->getPlayerChangeOut();
+            $playerChange = ('IN' == $inOut) ? $matchNote->getPlayerChangeIn() : $matchNote->getPlayerChangeOut();
             if ($playerChange && $playerChange->getUid() == $player->getUid()) {
                 // Es ist nicht möglich einen Spieler zweimal auszuwechseln!
                 return $matchNote->getMinute();

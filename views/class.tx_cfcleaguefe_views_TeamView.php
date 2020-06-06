@@ -24,27 +24,28 @@
 tx_rnbase::load('tx_rnbase_view_Base');
 
 /**
- * Viewklasse für die Anzeige des Teams
+ * Viewklasse für die Anzeige des Teams.
  */
 class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base
 {
-
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-        $team = & $viewData->offsetGet('team');
-        if (is_object($team))
+        $team = &$viewData->offsetGet('team');
+        if (is_object($team)) {
             $out = $this->_createView($template, $team, $configurations);
-        else
+        } else {
             $out = 'Sorry, no team found...';
+        }
+
         return $out;
     }
 
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###TEAM_VIEW###';
     }
 
-    function _createView($template, $team, $configurations)
+    public function _createView($template, $team, $configurations)
     {
         $out = '';
 
@@ -54,9 +55,8 @@ class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base
         return $out;
     }
 
-    function _init(&$configurations)
+    public function _init(&$configurations)
     {
         $this->formatter = &$configurations->getFormatter();
     }
 }
-

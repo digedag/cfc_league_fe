@@ -24,13 +24,11 @@
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
- * Diese Klasse ist für die Erstellung von Markerarrays eines Stadions verantwortlich
+ * Diese Klasse ist für die Erstellung von Markerarrays eines Stadions verantwortlich.
  */
 class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
 {
-
     /**
-     *
      * @param string $template
      *            das HTML-Template
      * @param tx_cfcleague_models_Stadium $item
@@ -40,11 +38,12 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
      *            Pfad der TS-Config
      * @param string $marker
      *            Name des Markers
-     * @return String das geparste Template
+     *
+     * @return string das geparste Template
      */
     public function parseTemplate($template, $item, $formatter, $confId, $marker = 'ARENA')
     {
-        if (! is_object($item)) {
+        if (!is_object($item)) {
             // Ist kein Item vorhanden wird ein leeres Objekt verwendet.
             $item = self::getEmptyInstance('tx_cfcleague_models_Stadium');
         }
@@ -53,23 +52,22 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
 
         // Es wird das MarkerArray mit Daten gefüllt
         $ignore = self::findUnusedCols($item->getProperty(), $template, $marker);
-        $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $ignore, $marker . '_', $item->getColumnNames());
+        $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $ignore, $marker.'_', $item->getColumnNames());
         $wrappedSubpartArray = $subpartArray = [];
         $this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
         // Die Adressdaten setzen
-        if ($this->containsMarker($template, $marker . '_ADDRESS')) {
-            $template = $this->_addAddress($template, $item->getAddress(), $formatter, $confId . 'address.', $marker . '_ADDRESS');
+        if ($this->containsMarker($template, $marker.'_ADDRESS')) {
+            $template = $this->_addAddress($template, $item->getAddress(), $formatter, $confId.'address.', $marker.'_ADDRESS');
         }
-        if ($this->containsMarker($template, $marker . '_MAP')) {
-            $template = $this->_addMap($template, $item, $formatter, $confId . 'map.', $marker . '_MAP');
+        if ($this->containsMarker($template, $marker.'_MAP')) {
+            $template = $this->_addMap($template, $item, $formatter, $confId.'map.', $marker.'_MAP');
         }
 
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
     /**
-     *
      * @param string $template
      * @param tx_cfcleague_models_Stadium $item
      * @param tx_rnbase_util_FormatUtil $formatter
@@ -81,34 +79,33 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
     {
         tx_rnbase::load('tx_cfcleaguefe_util_Maps');
         $mapTemplate = tx_cfcleaguefe_util_Maps::getMapTemplate($formatter->getConfigurations(), $confId, '###STADIUM_MAP_MARKER###');
-        $marker = $this->createMapMarker($mapTemplate, $item, $formatter, $confId . 'stadium.', 'STADIUM');
-        if (! $marker) {
+        $marker = $this->createMapMarker($mapTemplate, $item, $formatter, $confId.'stadium.', 'STADIUM');
+        if (!$marker) {
             return $template;
         }
 
         try {
-
             tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
             tx_rnbase::load('tx_rnbase_maps_Factory');
             $map = tx_rnbase_maps_Factory::createGoogleMap($formatter->getConfigurations(), $confId);
 
             // Icon
-            tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), $confId . 'icon.stadiumlogo.', $marker, 'stadium_' . $item->getUid(), $item->getLogoPath());
+            tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), $confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
 
             $map->addMarker($marker);
             $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array(
-                '###' . $markerPrefix . '###' => $map->draw()
+                '###'.$markerPrefix.'###' => $map->draw(),
             ));
         } catch (Exception $e) {
             $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array(
-                '###' . $markerPrefix . '###' => '###LABEL_mapNotAvailable###'
+                '###'.$markerPrefix.'###' => '###LABEL_mapNotAvailable###',
             ));
         }
+
         return $out;
     }
 
     /**
-     *
      * @param tx_rnbase_model_base $item
      * @param string $template
      * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
@@ -118,16 +115,16 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
     protected function prepareRecord(&$item, $template, $configurations, $confId, $marker)
     {
         $item->setProperty('distance', '');
-        if ($this->containsMarker($template, $marker . '_DISTANCE') && self::hasGeoData($item)) {
-            $lat = doubleval($configurations->get($confId . '_basePosition.latitude'));
-            $lng = doubleval($configurations->get($confId . '_basePosition.longitude'));
+        if ($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
+            $lat = floatval($configurations->get($confId.'_basePosition.latitude'));
+            $lng = floatval($configurations->get($confId.'_basePosition.longitude'));
             $item->setProperty('distance', tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
         }
     }
 
     public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix)
     {
-        if (! $item->getCity() && ! $item->getZip() && ! $item->getLongitute() && ! $item->getLatitute()) {
+        if (!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute()) {
             return false;
         }
 
@@ -143,6 +140,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
         // $marker->setTitle($item->getName());
         $bubble = $this->parseTemplate($template, $item, $formatter, $confId, $markerPrefix);
         $marker->setDescription($bubble);
+
         return $marker;
     }
 
@@ -150,11 +148,12 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
     {
         $addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
         $template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
+
         return $template;
     }
 
     /**
-     * Links vorbereiten
+     * Links vorbereiten.
      *
      * @param tx_cfcleague_models_Stadium $item
      * @param string $marker
@@ -168,17 +167,17 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
         $linkId = 'show';
         if ($item->isPersisted()) {
             $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, [
-                'stadium' => $item->getUid()
+                'stadium' => $item->getUid(),
             ], $template);
         } else {
-            $linkMarker = $marker . '_' . strtoupper($linkId) . 'LINK';
-            $remove = intval($formatter->configurations->get($confId . 'links.' . $linkId . '.removeIfDisabled'));
+            $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
+            $remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
             $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
         }
     }
 
     private static function hasGeoData($item)
     {
-        return ! (! $item->getCity() && ! $item->getZip() && ! $item->getLongitute() && ! $item->getLatitute());
+        return !(!$item->getCity() && !$item->getZip() && !$item->getLongitute() && !$item->getLatitute());
     }
 }

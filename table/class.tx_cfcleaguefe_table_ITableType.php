@@ -28,53 +28,48 @@
  */
 interface tx_cfcleaguefe_table_ITableType
 {
-
     /**
-     * Set match provider
+     * Set match provider.
      *
      * @param tx_cfcleaguefe_table_IMatchProvider $matchProvider
-     * @return void
      */
     public function setMatchProvider(tx_cfcleaguefe_table_IMatchProvider $matchProvider);
 
     /**
-     * Get match provider
+     * Get match provider.
      *
      * @return tx_cfcleaguefe_table_IMatchProvider
      */
     public function getMatchProvider();
 
     /**
-     * Set configuration
+     * Set configuration.
      *
      * @param tx_rnbase_configurations $configuration
      * @param
      *            string confId
-     * @return void
      */
     public function setConfigurations($configuration, $confId);
 
     /**
-     * Returns the final table data
+     * Returns the final table data.
      *
      * @return tx_cfcleaguefe_table_ITableResult
      */
     public function getTableData();
 
     /**
-     *
      * @return tx_cfcleaguefe_table_ITableWriter
      */
     public function getTableWriter();
 
     /**
-     *
      * @return tx_cfcleaguefe_table_IConfigurator
      */
     public function getConfigurator();
 
     /**
-     * Unique id string for this type of table
+     * Unique id string for this type of table.
      *
      * @return string
      */

@@ -28,12 +28,10 @@
  */
 interface tx_cfcleaguefe_table_volleyball_IComparator
 {
-
     public function setTeamData(array &$teamdata);
 
     /**
-     * Funktion zur Sortierung der Tabellenzeilen
+     * Funktion zur Sortierung der Tabellenzeilen.
      */
     public function compare($t1, $t2);
 }
-

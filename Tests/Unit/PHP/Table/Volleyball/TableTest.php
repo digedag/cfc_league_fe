@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\Tests\Table\Volleyball;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2013-2020 Rene Nitzsche (rene@system25.de)
  * All rights reserved
@@ -27,7 +28,6 @@ namespace System25\T3sports\Tests\Table\Volleyball;
  */
 class TableTest extends \tx_rnbase_tests_BaseTestCase
 {
-
     public function test_LeagueTableWithTwoPointSystem()
     {
         $league = $this->prepareLeague('league_volley_1');
@@ -37,7 +37,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations([
-            'tableType' => '0'
+            'tableType' => '0',
         ], 'cfc_league_fe');
 
         $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
@@ -73,7 +73,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
 
     private function getFixturePath($filename)
     {
-        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe') . 'tests/fixtures/' . $filename;
+        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe').'tests/fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)
@@ -83,13 +83,15 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
                 $ret[] = new $clazzName($arr['record']);
             }
         }
+
         return $ret;
     }
 
     /**
-     * Returns a league from yaml file
+     * Returns a league from yaml file.
      *
      * @param string $leagueName
+     *
      * @return \tx_cfcleaguefe_models_competition
      */
     private function prepareLeague($leagueName)

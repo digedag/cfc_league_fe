@@ -2,11 +2,11 @@
 
 namespace System25\T3sports\Action;
 
-
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 
-class StadiumList extends AbstractAction {
+class StadiumList extends AbstractAction
+{
     protected function handleRequest(RequestInterface $request)
     {
         $parameters = $request->getParameters();
@@ -20,23 +20,24 @@ class StadiumList extends AbstractAction {
         $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 
         // Soll ein PageBrowser verwendet werden
-        \tx_rnbase_filter_BaseFilter::handleCharBrowser($configurations, $this->getConfId() . 'stadium.charbrowser', $viewData, $fields, $options, [
+        \tx_rnbase_filter_BaseFilter::handleCharBrowser($configurations, $this->getConfId().'stadium.charbrowser', $viewData, $fields, $options, [
             'searchcallback' => [
                 $srv,
-                'search'
+                'search',
             ],
-            'colname' => 'name'
+            'colname' => 'name',
         ]);
-        \tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId() . 'stadium.pagebrowser', $viewData, $fields, $options, [
+        \tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'stadium.pagebrowser', $viewData, $fields, $options, [
             'searchcallback' => [
                 $srv,
-                'search'
+                'search',
             ],
-            'pbid' => 'stadium'
+            'pbid' => 'stadium',
         ]);
 
         $items = $srv->search($fields, $options);
         $viewData->offsetSet('items', $items);
+
         return null;
     }
 

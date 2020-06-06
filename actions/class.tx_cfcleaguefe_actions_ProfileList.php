@@ -32,13 +32,13 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
  */
 class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     * handle request
+     * handle request.
      *
      * @param arrayobject $parameters
      * @param tx_rnbase_configurations $configurations
      * @param arrayobject $viewData
+     *
      * @return string
      */
     protected function handleRequest(&$parameters, &$configurations, &$viewData)
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
 
         $fields = array();
         $options = array(
-            'count' => 1
+            'count' => 1,
         );
         $this->initSearch($fields, $options, $parameters, $configurations, $firstChar);
         $listSize = $service->search($fields, $options);
@@ -88,37 +88,40 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
         tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
         $timeRange = $configurations->get('profilelist.birthdays');
         if ($timeRange) {
-            $timePattern = $timeRange == 'DAY' ? '%d%m' : '%m';
+            $timePattern = 'DAY' == $timeRange ? '%d%m' : '%m';
             $where .= " ( (DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), '${timePattern}') = DATE_FORMAT(CURDATE(), '${timePattern}')";
             $where .= ' AND tx_cfcleague_profiles.birthday > 0) OR ';
             // Variante 2 für Zeiten vor 1970
             $where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( tx_cfcleague_profiles.birthday )), '1970-01-01')), '${timePattern}') = DATE_FORMAT(CURDATE(), '${timePattern}')";
             $where .= ' AND tx_cfcleague_profiles.birthday < 0 ))';
-            if ($fields[SEARCH_FIELD_CUSTOM])
+            if ($fields[SEARCH_FIELD_CUSTOM]) {
                 $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
+            }
             $fields[SEARCH_FIELD_CUSTOM] .= $where;
 
             // Sortierung nach Datum
             $sort = array(
-                'DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), \'%m%d\')' => 'asc'
+                'DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), \'%m%d\')' => 'asc',
             );
-            if (is_array($options['orderby']))
+            if (is_array($options['orderby'])) {
                 $options['orderby'] = array_merge($sort, $options['orderby']);
-            else
+            } else {
                 $options['orderby'] = $sort;
+            }
         }
         if ($firstChar) {
             $specials = tx_rnbase_util_SearchBase::getSpecialChars();
             $firsts = $specials[$firstChar];
             if ($firsts) {
                 $firsts = implode('\',\'', $firsts);
-            } else
+            } else {
                 $firsts = $firstChar;
+            }
 
-            if ($fields[SEARCH_FIELD_CUSTOM])
+            if ($fields[SEARCH_FIELD_CUSTOM]) {
                 $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
+            }
             $fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(last_name),1) IN ('$firsts') ";
-            ;
         }
     }
 
@@ -156,8 +159,9 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
         foreach ($rows as $row) {
             if (array_key_exists(($row['first_char']), $wSpecials)) {
                 $ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];
-            } else
+            } else {
                 $ret[$row['first_char']] = $row['size'];
+            }
         }
 
         $current = 0;
@@ -169,14 +173,16 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
             'list' => $ret,
             'default' => $current,
         ];
+
         return $data;
     }
 
     /**
-     * Liefert die Anzahl der Ergebnisse pro Seite
+     * Liefert die Anzahl der Ergebnisse pro Seite.
      *
      * @param array $parameters
      * @param tx_rnbase_configurations $configurations
+     *
      * @return int
      */
     protected function getPageSize(&$parameters, &$configurations)

@@ -34,34 +34,34 @@ use Sys25\RnBase\Frontend\View\ContextInterface;
  */
 class StadiumList extends BaseView
 {
-
     /**
-     * Erstellen des Frontend-Outputs
+     * Erstellen des Frontend-Outputs.
      */
     public function createOutput($template, RequestInterface $request, $formatter)
     {
-
         $viewData = $request->getViewContext();
         $configurations = $request->getConfigurations();
         // Die ViewData bereitstellen
-        $items = & $viewData->offsetGet('items');
+        $items = &$viewData->offsetGet('items');
         $listBuilder = \tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
         $template = $listBuilder->render($items, $viewData, $template, 'tx_cfcleaguefe_util_StadiumMarker', $request
-            ->getConfId() . 'stadium.', 'STADIUM', $formatter);
+            ->getConfId().'stadium.', 'STADIUM', $formatter);
 
         $markerArray = [];
         if (\tx_rnbase_util_BaseMarker::containsMarker($template, 'STADIUMMAP')) {
             $markerArray['###STADIUMMAP###'] = $this->getMap($items, $configurations, $request
-                ->getConfId() . 'map.', 'STADIUM');
+                ->getConfId().'map.', 'STADIUM');
         }
         $out = \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray); // , $wrappedSubpartArray);
+
         return $out;
     }
 
     private function getMap($items, $configurations, $confId, $markerPrefix)
     {
         $ret = '###LABEL_mapNotAvailable###';
+
         try {
             $map = \tx_rnbase_maps_Factory::createGoogleMap($configurations, $confId);
 
@@ -69,16 +69,16 @@ class StadiumList extends BaseView
             $template = \tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###STADIUM_MAP_MARKER###');
             $itemMarker = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
             foreach ($items as $item) {
-                $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId . 'stadium.', $markerPrefix);
-                if (! $marker) {
+                $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'stadium.', $markerPrefix);
+                if (!$marker) {
                     continue;
                 }
-                \tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId() . 'map.icon.stadiumlogo.', $marker, 'stadium_' . $item->getUid(), $item->getLogoPath());
+                \tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
                 $map->addMarker($marker);
             }
-            if ($configurations->get($confId . 'showBasePoint')) {
-                $lng = doubleval($configurations->get($confId . 'stadium._basePosition.longitude'));
-                $lat = doubleval($configurations->get($confId . 'stadium._basePosition.latitude'));
+            if ($configurations->get($confId.'showBasePoint')) {
+                $lng = floatval($configurations->get($confId.'stadium._basePosition.longitude'));
+                $lat = floatval($configurations->get($confId.'stadium._basePosition.latitude'));
                 $coords = \tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
                 $coords->setLongitude($lng);
                 $coords->setLatitude($lat);
@@ -91,6 +91,7 @@ class StadiumList extends BaseView
         } catch (\Exception $e) {
             $ret = '###LABEL_mapNotAvailable###';
         }
+
         return $ret;
     }
 
@@ -99,4 +100,3 @@ class StadiumList extends BaseView
         return '###STADIUM_LIST###';
     }
 }
-

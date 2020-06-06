@@ -24,20 +24,21 @@
 tx_rnbase::load('tx_rnbase_view_Base');
 
 /**
- * Viewklasse für die Anzeige des Stadien
+ * Viewklasse für die Anzeige des Stadien.
  */
 class tx_cfcleaguefe_views_StadiumView extends tx_rnbase_view_Base
 {
-
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-        $item = & $viewData->offsetGet('item');
-        if (! is_object($item))
+        $item = &$viewData->offsetGet('item');
+        if (!is_object($item)) {
             return 'Sorry, no item found...';
-        
+        }
+
         $out = '';
         $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_StadiumMarker');
         $out .= $marker->parseTemplate($template, $item, $formatter, 'stadiumview.stadium.', 'STADIUM');
+
         return $out;
     }
 
@@ -46,5 +47,3 @@ class tx_cfcleaguefe_views_StadiumView extends tx_rnbase_view_Base
         return '###STADIUM_VIEW###';
     }
 }
-
-

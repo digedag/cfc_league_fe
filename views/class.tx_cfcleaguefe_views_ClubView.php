@@ -24,26 +24,26 @@
 tx_rnbase::load('tx_rnbase_view_Base');
 
 /**
- * Viewklasse für die Anzeige des Vereins
+ * Viewklasse für die Anzeige des Vereins.
  */
 class tx_cfcleaguefe_views_ClubView extends tx_rnbase_view_Base
 {
-
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-        $item = & $viewData->offsetGet('item');
-        if (! is_object($item))
+        $item = &$viewData->offsetGet('item');
+        if (!is_object($item)) {
             return 'Sorry, no item found...';
+        }
 
         $out = '';
         $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
         $out .= $marker->parseTemplate($template, $item, $formatter, 'clubview.club.', 'CLUB');
+
         return $out;
     }
 
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###CLUB_VIEW###';
     }
 }
-

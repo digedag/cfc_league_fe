@@ -26,39 +26,43 @@ namespace System25\T3sports\Service;
 ***************************************************************/
 
 /**
- * Service for accessing profile information
+ * Service for accessing profile information.
  *
  * @author Rene Nitzsche
  */
-class ProfileService extends \Tx_Rnbase_Service_Base {
+class ProfileService extends \Tx_Rnbase_Service_Base
+{
+    /**
+     * Find team notes for a profile.
+     *
+     * @param \tx_cfcleaguefe_models_profile $profile
+     * @param \tx_cfcleaguefe_models_team $team
+     */
+    public function getTeamNotes(&$profile, &$team)
+    {
+        $what = '*';
+        $from = 'tx_cfcleague_team_notes';
+        $options = [];
+        $options['where'] = 'player = '.$profile->uid.' AND team = '.$team->uid;
+        $options['wrapperclass'] = 'tx_cfcleaguefe_models_teamNote';
+        //		$options['orderby'] = 'minute asc, extra_time asc, uid asc';
+        $teamNotes = \tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
 
-	/**
-	 * Find team notes for a profile
-	 *
-	 * @param \tx_cfcleaguefe_models_profile $profile
-	 * @param \tx_cfcleaguefe_models_team $team
-	 */
-	public function getTeamNotes(&$profile, &$team) {
-		$what = '*';
-		$from = 'tx_cfcleague_team_notes';
-		$options = [];
-		$options['where'] = 'player = ' .$profile->uid . ' AND team = '. $team->uid;
-		$options['wrapperclass'] = 'tx_cfcleaguefe_models_teamNote';
-//		$options['orderby'] = 'minute asc, extra_time asc, uid asc';
-		$teamNotes = \tx_rnbase_util_DB::doSelect($what, $from, $options,0);
-		return $teamNotes;
-	}
+        return $teamNotes;
+    }
 
-	/**
-	 * Search database for teams
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @return array of tx_cfcleaguefe_models_team
-	 */
-	function search($fields, $options) {
-		$searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\ProfileSearch::class);
-		return $searcher->search($fields, $options);
-	}
+    /**
+     * Search database for teams.
+     *
+     * @param array $fields
+     * @param array $options
+     *
+     * @return array of tx_cfcleaguefe_models_team
+     */
+    public function search($fields, $options)
+    {
+        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\ProfileSearch::class);
 
+        return $searcher->search($fields, $options);
+    }
 }

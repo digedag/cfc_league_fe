@@ -25,28 +25,26 @@ tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
- * Controller für die Anzeige der Scopeauswahl
+ * Controller für die Anzeige der Scopeauswahl.
  */
 class tx_cfcleaguefe_actions_CompetitionSelection extends tx_rnbase_action_BaseIOC
 {
-
-    /**
-     */
-    function handleRequest(&$parameters, &$configurations, &$viewdata)
+    public function handleRequest(&$parameters, &$configurations, &$viewdata)
     {
         $this->viewType = $configurations->get('scopeSelection.viewType');
         // Die Werte des aktuellen Scope ermitteln
-        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations, $this->viewType == 'HTML');
+        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations, 'HTML' == $this->viewType);
+
         return null;
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'scope';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
-        return ($this->viewType == 'HTML') ? 'tx_cfcleaguefe_views_ScopeSelection' : 'tx_rnbase_view_phpTemplateEngine';
+        return ('HTML' == $this->viewType) ? 'tx_cfcleaguefe_views_ScopeSelection' : 'tx_rnbase_view_phpTemplateEngine';
     }
 }

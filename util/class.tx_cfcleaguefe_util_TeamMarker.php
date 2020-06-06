@@ -25,20 +25,18 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
 tx_rnbase::load('tx_rnbase_util_Strings');
 
 /**
- * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich
+ * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich.
  */
 class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
 {
-
     private $options = null;
 
-    function __construct($options = null)
+    public function __construct($options = null)
     {
         $this->options = $options;
     }
 
     /**
-     *
      * @param string $template
      *            das HTML-Template
      * @param tx_cfcleaguefe_models_team $team
@@ -52,11 +50,12 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
      * @param string $teamMarker
      *            Name des Markers für das Team, z.B. TEAM, MATCH_HOME usw.
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
-     * @return String das geparste Template
+     *
+     * @return string das geparste Template
      */
     public function parseTemplate($template, $team, $formatter, $confId, $marker = 'TEAM')
     {
-        if (! is_object($team) || ! $team->isValid()) {
+        if (!is_object($team) || !$team->isValid()) {
             return $formatter->getConfigurations()->getLL('team_notFound');
         }
         $this->prepareRecord($team);
@@ -65,43 +64,47 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
-            'formatter' => $formatter
+            'formatter' => $formatter,
         ), $this);
         // Es wird das MarkerArray mit den Daten des Teams gefüllt.
         $ignore = self::findUnusedCols($team->getRecord(), $template, $marker);
-        $markerArray = $formatter->getItemMarkerArrayWrapped($team->getRecord(), $confId, $ignore, $marker . '_', $team->getColumnNames());
+        $markerArray = $formatter->getItemMarkerArrayWrapped($team->getRecord(), $confId, $ignore, $marker.'_', $team->getColumnNames());
         $wrappedSubpartArray = array();
         $subpartArray = array();
         $this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
         // Die Spieler setzen
         $this->pushTT('add player');
-        if ($this->containsMarker($template, $marker . '_PLAYERS'))
-            $template = $this->addProfiles($template, $team, $formatter, $confId . 'player.', $marker . '_PLAYER', 'players');
+        if ($this->containsMarker($template, $marker.'_PLAYERS')) {
+            $template = $this->addProfiles($template, $team, $formatter, $confId.'player.', $marker.'_PLAYER', 'players');
+        }
         $this->pullTT();
 
         // Die Trainer setzen
         $this->pushTT('add coaches');
-        if ($this->containsMarker($template, $marker . '_COACHS'))
-            $template = $this->addProfiles($template, $team, $formatter, $confId . 'coach.', $marker . '_COACH', 'coaches');
+        if ($this->containsMarker($template, $marker.'_COACHS')) {
+            $template = $this->addProfiles($template, $team, $formatter, $confId.'coach.', $marker.'_COACH', 'coaches');
+        }
         $this->pullTT();
 
         // Die Betreuer setzen
         $this->pushTT('add supporter');
-        if ($this->containsMarker($template, $marker . '_SUPPORTERS'))
-            $template = $this->addProfiles($template, $team, $formatter, $confId . 'supporter.', $marker . '_SUPPORTER', 'supporters');
+        if ($this->containsMarker($template, $marker.'_SUPPORTERS')) {
+            $template = $this->addProfiles($template, $team, $formatter, $confId.'supporter.', $marker.'_SUPPORTER', 'supporters');
+        }
         $this->pullTT();
 
         // set club data
         $this->pushTT('Club data');
-        if (self::containsMarker($template, $marker . '_CLUB_'))
-            $template = $this->addClubData($template, $team->getClub(), $formatter, $confId . 'club.', $marker . '_CLUB');
+        if (self::containsMarker($template, $marker.'_CLUB_')) {
+            $template = $this->addClubData($template, $team->getClub(), $formatter, $confId.'club.', $marker.'_CLUB');
+        }
         $this->pullTT();
 
-        if ($this->containsMarker($template, $marker . '_GROUP_')) {
-            $template = $this->addGroup($template, $team, $formatter, $confId . 'group.', $marker . '_GROUP');
+        if ($this->containsMarker($template, $marker.'_GROUP_')) {
+            $template = $this->addGroup($template, $team, $formatter, $confId.'group.', $marker.'_GROUP');
         }
-        if ($this->containsMarker($template, $marker . '_PLAYERLIST')) {
-            $template = $this->addProfileLists($template, $team, $formatter, $confId . 'playerLists.', $marker . '_PLAYERLIST');
+        if ($this->containsMarker($template, $marker.'_PLAYERLIST')) {
+            $template = $this->addProfileLists($template, $team, $formatter, $confId.'playerLists.', $marker.'_PLAYERLIST');
         }
 
         $template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -110,13 +113,14 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
-            'formatter' => $formatter
+            'formatter' => $formatter,
         ), $this);
+
         return $template;
     }
 
     /**
-     * Prepare team record before rendering
+     * Prepare team record before rendering.
      *
      * @param tx_cfcleaguefe_models_team $item
      */
@@ -133,7 +137,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     }
 
     /**
-     * Hinzufügen der Daten des Vereins
+     * Hinzufügen der Daten des Vereins.
      *
      * @param string $template
      * @param tx_cfcleaguefe_models_club $club
@@ -142,11 +146,12 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     {
         $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
         $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
+
         return $template;
     }
 
     /**
-     * Hinzufügen der Altersklasse
+     * Hinzufügen der Altersklasse.
      *
      * @param string $template
      * @param tx_cfcleaguefe_models_team $item
@@ -158,6 +163,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
 
         $groupMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_GroupMarker');
         $template = $groupMarker->parseTemplate($template, $group, $formatter, $confId, $markerPrefix);
+
         return $template;
     }
 
@@ -178,31 +184,34 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     private function addProfiles($template, $team, $formatter, $confId, $markerPrefix, $joinCol)
     {
         // Ohne Template gibt es nichts zu tun!
-        if (strlen(trim($template)) == 0)
+        if (0 == strlen(trim($template))) {
             return '';
+        }
 
         // $srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
         $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
         $fields = $options = array();
         $fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty($joinCol);
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId . 'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId . 'options.');
+        tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
+        tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
         $children = $srv->search($fields, $options);
-        if (! empty($children) && ! array_key_exists('orderby', $options)) { // Default sorting
+        if (!empty($children) && !array_key_exists('orderby', $options)) { // Default sorting
             $children = $this->sortProfiles($children, $team->getProperty($joinCol));
         }
 
         $options['team'] = $team;
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
         $out = $listBuilder->render($children, new ArrayObject(), $template, 'tx_cfcleaguefe_util_ProfileMarker', $confId, $markerPrefix, $formatter, $options);
+
         return $out;
     }
 
     /**
-     * Sortiert die Profile nach der Reihenfolge im Team
+     * Sortiert die Profile nach der Reihenfolge im Team.
      *
      * @param array $profiles
      * @param string $sortArr
+     *
      * @return array
      */
     protected function sortProfiles($profiles, $sortArr)
@@ -215,11 +224,12 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
         foreach ($sortArr as $profile) {
             $ret[] = $profile;
         }
+
         return $ret;
     }
 
     /**
-     * Initialisiert die Labels für die Team-Klasse
+     * Initialisiert die Labels für die Team-Klasse.
      *
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param array $defaultMarkerArr
@@ -230,14 +240,14 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     }
 
     /**
-     *
      * @return tx_cfcleaguefe_util_ClubMarker
      */
     private function getClubMarker()
     {
-        if (! $this->clubMarker) {
+        if (!$this->clubMarker) {
             $this->clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
         }
+
         return $this->clubMarker;
     }
 
@@ -251,16 +261,18 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix)
     {
         $club = $item->getClub();
-        if (! $club)
+        if (!$club) {
             return false;
+        }
 
         $template = $this->parseTemplate($template, $item, $formatter, $confId, $markerPrefix);
         $marker = $this->getClubMarker()->createMapMarker($template, $club, $formatter, $confId, $markerPrefix);
+
         return $marker;
     }
 
     /**
-     * Links vorbereiten
+     * Links vorbereiten.
      *
      * @param tx_cfcleaguefe_models_team $team
      * @param string $marker
@@ -272,43 +284,44 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     protected function prepareLinks(&$team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template)
     {
         $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array(
-            'teamId' => $team->uid
+            'teamId' => $team->uid,
         ), $template);
         if ($team->hasReport()) {
             $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showteam', $marker, array(
-                'teamId' => $team->uid
+                'teamId' => $team->uid,
             ), $template);
         } else {
             $linkId = 'showteam';
-            $linkMarker = $marker . '_' . strtoupper($linkId) . 'LINK';
-            $remove = intval($formatter->configurations->get($confId . 'links.' . $linkId . '.removeIfDisabled'));
+            $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
+            $remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
             $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
         }
     }
 
     /**
-     * Add dynamic defined markers for profiles
+     * Add dynamic defined markers for profiles.
      *
      * @param string $template
      * @param tx_cfcleaguefe_models_team $team
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $listConfId
      * @param string $teamMarker
+     *
      * @return string
      */
-    protected function addProfileLists($template, $team, $formatter, $listConfId, $teamMarker) {
+    protected function addProfileLists($template, $team, $formatter, $listConfId, $teamMarker)
+    {
         $configurations = $formatter->getConfigurations();
         $dynaMarkers = $configurations->getKeyNames($listConfId);
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
-
-        for($i=0, $size = count($dynaMarkers); $i < $size; $i++) {
+        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i) {
             // Prüfen ob der Marker existiert
-            $markerPrefix = $teamMarker . strtoupper($dynaMarkers[$i]);
+            $markerPrefix = $teamMarker.strtoupper($dynaMarkers[$i]);
             if (!self::containsMarker($template, $markerPrefix)) {
                 continue;
             }
-            $confId = $listConfId.$dynaMarkers[$i] .'.';
+            $confId = $listConfId.$dynaMarkers[$i].'.';
             // Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte
             // stehen schon im report bereit
             $srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
@@ -318,35 +331,45 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
             if ($this->joins($fields, 'TEAMNOTE')) {
                 $fields['TEAMNOTE.TEAM'][OP_EQ_INT] = $team->getUid();
-            }
-            else {
+            } else {
                 // Ohne TN müssen die Spieler des Teams gefiltert werden.
                 $fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty('players');
             }
 
             $items = $srv->search($fields, $options);
-            $template = $listBuilder->render($items,
-                false, $template, 'tx_cfcleaguefe_util_ProfileMarker',
-                $confId.'profile.', $markerPrefix, $formatter);
+            $template = $listBuilder->render(
+                $items,
+                false,
+                $template,
+                'tx_cfcleaguefe_util_ProfileMarker',
+                $confId.'profile.',
+                $markerPrefix,
+                $formatter
+            );
         }
+
         return $template;
     }
 
     /**
-     * Whether or not a given alias is used in fields
+     * Whether or not a given alias is used in fields.
+     *
      * @param array $fields
      * @param string $alias
-     * @return boolean
+     *
+     * @return bool
      */
     protected function joins($fields, $alias)
     {
-        foreach ($fields As $key => $op) {
+        foreach ($fields as $key => $op) {
             if (Tx_Rnbase_Utility_Strings::isFirstPartOfStr($key, $alias)) {
                 return true;
             }
         }
+
         return false;
     }
+
     public function getOptions()
     {
         return $this->options;

@@ -24,27 +24,36 @@
 
 tx_rnbase::load('tx_rnbase_view_Base');
 
-
 /**
- * Viewklasse für die Anzeige einer Liste der anstehenden Liveticker
+ * Viewklasse für die Anzeige einer Liste der anstehenden Liveticker.
  */
-class tx_cfcleaguefe_views_LiveTickerList extends tx_rnbase_view_Base {
-	function createOutput($template, &$viewData, &$configurations, &$formatter){
-		$matches = $viewData->offsetGet('matches');
-		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
-		$out = $listBuilder->render($matches,
-							$viewData, $template, 'tx_cfcleaguefe_util_MatchMarker',
-							'tickerlist.match.', 'MATCH', $formatter);
-		return $out;
-	}
-	function getMainSubpart(&$viewData) {
-		$matches = $viewData->offsetGet('matches');
-		return count($matches) ? '###LIVETICKER_VIEW###' : '###NO_LIVETICKER###';
-	}
+class tx_cfcleaguefe_views_LiveTickerList extends tx_rnbase_view_Base
+{
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    {
+        $matches = $viewData->offsetGet('matches');
+        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
+        $out = $listBuilder->render(
+            $matches,
+            $viewData,
+            $template,
+            'tx_cfcleaguefe_util_MatchMarker',
+            'tickerlist.match.',
+            'MATCH',
+            $formatter
+        );
+
+        return $out;
+    }
+
+    public function getMainSubpart(&$viewData)
+    {
+        $matches = $viewData->offsetGet('matches');
+
+        return count($matches) ? '###LIVETICKER_VIEW###' : '###NO_LIVETICKER###';
+    }
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LiveTickerList.php'])	{
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LiveTickerList.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LiveTickerList.php']) {
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/views/class.tx_cfcleaguefe_views_LiveTickerList.php'];
 }
-?>

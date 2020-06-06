@@ -25,16 +25,14 @@ namespace System25\T3sports\Filter;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-/**
- */
 class MatchFilter extends \tx_rnbase_filter_BaseFilter
 {
     private $data;
-    private static $profileData = ['profile','player','coach','referee'];
+
+    private static $profileData = ['profile', 'player', 'coach', 'referee'];
 
     /**
-     * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen
+     * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
      *
      * @param array $fields
      * @param array $options
@@ -45,10 +43,10 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
     protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
     {
         $options['distinct'] = 1;
-        $scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters,$configurations);
+        $scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
         // Spielplan für ein Team
         $teamId = $configurations->get($confId.'teamId');
-        if($configurations->get($confId.'acceptTeamIdFromRequest')) {
+        if ($configurations->get($confId.'acceptTeamIdFromRequest')) {
             $teamId = $parameters->offsetGet('teamId');
         }
 
@@ -57,25 +55,28 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
         $matchtable->setScope($scopeArr);
         $matchtable->setTeams($teamId);
         $clubId = $configurations->get($confId.'fixedOpponentClub');
-        if($clubId) {
+        if ($clubId) {
             // Show matches against a defined club
             $scopeClub = $matchtable->getClubs();
             $matchtable->setClubs('');
-            if($scopeClub)
+            if ($scopeClub) {
                 $clubId .= ','.$scopeClub;
-                $matchtable->setHomeClubs($clubId);
-                $matchtable->setGuestClubs($clubId);
+            }
+            $matchtable->setHomeClubs($clubId);
+            $matchtable->setGuestClubs($clubId);
         }
 
-        $matchtable->setTimeRange($configurations->get($confId.'timeRangePast'),$configurations->get($confId.'timeRangeFuture'));
-        if($configurations->get($confId.'acceptRefereeIdFromRequest')) {
+        $matchtable->setTimeRange($configurations->get($confId.'timeRangePast'), $configurations->get($confId.'timeRangeFuture'));
+        if ($configurations->get($confId.'acceptRefereeIdFromRequest')) {
             $ids = $parameters->getInt('refereeId');
-            if($ids) {
+            if ($ids) {
                 $matchtable->setReferees($ids);
                 $this->addFilterData('referee', $ids);
             }
         }
-        \tx_rnbase_util_Misc::callHook('cfc_league_fe','filterMatch_setfields',
+        \tx_rnbase_util_Misc::callHook(
+            'cfc_league_fe',
+            'filterMatch_setfields',
             [
                 'matchtable' => &$matchtable,
                 'fields' => &$fields,
@@ -83,34 +84,36 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
                 'configurations' => $configurations,
                 'confid' => $confId,
             ],
-            $this);
+            $this
+        );
         $matchtable->getFields($fields, $options);
     }
 
-    function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
+    public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
-
         $subpartArray = ['###FILTERITEMS###' => ''];
         $subpart = \tx_rnbase_util_Templates::getSubpart($template, '###FILTERITEMS###');
-        if(is_array($this->data) && count($this->data) > 0) {
+        if (is_array($this->data) && count($this->data) > 0) {
             // Dafür sorgen, daß überflüssige Subpart verschwinden
-            foreach(self::$profileData As $key)
+            foreach (self::$profileData as $key) {
                 $subpartArray['###'.strtoupper($key).'###'] = '';
-                $profileKeys = array_flip(self::$profileData);
-                foreach($this->data As $key => $filterData) {
-                    if(array_key_exists($key, $profileKeys) && intval($filterData) > 0) {
-                        // Person anzeigen, die anderen Subparts entfernen
-                        $profSubpartName = '###'.strtoupper($key).'###';
-                        $profileSubpart = \tx_rnbase_util_Templates::getSubpart($template, $profSubpartName);
+            }
+            $profileKeys = array_flip(self::$profileData);
+            foreach ($this->data as $key => $filterData) {
+                if (array_key_exists($key, $profileKeys) && intval($filterData) > 0) {
+                    // Person anzeigen, die anderen Subparts entfernen
+                    $profSubpartName = '###'.strtoupper($key).'###';
+                    $profileSubpart = \tx_rnbase_util_Templates::getSubpart($template, $profSubpartName);
 
-                        $profile = \tx_cfcleague_models_Profile::getProfileInstance($filterData);
-                        $profileMarker = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
-                        $subpartArray[$profSubpartName] = $profileMarker->parseTemplate($profileSubpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
-                    }
+                    $profile = \tx_cfcleague_models_Profile::getProfileInstance($filterData);
+                    $profileMarker = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
+                    $subpartArray[$profSubpartName] = $profileMarker->parseTemplate($profileSubpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
                 }
-                $subpartArray['###FILTERITEMS###'] = \tx_rnbase_util_Templates::substituteMarkerArrayCached($subpart, $markerArray, $subpartArray);
+            }
+            $subpartArray['###FILTERITEMS###'] = \tx_rnbase_util_Templates::substituteMarkerArrayCached($subpart, $markerArray, $subpartArray);
         }
         $template = \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+
         return $template;
     }
 

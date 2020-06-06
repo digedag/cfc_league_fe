@@ -24,11 +24,10 @@
  ***************************************************************/
 
 /**
- * Some util methods
+ * Some util methods.
  */
 class tx_cfcleaguefe_table_Util
 {
-
     /**
      * Prepare base data for head2head compare.
      *
@@ -51,11 +50,12 @@ class tx_cfcleaguefe_table_Util
         } elseif (count($t2vst1) > 0 && $t2vst1[0] < $t2vst1[1]) {
             $t1H2HPoints += 1;
         }
+
         return array(
             't1H2HPoints' => $t1H2HPoints,
             't2H2HPoints' => $t2H2HPoints,
             't1vst2' => $t1vst2,
-            't2vst1' => $t2vst1
+            't2vst1' => $t2vst1,
         );
     }
 }

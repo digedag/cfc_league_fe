@@ -30,24 +30,23 @@ tx_rnbase::load('tx_rnbase_util_Templates');
  */
 class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
 {
-
-    function getMainSubpart(&$viewData)
+    public function getMainSubpart(&$viewData)
     {
         return '###CROSSTABLE###';
     }
 
     /**
-     * Erstellen des Frontend-Outputs
+     * Erstellen des Frontend-Outputs.
      *
      * @param string $template
      * @param array $viewData
      * @param tx_rnbase_configurations $configurations
      * @param tx_rnbase_util_FormatUtil $formatter
      */
-    function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         $matches = $viewData->offsetGet('matches');
-        if (! is_array($matches) || ! count($matches)) {
+        if (!is_array($matches) || !count($matches)) {
             return $configurations->getLL('matchcrosstable.noData');
         }
         // Wir benötigen die beteiligten Teams
@@ -68,7 +67,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         $subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $configurations, $viewData);
         tx_rnbase_util_Misc::pullTT();
         $markerArray = array(
-            '###MATCHCOUNT###' => count($matches)
+            '###MATCHCOUNT###' => count($matches),
         );
 
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
@@ -77,7 +76,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
     /**
      * Erstellt ein Array dessen Key die UIDs der Teams sind.
      * Value ist ein Array
-     * mit den Spielen des Teams
+     * mit den Spielen des Teams.
      *
      * @param array $matches
      * @param array $teams
@@ -92,44 +91,48 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         $teamCnt = count($teamIds);
         $initArray = array_flip($teamIds);
         $opponents = $teams;
-        while (list ($uid, $team) = each($teams)) {
+        while (list($uid, $team) = each($teams)) {
             $ret[$uid] = $initArray;
             $ret[$uid][$uid] = ''; // Das Spiel gegen sich selbst
-                                   // In das Array alle Heimspiele des Teams legen
-            for ($i = 0; $i < $teamCnt; $i ++) {
-                if ($uid == $teamIds[$i])
-                    $ret[$uid][$uid] = $this->ownMatchStr; // Das Spiel gegen sich selbst
+            // In das Array alle Heimspiele des Teams legen
+            for ($i = 0; $i < $teamCnt; ++$i ) {
+                if ($uid == $teamIds[$i]) {
+                    $ret[$uid][$uid] = $this->ownMatchStr;
+                } // Das Spiel gegen sich selbst
                 else {
                     $ret[$uid][$teamIds[$i]] = $this->findMatch($matches, $uid, $teamIds[$i]);
                 }
             }
         }
+
         return $ret;
     }
 
     /**
-     * Sucht aus dem Spielarray die Paarung mit der Heim- und Gastmannschaft
+     * Sucht aus dem Spielarray die Paarung mit der Heim- und Gastmannschaft.
      *
      * @param array $matches
      * @param int $home
      *            uid der Heimmannschaft
      * @param int $guest
      *            uid der Gastmannschaft
+     *
      * @return tx_cfcleaguefe_models_match
      */
     private function findMatch(&$matches, $home, $guest)
     {
         $ret = array();
-        for ($i = 0, $cnt = count($matches); $i < $cnt; $i ++) {
-            if ($matches[$i]->record['home'] == $home && $matches[$i]->record['guest'] == $guest)
+        for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i ) {
+            if ($matches[$i]->record['home'] == $home && $matches[$i]->record['guest'] == $guest) {
                 $ret[] = $matches[$i];
+            }
         }
         // Die Paarung gibt es nicht.
         return count($ret) ? $ret : $this->noMatchStr;
     }
 
     /**
-     * Erstellt die Datenzeilen der Tabelle
+     * Erstellt die Datenzeilen der Tabelle.
      *
      * @param string $headlineTemplate
      * @param array $datalines
@@ -139,7 +142,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      */
     private function _createDatalines($template, $datalines, &$teams, $configurations, $viewData)
     {
-        $subTemplate = '###MATCHS###' . tx_rnbase_util_Templates::getSubpart($template, '###MATCHS###') . '###MATCHS###';
+        $subTemplate = '###MATCHS###'.tx_rnbase_util_Templates::getSubpart($template, '###MATCHS###').'###MATCHS###';
         $freeTemplate = tx_rnbase_util_Templates::getSubpart($template, '###MATCH_FREE###');
         $rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
 
@@ -155,8 +158,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
                 if (is_array($matchArr)) {
                     // Da sind Spiele im Array. Anzeigen mit ListMarker
                     $parts[] = $listBuilder->render($matchArr, $viewData, $subTemplate, 'tx_cfcleaguefe_util_MatchMarker', 'matchcrosstable.dataline.match.', 'MATCH', $this->formatter);
-                } else
-                    $parts[] = $matchArr; // Sollte ein String sein...
+                } else {
+                    $parts[] = $matchArr;
+                } // Sollte ein String sein...
 
                 $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
             }
@@ -166,11 +170,12 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
             $lineTemplate = $teamMarker->parseTemplate($template, $teams[$uid], $this->formatter, 'matchcrosstable.dataline.team.', 'DATALINE_TEAM');
             $lines[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($lineTemplate, $markerArray, $subpartArray);
         }
+
         return implode($lines, $configurations->get('matchcrosstable.dataline.implode'));
     }
 
     /**
-     * Creates the table head
+     * Creates the table head.
      *
      * @param string $headlineTemplate
      * @param array $teams
@@ -187,7 +192,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         $parts = array();
 
         tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'include teams');
-        while (list ($uid, $team) = each($teams)) {
+        while (list($uid, $team) = each($teams)) {
             $team->setProperty('roll', $rowRollCnt);
             $parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'matchcrosstable.headline.team.', 'TEAM');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
@@ -196,7 +201,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
 
         $subpartArray['###TEAM###'] = implode($parts, $configurations->get('matchcrosstable.headline.team.implode'));
         $markerArray = array(
-            '###TEAMCOUNT###' => count($teams)
+            '###TEAMCOUNT###' => count($teams),
         );
 
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
@@ -207,19 +212,21 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         // Das Team 'Spielfrei' vorher entfernen
         $dummyTeams = array();
         reset($teams);
-        while (list ($uid, $team) = each($teams)) {
-            if ($team->isDummy())
+        while (list($uid, $team) = each($teams)) {
+            if ($team->isDummy()) {
                 $dummyTeams[] = $uid;
+            }
         }
-        foreach ($dummyTeams as $uid)
+        foreach ($dummyTeams as $uid) {
             unset($teams[$uid]);
+        }
         reset($teams);
     }
 
     /**
-     * Vorbereitung der Link-Objekte
+     * Vorbereitung der Link-Objekte.
      */
-    function _init(&$configurations)
+    public function _init(&$configurations)
     {
         $this->formatter = &$configurations->getFormatter();
 

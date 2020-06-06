@@ -22,17 +22,19 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Model für einen Spielbericht.
  * Über diese Klasse können Informationen zu einem Spiel abgerufen werden.
  */
 class tx_cfcleaguefe_models_matchreport
 {
+    protected $match;
+    protected $_configurations;
 
-    protected $match, $_configurations;
     protected $_formatter;
+
     protected $_tickerArr;
+
     protected $initialized = false;
 
     // enthält alle Tickermeldungen
@@ -40,7 +42,7 @@ class tx_cfcleaguefe_models_matchreport
     /**
      * Konstruktor
      * Im Gegensatz zu anderen Modelklassen, holt sich diese Klasse den notwendigen Formatter
-     * direkt aus der Configuration
+     * direkt aus der Configuration.
      *
      * @param int $matchId UID eines Spiels
      */
@@ -55,7 +57,7 @@ class tx_cfcleaguefe_models_matchreport
     }
 
     /**
-     * Returns the match instance
+     * Returns the match instance.
      *
      * @return tx_cfcleaguefe_models_match
      */
@@ -65,81 +67,91 @@ class tx_cfcleaguefe_models_matchreport
     }
 
     /**
-     * Liefert die Tickermeldungen der Strafen des Heimteams (außer Elfmeter)
+     * Liefert die Tickermeldungen der Strafen des Heimteams (außer Elfmeter).
      */
-    function getPenaltiesHome()
+    public function getPenaltiesHome()
     {
         $conf = $this->_configurations->get('matchreport.penalties.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
         $tickers = array();
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isPenalty() && $ticker->isHome())
+            if ($ticker->isPenalty() && $ticker->isHome()) {
                 $tickers[] = $ticker;
+            }
         }
+
         return $this->_wrapTickers($tickers, 'matchreport.penalties.');
     }
 
-    function getPenaltiesGuest()
+    public function getPenaltiesGuest()
     {
         $conf = $this->_configurations->get('matchreport.penalties.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
         $tickers = array();
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isPenalty() && $ticker->isGuest())
+            if ($ticker->isPenalty() && $ticker->isGuest()) {
                 $tickers[] = $ticker;
+            }
         }
+
         return $this->_wrapTickers($tickers, 'matchreport.penalties.');
     }
 
     /**
-     * Liefert die Tickermeldungen der Spielerwechsel des Heimteams
+     * Liefert die Tickermeldungen der Spielerwechsel des Heimteams.
      */
-    function getChangesHome()
+    public function getChangesHome()
     {
         $conf = $this->_configurations->get('matchreport.changes.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
         $tickers = array();
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isChange() && $ticker->isHome())
+            if ($ticker->isChange() && $ticker->isHome()) {
                 $tickers[] = $ticker;
+            }
         }
+
         return $this->_wrapTickers($tickers, 'matchreport.changes.');
     }
 
     /**
-     * Liefert die Tickermeldungen der Spielerwechsel des Heimteams
+     * Liefert die Tickermeldungen der Spielerwechsel des Heimteams.
      */
-    function getChangesGuest()
+    public function getChangesGuest()
     {
         $conf = $this->_configurations->get('report.changes.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
         $tickers = array();
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isChange() && $ticker->isGuest())
+            if ($ticker->isChange() && $ticker->isGuest()) {
                 $tickers[] = $ticker;
+            }
         }
+
         return $this->_wrapTickers($tickers, 'matchreport.changes.');
     }
 
     /**
-     * Liefert die Tickermeldunge der Heimtorschützen
+     * Liefert die Tickermeldunge der Heimtorschützen.
      *
      * @deprecated to be deleted
      */
-    function getScorerHome()
+    public function getScorerHome()
     {
         $conf = $this->_configurations->get('matchreport.scorer.');
         // Aus dem gesamten Ticker suchen wir die Tormeldungen heraus und formatieren sie
         $tickers = array();
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isGoalHome())
+            if ($ticker->isGoalHome()) {
                 $tickers[] = $ticker;
+            }
         }
+
         return $this->_wrapTickers($tickers, 'matchreport.scorer.');
     }
 
@@ -154,27 +166,31 @@ class tx_cfcleaguefe_models_matchreport
         $tickers = array();
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isVisible($conf))
+            if ($ticker->isVisible($conf)) {
                 $tickers[] = $ticker;
+            }
         }
+
         return $this->_wrapTickers($tickers, $confId);
     }
 
     /**
-     * Liefert die Tickermeldunge der Gasttorschützen
+     * Liefert die Tickermeldunge der Gasttorschützen.
      *
      * @deprecated to be deleted
      */
-    function getScorerGuest()
+    public function getScorerGuest()
     {
         $conf = $this->_configurations->get('matchreport.scorer.');
         // Aus dem gesamten Ticker suchen wir die Tormeldungen heraus und formatieren sie
         $tickers = array();
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isGoalGuest())
+            if ($ticker->isGoalGuest()) {
                 $tickers[] = $ticker;
+            }
         }
+
         return $this->_wrapTickers($tickers, 'matchreport.scorer.');
     }
 
@@ -190,7 +206,8 @@ class tx_cfcleaguefe_models_matchreport
     protected function _getMatchTicker($cron = 0)
     {
         $this->_initMatchTicker();
-        $ret = ($cron != 1) ? array_reverse($this->_tickerArr) : $this->_tickerArr;
+        $ret = (1 != $cron) ? array_reverse($this->_tickerArr) : $this->_tickerArr;
+
         return $ret;
     }
 
@@ -205,7 +222,7 @@ class tx_cfcleaguefe_models_matchreport
      * @param $all wenn
      *            nicht 0 werden alle Meldungen geliefert, sonst entsprechend der Konfig
      */
-    function getMatchTicker()
+    public function getMatchTicker()
     {
         // Man kann einstellen welche Tickernachrichten gezeigt werden
         // z.B. soll evt. nicht jeder Eckball im Ticker erscheinen und ist nur für die Statistik interessant
@@ -214,209 +231,209 @@ class tx_cfcleaguefe_models_matchreport
         $tickerArr = $this->_getMatchTicker();
         if ($this->_configurations->get('tickerTypes')) {
             foreach ($tickerArr as $ticker) {
-                if (! (Tx_Rnbase_Utility_T3General::inList($this->_configurations->get('tickerTypes'), $ticker->getType())))
+                if (!(Tx_Rnbase_Utility_T3General::inList($this->_configurations->get('tickerTypes'), $ticker->getType()))) {
                     $tickers[] = $ticker;
+                }
             }
         } else {
             $tickers = $tickerArr;
         }
+
         return $tickers;
     }
 
     /**
-     * Liefert den Namen des Schiedsrichters
+     * Liefert den Namen des Schiedsrichters.
      */
-    function getRefereeName($confId = 'matchreport.referee.')
+    public function getRefereeName($confId = 'matchreport.referee.')
     {
         return $this->_getNames2($this->match->getReferee(), $confId);
     }
 
     /**
-     * Liefert die Namen der Linienrichters
+     * Liefert die Namen der Linienrichters.
      */
-    function getAssistNames($confId = 'matchreport.assists.')
+    public function getAssistNames($confId = 'matchreport.assists.')
     {
         return $this->_getNames2($this->match->getAssists(), $confId);
     }
 
     /**
-     * Liefert den Namen des Heimtrainers
+     * Liefert den Namen des Heimtrainers.
      */
-    function getCoachNameHome($confId = 'matchreport.coach.')
+    public function getCoachNameHome($confId = 'matchreport.coach.')
     {
         return $this->_getNames2($this->match->getCoachHome(), $confId);
     }
 
     /**
-     * Liefert den Namen des Gasttrainers
+     * Liefert den Namen des Gasttrainers.
      */
-    function getCoachNameGuest($confId = 'matchreport.coach.')
+    public function getCoachNameGuest($confId = 'matchreport.coach.')
     {
         return $this->_getNames2($this->match->getCoachGuest(), $confId);
     }
 
     /**
-     * Liefert die Startaufstellung des Heimteams
+     * Liefert die Startaufstellung des Heimteams.
      *
      * @deprecated
-     *
      */
-    function getPlayerNamesHome()
+    public function getPlayerNamesHome()
     {
         return $this->_getLineUp($this->match->getPlayersHome(), $this->match->record['system_home'], 'matchreport.players.');
     }
 
     /**
-     * Liefert den Namen der Spieler in der Startaufstellung des Heimteams
+     * Liefert den Namen der Spieler in der Startaufstellung des Heimteams.
      *
      * @deprecated
-     *
      */
-    function getPlayerNamesGuest()
+    public function getPlayerNamesGuest()
     {
         return $this->getLineupGuest();
     }
 
     /**
-     * Build the line_up string for home team
+     * Build the line_up string for home team.
      *
      * @param string $confId
+     *
      * @return string
      */
-    function getLineupHome($confId = 'matchreport.players.')
+    public function getLineupHome($confId = 'matchreport.players.')
     {
         return $this->_getLineUp($this->match->getPlayersHome(), $this->match->record['system_home'], $confId);
     }
 
     /**
-     * Build the line_up string for home team
+     * Build the line_up string for home team.
      *
      * @param string $confId
+     *
      * @return string
      */
-    function getLineupGuest($confId = 'matchreport.players.')
+    public function getLineupGuest($confId = 'matchreport.players.')
     {
         return $this->_getLineUp($this->match->getPlayersGuest(), $this->match->record['system_guest'], $confId);
     }
 
     /**
-     * Liefert den Namen der Spieler in der Reservespieler des Heimteams
+     * Liefert den Namen der Spieler in der Reservespieler des Heimteams.
      *
      * @param string $confId
      *            TS-Config
      */
-    function getSubstituteNamesHome($confId = 'matchreport.substitutes.')
+    public function getSubstituteNamesHome($confId = 'matchreport.substitutes.')
     {
         return $this->_getNames2($this->match->getSubstitutesHome(), $confId);
     }
 
     /**
-     * Liefert den Namen der Spieler in der Reservespieler des Gastteams
+     * Liefert den Namen der Spieler in der Reservespieler des Gastteams.
      */
-    function getSubstituteNamesGuest($confId = 'matchreport.substitutes.')
+    public function getSubstituteNamesGuest($confId = 'matchreport.substitutes.')
     {
         return $this->_getNames2($this->match->getSubstitutesGuest(), $confId);
     }
 
     /**
-     * Liefert das Logo der Heimmannschaft als komplettes Image-Tag
+     * Liefert das Logo der Heimmannschaft als komplettes Image-Tag.
      */
-    function getLogoHome()
+    public function getLogoHome()
     {
         // Wir suchen den Verein der Heimmannschaft
         return $this->_getLogo($this->match->getHome());
     }
 
     /**
-     * Liefert das Logo der Gastmannschaft als komplettes Image-Tag
+     * Liefert das Logo der Gastmannschaft als komplettes Image-Tag.
      */
-    function getLogoGuest()
+    public function getLogoGuest()
     {
         return $this->_getLogo($this->match->getGuest());
     }
 
     /**
-     * Liefert den Namen des Gastgebers
+     * Liefert den Namen des Gastgebers.
      */
-    function getTeamNameHome()
+    public function getTeamNameHome()
     {
         return $this->match->getHome()->getColumnWrapped($this->_formatter, 'name', 'matchreport.teamHome.');
     }
 
     /**
-     * Liefert den Namen des Gastes
+     * Liefert den Namen des Gastes.
      */
-    function getTeamNameGuest()
+    public function getTeamNameGuest()
     {
         return $this->match->getGuest()->getColumnWrapped($this->_formatter, 'name', 'matchreport.teamGuest.');
     }
 
     /**
-     * Liefert den Spieltermin als String
+     * Liefert den Spieltermin als String.
      */
-    function getDate()
+    public function getDate()
     {
         return $this->match->getColumnWrapped($this->_formatter, 'date', 'matchreport.match.');
     }
 
     /**
-     * Liefert das Stadion
+     * Liefert das Stadion.
      */
-    function getStadium()
+    public function getStadium()
     {
         return $this->match->getColumnWrapped($this->_formatter, 'stadium', 'matchreport.match.');
     }
 
     /**
-     * Liefert den Autor des Spielberichts
+     * Liefert den Autor des Spielberichts.
      */
-    function getReportAuthor()
+    public function getReportAuthor()
     {
         return $this->match->getColumnWrapped($this->_formatter, 'game_report_author', 'matchreport.match.');
     }
 
     /**
-     * Liefert den Spielberichts
+     * Liefert den Spielberichts.
      */
-    function getReport()
+    public function getReport()
     {
         return $this->match->getColumnWrapped($this->_formatter, 'game_report', 'matchreport.match.');
     }
 
     /**
-     * Liefert den Namen des Wettbewerbs
+     * Liefert den Namen des Wettbewerbs.
      */
-    function getCompetitionName()
+    public function getCompetitionName()
     {
         return $this->match->getColumnWrapped($this->_formatter, 'competition_name', 'matchreport.match.');
     }
 
     /**
-     * Liefert den Namen der Spielrunde
+     * Liefert den Namen der Spielrunde.
      */
-    function getRoundName()
+    public function getRoundName()
     {
         return $this->match->getColumnWrapped($this->_formatter, 'round_name', 'matchreport.match.');
     }
 
-    /**
-     */
-    function getVisitors()
+    public function getVisitors()
     {
         return $this->match->getColumnWrapped($this->_formatter, 'visitors', 'matchreport.match.');
     }
 
     /**
      * Initialisiert die MatchNotes.
-     * Diese werden auch den Spieler zugeordnet
+     * Diese werden auch den Spieler zugeordnet.
      */
     protected function _initMatchTicker()
     {
-        if (! is_array($this->_tickerArr)) {
+        if (!is_array($this->_tickerArr)) {
             // Der Ticker wird immer chronologisch ermittelt
-            $this->_tickerArr = & tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
+            $this->_tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
-            for ($i = 0; $i < count($this->_tickerArr); $i ++) {
+            for ($i = 0; $i < count($this->_tickerArr); ++$i ) {
                 $note = $this->_tickerArr[$i];
                 $player = $note->getPlayerInstance();
                 if (is_object($player)) {
@@ -427,21 +444,22 @@ class tx_cfcleaguefe_models_matchreport
     }
 
     /**
-     * Liefert die gewrappten Namen einer Profilliste
+     * Liefert die gewrappten Namen einer Profilliste.
      *
      * @param array $profiles
      *            Array mit den Personen. Kann auch direkt ein Profil sein.
      * @param string $confIdAll
      *            TS-Config String. Sollte einen Eintrag profile. enthalten
+     *
      * @return einen String mit allen Namen
      */
     protected function _getNames2($profiles, $confIdAll)
     {
         $this->_initMatchTicker();
-        $ret = $this->_wrapProfiles($profiles, $confIdAll . 'profile.');
+        $ret = $this->_wrapProfiles($profiles, $confIdAll.'profile.');
         // Jetzt noch die einzelnen Strings verbinden
         // Der Seperator sollte mit zwei Pipes eingeschlossen sein
-        $sep = $this->_configurations->get($confIdAll . 'seperator');
+        $sep = $this->_configurations->get($confIdAll.'seperator');
         $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
         $ret = implode($sep, $ret);
         // Jetzt noch ein Wrap über alles
@@ -453,34 +471,37 @@ class tx_cfcleaguefe_models_matchreport
      * Der übergebene Parameter kann aber
      * auch ein einzelnes Profile sein. Das Ergebnis ist aber in jedem Fall ein Array von Strings.
      *
-     * @return Array of Strings or an empty array
+     * @return array of Strings or an empty array
      */
     protected function _wrapProfiles($profiles, $confId)
     {
         $ret = array();
-        if (! is_array($profiles)) {
-            if (is_object($profiles))
+        if (!is_array($profiles)) {
+            if (is_object($profiles)) {
                 $profiles = array(
-                    $profiles
+                    $profiles,
                 );
-            else
+            } else {
                 return array();
+            }
         }
 
         foreach ($profiles as $profile) {
             if (is_object($profile)) {
                 $name = tx_cfcleaguefe_models_profile::wrap($this->_formatter, $confId, $profile);
-                if (strlen($name) > 0)
+                if (strlen($name) > 0) {
                     $ret[] = $name;
+                }
             } else { // Wenn $profile kein Objekt ist, dann wurde das Profil nicht geladen...
                 $ret[] = '??';
             }
         }
+
         return $ret;
     }
 
     /**
-     * Wrappt alle übergebenen Tickermeldungen
+     * Wrappt alle übergebenen Tickermeldungen.
      *
      * @param array $tickerArr
      * @param string $confIdAll
@@ -489,16 +510,17 @@ class tx_cfcleaguefe_models_matchreport
     {
         $ret = [];
         foreach ($tickerArr as $ticker) {
-            $ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $confIdAll . 'ticker.', $ticker);
+            $ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $confIdAll.'ticker.', $ticker);
         }
         // Die einzelnen Meldungen verbinden
         if (count($ret)) {
-            $sep = $this->_configurations->get($confIdAll . 'seperator');
+            $sep = $this->_configurations->get($confIdAll.'seperator');
 
             $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
             $ret = implode($sep, $ret);
-        } else
+        } else {
             $ret = null;
+        }
 
         $conf = $this->_configurations->get($confIdAll);
         // Jetzt noch ein Wrap über alles
@@ -506,7 +528,7 @@ class tx_cfcleaguefe_models_matchreport
     }
 
     /**
-     * Liefert den Namen der Spieler in der Startaufstellung eines Teams
+     * Liefert den Namen der Spieler in der Startaufstellung eines Teams.
      */
     protected function _getLineUp($players, $system, $confId)
     {
@@ -515,30 +537,30 @@ class tx_cfcleaguefe_models_matchreport
         $system = Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
         $players = is_array($players) ? array_values($players) : array();
 
-        $strategyEnable = $this->_configurations->getBool($confId . 'strategy.enable');
+        $strategyEnable = $this->_configurations->getBool($confId.'strategy.enable');
 
         // Jetzt die Spieler nach dem System aufteilen
         // $parts = count($system);
-        if (! $strategyEnable) {
+        if (!$strategyEnable) {
             $system[0] = count($players);
         }
 
         $partCnt = 0;
         $partArr = array();
         $splitSum = $system[$partCnt];
-        for ($i = 0; $i < count($players); $i ++) {
+        for ($i = 0; $i < count($players); ++$i ) {
             $partArr[$partCnt][] = $players[$i];
             // Muss umgeschaltet werden?
             if (count($partArr[$partCnt]) >= $splitSum) {
                 // Die Spielernamen holen
                 $partArr[$partCnt] = $this->_getNames2($partArr[$partCnt], $confId);
-                $partCnt ++;
+                ++$partCnt;
                 $splitSum = $system[$partCnt];
             }
         }
 
         // $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
-        $sep = $this->_configurations->get($confId . 'strategy.seperator');
+        $sep = $this->_configurations->get($confId.'strategy.seperator');
         $hits = array();
         if (preg_match('/^\|(.*)\|$/', $sep, $hits)) {
             $sep = $hits[1];
@@ -550,12 +572,13 @@ class tx_cfcleaguefe_models_matchreport
     }
 
     /**
-     * Lädt das Spiel aus der Datenbank
+     * Lädt das Spiel aus der Datenbank.
      */
     protected function _loadMatch($matchId)
     {
         // Wir holen gleich einige Zusatzinfos mit
         $match = tx_cfcleaguefe_models_match::getMatchInstance($matchId);
+
         return $match->isValid() ? $match : 0;
     }
 

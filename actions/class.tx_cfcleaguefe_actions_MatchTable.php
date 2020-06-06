@@ -29,20 +29,20 @@ tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
 /**
- * Controller für die Anzeige eines Spielplans
+ * Controller für die Anzeige eines Spielplans.
  */
 class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     * Handle request
+     * Handle request.
      *
      * @param arrayobject $parameters
      * @param tx_rnbase_configurations $configurations
      * @param arrayobject $viewdata
+     *
      * @return string error message
      */
-    function handleRequest(&$parameters, &$configurations, &$viewdata)
+    public function handleRequest(&$parameters, &$configurations, &$viewdata)
     {
         // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
         // ggf. die Konfiguration aus der TS-Config lesen
@@ -55,30 +55,32 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
         // $this->initSearch($fields, $options, $parameters, $configurations);
         $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
         // Soll ein PageBrowser verwendet werden
-        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId() . 'match.pagebrowser', $viewdata, $fields, $options, array(
+        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'match.pagebrowser', $viewdata, $fields, $options, array(
             'searchcallback' => array(
                 $service,
-                'search'
+                'search',
             ),
-            'pbid' => 'mt' . $configurations->getPluginId()
+            'pbid' => 'mt'.$configurations->getPluginId(),
         ));
 
         $prov = tx_rnbase::makeInstance('tx_rnbase_util_ListProvider');
         $prov->initBySearch(array(
             $service,
-            'search'
+            'search',
         ), $fields, $options);
         $viewdata->offsetSet('provider', $prov);
 
         // View
-        $this->viewType = $configurations->get($this->getConfId() . 'viewType');
+        $this->viewType = $configurations->get($this->getConfId().'viewType');
+
         return '';
     }
 
     /**
-     * Set search criteria
-
+     * Set search criteria.
+     *
      * @deprecated wird nicht mehr verwendet
+     *
      * @param array $fields
      * @param array $options
      * @param array $parameters
@@ -88,13 +90,13 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
     {
         $options['distinct'] = 1;
         // $options['debug'] = 1;
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId() . 'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId() . 'options.');
+        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
+        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
 
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
         // Spielplan für ein Team
-        $teamId = $configurations->get($this->getConfId() . 'teamId');
-        if ($configurations->get($this->getConfId() . 'acceptTeamIdFromRequest')) {
+        $teamId = $configurations->get($this->getConfId().'teamId');
+        if ($configurations->get($this->getConfId().'acceptTeamIdFromRequest')) {
             $teamId = $parameters->offsetGet('teamId');
         }
 
@@ -102,31 +104,32 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
         $matchtable = $service->getMatchTable();
         $matchtable->setScope($scopeArr);
         $matchtable->setTeams($teamId);
-        $clubId = $configurations->get($this->getConfId() . 'fixedOpponentClub');
+        $clubId = $configurations->get($this->getConfId().'fixedOpponentClub');
         if ($clubId) {
             // Show matches against a defined club
             $scopeClub = $matchtable->getClubs();
             $matchtable->setClubs('');
-            if ($scopeClub)
-                $clubId .= ',' . $scopeClub;
+            if ($scopeClub) {
+                $clubId .= ','.$scopeClub;
+            }
             $matchtable->setHomeClubs($clubId);
             $matchtable->setGuestClubs($clubId);
         }
 
-        $matchtable->setTimeRange($configurations->get($this->getConfId() . 'timeRangePast'), $configurations->get('matchtable.timeRangeFuture'));
-        if ($configurations->get($this->getConfId() . 'acceptRefereeIdFromRequest')) {
+        $matchtable->setTimeRange($configurations->get($this->getConfId().'timeRangePast'), $configurations->get('matchtable.timeRangeFuture'));
+        if ($configurations->get($this->getConfId().'acceptRefereeIdFromRequest')) {
             $matchtable->setReferees($parameters->offsetGet('refereeId'));
         }
 
         $matchtable->getFields($fields, $options);
     }
 
-    function getTemplateName()
+    public function getTemplateName()
     {
         return 'matchtable';
     }
 
-    function getViewClassName()
+    public function getViewClassName()
     {
         return 'tx_cfcleaguefe_views_MatchTable';
     }

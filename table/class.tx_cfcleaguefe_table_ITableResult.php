@@ -28,26 +28,25 @@
  */
 interface tx_cfcleaguefe_table_ITableResult
 {
-
     /**
-     * Set table data by round
+     * Set table data by round.
      *
      * @param int $round
      * @param array $scoreLine
-     * @return void
      */
     public function addScore($round, $scoreLine);
 
     /**
-     * Return table data by round
+     * Return table data by round.
      *
      * @param int $round
+     *
      * @return array
      */
     public function getScores($round = 0);
 
     /**
-     * Number of rounds
+     * Number of rounds.
      *
      * @return int
      */
@@ -62,25 +61,21 @@ interface tx_cfcleaguefe_table_ITableResult
     public function setPenalties($penalties);
 
     /**
-     *
      * @return tx_cfcleague_competition
      */
     public function getCompetition();
 
     /**
-     *
      * @param tx_cfcleague_competition $competition
      */
     public function setCompetition($competition);
 
     /**
-     *
      * @return tx_cfcleaguefe_table_IConfigurator
      */
     public function getConfigurator();
 
     /**
-     *
      * @param tx_cfcleaguefe_table_IConfigurator $configurator
      */
     public function setConfigurator($configurator);

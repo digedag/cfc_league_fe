@@ -34,7 +34,6 @@ tx_rnbase::load('tx_rnbase_util_Templates');
  */
 class tx_cfcleaguefe_util_LeagueTableWriter
 {
-
     public function writeLeagueTable($template, $tableData, $marks, &$configurations, $confId)
     {
         $markerArray = $penalties = []; // Strafen sammeln
@@ -46,17 +45,19 @@ class tx_cfcleaguefe_util_LeagueTableWriter
         }
 
         $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+
         return $out;
     }
 
     /**
      * Erstellt die Ligatabelle.
+     *
      * @param ConfigurationInterface $configurations
      */
     private function _createTable($templateList, $tableData, &$penalties, &$marks, &$configurations, $confId)
     {
         // Sollen alle Teams gezeigt werden?
-        $tableSize = $configurations->getInt($confId . 'leagueTableSize');
+        $tableSize = $configurations->getInt($confId.'leagueTableSize');
         if ($tableSize && $tableSize < count($tableData)) {
             // Es sollen weniger Teams gezeigt werden als vorhanden sind
             // Diesen Ausschnitt müssen wir jetzt ermitteln
@@ -68,7 +69,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
 
         $parts = array();
         // Die einzelnen Zeilen zusammenbauen
-        $rowRoll = intval($configurations->get($confId . 'table.roll.value'));
+        $rowRoll = intval($configurations->get($confId.'table.roll.value'));
         $rowRollCnt = 0;
         foreach ($tableData as $row) {
             $row['roll'] = $rowRollCnt;
@@ -81,17 +82,18 @@ class tx_cfcleaguefe_util_LeagueTableWriter
             unset($row['team']); // Gibt sonst Probleme mit PHP5.2
             $team->setProperty($row + $team->getProperties());
 
-            $parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId . 'table.', 'ROW');
+            $parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId.'table.', 'ROW');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }
         // Jetzt die einzelnen Teile zusammenfügen
         $markerArray = [];
-        $subpartArray['###ROW###'] = implode($parts, $configurations->get($confId . 'table.implode'));
+        $subpartArray['###ROW###'] = implode($parts, $configurations->get($confId.'table.implode'));
+
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
 
     /**
-     * Setzt die Tabellenmarkierungen für eine Zeile
+     * Setzt die Tabellenmarkierungen für eine Zeile.
      */
     private function _setMark(&$row, &$marks)
     {
@@ -113,8 +115,9 @@ class tx_cfcleaguefe_util_LeagueTableWriter
         if (is_array($row['penalties'])) {
             $penalties[] = $row['penalties'];
             $row['penalties'] = count($row['penalties']);
-        } else
+        } else {
             $row['penalties'] = 0;
+        }
     }
 
     /**
@@ -134,9 +137,10 @@ class tx_cfcleaguefe_util_LeagueTableWriter
             if ($row['markClub']) {
                 $markIdx = $cnt;
                 $mark = 1;
+
                 break;
             }
-            $cnt ++;
+            ++$cnt;
         }
 
         if ($mark) {
@@ -149,6 +153,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
                 $idxStart = $idxEnd - $teams2Show;
             }
         }
+
         return array_slice($tableData, $idxStart, $tableSize);
     }
 }

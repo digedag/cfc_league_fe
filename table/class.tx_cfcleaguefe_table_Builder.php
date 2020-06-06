@@ -28,13 +28,12 @@
  */
 class tx_cfcleaguefe_table_Builder
 {
-
     /**
-     *
      * @param tx_cfcleague_model_Competition $league
      * @param array $matches
      * @param tx_rnbase_configurations $configurations
      * @param string $confId
+     *
      * @return tx_cfcleaguefe_table_ITableType
      */
     public static function buildByCompetitionAndMatches($league, $matches, $configurations, $confId)
@@ -47,10 +46,10 @@ class tx_cfcleaguefe_table_Builder
         $prov->setMatches($matches);
         // Der Scope muss gesetzt werden, damit die Team gefunden werden
         $prov->setScope([
-            'COMP_UIDS' => $league->getUid()
+            'COMP_UIDS' => $league->getUid(),
         ]);
         $table = tx_cfcleaguefe_table_Factory::createTableType($tableType);
-        $table->setConfigurations($configurations, $confId . 'tablecfg.');
+        $table->setConfigurations($configurations, $confId.'tablecfg.');
         // MatchProvider und Configurator müssen sich gegenseitig kennen
         $table->setMatchProvider($prov);
         $c = $table->getConfigurator(true);
@@ -60,10 +59,10 @@ class tx_cfcleaguefe_table_Builder
     }
 
     /**
-     *
      * @param array $scopeArr
      * @param tx_rnbase_configurations $configurations
      * @param string $confId
+     *
      * @return tx_cfcleaguefe_table_ITableType
      */
     public static function buildByRequest($scopeArr, $configurations, $confId)
@@ -86,11 +85,12 @@ class tx_cfcleaguefe_table_Builder
         // Der Provider kennt die Spiele, also könnte er auch die Sportart kennen...
         $table = tx_cfcleaguefe_table_Factory::createTableType($tableType);
 
-        $table->setConfigurations($configurations, $confId . 'tablecfg.');
+        $table->setConfigurations($configurations, $confId.'tablecfg.');
         // MatchProvider und Configurator müssen sich gegenseitig kennen
         $table->setMatchProvider($prov);
         $c = $table->getConfigurator(true);
         $prov->setConfigurator($c);
+
         return $table;
     }
 
@@ -101,6 +101,7 @@ class tx_cfcleaguefe_table_Builder
      * @param tx_cfcleaguefe_models_match $match
      * @param tx_rnbase_configurations $configurations
      * @param string $confId
+     *
      * @return tx_cfcleaguefe_table_ITableType
      */
     public static function buildByMatch($match, $configurations, $confId)

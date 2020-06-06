@@ -26,11 +26,10 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('tx_rnbase_util_Extensions');
 
 /**
- * Diese Klasse ist für die Erstellung von Markerarrays der Spielereignisse verantwortlich
+ * Diese Klasse ist für die Erstellung von Markerarrays der Spielereignisse verantwortlich.
  */
 class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
 {
-
     public function __construct($options = array())
     {
         $this->setClassname('tx_cfcleaguefe_models_match_note');
@@ -38,7 +37,6 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
     }
 
     /**
-     *
      * @param string $template
      *            das HTML-Template
      * @param tx_cfcleaguefe_models_match_note $item
@@ -52,57 +50,62 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
      * @param string $marker
      *            Name des Markers für den Club, z.B. CLUB
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
-     * @return String das geparste Template
+     *
+     * @return string das geparste Template
      */
     protected function finishTemplate($template, $item, $formatter, $confId, $marker = 'NOTE')
     {
-        if ($this->containsMarker($template, $marker . '_MATCH_')) {
-            $template = $this->addMatch($template, $item, $formatter, $confId . 'match.', $marker . '_MATCH');
+        if ($this->containsMarker($template, $marker.'_MATCH_')) {
+            $template = $this->addMatch($template, $item, $formatter, $confId.'match.', $marker.'_MATCH');
         }
-        if ($this->containsMarker($template, $marker . '_PLAYER_')) {
-            $template = $this->addProfile($template, $item->getPlayerInstance(), $formatter, $confId . 'player.', $marker . '_PLAYER');
+        if ($this->containsMarker($template, $marker.'_PLAYER_')) {
+            $template = $this->addProfile($template, $item->getPlayerInstance(), $formatter, $confId.'player.', $marker.'_PLAYER');
         }
-        if ($this->containsMarker($template, $marker . '_PLAYERCHANGEIN_')) {
-            $template = $this->addProfile($template, $item->getPlayerChangeIn(), $formatter, $confId . 'playerchangein.', $marker . '_PLAYERCHANGEIN');
+        if ($this->containsMarker($template, $marker.'_PLAYERCHANGEIN_')) {
+            $template = $this->addProfile($template, $item->getPlayerChangeIn(), $formatter, $confId.'playerchangein.', $marker.'_PLAYERCHANGEIN');
         }
-        if ($this->containsMarker($template, $marker . '_PLAYERCHANGEOUT_')) {
-            $template = $this->addProfile($template, $item->getPlayerChangeOut(), $formatter, $confId . 'playerchangeout.', $marker . '_PLAYERCHANGEOUT');
+        if ($this->containsMarker($template, $marker.'_PLAYERCHANGEOUT_')) {
+            $template = $this->addProfile($template, $item->getPlayerChangeOut(), $formatter, $confId.'playerchangeout.', $marker.'_PLAYERCHANGEOUT');
         }
-        if ($this->containsMarker($template, $marker . '_TEAM_')) {
-            $template = $this->addTeam($template, $item->getTeam(), $formatter, $confId . 'team.', $marker . '_TEAM');
+        if ($this->containsMarker($template, $marker.'_TEAM_')) {
+            $template = $this->addTeam($template, $item->getTeam(), $formatter, $confId.'team.', $marker.'_TEAM');
         }
 
         return $template;
     }
 
     /**
-     * Bindet einen Spieler ein
+     * Bindet einen Spieler ein.
      *
      * @param string $template
      * @param tx_cfcleague_models_Profile $sub
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
+     *
      * @return string
      */
     protected function addProfile($template, $sub, $formatter, $confId, $markerPrefix)
     {
-        if (! $sub) {
+        if (!$sub) {
             // Kein Datensatz vorhanden. Leere Instanz anlegen und altname setzen
             $sub = tx_rnbase_util_BaseMarker::getEmptyInstance('tx_cfcleague_models_Profile');
         }
         $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
         $template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
+
         return $template;
     }
+
     /**
-     * Bindet ein Spiel ein
+     * Bindet ein Spiel ein.
      *
      * @param string $template
      * @param tx_cfcleague_models_MatchNote|tx_cfcleaguefe_models_match_note $note
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
+     *
      * @return string
      */
     protected function addMatch($template, $note, $formatter, $confId, $markerPrefix)
@@ -110,31 +113,33 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
         if ($note instanceof tx_cfcleaguefe_models_match_note) {
             // Das sollte zukünftig so nicht mehr sein!
             $match = $note->getMatch();
-        }
-        else {
+        } else {
             // FIXME: match laden
         }
         $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarker');
         $template = $marker->parseTemplate($template, $match, $formatter, $confId, $markerPrefix);
+
         return $template;
     }
+
     /**
-     *
      * @param string $template
      * @param tx_cfcleague_models_Team $sub
      * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
+     *
      * @return string
      */
     protected function addTeam($template, $sub, $formatter, $confId, $markerPrefix)
     {
-        if (! $sub) {
+        if (!$sub) {
             // Kein Datensatz vorhanden. Leere Instanz anlegen und altname setzen
             $sub = tx_rnbase_util_BaseMarker::getEmptyInstance('tx_cfcleague_models_Team');
         }
         $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
         $template = $marker->parseTemplate($template, $sub, $formatter, $confId, $markerPrefix);
+
         return $template;
     }
 }
