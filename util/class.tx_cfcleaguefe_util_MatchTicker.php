@@ -91,7 +91,7 @@ class tx_cfcleaguefe_util_MatchTicker
         $ret = array();
         $anz = count($arr);
 
-        for ($i = 0; $i < $anz; ++$i ) {
+        for ($i = 0; $i < $anz; ++$i) {
             $ticker = $arr[$i];
             // Datensatz im Zielarray ablegen
             $ret[] = $ticker;
