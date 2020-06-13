@@ -166,22 +166,18 @@
 								<renderType>selectMultipleSideBySide</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_league
-										</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_league</numIndex>
 										<numIndex index="1">1</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_ko
-										</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_ko</numIndex>
 										<numIndex index="1">2</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_other
-										</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_other</numIndex>
 										<numIndex index="1">0</numIndex>
 									</numIndex>
-									<!-- numIndex index="3" type="array"> <numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_combined</numIndex> 
-										<numIndex index="1">100</numIndex> </numIndex -->
+									<!-- numIndex index="3" type="array"> <numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_competition.type_combined</numIndex> <numIndex index="1">100</numIndex> </numIndex -->
 								</items>
 								<multiple>0</multiple>
 								<maxitems>4</maxitems>
@@ -325,30 +321,30 @@
 					<matchtable.fields.MATCH.STATUS.OP_IN_INT>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status
+							<label>LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_games.status
 							</label>
 							<config>
 								<type>select</type>
 								<renderType>selectMultipleSideBySide</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_scheduled</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_games.status_scheduled</numIndex>
 										<numIndex index="1">0</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_running</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_games.status_running</numIndex>
 										<numIndex index="1">1</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_finished</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_games.status_finished</numIndex>
 										<numIndex index="1">2</numIndex>
 									</numIndex>
 									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_invalid</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_games.status_invalid</numIndex>
 										<numIndex index="1">-1</numIndex>
 									</numIndex>
 									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_games.status_rescheduled</numIndex>
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_games.status_rescheduled</numIndex>
 										<numIndex index="1">-10</numIndex>
 									</numIndex>
 								</items>

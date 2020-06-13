@@ -228,18 +228,18 @@ class tx_cfcleaguefe_util_MatchTicker
     }
 
     /*
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.ticker", '100'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal", '10'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.header", '11'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.penalty", '12'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.own", '30'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.assist", '31'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.penalty.forgiven", '32'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.corner", '33'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.yellow", '70'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.yellowred", '71'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.red", '72'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.changeout", '80'),
-     * Array("LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.changein", '81'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.ticker", '100'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal", '10'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.header", '11'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.penalty", '12'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.own", '30'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.assist", '31'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.penalty.forgiven", '32'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.corner", '33'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.yellow", '70'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.yellowred", '71'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.red", '72'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.changeout", '80'),
+     * Array("LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.changein", '81'),
      */
 }

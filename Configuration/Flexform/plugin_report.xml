@@ -148,72 +148,72 @@
 								<renderType>selectMultipleSideBySide</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.ticker
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.ticker
 										</numIndex>
 										<numIndex index="1">100</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal
 										</numIndex>
 										<numIndex index="1">10</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.header
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.header
 										</numIndex>
 										<numIndex index="1">11</numIndex>
 									</numIndex>
 									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.penalty
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.penalty
 										</numIndex>
 										<numIndex index="1">12</numIndex>
 									</numIndex>
 									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.own
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.own
 										</numIndex>
 										<numIndex index="1">30</numIndex>
 									</numIndex>
 									<numIndex index="5" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.goal.assist
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.goal.assist
 										</numIndex>
 										<numIndex index="1">31</numIndex>
 									</numIndex>
 									<numIndex index="6" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.penalty.forgiven
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.penalty.forgiven
 										</numIndex>
 										<numIndex index="1">32</numIndex>
 									</numIndex>
 									<numIndex index="7" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.corner
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.corner
 										</numIndex>
 										<numIndex index="1">33</numIndex>
 									</numIndex>
 									<numIndex index="8" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.yellow
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.yellow
 										</numIndex>
 										<numIndex index="1">70</numIndex>
 									</numIndex>
 									<numIndex index="9" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.yellowred
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.yellowred
 										</numIndex>
 										<numIndex index="1">71</numIndex>
 									</numIndex>
 									<numIndex index="10" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.red
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.red
 										</numIndex>
 										<numIndex index="1">72</numIndex>
 									</numIndex>
 									<numIndex index="11" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.changeout
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.changeout
 										</numIndex>
 										<numIndex index="1">80</numIndex>
 									</numIndex>
 									<numIndex index="12" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.changein
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.changein
 										</numIndex>
 										<numIndex index="1">81</numIndex>
 									</numIndex>
 									<numIndex index="13" type="array">
-										<numIndex index="0">LLL:EXT:cfc_league/locallang_db.xml:tx_cfcleague_match_notes.type.captain
+										<numIndex index="0">LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_match_notes.type.captain
 										</numIndex>
 										<numIndex index="1">200</numIndex>
 									</numIndex>
