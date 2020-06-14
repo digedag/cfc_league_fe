@@ -1,6 +1,10 @@
 
 Änderungen
 ----------
+
+v1.5.2 (14.06.2020)
+ * labels in plugin flexforms fixed
+
 v1.5.1 (06.06.2020)
  * Support for TYPO3 10.4 LTS added
  * Show selected actions in plugin overview
