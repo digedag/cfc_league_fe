@@ -21,9 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
@@ -167,9 +164,8 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
      * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
      * ermittelt und zurückgeliefert.
      *
-     * @param &$tableData Daten der Tabelle
-     * @param $tableSize Maximale
-     *            Anzahl Teams, die gezeigt werden soll
+     * @param array &$tableData Daten der Tabelle
+     * @param int $tableSize Maximale Anzahl Teams, die gezeigt werden soll
      */
     protected function _cropTable(&$tableData, $tableSize)
     {

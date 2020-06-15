@@ -1,5 +1,6 @@
 ### travis builds
 /.Build
+/var
 /composer.lock
 
 

@@ -22,9 +22,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_views_LeagueTable');
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
@@ -61,7 +58,8 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
         }
         // Den ClubMarker erstellen
         $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
-        $templateEntry = $configurations->getCObj()->getSubpart($templateList, '###ROW###');
+
+        $templateEntry = \tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
 
         $parts = [];
         $rowRoll = $configurations->getInt('leaguetableAllTime.table.roll.value');
@@ -80,7 +78,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
         $markerArray = [];
         $subpartArray['###ROW###'] = implode($parts, $configurations->get('leaguetableAllTime.table.implode'));
 
-        return $configurations->getCObj()->substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
+        return \tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
 
     /**
