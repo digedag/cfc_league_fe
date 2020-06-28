@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,9 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_table_TableWriterBase');
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
-tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
  * Computes league tables for football.
@@ -52,7 +49,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
             $template = $compMarker->parseTemplate($template, $result->getCompetition(), $configurations->getFormatter(), $confId.'league.', 'LEAGUE');
         }
         // $start = microtime(true);
-        $penalties = array(); // Strafen sammeln
+        $penalties = []; // Strafen sammeln
         $subpartArray = [
             '###ROWS###' => $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $result, $penalties, $table->getMatchProvider(), $configurations, $confId),
         ];
@@ -125,7 +122,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         // Jetzt die einzelnen Teile zusammenfügen
         $markerArray = [];
         $subpartArray = [
-            '###ROW###' => implode($parts, $configurations->get($confId.'table.implode')),
+            '###ROW###' => implode($configurations->get($confId.'table.implode'), $parts),
         ];
 
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
@@ -135,10 +132,8 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
      * Wenn nur ein Teil der Tabelle gezeigt werden soll, dann wird dieser Ausschnitt hier
      * ermittelt und zurückgeliefert.
      *
-     * @param
-     *            &$tableData Daten der Tabelle
-     * @param $tableSize Maximale
-     *            Anzahl Teams, die gezeigt werden soll
+     * @param array &$tableData Daten der Tabelle
+     * @param int $tableSize Maximale Anzahl Teams, die gezeigt werden soll
      */
     protected function cropTable(&$tableData, $tableSize)
     {
@@ -206,39 +201,39 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
     protected function createControls($template, $configurator, $configurations, $confId)
     {
         $markerArray = [];
-        $subpartArray = array(
+        $subpartArray = [
             '###CONTROL_TABLETYPE###' => '',
             '###CONTROL_TABLESCOPE###' => '',
             '###CONTROL_POINTSYSTEM###' => '',
-        );
+        ];
 
         // Tabletype => Home/Away
         if ($configurations->get('tabletypeSelectionInput')) {
-            $items = array(
+            $items = [
                 0,
                 1,
                 2,
-            );
+            ];
             // Wir bereiten die Selectbox vor
-            $arr = array(
+            $arr = [
                 $items,
                 $configurator->getTableType(),
-            );
+            ];
             // $arr = Array($items, ($parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : 0));
             $subpartArray['###CONTROL_TABLETYPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $arr, $link, 'TABLETYPE', $configurations, $confId);
         }
 
         if ($configurations->get('tablescopeSelectionInput') || $configurations->get($confId.'tablescopeSelectionInput')) {
-            $items = array(
+            $items = [
                 0,
                 1,
                 2,
-            );
+            ];
             // Wir bereiten die Selectbox vor
-            $arr = array(
+            $arr = [
                 $items,
                 $configurator->getTableScope(),
-            );
+            ];
             $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, $link, 'TABLESCOPE', $configurations, $confId);
         }
 
@@ -249,7 +244,7 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
             $sports = $configurator->getCompetition()->getSports();
             $srv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
             $systems = $srv->getPointSystems($sports);
-            $items = array();
+            $items = [];
             foreach ($systems as $system) {
                 $items[] = $system[1];
             }
@@ -258,10 +253,10 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
             // $items = array(0,1);
             // $items = array(1=>0,0=>1);
 
-            $arr = array(
+            $arr = [
                 $items,
                 $configurator->getPointSystem(),
-            );
+            ];
             $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, $link, 'POINTSYSTEM', $configurations, $confId);
         }
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
@@ -272,16 +267,11 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
     /**
      * Die Auswahl für Tabellentyp, Tabellenscope und Punktesystem.
      *
-     * @param string $template
-     *            HTML- Template
-     * @param
-     *            array &$itemsArr Datensätze für die Auswahl
-     * @param
-     *            tx_rnbase_util_Link &$link Linkobjekt
-     * @param string $markerName
-     *            Name des Markers (TYPE, SCOPE oder SYSTEM)
-     * @param
-     *            tx_rnbase_configurations &$configurations Konfig-Objekt
+     * @param string $template HTML- Template
+     * @param array &$itemsArr Datensätze für die Auswahl
+     * @param tx_rnbase_util_Link &$link Linkobjekt
+     * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
+     * @param tx_rnbase_configurations $configurations Konfig-Objekt
      */
     protected function fillControlTemplate($template, &$itemsArr, $link, $markerName, $configurations, $confId)
     {
@@ -299,10 +289,10 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         // $link->label($token);
         // }
 
-        $currentNoLink = intval($configurations->get($confId.$confName.'.current.noLink'));
+        $currentNoLink = $configurations->getInt($confId.$confName.'.current.noLink');
 
         $token = self::getToken();
-        $markerArray = array();
+        $markerArray = [];
         // Jetzt über die vorhandenen Items iterieren
         while (list($key, $value) = each($itemsArr[0])) {
             $link = $configurations->createLink();
