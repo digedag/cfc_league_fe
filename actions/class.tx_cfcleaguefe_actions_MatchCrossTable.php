@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 /**
  * Controller für die Anzeige eines Spielplans als Kreuztabelle.
  */
@@ -131,7 +130,6 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
 
         return tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
     }
-
 
     public function ___handleRequest(&$parameters, &$configurations, &$viewdata)
     {
