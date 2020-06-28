@@ -55,7 +55,7 @@ class tx_cfcleaguefe_util_StatisticsHelper
         $ret = [];
         $tickerArr = &$match->getMatchNotesByType($type);
 
-        for ($i = 0; $i < count($tickerArr); ++$i ) {
+        for ($i = 0; $i < count($tickerArr); ++$i) {
             $matchNote = &$tickerArr[$i];
             $notePlayer = $matchNote->getPlayerInstance();
             if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
@@ -95,7 +95,7 @@ class tx_cfcleaguefe_util_StatisticsHelper
         $tickerArr = &$match->getMatchNotesByType($tickerType);
 
         $ret = [];
-        for ($i = 0; $i < count($tickerArr); ++$i ) {
+        for ($i = 0; $i < count($tickerArr); ++$i) {
             $matchNote = &$tickerArr[$i];
             $notePlayer = $matchNote->getPlayerInstance();
             if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
@@ -156,7 +156,7 @@ class tx_cfcleaguefe_util_StatisticsHelper
         $tickerType = 'Y' == $type ? 70 : ('YR' == $type ? 71 : 72);
         $tickerArr = &$match->getMatchNotesByType($tickerType);
 
-        for ($i = 0; $i < count($tickerArr); ++$i ) {
+        for ($i = 0; $i < count($tickerArr); ++$i) {
             $matchNote = &$tickerArr[$i];
             $notePlayer = $matchNote->getPlayerInstance();
             if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
@@ -204,7 +204,7 @@ class tx_cfcleaguefe_util_StatisticsHelper
     private static function _isPlayerChanged($inOut, &$player, &$match)
     {
         $tickerArr = &$match->getMatchNotesByType(('IN' == $inOut) ? 81 : 80);
-        for ($i = 0, $size = count($tickerArr); $i < $size; ++$i ) {
+        for ($i = 0, $size = count($tickerArr); $i < $size; ++$i) {
             $matchNote = &$tickerArr[$i];
             $playerChange = ('IN' == $inOut) ? $matchNote->getPlayerChangeIn() : $matchNote->getPlayerChangeOut();
             if ($playerChange && $playerChange->getUid() == $player->getUid()) {

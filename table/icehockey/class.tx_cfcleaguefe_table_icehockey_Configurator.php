@@ -32,7 +32,7 @@ class tx_cfcleaguefe_table_icehockey_Configurator extends tx_cfcleaguefe_table_f
     /**
      * Whether or not loose points are count.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCountLoosePoints()
     {

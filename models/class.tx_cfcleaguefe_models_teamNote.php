@@ -42,13 +42,10 @@ class tx_cfcleaguefe_models_teamNote extends tx_rnbase_model_base
     public function getValue()
     {
         if (0 == $this->getProperty('mediatype')) { // Text
-
             return $this->getProperty('comment');
         } elseif (1 == $this->getProperty('mediatype')) { // DAM-Media
-
             return $this->getProperty('media');
         } elseif (2 == $this->getProperty('mediatype')) { // Integer
-
             return $this->getProperty('number');
         }
     }

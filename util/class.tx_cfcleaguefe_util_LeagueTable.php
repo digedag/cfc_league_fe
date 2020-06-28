@@ -35,11 +35,15 @@ class tx_cfcleaguefe_util_LeagueTable
 
     // Daten für die Punktezählung
     public $cfgPointSystem;
+
     public $cfgPointsDraw;
+
     public $cfgPointsWin;
+
     public $cfgPointsLose;
 
     public $cfgTableType;
+
     public $cfgTableScope;
 
     public $cfgChartClubs;

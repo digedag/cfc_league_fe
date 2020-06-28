@@ -62,7 +62,6 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
         foreach ($data as $type => $stats) {
             $service = Tx_Rnbase_Utility_T3General::makeInstanceService('cfcleague_statistics', $type);
             if (!is_object($service)) { // Ohne den Service geht nix
-
                 continue;
             }
             $srvTemplate = tx_rnbase_util_Templates::getSubpart($template, '###STATISTIC_'.strtoupper($type).'###');

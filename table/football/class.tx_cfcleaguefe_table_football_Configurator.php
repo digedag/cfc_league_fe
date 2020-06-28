@@ -51,7 +51,7 @@ class tx_cfcleaguefe_table_football_Configurator implements tx_cfcleaguefe_table
     /**
      * 2-point-system.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCountLoosePoints()
     {

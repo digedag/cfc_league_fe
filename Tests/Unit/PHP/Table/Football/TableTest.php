@@ -131,7 +131,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
         $this->assertEquals(6, $scoreLine[0]['points'], 'Team 3 should has wrong points');
         $this->assertEquals(0, $scoreLine[3]['points'], 'Team 4 should has wrong points');
         // Alle Teams müssen bei den Minuspunkten -1 haben
-        for ($i = 0, $size = count($scoreLine); $i < $size; ++$i ) {
+        for ($i = 0, $size = count($scoreLine); $i < $size; ++$i) {
             $this->assertEquals(-1, $scoreLine[$i]['points2'], 'Team at '.($i + 1).'. place wrong neg points');
         }
     }

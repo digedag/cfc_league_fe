@@ -141,7 +141,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
 
     protected function addScore4Round($round, $teamData, $tableData)
     {
-        for ($i = 0; $i < count($teamData); ++$i ) {
+        for ($i = 0; $i < count($teamData); ++$i) {
             $newPosition = $i + 1;
             $team = $teamData[$i];
             if ($this->_teamData[$team['teamId']]['position']) {

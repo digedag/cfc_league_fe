@@ -111,7 +111,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
             }
         }
         if (!count($arr)) { // Wenn das Array leer ist, wird nix gezeigt
-
             return $formatter->wrap('', $confId, $profile->record);
         }
 
@@ -224,7 +223,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     public function isChangedOut()
     {
         if (is_array($this->_matchNotes)) {
-            for ($i = 0; $i < count($this->_matchNotes); ++$i ) {
+            for ($i = 0; $i < count($this->_matchNotes); ++$i) {
                 $note = $this->_matchNotes[$i];
                 if ($note->isType(80)) {
                     return $note;
@@ -246,7 +245,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         // Die Matchnotes müssen absteigend durchsucht werden, da die letzte Strafe entscheidend ist
         if (is_array($this->_matchNotes)) {
             $arr = array_reverse($this->_matchNotes);
-            for ($i = 0; $i < count($arr); ++$i ) {
+            for ($i = 0; $i < count($arr); ++$i) {
                 $note = $arr[$i];
                 if ($note->isPenalty()) {
                     return $note;
@@ -268,7 +267,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         // Zunächst alle Daten initialisieren
         tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
         $types = tx_cfcleaguefe_models_teamNoteType::getAll();
-        for ($i = 0, $cnt = count($types); $i < $cnt; ++$i ) {
+        for ($i = 0, $cnt = count($types); $i < $cnt; ++$i) {
             $type = $types[$i];
             $this->setProperty('tn'.$type->getMarker(), '');
             $this->setProperty('tn'.$type->getMarker().'_type', '0');
@@ -277,7 +276,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         if (is_object($team)) {
             // Mit Team können die TeamNotes geholt werden
             $notes = $this->getTeamNotes($team);
-            for ($i = 0, $cnt = count($notes); $i < $cnt; ++$i ) {
+            for ($i = 0, $cnt = count($notes); $i < $cnt; ++$i) {
                 $note = $notes[$i];
                 $noteType = $note->getType();
                 $this->setProperty('tn'.$noteType->getMarker(), $note->getUid());

@@ -89,7 +89,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
             }
             if (!$this->agegroup) {
                 $comps = $this->getCompetitions(true);
-                for ($i = 0, $cnt = count($comps); $i < $cnt; ++$i ) {
+                for ($i = 0, $cnt = count($comps); $i < $cnt; ++$i) {
                     if (is_object($comps[$i]->getGroup())) {
                         $this->agegroup = $comps[$i]->getGroup();
 

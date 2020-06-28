@@ -159,7 +159,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
     {
         $rounds = array();
         $matches = $this->getMatches();
-        for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i ) {
+        for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i) {
             $match = $matches[$i];
             $rounds[$match->record['round']][] = $match;
         }

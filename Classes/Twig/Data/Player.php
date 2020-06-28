@@ -66,7 +66,7 @@ class Player
     /**
      * @param int $type
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMatchNoteType($type)
     {
@@ -84,7 +84,7 @@ class Player
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCardYellow()
     {
@@ -100,7 +100,7 @@ class Player
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCardYellowRed()
     {
@@ -108,7 +108,7 @@ class Player
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCardRed()
     {
@@ -116,7 +116,7 @@ class Player
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCaptain()
     {
@@ -142,7 +142,7 @@ class Player
     /**
      * whether or not the lastname of this player is unique in this match.
      *
-     * @return boolean
+     * @return bool
      */
     public function getUniqueName()
     {
