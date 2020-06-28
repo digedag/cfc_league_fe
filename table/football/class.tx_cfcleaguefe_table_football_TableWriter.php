@@ -100,9 +100,9 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
         $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
         $templateEntry = tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
 
-        $parts = array();
+        $parts = [];
         // Die einzelnen Zeilen zusammenbauen
-        $rowRoll = intval($configurations->get($confId.'table.roll.value'));
+        $rowRoll = $configurations->getInt($confId.'table.roll.value');
         $rowRollCnt = 0;
 
         foreach ($tableData as $row) {
@@ -293,13 +293,14 @@ class tx_cfcleaguefe_table_football_TableWriter extends tx_cfcleaguefe_table_Tab
 
         $token = self::getToken();
         $markerArray = [];
+
         // Jetzt über die vorhandenen Items iterieren
-        while (list($key, $value) = each($itemsArr[0])) {
+        foreach ($itemsArr[0] as $key => $value) {
             $link = $configurations->createLink();
             $link->label($token);
-            $link->initByTS($configurations, $confId.$confName.'.link.', array(
+            $link->initByTS($configurations, $confId.$confName.'.link.', [
                 $confName => $key,
-            ));
+            ]);
 
             $isCurrent = ($key == $currItem);
             $markerLabel = $formatter->wrap($key, $confId.$confName.'.'.$key.'.');
