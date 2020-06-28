@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,9 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('tx_rnbase_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
@@ -83,15 +80,14 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      */
     private function generateTableData(&$matches, &$teams)
     {
-        $ret = array();
+        $ret = [];
 
         reset($matches);
         reset($teams);
         $teamIds = array_keys($teams);
         $teamCnt = count($teamIds);
         $initArray = array_flip($teamIds);
-        $opponents = $teams;
-        while (list($uid, $team) = each($teams)) {
+        foreach ($teams as $uid => $team) {
             $ret[$uid] = $initArray;
             $ret[$uid][$uid] = ''; // Das Spiel gegen sich selbst
             // In das Array alle Heimspiele des Teams legen
@@ -137,23 +133,23 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      * @param string $headlineTemplate
      * @param array $datalines
      * @param array $teams
-     * @param tslib_content $cObj
      * @param tx_rnbase_configurations $configurations
+     * @param ArrayObject $viewData
      */
     private function _createDatalines($template, $datalines, &$teams, $configurations, $viewData)
     {
         $subTemplate = '###MATCHS###'.tx_rnbase_util_Templates::getSubpart($template, '###MATCHS###').'###MATCHS###';
         $freeTemplate = tx_rnbase_util_Templates::getSubpart($template, '###MATCH_FREE###');
-        $rowRoll = intval($configurations->get('matchcrosstable.dataline.match.roll.value'));
+        $rowRoll = $configurations->getInt('matchcrosstable.dataline.match.roll.value');
 
         $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
 
-        $lines = array();
+        $lines = [];
         // Über alle Zeilen iterieren
         foreach ($datalines as $uid => $matches) {
             $rowRollCnt = 0;
-            $parts = array();
+            $parts = [];
             foreach ($matches as $matchArr) {
                 if (is_array($matchArr)) {
                     // Da sind Spiele im Array. Anzeigen mit ListMarker
@@ -179,7 +175,6 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      *
      * @param string $headlineTemplate
      * @param array $teams
-     * @param tslib_content $cObj
      * @param tx_rnbase_configurations $configurations
      */
     private function _createHeadline($template, &$teams, $configurations)
@@ -189,10 +184,10 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###TEAM###');
         $rowRoll = intval($configurations->get('matchcrosstable.headline.team.roll.value'));
         $rowRollCnt = 0;
-        $parts = array();
+        $parts = [];
 
         tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'include teams');
-        while (list($uid, $team) = each($teams)) {
+        foreach ($teams as $team) {
             $team->setProperty('roll', $rowRollCnt);
             $parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'matchcrosstable.headline.team.', 'TEAM');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
@@ -200,9 +195,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         tx_rnbase_util_Misc::pullTT();
 
         $subpartArray['###TEAM###'] = implode($parts, $configurations->get('matchcrosstable.headline.team.implode'));
-        $markerArray = array(
+        $markerArray = [
             '###TEAMCOUNT###' => count($teams),
-        );
+        ];
 
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
@@ -210,9 +205,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
     private function removeDummyTeams(&$teams)
     {
         // Das Team 'Spielfrei' vorher entfernen
-        $dummyTeams = array();
+        $dummyTeams = [];
         reset($teams);
-        while (list($uid, $team) = each($teams)) {
+        foreach ($teams as $uid => $team) {
             if ($team->isDummy()) {
                 $dummyTeams[] = $uid;
             }
