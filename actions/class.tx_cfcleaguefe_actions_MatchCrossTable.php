@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-tx_rnbase::load('tx_cfcleaguefe_models_team');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Controller für die Anzeige eines Spielplans als Kreuztabelle.
@@ -39,25 +35,16 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
      * @param tx_rnbase_configurations $configurations
      * @param arrayobject $viewdata
      *
-     * @return string error 	/**
-     * Handle request
-     *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewdata
-     *
      * @return string error message
      */
     public function handleRequest(&$parameters, &$configurations, &$viewdata)
     {
         // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
         // ggf. die Konfiguration aus der TS-Config lesen
-        $fields = array();
-        $options = array();
+        $fields = $options = [];
 
         //  	$options['debug'] = 1;
         $this->initSearch($fields, $options, $parameters, $configurations);
-        $listSize = 0;
 
         $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
         $matches = $service->search($fields, $options);
@@ -101,25 +88,50 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
         if (!$mCnt) {
             return;
         } // Ohne Spiele gibt es nix zu tun
-        $uids = array();
+        $uids = [];
         for ($i = 0; $i < $mCnt; ++$i) {
-            $uids[] = $matches[$i]->record['home'];
-            $uids[] = $matches[$i]->record['guest'];
+            $uids[] = $matches[$i]->getProperty('home');
+            $uids[] = $matches[$i]->getProperty('guest');
         }
         $uids = array_unique($uids);
-        $teams = tx_cfcleaguefe_models_team::getTeamsByUid($uids);
-        $teamsArr = array();
+        $teams = $this->getTeamsByUid($uids);
+        $teamsArr = [];
         for ($i = 0; $i < count($teams); ++$i) {
-            $teamsArr[$teams[$i]->uid] = $teams[$i];
+            $teamsArr[$teams[$i]->getUid()] = $teams[$i];
         }
 
         for ($i = 0; $i < $mCnt; ++$i) {
-            $matches[$i]->setHome($teamsArr[$matches[$i]->record['home']]);
-            $matches[$i]->setGuest($teamsArr[$matches[$i]->record['guest']]);
+            $matches[$i]->setHome($teamsArr[$matches[$i]->getProperty('home')]);
+            $matches[$i]->setGuest($teamsArr[$matches[$i]->getProperty('guest')]);
         }
 
         return $teamsArr;
     }
+
+    /**
+     * Return all teams by an array of uids.
+     *
+     * @param mixed $teamIds
+     *
+     * @return array of tx_cfcleaguefe_models_team
+     */
+    private function getTeamsByUid($teamIds)
+    {
+        if (!is_array($teamIds)) {
+            $teamIds = Tx_Rnbase_Utility_Strings::intExplode(',', $teamIds);
+        }
+        if (!count($teamIds)) {
+            return [];
+        }
+        $teamIds = implode($teamIds, ',');
+        $what = '*';
+        $from = 'tx_cfcleague_teams';
+        $options['where'] = 'tx_cfcleague_teams.uid IN ('.$teamIds.') ';
+        $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
+
+        return tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
+    }
+
 
     public function ___handleRequest(&$parameters, &$configurations, &$viewdata)
     {
@@ -138,7 +150,7 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
                 $currCompetition = $currCompetition->uid;
             // Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten.
             } else {
-                return $out;
+                return '';
             } // Ohne Wettbewerb keine Tabelle!
         } else {
             $currCompetition = Tx_Rnbase_Utility_Strings::intExplode(',', $compUids);
@@ -153,9 +165,9 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
 
         $viewData = &$configurations->getViewData();
         $viewData->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
-    $viewData->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
+        $viewData->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
 
-    return '';
+        return '';
     }
 
     public function getTemplateName()
@@ -167,8 +179,4 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
     {
         return 'tx_cfcleaguefe_views_MatchCrossTable';
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchCrossTable.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_MatchCrossTable.php'];
 }

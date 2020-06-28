@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -267,30 +267,6 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     public function isDummy()
     {
         return 0 != intval($this->getProperty('dummy'));
-    }
-
-    /**
-     * Return all teams by an array of uids.
-     *
-     * @param mixed $teamIds
-     *
-     * @return array of tx_cfcleaguefe_models_team
-     */
-    public function getTeamsByUid($teamIds)
-    {
-        if (!is_array($teamIds)) {
-            $teamIds = Tx_Rnbase_Utility_Strings::intExplode(',', $teamIds);
-        }
-        if (!count($teamIds)) {
-            return array();
-        }
-        $teamIds = implode($teamIds, ',');
-        $what = '*';
-        $from = 'tx_cfcleague_teams';
-        $options['where'] = 'tx_cfcleague_teams.uid IN ('.$teamIds.') ';
-        $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
-
-        return tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
     }
 
     /**
