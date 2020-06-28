@@ -36,7 +36,7 @@ class tx_cfcleaguefe_table_volleyball_Configurator extends tx_cfcleaguefe_table_
     /**
      * Whether or not loose points are count.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCountLoosePoints()
     {

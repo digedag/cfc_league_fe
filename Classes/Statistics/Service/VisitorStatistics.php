@@ -88,7 +88,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     {
         // den Zuschauerschnitt berechnen
         $teamIds = array_keys($this->result);
-        for ($i = 0, $size = count($teamIds); $i < $size; ++$i ) {
+        for ($i = 0, $size = count($teamIds); $i < $size; ++$i) {
             $this->setAverage($teamIds[$i], 'home');
             $this->setAverage($teamIds[$i], 'away');
             $this->setAverage($teamIds[$i], 'all');

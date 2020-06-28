@@ -95,7 +95,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
             $ret[$uid] = $initArray;
             $ret[$uid][$uid] = ''; // Das Spiel gegen sich selbst
             // In das Array alle Heimspiele des Teams legen
-            for ($i = 0; $i < $teamCnt; ++$i ) {
+            for ($i = 0; $i < $teamCnt; ++$i) {
                 if ($uid == $teamIds[$i]) {
                     $ret[$uid][$uid] = $this->ownMatchStr;
                 } // Das Spiel gegen sich selbst
@@ -122,7 +122,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
     private function findMatch(&$matches, $home, $guest)
     {
         $ret = array();
-        for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i ) {
+        for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i) {
             if ($matches[$i]->record['home'] == $home && $matches[$i]->record['guest'] == $guest) {
                 $ret[] = $matches[$i];
             }

@@ -205,7 +205,7 @@ class MatchReport
         $partCnt = 0;
         $partArr = array();
         $splitSum = $system[$partCnt];
-        for ($i = 0; $i < count($players); ++$i ) {
+        for ($i = 0; $i < count($players); ++$i) {
             $partArr[$partCnt][] = $this->substPlayer($players[$i]);
             // Muss umgeschaltet werden?
             if (count($partArr[$partCnt]) >= $splitSum) {
@@ -239,7 +239,7 @@ class MatchReport
             // Der Ticker wird immer chronologisch ermittelt
             $matchNotes = &\tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
-            for ($i = 0; $i < count($matchNotes); ++$i ) {
+            for ($i = 0; $i < count($matchNotes); ++$i) {
                 $note = $matchNotes[$i];
                 $player = null;
                 $matchNote = null;

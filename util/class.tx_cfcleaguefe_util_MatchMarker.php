@@ -269,7 +269,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         }
 
         $dynaMarkers = $formatter->getConfigurations()->getKeyNames($matchConfId.'dynaMarkers.');
-        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i ) {
+        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i) {
             $typeArr = $formatter->getConfigurations()->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i].'.');
             $match->setProperty($dynaMarkers[$i], $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i].'.'));
         }
@@ -292,7 +292,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $dynaMarkers = $configurations->getKeyNames($matchConfId.'tickerLists.');
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
 
-        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i ) {
+        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i) {
             // Prüfen ob der Marker existiert
             $markerPrefix = $matchMarker.'_'.strtoupper($dynaMarkers[$i]);
             if (!self::containsMarker($template, $markerPrefix)) {
@@ -312,7 +312,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             // Die gefundenen Notes werden jetzt durch ihre aufbereiteten Duplikate ersetzt
             $items = array();
             $tickerHash = $this->getTickerHash($match);
-            for ($ci = 0, $cnt = count($children); $ci < $cnt; ++$ci ) {
+            for ($ci = 0, $cnt = count($children); $ci < $cnt; ++$ci) {
                 if (array_key_exists($children[$ci]['uid'], $tickerHash)) {
                     $items[] = $tickerHash[$children[$ci]['uid']];
                 }
@@ -336,7 +336,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         if (!is_array($this->tickerHash)) {
             $this->tickerHash = array();
             $tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($match);
-            for ($i = 0, $cnt = count($tickerArr); $i < $cnt; ++$i ) {
+            for ($i = 0, $cnt = count($tickerArr); $i < $cnt; ++$i) {
                 $this->tickerHash[$tickerArr[$i]->getUid()] = $tickerArr[$i];
             }
         }
@@ -360,7 +360,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
     protected function setMatchSubparts($template, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $match, $formatter)
     {
         // Je Spielstatus wird ein anderer Subpart gefüllt
-        for ($i = -1; $i < 3; ++$i ) {
+        for ($i = -1; $i < 3; ++$i) {
             $subpartArray['###RESULT_STATUS_'.$i.'###'] = '';
         }
         $subpartArray['###RESULT_STATUS_-10###'] = '';

@@ -29,6 +29,7 @@
 class tx_cfcleaguefe_models_matchreport
 {
     protected $match;
+
     protected $_configurations;
 
     protected $_formatter;
@@ -433,7 +434,7 @@ class tx_cfcleaguefe_models_matchreport
             // Der Ticker wird immer chronologisch ermittelt
             $this->_tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
-            for ($i = 0; $i < count($this->_tickerArr); ++$i ) {
+            for ($i = 0; $i < count($this->_tickerArr); ++$i) {
                 $note = $this->_tickerArr[$i];
                 $player = $note->getPlayerInstance();
                 if (is_object($player)) {
@@ -548,7 +549,7 @@ class tx_cfcleaguefe_models_matchreport
         $partCnt = 0;
         $partArr = array();
         $splitSum = $system[$partCnt];
-        for ($i = 0; $i < count($players); ++$i ) {
+        for ($i = 0; $i < count($players); ++$i) {
             $partArr[$partCnt][] = $players[$i];
             // Muss umgeschaltet werden?
             if (count($partArr[$partCnt]) >= $splitSum) {

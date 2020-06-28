@@ -78,7 +78,6 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     public static function wrap($formatter, $confId, $ticker)
     {
         if ('1' == $formatter->configurations->get($confId.'hide')) { // Die Meldung soll nicht gezeigt werden
-
             return '';
         }
 
@@ -453,7 +452,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         $matchesHash = [];
         $matchIds = [];
         $anz = count($matches);
-        for ($i = 0; $i < $anz; ++$i ) {
+        for ($i = 0; $i < $anz; ++$i) {
             $matchesHash[$matches[$i]->getUid()] = &$matches[$i];
             $matchIds[] = $matches[$i]->getUid();
         }
@@ -473,7 +472,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
         // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
         $anz = count($matchNotes);
-        for ($i = 0; $i < $anz; ++$i ) {
+        for ($i = 0; $i < $anz; ++$i) {
             // Hier darf nur mit Referenzen gearbeitet werden
             // $matchNotes[$i]->setMatch($matchesHash[$matchNotes[$i]->record['game']]);
             $matchesHash[$matchNotes[$i]->getProperty('game')]->addMatchNote($matchNotes[$i]);

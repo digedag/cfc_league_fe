@@ -54,7 +54,7 @@ interface tx_cfcleaguefe_util_league_TableProvider
      * Whether or not negative points of lost matches should be count. This is in case
      * if 2-point-system is used.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCountLoosePoints();
 

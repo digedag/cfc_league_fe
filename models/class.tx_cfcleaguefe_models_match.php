@@ -35,8 +35,11 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     private static $instances = array();
 
     public $_profiles;
+
     public $_matchNotes;
+
     public $_teamHome;
+
     public $_teamGuest;
 
     public $_report;
@@ -108,7 +111,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 
         // Teilergebnisse holen
         $matchParts = $matchParts > 0 ? $matchParts : 1;
-        for ($i = 1; $i <= $matchParts; ++$i ) {
+        for ($i = 1; $i <= $matchParts; ++$i) {
             $goalsHome += $this->record['goals_home_'.$i];
             $goalsGuest += $this->record['goals_guest_'.$i];
         }
@@ -286,7 +289,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     {
         if (is_array($type)) {
             $ret = array();
-            for ($i = 0, $size = count($type); $i < $size; ++$i ) {
+            for ($i = 0, $size = count($type); $i < $size; ++$i) {
                 $notes = $this->_matchNoteTypes[intval($type[$i])];
                 if (is_array($notes)) {
                     $ret = array_merge($ret, $notes);
@@ -320,7 +323,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 
         // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
         $anz = count($this->_matchNotes);
-        for ($i = 0; $i < $anz; ++$i ) {
+        for ($i = 0; $i < $anz; ++$i) {
             $this->_matchNotes[$i]->setMatch($this);
             // Zusätzlich die Notes nach ihrem Typ sortieren
             $this->_matchNoteTypes[intval($this->_matchNotes[$i]->record['type'])][] = $this->_matchNotes[$i];
