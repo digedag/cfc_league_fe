@@ -283,18 +283,18 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
      */
     protected function prepareLinks(&$team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template)
     {
-        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array(
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, [
             'teamId' => $team->uid,
-        ), $template);
+        ], $template);
         if ($team->hasReport()) {
-            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showteam', $marker, array(
+            self::initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showteam', $marker, [
                 'teamId' => $team->uid,
-            ), $template);
+            ], $template);
         } else {
             $linkId = 'showteam';
             $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
-            $remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));
-            $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
+            $remove = intval($formatter->getConfigurations()->get($confId.'links.'.$linkId.'.removeIfDisabled'));
+            self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
         }
     }
 
