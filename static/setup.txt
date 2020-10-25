@@ -440,8 +440,9 @@ lib.t3sports.teamLogo {
     key.field = t3logo
     if {
 	    # Nix zeigen, wenn es ein Dummy-Team ist
-	    value = 0
+	    value = 1
 	    equals.field = dummy
+	    negate = 1
     }
   }
 
@@ -528,8 +529,9 @@ lib.t3sports.team {
 
   name.if {
     # Nix zeigen, wenn es ein Dummy-Team ist
-    value = 0
+    value = 1
     equals.field = dummy
+    negate = 1
   }
   short_name < lib.t3sports.team.name
 

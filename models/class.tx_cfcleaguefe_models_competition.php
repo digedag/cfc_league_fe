@@ -182,7 +182,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
             $uids = $this->getProperty('teams');
             $options['where'] = 'uid IN ('.$uids.') ';
             if ($ignoreDummies) {
-                $options['where'] .= ' AND dummy = 0  ';
+                $options['where'] .= ' AND dummy <> 1  ';
             }
 
             $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';

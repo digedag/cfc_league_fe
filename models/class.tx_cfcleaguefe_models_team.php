@@ -266,7 +266,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     public function isDummy()
     {
-        return 0 != intval($this->getProperty('dummy'));
+        return 1 === (int) $this->getProperty('dummy');
     }
 
     /**
