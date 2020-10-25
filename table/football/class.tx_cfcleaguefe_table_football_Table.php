@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,15 +22,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_table_ITableType');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
 /**
  * Computes league tables for football.
  */
 class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base implements tx_cfcleaguefe_table_ITableType
 {
-    protected $_teamData = array();
+    protected $_teamData = [];
 
     /**
      * Set configuration.
@@ -112,10 +109,10 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
                 // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
                 $teamData = $this->_teamData;
                 $comparator->setTeamData($teamData);
-                usort($teamData, array(
+                usort($teamData, [
                     $comparator,
                     'compare',
-                ));
+                ]);
                 // Nun setzen wir die Tabellenstände
                 reset($teamData);
                 // Nochmal sortieren und die statischen Positionen setzen
@@ -126,10 +123,10 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             // Tabelle ohne Spiele, nur die Teams zeigen
             $teamData = array_values($this->_teamData);
             $comparator->setTeamData($teamData);
-            usort($teamData, array(
+            usort($teamData, [
                 $comparator,
                 'compare',
-            ));
+            ]);
             reset($teamData);
             // Nochmal sortieren und die statischen Positionen setzen
             $this->handleStaticPositions($teamData);
@@ -194,9 +191,10 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
      */
     protected function initTeams(tx_cfcleaguefe_table_football_Configurator $configurator)
     {
-        $this->_teamData = array();
+        $this->_teamData = [];
         $teams = $configurator->getTeams();
         foreach ($teams as $team) {
+            /* @var $team \tx_cfcleague_models_Team */
             $teamId = $configurator->getTeamId($team);
             if (!$teamId) {
                 continue;
@@ -232,6 +230,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             $this->_teamData[$teamId]['winCount'] = 0;
             $this->_teamData[$teamId]['drawCount'] = 0;
             $this->_teamData[$teamId]['loseCount'] = 0;
+            $this->_teamData[$teamId]['outOfCompetition'] = $team->isOutOfCompetition();
 
             // Muss das Team hervorgehoben werden?
             $markClubs = $configurator->getMarkClubs();
@@ -317,7 +316,7 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
     /**
      * Die Spiele werden zum aktuellen Tabellenstand hinzugerechnet.
      *
-     * @param array[tx_cfcleague_models_Match] $matches
+     * @param tx_cfcleague_models_Match[] $matches
      * @param tx_cfcleaguefe_table_football_Configurator $configurator
      */
     protected function handleMatches(&$matches, tx_cfcleaguefe_table_football_Configurator $configurator)
@@ -330,10 +329,10 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
             $this->assertTeamsInCompetition($match);
             // Wie ist das Spiel ausgegangen?
             $toto = $match->getToto();
-            tx_rnbase_util_Misc::callHook('cfc_league_fe', 'leagueTableFootball_handleMatches', array(
+            tx_rnbase_util_Misc::callHook('cfc_league_fe', 'leagueTableFootball_handleMatches', [
                 'match' => &$match,
                 'teamdata' => &$this->_teamData,
-            ), $this);
+            ], $this);
 
             // Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
             // Daher rufen wir jetzt die passende Methode auf
@@ -379,13 +378,16 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
      * @param int $toto
      * @param tx_cfcleaguefe_table_football_Configurator $configurator
      */
-    protected function countStandard($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
+    protected function countStandard(tx_cfcleague_models_Match $match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
     {
         // Anzahl Spiele aktualisieren
         $homeId = $configurator->getTeamId($match->getHome());
         $guestId = $configurator->getTeamId($match->getGuest());
         $this->addMatchCount($homeId);
         $this->addMatchCount($guestId);
+        if ($match->isOutOfCompetition()) {
+            return ;
+        }
         // Für H2H modus das Spielergebnis merken
         $this->addResult($homeId, $guestId, $match->getResult());
 
@@ -432,12 +434,17 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
      * @param int $toto
      * @param tx_cfcleaguefe_table_football_Configurator $configurator
      */
-    protected function countHome($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
+    protected function countHome(tx_cfcleague_models_Match $match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
     {
         $homeId = $configurator->getTeamId($match->getHome());
         $guestId = $configurator->getTeamId($match->getGuest());
         // Anzahl Spiele aktualisieren
         $this->addMatchCount($homeId);
+
+        if ($match->isOutOfCompetition()) {
+            return ;
+        }
+
         $this->addResult($homeId, $guestId, $match->getGuest());
 
         if (0 == $toto) { // Unentschieden
@@ -469,12 +476,17 @@ class tx_cfcleaguefe_table_football_Table extends Tx_Rnbase_Service_Base impleme
      * @param int $toto
      * @param tx_cfcleaguefe_table_football_Configurator $configurator
      */
-    protected function countGuest($match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
+    protected function countGuest(tx_cfcleague_models_Match $match, $toto, tx_cfcleaguefe_table_IConfigurator $configurator)
     {
         $homeId = $configurator->getTeamId($match->getHome());
         $guestId = $configurator->getTeamId($match->getGuest());
         // Anzahl Spiele aktualisieren
         $this->addMatchCount($guestId);
+
+        if ($match->isOutOfCompetition()) {
+            return ;
+        }
+
         $this->addResult($homeId, $guestId, $match->getGuest());
 
         if (0 == $toto) { // Unentschieden
