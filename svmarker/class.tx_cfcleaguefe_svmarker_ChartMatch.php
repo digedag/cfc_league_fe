@@ -1,5 +1,7 @@
 <?php
 
+use System25\T3sports\Table\Builder;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -73,9 +75,7 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base
 
         $configurations = $formatter->getConfigurations();
 
-        tx_rnbase::load('tx_cfcleaguefe_table_Builder');
-        tx_rnbase::load('tx_cfcleague_models_Match');
-        $table = tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches(
+        $table = Builder::buildByCompetitionAndMatches(
             $competition,
             $competition->getMatches(tx_cfcleague_models_Match::MATCH_STATUS_FINISHED),
             $configurations,
@@ -88,7 +88,7 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base
 
         $chartTemplate = tx_rnbase_util_Templates::getSubpartFromFile($configurations->get($confId.'template.file'), $configurations->get($confId.'template.subpart'));
 
-        $markerArray = $subpartArray = $wrappedSubpartArray = array();
+        $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $markerArray['###JSON###'] = $json;
         $chartTemplate = tx_rnbase_util_Templates::substituteMarkerArrayCached($chartTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
 

@@ -2,6 +2,9 @@
 
 namespace System25\T3sports\Tests\Table\Football;
 
+use System25\T3sports\Table\ITableResult;
+use System25\T3sports\Table\Builder;
+
 /**
  * *************************************************************
  * Copyright notice.
@@ -45,12 +48,12 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
         $config = $this->createConfigurations([
             'tableType' => '0',
         ], 'cfc_league_fe');
-        $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+        $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 
         // Die Teams vorher setzen, damit kein DB-Zugriff erfolgt
         $leagueTable->getMatchProvider()->setTeams(array_values($teams));
         $result = $leagueTable->getTableData();
-        $this->assertTrue($result instanceof \tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+        $this->assertTrue($result instanceof ITableResult, 'Got no valid result');
 
         $scoreLine = $result->getScores();
         $this->assertEquals(3, count($scoreLine), 'Table should contain 3 teams.');
@@ -73,12 +76,12 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
             'tableType' => '0',
         ], 'cfc_league_fe');
 
-        $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+        $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams());
 
         $result = $leagueTable->getTableData();
 
-        $this->assertTrue($result instanceof \tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+        $this->assertTrue($result instanceof ITableResult, 'Got no valid result');
         $scoreLine = $result->getScores();
 
         $this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');
@@ -109,7 +112,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
         $config = $this->createConfigurations(array(
             'tableType' => '0',
         ), 'cfc_league_fe');
-        $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+        $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams());
         $result = $leagueTable->getTableData();
 
@@ -118,7 +121,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
         // T1 - 3 4:2 4
         // T2 - 2 3:2 4
         // T4 - 3 1:7 0
-        $this->assertTrue($result instanceof \tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+        $this->assertTrue($result instanceof ITableResult, 'Got no valid result');
         $scoreLine = $result->getScores();
 
         $this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');

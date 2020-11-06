@@ -1,4 +1,6 @@
 <?php
+use System25\T3sports\Table\ITableType;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -75,7 +77,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
     }
 
     /**
-     * @param tx_cfcleaguefe_table_ITableType $table
+     * @param ITableType $table
      * @param string $template
      * @param tx_rnbase_configurations $configurations
      */

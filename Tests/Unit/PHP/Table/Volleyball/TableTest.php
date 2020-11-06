@@ -2,6 +2,9 @@
 
 namespace System25\T3sports\Tests\Table\Volleyball;
 
+use System25\T3sports\Table\Builder;
+use System25\T3sports\Table\ITableResult;
+
 /**
  * *************************************************************
  * Copyright notice.
@@ -40,12 +43,12 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
             'tableType' => '0',
         ], 'cfc_league_fe');
 
-        $leagueTable = \tx_cfcleaguefe_table_Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
+        $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams());
 
         $result = $leagueTable->getTableData();
 
-        $this->assertTrue($result instanceof \tx_cfcleaguefe_table_ITableResult, 'Got no valid result');
+        $this->assertTrue($result instanceof ITableResult, 'Got no valid result');
         $scoreLine = $result->getScores();
 
         $this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');

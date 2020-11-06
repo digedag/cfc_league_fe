@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\Chart;
 
+use System25\T3sports\Table\ITableType;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -28,7 +30,7 @@ namespace System25\T3sports\Chart;
 class ChartBuilder
 {
     /**
-     * @param \tx_cfcleaguefe_table_ITableType $table
+     * @param ITableType $table
      */
     public function buildJson($table, $clubIds, $configurations, $confId)
     {

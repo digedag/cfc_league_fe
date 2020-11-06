@@ -642,8 +642,8 @@ plugin.tx_cfcleaguefe_competition {
   # Daten für die Ligatabelle
   leaguetable {
     newMode = 1
-  	football.matchProviderClass = tx_cfcleaguefe_table_football_MatchProvider
-  	icehockey.matchProviderClass = tx_cfcleaguefe_table_football_MatchProvider
+  	football.matchProviderClass = System25\T3sports\Table\Football\MatchProvider
+  	icehockey.matchProviderClass = System25\T3sports\Table\Football\MatchProvider
     # Ausgabe mit HTML-Template
     viewType = HTML
     league =< lib.t3sports.competition

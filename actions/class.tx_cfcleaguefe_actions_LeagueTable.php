@@ -1,4 +1,6 @@
 <?php
+use System25\T3sports\Table\Builder;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -89,8 +91,7 @@ class tx_cfcleaguefe_actions_LeagueTable extends tx_rnbase_action_BaseIOC
         }
 
         // Okay, es ist mindestens eine Liga enthalten
-        tx_rnbase::load('tx_cfcleaguefe_table_Builder');
-        $table = tx_cfcleaguefe_table_Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
+        $table = Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
 
         $viewData->offsetSet('table', $table); // Die Tabelle für den View bereitstellen
 

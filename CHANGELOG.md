@@ -1,6 +1,11 @@
 
-Änderungen
-----------
+Changes
+-------
+v1.6.0 (??.1?.2020)
+ * Moving table classes to PSR-4
+
+v1.5.2 (14.06.2020)
+ * labels in plugin flexforms fixed
 
 v1.5.2 (14.06.2020)
  * labels in plugin flexforms fixed
@@ -90,7 +95,7 @@ v0.8.2 (21.12.2011) (not released)
  * #52: Exception in league table alltime fixed.
  * ROLL-Markers added and configured in TeamView for players
  * ScopeSelection configured for report plugin
- * New Leaguetable: Set H2H-mode by TS: leaguetable.comparatorClass = tx_cfcleaguefe_table_football_ComparatorH2H
+ * New Leaguetable: Set H2H-mode by TS: leaguetable.comparatorClass = System25\T3sports\Table\Football\ComparatorH2H
  * Match report: display match notes with listbuilder.
  * Bugfix: Don't cache scope if no cObj UID is available
  * New marker ###MATCH_DCRESULTSUFFIX### to indicate extra time and penalty
