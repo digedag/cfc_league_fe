@@ -42,10 +42,8 @@
 		"classmap" : [
 			"actions/",
 			"Deprecations/",
-			"hooks/",
 			"models/",
 			"svmarker/",
-			"table/",
 			"util/",
 			"views/"
 		]

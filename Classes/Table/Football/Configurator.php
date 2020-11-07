@@ -233,11 +233,11 @@ class Configurator implements IConfigurator
             $this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
         }
 
-        $this->cfgPointSystem = $this->getMatchProvider()->getBaseCompetition()->record['point_system'];
+        $this->cfgPointSystem = $this->getMatchProvider()->getBaseCompetition()->getProperty('point_system');
         if ($this->configurations->get('pointSystemSelectionInput') || $this->getConfValue('pointSystemSelectionInput')) {
             $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
         }
-        $this->cfgLiveTable = intval($this->getConfValue('showLiveTable'));
+        $this->cfgLiveTable = (int) $this->getConfValue('showLiveTable');
         $this->cfgComparatorClass = $this->getConfValue('comparatorClass');
     }
 }
