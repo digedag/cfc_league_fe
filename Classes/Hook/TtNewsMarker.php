@@ -1,8 +1,17 @@
 <?php
+
+namespace System25\T3sports\Hook;
+
+use tx_rnbase;
+use tx_rnbase_util_BaseMarker;
+use Tx_Rnbase_Utility_Strings;
+use Exception;
+use tx_cfcleaguefe_models_match;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2016 Rene Nitzsche
+ *  (c) 2008-2020 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,15 +30,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
-
 /**
  * Make links to match reports from tt_news.
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_hooks_ttnewsMarkers
+class TtNewsMarker
 {
     /**
      * Hook um weitere Marker in tt_news einzufügen. Es sollte möglich sein auf alle
@@ -44,7 +50,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers
      * @param array $markerArray marker array from tt_news
      * @param array $row tt_news record
      * @param array $lConf tt_news config-array
-     * @param tx_ttnews $ttnews tt_news plugin instance
+     * @param \tx_ttnews $ttnews tt_news plugin instance
      */
     public function extraItemMarkerProcessor($markerArray, $row, $lConf, $ttnews)
     {
@@ -53,7 +59,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers
         $this->configurations->init($ttnews->conf, $ttnews->cObj, 'cfc_league_fe', 'cfc_league_fe');
         $this->linkConf = $this->configurations->get('external_links.');
         $regExpr[] = "/\[t3sports:([\w]*):(\w+) (.*?)]/";
-        $markerNames = array('CONTENT', 'SUBHEADER');
+        $markerNames = ['CONTENT', 'SUBHEADER'];
         foreach ($markerNames as $markerName) {
             $markerArray['###NEWS_'.$markerName.'###'] = $this->handleMarker($markerArray['###NEWS_'.$markerName.'###'], $regExpr);
         }
@@ -63,7 +69,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers
 
     public function handleMarker($marker, $expr)
     {
-        $marker = preg_replace_callback($expr, array($this, 'replace'), $marker);
+        $marker = preg_replace_callback($expr, [$this, 'replace'], $marker);
 
         return $marker;
     }
@@ -72,7 +78,7 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers
     {
         $linkId = $match[1];
         $conf = $this->linkConf[$linkId.'.'];
-        $linkParams = array();
+        $linkParams = [];
         $params = Tx_Rnbase_Utility_Strings::trimExplode(',', $conf['ext_parameters']);
         $paramValues = Tx_Rnbase_Utility_Strings::trimExplode(',', $match[2]);
         for ($i = 0, $cnt = count($params); $i < $cnt; ++$i) {
@@ -84,7 +90,6 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers
             $uid = $linkParams['matchId'];
 
             try {
-                tx_rnbase::load('tx_cfcleaguefe_models_match');
                 $t3match = tx_cfcleaguefe_models_match::getMatchInstance($uid);
                 $competition = $t3match->getCompetition();
                 $GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->record['agegroup'];
@@ -93,8 +98,8 @@ class tx_cfcleaguefe_hooks_ttnewsMarkers
             }
         }
 
-        $wrappedSubpartArray = array();
-        $empty = array();
+        $wrappedSubpartArray = [];
+        $empty = [];
         tx_rnbase_util_BaseMarker::initLink(
             $empty,
             $empty,

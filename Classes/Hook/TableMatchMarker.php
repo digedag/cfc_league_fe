@@ -1,8 +1,23 @@
 <?php
+
+namespace System25\T3sports\Hook;
+
+use tx_rnbase;
+use tx_rnbase_util_BaseMarker;
+use tx_rnbase_util_Templates;
+use tx_rnbase_util_Logger;
+use tx_rnbase_util_FormatUtil;
+use tx_rnbase_util_Files;
+use tx_rnbase_util_SearchBase;
+use Exception;
+
+use tx_cfcleaguefe_util_ServiceRegistry;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2016 Rene Nitzsche
+ *  (c) 2009-2020 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -21,21 +36,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
-tx_rnbase::load('tx_rnbase_util_Templates');
-
 /**
  * Integrate a league table in matchreport.
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_hooks_TableMatchMarker
+class TableMatchMarker
 {
     /**
      * Add match table with current round in match report.
      *
      * @param array $params
-     * @param tx_cfcleaguefe_util_MatchReport $parent
+     * @param \tx_cfcleaguefe_util_MatchMarker $parent
      */
     public function addCurrentRound($params, $parent)
     {
@@ -47,6 +59,7 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
 
         $formatter = $params['formatter'];
         $matches = $this->getCurrentRound($params, $formatter);
+        $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $markerArray['###'.$marker.'_MTCURRENTROUND###'] = $matches;
         $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
@@ -87,7 +100,6 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
                 $subpartName
             );
         } catch (Exception $e) {
-            tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::info('Error for matchtable current round: '.$e->getMessage(), 'cfc_league_fe');
         }
         if (!$template) {
@@ -112,7 +124,7 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
      * Add league table in match report.
      *
      * @param array $params
-     * @param tx_cfcleaguefe_util_MatchReport $parent
+     * @param \tx_cfcleaguefe_util_MatchMarker $parent
      */
     public function addLeagueTable($params, $parent)
     {
@@ -122,23 +134,21 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
             return;
         }
 
+        $table = '';
+        $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $match = $this->getMatch($params);
         if (!is_object($match)) {
             return false;
         } // The call is not for us
         $competition = $match->getCompetition();
-        if (!$competition->isTypeLeague()) {
-            // remove marker
-            $markerArray['###'.$marker.'_LEAGUETABLE###'] = $table;
-        } else {
+        if ($competition->isTypeLeague()) {
             $formatter = $params['formatter'];
             $configurations = $formatter->getConfigurations();
             $confId = $params['confid'].'leaguetable.';
             $table = '#####<!-- Template not found -->';
-            tx_rnbase::load('tx_rnbase_util_Files');
             $tableTemplate = tx_rnbase_util_Files::getFileResource(
                 $configurations->get($confId.'template'),
-                array('subpart' => $configurations->get($confId.'subpartName'))
+                ['subpart' => $configurations->get($confId.'subpartName')]
             );
             if ($tableTemplate) {
                 $tableData = $this->getTableData($formatter->getConfigurations(), $confId, $competition, $match);
@@ -151,15 +161,23 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
         $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
+    /**
+     *
+     * @param ConfigurationInterface $configurations
+     * @param string $confId
+     * @param \tx_cfcleaguefe_models_competition $competition
+     * @param \tx_cfcleaguefe_models_match $match
+     * @return array
+     */
     private function getTableData($configurations, $confId, $competition, $match)
     {
         $tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $configurations->getParameters(), $configurations, $competition, $confId);
-        if (intval($configurations->get($confId.'leaguetable.useRoundFromMatch'))) {
+        if ($configurations->getInt($confId.'leaguetable.useRoundFromMatch') > 0) {
             $tableProvider->setCurrentRound($match->getRound());
         }
 
         // Wir benötigen noch die beiden Club-UIDs
-        $clubMarks = array();
+        $clubMarks = [];
         $clubUid = $match->getHome()->getClubUid();
         if ($clubUid) {
             $clubMarks[] = $clubUid;
@@ -170,8 +188,8 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
         }
         $tableProvider->setMarkClubs($clubMarks);
 
+        // FIXME: change implementation
         $leagueTable = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTable');
-        $leagueTable = new tx_cfcleaguefe_util_LeagueTable();
         $tableData = $leagueTable->generateTable($tableProvider);
 
         return $tableData;
@@ -182,7 +200,7 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
      *
      * @param array $params
      *
-     * @return tx_cfcleaguefe_models_match or false
+     * @return \tx_cfcleaguefe_models_match or false
      */
     private function getMatch($params)
     {
@@ -192,8 +210,4 @@ class tx_cfcleaguefe_hooks_TableMatchMarker
 
         return $params['match'];
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/hooks/class.tx_cfcleaguefe_hooks_TableMatchMarker.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/hooks/class.tx_cfcleaguefe_hooks_TableMatchMarker.php'];
 }

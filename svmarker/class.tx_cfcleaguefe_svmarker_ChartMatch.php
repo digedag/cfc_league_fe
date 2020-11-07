@@ -25,9 +25,6 @@ use System25\T3sports\Table\Builder;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
 /**
  * Service to output a chart to compare two match opponents.
  *
@@ -47,7 +44,7 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base
         $formatter = $params['formatter'];
         $chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
         //		$chart = '<!-- TODO: convert to JS -->';
-        $markerArray = $subpartArray = $wrappedSubpartArray = array();
+        $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
         $markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
         $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);

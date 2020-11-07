@@ -13,11 +13,11 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php'][
     \System25\T3sports\Hook\PageLayout::class.'->getPluginSummary';
 
 // Hook for tt_news
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = 'tx_cfcleaguefe_hooks_ttnewsMarkers';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = \System25\T3sports\Hook\TtNewsMarker::class;
 // LeagueTable in Match
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_hooks_TableMatchMarker->addLeagueTable';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = \System25\T3sports\Hook\TableMatchMarker::class . '->addLeagueTable';
 // Matchtable current round in Match
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_initRecord'][] = 'tx_cfcleaguefe_hooks_TableMatchMarker->addCurrentRound';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_initRecord'][] = \System25\T3sports\Hook\TableMatchMarker::class . '->addCurrentRound';
 // Hook für historische Spiele
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_svmarker_MatchHistory->addMatches';
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_svmarker_ChartMatch->addChart';
