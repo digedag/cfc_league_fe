@@ -140,6 +140,6 @@ class Configurator extends FootballConfigurator
             $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
         }
         $this->cfgLiveTable = intval($this->getConfValue('showLiveTable'));
-        $this->cfgComparatorClass = $this->getConfValue('comparatorClass');
+        $this->cfgComparatorClass = $this->getStrategyValue('comparator');
     }
 }

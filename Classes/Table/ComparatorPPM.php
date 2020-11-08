@@ -1,8 +1,6 @@
 <?php
 
-namespace System25\T3sports\Table\Football;
-
-use System25\T3sports\Table\IComparator;
+namespace System25\T3sports\Table;
 
 /***************************************************************
  *  Copyright notice
@@ -28,9 +26,10 @@ use System25\T3sports\Table\IComparator;
  ***************************************************************/
 
 /**
- * Comperator methods for football league tables.
+ * Comperator methods for point based competitions.
+ * Compare teams based on best points per match.
  */
-class Comparator implements IComparator
+class ComparatorPPM implements IComparator
 {
     public function setTeamData(array &$teamdata)
     {

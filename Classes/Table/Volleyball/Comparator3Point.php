@@ -3,6 +3,7 @@
 namespace System25\T3sports\Table\Volleyball;
 
 use System25\T3sports\Table\Util;
+use System25\T3sports\Table\IComparator;
 
 /***************************************************************
  *  Copyright notice
@@ -29,7 +30,7 @@ use System25\T3sports\Table\Util;
 
 /**
  * Comperator methods for volleyball league tables with 3 point system.
- * http://sourceforge.net/apps/trac/cfcleague/ticket/74.
+ * http://www.vbl-wiki.de/wiki/Drei-Punkte-Wertung
  */
 class Comparator3Point implements IComparator
 {
@@ -40,8 +41,7 @@ class Comparator3Point implements IComparator
 
     /**
      * Funktion zur Sortierung der Tabellenzeilen
-     * 1.
-     * Anzahl der Punkte
+     * 1. Anzahl der Punkte
      * 2. Anzahl gewonnener Spiele
      * 3. Satzquotient
      * 4. Ballpunktequotient

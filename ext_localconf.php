@@ -22,6 +22,13 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_initRecord'
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_svmarker_MatchHistory->addMatches';
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = 'tx_cfcleaguefe_svmarker_ChartMatch->addChart';
 
+tx_cfcleague_util_Misc::registerTableStrategy('default','LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_default', System25\T3sports\Table\Football\Comparator::class);
+tx_cfcleague_util_Misc::registerTableStrategy('head2head','LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_head2head', System25\T3sports\Table\Football\ComparatorH2H::class);
+tx_cfcleague_util_Misc::registerTableStrategy('pointpermatch','LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_pointpermatch', System25\T3sports\Table\ComparatorPPM::class);
+tx_cfcleague_util_Misc::registerTableStrategy('volleyball3','LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_volleyball_3point', System25\T3sports\Table\Volleyball\Comparator3Point::class);
+tx_cfcleague_util_Misc::registerTableStrategy('volleyball2','LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_volleyball_2point', System25\T3sports\Table\Volleyball\Comparator::class);
+
+
 $confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
 
 // Cal-Service nur bei Bedarf einbinden

@@ -146,6 +146,12 @@
 			<label index="general_lgl_recursive_i_4">4 level</label>
 			<label index="general_lgl_recursive_i_5">5 level</label>
 
+			<label index="tablestrategy_default">Default</label>
+			<label index="tablestrategy_head2head">Direct matches first</label>
+			<label index="tablestrategy_pointpermatch">Points per match</label>
+			<label index="tablestrategy_volleyball_2point">Volleyball 2 point system</label>
+			<label index="tablestrategy_volleyball_3point">Volleyball 3 point system</label>
+
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="plugin.competition.label">T3sports: Ligaverwaltung</label>
@@ -268,6 +274,13 @@
 			<label index="general_lgl_recursive_i_3">3 Ebenen</label>
 			<label index="general_lgl_recursive_i_4">4 Ebenen</label>
 			<label index="general_lgl_recursive_i_5">5 Ebenen</label>
+
+			<label index="tablestrategy_default">Standard</label>
+			<label index="tablestrategy_head2head">Vergleich gegeneinander</label>
+			<label index="tablestrategy_pointpermatch">Punkte pro Spiel</label>
+			<label index="tablestrategy_volleyball_2point">Volleyball 2 Punktsystem</label>
+			<label index="tablestrategy_volleyball_3point">Volleyball 3 Punktsystem</label>
+
 		</languageKey>
 	</data>
 </T3locallang>

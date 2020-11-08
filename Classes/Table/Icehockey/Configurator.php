@@ -3,12 +3,12 @@
 namespace System25\T3sports\Table\Icehockey;
 
 use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
+use System25\T3sports\Table\Football\Comparator;
 use System25\T3sports\Table\PointOptions;
-use System25\T3sports\Table\Football\IComparator;
 
 use tx_rnbase;
 use Exception;
-use System25\T3sports\Table\Football\Comparator;
+use System25\T3sports\Table\IComparator;
 
 /***************************************************************
 *  Copyright notice
@@ -138,6 +138,6 @@ class Configurator extends FootballConfigurator
             $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
         }
         $this->cfgLiveTable = intval($this->getConfValue('showLiveTable'));
-        $this->cfgComparatorClass = $this->getConfValue('comparatorClass');
+        $this->cfgComparatorClass = $this->getStrategyValue('comparator');
     }
 }

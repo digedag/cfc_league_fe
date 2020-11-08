@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\Table\Volleyball;
 
+use System25\T3sports\Table\IComparator;
+
 /***************************************************************
  *  Copyright notice
  *

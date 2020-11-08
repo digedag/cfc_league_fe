@@ -10,6 +10,7 @@ use tx_cfcleague_models_Competition;
 use Tx_Rnbase_Utility_Strings;
 use tx_rnbase;
 use Exception;
+use System25\T3sports\Table\IComparator;
 
 /***************************************************************
 *  Copyright notice
@@ -47,6 +48,7 @@ class Configurator implements IConfigurator
     protected $matchProvider;
 
     protected $configurations;
+    protected $cfgTableStrategy;
 
     protected $confId;
 
@@ -238,6 +240,21 @@ class Configurator implements IConfigurator
             $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
         }
         $this->cfgLiveTable = (int) $this->getConfValue('showLiveTable');
-        $this->cfgComparatorClass = $this->getConfValue('comparatorClass');
+
+        $this->cfgComparatorClass = $this->getStrategyValue('comparator');
+    }
+
+    /**
+     *
+     * @param string $key
+     * @return mixed|NULL
+     */
+    protected function getStrategyValue(string $key)
+    {
+        if ($this->cfgTableStrategy === null) {
+            $strategy = $this->getMatchProvider()->getBaseCompetition()->getProperty('tablestrategy');
+            $this->cfgTableStrategy = \tx_cfcleague_util_Misc::lookupTableStrategy($strategy);
+        }
+        return array_key_exists($key, $this->cfgTableStrategy) ? $this->cfgTableStrategy[$key] : null;
     }
 }

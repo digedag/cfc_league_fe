@@ -5,6 +5,7 @@ v1.6.0 (??.1?.2020)
  * #59 Moving table classes to PSR-4
  * #71 ignore matches of teams out of competitions in table calculation
  * fix some PHP issues
+ * TS config `leaguetable.comparatorClass` for comparator replaced by table strategy value in competition
 
 v1.5.2 (14.06.2020)
  * labels in plugin flexforms fixed

@@ -1,6 +1,6 @@
 <?php
 
-namespace System25\T3sports\Table\Football;
+namespace System25\T3sports\Table;
 
 /***************************************************************
  *  Copyright notice
