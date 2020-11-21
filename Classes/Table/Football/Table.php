@@ -251,6 +251,7 @@ class Table extends AbstractService implements ITableType
             $this->_teamData[$teamId]['winCount'] = 0;
             $this->_teamData[$teamId]['drawCount'] = 0;
             $this->_teamData[$teamId]['loseCount'] = 0;
+            $this->_teamData[$teamId]['ppm'] = 0;
             $this->_teamData[$teamId]['outOfCompetition'] = $team->isOutOfCompetition();
 
             // Muss das Team hervorgehoben werden?
@@ -354,7 +355,6 @@ class Table extends AbstractService implements ITableType
                 'match' => &$match,
                 'teamdata' => &$this->_teamData,
             ], $this);
-
             // Die eigentliche Punktezählung richtet sich nach dem Typ der Tabelle
             // Daher rufen wir jetzt die passende Methode auf
             switch ($configurator->getTableType()) {
@@ -444,6 +444,8 @@ class Table extends AbstractService implements ITableType
         // Jetzt die Tore summieren
         $this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
         $this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addPPM($homeId);
+        $this->addPPM($guestId);
     }
 
     /**
@@ -486,6 +488,7 @@ class Table extends AbstractService implements ITableType
         }
         // Jetzt die Tore summieren
         $this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addPPM($homeId);
     }
 
     /**
@@ -529,11 +532,22 @@ class Table extends AbstractService implements ITableType
 
         // Jetzt die Tore summieren
         $this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addPPM($guestId);
     }
 
     protected function addResult($homeId, $guestId, $result)
     {
         $this->_teamData[$homeId]['matches'][$guestId] = $result;
+    }
+
+    /**
+     * Berechnet den Punktquotienten (Punkte pro Spiel)
+     */
+    protected function addPPM($teamId)
+    {
+        if ($this->_teamData[$teamId]['matchCount'] > 0) {
+            $this->_teamData[$teamId]['ppm'] = round($this->_teamData[$teamId]['points'] / $this->_teamData[$teamId]['matchCount'], 3);
+        }
     }
 
     /**

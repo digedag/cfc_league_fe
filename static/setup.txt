@@ -672,6 +672,9 @@ plugin.tx_cfcleaguefe_competition {
         if.value = -1
         if.isGreaterThan.field = points2
       }
+      # format points per match
+      ppm.numberFormat.decimals = 2
+      ppm.numberFormat.dec_point = ,
       # Optional ein String, der zwischen den Zeilen steht
 #      implode = <br />
     }
