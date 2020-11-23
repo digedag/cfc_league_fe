@@ -1,8 +1,9 @@
 
 Changes
 -------
-v1.6.0 (??.1?.2020)
+v1.6.0 (23.11.2020)
  * #59 Moving table classes to PSR-4
+ * #70 allow to configure league table strategy in competition
  * #71 ignore matches of teams out of competitions in table calculation
  * fix some PHP issues
  * TS config `leaguetable.comparatorClass` for comparator replaced by table strategy value in competition
