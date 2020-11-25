@@ -29,7 +29,7 @@ addons:
 
 cache:
     directories:
-        - $HOME/.composer/cache
+        - $HOME/.config/composer/cache
 
 before_install:
     - phpenv config-rm xdebug.ini
@@ -92,4 +92,4 @@ jobs:
         echo "Release comment ${TAG_MESSAGE}";
         echo;
         echo;
-        $HOME/.composer/vendor/bin/ter-client upload cfc_league_fe . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASS" -m "$TAG_MESSAGE";
+        $HOME/.config/composer/vendor/bin/ter-client upload cfc_league_fe . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASS" -m "$TAG_MESSAGE";

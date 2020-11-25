@@ -1,6 +1,9 @@
 
 Changes
 -------
+v1.6.1 (25.11.2020)
+ * fix TravisCI release stage
+
 v1.6.0 (23.11.2020)
  * #59 Moving table classes to PSR-4
  * #70 allow to configure league table strategy in competition
