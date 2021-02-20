@@ -87,7 +87,7 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club
     public static function findAll($clubUids, $saisonUids = '', $groupUids = '', $compUids = '')
     {
         // FIXME: Die Felder des Clubs aus der TCA laden.
-        $what = 'DISTINCT tx_cfcleague_club.uid, tx_cfcleague_club.name, tx_cfcleague_club.short_name, tx_cfcleague_club.dam_logo ';
+        $what = 'DISTINCT tx_cfcleague_club.uid, tx_cfcleague_club.name, tx_cfcleague_club.short_name ';
         $from = array(
             '
       tx_cfcleague_club
