@@ -89,7 +89,7 @@ class MatchEventService extends \tx_cal_event_service
         $events = [];
 
         foreach ($matches as $match) {
-            $events[date('Ymd', $match->record['date'])][date('Hi', $match->record['date'])][$match->uid] = $this->createEvent($match, false);
+            $events[date('Ymd', $match->getProperty('date'))][date('Hi', $match->getProperty('date'))][$match->uid] = $this->createEvent($match, false);
         }
 
         return $events;

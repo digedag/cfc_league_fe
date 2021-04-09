@@ -197,11 +197,11 @@ class DefaultMatchProvider implements IMatchProvider
 
     public function getRounds()
     {
-        $rounds = array();
+        $rounds = [];
         $matches = $this->getMatches();
         for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i) {
             $match = $matches[$i];
-            $rounds[$match->record['round']][] = $match;
+            $rounds[$match->getProperty('round')][] = $match;
         }
 
         return $rounds;

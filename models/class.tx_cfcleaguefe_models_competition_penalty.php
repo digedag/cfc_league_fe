@@ -41,10 +41,7 @@ class tx_cfcleaguefe_models_competition_penalty extends tx_rnbase_model_base
 
     public function isCorrection()
     {
-        return $this->record['correction'] > 0;
+        return $this->getProperty('correction') > 0;
     }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition_penalty.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/models/class.tx_cfcleaguefe_models_competition_penalty.php'];
-}

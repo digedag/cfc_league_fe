@@ -38,7 +38,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         if (!is_array($rowOrUid) && intval($rowOrUid) < 0) {
             // Unbekannter Spieler
             $this->uid = $rowOrUid;
-            $this->record['uid'] = $rowOrUid;
+            $this->setProperty('uid', $rowOrUid);
         } else {
             parent::tx_rnbase_model_base($rowOrUid);
         }
@@ -51,10 +51,10 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
      * einzelnen Marker ausgegeben.
      *
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param array $conf
-     *            Configuration array
+     * @param string $confId Configuration path
+     * @param tx_cfcleague_models_Profile $profile
      */
-    public static function wrap(&$formatter, $confId, $profile)
+    public static function wrap($formatter, $confId, $profile)
     {
         if (!is_object($profile)) {
             // Es wurde kein Profil übergeben, also gibt es nicht weiter zu tun
@@ -62,20 +62,20 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         }
         if (intval($profile->uid) < 0) {
             // Bei unbekannten Profilen holen wir den Namen aus der Config
-            $profile->record['last_name'] = $formatter->configurations->getLL('profile_unknownLastname');
-            $profile->record['first_name'] = $formatter->configurations->getLL('profile_unknownFirstname');
+            $profile->setProperty('last_name', $formatter->configurations->getLL('profile_unknownLastname'));
+            $profile->setProperty('first_name', $formatter->configurations->getLL('profile_unknownFirstname'));
         }
         self::prepareLinks($formatter, $confId, $profile);
         // TODO Das sollte dynamisch gestaltet werden, damit alle Daten der Tabelle verwendet
         // werden können.
-        $conf = $formatter->configurations->get($confId);
+        $conf = $formatter->getConfigurations()->get($confId);
         $arr = array();
         // Über alle Felder im record iterieren
-        foreach ($profile->record as $key => $val) {
+        foreach ($profile->getProperty() as $key => $val) {
             if ($conf[$key] || $conf[$key.'.']) {
-                $value = $formatter->wrap($profile->record[$key], $confId.$key.'.', $profile->record);
+                $value = $formatter->wrap($profile->getProperty($key), $confId.$key.'.', $profile->getProperty());
                 if (strlen($value) > 0) {
-                    $weight = intval($formatter->configurations->get($confId.$key.'.s_weight'));
+                    $weight = intval($formatter->getConfigurations()->get($confId.$key.'.s_weight'));
                     $arr[] = array(
                         $value,
                         $weight,
@@ -89,7 +89,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         if (is_object($ticker) && $conf['ifChangedOut.']['ticker.']) {
             $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId.'ifChangedOut.ticker.', $ticker);
             if (strlen($value) > 0) {
-                $weight = intval($formatter->configurations->get($confId.'ifChangedOut.s_weight'));
+                $weight = intval($formatter->getConfigurations()->get($confId.'ifChangedOut.s_weight'));
                 $arr[] = array(
                     $value,
                     $weight,
@@ -111,7 +111,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
             }
         }
         if (!count($arr)) { // Wenn das Array leer ist, wird nix gezeigt
-            return $formatter->wrap('', $confId, $profile->record);
+            return $formatter->wrap('', $confId, $profile->getProperty());
         }
 
         // Jetzt die Teile sortieren
@@ -126,7 +126,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         $ret = implode($sep, $ret);
 
         // Abschließend nochmal den Ergebnisstring wrappen
-        return $formatter->wrap($ret, $confId, $profile->record);
+        return $formatter->wrap($ret, $confId, $profile->getProperty());
     }
 
     /**
@@ -171,16 +171,16 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     public function getName($reverse = 0)
     {
         if ($reverse) {
-            $ret = $this->record['last_name'];
-            if ($this->record['first_name']) {
-                $ret .= ', '.$this->record['first_name'];
+            $ret = $this->getProperty('last_name');
+            if ($this->getProperty('first_name')) {
+                $ret .= ', '.$this->getProperty('first_name');
             }
         } else {
-            $ret = $this->record['first_name'];
-            if ($this->record['first_name']) {
+            $ret = $this->getProperty('first_name');
+            if ($this->getProperty('first_name')) {
                 $ret .= ' ';
             }
-            $ret .= $this->record['last_name'];
+            $ret .= $this->getProperty('last_name');
         }
 
         return $ret;
@@ -203,7 +203,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     {
         if ($note->isType(200)) {
             // Wenn das im Record liegt, kann es auch per TS ausgewertet werden!
-            $this->record['teamCaptain'] = '1';
+            $this->setProperty('teamCaptain', '1');
         }
     }
 
@@ -213,7 +213,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
      */
     public function isCaptain()
     {
-        return intval($this->record['teamCaptain']);
+        return (int) $this->getProperty('teamCaptain');
     }
 
     /**
@@ -265,7 +265,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     public function addTeamNotes($team)
     {
         // Zunächst alle Daten initialisieren
-        tx_rnbase::load('tx_cfcleaguefe_models_teamNoteType');
         $types = tx_cfcleaguefe_models_teamNoteType::getAll();
         for ($i = 0, $cnt = count($types); $i < $cnt; ++$i) {
             $type = $types[$i];
@@ -280,7 +279,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
                 $note = $notes[$i];
                 $noteType = $note->getType();
                 $this->setProperty('tn'.$noteType->getMarker(), $note->getUid());
-                // $this->record['tn'.$noteType->getMarker()] = $note->getValue();
                 $this->setProperty('tn'.$noteType->getMarker().'_type', $note->getProperty('mediatype'));
             }
         }

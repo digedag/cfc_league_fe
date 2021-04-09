@@ -282,7 +282,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getPlayerNamesHome()
     {
-        return $this->_getLineUp($this->match->getPlayersHome(), $this->match->record['system_home'], 'matchreport.players.');
+        return $this->_getLineUp($this->match->getPlayersHome(), $this->match->getProperty('system_home'), 'matchreport.players.');
     }
 
     /**
@@ -304,7 +304,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getLineupHome($confId = 'matchreport.players.')
     {
-        return $this->_getLineUp($this->match->getPlayersHome(), $this->match->record['system_home'], $confId);
+        return $this->_getLineUp($this->match->getPlayersHome(), $this->match->getProperty('system_home'), $confId);
     }
 
     /**
@@ -316,7 +316,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getLineupGuest($confId = 'matchreport.players.')
     {
-        return $this->_getLineUp($this->match->getPlayersGuest(), $this->match->record['system_guest'], $confId);
+        return $this->_getLineUp($this->match->getPlayersGuest(), $this->match->getProperty('system_guest'), $confId);
     }
 
     /**
@@ -464,7 +464,7 @@ class tx_cfcleaguefe_models_matchreport
         $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
         $ret = implode($sep, $ret);
         // Jetzt noch ein Wrap über alles
-        return $this->_formatter->stdWrap($ret, $this->_configurations->get($confIdAll), $this->match->record);
+        return $this->_formatter->stdWrap($ret, $this->_configurations->get($confIdAll), $this->match->getProperty());
     }
 
     /**
@@ -525,7 +525,7 @@ class tx_cfcleaguefe_models_matchreport
 
         $conf = $this->_configurations->get($confIdAll);
         // Jetzt noch ein Wrap über alles
-        return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
+        return $this->_formatter->stdWrap($ret, $conf, $this->match->getProperty());
     }
 
     /**
@@ -569,7 +569,7 @@ class tx_cfcleaguefe_models_matchreport
         $ret = implode(' - ', $partArr);
 
         // Jetzt noch ein Wrap über alles
-        return $this->_formatter->stdWrap($ret, $conf, $this->match->record);
+        return $this->_formatter->stdWrap($ret, $conf, $this->match->getProperty());
     }
 
     /**

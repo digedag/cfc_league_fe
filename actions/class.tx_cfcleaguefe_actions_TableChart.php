@@ -24,12 +24,6 @@ use System25\T3sports\Table\Builder;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
-tx_rnbase::load('tx_rnbase_util_TYPO3');
-tx_rnbase::load('tx_rnbase_util_Math');
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Controller für die Anzeige einer Tabellenfahrt.
@@ -70,7 +64,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
             }
             // Wir müssen den Typ des Wettbewerbs ermitteln.
             $currCompetition = tx_rnbase::makeInstance('tx_cfcleague_models_competition', $compUids);
-            if (1 != intval($currCompetition->record['type'])) {
+            if (!$currCompetition->isTypeLeague()) {
                 return $out;
             }
         }
@@ -152,11 +146,9 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
         $this->createChartDataset($xyDataset, $tsArr, $configurations, $league);
 
         try {
-            tx_rnbase::load('tx_rnbase_plot_Builder');
             $chart = tx_rnbase_plot_Builder::getInstance()->make($tsArr, false);
         } catch (Exception $e) {
             $chart = 'Not possible: '.$e->getMessage();
-            tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::warn('Chart creation failed!', 'cfc_league_fe', [
                 'Exception' => $e->getMessage(),
             ]);
@@ -168,7 +160,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
     /**
      * Fügt in das TS-Array die zusätzlichen Daten ein.
      */
-    protected function createChartDataset($xyDataset, &$tsArr, &$configurations, &$league, $confId = 'chart.')
+    protected function createChartDataset($xyDataset, &$tsArr, $configurations, $league, $confId = 'chart.')
     {
         $defaultLine = $configurations->get($confId.'defaults.line');
         $defaultLineArr = $configurations->get($confId.'defaults.line.');
@@ -178,7 +170,7 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
         $title = $configurations->get($confId.'defaults.title');
         if ($tsArr['10.']['10.']['text']) {
             if ($title) {
-                $tsArr['10.']['10.']['text'] = str_replace('COMPETITION_NAME', $league->record['name'], $title);
+                $tsArr['10.']['10.']['text'] = str_replace('COMPETITION_NAME', $league->getProperty('name'), $title);
                 // Hier könnten noch zusätzliche Ersetzungsstrings eingebaut werden..
             }
         }

@@ -132,8 +132,8 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
         $GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->getUid() : 0;
         $item->setProperty('group', is_object($group) ? $group->getUid() : '0');
         $item->setProperty('agegroup_name', is_object($group) ? $group->getName() : '');
-        $item->setProperty('firstpicture', $item->record['dam_images']);
-        $item->setProperty('pictures', $item->record['dam_images']);
+        $item->setProperty('firstpicture', $item->getProperty('dam_images'));
+        $item->setProperty('pictures', $item->getProperty('dam_images'));
     }
 
     /**

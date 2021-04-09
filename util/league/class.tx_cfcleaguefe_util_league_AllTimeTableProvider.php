@@ -57,14 +57,14 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
         for ($i = 0, $cnt = count($this->matches); $i < $cnt; ++$i) {
             $match = $this->matches[$i];
             $club = $match->getHome()->getClub();
-            if ($club->uid && !array_key_exists($club->uid, $this->teams)) {
-                $club->record['club'] = $club->uid; // necessary for mark clubs
-                $this->teams[$club->uid] = $club;
+            if ($club->getUid() && !array_key_exists($club->getUid(), $this->teams)) {
+                $club->setProperty('club', $club->getUid()); // necessary for mark clubs
+                $this->teams[$club->getUid()] = $club;
             }
             $club = $match->getGuest()->getClub();
-            if ($club->uid && !array_key_exists($club->uid, $this->teams)) {
-                $club->record['club'] = $club->uid; // necessary for mark clubs
-                $this->teams[$club->uid] = $club;
+            if ($club->getUid() && !array_key_exists($club->getUid(), $this->teams)) {
+                $club->setProperty('club', $club->getUid()); // necessary for mark clubs
+                $this->teams[$club->getUid()] = $club;
             }
         }
 

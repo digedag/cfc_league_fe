@@ -139,7 +139,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
         // die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
         // Haben wir eine $currRound
         if ($this->cfgTableScope) {
-            $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getLeague()->record['teams']));
+            $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getLeague()->getProperty('teams')));
             $round = ($round) ? $round - 1 : $round;
             if ($round) {
                 // Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
@@ -161,7 +161,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
         $matches = $this->getMatches();
         for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i) {
             $match = $matches[$i];
-            $rounds[$match->record['round']][] = $match;
+            $rounds[$match->getProperty('round')][] = $match;
         }
 
         return $rounds;
@@ -187,7 +187,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
             $this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
         }
 
-        $this->cfgPointSystem = $this->getLeague()->record['point_system'];
+        $this->cfgPointSystem = $this->getLeague()->getProperty('point_system');
         if ($this->getConfigurations()->get($this->confId.'pointSystemSelectionInput')) {
             $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
         }

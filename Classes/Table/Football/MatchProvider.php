@@ -54,7 +54,7 @@ class MatchProvider extends DefaultMatchProvider
     protected function modifyMatchFields(&$fields, &$options)
     {
         if ($tableScope = $this->getConfigurator()->getTableScope()) {
-            $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getLeague()->record['teams']));
+            $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getLeague()->getProperty('teams')));
             $round = ($round) ? $round - 1 : $round;
             if ($round) {
                 // Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird

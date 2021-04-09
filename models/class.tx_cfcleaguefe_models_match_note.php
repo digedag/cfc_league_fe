@@ -126,13 +126,12 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
             }
         }
         $cObj = $formatter->configurations->getCObj(1);
-        $cObj->data = $ticker->record;
-        foreach ($ticker->record as $key => $val) {
+        $cObj->data = $ticker->getProperty();
+        foreach ($ticker->getProperty() as $key => $val) {
             $conf = $formatter->configurations->get($confId.$key.'.');
             if ($conf) {
-                $cObj->setCurrentVal($ticker->record[$key]);
-                $value = $cObj->stdWrap($ticker->record[$key], $conf);
-                // $value = $cObj->stdWrap($ticker->record[$key],$conf[$key.'.']);
+                $cObj->setCurrentVal($ticker->getProperty($key));
+                $value = $cObj->stdWrap($ticker->getProperty($key), $conf);
                 if (strlen($value) > 0) {
                     $arr[] = array(
                         $value,
@@ -183,7 +182,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      */
     public function getScore()
     {
-        return $this->record['goals_home'].' : '.$this->record['goals_guest'];
+        return $this->getProperty('goals_home').' : '.$this->getProperty('goals_guest');
     }
 
     /**
@@ -191,7 +190,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      */
     public function isPenalty()
     {
-        $type = intval($this->record['type']);
+        $type = (int) $this->getProperty('type');
 
         return $type >= 70 && $type < 80;
     }
@@ -234,7 +233,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     {
         $minMinute = intval($conf['noteMinimumMinute']);
 
-        return $minMinute <= $this->record['minute'] && $this->isType($conf);
+        return $minMinute <= $this->getProperty('minute') && $this->isType($conf);
     }
 
     /**
@@ -293,7 +292,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         $flex = $this->_getFlexForm($configurations);
         $types = $this->_getItemsArrayFromFlexForm($flex, 's_matchreport', 'tickerTypes');
         foreach ($types as $type) {
-            if (intval($type[1]) == intval($this->record['type'])) {
+            if (intval($type[1]) == intval($this->getProperty('type'))) {
                 return $TSFE->sL($type[0]);
             }
         }
@@ -303,7 +302,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
     public function getExtraTime()
     {
-        return $this->record['extra_time'];
+        return $this->getProperty('extra_time');
     }
 
     /**
@@ -344,13 +343,13 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         // Innerhalb der Matchnote gibt es das Konstrukt des unbekannten Spielers. Dieser
         // Wird verwendet, wenn der eigentliche Spieler nicht mehr in der Datenbank gefunden
         // wird, oder wenn die ID des Spielers -1 ist.
-        if (0 == intval($this->record['player_home'])) { // ID 0 ist nicht vergeben
+        if (0 == intval($this->getProperty('player_home'))) { // ID 0 ist nicht vergeben
             $player = null;
-        } elseif (-1 == intval($this->record['player_home'])) {
+        } elseif (-1 == intval($this->getProperty('player_home'))) {
             $player = $this->getUnknownPlayer();
         } else {
             $players = $this->match->getPlayersHome(1); // Spieler und Wechselspieler holen
-            $player = &$players[$this->record['player_home']];
+            $player = &$players[$this->getProperty('player_home')];
         }
 
         return $player;
@@ -361,13 +360,13 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      */
     protected function getInstancePlayerGuest()
     {
-        if (0 == intval($this->record['player_guest'])) { // ID 0 ist nicht vergeben
+        if (0 == intval($this->getProperty('player_guest'))) { // ID 0 ist nicht vergeben
             $player = null;
-        } elseif (-1 == intval($this->record['player_guest'])) {
+        } elseif (-1 == intval($this->getProperty('player_guest'))) {
             $player = &$this->getUnknownPlayer();
         } else {
             $players = $this->match->getPlayersGuest(1);
-            $player = &$players[$this->record['player_guest']];
+            $player = &$players[$this->getProperty('player_guest')];
             if (!is_object($player)) {
                 $player = &$this->getNotFoundProfile();
             }
@@ -474,7 +473,6 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         $anz = count($matchNotes);
         for ($i = 0; $i < $anz; ++$i) {
             // Hier darf nur mit Referenzen gearbeitet werden
-            // $matchNotes[$i]->setMatch($matchesHash[$matchNotes[$i]->record['game']]);
             $matchesHash[$matchNotes[$i]->getProperty('game')]->addMatchNote($matchNotes[$i]);
         }
 
@@ -492,7 +490,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         if (strlen($showOnly) > 0) {
             $showOnly = Tx_Rnbase_Utility_Strings::intExplode(',', $showOnly);
             // Prüfen ob der aktuelle Typ paßt
-            if (count($showOnly) > 0 && in_array($ticker->record['type'], $showOnly)) {
+            if (count($showOnly) > 0 && in_array($ticker->getProperty('type'), $showOnly)) {
                 return 1;
             }
         } else {
@@ -556,20 +554,20 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     protected function _getPlayerChange($type)
     {
         // Ist es ein Wechsel?
-        if ($this->isChange() && ($this->record['player_home'] || $this->record['player_guest'])) {
+        if ($this->isChange() && ($this->getProperty('player_home') || $this->getProperty('player_guest'))) {
             // Heim oder Gast?
-            if ($this->record['player_home']) {
+            if ($this->getProperty('player_home')) {
                 $players = $this->match->getPlayersHome(1);
-                $playerField = '80' == $this->record['type'] ? ($type ? 'player_home' : 'player_home_2') : ($type ? 'player_home_2' : 'player_home');
+                $playerField = '80' == $this->getProperty('type') ? ($type ? 'player_home' : 'player_home_2') : ($type ? 'player_home_2' : 'player_home');
             } else {
                 $players = $this->match->getPlayersGuest(1);
-                $playerField = '80' == $this->record['type'] ? ($type ? 'player_guest' : 'player_guest_2') : ($type ? 'player_guest_2' : 'player_guest');
+                $playerField = '80' == $this->getProperty('type') ? ($type ? 'player_guest' : 'player_guest_2') : ($type ? 'player_guest_2' : 'player_guest');
             }
-            if ($this->record[$playerField] < 0) {
+            if ($this->getProperty($playerField) < 0) {
                 return $this->getUnknownPlayer();
             }
 
-            return $players[$this->record[$playerField]];
+            return $players[$this->getProperty($playerField)];
         }
     }
 }

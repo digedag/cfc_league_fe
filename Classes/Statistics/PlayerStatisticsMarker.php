@@ -58,13 +58,15 @@ class PlayerStatisticsMarker
         $rowRollCnt = 0;
         $parts = array();
         foreach ($stats as $playerStat) {
+            /* @var $player \tx_cfcleague_models_Profile */
             $player = $playerStat['player'];
             if (!is_object($player)) {
                 continue; // Ohne Spieler wird auch nix gezeigt
             }
             unset($playerStat['player']); // PHP 5.2, sonst klappt der merge nicht
-            $player->record = array_merge($playerStat, $player->record);
-            $player->record['roll'] = $rowRollCnt;
+
+            $player->setProperty(array_merge($playerStat, $player->record));
+            $player->setProperty('roll', $rowRollCnt);
             // Jetzt für jedes Profil das Template parsen
             $parts[] = $profileMarkerObj->parseTemplate($playerTemplate, $player, $formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;

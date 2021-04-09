@@ -72,7 +72,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
             $scope = intval($scope);
             if ($scope) {
                 // Feststellen wann die Hinrunde endet: Anz Teams - 1
-                $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->record['teams']));
+                $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getProperty('teams')));
                 $round = ($round) ? $round - 1 : $round;
             }
             // Check if data is already cached

@@ -60,7 +60,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
     public function test_twoPointSystem()
     {
         $league = $this->prepareLeague('league_1');
-        $league->record['point_system'] = 1; // Punktsystem umstellen
+        $league->setProperty('point_system', 1); // Punktsystem umstellen
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations([
@@ -92,7 +92,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
     public function test_threePointSystem()
     {
         $league = $this->prepareLeague('league_1');
-        $league->record['point_system'] = 0; // Punktsystem einstellen
+        $league->setProperty('point_system', 0); // Punktsystem einstellen
 
         $params = new \ArrayObject();
         $config = $this->createConfigurations([

@@ -41,11 +41,11 @@ class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe
     {
         // Die Clubs aus dem Spiel ermitteln
         $clubs = array();
-        $clubId = $this->match->getHome()->record['club'];
+        $clubId = $this->match->getHome()->getProperty('club');
         if ($clubId) {
             $clubs[] = $clubId;
         }
-        $clubId = $this->match->getGuest()->record['club'];
+        $clubId = $this->match->getGuest()->getProperty('club');
         if ($clubId) {
             $clubs[] = $clubId;
         }

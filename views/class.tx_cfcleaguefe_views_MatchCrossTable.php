@@ -119,7 +119,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
     {
         $ret = array();
         for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i) {
-            if ($matches[$i]->record['home'] == $home && $matches[$i]->record['guest'] == $guest) {
+            if ($matches[$i]->getProperty('home') == $home && $matches[$i]->getProperty('guest') == $guest) {
                 $ret[] = $matches[$i];
             }
         }

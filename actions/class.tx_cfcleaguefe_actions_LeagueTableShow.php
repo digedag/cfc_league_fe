@@ -87,7 +87,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
             }
             // Wir müssen den Typ des Wettbewerbs ermitteln.
             $currCompetition = new tx_cfcleaguefe_models_competition($compUids);
-            if (1 != intval($currCompetition->record['type'])) {
+            if (!$currCompetition->isTypeLeague()) {
                 return $out;
             }
         }

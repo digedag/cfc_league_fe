@@ -92,7 +92,7 @@ class TtNewsMarker
             try {
                 $t3match = tx_cfcleaguefe_models_match::getMatchInstance($uid);
                 $competition = $t3match->getCompetition();
-                $GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->record['agegroup'];
+                $GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->getProperty('agegroup');
             } catch (Exception $e) {
                 $GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = 0;
             }
