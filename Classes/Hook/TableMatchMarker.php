@@ -2,17 +2,16 @@
 
 namespace System25\T3sports\Hook;
 
+use Exception;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use tx_cfcleaguefe_util_ServiceRegistry;
 use tx_rnbase;
 use tx_rnbase_util_BaseMarker;
-use tx_rnbase_util_Templates;
-use tx_rnbase_util_Logger;
-use tx_rnbase_util_FormatUtil;
 use tx_rnbase_util_Files;
+use tx_rnbase_util_FormatUtil;
+use tx_rnbase_util_Logger;
 use tx_rnbase_util_SearchBase;
-use Exception;
-
-use tx_cfcleaguefe_util_ServiceRegistry;
-use Sys25\RnBase\Configuration\ConfigurationInterface;
+use tx_rnbase_util_Templates;
 
 /***************************************************************
  *  Copyright notice
@@ -78,8 +77,8 @@ class TableMatchMarker
         } // The call is not for us
 
         $confId = 'matchreport.mtcurrentround.';
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
 
@@ -162,11 +161,11 @@ class TableMatchMarker
     }
 
     /**
-     *
      * @param ConfigurationInterface $configurations
      * @param string $confId
      * @param \tx_cfcleaguefe_models_competition $competition
      * @param \tx_cfcleaguefe_models_match $match
+     *
      * @return array
      */
     private function getTableData($configurations, $confId, $competition, $match)

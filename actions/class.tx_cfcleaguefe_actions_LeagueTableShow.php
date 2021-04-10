@@ -59,7 +59,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
         tx_rnbase_util_Misc::callHook(
             'cfc_league_fe',
             'action_LeagueTable_handleScope_hook',
-            array('scopeArray' => &$scopeArr, 'parameters' => $parameters, 'configurations' => $configurations, 'confId' => $this->getConfId()),
+            ['scopeArray' => &$scopeArr, 'parameters' => $parameters, 'configurations' => $configurations, 'confId' => $this->getConfId()],
             $this
         );
         $saisonUids = $scopeArr['SAISON_UIDS'];
@@ -121,13 +121,13 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
 
             $srv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
             $systems = $srv->getPointSystems('football');
-            $items = array();
+            $items = [];
             foreach ($systems as $system) {
                 $items[] = $system[1];
             }
 
             // Wir bereiten die Selectbox vor
-            $arr = array();
+            $arr = [];
             $arr[0] = $items;
             $arr[1] = $viewData->offsetGet('tablePointSystem');
             $viewData->offsetSet('pointsystem_select', $arr);
@@ -145,7 +145,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
             $items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable', 'tabletype'));
 
             // Wir bereiten die Selectbox vor
-            $arr = array();
+            $arr = [];
             $arr[0] = $items;
             $arr[1] = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : 0;
             $viewData->offsetSet('tabletype_select', $arr);
@@ -163,7 +163,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
             $items = $this->translateItems($this->getItemsArrayFromFlexForm($flex, 's_leaguetable', 'tablescope'));
 
             // Wir bereiten die Selectbox vor
-            $arr = array();
+            $arr = [];
             $arr[0] = $items;
             $arr[1] = $parameters->offsetGet('tablescope') ? $parameters->offsetGet('tablescope') : 0;
             $viewData->offsetSet('tablescope_select', $arr);
@@ -194,7 +194,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
     {
         global $TSFE;
 
-        $ret = array();
+        $ret = [];
         foreach ($items as $item) {
             $ret[$item[1]] = $TSFE->sL($item[0]);
         }
@@ -216,10 +216,10 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
         }
 
         $leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-        $arr = array(
+        $arr = [
             'table' => $leagueTable->generateTable($tableProvider),
             'pointsystem' => $tableProvider->cfgPointSystem,
-        );
+        ];
 
         return $arr;
     }

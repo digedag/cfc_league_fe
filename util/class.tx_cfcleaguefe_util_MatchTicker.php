@@ -88,7 +88,7 @@ class tx_cfcleaguefe_util_MatchTicker
         $arr = &$match->getMatchNotes();
 
         // Die Notes werden jetzt noch einmal aufbereitet
-        $ret = array();
+        $ret = [];
         $anz = count($arr);
 
         for ($i = 0; $i < $anz; ++$i) {

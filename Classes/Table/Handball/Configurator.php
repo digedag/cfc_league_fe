@@ -2,11 +2,11 @@
 
 namespace System25\T3sports\Table\Handball;
 
-use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
-use System25\T3sports\Table\Football\Comparator;
-use tx_rnbase;
 use Exception;
+use System25\T3sports\Table\Football\Comparator;
+use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
 use System25\T3sports\Table\IComparator;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
@@ -72,7 +72,7 @@ class Configurator extends FootballConfigurator
     /**
      * @return IComparator
      */
-    public function getComparator() : IComparator
+    public function getComparator(): IComparator
     {
         $compareClass = $this->cfgComparatorClass ? $this->cfgComparatorClass : Comparator::class;
         $comparator = tx_rnbase::makeInstance($compareClass);

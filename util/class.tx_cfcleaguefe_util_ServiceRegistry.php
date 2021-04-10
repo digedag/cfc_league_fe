@@ -42,10 +42,10 @@ class tx_cfcleaguefe_util_ServiceRegistry
             if ('LLL:' === substr($title, 0, 4)) {
                 $title = tx_rnbase_util_Lang::sL($title);
             }
-            $config['items'][] = array(
+            $config['items'][] = [
                 $title,
                 $subtype,
-            );
+            ];
         }
 
         return $config;

@@ -118,9 +118,9 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
     private function addStadiums($template, &$item, &$formatter, $confId, $markerPrefix)
     {
         $srv = tx_cfcleague_util_ServiceRegistry::getStadiumService();
-        $fields = array();
+        $fields = [];
         $fields['STADIUMMM.UID_FOREIGN'][OP_IN_INT] = $item->getUid();
-        $options = array();
+        $options = [];
         tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
         $children = $srv->search($fields, $options);
@@ -145,9 +145,9 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
     private function addTeams($template, $item, $formatter, $confId, $markerPrefix)
     {
         $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
-        $fields = array();
+        $fields = [];
         $fields['TEAM.CLUB'][OP_EQ_INT] = $item->getUid();
-        $options = array();
+        $options = [];
         tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
         $children = $srv->searchTeams($fields, $options);
@@ -209,9 +209,9 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
         $cObjData = $formatter->getConfigurations()->getCObj()->data;
         $formatter->getConfigurations()->getCObj()->data = $item->getProperty();
         if ($item->isPersisted()) {
-            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array(
+            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, [
                 'club' => $item->uid,
-            ), $template);
+            ], $template);
         } else {
             $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
             $remove = intval($formatter->configurations->get($confId.'links.'.$linkId.'.removeIfDisabled'));

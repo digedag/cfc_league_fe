@@ -2,8 +2,8 @@
 
 namespace System25\T3sports\Table\Football;
 
-use System25\T3sports\Table\Util;
 use System25\T3sports\Table\IComparator;
+use System25\T3sports\Table\Util;
 
 /***************************************************************
  *  Copyright notice

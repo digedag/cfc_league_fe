@@ -43,14 +43,14 @@ class Util
         $t1H2HPoints = 0;
         $t2H2HPoints = 0;
         if (count($t1vst2) > 0 && $t1vst2[0] > $t1vst2[1]) {
-            $t1H2HPoints += 1;
+            ++$t1H2HPoints;
         } elseif (count($t1vst2) > 0 && $t1vst2[0] < $t1vst2[1]) {
-            $t2H2HPoints += 1;
+            ++$t2H2HPoints;
         }
         if (count($t2vst1) > 0 && $t2vst1[0] > $t2vst1[1]) {
-            $t2H2HPoints += 1;
+            ++$t2H2HPoints;
         } elseif (count($t2vst1) > 0 && $t2vst1[0] < $t2vst1[1]) {
-            $t1H2HPoints += 1;
+            ++$t1H2HPoints;
         }
 
         return [

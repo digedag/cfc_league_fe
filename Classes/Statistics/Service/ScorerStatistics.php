@@ -53,7 +53,7 @@ class ScorerStatistics extends PlayerStatistics
      */
     private function _findScorer(&$playerData)
     {
-        $ret = array();
+        $ret = [];
         foreach ($playerData as $playerStats) {
             if (intval($playerStats['goals_all']) > 0) {
                 $ret[] = $playerStats;

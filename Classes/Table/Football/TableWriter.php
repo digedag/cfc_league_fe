@@ -2,12 +2,11 @@
 
 namespace System25\T3sports\Table\Football;
 
-use System25\T3sports\Table\TableWriterBase;
-use System25\T3sports\Table\ITableType;
-use System25\T3sports\Table\ITableResult;
-use System25\T3sports\Table\IMatchProvider;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
-
+use System25\T3sports\Table\IMatchProvider;
+use System25\T3sports\Table\ITableResult;
+use System25\T3sports\Table\ITableType;
+use System25\T3sports\Table\TableWriterBase;
 use tx_cfcleague_util_ServiceRegistry;
 use tx_rnbase;
 use tx_rnbase_util_BaseMarker;
@@ -69,9 +68,9 @@ class TableWriter extends TableWriterBase
         ];
         // Jetzt die Strafen auflisten
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-        $template = $listBuilder->render($penalties, false, $template, 'tx_rnbase_util_SimpleMarker', $confId.'penalty.', 'PENALTY', $formatter, array(
+        $template = $listBuilder->render($penalties, false, $template, 'tx_rnbase_util_SimpleMarker', $confId.'penalty.', 'PENALTY', $formatter, [
             'classname' => 'tx_cfcleague_models_CompetitionPenalty',
-        ));
+        ]);
 
         $markerArray = [];
         // Die Tabellensteuerung

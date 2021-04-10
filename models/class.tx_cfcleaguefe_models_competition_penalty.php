@@ -44,4 +44,3 @@ class tx_cfcleaguefe_models_competition_penalty extends tx_rnbase_model_base
         return $this->getProperty('correction') > 0;
     }
 }
-

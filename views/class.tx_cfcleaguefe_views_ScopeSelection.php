@@ -138,7 +138,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         $itemConfId = 'scopeSelection.'.$confName.'.';
         $currentNoLink = intval($configurations->get($itemConfId.'current.noLink'));
 
-        $parts = array();
+        $parts = [];
         // Jetzt über die vorhandenen Items iterieren
         foreach ($items as $item) {
             if (!is_object($item)) {

@@ -102,7 +102,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
         // Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
         // für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
         if ($this->cfgTableType || $this->cfgTableScope) {
-            return array();
+            return [];
         }
 
         return $this->getLeague()->getPenalties();
@@ -131,8 +131,8 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
             // Nur bis zum Spieltag anzeigen
             $matchTable->setMaxRound($this->currRound);
         }
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $options['orderby']['MATCH.ROUND'] = 'asc';
         $matchTable->getFields($fields, $options);
         // Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
@@ -144,7 +144,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
             if ($round) {
                 // Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
                 $joined['value'] = $round;
-                $joined['cols'] = array('MATCH.ROUND');
+                $joined['cols'] = ['MATCH.ROUND'];
                 $joined['operator'] = 1 == $this->cfgTableScope ? OP_LTEQ_INT : OP_GT_INT;
                 $fields[SEARCH_FIELD_JOINED][] = $joined;
             }
@@ -157,7 +157,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
 
     public function getRounds()
     {
-        $rounds = array();
+        $rounds = [];
         $matches = $this->getMatches();
         for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i) {
             $match = $matches[$i];

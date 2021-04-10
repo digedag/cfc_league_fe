@@ -71,11 +71,11 @@ class tx_cfcleaguefe_util_StatisticsHelper
     /**
      * Alle Typen für ein Tor.
      */
-    private static $goalTypes = array(
+    private static $goalTypes = [
         10,
         11,
         12,
-    );
+    ];
 
     /**
      * Prüft, ob der Spieler ein Tor geschossen hat.

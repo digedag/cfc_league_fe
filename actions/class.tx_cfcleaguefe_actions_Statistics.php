@@ -64,7 +64,7 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
             // Abbruch kein Typ angegeben
             return $configurations->getLL('statistics_noTypeFound');
         }
-        $services = array();
+        $services = [];
         foreach ($types as $type) {
             $service = tx_rnbase::makeInstanceService('cfcleague_statistics', $type);
             if (is_object($service)) {

@@ -41,7 +41,7 @@ class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base
      */
     public static function findItems($uids)
     {
-        $options = array();
+        $options = [];
         if (is_string($uids) && strlen($uids) > 0) {
             $options['where'] = 'uid IN ('.$uids.')';
         } else {

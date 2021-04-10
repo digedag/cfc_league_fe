@@ -30,7 +30,7 @@ tx_rnbase::load('tx_rnbase_util_Extensions');
  */
 class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
 {
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->setClassname('tx_cfcleaguefe_models_match_note');
         parent::__construct($options);

@@ -63,9 +63,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'createDatalines');
         $subpartArray['###DATALINE###'] = $this->_createDatalines($datalineTemplate, $teamsArray, $teams, $configurations, $viewData);
         tx_rnbase_util_Misc::pullTT();
-        $markerArray = array(
+        $markerArray = [
             '###MATCHCOUNT###' => count($matches),
-        );
+        ];
 
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
@@ -117,7 +117,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      */
     private function findMatch(&$matches, $home, $guest)
     {
-        $ret = array();
+        $ret = [];
         for ($i = 0, $cnt = count($matches); $i < $cnt; ++$i) {
             if ($matches[$i]->getProperty('home') == $home && $matches[$i]->getProperty('guest') == $guest) {
                 $ret[] = $matches[$i];

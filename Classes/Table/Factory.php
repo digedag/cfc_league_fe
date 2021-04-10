@@ -3,12 +3,11 @@
 namespace System25\T3sports\Table;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
-use tx_rnbase;
-use tx_rnbase_util_Misc;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\Handball\Table as HandballTable;
 use System25\T3sports\Table\Icehockey\Table as IcehockeyTable;
 use System25\T3sports\Table\Volleyball\Table as VolleyballTable;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
@@ -72,6 +71,7 @@ class Factory
         if (array_key_exists($type, $map)) {
             $table = tx_rnbase::makeInstance($map[$type]);
         }
+
         return $table;
     }
 }

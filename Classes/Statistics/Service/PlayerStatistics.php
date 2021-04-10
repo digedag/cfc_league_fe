@@ -47,7 +47,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
 
     private $configurations;
 
-    private $statData = array(
+    private $statData = [
         'match_count',
         'match_minutes',
         'changed_out',
@@ -63,7 +63,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         'goals_away',
         'goals_assist',
         'goals_joker',
-    );
+    ];
 
     /**
      * This method is called one time before the statistic process starts.
@@ -203,10 +203,10 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      */
     protected function getTeams($scopeArr)
     {
-        $teams = call_user_func(array(
+        $teams = call_user_func([
             'tx_cfcleaguefe_models_team',
             'getTeams',
-        ), $scopeArr['COMP_UIDS'], $scopeArr['CLUB_UIDS']);
+        ], $scopeArr['COMP_UIDS'], $scopeArr['CLUB_UIDS']);
 
         return $teams;
     }
@@ -422,7 +422,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     public function &_getPlayerData(&$players, $player)
     {
         if (!array_key_exists($player->uid, $players)) {
-            $players[$player->uid] = array();
+            $players[$player->uid] = [];
             // Alle Daten initialisieren
             foreach ($this->statData as $col) {
                 $players[$player->uid][$col] = 0;
@@ -441,7 +441,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      */
     public function _sortPlayer($players, $team)
     {
-        $ret = array();
+        $ret = [];
         if (strlen(trim($team->getProperty('players'))) > 0) {
             if (count($players)) {
                 // Jetzt die Spieler in die richtige Reihenfolge bringen

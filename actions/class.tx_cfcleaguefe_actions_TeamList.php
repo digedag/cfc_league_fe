@@ -36,17 +36,17 @@ class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC
         $srv = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();
         $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewdata, $this->getConfId());
 
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 
-        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'team.pagebrowser', $viewdata, $fields, $options, array(
-            'searchcallback' => array(
+        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'team.pagebrowser', $viewdata, $fields, $options, [
+            'searchcallback' => [
                 $srv,
                 'search',
-            ),
+            ],
             'pbid' => 'teams',
-        ));
+        ]);
 
         $teams = $srv->search($fields, $options);
         $viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen

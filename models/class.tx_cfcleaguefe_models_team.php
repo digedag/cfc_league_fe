@@ -230,7 +230,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
             return $this->sortPlayer($rows, $column);
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -241,7 +241,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     protected function sortPlayer($profiles, $recordKey = 'players')
     {
-        $ret = array();
+        $ret = [];
         if (strlen(trim($this->getProperty($recordKey))) > 0) {
             if (count($profiles)) {
                 // Jetzt die Spieler in die richtige Reihenfolge bringen
@@ -282,12 +282,12 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
 
         // $what = tx_cfcleaguefe_models_team::getWhat();
         $what = 'tx_cfcleague_teams.*';
-        $from = array(
+        $from = [
             '
 			tx_cfcleague_teams
 				JOIN tx_cfcleague_competition ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )',
             'tx_cfcleague_teams',
-        );
+        ];
 
         $options['where'] = 'tx_cfcleague_teams.club IN ('.$clubIds.') AND ';
         $options['where'] .= 'tx_cfcleague_competition.uid IN ('.$competitionIds.') ';

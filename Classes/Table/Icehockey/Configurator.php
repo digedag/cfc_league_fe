@@ -2,13 +2,12 @@
 
 namespace System25\T3sports\Table\Icehockey;
 
-use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
-use System25\T3sports\Table\Football\Comparator;
-use System25\T3sports\Table\PointOptions;
-
-use tx_rnbase;
 use Exception;
+use System25\T3sports\Table\Football\Comparator;
+use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
 use System25\T3sports\Table\IComparator;
+use System25\T3sports\Table\PointOptions;
+use tx_rnbase;
 
 /***************************************************************
 *  Copyright notice

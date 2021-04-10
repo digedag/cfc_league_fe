@@ -2,21 +2,19 @@
 
 namespace System25\T3sports\Table\Football;
 
-use System25\T3sports\Table\ITableType;
+use Exception;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Typo3Wrapper\Service\AbstractService;
+use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
-use Sys25\RnBase\Typo3Wrapper\Service\AbstractService;
-use tx_cfcleague_models_Match;
+use System25\T3sports\Table\ITableType;
+use System25\T3sports\Table\ITableWriter;
+use System25\T3sports\Table\TableResult;
 use tx_cfcleague_models_CompetitionPenalty;
-
+use tx_cfcleague_models_Match;
 use tx_rnbase;
 use tx_rnbase_util_Misc;
-use System25\T3sports\Table\IConfigurator;
-
-use Exception;
-use System25\T3sports\Table\TableResult;
-use System25\T3sports\Table\ITableWriter;
 
 /***************************************************************
  *  Copyright notice
@@ -85,7 +83,7 @@ class Table extends AbstractService implements ITableType
     /**
      * @return IMatchProvider
      */
-    public function getMatchProvider() : IMatchProvider
+    public function getMatchProvider(): IMatchProvider
     {
         return $this->matchProvider;
     }
@@ -93,7 +91,7 @@ class Table extends AbstractService implements ITableType
     /**
      * @return Configurator
      */
-    public function getConfigurator($forceNew = false) : IConfigurator
+    public function getConfigurator($forceNew = false): IConfigurator
     {
         if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
@@ -109,7 +107,7 @@ class Table extends AbstractService implements ITableType
      *
      * @return ITableResult
      */
-    public function getTableData() : ITableResult
+    public function getTableData(): ITableResult
     {
         $tableData = tx_rnbase::makeInstance(TableResult::class);
         $configurator = $this->getConfigurator();
@@ -200,7 +198,7 @@ class Table extends AbstractService implements ITableType
         }
     }
 
-    public function getTableWriter() : ITableWriter
+    public function getTableWriter(): ITableWriter
     {
         return tx_rnbase::makeInstance(TableWriter::class);
     }
@@ -407,7 +405,7 @@ class Table extends AbstractService implements ITableType
         $this->addMatchCount($homeId);
         $this->addMatchCount($guestId);
         if ($match->isOutOfCompetition()) {
-            return ;
+            return;
         }
         // Für H2H modus das Spielergebnis merken
         $this->addResult($homeId, $guestId, $match->getResult());
@@ -465,7 +463,7 @@ class Table extends AbstractService implements ITableType
         $this->addMatchCount($homeId);
 
         if ($match->isOutOfCompetition()) {
-            return ;
+            return;
         }
 
         $this->addResult($homeId, $guestId, $match->getGuest());
@@ -508,7 +506,7 @@ class Table extends AbstractService implements ITableType
         $this->addMatchCount($guestId);
 
         if ($match->isOutOfCompetition()) {
-            return ;
+            return;
         }
 
         $this->addResult($homeId, $guestId, $match->getGuest());
@@ -541,7 +539,7 @@ class Table extends AbstractService implements ITableType
     }
 
     /**
-     * Berechnet den Punktquotienten (Punkte pro Spiel)
+     * Berechnet den Punktquotienten (Punkte pro Spiel).
      */
     protected function addPPM($teamId)
     {
@@ -591,7 +589,7 @@ class Table extends AbstractService implements ITableType
         $this->_teamData[$teamId]['loseCount'] = $this->_teamData[$teamId]['loseCount'] + 1;
     }
 
-    public function getTypeID() : string
+    public function getTypeID(): string
     {
         return self::TABLE_TYPE;
     }

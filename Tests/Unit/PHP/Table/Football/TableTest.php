@@ -2,8 +2,8 @@
 
 namespace System25\T3sports\Tests\Table\Football;
 
-use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\Builder;
+use System25\T3sports\Table\ITableResult;
 
 /**
  * *************************************************************
@@ -36,7 +36,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
      *
      * @_group unit
      */
-    public function test_LeagueTableWithDummyTeam()
+    public function testLeagueTableWithDummyTeam()
     {
         $league = $this->prepareLeague('league_2');
         // Team 2 ist der Dummy und muss entfernt werden
@@ -64,7 +64,7 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
      *
      * @_group unit
      */
-    public function test_LeagueTableWithTwoPointSystem()
+    public function testLeagueTableWithTwoPointSystem()
     {
         $league = $this->prepareLeague('league_1');
         $league->getProperty('point_system', 1); // Punktsystem einstellen
@@ -102,16 +102,16 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
      *
      * @_group unit
      */
-    public function test_LeagueTableWithThreePointSystem()
+    public function testLeagueTableWithThreePointSystem()
     {
         $league = $this->prepareLeague('league_1');
         $league->setProperty('point_system', 0); // Punktsystem umstellen
         $matches = $league->getMatches(2);
 
         $params = new \ArrayObject();
-        $config = $this->createConfigurations(array(
+        $config = $this->createConfigurations([
             'tableType' => '0',
-        ), 'cfc_league_fe');
+        ], 'cfc_league_fe');
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams());
         $result = $leagueTable->getTableData();

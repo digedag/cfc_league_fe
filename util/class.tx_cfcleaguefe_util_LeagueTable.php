@@ -52,7 +52,7 @@ class tx_cfcleaguefe_util_LeagueTable
 
     public function __construct()
     {
-        $this->_teamData = array();
+        $this->_teamData = [];
     }
 
     /**
@@ -70,13 +70,13 @@ class tx_cfcleaguefe_util_LeagueTable
         $this->setTableProvider($tableProvider);
         $this->_initTeams($tableProvider);
         $this->handlePenalties(); // Strafen können direkt berechnet werden
-        $xyData = array();
+        $xyData = [];
         $rounds = $tableProvider->getRounds();
         foreach ($rounds as $round => $roundMatches) {
             $this->handleMatches($roundMatches);
             // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
             $teamData = $this->_teamData;
-            usort($teamData, array($this, $this->getCompareMethod()));
+            usort($teamData, [$this, $this->getCompareMethod()]);
             // Nun setzen wir die Tabellenstände
             reset($teamData);
             foreach ($teamData as $position => $team) {
@@ -109,13 +109,13 @@ class tx_cfcleaguefe_util_LeagueTable
         $this->_initTeams($tableProvider);
         $this->handlePenalties(); // Strafen können direkt berechnet werden
 
-        $teamData = array();
+        $teamData = [];
         $rounds = $tableProvider->getRounds();
         foreach ($rounds as $round => $roundMatches) {
             $this->handleMatches($roundMatches);
             // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
             $teamData = $this->_teamData;
-            usort($teamData, array($this, $this->getCompareMethod()));
+            usort($teamData, [$this, $this->getCompareMethod()]);
             // Nun setzen wir die Tabellenstände
             reset($teamData);
             for ($i = 0; $i < count($teamData); ++$i) {
@@ -129,7 +129,7 @@ class tx_cfcleaguefe_util_LeagueTable
                 $this->_teamData[$team['teamId']]['position'] = $newPosition;
             }
         }
-        usort($this->_teamData, array($this, $this->getCompareMethod()));
+        usort($this->_teamData, [$this, $this->getCompareMethod()]);
 
         return $this->_teamData;
     }
@@ -195,7 +195,7 @@ class tx_cfcleaguefe_util_LeagueTable
             tx_rnbase_util_Misc::callHook(
                 'cfc_league_fe',
                 'leagueTable_handleMatches',
-                array('match' => &$match, 'teamdata' => &$this->_teamData),
+                ['match' => &$match, 'teamdata' => &$this->_teamData],
                 $this
             );
 
@@ -432,7 +432,7 @@ class tx_cfcleaguefe_util_LeagueTable
             $this->_teamData[$teamId]['loseCount'] = 0;
 
             // CDe begin */
-            $this->_teamData[$teamId]['matches'] = array();
+            $this->_teamData[$teamId]['matches'] = [];
             // CDe end */
 
             // Muss das Team hervorgehoben werden?
@@ -542,14 +542,14 @@ class tx_cfcleaguefe_util_LeagueTable
                 $t1H2HPoints = 0;
                 $t2H2HPoints = 0;
                 if (count($t1vst2) > 0 && $t1vst2[0] > $t1vst2[1]) {
-                    $t1H2HPoints += 1;
+                    ++$t1H2HPoints;
                 } elseif (count($t1vst2) > 0 && $t1vst2[0] < $t1vst2[1]) {
-                    $t2H2HPoints += 1;
+                    ++$t2H2HPoints;
                 }
                 if (count($t2vst1) > 0 && $t2vst1[0] > $t2vst1[1]) {
-                    $t2H2HPoints += 1;
+                    ++$t2H2HPoints;
                 } elseif (count($t2vst1) > 0 && $t2vst1[0] < $t2vst1[1]) {
-                    $t1H2HPoints += 1;
+                    ++$t1H2HPoints;
                 }
 
                 if ($t1H2HPoints == $t2H2HPoints || !$isH2HComparison) {

@@ -54,7 +54,7 @@ class TeamStatisticsMarker extends \tx_rnbase_util_BaseMarker
 
         $rowRoll = intval($configurations->get($statsConfId.'team.roll.value'));
         $rowRollCnt = 0;
-        $parts = array();
+        $parts = [];
         foreach ($stats as $teamStat) {
             try {
                 $team = \tx_cfcleaguefe_models_team::getTeamInstance($teamStat['team']);

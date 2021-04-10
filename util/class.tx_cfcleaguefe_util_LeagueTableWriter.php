@@ -67,7 +67,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
         $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
         $templateEntry = tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
 
-        $parts = array();
+        $parts = [];
         // Die einzelnen Zeilen zusammenbauen
         $rowRoll = intval($configurations->get($confId.'table.roll.value'));
         $rowRollCnt = 0;

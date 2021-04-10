@@ -78,8 +78,8 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
         }
 
         $confId = 'matchreport.historic.';
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
 

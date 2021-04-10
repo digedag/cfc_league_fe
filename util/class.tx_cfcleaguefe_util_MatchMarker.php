@@ -44,7 +44,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
      * @param $options Array
      *            with options. not used until now.
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         parent::__construct($options);
         // Den TeamMarker erstellen
@@ -62,13 +62,13 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
     protected function prepareTemplate($template, $match, $formatter, $confId, $marker)
     {
         $this->prepareFields($match, $formatter, $confId);
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_initRecord', [
             'match' => $match,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
             'formatter' => $formatter,
-        ), $this);
+        ], $this);
 
         // Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
         $this->pushTT('addDynamicMarkers');
@@ -117,16 +117,16 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         // Nochmal nach Markern schauen, falls SubTemplates aus dem TS neue Marker verwendet haben
         if (self::containsMarker($template, $marker.'_') && 0 == $this->recursion) {
             // einmalige Rekursion starten
-            $this->recursion += 1;
+            ++$this->recursion;
             $template = $this->parseTemplate($template, $match, $formatter, $confId, $marker);
         }
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_afterSubst', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'matchMarker_afterSubst', [
             'match' => $match,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
             'formatter' => $formatter,
-        ), $this);
+        ], $this);
 
         return $template;
     }
@@ -302,15 +302,15 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             // Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte
             // stehen schon im report bereit
             $srv = tx_cfcleague_util_ServiceRegistry::getMatchService();
-            $fields = array();
+            $fields = [];
             $fields['MATCHNOTE.GAME'][OP_EQ_INT] = $match->getUid();
-            $options = array();
+            $options = [];
             $options['what'] = 'uid';
             tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
             tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
             $children = $srv->searchMatchNotes($fields, $options);
             // Die gefundenen Notes werden jetzt durch ihre aufbereiteten Duplikate ersetzt
-            $items = array();
+            $items = [];
             $tickerHash = $this->getTickerHash($match);
             for ($ci = 0, $cnt = count($children); $ci < $cnt; ++$ci) {
                 if (array_key_exists($children[$ci]['uid'], $tickerHash)) {
@@ -334,7 +334,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
     protected function getTickerHash($match)
     {
         if (!is_array($this->tickerHash)) {
-            $this->tickerHash = array();
+            $this->tickerHash = [];
             $tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($match);
             for ($i = 0, $cnt = count($tickerArr); $i < $cnt; ++$i) {
                 $this->tickerHash[$tickerArr[$i]->getUid()] = $tickerArr[$i];
@@ -391,7 +391,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             return $template;
         }
 
-        $gSubpartArray = $firstMarkerArray = array();
+        $gSubpartArray = $firstMarkerArray = [];
 
         if (!tx_rnbase_util_Extensions::isLoaded('dam')) {
             // Not supported without DAM!
@@ -414,7 +414,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $gPictureTemplate = tx_rnbase_util_Templates::getSubpart($template, '###'.$baseMarker.'_MEDIAS###');
 
         $pictureTemplate = tx_rnbase_util_Templates::getSubpart($gPictureTemplate, '###'.$baseMarker.'_MEDIA###');
-        $markerArray = array();
+        $markerArray = [];
         $out = '';
         $serviceObj = Tx_Rnbase_Utility_T3General::makeInstanceService('mediaplayer');
 
@@ -456,9 +456,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $formatter->getConfigurations()->getCObj()->data = $match->getProperty();
 
         if ($match->hasReport()) {
-            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array(
+            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, [
                 'matchId' => $match->getUid(),
-            ), $template);
+            ], $template);
         } else {
             $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
             $remove = intval($formatter->getConfigurations()->get($confId.'links.'.$linkId.'.removeIfDisabled'));
@@ -467,9 +467,9 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
         $linkId = 'ticker';
         $force = $formatter->getConfigurations()->getBool($confId.'links.'.$linkId.'.force', true);
         if ($match->isTicker() || $force) {
-            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array(
+            $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, [
                 'matchId' => $match->getUid(),
-            ), $template);
+            ], $template);
         } else {
             $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
             $remove = intval($formatter->getConfigurations()->get($confId.'links.'.$linkId.'.removeIfDisabled'));

@@ -35,9 +35,9 @@
 class tx_cfcleaguefe_util_ScopeController
 {
     // Speichert die UID des aktuellen cObject
-    private static $_cObjectUID = array();
+    private static $_cObjectUID = [];
 
-    private static $_scopeParams = array();
+    private static $_scopeParams = [];
 
     /**
      * Diese Funktion stellt die UIDs der aktuell ausgewählten Ligen bereit.
@@ -57,7 +57,7 @@ class tx_cfcleaguefe_util_ScopeController
         // Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
         if (!$cObjUid || !isset(self::$_cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
             // Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
-            $ret = array();
+            $ret = [];
             $ret['SAISON_UIDS'] = self::handleCurrentSaison($parameters, $configurations, $useObjects);
             $ret['GROUP_UIDS'] = self::handleCurrentCompetitionGroup($parameters, $configurations, $useObjects);
             $ret['TEAMGROUP_UIDS'] = self::handleCurrentTeamGroup($parameters, $configurations, $useObjects);
@@ -224,8 +224,8 @@ class tx_cfcleaguefe_util_ScopeController
             // Die UIDs der Wettkämpfe in Objekte umwandeln, um eine Selectbox zu bauen
             // Suche der Wettbewerbe über den Service
             $compServ = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
-            $fields = array();
-            $options = array();
+            $fields = [];
+            $options = [];
             tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'scope.competition.options.');
             \System25\T3sports\Search\SearchBuilder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
 
@@ -291,7 +291,7 @@ class tx_cfcleaguefe_util_ScopeController
      */
     private static function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name')
     {
-        $ret = array();
+        $ret = [];
         if (count($objects)) {
             foreach ($objects as $object) {
                 $ret[0][$object->getUid()] = 0 == strlen($displayAttrName) ? $object : $object->getProperty($displayAttrName);

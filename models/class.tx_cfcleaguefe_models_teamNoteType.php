@@ -29,7 +29,7 @@ tx_rnbase::load('Tx_Rnbase_Database_Connection');
  */
 class tx_cfcleaguefe_models_teamNoteType extends tx_rnbase_model_base
 {
-    private static $instances = array();
+    private static $instances = [];
 
     public function getTableName()
     {

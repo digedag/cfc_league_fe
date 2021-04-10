@@ -30,7 +30,7 @@ namespace System25\T3sports\Table;
  */
 class TableResult implements ITableResult
 {
-    private $tableData = array();
+    private $tableData = [];
 
     /**
      * Add score for round.
@@ -118,7 +118,7 @@ class TableResult implements ITableResult
     /**
      * @return IConfigurator
      */
-    public function getConfigurator() : IConfigurator
+    public function getConfigurator(): IConfigurator
     {
         return $this->configurator;
     }

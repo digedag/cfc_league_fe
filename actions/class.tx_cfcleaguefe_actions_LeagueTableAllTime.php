@@ -105,10 +105,10 @@ class tx_cfcleaguefe_actions_LeagueTableAllTime extends tx_cfcleaguefe_actions_L
         $tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_AllTimeTableProvider', $parameters, $configurations, $matches, 'leaguetableAllTime.');
 
         $leagueTable = new tx_cfcleaguefe_util_LeagueTable();
-        $arr = array(
+        $arr = [
             'table' => $leagueTable->generateTable($tableProvider),
             'pointsystem' => $tableProvider->cfgPointSystem,
-        );
+        ];
 
         return $arr;
     }

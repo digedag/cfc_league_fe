@@ -30,7 +30,7 @@ class DataProvider extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('buildMatchReport', array($this, 'buildMatchReport')),
+            new \Twig_SimpleFunction('buildMatchReport', [$this, 'buildMatchReport']),
         ];
     }
 

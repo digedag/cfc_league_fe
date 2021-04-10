@@ -54,7 +54,7 @@ class Player
         return $this->profile->getUid();
     }
 
-    public function addMatchNote(\System25\T3sports\Twig\Data\MatchNote $note)
+    public function addMatchNote(MatchNote $note)
     {
         $this->matchNotes[] = $note;
         if (!array_key_exists($note->getType(), $this->matchNotesByType)) {

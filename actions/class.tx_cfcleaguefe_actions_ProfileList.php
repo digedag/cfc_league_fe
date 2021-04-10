@@ -55,10 +55,10 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
             $viewData->offsetSet('charpointer', $firstChar);
         }
 
-        $fields = array();
-        $options = array(
+        $fields = [];
+        $options = [
             'count' => 1,
-        );
+        ];
         $this->initSearch($fields, $options, $parameters, $configurations, $firstChar);
         $listSize = $service->search($fields, $options);
         unset($options['count']);
@@ -100,9 +100,9 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
             $fields[SEARCH_FIELD_CUSTOM] .= $where;
 
             // Sortierung nach Datum
-            $sort = array(
+            $sort = [
                 'DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), \'%m%d\')' => 'asc',
-            );
+            ];
             if (is_array($options['orderby'])) {
                 $options['orderby'] = array_merge($sort, $options['orderby']);
             } else {
@@ -148,14 +148,14 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
         $rows = $service->search($fields, $options);
 
         $specials = tx_rnbase_util_SearchBase::getSpecialChars();
-        $wSpecials = array();
+        $wSpecials = [];
         foreach ($specials as $key => $special) {
             foreach ($special as $char) {
                 $wSpecials[$char] = $key;
             }
         }
 
-        $ret = array();
+        $ret = [];
         foreach ($rows as $row) {
             if (array_key_exists(($row['first_char']), $wSpecials)) {
                 $ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];

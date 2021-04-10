@@ -28,7 +28,7 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
  */
 class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
 {
-    public static $exclude = array();
+    public static $exclude = [];
 
     /**
      * handle request.
@@ -41,8 +41,8 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
      */
     protected function handleRequest(&$parameters, &$configurations, &$viewData)
     {
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $this->initSearch($fields, $options, $parameters, $configurations);
 
         $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();

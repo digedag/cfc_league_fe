@@ -52,7 +52,7 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
     protected function createView($template, $profile, $configurations)
     {
         $out = '';
-        $markerOptions = array();
+        $markerOptions = [];
         $teamId = $configurations->getParameters()->getInt('team');
         if (!$teamId) {
             // Id per TS suchen
@@ -71,19 +71,19 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
         $subType = 1 == $profiles['prev']->memberType ? 'coach.' : (2 == $profiles['prev']->memberType ? 'supporter.' : 'player.');
         $out = $profileMarker->parseTemplate($out, $profiles['prev'], $configurations->getFormatter(), 'profileview.prevprofile.'.$subType, 'PREVPROFILE');
 
-        $markerArray = $subpartArray = $wrappedSubpartArray = array();
+        $markerArray = $subpartArray = $wrappedSubpartArray = [];
 
         if ($teamId) {
             $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
             $out = $teamMarker->parseTemplate($out, $team, $configurations->getFormatter(), 'profileview.team.', 'TEAM');
-            $wrappedSubpartArray['###TEAM###'] = array(
+            $wrappedSubpartArray['###TEAM###'] = [
                 '',
                 '',
-            );
-            $wrappedSubpartArray['###PROFILEPAGER###'] = array(
+            ];
+            $wrappedSubpartArray['###PROFILEPAGER###'] = [
                 '',
                 '',
-            );
+            ];
         } else {
             $subpartArray['###TEAM###'] = '';
             $subpartArray['###PROFILEPAGER###'] = '';
@@ -102,14 +102,14 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
      */
     protected function findNextAndPrevProfiles($profile, $team)
     {
-        $ret = array();
-        $playerIds = array();
-        $coachIds = array();
-        $supporterIds = array();
+        $ret = [];
+        $playerIds = [];
+        $coachIds = [];
+        $supporterIds = [];
 
         if ($team && $team->isValid()) {
             // Alle Profile des Teams sammeln
-            $teamProfiles = array();
+            $teamProfiles = [];
             if ($team->getProperty('players')) {
                 $playerIds = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('players'));
                 $teamProfiles = array_merge($teamProfiles, $playerIds);

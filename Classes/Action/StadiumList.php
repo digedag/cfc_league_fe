@@ -4,9 +4,6 @@ namespace System25\T3sports\Action;
 
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
-use Sys25\RnBase\Database\Connection;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use Sys25\RnBase\Search\ConditionBuilder;
 
 class StadiumList extends AbstractAction
 {

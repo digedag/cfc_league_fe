@@ -40,7 +40,7 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
      */
     public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
-        $teams = array();
+        $teams = [];
         // Im Flexform kann direkt ein Team ausgwählt werden
         $teamId = intval($configurations->get('teamviewTeam'));
         if (!$teamId) {

@@ -40,7 +40,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
 
         $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         // Soll ein PageBrowser verwendet werden
@@ -124,21 +124,21 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
         $options = [];
         $options['what'] = 'LEFT(UCASE('.$colName.'),1) As first_char, count(LEFT(UCASE('.$colName.'),1)) As size';
         $options['groupby'] = 'LEFT(UCASE('.$colName.'),1)';
-        $fields = array();
+        $fields = [];
         tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
 
         $rows = $service->searchClubs($fields, $options);
 
         $specials = tx_rnbase_util_SearchBase::getSpecialChars();
-        $wSpecials = array();
+        $wSpecials = [];
         foreach ($specials as $key => $special) {
             foreach ($special as $char) {
                 $wSpecials[$char] = $key;
             }
         }
 
-        $ret = array();
+        $ret = [];
         foreach ($rows as $row) {
             if (array_key_exists(($row['first_char']), $wSpecials)) {
                 $ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];

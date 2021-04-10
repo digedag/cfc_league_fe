@@ -53,7 +53,7 @@ class AssistStatistics extends PlayerStatistics
      */
     private function _findAssists(&$playerData)
     {
-        $ret = array();
+        $ret = [];
         foreach ($playerData as $playerStats) {
             if (intval($playerStats['goals_assist']) > 0) {
                 $ret[] = $playerStats;

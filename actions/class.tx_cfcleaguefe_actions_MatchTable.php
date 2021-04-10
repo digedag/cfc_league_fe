@@ -47,27 +47,27 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
         // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
         // ggf. die Konfiguration aus der TS-Config lesen
         $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewdata, $this->getConfId());
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
 
         // $options['debug'] = 1;
         $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
         // $this->initSearch($fields, $options, $parameters, $configurations);
         $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
         // Soll ein PageBrowser verwendet werden
-        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'match.pagebrowser', $viewdata, $fields, $options, array(
-            'searchcallback' => array(
+        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'match.pagebrowser', $viewdata, $fields, $options, [
+            'searchcallback' => [
                 $service,
                 'search',
-            ),
+            ],
             'pbid' => 'mt'.$configurations->getPluginId(),
-        ));
+        ]);
 
         $prov = tx_rnbase::makeInstance('tx_rnbase_util_ListProvider');
-        $prov->initBySearch(array(
+        $prov->initBySearch([
             $service,
             'search',
-        ), $fields, $options);
+        ], $fields, $options);
         $viewdata->offsetSet('provider', $prov);
 
         // View

@@ -88,13 +88,13 @@ class tx_cfcleaguefe_models_club extends tx_cfcleague_models_Club
     {
         // FIXME: Die Felder des Clubs aus der TCA laden.
         $what = 'DISTINCT tx_cfcleague_club.uid, tx_cfcleague_club.name, tx_cfcleague_club.short_name ';
-        $from = array(
+        $from = [
             '
       tx_cfcleague_club
       INNER JOIN tx_cfcleague_teams ON tx_cfcleague_club.uid = tx_cfcleague_teams.club
       INNER JOIN tx_cfcleague_competition ON FIND_IN_SET(tx_cfcleague_teams.uid, tx_cfcleague_competition.teams)',
             'tx_cfcleague_club',
-        );
+        ];
 
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_club';
         $options['orderby'] = 'name';

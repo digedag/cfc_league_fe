@@ -34,7 +34,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
     /**
      * Initialisiert den Marker Array.
      */
-    public function __construct(&$options = array())
+    public function __construct(&$options = [])
     {
         $this->options = $options;
         $this->setClassname('tx_cfcleaguefe_models_profile');
@@ -76,10 +76,10 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
         $profile->setProperty('firstpicture', $profile->getProperty('t3images'));
         $profile->setProperty('pictures', $profile->getProperty('t3images'));
 
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_initRecord', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_initRecord', [
             'item' => &$profile,
             'template' => &$template,
-        ), $this);
+        ], $this);
 
         $profile->setProperty('sign', $profile->getSign());
 
@@ -93,13 +93,13 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
      */
     protected function finishTemplate($template, $item, $formatter, $confId, $marker)
     {
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_afterSubst', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_afterSubst', [
             'item' => $item,
             'template' => &$template,
             'confId' => $confId,
             'marker' => $marker,
             'conf' => $formatter->getConfigurations(),
-        ), $this);
+        ], $this);
 
         return $template;
     }
@@ -120,9 +120,9 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
 
         // $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, array('teamId' => $team->uid));
         if ($profile->hasReport()) {
-            $params = array(
+            $params = [
                 'profileId' => $profile->getUid(),
-            );
+            ];
             if (is_object($this->options['team'])) {
                 // Transfer current team to profile view
                 $params['team'] = $this->options['team']->getUid();
@@ -132,8 +132,8 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
             $linkMarker = $marker.'_'.strtoupper('showprofile').'LINK';
             $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, false);
         }
-        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'refereematches', $marker, array(
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'refereematches', $marker, [
             'refereeId' => $profile->getUid(),
-        ), $template);
+        ], $template);
     }
 }

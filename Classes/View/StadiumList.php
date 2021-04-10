@@ -2,9 +2,9 @@
 
 namespace System25\T3sports\View;
 
-use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
 
 /***************************************************************
  *  Copyright notice

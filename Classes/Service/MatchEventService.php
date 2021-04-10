@@ -72,8 +72,8 @@ class MatchEventService extends \tx_cal_event_service
         $matchTable->setLimit($configurations->getInt($confId.'limit'));
         $matchTable->setLiveTicker($configurations->getBool('view.cfc_league_events.livetickerOnly', false, false));
 
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         if ($this->conf['view.']['cfc_league_events.']['debug']) {
             $options['debug'] = 1;
         }
@@ -161,15 +161,15 @@ class MatchEventService extends \tx_cal_event_service
 
     public function _init()
     {
-        $legendArray = array(
+        $legendArray = [
             'title' => $this->conf['view.']['cfc_league_events.']['legendDescription'],
-        );
-        $this->callegenddescription = array(
-            $this->conf['view.']['cfc_league_events.']['legendCalendarName'] => array(
-                array(
+        ];
+        $this->callegenddescription = [
+            $this->conf['view.']['cfc_league_events.']['legendCalendarName'] => [
+                [
                     $this->conf['view.']['cfc_league_events.']['headerStyle'] => $legendArray,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

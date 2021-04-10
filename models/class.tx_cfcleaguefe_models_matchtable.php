@@ -167,7 +167,7 @@ class tx_cfcleaguefe_models_matchtable
 
         $what = tx_cfcleaguefe_models_match::getWhatFull($extended);
         $from = tx_cfcleaguefe_models_match::getFromFull();
-        $arr = array();
+        $arr = [];
 
         $where = '';
         // TODO: Parameter prüfen!!

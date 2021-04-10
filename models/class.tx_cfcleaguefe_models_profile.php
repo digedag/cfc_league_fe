@@ -69,17 +69,17 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         // TODO Das sollte dynamisch gestaltet werden, damit alle Daten der Tabelle verwendet
         // werden können.
         $conf = $formatter->getConfigurations()->get($confId);
-        $arr = array();
+        $arr = [];
         // Über alle Felder im record iterieren
         foreach ($profile->getProperty() as $key => $val) {
             if ($conf[$key] || $conf[$key.'.']) {
                 $value = $formatter->wrap($profile->getProperty($key), $confId.$key.'.', $profile->getProperty());
                 if (strlen($value) > 0) {
                     $weight = intval($formatter->getConfigurations()->get($confId.$key.'.s_weight'));
-                    $arr[] = array(
+                    $arr[] = [
                         $value,
                         $weight,
-                    );
+                    ];
                     $value = '';
                 }
             }
@@ -90,10 +90,10 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
             $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId.'ifChangedOut.ticker.', $ticker);
             if (strlen($value) > 0) {
                 $weight = intval($formatter->getConfigurations()->get($confId.'ifChangedOut.s_weight'));
-                $arr[] = array(
+                $arr[] = [
                     $value,
                     $weight,
-                );
+                ];
                 $value = '';
             }
         }
@@ -103,10 +103,10 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
             $value = tx_cfcleaguefe_models_match_note::wrap($formatter, $confId.'ifPenalty.ticker.', $ticker);
             if (strlen($value) > 0) {
                 $weight = intval($formatter->configurations->get($confId.'ifPenalty.s_weight'));
-                $arr[] = array(
+                $arr[] = [
                     $value,
                     $weight,
-                );
+                ];
                 $value = '';
             }
         }
@@ -143,10 +143,10 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     {
         $link = $formatter->getConfigurations()->createLink();
         $link->destination($GLOBALS['TSFE']->id);
-        $link->parameters(array(
+        $link->parameters([
             'refereeId' => $profile->getUid(),
             'profileId' => $profile->getUid(),
-        ));
+        ]);
         $cfg = $link->_makeConfig('url');
         $GLOBALS['TSFE']->register['T3SPORTS_PARAMS_REFEREE_MATCHES'] = $cfg['additionalParams'];
     }
@@ -192,7 +192,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     public function addMatchNote(&$note)
     {
         if (!isset($this->_matchNotes)) {
-            $this->_matchNotes = array();
+            $this->_matchNotes = [];
         } // Neues TickerArray erstellen
         $this->_matchNotes[] = $note;
         // Wir prüfen direkt auf Teamcaptain

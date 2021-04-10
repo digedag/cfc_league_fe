@@ -6,9 +6,7 @@ use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\IConfigurator;
 use tx_cfcleague_models_Match;
 use tx_cfcleague_util_MatchSets;
-
 use tx_rnbase;
-
 
 /***************************************************************
  *  Copyright notice
@@ -47,7 +45,7 @@ class Table extends FootballTable
     /**
      * @return Configurator
      */
-    public function getConfigurator($forceNew = false) : IConfigurator
+    public function getConfigurator($forceNew = false): IConfigurator
     {
         if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
@@ -215,7 +213,7 @@ class Table extends FootballTable
         $this->addSets($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
     }
 
-    public function getTypeID() : string
+    public function getTypeID(): string
     {
         return self::TABLE_TYPE;
     }

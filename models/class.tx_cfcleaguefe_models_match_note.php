@@ -84,7 +84,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         // Wenn der Ticker für den eigene Vereins ist, einen Eintrag im Register setzen
         $GLOBALS['TSFE']->register['T3SPORTS_NOTE_FAVCLUB'] = $ticker->isFavClub(); // XXX: Access to image size by TS
 
-        $arr = array();
+        $arr = [];
         $conf = $formatter->configurations->get($confId.'profile.');
         // Angezeigt wird ein Spieler, sobald etwas im TS steht
         if ($conf && is_object($ticker)) {
@@ -97,10 +97,10 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
             // $value = $player->wrap($formatter, $conf['profile.']);
             $value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId.'profile.', $player);
             if (strlen($value) > 0) {
-                $arr[] = array(
+                $arr[] = [
                     $value,
                     $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0,
-                );
+                ];
                 $value = '';
             }
         }
@@ -118,10 +118,10 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
             }
             // $value = $player2->wrap($formatter, $conf['profile2.']);
             if (strlen($value) > 0) {
-                $arr[] = array(
+                $arr[] = [
                     $value,
                     $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0,
-                );
+                ];
                 $value = '';
             }
         }
@@ -133,10 +133,10 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
                 $cObj->setCurrentVal($ticker->getProperty($key));
                 $value = $cObj->stdWrap($ticker->getProperty($key), $conf);
                 if (strlen($value) > 0) {
-                    $arr[] = array(
+                    $arr[] = [
                         $value,
                         $conf['s_weight'] ? intval($conf['s_weight']) : 0,
-                    );
+                    ];
                     $value = '';
                 }
             }
@@ -144,7 +144,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
         // Jetzt die Teile sortieren
         usort($arr, 'cmpWeight');
-        $ret = array();
+        $ret = [];
         // Jetzt die Strings extrahieren
         foreach ($arr as $val) {
             $ret[] = $val[0];
@@ -252,8 +252,8 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
             $typeArr = $typeNumberOrArray;
             // Wenn es ein Array ist, dann zunächst die Typen ermitteln
             // Keine Typen bedeutet, daß alle verwendet werden
-            $types = $typeArr['noteType'] ? Tx_Rnbase_Utility_Strings::intExplode(',', $typeArr['noteType']) : array();
-            $ignoreTypes = $typeArr['noteIgnoreType'] ? Tx_Rnbase_Utility_Strings::intExplode(',', $typeArr['noteIgnoreType']) : array();
+            $types = $typeArr['noteType'] ? Tx_Rnbase_Utility_Strings::intExplode(',', $typeArr['noteType']) : [];
+            $ignoreTypes = $typeArr['noteIgnoreType'] ? Tx_Rnbase_Utility_Strings::intExplode(',', $typeArr['noteIgnoreType']) : [];
 
             // Wenn Typen definiert sind, dann wird ignoreType nicht betrachtet
             if (in_array($this->getType(), $types) || (!count($types) && !count($ignoreTypes)) || (!in_array($this->getType(), $ignoreTypes) && count($ignoreTypes))) {
@@ -416,7 +416,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     /**
      * Returns the team of the player assigned to this match note.
      *
-     * @return null|tx_cfcleaguefe_models_team
+     * @return tx_cfcleaguefe_models_team|null
      */
     public function getTeam()
     {

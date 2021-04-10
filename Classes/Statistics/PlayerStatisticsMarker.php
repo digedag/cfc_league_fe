@@ -56,7 +56,7 @@ class PlayerStatisticsMarker
 
         $rowRoll = (int) $configurations->get($statsConfId.'profile.roll.value');
         $rowRollCnt = 0;
-        $parts = array();
+        $parts = [];
         foreach ($stats as $playerStat) {
             /* @var $player \tx_cfcleague_models_Profile */
             $player = $playerStat['player'];

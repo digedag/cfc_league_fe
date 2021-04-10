@@ -59,18 +59,18 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             return $formatter->getConfigurations()->getLL('team_notFound');
         }
         $this->prepareRecord($team);
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'teamMarker_initRecord', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'teamMarker_initRecord', [
             'item' => &$team,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
             'formatter' => $formatter,
-        ), $this);
+        ], $this);
         // Es wird das MarkerArray mit den Daten des Teams gefüllt.
         $ignore = self::findUnusedCols($team->getRecord(), $template, $marker);
         $markerArray = $formatter->getItemMarkerArrayWrapped($team->getRecord(), $confId, $ignore, $marker.'_', $team->getColumnNames());
-        $wrappedSubpartArray = array();
-        $subpartArray = array();
+        $wrappedSubpartArray = [];
+        $subpartArray = [];
         $this->prepareLinks($team, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
         // Die Spieler setzen
         $this->pushTT('add player');
@@ -108,13 +108,13 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
         }
 
         $template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'teamMarker_afterSubst', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'teamMarker_afterSubst', [
             'item' => &$team,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
             'formatter' => $formatter,
-        ), $this);
+        ], $this);
 
         return $template;
     }
@@ -190,7 +190,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
 
         // $srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
         $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
-        $fields = $options = array();
+        $fields = $options = [];
         $fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty($joinCol);
         tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
         tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
@@ -220,7 +220,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
         foreach ($profiles as $profile) {
             $sortArr[$profile->uid] = $profile;
         }
-        $ret = array();
+        $ret = [];
         foreach ($sortArr as $profile) {
             $ret[] = $profile;
         }

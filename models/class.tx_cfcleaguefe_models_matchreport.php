@@ -74,7 +74,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $conf = $this->_configurations->get('matchreport.penalties.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
             if ($ticker->isPenalty() && $ticker->isHome()) {
@@ -89,7 +89,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $conf = $this->_configurations->get('matchreport.penalties.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
             if ($ticker->isPenalty() && $ticker->isGuest()) {
@@ -107,7 +107,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $conf = $this->_configurations->get('matchreport.changes.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
             if ($ticker->isChange() && $ticker->isHome()) {
@@ -125,7 +125,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $conf = $this->_configurations->get('report.changes.');
         // Aus dem gesamten Ticker suchen wir die Wechselmeldungen heraus und formatieren sie
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
             if ($ticker->isChange() && $ticker->isGuest()) {
@@ -145,7 +145,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $conf = $this->_configurations->get('matchreport.scorer.');
         // Aus dem gesamten Ticker suchen wir die Tormeldungen heraus und formatieren sie
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
             if ($ticker->isGoalHome()) {
@@ -164,7 +164,7 @@ class tx_cfcleaguefe_models_matchreport
     public function getTickerList($confId)
     {
         $conf = $this->_configurations->get($confId);
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
             if ($ticker->isVisible($conf)) {
@@ -184,7 +184,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $conf = $this->_configurations->get('matchreport.scorer.');
         // Aus dem gesamten Ticker suchen wir die Tormeldungen heraus und formatieren sie
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
             if ($ticker->isGoalGuest()) {
@@ -228,7 +228,7 @@ class tx_cfcleaguefe_models_matchreport
         // Man kann einstellen welche Tickernachrichten gezeigt werden
         // z.B. soll evt. nicht jeder Eckball im Ticker erscheinen und ist nur für die Statistik interessant
         $conf = $this->_configurations->get('matchreport.tickerlist.');
-        $tickers = array();
+        $tickers = [];
         $tickerArr = $this->_getMatchTicker();
         if ($this->_configurations->get('tickerTypes')) {
             foreach ($tickerArr as $ticker) {
@@ -476,14 +476,14 @@ class tx_cfcleaguefe_models_matchreport
      */
     protected function _wrapProfiles($profiles, $confId)
     {
-        $ret = array();
+        $ret = [];
         if (!is_array($profiles)) {
             if (is_object($profiles)) {
-                $profiles = array(
+                $profiles = [
                     $profiles,
-                );
+                ];
             } else {
-                return array();
+                return [];
             }
         }
 
@@ -536,7 +536,7 @@ class tx_cfcleaguefe_models_matchreport
         $conf = $this->_configurations->get($confId);
 
         $system = Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
-        $players = is_array($players) ? array_values($players) : array();
+        $players = is_array($players) ? array_values($players) : [];
 
         $strategyEnable = $this->_configurations->getBool($confId.'strategy.enable');
 
@@ -547,7 +547,7 @@ class tx_cfcleaguefe_models_matchreport
         }
 
         $partCnt = 0;
-        $partArr = array();
+        $partArr = [];
         $splitSum = $system[$partCnt];
         for ($i = 0; $i < count($players); ++$i) {
             $partArr[$partCnt][] = $players[$i];
@@ -562,7 +562,7 @@ class tx_cfcleaguefe_models_matchreport
 
         // $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
         $sep = $this->_configurations->get($confId.'strategy.seperator');
-        $hits = array();
+        $hits = [];
         if (preg_match('/^\|(.*)\|$/', $sep, $hits)) {
             $sep = $hits[1];
         }

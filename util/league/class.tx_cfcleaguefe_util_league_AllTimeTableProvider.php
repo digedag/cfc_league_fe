@@ -53,7 +53,7 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
         if (is_array($this->teams)) {
             return $this->teams;
         }
-        $this->teams = array();
+        $this->teams = [];
         for ($i = 0, $cnt = count($this->matches); $i < $cnt; ++$i) {
             $match = $this->matches[$i];
             $club = $match->getHome()->getClub();
@@ -73,12 +73,12 @@ class tx_cfcleaguefe_util_league_AllTimeTableProvider extends tx_cfcleaguefe_uti
 
     public function getRounds()
     {
-        return array(0 => $this->matches);
+        return [0 => $this->matches];
     }
 
     public function getPenalties()
     {
-        return array(); // Bring hier wohl nichts...
+        return []; // Bring hier wohl nichts...
     }
 
     protected function init()

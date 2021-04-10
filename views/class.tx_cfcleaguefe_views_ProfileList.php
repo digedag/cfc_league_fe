@@ -41,8 +41,8 @@ class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base
      */
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-        $markerArray = array(); // Eventuell später für allgemeine Daten oder Labels
-        $subpartArray = array();
+        $markerArray = []; // Eventuell später für allgemeine Daten oder Labels
+        $subpartArray = [];
 
         $listCnt = &$viewData->offsetGet('listsize');
         $profiles = &$viewData->offsetGet('profiles');

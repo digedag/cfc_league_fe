@@ -40,7 +40,7 @@ class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe
     public function getChartClubs()
     {
         // Die Clubs aus dem Spiel ermitteln
-        $clubs = array();
+        $clubs = [];
         $clubId = $this->match->getHome()->getProperty('club');
         if ($clubId) {
             $clubs[] = $clubId;
@@ -55,7 +55,7 @@ class tx_cfcleaguefe_util_league_SingleMatchTableProvider extends tx_cfcleaguefe
 
     public function getMarkClubs()
     {
-        return array();
+        return [];
     }
 
     public function getPenalties()

@@ -32,7 +32,7 @@ tx_rnbase::load('Tx_Rnbase_Utility_Strings');
  */
 class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 {
-    private static $instances = array();
+    private static $instances = [];
 
     public $_profiles;
 
@@ -275,7 +275,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     public function addMatchNote(&$note)
     {
         if (!isset($this->_matchNotes)) {
-            $this->_matchNotes = array();
+            $this->_matchNotes = [];
         } // Neues TickerArray erstellen
         $note->setMatch($this);
         $this->_matchNotes[] = $note;
@@ -286,7 +286,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     public function &getMatchNotesByType($type)
     {
         if (is_array($type)) {
-            $ret = array();
+            $ret = [];
             for ($i = 0, $size = count($type); $i < $size; ++$i) {
                 $notes = $this->_matchNoteTypes[intval($type[$i])];
                 if (is_array($notes)) {
@@ -444,7 +444,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     {
         if (!is_array($this->sets)) {
             $this->sets = tx_cfcleague_models_Set::buildFromString($this->getProperty('sets'));
-            $this->sets = $this->sets ? $this->sets : array();
+            $this->sets = $this->sets ? $this->sets : [];
         }
 
         return $this->sets;
@@ -524,7 +524,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
         if (!$playerUid) {
             return 0;
         } // Keine ID vorhanden
-        $uids = array();
+        $uids = [];
         if ($this->getProperty('players_home')) {
             $uids[] = $this->getProperty('players_home');
         }
@@ -537,7 +537,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             return 1;
         }
 
-        $uids = array();
+        $uids = [];
         if ($this->getProperty('players_guest')) {
             $uids[] = $this->getProperty('players_guest');
         }
@@ -561,7 +561,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      */
     public function _getProfiles($uidStr)
     {
-        $ret = array();
+        $ret = [];
         if ($uidStr) {
             $this->_resolveProfiles();
 
@@ -595,7 +595,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             return;
         } // Die Profile sind schon geladen
         // Wir sammeln zunächst die UIDs zusammen
-        $uids = array();
+        $uids = [];
         if ($this->getProperty('referee')) {
             $uids[] = $this->getProperty('referee');
         }
@@ -630,7 +630,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 
         $rows = tx_rnbase_util_DB::doSelect($what, $from, $options);
 
-        $this->_profiles = array();
+        $this->_profiles = [];
         // Wir erstellen jetzt ein Array dessen Key die UID des Profiles ist
         foreach ($rows as $profile) {
             $this->_profiles[$profile->uid] = $profile;
@@ -766,9 +766,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
         if (!$this->competition) {
             $this->competition = tx_cfcleague_models_Competition::getCompetitionInstance($this->getProperty('competition'));
             if (!is_object($this->competition)) {
-                tx_rnbase_util_Logger::warn('Match with UID '.$this->getUid().' has no valid competition!', 't3sports', array(
+                tx_rnbase_util_Logger::warn('Match with UID '.$this->getUid().' has no valid competition!', 't3sports', [
                     'match' => $this->getProperty(),
-                ));
+                ]);
 
                 throw new Exception('Match with UID '.$this->getUid().' has no valid competition!');
             }
@@ -812,13 +812,13 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      */
     public function getFromMedium()
     {
-        return array(
+        return [
             '
        tx_cfcleague_games
          INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid
          INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid',
             'tx_cfcleague_games',
-        );
+        ];
     }
 
     /**
@@ -866,14 +866,14 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     public function getFromFull()
     {
         // CHECK: Funktioniert das auch bei MySQL4??
-        return array(
+        return [
             '
        tx_cfcleague_games
          INNER JOIN tx_cfcleague_competition ON tx_cfcleague_games.competition = tx_cfcleague_competition.uid
          INNER JOIN tx_cfcleague_teams As t1 ON tx_cfcleague_games.home = t1.uid
          INNER JOIN tx_cfcleague_teams As t2 ON tx_cfcleague_games.guest = t2.uid',
             'tx_cfcleague_games',
-        );
+        ];
 
         /*
          * Funktioniert bei MySQL 5 nicht mehr:

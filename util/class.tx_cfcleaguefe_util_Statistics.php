@@ -45,16 +45,16 @@ class tx_cfcleaguefe_util_Statistics
         $matchtable = $service->getMatchTable();
         $matchtable->setScope($scopeArr);
         $matchtable->setStatus(2);
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $options['orderby']['MATCH.DATE'] = 'asc';
         //		$options['debug'] = 1;
         $matchtable->getFields($fields, $options);
         $prov = tx_rnbase::makeInstance('tx_rnbase_util_ListProvider');
-        $prov->initBySearch(array($service, 'search'), $fields, $options);
+        $prov->initBySearch([$service, 'search'], $fields, $options);
 
         $this->initServices($services, $scopeArr, $configuration, $parameters);
-        $prov->iterateAll(array($this, 'handleMatch'));
+        $prov->iterateAll([$this, 'handleMatch']);
         $ret = $this->collectData();
 
         return $ret;
@@ -79,7 +79,7 @@ class tx_cfcleaguefe_util_Statistics
      */
     public function handleMatch($match)
     {
-        $matches = array($match);
+        $matches = [$match];
         $matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
 
         for ($i = 0; $i < $this->servicesArrCnt; ++$i) {
@@ -91,7 +91,7 @@ class tx_cfcleaguefe_util_Statistics
     private function collectData()
     {
         // Abschließend die Daten zusammenpacken
-        $ret = array();
+        $ret = [];
         for ($i = 0; $i < $this->servicesArrCnt; ++$i) {
             $service = &$this->servicesArr[$i];
             $ret[$this->serviceKeys[$i]] = $service->getResult();
@@ -126,7 +126,7 @@ class tx_cfcleaguefe_util_Statistics
             }
         }
         // Abschließend die Daten zusammenpacken
-        $ret = array();
+        $ret = [];
         for ($i = 0; $i < $servicesArrCnt; ++$i) {
             $service = &$servicesArr[$i];
             $ret[$serviceKeys[$i]] = $service->getResult();

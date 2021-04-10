@@ -42,7 +42,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
      */
     private $result = [];
 
-    private $statData = array(
+    private $statData = [
         'home_matchcount',
         'home_total',
         'home_average',
@@ -52,7 +52,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
         'all_matchcount',
         'all_total',
         'all_average',
-    );
+    ];
 
     public function prepare($scope, &$configurations, &$parameters)
     {
@@ -185,7 +185,7 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     private function &_getData(&$dataArray, $teamId)
     {
         if (!array_key_exists($teamId, $dataArray)) {
-            $dataArray[$teamId] = array();
+            $dataArray[$teamId] = [];
             // Alle Daten initialisieren
             foreach ($this->statData as $col) {
                 $dataArray[$teamId][$col] = 0;

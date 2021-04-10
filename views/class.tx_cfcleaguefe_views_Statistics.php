@@ -50,9 +50,9 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
 
         $cObj = $configurations->getCObj(0);
         // Jetzt über die einzelnen Statistiken iterieren
-        $markerArray = array();
+        $markerArray = [];
         $subpartArray = $this->_getSubpartArray($configurations);
-        $parts = array();
+        $parts = [];
         $services = tx_rnbase_util_Misc::lookupServices('cfcleague_statistics');
         foreach ($services as $subtype => $info) {
             // Init all stats with empty subpart
@@ -85,7 +85,7 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
      */
     protected function _getSubpartArray($configurations)
     {
-        $ret = array();
+        $ret = [];
 
         $cfg = [];
         $types = tx_cfcleaguefe_util_ServiceRegistry::lookupStatistics($cfg);

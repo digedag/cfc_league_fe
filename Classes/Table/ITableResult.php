@@ -75,7 +75,7 @@ interface ITableResult
     /**
      * @return IConfigurator
      */
-    public function getConfigurator() : IConfigurator;
+    public function getConfigurator(): IConfigurator;
 
     /**
      * @param IConfigurator $configurator

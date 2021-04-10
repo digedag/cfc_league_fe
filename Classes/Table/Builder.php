@@ -2,9 +2,9 @@
 
 namespace System25\T3sports\Table;
 
-use tx_cfcleaguefe_models_match;
-use tx_cfcleague_models_Competition;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use tx_cfcleague_models_Competition;
+use tx_cfcleaguefe_models_match;
 
 /***************************************************************
  *  Copyright notice

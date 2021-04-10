@@ -31,7 +31,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
     /**
      * @group unit
      */
-    public function test_dummyTeam()
+    public function testDummyTeam()
     {
         $league = $this->prepareLeague('league_2');
 
@@ -57,7 +57,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
     /**
      * @group unit
      */
-    public function test_twoPointSystem()
+    public function testTwoPointSystem()
     {
         $league = $this->prepareLeague('league_1');
         $league->setProperty('point_system', 1); // Punktsystem umstellen
@@ -89,7 +89,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
     /**
      * @group unit
      */
-    public function test_threePointSystem()
+    public function testThreePointSystem()
     {
         $league = $this->prepareLeague('league_1');
         $league->setProperty('point_system', 0); // Punktsystem einstellen
@@ -161,7 +161,7 @@ class LeagueTableTest extends \tx_rnbase_tests_BaseTestCase
         }
         $matches = $this->makeInstances($data['matches'], $data['matches']['clazz']);
         $league->setTeams($teams);
-        $league->setPenalties(array());
+        $league->setPenalties([]);
         $league->setMatches($matches, 2);
         // Und jetzt die Spiele
         return $league;

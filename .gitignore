@@ -8,3 +8,9 @@
 .settings
 .buildpath
 
+###ignore backups and caches
+*.bak
+.php_cs.cache
+.scannerwork
+
+

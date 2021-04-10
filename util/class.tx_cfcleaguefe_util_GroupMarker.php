@@ -48,25 +48,25 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker
             // Ist kein Objekt vorhanden wird ein leeres Objekt verwendet.
             $item = self::getEmptyInstance('tx_cfcleague_models_Group');
         }
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'groupMarker_initRecord', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'groupMarker_initRecord', [
             'item' => &$item,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
             'formatter' => $formatter,
-        ), $this);
+        ], $this);
         // Es wird das MarkerArray mit den Daten des Records gefüllt.
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, 0, $marker.'_', $item->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
         $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'groupMarker_afterSubst', array(
+        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'groupMarker_afterSubst', [
             'item' => &$item,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
             'formatter' => $formatter,
-        ), $this);
+        ], $this);
 
         return $template;
     }

@@ -40,7 +40,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
      * array of matches
      * Containes retrieved matches by state.
      */
-    private $matchesByState = array();
+    private $matchesByState = [];
 
     /** array of penalties */
     private $penalties;
@@ -121,7 +121,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
         // build SQL for select
         $what = 'distinct round as uid,round AS number,round_name As name, max(status) As finished';
         // WHERE
-        $options = array();
+        $options = [];
         // Die UID der Liga setzen
         $options['where'] = 'competition="'.$this->getUid().'"';
         $options['groupby'] = 'round,round_name';
@@ -138,8 +138,8 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
      */
     public function getMatchesByRound($roundId)
     {
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $fields['MATCH.ROUND'][OP_EQ_INT] = $roundId;
         $fields['MATCH.COMPETITION'][OP_EQ_INT] = $this->getUid();
         //	  $options['debug'] = 1;
@@ -239,7 +239,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
         SELECT * FROM tx_cfcleague_competition WHERE uid IN ($uid)
         */
 
-        $options = array();
+        $options = [];
         $options['where'] = $where;
         $options['orderby'] = 'sorting';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_competition';
@@ -258,7 +258,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
             return 0;
         }
 
-        $ret = array();
+        $ret = [];
         $arr = Tx_Rnbase_Utility_Strings::trimExplode('|', $str);
         foreach ($arr as $item) {
             // Jedes Item splitten
@@ -267,7 +267,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
             $comments = Tx_Rnbase_Utility_Strings::trimExplode(',', $mark[1]);
             // Jetzt das Ergebnisarray aufbauen
             foreach ($positions as $position) {
-                $ret[$position] = array($comments[0], $comments[1]);
+                $ret[$position] = [$comments[0], $comments[1]];
             }
         }
 
@@ -282,7 +282,7 @@ class tx_cfcleaguefe_models_competition extends tx_cfcleague_models_Competition
     public function getPenalties()
     {
         if (!is_array($this->penalties)) {
-            $options = array();
+            $options = [];
             // Die UID der Liga setzen
             $options['where'] = 'competition="'.$this->uid.'" ';
             $options['orderby'] = 'sorting';

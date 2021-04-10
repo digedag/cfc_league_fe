@@ -41,8 +41,8 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
      */
     public function handleRequest(&$parameters, &$configurations, &$viewdata)
     {
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         // $options['debug'] = 1;
         $this->initSearch($fields, $options, $parameters, $configurations);
 

@@ -44,7 +44,7 @@ interface ITableType
      *
      * @return IMatchProvider
      */
-    public function getMatchProvider() : IMatchProvider;
+    public function getMatchProvider(): IMatchProvider;
 
     /**
      * Set configuration.
@@ -59,22 +59,22 @@ interface ITableType
      *
      * @return ITableResult
      */
-    public function getTableData() : ITableResult;
+    public function getTableData(): ITableResult;
 
     /**
      * @return ITableWriter
      */
-    public function getTableWriter() : ITableWriter;
+    public function getTableWriter(): ITableWriter;
 
     /**
      * @return IConfigurator
      */
-    public function getConfigurator() : IConfigurator;
+    public function getConfigurator(): IConfigurator;
 
     /**
      * Unique id string for this type of table.
      *
      * @return string
      */
-    public function getTypeID() : string;
+    public function getTypeID(): string;
 }

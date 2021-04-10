@@ -28,7 +28,6 @@ use Tx_Rnbase_Utility_Strings;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 /**
  * Match provider.
  */
@@ -39,7 +38,7 @@ class MatchProvider extends DefaultMatchProvider
         // Die Ligastrafen werden in den Tabellenstand eingerechnet. Dies wird allerdings nur
         // für die normale Tabelle gemacht. Sondertabellen werden ohne Strafen berechnet.
         if ($this->getConfigurator()->getTableScope() || $this->getConfigurator()->getTableType()) {
-            return array();
+            return [];
         }
 
         return $this->getLeague()->getPenalties();
@@ -59,7 +58,7 @@ class MatchProvider extends DefaultMatchProvider
             if ($round) {
                 // Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
                 $joined['value'] = $round;
-                $joined['cols'] = array('MATCH.ROUND');
+                $joined['cols'] = ['MATCH.ROUND'];
                 $joined['operator'] = 1 == $tableScope ? OP_LTEQ_INT : OP_GT_INT;
                 $fields[SEARCH_FIELD_JOINED][] = $joined;
             }

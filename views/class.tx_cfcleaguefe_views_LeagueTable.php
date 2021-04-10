@@ -1,4 +1,5 @@
 <?php
+
 use System25\T3sports\Table\ITableType;
 
 /***************************************************************
@@ -55,7 +56,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
         $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($league->record, 'leaguetable.league.', 0, 'LEAGUE_');
 
         // Die Ligatabelle zusammenbauen
-        $penalties = array(); // Strafen sammeln
+        $penalties = []; // Strafen sammeln
         $subpartArray = [
             '###ROWS###' => $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $viewData, $penalties, $marks, $configurations),
         ];
@@ -136,7 +137,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
         $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
         $templateEntry = tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
 
-        $parts = array();
+        $parts = [];
         // Die einzelnen Zeilen zusammenbauen
         $rowRoll = intval($configurations->get('leaguetable.table.roll.value'));
         $rowRollCnt = 0;
@@ -283,7 +284,7 @@ class tx_cfcleaguefe_views_LeagueTable extends tx_rnbase_view_Base
         }
 
         $currentNoLink = $configurations->getInt('leaguetable.controls.'.$confName.'.current.noLink');
-        $markerArray = $subpartArray = $wrappedSubpartArray = array();
+        $markerArray = $subpartArray = $wrappedSubpartArray = [];
 
         // Jetzt über die vorhandenen Items iterieren
         while (list($key, $value) = each($itemsArr[0])) {

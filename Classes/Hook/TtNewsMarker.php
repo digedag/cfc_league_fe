@@ -2,11 +2,11 @@
 
 namespace System25\T3sports\Hook;
 
+use Exception;
+use tx_cfcleaguefe_models_match;
 use tx_rnbase;
 use tx_rnbase_util_BaseMarker;
 use Tx_Rnbase_Utility_Strings;
-use Exception;
-use tx_cfcleaguefe_models_match;
 
 /***************************************************************
  *  Copyright notice

@@ -37,8 +37,8 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
         $template = $listBuilder->render($items, $viewData, $template, 'tx_cfcleaguefe_util_ClubMarker', 'clublist.club.', 'CLUB', $formatter);
 
-        $markerArray = array();
-        $subpartArray = array();
+        $markerArray = [];
+        $subpartArray = [];
 
         if (tx_rnbase_util_BaseMarker::containsMarker($template, 'CLUBMAP')) {
             $markerArray['###CLUBMAP###'] = $this->getMap($items, $configurations, $this->getController()

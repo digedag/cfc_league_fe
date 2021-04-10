@@ -93,13 +93,13 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
             tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), $confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
 
             $map->addMarker($marker);
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array(
+            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [
                 '###'.$markerPrefix.'###' => $map->draw(),
-            ));
+            ]);
         } catch (Exception $e) {
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, array(
+            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [
                 '###'.$markerPrefix.'###' => '###LABEL_mapNotAvailable###',
-            ));
+            ]);
         }
 
         return $out;

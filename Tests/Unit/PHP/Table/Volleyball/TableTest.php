@@ -31,7 +31,7 @@ use System25\T3sports\Table\ITableResult;
  */
 class TableTest extends \tx_rnbase_tests_BaseTestCase
 {
-    public function test_LeagueTableWithTwoPointSystem()
+    public function testLeagueTableWithTwoPointSystem()
     {
         $league = $this->prepareLeague('league_volley_1');
         $league->setProperty('point_system', 0); // Punktsystem einstellen

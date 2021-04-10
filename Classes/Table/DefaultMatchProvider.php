@@ -3,12 +3,10 @@
 namespace System25\T3sports\Table;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
-
+use System25\T3sports\Search\SearchBuilder;
 use tx_cfcleague_models_Competition;
 use tx_cfcleague_util_ServiceRegistry;
 use tx_rnbase_util_SearchBase;
-use System25\T3sports\Search\SearchBuilder;
-
 
 /***************************************************************
  *  Copyright notice
@@ -83,7 +81,7 @@ class DefaultMatchProvider implements IMatchProvider
     /**
      * @return IConfigurator
      */
-    public function getConfigurator() : IConfigurator
+    public function getConfigurator(): IConfigurator
     {
         return $this->configurator;
     }
@@ -158,8 +156,8 @@ class DefaultMatchProvider implements IMatchProvider
     {
         // Wenn die Tabelle über mehrere Saisons geht, dann müssen Clubs verwendet werden
         $matchTable = $this->getMatchTable();
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $matchTable->getFields($fields, $options);
         $options['what'] = 'count(DISTINCT COMPETITION.SAISON) AS `saison`';
         $compSrv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
@@ -277,8 +275,8 @@ class DefaultMatchProvider implements IMatchProvider
         }
 
         $matchTable = $this->getMatchTable();
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $options['orderby']['MATCH.ROUND'] = 'asc';
         $matchTable->getFields($fields, $options);
         // Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
@@ -328,8 +326,8 @@ class DefaultMatchProvider implements IMatchProvider
             $matchTable = $matchSrv->getMatchTableBuilder();
             $matchTable->setScope($scopeArr);
 
-            $fields = array();
-            $options = array();
+            $fields = [];
+            $options = [];
             $matchTable->getFields($fields, $options);
             $options['what'] = 'distinct competition';
 

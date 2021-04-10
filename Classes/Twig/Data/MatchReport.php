@@ -200,10 +200,10 @@ class MatchReport
     protected function getLineup($players, $system)
     {
         $system = \Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
-        $players = is_array($players) ? array_values($players) : array();
+        $players = is_array($players) ? array_values($players) : [];
 
         $partCnt = 0;
-        $partArr = array();
+        $partArr = [];
         $splitSum = $system[$partCnt];
         for ($i = 0; $i < count($players); ++$i) {
             $partArr[$partCnt][] = $this->substPlayer($players[$i]);

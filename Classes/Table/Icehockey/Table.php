@@ -3,11 +3,10 @@
 namespace System25\T3sports\Table\Icehockey;
 
 use System25\T3sports\Table\Football\Table as FootballTable;
-
+use System25\T3sports\Table\IConfigurator;
+use System25\T3sports\Table\PointOptions;
 use tx_cfcleague_models_Match;
 use tx_rnbase;
-use System25\T3sports\Table\PointOptions;
-use System25\T3sports\Table\IConfigurator;
 
 /***************************************************************
  *  Copyright notice
@@ -46,7 +45,7 @@ class Table extends FootballTable
     /**
      * @return Configurator
      */
-    public function getConfigurator($forceNew = false) : IConfigurator
+    public function getConfigurator($forceNew = false): IConfigurator
     {
         if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
@@ -262,7 +261,7 @@ class Table extends FootballTable
         $this->_teamData[$teamId]['loosecount_overtime'] = 0;
     }
 
-    public function getTypeID() : string
+    public function getTypeID(): string
     {
         return self::TABLE_TYPE;
     }

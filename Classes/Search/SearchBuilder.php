@@ -113,10 +113,10 @@ class SearchBuilder
     {
         if (strlen(trim($clubUids))) {
             $joined['value'] = trim($clubUids);
-            $joined['cols'] = array(
+            $joined['cols'] = [
                 'TEAM1.CLUB',
                 'TEAM2.CLUB',
-            );
+            ];
             $joined['operator'] = OP_IN_INT;
             $fields[SEARCH_FIELD_JOINED][] = $joined;
             $result = true;
@@ -137,10 +137,10 @@ class SearchBuilder
         if (strlen(trim($teamUids))) {
             $joined = [];
             $joined['value'] = trim($teamUids);
-            $joined['cols'] = array(
+            $joined['cols'] = [
                 'MATCH.HOME',
                 'MATCH.GUEST',
-            );
+            ];
             $joined['operator'] = OP_IN_INT;
             $fields[SEARCH_FIELD_JOINED][] = $joined;
         }
@@ -160,10 +160,10 @@ class SearchBuilder
         if (strlen(trim($groupUids))) {
             $joined = [];
             $joined['value'] = trim($groupUids);
-            $joined['cols'] = array(
+            $joined['cols'] = [
                 'TEAM1.AGEGROUP',
                 'TEAM2.AGEGROUP',
-            );
+            ];
             $joined['operator'] = OP_IN_INT;
             $fields[SEARCH_FIELD_JOINED][] = $joined;
         }

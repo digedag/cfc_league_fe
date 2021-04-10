@@ -2,10 +2,9 @@
 
 namespace System25\T3sports\Table\Volleyball;
 
-use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
-
-use tx_rnbase;
 use Exception;
+use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice

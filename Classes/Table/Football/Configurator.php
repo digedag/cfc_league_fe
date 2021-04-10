@@ -2,15 +2,15 @@
 
 namespace System25\T3sports\Table\Football;
 
+use Exception;
+use System25\T3sports\Table\IComparator;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\PointOptions;
-use tx_cfcleague_models_Team;
 use tx_cfcleague_models_Competition;
-use Tx_Rnbase_Utility_Strings;
+use tx_cfcleague_models_Team;
 use tx_rnbase;
-use Exception;
-use System25\T3sports\Table\IComparator;
+use Tx_Rnbase_Utility_Strings;
 
 /***************************************************************
 *  Copyright notice
@@ -34,7 +34,6 @@ use System25\T3sports\Table\IComparator;
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
 
 /**
  * Configurator for football league tables.
@@ -245,16 +244,17 @@ class Configurator implements IConfigurator
     }
 
     /**
-     *
      * @param string $key
-     * @return mixed|NULL
+     *
+     * @return mixed|null
      */
     protected function getStrategyValue(string $key)
     {
-        if ($this->cfgTableStrategy === null) {
+        if (null === $this->cfgTableStrategy) {
             $strategy = $this->getMatchProvider()->getBaseCompetition()->getProperty('tablestrategy');
             $this->cfgTableStrategy = \tx_cfcleague_util_Misc::lookupTableStrategy($strategy);
         }
+
         return array_key_exists($key, $this->cfgTableStrategy) ? $this->cfgTableStrategy[$key] : null;
     }
 }

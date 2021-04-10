@@ -33,6 +33,7 @@ use Sys25\RnBase\Search\SearchBase;
  * Class to search matches from database.
  *
  * @author Rene Nitzsche
+ *
  * @deprecated use \System25\T3sports\Search\MatchSearch
  */
 class MatchSearch extends SearchBase
@@ -45,9 +46,9 @@ class MatchSearch extends SearchBase
         $tableMapping['TEAM1'] = 't1';
         $tableMapping['TEAM2'] = 't2';
         // Hook to append other tables
-        \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getTableMapping_hook', array(
+        \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getTableMapping_hook', [
             'tableMapping' => &$tableMapping,
-        ), $this);
+        ], $this);
 
         return $tableMapping;
     }
@@ -61,6 +62,7 @@ class MatchSearch extends SearchBase
     {
         return 'MATCH';
     }
+
     protected function useAlias()
     {
         return true;
@@ -76,13 +78,13 @@ class MatchSearch extends SearchBase
         $join = '';
         $join = [];
         if (isset($tableAliases['COMPETITION'])) {
-            $join[] = new Join('MATCH','tx_cfcleague_competition', 'MATCH.competition = COMPETITION.uid', 'COMPETITION');
+            $join[] = new Join('MATCH', 'tx_cfcleague_competition', 'MATCH.competition = COMPETITION.uid', 'COMPETITION');
         }
         if (isset($tableAliases['TEAM1'])) {
-            $join[] = new Join('MATCH','tx_cfcleague_teams', 'MATCH.home = t1.uid', 't1');
+            $join[] = new Join('MATCH', 'tx_cfcleague_teams', 'MATCH.home = t1.uid', 't1');
         }
         if (isset($tableAliases['TEAM2'])) {
-            $join[] = new Join('MATCH','tx_cfcleague_teams', 'MATCH.home = t2.uid', 't2');
+            $join[] = new Join('MATCH', 'tx_cfcleague_teams', 'MATCH.home = t2.uid', 't2');
         }
         // Hook to append other tables
         \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getJoins_hook', [
