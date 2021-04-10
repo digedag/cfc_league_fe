@@ -4,6 +4,9 @@ namespace System25\T3sports\Action;
 
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Database\Connection;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use Sys25\RnBase\Search\ConditionBuilder;
 
 class StadiumList extends AbstractAction
 {
@@ -13,11 +16,9 @@ class StadiumList extends AbstractAction
         $configurations = $request->getConfigurations();
         $viewData = $request->getViewContext();
         $srv = \tx_cfcleague_util_ServiceRegistry::getStadiumService();
-
-        $filter = \tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
-
+        $filter = \tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId().'stadium.');
         $fields = $options = [];
-        $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
+        $filter->init($fields, $options);
 
         // Soll ein PageBrowser verwendet werden
         \tx_rnbase_filter_BaseFilter::handleCharBrowser($configurations, $this->getConfId().'stadium.charbrowser', $viewData, $fields, $options, [
@@ -36,6 +37,7 @@ class StadiumList extends AbstractAction
         ]);
 
         $items = $srv->search($fields, $options);
+
         $viewData->offsetSet('items', $items);
 
         return null;

@@ -44,6 +44,6 @@ class StadiumFilter extends \tx_rnbase_filter_BaseFilter
     {
         $options['distinct'] = 1;
         $scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
-        \tx_cfcleague_search_Builder::buildStadiumByScope($fields, $scopeArr);
+        SearchBuilder::buildStadiumByScope($fields, $scopeArr);
     }
 }

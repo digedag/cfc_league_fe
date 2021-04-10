@@ -1,6 +1,9 @@
 
 Changes
 -------
+v1.7.0 (??.??.2021)
+ * BREAKING CHANGE: all SearchClasses support new querybuilder API. Update hooks on search classes.
+
 v1.6.1 (25.11.2020)
  * fix TravisCI release stage
 

@@ -5,9 +5,9 @@ namespace System25\T3sports\Table;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 
 use tx_cfcleague_models_Competition;
-use tx_cfcleague_search_Builder;
 use tx_cfcleague_util_ServiceRegistry;
 use tx_rnbase_util_SearchBase;
+use System25\T3sports\Search\SearchBuilder;
 
 
 /***************************************************************
@@ -117,10 +117,10 @@ class DefaultMatchProvider implements IMatchProvider
         // Dadurch kann am Saisonbeginn keine Tabelle erstellt werden.
         // Es ist besser die Spiele über die Wettbewerbe zu laden.
         $fields = $options = [];
-        tx_cfcleague_search_Builder::setField($fields, 'COMPETITION.SAISON', OP_IN_INT, $this->scope['SAISON_UIDS']);
-        tx_cfcleague_search_Builder::setField($fields, 'COMPETITION.AGEGROUP', OP_INSET_INT, $this->scope['GROUP_UIDS']);
-        tx_cfcleague_search_Builder::setField($fields, 'COMPETITION.UID', OP_IN_INT, $this->scope['COMP_UIDS']);
-        tx_cfcleague_search_Builder::setField($fields, 'TEAM.CLUB', OP_IN_INT, $this->scope['CLUB_UIDS']);
+        SearchBuilder::setField($fields, 'COMPETITION.SAISON', OP_IN_INT, $this->scope['SAISON_UIDS']);
+        SearchBuilder::setField($fields, 'COMPETITION.AGEGROUP', OP_INSET_INT, $this->scope['GROUP_UIDS']);
+        SearchBuilder::setField($fields, 'COMPETITION.UID', OP_IN_INT, $this->scope['COMP_UIDS']);
+        SearchBuilder::setField($fields, 'TEAM.CLUB', OP_IN_INT, $this->scope['CLUB_UIDS']);
 
         if (intval($this->scope['COMP_OBLIGATION'])) {
             if (1 == intval($this->scope['COMP_OBLIGATION'])) {
@@ -130,8 +130,8 @@ class DefaultMatchProvider implements IMatchProvider
             }
         }
 
-        tx_cfcleague_search_Builder::setField($fields, 'COMPETITION.TYPE', OP_IN_INT, $this->scope['COMP_TYPES']);
-        tx_cfcleague_search_Builder::setField($fields, 'TEAM.AGEGROUP', OP_IN_INT, $this->scope['TEAMGROUP_UIDS']);
+        SearchBuilder::setField($fields, 'COMPETITION.TYPE', OP_IN_INT, $this->scope['COMP_TYPES']);
+        SearchBuilder::setField($fields, 'TEAM.AGEGROUP', OP_IN_INT, $this->scope['TEAMGROUP_UIDS']);
 
         $options['distinct'] = 1;
         $options['orderby']['TEAM.SORTING'] = 'asc'; // Nach Sortierung auf Seite
