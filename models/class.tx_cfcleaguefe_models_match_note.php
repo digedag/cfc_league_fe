@@ -21,8 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleague_models_MatchNote');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Model für eine Tickermeldung.
@@ -143,7 +141,13 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         }
 
         // Jetzt die Teile sortieren
-        usort($arr, 'cmpWeight');
+        usort($arr, function ($a, $b) {
+            if ($a[1] == $b[1]) {
+                return 0;
+            }
+
+            return ($a[1] < $b[1]) ? -1 : 1;
+        });
         $ret = [];
         // Jetzt die Strings extrahieren
         foreach ($arr as $val) {
@@ -151,7 +155,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         }
 
         // Der Seperator sollte mit zwei Pipes eingeschlossen sein
-        $sep = $formatter->configurations->get($confId.'seperator');
+        $sep = $formatter->getConfigurations()->get($confId.'seperator');
         $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
         $ret = implode($sep, $ret);
 
@@ -570,16 +574,4 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
             return $players[$this->getProperty($playerField)];
         }
     }
-}
-
-/**
- * Sortierfunktion, um die korrekte Reihenfolge nach weights zu ermittlen.
- */
-function cmpWeight($a, $b)
-{
-    if ($a[1] == $b[1]) {
-        return 0;
-    }
-
-    return ($a[1] < $b[1]) ? -1 : 1;
 }

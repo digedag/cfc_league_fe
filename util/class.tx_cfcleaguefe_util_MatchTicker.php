@@ -21,10 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleague_util_Cache');
-tx_rnbase::load('tx_rnbase_util_Queue');
-tx_rnbase::load('tx_rnbase_util_Extensions');
-require_once tx_rnbase_util_Extensions::extPath('cfc_league_fe').'models/class.tx_cfcleaguefe_models_match_note.php';
 
 /**
  * Controllerklasse für den MatchTicker.
@@ -44,6 +40,8 @@ require_once tx_rnbase_util_Extensions::extPath('cfc_league_fe').'models/class.t
  */
 class tx_cfcleaguefe_util_MatchTicker
 {
+    private static $cache = [];
+
     /**
      * Liefert alle Spiele des Scopes mit den geladenen Tickermeldungen.
      */
@@ -80,7 +78,7 @@ class tx_cfcleaguefe_util_MatchTicker
      */
     public static function &getTicker4Match($match, $types = 0)
     {
-        $arr = tx_cfcleague_util_Cache::get('matchnotes_'.$match->getUid());
+        $arr = self::get('matchnotes_'.$match->getUid());
         if ($arr) {
             return $arr;
         }
@@ -101,7 +99,7 @@ class tx_cfcleaguefe_util_MatchTicker
                 self::_handleResult($ret[count($ret) - 1]);
             }
         }
-        tx_cfcleague_util_Cache::add('matchnotes_'.$match->getUid(), $ret);
+        self::add('matchnotes_'.$match->getUid(), $ret);
 
         return $ret;
     }
@@ -225,6 +223,29 @@ class tx_cfcleaguefe_util_MatchTicker
         } // end if GUEST
 
         return $isRemoved;
+    }
+
+    /**
+     * Ein Objekt in den Cache legen.
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public static function add($key, $value)
+    {
+        self::$cache[$key] = $value;
+    }
+
+    /**
+     * Liefert ein Objekt aus dem Cache.
+     *
+     * @param $key
+     *
+     * @return mixed
+     */
+    public static function get($key)
+    {
+        return self::$cache[$key];
     }
 
     /*
