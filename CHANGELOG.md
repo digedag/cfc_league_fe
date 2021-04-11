@@ -1,7 +1,7 @@
 
 Changes
 -------
-v1.7.0 (??.??.2021)
+v1.7.0 (11.04.2021)
  * BREAKING CHANGE: all SearchClasses support new querybuilder API. Update hooks on search classes.
 
 v1.6.1 (25.11.2020)
