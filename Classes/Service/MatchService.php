@@ -44,7 +44,7 @@ class MatchService extends \Tx_Rnbase_Service_Base
      */
     public function search($fields, $options)
     {
-        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\MatchSearch::class);
+        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\MatchFeSearch::class);
 
         return $searcher->search($fields, $options);
     }

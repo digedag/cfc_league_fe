@@ -61,7 +61,7 @@ class ProfileService extends \Tx_Rnbase_Service_Base
      */
     public function search($fields, $options)
     {
-        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\ProfileSearch::class);
+        $searcher = \tx_rnbase_util_SearchBase::getInstance(\System25\T3sports\Search\ProfileFeSearch::class);
 
         return $searcher->search($fields, $options);
     }

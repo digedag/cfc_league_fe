@@ -2,9 +2,12 @@
 
 namespace System25\T3sports\Search;
 
-/**
+use Sys25\RnBase\Database\Query\Join;
+use Sys25\RnBase\Search\SearchBase;
+
+/*
  * *************************************************************
- * Copyright notice.
+ * Copyright notice
  *
  * (c) 2008-2019 Rene Nitzsche
  * Contact: rene@system25.de
@@ -27,37 +30,67 @@ namespace System25\T3sports\Search;
  */
 
 /**
- * Class to search teams from database.
+ * Class to search matches from database.
  *
  * @author Rene Nitzsche
+ *
+ * @deprecated use \System25\T3sports\Search\MatchSearch
  */
-class TeamSearch extends \tx_rnbase_util_SearchBase
+class MatchFeSearch extends SearchBase
 {
     protected function getTableMappings()
     {
         $tableMapping = [];
-        $tableMapping['TEAM'] = 'tx_cfcleague_teams';
+        $tableMapping['MATCH'] = 'tx_cfcleague_games';
         $tableMapping['COMPETITION'] = 'tx_cfcleague_competition';
+        $tableMapping['TEAM1'] = 't1';
+        $tableMapping['TEAM2'] = 't2';
+        // Hook to append other tables
+        \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getTableMapping_hook', [
+            'tableMapping' => &$tableMapping,
+        ], $this);
 
         return $tableMapping;
     }
 
     protected function getBaseTable()
     {
-        return 'tx_cfcleague_teams';
+        return 'tx_cfcleague_games';
+    }
+
+    protected function getBaseTableAlias()
+    {
+        return 'MATCH';
+    }
+
+    protected function useAlias()
+    {
+        return true;
     }
 
     public function getWrapperClass()
     {
-        return 'tx_cfcleaguefe_models_team';
+        return 'tx_cfcleaguefe_models_match';
     }
 
     protected function getJoins($tableAliases)
     {
         $join = '';
+        $join = [];
         if (isset($tableAliases['COMPETITION'])) {
-            $join .= ' JOIN tx_cfcleague_competition ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )';
+            $join[] = new Join('MATCH', 'tx_cfcleague_competition', 'MATCH.competition = COMPETITION.uid', 'COMPETITION');
         }
+        if (isset($tableAliases['TEAM1'])) {
+            $join[] = new Join('MATCH', 'tx_cfcleague_teams', 'MATCH.home = t1.uid', 't1');
+        }
+        if (isset($tableAliases['TEAM2'])) {
+            $join[] = new Join('MATCH', 'tx_cfcleague_teams', 'MATCH.home = t2.uid', 't2');
+        }
+        // Hook to append other tables
+        \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getJoins_hook', [
+            'join' => &$join,
+            'tableAliases' => $tableAliases,
+        ], $this);
 
         return $join;
     }

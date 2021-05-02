@@ -21,16 +21,16 @@ class tx_cfcleaguefe_filter_Team extends System25\T3sports\Filter\TeamFilter
 class tx_cfcleaguefe_search_Builder extends System25\T3sports\Search\SearchBuilder
 {
 }
-class tx_cfcleaguefe_search_Competition extends System25\T3sports\Search\CompetitionSearch
+class tx_cfcleaguefe_search_Competition extends System25\T3sports\Search\CompetitionFeSearch
 {
 }
-class tx_cfcleaguefe_search_Match extends System25\T3sports\Search\MatchSearch
+class tx_cfcleaguefe_search_Match extends System25\T3sports\Search\MatchFeSearch
 {
 }
-class tx_cfcleaguefe_search_Profile extends System25\T3sports\Search\ProfileSearch
+class tx_cfcleaguefe_search_Profile extends System25\T3sports\Search\ProfileFeSearch
 {
 }
-class tx_cfcleaguefe_search_Team extends System25\T3sports\Search\TeamSearch
+class tx_cfcleaguefe_search_Team extends System25\T3sports\Search\TeamFeSearch
 {
 }
 

@@ -27,37 +27,35 @@ namespace System25\T3sports\Search;
  */
 
 /**
- * Class to search comptitions from database.
+ * Class to search profiles from database.
  *
  * @author Rene Nitzsche
+ *
+ * @deprecated use \System25\T3sports\Search\ProfileSearch
  */
-class CompetitionSearch extends \tx_rnbase_util_SearchBase
+class ProfileFeSearch extends \tx_rnbase_util_SearchBase
 {
     protected function getTableMappings()
     {
         $tableMapping = [];
-        $tableMapping['TEAM'] = 'tx_cfcleague_teams';
-        $tableMapping['COMPETITION'] = 'tx_cfcleague_competition';
+        $tableMapping['PROFILE'] = 'tx_cfcleague_profiles';
 
         return $tableMapping;
     }
 
     protected function getBaseTable()
     {
-        return 'tx_cfcleague_competition';
+        return 'tx_cfcleague_profiles';
     }
 
     public function getWrapperClass()
     {
-        return 'tx_cfcleaguefe_models_competition';
+        return 'tx_cfcleaguefe_models_profile';
     }
 
     protected function getJoins($tableAliases)
     {
         $join = '';
-        if (isset($tableAliases['TEAM'])) {
-            $join .= ' JOIN tx_cfcleague_teams ON FIND_IN_SET( tx_cfcleague_teams.uid, tx_cfcleague_competition.teams )';
-        }
 
         return $join;
     }
