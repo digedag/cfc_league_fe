@@ -252,7 +252,7 @@ class Configurator implements IConfigurator
     {
         if (null === $this->cfgTableStrategy) {
             $strategy = $this->getMatchProvider()->getBaseCompetition()->getProperty('tablestrategy');
-            if ($strategy === null) {
+            if (null === $strategy) {
                 $srv = \tx_cfcleague_util_ServiceRegistry::getCompetitionService();
                 $strategies = reset($srv->getTableStrategies4TCA());
                 $strategy = $strategies[1];
