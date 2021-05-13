@@ -126,7 +126,7 @@ class TableResult implements ITableResult
     /**
      * @param IConfigurator $configurator
      */
-    public function setConfigurator($configurator)
+    public function setConfigurator(IConfigurator $configurator)
     {
         $this->configurator = $configurator;
     }

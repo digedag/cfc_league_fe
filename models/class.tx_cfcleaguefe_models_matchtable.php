@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_DB');
-tx_rnbase::load('tx_cfcleaguefe_models_match');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
-
 /**
  * Model für einen Spielplan. Dieser kann für einen oder mehrere Wettbewerbe abgerufen werden.
  *
@@ -200,7 +196,7 @@ class tx_cfcleaguefe_models_matchtable
             if (strlen($where) > 0) {
                 $where .= ' AND ';
             }
-            $where .= ' (t1.club = '.$club.' OR t2.club = '.$club.')';
+            $where .= ' (TEAM1.club = '.$club.' OR TEAM2.club = '.$club.')';
         }
 
         if ($this->_team && strlen($this->_team)) {
@@ -284,14 +280,14 @@ class tx_cfcleaguefe_models_matchtable
 
         /*
 // Ermittelt alle Spiele eines Teams in einer Saison
-SELECT distinct m.uid, m.home, t1.name as home_name, m.guest, t2.name as guest_name
+SELECT distinct m.uid, m.home, t1.name as home_name, m.guest, TEAM2.name as guest_name
 FROM `tx_cfcleague_games` as m
   INNER JOIN tx_cfcleague_competition As c
-  INNER JOIN tx_cfcleague_teams As t1
-  INNER JOIN tx_cfcleague_teams As t2
+  INNER JOIN tx_cfcleague_teams As TEAM1
+  INNER JOIN tx_cfcleague_teams As TEAM2
   ON m.competition = c.uid
   ON m.home = t1.uid
-  ON m.guest = t2.uid
+  ON m.guest = TEAM2.uid
 WHERE
 c.saison IN (1) AND
 ( m.home = 1 OR m.guest=1)

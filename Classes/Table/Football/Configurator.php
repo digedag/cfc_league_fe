@@ -15,7 +15,7 @@ use Tx_Rnbase_Utility_Strings;
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -252,6 +252,11 @@ class Configurator implements IConfigurator
     {
         if (null === $this->cfgTableStrategy) {
             $strategy = $this->getMatchProvider()->getBaseCompetition()->getProperty('tablestrategy');
+            if ($strategy === null) {
+                $srv = \tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+                $strategies = reset($srv->getTableStrategies4TCA());
+                $strategy = $strategies[1];
+            }
             $this->cfgTableStrategy = \tx_cfcleague_util_Misc::lookupTableStrategy($strategy);
         }
 

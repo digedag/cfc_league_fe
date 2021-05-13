@@ -1,8 +1,10 @@
 <?php
+use Sys25\RnBase\Search\SearchBase;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,9 +23,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service to output historic matches of two match opponents.
@@ -80,8 +79,8 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
         $confId = 'matchreport.historic.';
         $fields = [];
         $options = [];
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
+        SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
+        SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
 
         $srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
         $matchTable = $srv->getMatchTable();

@@ -21,12 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_cfcleaguefe_models_team');
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-
-tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
 /**
  * Controller für die Anzeige eines Spielplans.
