@@ -115,7 +115,13 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         }
 
         // Jetzt die Teile sortieren
-        usort($arr, 'cmpWeight');
+        usort($arr, function ($a, $b) {
+            if ($a[1] == $b[1]) {
+                return 0;
+            }
+
+            return ($a[1] < $b[1]) ? -1 : 1;
+        });
         // Jetzt die Strings extrahieren
         $ret = [];
         foreach ($arr as $val) {
