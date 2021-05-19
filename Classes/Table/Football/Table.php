@@ -397,7 +397,7 @@ class Table extends AbstractService implements ITableType
      * @param int $toto
      * @param IConfigurator $configurator
      */
-    protected function countStandard(tx_cfcleague_models_Match $match, $toto, IConfigurator $configurator)
+    protected function countStandard($match, $toto, IConfigurator $configurator)
     {
         // Anzahl Spiele aktualisieren
         $homeId = $configurator->getTeamId($match->getHome());
@@ -455,7 +455,7 @@ class Table extends AbstractService implements ITableType
      * @param int $toto
      * @param Configurator $configurator
      */
-    protected function countHome(tx_cfcleague_models_Match $match, $toto, IConfigurator $configurator)
+    protected function countHome($match, $toto, IConfigurator $configurator)
     {
         $homeId = $configurator->getTeamId($match->getHome());
         $guestId = $configurator->getTeamId($match->getGuest());
@@ -498,7 +498,7 @@ class Table extends AbstractService implements ITableType
      * @param int $toto
      * @param Configurator $configurator
      */
-    protected function countGuest(tx_cfcleague_models_Match $match, $toto, IConfigurator $configurator)
+    protected function countGuest($match, $toto, IConfigurator $configurator)
     {
         $homeId = $configurator->getTeamId($match->getHome());
         $guestId = $configurator->getTeamId($match->getGuest());
