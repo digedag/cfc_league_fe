@@ -84,7 +84,7 @@ class MatchFeSearch extends SearchBase
             $join[] = new Join('MATCH', 'tx_cfcleague_teams', 'MATCH.home = TEAM1.uid', 'TEAM1');
         }
         if (isset($tableAliases['TEAM2'])) {
-            $join[] = new Join('MATCH', 'tx_cfcleague_teams', 'MATCH.home = TEAM2.uid', 'TEAM2');
+            $join[] = new Join('MATCH', 'tx_cfcleague_teams', 'MATCH.guest = TEAM2.uid', 'TEAM2');
         }
         // Hook to append other tables
         \tx_rnbase_util_Misc::callHook('cfc_league_fe', 'search_Match_getJoins_hook', [

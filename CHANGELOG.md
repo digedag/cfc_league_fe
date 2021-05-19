@@ -2,6 +2,9 @@
 Changes
 -------
 
+v1.7.2 (19.05.2021)
+ * Fix matchtable shows home matches only
+
 v1.7.1 (13.05.2021)
  * #72 fix ambiguous search classes
  * Fix table aliases for teams in matchtable queries
