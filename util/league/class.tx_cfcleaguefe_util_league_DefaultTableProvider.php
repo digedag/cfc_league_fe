@@ -126,7 +126,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
         $matchSrv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
         $matchTable = $matchSrv->getMatchTable();
         $matchTable->setStatus($this->cfgLiveTable ? '1,2' : 2); //Status der Spiele
-        $matchTable->setCompetitions($this->getLeague()->uid);
+        $matchTable->setCompetitions($this->getLeague()->getUid());
         if ($this->currRound) {
             // Nur bis zum Spieltag anzeigen
             $matchTable->setMaxRound($this->currRound);
