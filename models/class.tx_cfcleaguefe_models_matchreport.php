@@ -1,4 +1,5 @@
 <?php
+
 use Sys25\RnBase\Utility\Strings;
 
 /***************************************************************
@@ -432,7 +433,6 @@ class tx_cfcleaguefe_models_matchreport
     protected function _initMatchTicker()
     {
         if (!is_array($this->_tickerArr)) {
-
             // Der Ticker wird immer chronologisch ermittelt
             $this->_tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen

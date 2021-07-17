@@ -303,6 +303,7 @@ class tx_cfcleaguefe_util_ScopeController
             }
             $ret[1] = $ret[1] ? $ret[1] : $objects[0]->getUid();
         }
+
         return $ret;
     }
 
