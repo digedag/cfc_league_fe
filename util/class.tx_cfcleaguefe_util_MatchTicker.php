@@ -71,8 +71,7 @@ class tx_cfcleaguefe_util_MatchTicker
      * Tickermeldung zusammengefasst.
      *
      * @param tx_cfcleaguefe_models_match $match
-     * @param mixed $types
-     *            unused!
+     * @param mixed $types unused!
      *
      * @return tx_cfcleaguefe_models_match_note[]
      */

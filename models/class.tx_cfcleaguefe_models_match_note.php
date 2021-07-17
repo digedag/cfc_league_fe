@@ -83,7 +83,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         $GLOBALS['TSFE']->register['T3SPORTS_NOTE_FAVCLUB'] = $ticker->isFavClub(); // XXX: Access to image size by TS
 
         $arr = [];
-        $conf = $formatter->configurations->get($confId.'profile.');
+        $conf = $formatter->getConfigurations()->get($confId.'profile.');
         // Angezeigt wird ein Spieler, sobald etwas im TS steht
         if ($conf && is_object($ticker)) {
             // Bei einem Wechsel ist profile für den ausgewechselten Spieler
@@ -160,7 +160,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
         $ret = implode($sep, $ret);
 
         // Abschließend nochmal den Ergebnisstring wrappen
-        return $formatter->wrap($ret, $confId, $ticker->record);
+        return $formatter->wrap($ret, $confId, $ticker->getProperty());
     }
 
     /**

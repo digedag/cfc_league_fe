@@ -1,4 +1,7 @@
 <?php
+use Sys25\RnBase\Utility\Strings;
+use Sys25\RnBase\Database\Connection;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -568,10 +571,9 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             // Wenn direkt mit dem Array $this->_profiles gearbeitet wird, dann wird bei der Erstellung
             // der MatchNotes für die Auswechslungen die Instanz des ausgewechselten Spielers gelöscht.
             // Durch die Verwendung des zweiten Arrays wird das verhindert. Ursache ist mir aber unbekannt...
-            $this->_profiles = $this->_profiles2;
 
             // $ret = array();
-            $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uidStr);
+            $uids = Strings::intExplode(',', $uidStr);
             foreach ($uids as $uid) {
                 $ret[$uid] = &$this->_profiles[$uid];
             }
@@ -626,13 +628,12 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
         $options['where'] = 'uid IN ('.$uids.')';
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_profile';
 
-        $rows = tx_rnbase_util_DB::doSelect($what, $from, $options);
+        $rows = Connection::getInstance()->doSelect($what, $from, $options);
 
         $this->_profiles = [];
         // Wir erstellen jetzt ein Array dessen Key die UID des Profiles ist
         foreach ($rows as $profile) {
-            $this->_profiles[$profile->uid] = $profile;
-            $this->_profiles2[$profile->uid] = $profile;
+            $this->_profiles[$profile->getUid()] = $profile;
         }
     }
 

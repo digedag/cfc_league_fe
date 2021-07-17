@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Utility\Strings;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -430,6 +432,7 @@ class tx_cfcleaguefe_models_matchreport
     protected function _initMatchTicker()
     {
         if (!is_array($this->_tickerArr)) {
+
             // Der Ticker wird immer chronologisch ermittelt
             $this->_tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
@@ -534,7 +537,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $conf = $this->_configurations->get($confId);
 
-        $system = Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
+        $system = Strings::trimExplode('-', $system);
         $players = is_array($players) ? array_values($players) : [];
 
         $strategyEnable = $this->_configurations->getBool($confId.'strategy.enable');
