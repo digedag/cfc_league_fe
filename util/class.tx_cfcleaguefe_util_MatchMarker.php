@@ -1,8 +1,10 @@
 <?php
+use Sys25\RnBase\Search\SearchBase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,9 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_SimpleMarker');
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('Tx_Rnbase_Utility_T3General');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Spiele verantwortlich.
@@ -306,9 +305,10 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
             $fields['MATCHNOTE.GAME'][OP_EQ_INT] = $match->getUid();
             $options = [];
             $options['what'] = 'uid';
-            tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
-            tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
+            SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
+            SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
             $children = $srv->searchMatchNotes($fields, $options);
+
             // Die gefundenen Notes werden jetzt durch ihre aufbereiteten Duplikate ersetzt
             $items = [];
             $tickerHash = $this->getTickerHash($match);
@@ -317,6 +317,7 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
                     $items[] = $tickerHash[$children[$ci]['uid']];
                 }
             }
+
             $template = $listBuilder->render($items, false, $template, 'tx_cfcleaguefe_util_MatchNoteMarker', $confId, $markerPrefix, $formatter);
         }
 
@@ -393,44 +394,8 @@ class tx_cfcleaguefe_util_MatchMarker extends tx_rnbase_util_SimpleMarker
 
         $gSubpartArray = $firstMarkerArray = [];
 
-        if (!tx_rnbase_util_Extensions::isLoaded('dam')) {
-            // Not supported without DAM!
-            $gSubpartArray['###'.$baseMarker.'_MEDIAS###'] = '';
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
-
-            return $out;
-        }
-
-        $damMedia = tx_dam_db::getReferencedFiles('tx_cfcleague_games', $match->getUid(), 'dam_media');
-        if (0 == count($damMedia['files'])) { // Keine Daten vorhanden
-            // Alle Marker löschen
-            $gSubpartArray['###'.$baseMarker.'_MEDIAS###'] = '';
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
-
-            return $out;
-        }
-
-        // Zuerst wieder das Template laden
-        $gPictureTemplate = tx_rnbase_util_Templates::getSubpart($template, '###'.$baseMarker.'_MEDIAS###');
-
-        $pictureTemplate = tx_rnbase_util_Templates::getSubpart($gPictureTemplate, '###'.$baseMarker.'_MEDIA###');
-        $markerArray = [];
-        $out = '';
-        $serviceObj = Tx_Rnbase_Utility_T3General::makeInstanceService('mediaplayer');
-
-        // Alle Daten hinzufügen
-        while (list($uid, $filePath) = each($damMedia['files'])) {
-            $media = tx_rnbase::makeInstance('tx_dam_media', $filePath);
-            $markerArray = $formatter->getItemMarkerArray4DAM($media, $baseConfId.'media.', $baseMarker.'_MEDIA');
-            $markerArray['###'.$baseMarker.'_MEDIA_PLAYER###'] = is_object($serviceObj) ? $serviceObj->getPlayer($damMedia['rows'][$uid], $formatter->configurations->get($baseConfId.'media.')) : '<b>No media service available</b>';
-            $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($pictureTemplate, $markerArray);
-        }
-        // Der String mit den Bilder ersetzt jetzt den Subpart ###MATCH_MEDIAS_2###
-        if (strlen(trim($out)) > 0) {
-            $subpartArray['###'.$baseMarker.'_MEDIA###'] = $out;
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($gPictureTemplate, $firstMarkerArray, $subpartArray); // , $wrappedSubpartArray);
-        }
-        $gSubpartArray['###'.$baseMarker.'_MEDIAS###'] = $out;
+        // Not supported without DAM!
+        $gSubpartArray['###'.$baseMarker.'_MEDIAS###'] = '';
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $firstMarkerArray, $gSubpartArray);
 
         return $out;

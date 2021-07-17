@@ -1478,7 +1478,6 @@ plugin.tx_cfcleaguefe_report {
         ticker =< lib.t3sports.matchNote
         ticker {
           filter.fields.MATCHNOTE.MINUTE.OP_GTEQ_INT = 0
-          filter.fields.MATCHNOTE.TYPE.OP_NOTIN_INT = 200
           filter.options {
             orderby.MATCHNOTE.MINUTE = DESC
             orderby.MATCHNOTE.EXTRA_TIME = DESC

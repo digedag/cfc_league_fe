@@ -227,7 +227,6 @@ class tx_cfcleaguefe_models_matchreport
     {
         // Man kann einstellen welche Tickernachrichten gezeigt werden
         // z.B. soll evt. nicht jeder Eckball im Ticker erscheinen und ist nur für die Statistik interessant
-        $conf = $this->_configurations->get('matchreport.tickerlist.');
         $tickers = [];
         $tickerArr = $this->_getMatchTicker();
         if ($this->_configurations->get('tickerTypes')) {
@@ -452,7 +451,7 @@ class tx_cfcleaguefe_models_matchreport
      * @param string $confIdAll
      *            TS-Config String. Sollte einen Eintrag profile. enthalten
      *
-     * @return einen String mit allen Namen
+     * @return string mit allen Namen
      */
     protected function _getNames2($profiles, $confIdAll)
     {
