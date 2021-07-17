@@ -1,6 +1,7 @@
 <?php
-use Sys25\RnBase\Utility\Strings;
+
 use Sys25\RnBase\Database\Connection;
+use Sys25\RnBase\Utility\Strings;
 
 /***************************************************************
  *  Copyright notice
@@ -454,8 +455,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     /**
      * Liefert die Spieler des Heimteams der Startelf als Datenobjekte in einem Array.
      *
-     * @param $all wenn
-     *            > 0 werden auch die Ersatzspieler mit geliefert
+     * @param bool $all wenn > 0 werden auch die Ersatzspieler mit geliefert
      *
      * @return array Key ist UID, Value ist Profile als Object
      */
@@ -475,8 +475,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     /**
      * Liefert die Spieler des Gastteams der Startelf als Datenobjekte in einem Array.
      *
-     * @param $all wenn
-     *            > 0 werden auch die Ersatzspieler mit geliefert
+     * @param int $all wenn > 0 werden auch die Ersatzspieler mit geliefert
      *
      * @return array Key ist UID, Value ist Profile als Object
      */
@@ -517,7 +516,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * @param $playerUid int
      *            UID eines Spielers
      *
-     * @return 1 - Heimteam, 2- Gastteam, 0 - unbekannt
+     * @return int 1 - Heimteam, 2- Gastteam, 0 - unbekannt
      */
     public function getTeam4Player($playerUid)
     {
@@ -533,7 +532,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             $uids[] = $this->getProperty('substitutes_home');
         }
         $uids = implode($uids, ',');
-        $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uids);
+        $uids = Strings::intExplode(',', $uids);
         if (in_array($playerUid, $uids)) {
             return 1;
         }
@@ -546,7 +545,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
             $uids[] = $this->getProperty('substitutes_guest');
         }
         $uids = implode($uids, ',');
-        $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $uids);
+        $uids = Strings::intExplode(',', $uids);
         if (in_array($playerUid, $uids)) {
             return 2;
         }
@@ -825,8 +824,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      * Dies sind alle Felder der Tabellen games und teams. Für die Team-Tabelle werden die Aliase
      * t1 und t1 verwendet.
      *
-     * @param $extended Optional
-     *            kann auch der Spielbericht mit geladen werden
+     * @param bool $extended Optional kann auch der Spielbericht mit geladen werden
      */
     public function getWhatFull($extended = 0)
     {
@@ -864,7 +862,6 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      */
     public function getFromFull()
     {
-        // CHECK: Funktioniert das auch bei MySQL4??
         return [
             '
        tx_cfcleague_games
@@ -902,6 +899,7 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
         if (!$uid) {
             throw new Exception('Invalid uid for match');
         }
+
         if (!is_object(self::$instances[$uid])) {
             self::$instances[$uid] = new self($uid);
         }
