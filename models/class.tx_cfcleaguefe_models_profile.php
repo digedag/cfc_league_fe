@@ -40,7 +40,7 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
             $this->uid = $rowOrUid;
             $this->setProperty('uid', $rowOrUid);
         } else {
-            parent::tx_rnbase_model_base($rowOrUid);
+            parent::__construct($rowOrUid);
         }
     }
 

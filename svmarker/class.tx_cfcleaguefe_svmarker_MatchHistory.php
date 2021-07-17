@@ -53,7 +53,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Generate chart.
+     * Generate matchtable.
      *
      * @param array $params
      * @param tx_rnbase_util_FormatUtil $formatter
@@ -87,10 +87,10 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
         $matchTable = $srv->getMatchTable();
 
         if (!intval($formatter->configurations->get($confId.'ignoreAgeGroup'))) {
-            $matchTable->setAgeGroups($group->uid);
+            $matchTable->setAgeGroups($group->getUid());
         }
-        $matchTable->setHomeClubs($home->uid.','.$guest->uid);
-        $matchTable->setGuestClubs($home->uid.','.$guest->uid);
+        $matchTable->setHomeClubs($home->getUid().','.$guest->getUid());
+        $matchTable->setGuestClubs($home->getUid().','.$guest->getUid());
         $matchTable->getFields($fields, $options);
         $matches = $srv->search($fields, $options);
 
@@ -144,8 +144,4 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
 
         return '<h2>Not implemented. This is a single marker module!</h2>';
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/svmarker/class.tx_cfcleaguefe_svmarker_MatchHistory.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/svmarker/class.tx_cfcleaguefe_svmarker_MatchHistory.php'];
 }
