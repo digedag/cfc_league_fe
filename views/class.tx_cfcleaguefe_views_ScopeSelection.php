@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -21,9 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('Tx_Rnbase_Frontend_Marker_Utility');
 
 /**
  * Viewklasse für die Anzeige der Scope-Auswahl mit Hilfe eines HTML-Templates.
@@ -106,16 +105,11 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
     /**
      * Erstellt die einzelnen Teile der Scopeauswahl.
      *
-     * @param string $template
-     *            HTML- Template
-     * @param
-     *            array &$itemsArr Datensätze für die Auswahl
-     * @param
-     *            tx_rnbase_util_Link $link Linkobjekt
-     * @param string $markerName
-     *            Name des Markers (SAISON, ROUND usw.)
-     * @param
-     *            tx_rnbase_configurations &$configurations Config-Objekt
+     * @param string $template HTML- Template
+     * @param array &$itemsArr Datensätze für die Auswahl
+     * @param tx_rnbase_util_Link $link Linkobjekt
+     * @param string $markerName Name des Markers (SAISON, ROUND usw.)
+     * @param ConfigurationInterface $configurations Config-Objekt
      */
     protected function _fillTemplate($template, &$itemsArr, $link, $markerName, $configurations)
     {
@@ -136,7 +130,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###'.$markerName.'_SELECTION_2###');
 
         $itemConfId = 'scopeSelection.'.$confName.'.';
-        $currentNoLink = intval($configurations->get($itemConfId.'current.noLink'));
+        $currentNoLink = $configurations->getBool($itemConfId.'current.noLink');
 
         $parts = [];
         // Jetzt über die vorhandenen Items iterieren
@@ -144,9 +138,9 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
             if (!is_object($item)) {
                 continue;
             } // Sollte eigentlich nicht vorkommen.
-            $keepVars[strtolower($markerName)] = $item->uid;
+            $keepVars[strtolower($markerName)] = $item->getUid();
             $link->parameters($keepVars);
-            $isCurrent = ($item->uid == $currItem->uid);
+            $isCurrent = ($item->getUid() == $currItem->getUid());
             $item->setProperty('isCurrent', $isCurrent ? 1 : 0);
 
             $ignore = Tx_Rnbase_Frontend_Marker_Utility::findUnusedAttributes($item, $subTemplate, $markerName);
@@ -154,7 +148,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
             $markerArray['###'.$markerName.'_LINK_URL###'] = $link->makeUrl(false);
             $linkStr = ($currentNoLink && $isCurrent) ? $token : $link->makeTag();
             // Ein zusätzliche Wrap um das generierte Element inkl. Link
-            $linkStr = $configurations->getFormatter()->wrap($linkStr, 'scopeSelection.'.$confName.(($item->uid == $currItem->uid) ? '.current.' : '.normal.'));
+            $linkStr = $configurations->getFormatter()->wrap($linkStr, 'scopeSelection.'.$confName.(($item->getUid() == $currItem->getUid()) ? '.current.' : '.normal.'));
 
             $subpartArray = $wrappedSubpartArray = [];
             $wrappedSubpartArray['###'.$markerName.'_LINK###'] = explode($token, $linkStr);
@@ -166,7 +160,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         $out = implode($parts, $configurations->get('scopeSelection.'.$confName.'.implode'));
 
         // Im Haupttemplate stellen wir die ausgewählte Saison als Marker zur Verfügung
-        $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->record, $itemConfId.'current.', 0, $markerName.'_CURRENT_', $currItem->getColumnNames());
+        $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->getProperty(), $itemConfId.'current.', 0, $markerName.'_CURRENT_', $currItem->getColumnNames());
         $subpartArray['###'.$markerName.'_SELECTION_2###'] = $out;
 
         return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);

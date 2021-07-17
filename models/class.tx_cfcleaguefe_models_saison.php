@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Database\Connection;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -21,7 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_model_base');
 
 /**
  * Model für eine Saison.
@@ -51,6 +52,6 @@ class tx_cfcleaguefe_models_saison extends tx_rnbase_model_base
         $options['wrapperclass'] = 'tx_cfcleaguefe_models_saison';
         // SELECT * FROM tx_cfcleague_saison WHERE uid IN ($uid)
 
-        return Tx_Rnbase_Database_Connection::getInstance()->doSelect('*', 'tx_cfcleague_saison', $options);
+        return Connection::getInstance()->doSelect('*', 'tx_cfcleague_saison', $options);
     }
 }
