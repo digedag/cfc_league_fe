@@ -1,4 +1,7 @@
 <?php
+use Sys25\RnBase\Frontend\Marker\ListMarkerInfo;
+use Sys25\RnBase\Frontend\Marker\Templates;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -21,20 +24,19 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_ListMarkerInfo');
 
-class tx_cfcleaguefe_util_MatchMarkerListInfo extends tx_rnbase_util_ListMarkerInfo
+class tx_cfcleaguefe_util_MatchMarkerListInfo extends ListMarkerInfo
 {
-    public function init($template, &$formatter, $marker)
+    public function init($template, $formatter, $marker)
     {
         // Im Template ist noch das Template für Spielfrei enthalten
-        $this->freeTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###'.$marker.'_FREE###');
+        $this->freeTemplate = Templates::getSubpart($template, '###'.$marker.'_FREE###');
         // Dieses enfernen wir jetzt direkt aus dem Template
         $subpartArray = ['###'.$marker.'_FREE###' => ''];
-        $this->template = \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [], $subpartArray);
+        $this->template = Templates::substituteMarkerArrayCached($template, [], $subpartArray);
     }
 
-    public function getTemplate(&$item)
+    public function getTemplate($item)
     {
         return $item->isDummy() ? $this->freeTemplate : $this->template;
     }
