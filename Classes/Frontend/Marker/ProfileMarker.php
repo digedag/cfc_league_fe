@@ -1,9 +1,13 @@
 <?php
 
+namespace System25\T3sports\Frontend\Marker;
+
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\SimpleMarker;
+use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Decorator\TeamNoteDecorator;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Repository\TeamNoteRepository;
-use Sys25\RnBase\Frontend\Marker\SimpleMarker;
 
 /***************************************************************
  *  Copyright notice
@@ -27,13 +31,11 @@ use Sys25\RnBase\Frontend\Marker\SimpleMarker;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_SimpleMarker');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich.
  */
-class tx_cfcleaguefe_util_ProfileMarker extends SimpleMarker
+class ProfileMarker extends SimpleMarker
 {
     private $options;
     private $tnDecorator;
@@ -56,18 +58,18 @@ class tx_cfcleaguefe_util_ProfileMarker extends SimpleMarker
     /**
      * Initialisiert die Labels für die Profile-Klasse.
      *
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      * @param array $defaultMarkerArr
      */
-    public function initLabelMarkers(&$formatter, $profileConfId, $defaultMarkerArr = 0, $profileMarker = 'PROFILE')
+    public function initLabelMarkers(FormatUtil $formatter, $profileConfId, $defaultMarkerArr = 0, $profileMarker = 'PROFILE')
     {
-        return $this->prepareLabelMarkers('tx_cfcleaguefe_models_profile', $formatter, $profileConfId, $defaultMarkerArr, $profileMarker);
+        return $this->prepareLabelMarkers(Profile::class, $formatter, $profileConfId, $defaultMarkerArr, $profileMarker);
     }
 
     /**
      * @param string $template das HTML-Template
      * @param Profile $profile das Profil
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      *            der zu verwendente Formatter
      * @param string $confId Pfad
      *            der TS-Config des Profils, z.B. 'listView.profile.'
@@ -84,12 +86,12 @@ class tx_cfcleaguefe_util_ProfileMarker extends SimpleMarker
         $profile->setProperty('firstpicture', $profile->getProperty('t3images'));
         $profile->setProperty('pictures', $profile->getProperty('t3images'));
 
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_initRecord', [
+        Misc::callHook('cfc_league_fe', 'profileMarker_initRecord', [
             'item' => &$profile,
             'template' => &$template,
         ], $this);
 
-        $signs = System25\T3sports\Utility\Signs::getInstance();
+        $signs = \System25\T3sports\Utility\Signs::getInstance();
         $birthday = $profile->getProperty('birthday');
         $profile->setProperty('sign', 0 !== intval($birthday) ? $signs->getSign($birthday) : '');
 
@@ -99,11 +101,11 @@ class tx_cfcleaguefe_util_ProfileMarker extends SimpleMarker
     /**
      * {@inheritdoc}
      *
-     * @see tx_rnbase_util_SimpleMarker::finishTemplate()
+     * @see SimpleMarker::finishTemplate()
      */
     protected function finishTemplate($template, $item, $formatter, $confId, $marker)
     {
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'profileMarker_afterSubst', [
+        Misc::callHook('cfc_league_fe', 'profileMarker_afterSubst', [
             'item' => $item,
             'template' => &$template,
             'confId' => $confId,
@@ -117,14 +119,14 @@ class tx_cfcleaguefe_util_ProfileMarker extends SimpleMarker
     /**
      * Links vorbereiten.
      *
-     * @param tx_cfcleaguefe_models_profile $profile
+     * @param Profile $profile
      * @param string $marker
      * @param array $markerArray
      * @param array $wrappedSubpartArray
      * @param string $confId
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      */
-    protected function prepareLinks($profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
+    protected function prepareLinks(Profile $profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
         parent::prepareLinks($profile, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 

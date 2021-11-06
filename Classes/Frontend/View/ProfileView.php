@@ -1,8 +1,22 @@
 <?php
+
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Frontend\Marker\ProfileMarker;
+use System25\T3sports\Model\Profile;
+use System25\T3sports\Model\Team;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,25 +35,22 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Viewklasse für die Anzeige eines Personenprofils.
  */
-class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
+class ProfileView extends BaseView
 {
     /**
      * Erstellen des Frontend-Outputs.
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    //public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
-        $cObj = &$configurations->getCObj(0);
+        $viewData = $request->getViewContext();
+        $configurations = $request->getConfigurations();
 
-        // Die ViewData bereitstellen
-        $viewData = &$configurations->getViewData();
-
-        $profile = &$viewData->offsetGet('profile');
+        $profile = $viewData->offsetGet('profile');
         if (is_object($profile)) {
             $out = $this->createView($template, $profile, $configurations);
         } else {
@@ -49,20 +60,20 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
         return $out;
     }
 
-    protected function createView($template, $profile, $configurations)
+    protected function createView($template, $profile, ConfigurationInterface $configurations)
     {
         $out = '';
         $markerOptions = [];
         $teamId = $configurations->getParameters()->getInt('team');
         if (!$teamId) {
             // Id per TS suchen
-            $teamId = intval($configurations->get('profileview.staticteam'));
+            $teamId = $configurations->getInt('profileview.staticteam');
         }
         if ($teamId) {
-            $team = tx_cfcleague_util_ServiceRegistry::getTeamService()->getTeam($teamId);
+            $team = ServiceRegistry::getTeamService()->getTeam($teamId);
             $markerOptions['team'] = $team;
         }
-        $profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker', $markerOptions);
+        $profileMarker = tx_rnbase::makeInstance(ProfileMarker::class, $markerOptions);
         $out .= $profileMarker->parseTemplate($template, $profile, $configurations->getFormatter(), 'profileview.profile.', 'PROFILE');
         $profiles = $this->findNextAndPrevProfiles($profile, $markerOptions['team']);
 
@@ -89,18 +100,18 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
             $subpartArray['###PROFILEPAGER###'] = '';
         }
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $out = Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray, $wrappedSubpartArray);
 
         return $out;
     }
 
     /**
-     * @param tx_cfcleaguefe_models_profile $profile
-     * @param tx_cfcleaguefe_models_team $team
+     * @param Profile $profile
+     * @param Team $team
      *
-     * @return array[tx_cfcleaguefe_models_profile]
+     * @return Profile[]
      */
-    protected function findNextAndPrevProfiles($profile, $team)
+    protected function findNextAndPrevProfiles(Profile $profile, Team $team)
     {
         $ret = [];
         $playerIds = [];
@@ -111,17 +122,17 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
             // Alle Profile des Teams sammeln
             $teamProfiles = [];
             if ($team->getProperty('players')) {
-                $playerIds = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('players'));
+                $playerIds = Strings::intExplode(',', $team->getProperty('players'));
                 $teamProfiles = array_merge($teamProfiles, $playerIds);
                 $playerIds = array_flip($playerIds);
             }
             if ($team->getProperty('coaches')) {
-                $coachIds = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('coaches'));
+                $coachIds = Strings::intExplode(',', $team->getProperty('coaches'));
                 $teamProfiles = array_merge($teamProfiles, $coachIds);
                 $coachIds = array_flip($coachIds);
             }
             if ($team->getProperty('supporters')) {
-                $supporterIds = Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('supporters'));
+                $supporterIds = Strings::intExplode(',', $team->getProperty('supporters'));
                 $teamProfiles = array_merge($teamProfiles, $supporterIds);
                 $supporterIds = array_flip($supporterIds);
             }
@@ -132,8 +143,8 @@ class tx_cfcleaguefe_views_ProfileView extends tx_rnbase_view_Base
                     $prevId = 0 == $idx ? count($teamProfiles) - 1 : $idx - 1;
                     $nextId = $idx == count($teamProfiles) - 1 ? 0 : $idx + 1;
                     // TODO: In Schleife packen und den nächsten sichtbaren Link suchen.
-                    $ret['prev'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$prevId]);
-                    $ret['next'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', $teamProfiles[$nextId]);
+                    $ret['prev'] = tx_rnbase::makeInstance(Profile::class, $teamProfiles[$prevId]);
+                    $ret['next'] = tx_rnbase::makeInstance(Profile::class, $teamProfiles[$nextId]);
                 }
             }
         }

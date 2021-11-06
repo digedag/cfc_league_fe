@@ -41,10 +41,10 @@ class ProfileView extends AbstractAction
      * handle request.
      *
      * @param RequestInterface $request
+     *
      * @return string
      */
     protected function handleRequest(RequestInterface $request)
-//    protected function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         $fields = [];
         $options = [];
@@ -53,6 +53,7 @@ class ProfileView extends AbstractAction
         $service = ServiceRegistry::getProfileService();
         $profiles = $service->search($fields, $options);
         $profile = count($profiles) ? $profiles[0] : null;
+
         if (!$profile) {
             return 'No profile found!';
         }
@@ -96,6 +97,6 @@ class ProfileView extends AbstractAction
 
     protected function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_ProfileView';
+        return \System25\T3sports\Frontend\View\ProfileView::class;
     }
 }

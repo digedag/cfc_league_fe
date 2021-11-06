@@ -15,4 +15,8 @@ namespace {
     class tx_cfcleaguefe_actions_StadiumList
     {
     }
+    /** @deprecated */
+    class tx_cfcleaguefe_uti_ProfileMarker
+    {
+    }
 }
