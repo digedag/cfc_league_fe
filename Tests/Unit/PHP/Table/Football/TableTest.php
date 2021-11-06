@@ -2,6 +2,9 @@
 
 namespace System25\T3sports\Tests\Table\Football;
 
+use Sys25\RnBase\Testing\BaseTestCase;
+use Sys25\RnBase\Utility\Spyc;
+use System25\T3sports\Model\Competition;
 use System25\T3sports\Table\Builder;
 use System25\T3sports\Table\ITableResult;
 
@@ -9,7 +12,7 @@ use System25\T3sports\Table\ITableResult;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2011-2020 Rene Nitzsche (rene@system25.de)
+ * (c) 2011-2021 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +32,7 @@ use System25\T3sports\Table\ITableResult;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-class TableTest extends \tx_rnbase_tests_BaseTestCase
+class TableTest extends BaseTestCase
 {
     /**
      * FIXME.
@@ -165,10 +168,10 @@ class TableTest extends \tx_rnbase_tests_BaseTestCase
     public function prepareLeague($leagueName)
     {
         // Laden der Daten
-        $data = \tx_rnbase_util_Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));
+        $data = Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));
         $data = $data[$leagueName];
 
-        $league = \tx_cfcleague_models_Competition::getCompetitionInstance($data['record']['uid'], $data['record']);
+        $league = Competition::getCompetitionInstance($data['record']['uid'], $data['record']);
         $teams = $this->makeInstances($data['teams'], $data['teams']['clazz']);
         foreach ($teams as $team) {
             \tx_cfcleaguefe_models_team::addInstance($team);

@@ -27,9 +27,9 @@ namespace System25\T3sports\Table;
 
 class PointOptions
 {
-    const AFTER_EXTRA_TIME = 'afterExtraTime';
+    public const AFTER_EXTRA_TIME = 'afterExtraTime';
 
-    const AFTER_EXTRA_PENALTY = 'afterExtraPenalty';
+    public const AFTER_EXTRA_PENALTY = 'afterExtraPenalty';
 
     private $options;
 

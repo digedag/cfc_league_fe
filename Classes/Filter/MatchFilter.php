@@ -2,10 +2,15 @@
 
 namespace System25\T3sports\Filter;
 
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Utility\Misc;
+use System25\T3sports\Model\Profile;
+use System25\T3sports\Utility\MatchTableBuilder;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2019 Rene Nitzsche (rene@system25.de)
+*  (c) 2010-2021 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -50,8 +55,7 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
             $teamId = $parameters->offsetGet('teamId');
         }
 
-        $service = \tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
-        $matchtable = $service->getMatchTable();
+        $matchtable = new MatchTableBuilder();
         $matchtable->setScope($scopeArr);
         $matchtable->setTeams($teamId);
         $clubId = $configurations->get($confId.'fixedOpponentClub');
@@ -74,7 +78,7 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
                 $this->addFilterData('referee', $ids);
             }
         }
-        \tx_rnbase_util_Misc::callHook(
+        Misc::callHook(
             'cfc_league_fe',
             'filterMatch_setfields',
             [
@@ -92,7 +96,7 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
         $subpartArray = ['###FILTERITEMS###' => ''];
-        $subpart = \tx_rnbase_util_Templates::getSubpart($template, '###FILTERITEMS###');
+        $subpart = Templates::getSubpart($template, '###FILTERITEMS###');
         if (is_array($this->data) && count($this->data) > 0) {
             // Dafür sorgen, daß überflüssige Subpart verschwinden
             foreach (self::$profileData as $key) {
@@ -103,16 +107,16 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
                 if (array_key_exists($key, $profileKeys) && intval($filterData) > 0) {
                     // Person anzeigen, die anderen Subparts entfernen
                     $profSubpartName = '###'.strtoupper($key).'###';
-                    $profileSubpart = \tx_rnbase_util_Templates::getSubpart($template, $profSubpartName);
+                    $profileSubpart = Templates::getSubpart($template, $profSubpartName);
 
-                    $profile = \tx_cfcleague_models_Profile::getProfileInstance($filterData);
+                    $profile = Profile::getProfileInstance($filterData);
                     $profileMarker = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
                     $subpartArray[$profSubpartName] = $profileMarker->parseTemplate($profileSubpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
                 }
             }
-            $subpartArray['###FILTERITEMS###'] = \tx_rnbase_util_Templates::substituteMarkerArrayCached($subpart, $markerArray, $subpartArray);
+            $subpartArray['###FILTERITEMS###'] = Templates::substituteMarkerArrayCached($subpart, $markerArray, $subpartArray);
         }
-        $template = \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        $template = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
         return $template;
     }

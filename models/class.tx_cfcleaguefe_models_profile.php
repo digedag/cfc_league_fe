@@ -158,18 +158,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
     }
 
     /**
-     * Returns the team notes for this player.
-     *
-     * @param tx_cfcleaguefe_models_team $team
-     */
-    public function getTeamNotes(&$team)
-    {
-        $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
-
-        return $srv->getTeamNotes($this, $team);
-    }
-
-    /**
      * Liefert den kompletten Namen der Person.
      *
      * @param int $reverse Wenn 1 dann ist die Form <Nachname, Vorname>
@@ -260,34 +248,6 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
         }
 
         return 0;
-    }
-
-    /**
-     * Fügt die TeamNotes für den Spieler hinzu.
-     * Wird kein Team übergeben, dann passiert nichts.
-     *
-     * @param tx_cfcleaguefe_models_team $team
-     */
-    public function addTeamNotes($team)
-    {
-        // Zunächst alle Daten initialisieren
-        $types = tx_cfcleaguefe_models_teamNoteType::getAll();
-        for ($i = 0, $cnt = count($types); $i < $cnt; ++$i) {
-            $type = $types[$i];
-            $this->setProperty('tn'.$type->getMarker(), '');
-            $this->setProperty('tn'.$type->getMarker().'_type', '0');
-        }
-
-        if (is_object($team)) {
-            // Mit Team können die TeamNotes geholt werden
-            $notes = $this->getTeamNotes($team);
-            for ($i = 0, $cnt = count($notes); $i < $cnt; ++$i) {
-                $note = $notes[$i];
-                $noteType = $note->getType();
-                $this->setProperty('tn'.$noteType->getMarker(), $note->getUid());
-                $this->setProperty('tn'.$noteType->getMarker().'_type', $note->getProperty('mediatype'));
-            }
-        }
     }
 
     /**

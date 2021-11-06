@@ -10,7 +10,7 @@
 
 ###ignore backups and caches
 *.bak
-.php_cs.cache
+.php-cs-fixer.cache
 .scannerwork
 
 

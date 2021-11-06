@@ -4,7 +4,7 @@ namespace System25\T3sports\Hook;
 
 class PageLayout
 {
-    const LLPATH = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:';
+    public const LLPATH = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:';
 
     /**
      * Returns information about plugin.

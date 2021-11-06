@@ -1,8 +1,16 @@
 <?php
+
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Utility\ServiceRegistry;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,38 +29,35 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Controller für die Anzeige eines Personenprofils.
  */
-class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
+class ProfileView extends AbstractAction
 {
     public static $exclude = [];
 
     /**
      * handle request.
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewData
-     *
+     * @param RequestInterface $request
      * @return string
      */
-    protected function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
+//    protected function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         $fields = [];
         $options = [];
-        $this->initSearch($fields, $options, $parameters, $configurations);
+        $this->initSearch($fields, $options, $request->getParameters(), $request->getConfigurations());
 
-        $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+        $service = ServiceRegistry::getProfileService();
         $profiles = $service->search($fields, $options);
         $profile = count($profiles) ? $profiles[0] : null;
         if (!$profile) {
             return 'No profile found!';
         }
 
-        $viewData->offsetSet('profile', $profile);
+        $request->getViewContext()->offsetSet('profile', $profile);
         self::$exclude[] = $profile->uid;
 
         return '';
@@ -61,8 +66,8 @@ class tx_cfcleaguefe_actions_ProfileView extends tx_rnbase_action_BaseIOC
     protected function initSearch(&$fields, &$options, $parameters, $configurations)
     {
         // ggf. die Konfiguration aus der TS-Config lesen
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profileview.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profileview.options.');
+        SearchBase::setConfigFields($fields, $configurations, 'profileview.fields.');
+        SearchBase::setConfigOptions($options, $configurations, 'profileview.options.');
 
         $options['limit'] = 1;
         if (intval($configurations->get('profileview.excludeAlreadyDisplayed'))) {

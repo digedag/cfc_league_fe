@@ -34,9 +34,9 @@ use tx_rnbase;
  */
 class Configurator extends FootballConfigurator
 {
-    const POINT_SYSTEM_2POINT = 0;
+    public const POINT_SYSTEM_2POINT = 0;
 
-    const POINT_SYSTEM_3POINT = 1;
+    public const POINT_SYSTEM_3POINT = 1;
 
     /**
      * Whether or not loose points are count.

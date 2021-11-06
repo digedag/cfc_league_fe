@@ -44,7 +44,7 @@ use tx_rnbase_util_Misc;
  */
 class Table extends AbstractService implements ITableType
 {
-    const TABLE_TYPE = 'football';
+    public const TABLE_TYPE = 'football';
 
     protected $_teamData = [];
 

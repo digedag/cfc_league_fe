@@ -29,28 +29,11 @@ namespace System25\T3sports\Service;
  * Service for accessing profile information.
  *
  * @author Rene Nitzsche
+ *
+ * @deprecated
  */
 class ProfileService extends \Tx_Rnbase_Service_Base
 {
-    /**
-     * Find team notes for a profile.
-     *
-     * @param \tx_cfcleaguefe_models_profile $profile
-     * @param \tx_cfcleaguefe_models_team $team
-     */
-    public function getTeamNotes(&$profile, &$team)
-    {
-        $what = '*';
-        $from = 'tx_cfcleague_team_notes';
-        $options = [];
-        $options['where'] = 'player = '.$profile->uid.' AND team = '.$team->uid;
-        $options['wrapperclass'] = 'tx_cfcleaguefe_models_teamNote';
-        //		$options['orderby'] = 'minute asc, extra_time asc, uid asc';
-        $teamNotes = \tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
-
-        return $teamNotes;
-    }
-
     /**
      * Search database for teams.
      *

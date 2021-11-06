@@ -28,7 +28,7 @@
 	"require" : {
 		"typo3/cms-core": "^7.6 || ^8.7 || ^9.5.17 || ^10.4.3",
 		"digedag/cfc-league" : "^1.7.0",
-		"digedag/rn-base" : "^1.13.5"
+		"digedag/rn-base" : "~1.14.2"
 	},
 	"require-dev": {
 		"namelesscoder/typo3-repository-client": "^1.2",
@@ -66,7 +66,8 @@
         "post-autoload-dump": [
             "mkdir -p .Build/Web/typo3conf/ext/",
             "[ -L .Build/Web/typo3conf/ext/cfc_league_fe ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/cfc_league_fe"
-        ]
+        ],
+        "tests:phplint": "find *.php Classes Deprecations mod1 models services Tests util -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"
     },
     "extra": {
         "typo3/cms": {
@@ -74,6 +75,11 @@
             "extension-key": "cfc_league_fe",
             "web-dir": ".Build/Web"
         },
+		"typo3/class-alias-loader": {
+			"class-alias-maps": [
+				"Migrations/Code/ClassAliasMap.php"
+			]
+		},
 		"branch-alias": {
 			"dev-master": "1.x-dev"
 		}

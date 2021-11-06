@@ -1,8 +1,14 @@
 <?php
+
+use System25\T3sports\Decorator\TeamNoteDecorator;
+use System25\T3sports\Model\Profile;
+use System25\T3sports\Model\Repository\TeamNoteRepository;
+use Sys25\RnBase\Frontend\Marker\SimpleMarker;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,9 +33,10 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays für Profile verantwortlich.
  */
-class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
+class tx_cfcleaguefe_util_ProfileMarker extends SimpleMarker
 {
     private $options;
+    private $tnDecorator;
 
     /**
      * Initialisiert den Marker Array.
@@ -37,6 +44,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
     public function __construct(&$options = [])
     {
         $this->options = $options;
+        $this->tnDecorator = new TeamNoteDecorator(new TeamNoteRepository());
         $this->setClassname('tx_cfcleaguefe_models_profile');
     }
 
@@ -58,8 +66,7 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
 
     /**
      * @param string $template das HTML-Template
-     * @param tx_cfcleaguefe_models_profile $profile
-     *            das Profil
+     * @param Profile $profile das Profil
      * @param tx_rnbase_util_FormatUtil $formatter
      *            der zu verwendente Formatter
      * @param string $confId Pfad
@@ -72,7 +79,8 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
      */
     protected function prepareTemplate($template, $profile, $formatter, $confId, $marker = 'PROFILE')
     {
-        $profile->addTeamNotes($this->options['team']);
+        $this->tnDecorator->addTeamNotes($profile, $this->options['team']);
+//        $profile->addTeamNotes($this->options['team']);
         $profile->setProperty('firstpicture', $profile->getProperty('t3images'));
         $profile->setProperty('pictures', $profile->getProperty('t3images'));
 
@@ -81,7 +89,9 @@ class tx_cfcleaguefe_util_ProfileMarker extends tx_rnbase_util_SimpleMarker
             'template' => &$template,
         ], $this);
 
-        $profile->setProperty('sign', $profile->getSign());
+        $signs = System25\T3sports\Utility\Signs::getInstance();
+        $birthday = $profile->getProperty('birthday');
+        $profile->setProperty('sign', 0 !== intval($birthday) ? $signs->getSign($birthday) : '');
 
         return $template;
     }

@@ -108,18 +108,6 @@ tx_rnbase_util_Extensions::addService(
 tx_rnbase_util_Extensions::addService(
     $_EXTKEY,
     'cfcleague_data' /* sv type */ ,
-    'tx_cfcleaguefe_sv1_Matches' /* sv key */ ,
-    [
-    'title' => 'Team services', 'description' => 'Service functions for match access', 'subtype' => 'match',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Service\MatchService',
-  ]
-);
-
-tx_rnbase_util_Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_data' /* sv type */ ,
     'tx_cfcleaguefe_sv1_Teams' /* sv key */ ,
     [
     'title' => 'Team services', 'description' => 'Service functions for team access', 'subtype' => 'team',

@@ -22,7 +22,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_Misc');
 
 /**
  * Keine echte Registry, aber eine zentrale Klasse für den Zugriff auf verschiedene
@@ -68,7 +67,7 @@ class tx_cfcleaguefe_util_ServiceRegistry
      */
     public static function getMatchService()
     {
-        return tx_rnbase_util_Misc::getService('cfcleague_data', 'match');
+        return tx_rnbase_util_Misc::getService('t3sports_srv', 'match');
     }
 
     /**

@@ -1,11 +1,5 @@
 <?php
 
-class tx_cfcleaguefe_actions_StadiumList extends System25\T3sports\Action\StadiumList
-{
-}
-class tx_cfcleaguefe_views_StadiumList extends System25\T3sports\View\StadiumList
-{
-}
 class tx_cfcleaguefe_filter_Match extends System25\T3sports\Filter\MatchFilter
 {
 }

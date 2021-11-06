@@ -40,7 +40,7 @@ use tx_rnbase;
  */
 class Table extends FootballTable
 {
-    const TABLE_TYPE = 'icehockey';
+    public const TABLE_TYPE = 'icehockey';
 
     /**
      * @return Configurator
