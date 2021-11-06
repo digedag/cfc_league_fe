@@ -1,8 +1,16 @@
 <?php
+
+namespace System25\T3sports\Frontend\Marker;
+
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use tx_cfcleaguefe_models_address as Address;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,27 +29,19 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays von Adressen verantwortlich.
  */
-class tx_cfcleaguefe_util_AddressMarker extends tx_rnbase_util_BaseMarker
+class AddressMarker extends BaseMarker
 {
     /**
-     * @param string $template
-     *            das HTML-Template
-     * @param tx_cfcleaguefe_models_address $address
-     *            die Adresse
-     * @param tx_rnbase_util_FormatUtil $formatter
-     *            der zu verwendente Formatter
-     * @param string $confId
-     *            Pfad der TS-Config des Vereins, z.B. 'listView.club.'
-     * @param array $links
-     *            Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-     * @param string $clubMarker
-     *            Name des Markers für den Club, z.B. CLUB
+     * @param string $template das HTML-Template
+     * @param Address $address die Adresse
+     * @param FormatUtil $formatter der zu verwendente Formatter
+     * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
+     * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
+     * @param string $clubMarker Name des Markers für den Club, z.B. CLUB
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
      *
      * @return string das geparste Template
@@ -56,7 +56,7 @@ class tx_cfcleaguefe_util_AddressMarker extends tx_rnbase_util_BaseMarker
         // Es wird das MarkerArray mit den Daten des Teams gefüllt.
         $markerArray = $formatter->getItemMarkerArrayWrapped($address->getProperty(), $confId, $ignore, $addressMarker.'_', $address->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
         return $out;
     }

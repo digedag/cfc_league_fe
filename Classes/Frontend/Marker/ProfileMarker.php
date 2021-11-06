@@ -47,7 +47,7 @@ class ProfileMarker extends SimpleMarker
     {
         $this->options = $options;
         $this->tnDecorator = new TeamNoteDecorator(new TeamNoteRepository());
-        $this->setClassname('tx_cfcleaguefe_models_profile');
+        $this->setClassname(Profile::class);
     }
 
     public function getOptions()

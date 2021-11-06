@@ -1,8 +1,22 @@
 <?php
+
+namespace System25\T3sports\Frontend\Marker;
+
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Maps\DefaultMarker;
+use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Model\Club;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_cfcleaguefe_util_StadiumMarker as StadiumMarker;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,27 +35,19 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Vereine verantwortlich.
  */
-class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
+class ClubMarker extends BaseMarker
 {
     /**
-     * @param string $template
-     *            das HTML-Template
-     * @param tx_cfcleaguefe_models_club $club
-     *            der Verein
-     * @param tx_rnbase_util_FormatUtil $formatter
-     *            der zu verwendente Formatter
-     * @param string $confId
-     *            Pfad der TS-Config des Vereins, z.B. 'listView.club.'
-     * @param array $links
-     *            Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-     * @param string $clubMarker
-     *            Name des Markers für den Club, z.B. CLUB
+     * @param string $template das HTML-Template
+     * @param Club $club der Verein
+     * @param FormatUtil $formatter der zu verwendente Formatter
+     * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
+     * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
+     * @param string $clubMarker Name des Markers für den Club, z.B. CLUB
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
      *
      * @return string das geparste Template
@@ -50,7 +56,7 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
     {
         if (!is_object($club)) {
             // Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
-            $club = self::getEmptyInstance('tx_cfcleaguefe_models_club');
+            $club = self::getEmptyInstance(Club::class);
         }
         $this->prepareRecord($club, $template, $formatter->getConfigurations(), $confId, $marker);
         // Es wird das MarkerArray mit Daten gefüllt
@@ -69,21 +75,17 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
             $template = $this->addTeams($template, $club, $formatter, $confId.'team.', $marker.'_TEAM');
         }
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
         return $out;
     }
 
     /**
-     * @param $item tx_cfcleaguefe_models_club
-     * @param
-     *            $template
-     * @param
-     *            $configurations
-     * @param
-     *            $confId
-     * @param
-     *            $marker
+     * @param Club $item
+     * @param string $template
+     * @param $configurations
+     * @param string $confId
+     * @param $marker
      */
     protected function prepareRecord($item, $template, $configurations, $confId, $marker)
     {
@@ -92,13 +94,13 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
             $lat = floatval($configurations->get($confId.'_basePosition.latitude'));
             $lng = floatval($configurations->get($confId.'_basePosition.longitude'));
             tx_rnbase::load('tx_cfcleaguefe_util_Maps');
-            $item->setProperty('distance', tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
+            $item->setProperty('distance', \tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
         }
     }
 
     protected function _addAddress($template, $address, $formatter, $addressConf, $markerPrefix)
     {
-        $addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
+        $addressMarker = tx_rnbase::makeInstance(AddressMarker::class);
         $template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
 
         return $template;
@@ -107,26 +109,24 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
     /**
      * Hinzufügen der Stadien.
      *
-     * @param string $template
-     *            HTML-Template für die Profile
-     * @param tx_cfcleaguefe_models_club $item
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     *            Config-String
+     * @param string $template HTML-Template für die Profile
+     * @param Club $item
+     * @param FormatUtil $formatter
+     * @param string $confId Config-String
      * @param string $markerPrefix
      */
     private function addStadiums($template, &$item, &$formatter, $confId, $markerPrefix)
     {
-        $srv = tx_cfcleague_util_ServiceRegistry::getStadiumService();
+        $srv = ServiceRegistry::getStadiumService();
         $fields = [];
         $fields['STADIUMMM.UID_FOREIGN'][OP_IN_INT] = $item->getUid();
         $options = [];
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
+        SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
+        SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
         $children = $srv->search($fields, $options);
 
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-        $out = $listBuilder->render($children, false, $template, 'tx_cfcleaguefe_util_StadiumMarker', $confId, $markerPrefix, $formatter, $options);
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
+        $out = $listBuilder->render($children, false, $template, StadiumMarker::class, $confId, $markerPrefix, $formatter, $options);
 
         return $out;
     }
@@ -136,20 +136,20 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
      *
      * @param string $template
      *            HTML-Template
-     * @param tx_cfcleaguefe_models_club $item
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param Club $item
+     * @param FormatUtil $formatter
      * @param string $confId
      *            Config-String
      * @param string $markerPrefix
      */
-    private function addTeams($template, $item, $formatter, $confId, $markerPrefix)
+    private function addTeams($template, Club $item, FormatUtil $formatter, $confId, $markerPrefix)
     {
-        $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
+        $srv = ServiceRegistry::getTeamService();
         $fields = [];
         $fields['TEAM.CLUB'][OP_EQ_INT] = $item->getUid();
         $options = [];
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->configurations, $confId.'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->configurations, $confId.'options.');
+        SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
+        SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
         $children = $srv->searchTeams($fields, $options);
 
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
@@ -168,16 +168,15 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
      * This can be done if the club has address data.
      *
      * @param string $template
-     * @param tx_cfcleague_models_Club $item
+     * @param Club $item
      */
-    public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix)
+    public function createMapMarker($template, Club $item, $formatter, $confId, $markerPrefix)
     {
         if (!self::hasGeoData($item)) {
             return false;
         }
-        tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
 
-        $marker = new tx_rnbase_maps_DefaultMarker();
+        $marker = new DefaultMarker();
         if ($item->getLongitute() || $item->getLatitute()) {
             $marker->setCoords($item->getCoords());
         } else {
@@ -196,12 +195,12 @@ class tx_cfcleaguefe_util_ClubMarker extends tx_rnbase_util_BaseMarker
     /**
      * Links vorbereiten.
      *
-     * @param tx_cfcleague_models_Club $item
+     * @param Club $item
      * @param string $marker
      * @param array $markerArray
      * @param array $wrappedSubpartArray
      * @param string $confId
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      */
     protected function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {

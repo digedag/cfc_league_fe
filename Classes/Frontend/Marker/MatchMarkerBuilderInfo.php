@@ -1,8 +1,14 @@
 <?php
+
+namespace System25\T3sports\Frontend\Marker;
+
+use Sys25\RnBase\Frontend\Marker\ListBuilderInfo;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,29 +27,11 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
 
-/**
- * Viewklasse für die Anzeige des Vereins.
- */
-class tx_cfcleaguefe_views_ClubView extends tx_rnbase_view_Base
+class MatchMarkerBuilderInfo extends ListBuilderInfo
 {
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function getListMarkerInfo()
     {
-        $item = &$viewData->offsetGet('item');
-        if (!is_object($item)) {
-            return 'Sorry, no item found...';
-        }
-
-        $out = '';
-        $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
-        $out .= $marker->parseTemplate($template, $item, $formatter, 'clubview.club.', 'CLUB');
-
-        return $out;
-    }
-
-    public function getMainSubpart(&$viewData)
-    {
-        return '###CLUB_VIEW###';
+        return tx_rnbase::makeInstance(MatchMarkerListInfo::class);
     }
 }

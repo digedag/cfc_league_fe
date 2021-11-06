@@ -5,6 +5,7 @@ namespace System25\T3sports\Frontend\View;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Frontend\Marker\ProfileMarker;
@@ -174,7 +175,7 @@ class ProfileView extends BaseView
         }
     }
 
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###PROFILE_VIEW###';
     }

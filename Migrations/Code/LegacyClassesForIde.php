@@ -8,6 +8,14 @@ namespace {
 
 namespace {
     /** @deprecated */
+    class tx_cfcleaguefe_actions_ClubList
+    {
+    }
+    /** @deprecated */
+    class tx_cfcleaguefe_actions_ClubView
+    {
+    }
+    /** @deprecated */
     class tx_cfcleaguefe_actions_ProfileView
     {
     }
@@ -15,8 +23,17 @@ namespace {
     class tx_cfcleaguefe_actions_StadiumList
     {
     }
+
     /** @deprecated */
     class tx_cfcleaguefe_uti_ProfileMarker
+    {
+    }
+    /** @deprecated */
+    class tx_cfcleaguefe_util_MatchMarker
+    {
+    }
+    /** @deprecated */
+    class tx_cfcleaguefe_util_StadiumMarker
     {
     }
 }

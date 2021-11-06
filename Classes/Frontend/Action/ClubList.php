@@ -1,8 +1,23 @@
 <?php
+
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Search\SearchBase;
+use Sys25\RnBase\Utility\PageBrowser;
+use System25\T3sports\Frontend\View\ClubListView;
+use System25\T3sports\Service\TeamService;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2018 Rene Nitzsche (rene@system25.com)
+ *  (c) 2009-2021 Rene Nitzsche (rene@system25.com)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,24 +36,24 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
-class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
+class ClubList extends AbstractAction
 {
     /**
-     * @param array_object $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param array $viewData
+     * @param RequestInterface $request
      *
      * @return string error msg or null
      */
-    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
     {
-        $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $viewData = $request->getViewContext();
+
+        $srv = ServiceRegistry::getTeamService();
         $this->conf = $configurations;
 
-        $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $this->getConfId());
+        $filter = BaseFilter::createFilter($request, $this->getConfId());
 
         $fields = $options = [];
         $filter->init($fields, $options);
@@ -47,7 +62,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
         $this->handleCharBrowser($parameters, $configurations, $viewData, $fields, $options);
         $this->handlePageBrowser($parameters, $configurations, $viewData, $fields, $options);
         $items = $srv->searchClubs($fields, $options);
-        $viewData->offsetSet('items', $items);
+        $request->getViewContext()->offsetSet('items', $items);
 
         return null;
     }
@@ -55,23 +70,23 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
     /**
      * Pagebrowser vorbereiten.
      *
-     * @param array_object $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param array_object $viewdata
+     * @param ParametersInterface $parameters
+     * @param ConfigurationInterface $configurations
+     * @param \ArrayObject $viewdata
      * @param array $fields
      * @param array $options
      */
-    protected function handlePageBrowser(&$parameters, &$configurations, &$viewdata, &$fields, &$options)
+    protected function handlePageBrowser($parameters, $configurations, $viewdata, &$fields, &$options)
     {
         if (is_array($configurations->get($this->getConfId().'club.pagebrowser.'))) {
-            $service = tx_cfcleague_util_ServiceRegistry::getTeamService();
+            $service = ServiceRegistry::getTeamService();
             // Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Orgs zu ermitteln
             $options['count'] = 1;
             $listSize = $service->searchClubs($fields, $options);
             unset($options['count']);
             // PageBrowser initialisieren
-            $pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'club');
-            $pageSize = intval($configurations->get($this->getConfId().'club.pagebrowser.limit'));
+            $pageBrowser = tx_rnbase::makeInstance(PageBrowser::class, 'club');
+            $pageSize = $configurations->getInt($this->getConfId().'club.pagebrowser.limit');
             $pageBrowser->setState($parameters, $listSize, $pageSize);
             $limit = $pageBrowser->getState();
             $options = array_merge($options, $limit);
@@ -82,7 +97,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
     protected function handleCharBrowser(&$parameters, &$configurations, &$viewData, &$fields, &$options)
     {
         if ($configurations->get($this->getConfId().'club.charbrowser')) {
-            $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
+            $srv = ServiceRegistry::getTeamService();
             $colName = $configurations->get($this->getConfId().'club.charbrowser.column');
             $colName = $colName ? $colName : 'name';
 
@@ -96,7 +111,7 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
         // Der CharBrowser beachten wir nur, wenn keine Suche aktiv ist
         // TODO: Der Filter sollte eine Methode haben, die sagt, ob ein Formular aktiv ist
         if ($firstChar && !$filter->inputData) {
-            $specials = tx_rnbase_util_SearchBase::getSpecialChars();
+            $specials = SearchBase::getSpecialChars();
             $firsts = $specials[$firstChar];
             if ($firsts) {
                 $firsts = implode('\', \'', $firsts);
@@ -116,21 +131,21 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
      * Also muß zunächst ermittelt werden, welche
      * Buchstaben überhaupt vorkommen.
      *
-     * @param tx_cfcleague_services_Teams $service
-     * @param tx_rnbase_configurations $configurations
+     * @param TeamService $service
+     * @param ConfigurationInterface $configurations
      */
-    protected function findPagerData(&$service, &$configurations, $colName)
+    protected function findPagerData($service, ConfigurationInterface $configurations, $colName)
     {
         $options = [];
         $options['what'] = 'LEFT(UCASE('.$colName.'),1) As first_char, count(LEFT(UCASE('.$colName.'),1)) As size';
         $options['groupby'] = 'LEFT(UCASE('.$colName.'),1)';
         $fields = [];
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
+        SearchBase::setConfigFields($fields, $configurations, $this->getConfId().'fields.');
+        SearchBase::setConfigOptions($options, $configurations, $this->getConfId().'options.');
 
         $rows = $service->searchClubs($fields, $options);
 
-        $specials = tx_rnbase_util_SearchBase::getSpecialChars();
+        $specials = SearchBase::getSpecialChars();
         $wSpecials = [];
         foreach ($specials as $key => $special) {
             foreach ($special as $char) {
@@ -167,6 +182,6 @@ class tx_cfcleaguefe_actions_ClubList extends tx_rnbase_action_BaseIOC
 
     public function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_ClubList';
+        return ClubListView::class;
     }
 }

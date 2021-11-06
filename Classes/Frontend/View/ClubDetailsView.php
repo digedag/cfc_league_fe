@@ -1,12 +1,16 @@
 <?php
 
-use Sys25\RnBase\Frontend\Marker\ListMarkerInfo;
-use Sys25\RnBase\Frontend\Marker\Templates;
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2009-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,19 +30,27 @@ use Sys25\RnBase\Frontend\Marker\Templates;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class tx_cfcleaguefe_util_MatchMarkerListInfo extends ListMarkerInfo
+/**
+ * Viewklasse für die Anzeige des Vereins.
+ */
+class ClubDetailsView extends BaseView
 {
-    public function init($template, $formatter, $marker)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
-        // Im Template ist noch das Template für Spielfrei enthalten
-        $this->freeTemplate = Templates::getSubpart($template, '###'.$marker.'_FREE###');
-        // Dieses enfernen wir jetzt direkt aus dem Template
-        $subpartArray = ['###'.$marker.'_FREE###' => ''];
-        $this->template = Templates::substituteMarkerArrayCached($template, [], $subpartArray);
+        $item = $request->getViewContext()->offsetGet('item');
+        if (!is_object($item)) {
+            return 'Sorry, no item found...';
+        }
+
+        $out = '';
+        $marker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
+        $out .= $marker->parseTemplate($template, $item, $formatter, 'clubview.club.', 'CLUB');
+
+        return $out;
     }
 
-    public function getTemplate($item)
+    public function getMainSubpart(ContextInterface $viewData)
     {
-        return $item->isDummy() ? $this->freeTemplate : $this->template;
+        return '###CLUB_VIEW###';
     }
 }

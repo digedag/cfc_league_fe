@@ -1,8 +1,27 @@
 <?php
+
+namespace System25\T3sports\Frontend\View;
+
+use Exception;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use Sys25\RnBase\Maps\Coord;
+use Sys25\RnBase\Maps\DefaultMarker;
+use Sys25\RnBase\Maps\Factory;
+use Sys25\RnBase\Maps\Google\Icon;
+use System25\T3sports\Frontend\Marker\ClubMarker;
+use System25\T3sports\Model\Club;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2009-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,31 +40,29 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('tx_rnbase_maps_Factory');
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Viewklasse.
  */
-class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base
+class ClubListView extends BaseView
 {
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
+        $configurations = $request->getConfigurations();
+        $viewData = $request->getViewContext();
         $items = &$viewData->offsetGet('items');
 
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-        $template = $listBuilder->render($items, $viewData, $template, 'tx_cfcleaguefe_util_ClubMarker', 'clublist.club.', 'CLUB', $formatter);
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
+        $template = $listBuilder->render($items, $viewData, $template, ClubMarker::class, 'clublist.club.', 'CLUB', $formatter);
 
         $markerArray = [];
         $subpartArray = [];
 
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'CLUBMAP')) {
-            $markerArray['###CLUBMAP###'] = $this->getMap($items, $configurations, $this->getController()
-                ->getConfId().'map.', 'CLUB');
+        if (BaseMarker::containsMarker($template, 'CLUBMAP')) {
+            $markerArray['###CLUBMAP###'] = $this->getMap($items, $configurations, $request->getConfId().'map.', 'CLUB');
         }
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); // , $wrappedSubpartArray);
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); // , $wrappedSubpartArray);
 
         return $out;
     }
@@ -55,30 +72,27 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base
         $ret = '###LABEL_mapNotAvailable###';
 
         try {
-            $map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $confId);
+            $map = Factory::createGoogleMap($configurations, $confId);
 
-            tx_rnbase::load('tx_cfcleaguefe_util_Maps');
-            $template = tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###CLUB_MAP_MARKER###');
-            $itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
-            tx_rnbase::load('tx_rnbase_maps_google_Icon');
-            tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
+            $template = \tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###CLUB_MAP_MARKER###');
+            $itemMarker = tx_rnbase::makeInstance(ClubMarker::class);
             foreach ($items as $item) {
                 $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'club.', $markerPrefix);
                 if (!$marker) {
                     continue;
                 }
 
-                tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.clublogo.', $marker, 'club_'.$item->getUid(), $item->getFirstLogo());
+                \tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.clublogo.', $marker, 'club_'.$item->getUid(), $item->getFirstLogo());
                 // $this->addIcon($map, $marker, $item, $configurations);
                 $map->addMarker($marker);
             }
             if ($configurations->get($confId.'showBasePoint')) {
                 $lng = floatval($configurations->get($confId.'club._basePosition.longitude'));
                 $lat = floatval($configurations->get($confId.'club._basePosition.latitude'));
-                $coords = tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
+                $coords = tx_rnbase::makeInstance(Coord::class);
                 $coords->setLongitude($lng);
                 $coords->setLatitude($lat);
-                $marker = tx_rnbase::makeInstance('tx_rnbase_maps_DefaultMarker');
+                $marker = tx_rnbase::makeInstance(DefaultMarker::class);
                 $marker->setCoords($coords);
                 $marker->setDescription('###LABEL_BASEPOINT###');
                 $map->addMarker($marker);
@@ -95,11 +109,11 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base
     /**
      * Setzt ein Icon für die Map.
      *
-     * @param tx_rnbase_maps_DefaultMarker $marker
-     * @param tx_cfcleague_models_Club $club
-     * @param tx_rnbase_configurations $configurations
+     * @param DefaultMarker $marker
+     * @param Club $club
+     * @param ConfigurationInterface $configurations
      */
-    private function addIcon($map, &$marker, $club, $configurations)
+    private function addIcon($map, DefaultMarker $marker, Club $club, ConfigurationInterface $configurations)
     {
         $logo = $club->getFirstLogo();
         if ($logo) {
@@ -107,7 +121,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base
                 ->getConfId().'map.icon.clublogo.');
             $imgConf['file'] = $logo;
             $url = $configurations->getCObj()->IMG_RESOURCE($imgConf);
-            $icon = new tx_rnbase_maps_google_Icon($map);
+            $icon = new Icon($map);
             $icon->setName('club_'.$club->getUid());
 
             $height = intval($imgConf['file.']['maxH']);
@@ -128,7 +142,7 @@ class tx_cfcleaguefe_views_ClubList extends tx_rnbase_view_Base
      *
      * @return string
      */
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###CLUB_LIST###';
     }

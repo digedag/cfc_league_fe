@@ -1,8 +1,21 @@
 <?php
+
+namespace System25\T3sports\Frontend\Marker;
+
+use Exception;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Maps\DefaultMarker;
+use Sys25\RnBase\Maps\Factory;
+use System25\T3sports\Model\Stadium;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2009-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,19 +34,16 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays eines Stadions verantwortlich.
  */
-class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
+class StadiumMarker extends BaseMarker
 {
     /**
-     * @param string $template
-     *            das HTML-Template
-     * @param tx_cfcleague_models_Stadium $item
-     * @param tx_rnbase_util_FormatUtil $formatter
-     *            der zu verwendente Formatter
+     * @param string $template das HTML-Template
+     * @param Stadium $item
+     * @param FormatUtil $formatter der zu verwendente Formatter
      * @param string $confId
      *            Pfad der TS-Config
      * @param string $marker
@@ -45,7 +55,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
     {
         if (!is_object($item)) {
             // Ist kein Item vorhanden wird ein leeres Objekt verwendet.
-            $item = self::getEmptyInstance('tx_cfcleague_models_Stadium');
+            $item = self::getEmptyInstance(Stadium::class);
         }
 
         $this->prepareRecord($item, $template, $formatter->getConfigurations(), $confId, $marker);
@@ -64,40 +74,37 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
             $template = $this->_addMap($template, $item, $formatter, $confId.'map.', $marker.'_MAP');
         }
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
     /**
      * @param string $template
-     * @param tx_cfcleague_models_Stadium $item
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param Stadium $item
+     * @param FormatUtil $formatter
      * @param string $confId
      *            Achtung die ConfId hier für die Map übergeben
      * @param string $markerPrefix
      */
     protected function _addMap($template, $item, $formatter, $confId, $markerPrefix)
     {
-        tx_rnbase::load('tx_cfcleaguefe_util_Maps');
-        $mapTemplate = tx_cfcleaguefe_util_Maps::getMapTemplate($formatter->getConfigurations(), $confId, '###STADIUM_MAP_MARKER###');
+        $mapTemplate = \tx_cfcleaguefe_util_Maps::getMapTemplate($formatter->getConfigurations(), $confId, '###STADIUM_MAP_MARKER###');
         $marker = $this->createMapMarker($mapTemplate, $item, $formatter, $confId.'stadium.', 'STADIUM');
         if (!$marker) {
             return $template;
         }
 
         try {
-            tx_rnbase::load('tx_rnbase_maps_DefaultMarker');
-            tx_rnbase::load('tx_rnbase_maps_Factory');
-            $map = tx_rnbase_maps_Factory::createGoogleMap($formatter->getConfigurations(), $confId);
+            $map = Factory::createGoogleMap($formatter->getConfigurations(), $confId);
 
             // Icon
-            tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), $confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
+            \tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), $confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
 
             $map->addMarker($marker);
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [
+            $out = Templates::substituteMarkerArrayCached($template, [
                 '###'.$markerPrefix.'###' => $map->draw(),
             ]);
         } catch (Exception $e) {
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, [
+            $out = Templates::substituteMarkerArrayCached($template, [
                 '###'.$markerPrefix.'###' => '###LABEL_mapNotAvailable###',
             ]);
         }
@@ -106,9 +113,9 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
     }
 
     /**
-     * @param tx_rnbase_model_base $item
+     * @param Stadium $item
      * @param string $template
-     * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
+     * @param ConfigurationInterface $configurations
      * @param string $confId
      * @param string $marker
      */
@@ -118,7 +125,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
         if ($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
             $lat = floatval($configurations->get($confId.'_basePosition.latitude'));
             $lng = floatval($configurations->get($confId.'_basePosition.longitude'));
-            $item->setProperty('distance', tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
+            $item->setProperty('distance', \tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
         }
     }
 
@@ -128,7 +135,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
             return false;
         }
 
-        $marker = new tx_rnbase_maps_DefaultMarker();
+        $marker = new DefaultMarker();
         if ($item->getLongitute() || $item->getLatitute()) {
             $marker->setCoords($item->getCoords());
         } else {
@@ -146,7 +153,7 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
 
     protected function _addAddress($template, &$address, &$formatter, $addressConf, $markerPrefix)
     {
-        $addressMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_AddressMarker');
+        $addressMarker = tx_rnbase::makeInstance(AddressMarker::class);
         $template = $addressMarker->parseTemplate($template, $address, $formatter, $addressConf, null, $markerPrefix);
 
         return $template;
@@ -155,12 +162,12 @@ class tx_cfcleaguefe_util_StadiumMarker extends tx_rnbase_util_BaseMarker
     /**
      * Links vorbereiten.
      *
-     * @param tx_cfcleague_models_Stadium $item
+     * @param Stadium $item
      * @param string $marker
      * @param array $markerArray
      * @param array $wrappedSubpartArray
      * @param string $confId
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      */
     protected function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template)
     {

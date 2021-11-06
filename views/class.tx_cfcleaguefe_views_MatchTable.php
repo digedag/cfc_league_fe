@@ -1,8 +1,13 @@
 <?php
+
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,7 +26,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
 
 /**
  * Viewklasse für die Anzeige eines Spielplans mit Hilfe eines HTML-Templates.
@@ -33,7 +37,7 @@ class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base
      */
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarkerBuilderInfo'));
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class, tx_rnbase::makeInstance(MatchMarkerBuilderInfo::class));
 
         /* @var $prov tx_rnbase_util_ListProvider */
         $prov = $viewData->offsetGet('provider');

@@ -1,8 +1,20 @@
 <?php
+
+namespace System25\T3sports\Utility;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Maps\Coord;
+use Sys25\RnBase\Maps\DefaultMarker;
+use Sys25\RnBase\Maps\Google\Icon;
+use Sys25\RnBase\Maps\ICoord;
+use Sys25\RnBase\Utility\Extensions;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,10 +36,9 @@
 
 /**
  * Utility methods for google maps integration.
- *
- * @author René Nitzsche <rene[at]system25.de>
+ * FIXME: reimplement.
  */
-class tx_cfcleaguefe_util_Maps
+class MapsUtil
 {
     private static $key = false;
 
@@ -37,7 +48,7 @@ class tx_cfcleaguefe_util_Maps
         if (!$file) {
             return '';
         }
-        $subpart = tx_rnbase_util_Templates::getSubpartFromFile($file, $subpartName);
+        $subpart = Templates::getSubpartFromFile($file, $subpartName);
         $order = [
             "\r\n",
             "\n",
@@ -51,23 +62,20 @@ class tx_cfcleaguefe_util_Maps
     /**
      * Setzt ein Icon für die Map.
      *
-     * @param tx_rnbase_configurations $configurations
-     * @param string $confId
-     *            confid for image configuration
-     * @param tx_rnbase_maps_DefaultMarker $marker
-     * @param string $logo
-     *            image path
-     * @param string $shadow
-     *            image path to shadow, not supported yet!
+     * @param ConfigurationInterface $configurations
+     * @param string $confId confid for image configuration
+     * @param DefaultMarker $marker
+     * @param string $logo image path
+     * @param string $shadow image path to shadow, not supported yet!
      */
-    public static function addIcon($map, $configurations, $confId, $marker, $iconName, $logo, $shadow = '')
+    public static function addIcon($map, ConfigurationInterface $configurations, $confId, DefaultMarker $marker, $iconName, $logo, $shadow = '')
     {
         $GLOBALS['TSFE']->register['T3SPORTS_MAPICON'] = $logo;
         if ($logo) {
             $imgConf = $configurations->get($confId);
             $imgConf['file'] = $imgConf['file'] ? $imgConf['file'] : $logo;
             $url = $configurations->getCObj()->IMG_RESOURCE($imgConf);
-            $icon = new tx_rnbase_maps_google_Icon($map);
+            $icon = new Icon($map);
             $icon->setName($iconName);
 
             $height = (int) $imgConf['file.']['maxH'];
@@ -129,19 +137,20 @@ class tx_cfcleaguefe_util_Maps
      * @param string $zip
      * @param string $country
      *
-     * @return tx_rnbase_maps_ICoord or false
+     * @return ICoord or false
      */
     public static function lookupAddress($street, $city, $state, $zip, $country)
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('wec_map')) {
+        if (!Extensions::isLoaded('wec_map')) {
             return false;
         }
-        require_once tx_rnbase_util_Extensions::extPath('wec_map').'class.tx_wecmap_cache.php';
+        // FIXME: integrate rn_base
+        return false;
 
         $lookupTable = tx_rnbase::makeInstance('tx_wecmap_cache');
         $latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, self::getKey());
 
-        $coord = tx_rnbase::makeInstance('tx_rnbase_maps_Coord');
+        $coord = tx_rnbase::makeInstance(Coord::class);
         $coord->setLongitude($latlong['long']);
         $coord->setLatitude($latlong['lat']);
 
@@ -151,8 +160,7 @@ class tx_cfcleaguefe_util_Maps
     private static function getKey()
     {
         if (!self::$key) {
-            require_once tx_rnbase_util_Extensions::extPath('wec_map').'class.tx_wecmap_domainmgr.php';
-            /* @var $domainmgr tx_wecmap_domainmgr */
+            /* @var $domainmgr \tx_wecmap_domainmgr */
             $domainmgr = tx_rnbase::makeInstance('tx_wecmap_domainmgr');
             self::$key = $domainmgr->getServerKey();
         }
