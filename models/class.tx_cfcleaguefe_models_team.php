@@ -1,4 +1,9 @@
 <?php
+
+use System25\T3sports\Model\Club;
+use System25\T3sports\Model\Group;
+use System25\T3sports\Model\Repository\ClubRepository;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -53,7 +58,9 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     /**
      * Liefert den Verein des Teams als Objekt.
      *
-     * @return tx_cfcleaguefe_models_club Verein als Objekt oder 0
+     * @return tx_cfcleaguefe_models_club|null Verein als Objekt
+     *
+     * @deprecated
      */
     public function getClub()
     {
@@ -61,7 +68,9 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
             return 0;
         }
 
-        return tx_cfcleaguefe_models_club::getClubInstance($this->getProperty('club'));
+        $repo = new ClubRepository();
+
+        return $repo->findByUid($this->getClubUid());
     }
 
     /**
@@ -79,13 +88,13 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      * This value is retrieved from the teams competitions. So
      * the first competition found, decides about the age group.
      *
-     * @return tx_cfcleague_models_Group or null
+     * @return Group or null
      */
     public function getAgeGroup()
     {
         if (!$this->agegroup) {
             if (intval($this->getProperty('agegroup'))) {
-                $this->agegroup = tx_cfcleague_models_Group::getGroupInstance($this->getProperty('agegroup'));
+                $this->agegroup = Group::getGroupInstance($this->getProperty('agegroup'));
             }
             if (!$this->agegroup) {
                 $comps = $this->getCompetitions(true);

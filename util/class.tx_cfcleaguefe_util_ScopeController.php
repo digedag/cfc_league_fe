@@ -1,4 +1,7 @@
 <?php
+
+use System25\T3sports\Model\Repository\ClubRepository;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -190,12 +193,13 @@ class tx_cfcleaguefe_util_ScopeController
     {
         $viewData = $configurations->getViewData();
         $clubUids = $configurations->get('clubSelection');
+        $clubRepo = new ClubRepository();
 
         // Soll eine SelectBox für den Verein gezeigt werden?
         // Das machen wir nur, wenn mindestens ein Verein konfiguriert wurde
         if ($configurations->get('clubSelectionInput')) {
             // Die UIDs der Vereine in Objekte umwandeln, um eine Selectbox zu bauen
-            $clubs = tx_cfcleaguefe_models_club::findAll($clubUids, $saisonUids, $groupUids, $compUids);
+            $clubs = $clubRepo->findAllByScope($clubUids, $saisonUids, $groupUids, $compUids);
             $dataArr = self::_prepareSelect($clubs, $parameters, 'club', $useObjects ? '' : 'name');
             $clubUids = $dataArr[1];
             $viewData->offsetSet('club_select', $dataArr);
