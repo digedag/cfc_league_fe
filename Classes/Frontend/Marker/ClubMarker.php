@@ -9,6 +9,7 @@ use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Maps\DefaultMarker;
 use Sys25\RnBase\Search\SearchBase;
 use System25\T3sports\Model\Club;
+use System25\T3sports\Utility\MapsUtil;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_cfcleaguefe_util_StadiumMarker as StadiumMarker;
 use tx_rnbase;
@@ -93,8 +94,7 @@ class ClubMarker extends BaseMarker
         if ($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
             $lat = floatval($configurations->get($confId.'_basePosition.latitude'));
             $lng = floatval($configurations->get($confId.'_basePosition.longitude'));
-            tx_rnbase::load('tx_cfcleaguefe_util_Maps');
-            $item->setProperty('distance', \tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
+            $item->setProperty('distance', MapsUtil::getDistance($item, $lat, $lng));
         }
     }
 

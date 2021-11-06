@@ -1,4 +1,8 @@
 <?php
+
+use Sys25\RnBase\Maps\Factory;
+use System25\T3sports\Utility\MapsUtil;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -62,17 +66,16 @@ class tx_cfcleaguefe_views_TeamList extends tx_rnbase_view_Base
         $ret = '###LABEL_mapNotAvailable###';
 
         try {
-            $map = tx_rnbase_maps_Factory::createGoogleMap($configurations, $confId);
+            $map = Factory::createGoogleMap($configurations, $confId);
 
-            tx_rnbase::load('tx_cfcleaguefe_util_Maps');
-            $template = tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###TEAM_MAP_MARKER###');
+            $template = MapsUtil::getMapTemplate($configurations, $confId, '###TEAM_MAP_MARKER###');
             $itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
             foreach ($items as $item) {
                 $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'team.', $markerPrefix);
                 if (!$marker) {
                     continue;
                 }
-                tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.teamlogo.', $marker, 'team_'.$item->getUid(), $item->getLogoPath());
+                MapsUtil::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.teamlogo.', $marker, 'team_'.$item->getUid(), $item->getLogoPath());
                 $map->addMarker($marker);
             }
             $ret = $map->draw();

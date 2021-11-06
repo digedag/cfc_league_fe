@@ -16,6 +16,7 @@ use Sys25\RnBase\Maps\Factory;
 use Sys25\RnBase\Maps\Google\Icon;
 use System25\T3sports\Frontend\Marker\ClubMarker;
 use System25\T3sports\Model\Club;
+use System25\T3sports\Utility\MapsUtil;
 use tx_rnbase;
 
 /***************************************************************
@@ -74,7 +75,7 @@ class ClubListView extends BaseView
         try {
             $map = Factory::createGoogleMap($configurations, $confId);
 
-            $template = \tx_cfcleaguefe_util_Maps::getMapTemplate($configurations, $confId, '###CLUB_MAP_MARKER###');
+            $template = MapsUtil::getMapTemplate($configurations, $confId, '###CLUB_MAP_MARKER###');
             $itemMarker = tx_rnbase::makeInstance(ClubMarker::class);
             foreach ($items as $item) {
                 $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'club.', $markerPrefix);
@@ -82,7 +83,7 @@ class ClubListView extends BaseView
                     continue;
                 }
 
-                \tx_cfcleaguefe_util_Maps::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.clublogo.', $marker, 'club_'.$item->getUid(), $item->getFirstLogo());
+                MapsUtil::addIcon($map, $configurations, $this->getController()->getConfId().'map.icon.clublogo.', $marker, 'club_'.$item->getUid(), $item->getFirstLogo());
                 // $this->addIcon($map, $marker, $item, $configurations);
                 $map->addMarker($marker);
             }

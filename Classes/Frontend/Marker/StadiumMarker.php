@@ -10,6 +10,7 @@ use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Maps\DefaultMarker;
 use Sys25\RnBase\Maps\Factory;
 use System25\T3sports\Model\Stadium;
+use System25\T3sports\Utility\MapsUtil;
 use tx_rnbase;
 
 /***************************************************************
@@ -87,7 +88,7 @@ class StadiumMarker extends BaseMarker
      */
     protected function _addMap($template, $item, $formatter, $confId, $markerPrefix)
     {
-        $mapTemplate = \tx_cfcleaguefe_util_Maps::getMapTemplate($formatter->getConfigurations(), $confId, '###STADIUM_MAP_MARKER###');
+        $mapTemplate = MapsUtil::getMapTemplate($formatter->getConfigurations(), $confId, '###STADIUM_MAP_MARKER###');
         $marker = $this->createMapMarker($mapTemplate, $item, $formatter, $confId.'stadium.', 'STADIUM');
         if (!$marker) {
             return $template;
@@ -97,7 +98,7 @@ class StadiumMarker extends BaseMarker
             $map = Factory::createGoogleMap($formatter->getConfigurations(), $confId);
 
             // Icon
-            \tx_cfcleaguefe_util_Maps::addIcon($map, $formatter->getConfigurations(), $confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
+            MapsUtil::addIcon($map, $formatter->getConfigurations(), $confId.'icon.stadiumlogo.', $marker, 'stadium_'.$item->getUid(), $item->getLogoPath());
 
             $map->addMarker($marker);
             $out = Templates::substituteMarkerArrayCached($template, [
@@ -125,7 +126,7 @@ class StadiumMarker extends BaseMarker
         if ($this->containsMarker($template, $marker.'_DISTANCE') && self::hasGeoData($item)) {
             $lat = floatval($configurations->get($confId.'_basePosition.latitude'));
             $lng = floatval($configurations->get($confId.'_basePosition.longitude'));
-            $item->setProperty('distance', \tx_cfcleaguefe_util_Maps::getDistance($item, $lat, $lng));
+            $item->setProperty('distance', MapsUtil::getDistance($item, $lat, $lng));
         }
     }
 
