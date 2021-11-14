@@ -1,4 +1,10 @@
 <?php
+use System25\T3sports\Model\Competition;
+use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Utility\MatchTableBuilder;
+use System25\T3sports\Model\Team;
+use Sys25\RnBase\Database\Connection;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -117,7 +123,7 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
     private function getTeamsByUid($teamIds)
     {
         if (!is_array($teamIds)) {
-            $teamIds = Tx_Rnbase_Utility_Strings::intExplode(',', $teamIds);
+            $teamIds = Strings::intExplode(',', $teamIds);
         }
         if (!count($teamIds)) {
             return [];
@@ -126,9 +132,9 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
         $what = '*';
         $from = 'tx_cfcleague_teams';
         $options['where'] = 'tx_cfcleague_teams.uid IN ('.$teamIds.') ';
-        $options['wrapperclass'] = 'tx_cfcleaguefe_models_team';
+        $options['wrapperclass'] = Team::class;
 
-        return tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
+        return Connection::getInstance()->doSelect($what, $from, $options);
     }
 
     public function ___handleRequest(&$parameters, &$configurations, &$viewdata)
@@ -142,7 +148,7 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
         $club = $scopeArr['CLUB_UIDS'];
         // Die Kreuztabelle wird nur für komplette Wettbewerbe erzeugt
         if (0 == strlen($compUids)) {
-            $comps = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids);
+            $comps = Competition::findAll($saisonUids, $groupUids, $compUids);
             if (count($comps) > 0) {
                 $currCompetition = $comps[0];
                 $currCompetition = $currCompetition->uid;
@@ -151,9 +157,10 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
                 return '';
             } // Ohne Wettbewerb keine Tabelle!
         } else {
-            $currCompetition = Tx_Rnbase_Utility_Strings::intExplode(',', $compUids);
+            $currCompetition = Strings::intExplode(',', $compUids);
             $currCompetition = $currCompetition[0];
         }
+
 
         $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
         $extended = $configurations->get('matchcrosstable.allData');

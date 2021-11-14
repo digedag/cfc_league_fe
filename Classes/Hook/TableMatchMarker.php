@@ -12,6 +12,16 @@ use tx_rnbase_util_FormatUtil;
 use tx_rnbase_util_Logger;
 use tx_rnbase_util_SearchBase;
 use tx_rnbase_util_Templates;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Match;
+use Sys25\RnBase\Utility\Files;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Utility\Logger;
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Utility\ServiceRegistry;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use System25\T3sports\Frontend\Marker\MatchMarker;
 
 /***************************************************************
  *  Copyright notice
@@ -79,10 +89,10 @@ class TableMatchMarker
         $confId = 'matchreport.mtcurrentround.';
         $fields = [];
         $options = [];
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
+        SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
+        SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
 
-        $srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+        $srv = ServiceRegistry::getMatchService();
         $matchTable = $srv->getMatchTable();
         $matchTable->setCompetitions($match->getCompetition()->uid);
         $matchTable->setRounds($match->getRound());
@@ -94,23 +104,23 @@ class TableMatchMarker
         $template = '';
 
         try {
-            $template = tx_rnbase_util_Templates::getSubpartFromFile(
-                $formatter->configurations->get($confId.'template'),
+            $template = Templates::getSubpartFromFile(
+                $formatter->getConfigurations()->get($confId.'template'),
                 $subpartName
             );
         } catch (Exception $e) {
-            tx_rnbase_util_Logger::info('Error for matchtable current round: '.$e->getMessage(), 'cfc_league_fe');
+            Logger::info('Error for matchtable current round: '.$e->getMessage(), 'cfc_league_fe');
         }
         if (!$template) {
             return '';
         }
 
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
         $out = $listBuilder->render(
             $matches,
             false,
             $template,
-            'tx_cfcleaguefe_util_MatchMarker',
+            MatchMarker::class,
             $confId.'match.',
             'MATCH',
             $formatter
@@ -123,13 +133,13 @@ class TableMatchMarker
      * Add league table in match report.
      *
      * @param array $params
-     * @param \tx_cfcleaguefe_util_MatchMarker $parent
+     * @param MatchMarker $parent
      */
     public function addLeagueTable($params, $parent)
     {
         $template = $params['template'];
         $marker = $params['marker'];
-        if (!tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_LEAGUETABLE')) {
+        if (!BaseMarker::containsMarker($template, $marker.'_LEAGUETABLE')) {
             return;
         }
 
@@ -145,7 +155,7 @@ class TableMatchMarker
             $configurations = $formatter->getConfigurations();
             $confId = $params['confid'].'leaguetable.';
             $table = '#####<!-- Template not found -->';
-            $tableTemplate = tx_rnbase_util_Files::getFileResource(
+            $tableTemplate = Files::getFileResource(
                 $configurations->get($confId.'template'),
                 ['subpart' => $configurations->get($confId.'subpartName')]
             );
@@ -157,14 +167,14 @@ class TableMatchMarker
         }
 
         $markerArray['###'.$marker.'_LEAGUETABLE###'] = $table;
-        $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $params['template'] = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
     /**
      * @param ConfigurationInterface $configurations
      * @param string $confId
-     * @param \tx_cfcleaguefe_models_competition $competition
-     * @param \tx_cfcleaguefe_models_match $match
+     * @param Competition $competition
+     * @param Match $match
      *
      * @return array
      */
@@ -199,7 +209,7 @@ class TableMatchMarker
      *
      * @param array $params
      *
-     * @return \tx_cfcleaguefe_models_match or false
+     * @return Match or false
      */
     private function getMatch($params)
     {

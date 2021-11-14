@@ -1,4 +1,7 @@
 <?php
+use System25\T3sports\Model\Match;
+use System25\T3sports\Utility\MatchProfileProvider;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -50,15 +53,15 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
         }
         // Das Spiel laden
         try {
+            $match = tx_rnbase::makeInstance(Match::class, $matchId);
             if (null != $configurations->get($this->getConfId().'viewClassName')) {
-                $match = tx_rnbase::makeInstance('tx_cfcleague_models_Match', $matchId);
                 if (!$match->isValid()) {
                     throw new Exception('Match is not valid');
                 }
                 $viewData->offsetSet('match', $match); // Den Spielreport für den View bereitstellen
             } else {
                 /* @var $matchReport tx_cfcleaguefe_models_matchreport */
-                $matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $matchId, $configurations);
+                $matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $match, $configurations, new MatchProfileProvider());
                 $viewData->offsetSet('match', $matchReport->getMatch()); // Den Spielreport für den View bereitstellen
             }
         } catch (Exception $e) {

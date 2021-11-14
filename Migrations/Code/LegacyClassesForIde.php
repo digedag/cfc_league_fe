@@ -36,4 +36,8 @@ namespace {
     class tx_cfcleaguefe_util_StadiumMarker
     {
     }
+    /** @deprecated */
+    class tx_cfcleaguefe_models_competition
+    {
+    }
 }

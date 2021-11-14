@@ -1,6 +1,12 @@
 <?php
 
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Decorator\ProfileDecorator;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Utility\MatchTicker;
+use System25\T3sports\Model\MatchNote;
+use System25\T3sports\Decorator\MatchNoteDecorator;
+use System25\T3sports\Utility\MatchProfileProvider;
 
 /***************************************************************
  *  Copyright notice
@@ -40,6 +46,9 @@ class tx_cfcleaguefe_models_matchreport
     protected $_tickerArr;
 
     protected $initialized = false;
+    protected $mnDecorator;
+    protected $profileDecorator;
+    protected $matchProfileProvider;
 
     // enthält alle Tickermeldungen
 
@@ -50,14 +59,16 @@ class tx_cfcleaguefe_models_matchreport
      *
      * @param int $matchId UID eines Spiels
      */
-    public function __construct($matchId, $configurations)
+    public function __construct(Match $match, $configurations, MatchProfileProvider $mpProvider)
     {
         // Laden des Spiels
-        $this->match = self::_loadMatch($matchId);
+        $this->match = $match;
         $this->match->setMatchReport($this);
         $this->_configurations = $configurations;
-
         $this->_formatter = $configurations->getFormatter();
+        $this->mnDecorator = new MatchNoteDecorator(null, $mpProvider);
+        $this->profileDecorator = new ProfileDecorator($this->mnDecorator);
+        $this->matchProfileProvider = $mpProvider;
     }
 
     /**
@@ -170,7 +181,7 @@ class tx_cfcleaguefe_models_matchreport
         $tickers = [];
         $tickerArr = $this->_getMatchTicker($conf['cron']);
         foreach ($tickerArr as $ticker) {
-            if ($ticker->isVisible($conf)) {
+            if ($this->mnDecorator->isVisible($ticker, $conf)) {
                 $tickers[] = $ticker;
             }
         }
@@ -204,8 +215,9 @@ class tx_cfcleaguefe_models_matchreport
      * Spielerwechsel
      * sind z.B. schon zusammengelegt und Spielstände berechnet.
      *
-     * @param $cron chronologischer
+     * @param int $cron chronologischer
      *            Reihenfolge: "0" - 90 bis 0, "1" - 0 bis 90
+     * @return MatchNote[]
      */
     protected function _getMatchTicker($cron = 0)
     {
@@ -221,10 +233,6 @@ class tx_cfcleaguefe_models_matchreport
      * Spielerwechsel
      * sind z.B. schon zusammengelegt und Spielstände berechnet.
      *
-     * @param $cron chronologischer
-     *            Reihenfolge: "0" - 90 bis 0, "1" - 0 bis 90
-     * @param $all wenn
-     *            nicht 0 werden alle Meldungen geliefert, sonst entsprechend der Konfig
      */
     public function getMatchTicker()
     {
@@ -250,6 +258,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getRefereeName($confId = 'matchreport.referee.')
     {
+        // der Schiedsrichter wird schon als Instanz geliefert.
         return $this->_getNames2($this->match->getReferee(), $confId);
     }
 
@@ -258,7 +267,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getAssistNames($confId = 'matchreport.assists.')
     {
-        return $this->_getNames2($this->match->getAssists(), $confId);
+        return $this->_getNames2($this->matchProfileProvider->getProfiles($this->match, $this->match->getAssists()), $confId);
     }
 
     /**
@@ -266,7 +275,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getCoachNameHome($confId = 'matchreport.coach.')
     {
-        return $this->_getNames2($this->match->getCoachHome(), $confId);
+        return $this->_getNames2($this->matchProfileProvider->getProfiles($this->match, $this->match->getCoachHome()), $confId);
     }
 
     /**
@@ -274,7 +283,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getCoachNameGuest($confId = 'matchreport.coach.')
     {
-        return $this->_getNames2($this->match->getCoachGuest(), $confId);
+        return $this->_getNames2($this->matchProfileProvider->getProfiles($this->match, $this->match->getCoachGuest()), $confId);
     }
 
     /**
@@ -306,7 +315,8 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getLineupHome($confId = 'matchreport.players.')
     {
-        return $this->_getLineUp($this->match->getPlayersHome(), $this->match->getProperty('system_home'), $confId);
+        $players = $this->matchProfileProvider->getPlayers($this->match, MatchProfileProvider::PLAYERS_HOME, false);
+        return $this->_getLineUp($players, $this->match->getProperty('system_home'), $confId);
     }
 
     /**
@@ -318,7 +328,8 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getLineupGuest($confId = 'matchreport.players.')
     {
-        return $this->_getLineUp($this->match->getPlayersGuest(), $this->match->getProperty('system_guest'), $confId);
+        $players = $this->matchProfileProvider->getPlayers($this->match, MatchProfileProvider::PLAYERS_GUEST, false);
+        return $this->_getLineUp($players, $this->match->getProperty('system_guest'), $confId);
     }
 
     /**
@@ -329,7 +340,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getSubstituteNamesHome($confId = 'matchreport.substitutes.')
     {
-        return $this->_getNames2($this->match->getSubstitutesHome(), $confId);
+        return $this->_getNames2($this->matchProfileProvider->getProfiles($this->match, $this->match->getSubstitutesHome()), $confId);
     }
 
     /**
@@ -337,7 +348,7 @@ class tx_cfcleaguefe_models_matchreport
      */
     public function getSubstituteNamesGuest($confId = 'matchreport.substitutes.')
     {
-        return $this->_getNames2($this->match->getSubstitutesGuest(), $confId);
+        return $this->_getNames2($this->matchProfileProvider->getProfiles($this->match, $this->match->getSubstitutesGuest()), $confId);
     }
 
     /**
@@ -432,9 +443,10 @@ class tx_cfcleaguefe_models_matchreport
      */
     protected function _initMatchTicker()
     {
+        $tickerUtil = new MatchTicker();
         if (!is_array($this->_tickerArr)) {
             // Der Ticker wird immer chronologisch ermittelt
-            $this->_tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
+            $this->_tickerArr = $tickerUtil->getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
             for ($i = 0; $i < count($this->_tickerArr); ++$i) {
                 $note = $this->_tickerArr[$i];
@@ -491,7 +503,7 @@ class tx_cfcleaguefe_models_matchreport
 
         foreach ($profiles as $profile) {
             if (is_object($profile)) {
-                $name = tx_cfcleaguefe_models_profile::wrap($this->_formatter, $confId, $profile);
+                $name = $this->profileDecorator->wrap($this->_formatter, $confId, $profile);
                 if (strlen($name) > 0) {
                     $ret[] = $name;
                 }
@@ -513,7 +525,7 @@ class tx_cfcleaguefe_models_matchreport
     {
         $ret = [];
         foreach ($tickerArr as $ticker) {
-            $ret[] = tx_cfcleaguefe_models_match_note::wrap($this->_formatter, $confIdAll.'ticker.', $ticker);
+            $ret[] = $this->mnDecorator->wrap($this->_formatter, $confIdAll.'ticker.', $ticker);
         }
         // Die einzelnen Meldungen verbinden
         if (count($ret)) {
@@ -572,17 +584,6 @@ class tx_cfcleaguefe_models_matchreport
 
         // Jetzt noch ein Wrap über alles
         return $this->_formatter->stdWrap($ret, $conf, $this->match->getProperty());
-    }
-
-    /**
-     * Lädt das Spiel aus der Datenbank.
-     */
-    protected function _loadMatch($matchId)
-    {
-        // Wir holen gleich einige Zusatzinfos mit
-        $match = tx_cfcleaguefe_models_match::getMatchInstance($matchId);
-
-        return $match->isValid() ? $match : 0;
     }
 
     /**

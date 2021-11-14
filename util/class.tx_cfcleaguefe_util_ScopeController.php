@@ -1,11 +1,16 @@
 <?php
 
 use System25\T3sports\Model\Repository\ClubRepository;
+use System25\T3sports\Model\Competition;
+use Sys25\RnBase\Utility\Math;
+use System25\T3sports\Model\CompetitionRound;
+use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Utility\ServiceRegistry;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -227,10 +232,10 @@ class tx_cfcleaguefe_util_ScopeController
         if ($configurations->get('competitionSelectionInput') || ($configurations->get('roundSelectionInput') && !tx_rnbase_util_Math::testInt($compUids))) {
             // Die UIDs der Wettkämpfe in Objekte umwandeln, um eine Selectbox zu bauen
             // Suche der Wettbewerbe über den Service
-            $compServ = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
+            $compServ = ServiceRegistry::getCompetitionService();
             $fields = [];
             $options = [];
-            tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'scope.competition.options.');
+            SearchBase::setConfigOptions($options, $configurations, 'scope.competition.options.');
             \System25\T3sports\Search\SearchBuilder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
 
             $competitions = $compServ->search($fields, $options);
@@ -243,7 +248,7 @@ class tx_cfcleaguefe_util_ScopeController
         $scopeArr['COMP_UIDS'] = $compUids;
         // Zusätzlich noch die weiteren Einschränkungen mit in das ScopeArray legen, weil diese Infos auch
         // von anderen Views benötigt werden
-        $value = intval($configurations->get('scope.competition.obligation'));
+        $value = $configurations->getInt('scope.competition.obligation');
         if ($value) {
             $scopeArr['COMP_OBLIGATION'] = $value; // 1 - Pflicht, 2- freie Spiele
         }
@@ -269,10 +274,10 @@ class tx_cfcleaguefe_util_ScopeController
      */
     private static function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
     {
-        $viewData = &$configurations->getViewData();
+        $viewData = $configurations->getViewData();
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
-        if ($configurations->get('roundSelectionInput') && (isset($compUids) && tx_rnbase_util_Math::testInt($compUids))) {
-            $currCompetition = new tx_cfcleaguefe_models_competition($compUids);
+        if ($configurations->get('roundSelectionInput') && (isset($compUids) && Math::testInt($compUids))) {
+            $currCompetition = new Competition($compUids);
             // Die Spielrunden ermitteln
             $rounds = $currCompetition->getRounds();
             $dataArr = self::prepareRoundSelect($rounds, $parameters, $configurations, 'scope.rounds.', $useObjects ? '' : 'uid');
@@ -314,15 +319,13 @@ class tx_cfcleaguefe_util_ScopeController
     /**
      * Liefert ein Array für die Erstellung der Select-Box für die Spielrunden einer Liga.
      *
-     * @param $rounds
+     * @param CompetitionRound $rounds
      * @param tx_rnbase_IParameters $parameters
      * @param tx_rnbase_configurations $configurations
      * @param $confId
      * @param string $displayAttrName
      *
      * @return array
-     *
-     * @internal param $array [tx_cfcleaguefe_models_competition_round] $rounds
      */
     private static function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
     {

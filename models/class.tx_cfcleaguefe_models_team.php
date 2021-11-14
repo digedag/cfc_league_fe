@@ -3,6 +3,10 @@
 use System25\T3sports\Model\Club;
 use System25\T3sports\Model\Group;
 use System25\T3sports\Model\Repository\ClubRepository;
+use System25\T3sports\Utility\ServiceRegistry;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Team;
+use Sys25\RnBase\Utility\Strings;
 
 /***************************************************************
  *  Copyright notice
@@ -30,7 +34,7 @@ use System25\T3sports\Model\Repository\ClubRepository;
 /**
  * Model für ein Team.
  */
-class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
+class tx_cfcleaguefe_models_team extends Team
 {
     private $_players;
 
@@ -58,7 +62,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
     /**
      * Liefert den Verein des Teams als Objekt.
      *
-     * @return tx_cfcleaguefe_models_club|null Verein als Objekt
+     * @return Club|null Verein als Objekt
      *
      * @deprecated
      */
@@ -128,13 +132,13 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      * @param bool $obligateOnly
      *            if true, only obligate competitions are returned
      *
-     * @return array of tx_cfcleaguefe_models_competition
+     * @return Competition[]
      */
     public function getCompetitions($obligateOnly = false)
     {
         $fields = $options = [];
         \System25\T3sports\Search\SearchBuilder::buildCompetitionByTeam($fields, $this->getUid(), $obligateOnly);
-        $srv = tx_cfcleaguefe_util_ServiceRegistry::getCompetitionService();
+        $srv = ServiceRegistry::getCompetitionService();
 
         return $srv->search($fields, $options);
     }
@@ -254,7 +258,7 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
         if (strlen(trim($this->getProperty($recordKey))) > 0) {
             if (count($profiles)) {
                 // Jetzt die Spieler in die richtige Reihenfolge bringen
-                $uids = Tx_Rnbase_Utility_Strings::intExplode(',', $this->getProperty($recordKey));
+                $uids = Strings::intExplode(',', $this->getProperty($recordKey));
                 $uids = array_flip($uids);
                 foreach ($profiles as $player) {
                     $ret[$uids[$player->getUid()]] = $player;
@@ -286,8 +290,8 @@ class tx_cfcleaguefe_models_team extends tx_cfcleague_models_Team
      */
     public static function getTeams($competitionIds, $clubIds)
     {
-        $competitionIds = implode(Tx_Rnbase_Utility_Strings::intExplode(',', $competitionIds), ',');
-        $clubIds = implode(Tx_Rnbase_Utility_Strings::intExplode(',', $clubIds), ',');
+        $competitionIds = implode(Strings::intExplode(',', $competitionIds), ',');
+        $clubIds = implode(Strings::intExplode(',', $clubIds), ',');
 
         // $what = tx_cfcleaguefe_models_team::getWhat();
         $what = 'tx_cfcleague_teams.*';

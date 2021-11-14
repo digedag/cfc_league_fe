@@ -13,8 +13,10 @@ use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\Stadium;
 use System25\T3sports\Utility\ServiceRegistry;
-use tx_cfcleaguefe_util_MatchTicker;
 use tx_rnbase;
+use tx_cfcleaguefe_models_matchreport as MatchReport;
+use System25\T3sports\Utility\MatchTicker;
+
 
 /***************************************************************
  *  Copyright notice
@@ -85,9 +87,12 @@ class MatchMarker extends SimpleMarker
         ], $this);
 
         // Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
-        $this->pushTT('addDynamicMarkers');
-        $this->addDynamicMarkers($template, $match, $formatter, $confId, $marker);
-        $this->pullTT();
+        $report = $match->getMatchReport();
+        if (is_object($report)) {
+            $this->pushTT('addDynamicMarkers');
+            $this->addDynamicMarkers($template, $report, $formatter, $confId, $marker);
+            $this->pullTT();
+        }
 
         $this->pushTT('parse home team');
         if (self::containsMarker($template, $marker.'_HOME')) {
@@ -226,6 +231,7 @@ class MatchMarker extends SimpleMarker
         $match->setProperty('pictures', $match->getProperty('dam_images'));
         $match->setProperty('firstpicture', $match->getProperty('dam_images'));
 
+        /* @var $report MatchReport */
         $report = $match->getMatchReport();
         if (!is_object($report)) {
             return;
@@ -238,6 +244,7 @@ class MatchMarker extends SimpleMarker
             $this->lookupStaticField($match, $configurations->get('matchreport.lineuphome.staticField')) ?:
                     $report->getLineupHome('matchreport.lineuphome.')
         );
+
         $match->setProperty(
             'lineup_guest',
             $this->lookupStaticField($match, $configurations->get('matchreport.lineupguest.staticField')) ?:
@@ -275,17 +282,12 @@ class MatchMarker extends SimpleMarker
      *
      * @return string
      */
-    private function addDynamicMarkers($template, $match, FormatUtil $formatter, $matchConfId, $matchMarker)
+    private function addDynamicMarkers($template, MatchReport $report, FormatUtil $formatter, $matchConfId, $matchMarker)
     {
-        $report = $match->getMatchReport();
-        if (!is_object($report)) {
-            return $template;
-        }
-
         $dynaMarkers = $formatter->getConfigurations()->getKeyNames($matchConfId.'dynaMarkers.');
-        for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i) {
-            $typeArr = $formatter->getConfigurations()->get($matchConfId.'dynaMarkers.'.$dynaMarkers[$i].'.');
-            $match->setProperty($dynaMarkers[$i], $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarkers[$i].'.'));
+
+        foreach ($dynaMarkers as $dynaMarker) {
+            $report->getMatch()->setProperty($dynaMarker, $report->getTickerList($matchConfId.'dynaMarkers.'.$dynaMarker.'.'));
         }
     }
 
@@ -332,7 +334,6 @@ class MatchMarker extends SimpleMarker
                     $items[] = $tickerHash[$children[$ci]['uid']];
                 }
             }
-
             $template = $listBuilder->render($items, false, $template, 'tx_cfcleaguefe_util_MatchNoteMarker', $confId, $markerPrefix, $formatter);
         }
 
@@ -351,7 +352,8 @@ class MatchMarker extends SimpleMarker
     {
         if (!is_array($this->tickerHash)) {
             $this->tickerHash = [];
-            $tickerArr = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($match);
+            $matchTicker = new MatchTicker();
+            $tickerArr = $matchTicker->getTicker4Match($match);
             for ($i = 0, $cnt = count($tickerArr); $i < $cnt; ++$i) {
                 $this->tickerHash[$tickerArr[$i]->getUid()] = $tickerArr[$i];
             }

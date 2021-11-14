@@ -2,6 +2,7 @@
 
 use Sys25\RnBase\Database\Connection;
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Model\Match;
 
 /***************************************************************
  *  Copyright notice
@@ -30,131 +31,19 @@ use Sys25\RnBase\Utility\Strings;
  * Model für einen Spiel.
  * Liefert Zugriff auf die Daten eines Spiels.
  */
-class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
+class tx_cfcleaguefe_models_match extends Match
 {
     private static $instances = [];
 
-    public $_profiles;
-
-    public $_matchNotes;
-
-    public $_teamHome;
-
-    public $_teamGuest;
-
     public $_report;
-
-    private $competition;
-
-    public function __construct($rowOrUid)
-    {
-        parent::__construct($rowOrUid);
-        $this->initResult();
-    }
-
-    public function getTableName()
-    {
-        return 'tx_cfcleague_games';
-    }
-
-    /**
-     * Notwendige Initialisierung für das Ergebnis des Spieldatensatzes.
-     */
-    public function initResult()
-    {
-        if ($this->resultInited) {
-            return;
-        }
-
-        // Um das Endergebnis zu ermitteln, muss bekannt sein, wieviele Spielabschnitte
-        // es gibt. Dies steht im Wettbewerb
-        $comp = $this->getCompetition();
-        $this->setProperty('matchparts', $comp->getMatchParts());
-        if ($comp->isAddPartResults()) {
-            $this->initResultAdded($comp, $comp->getMatchParts());
-        } else {
-            $this->initResultSimple($comp, $comp->getMatchParts());
-        }
-        $this->resultInited = true;
-    }
-
-    /**
-     * Init result and expect the endresult in last match part.
-     *
-     * @param tx_cfcleague_models_Competition $comp
-     * @param int $matchParts
-     */
-    private function initResultSimple($comp, $matchParts)
-    {
-        $goalsHome = $this->getProperty('goals_home_'.$matchParts);
-        $goalsGuest = $this->getProperty('goals_guest_'.$matchParts);
-        // Gab es Verländerung oder Elfmeterschiessen
-        if ($this->isPenalty()) {
-            $goalsHome = $this->getProperty('goals_home_ap');
-            $goalsGuest = $this->getProperty('goals_guest_ap');
-        } elseif ($this->isExtraTime()) {
-            $goalsHome = $this->getProperty('goals_home_et');
-            $goalsGuest = $this->getProperty('goals_guest_et');
-        }
-        $this->setProperty('goals_home', $goalsHome);
-        $this->setProperty('goals_guest', $goalsGuest);
-    }
-
-    /**
-     * Init result and add all matchpart results.
-     *
-     * @param tx_cfcleague_models_Competition $comp
-     * @param int $matchParts
-     */
-    private function initResultAdded($comp, $matchParts)
-    {
-        $goalsHome = 0;
-        $goalsGuest = 0;
-
-        // Teilergebnisse holen
-        $matchParts = $matchParts > 0 ? $matchParts : 1;
-        for ($i = 1; $i <= $matchParts; ++$i) {
-            $goalsHome += $this->getProperty('goals_home_'.$i);
-            $goalsGuest += $this->getProperty('goals_guest_'.$i);
-        }
-        // Gab es Verländerung oder Elfmeterschiessen
-        if ($this->isPenalty()) {
-            $goalsHome += $this->getProperty('goals_home_ap');
-            $goalsGuest += $this->getProperty('goals_guest_ap');
-        } elseif ($this->isExtraTime()) {
-            $goalsHome += $this->getProperty('goals_home_et');
-            $goalsGuest += $this->recordgetProperty('goals_guest_et');
-        }
-        $this->setProperty('goals_home', $goalsHome);
-        $this->setProperty('goals_guest', $goalsGuest);
-    }
-
-    public function getGoalsHome($matchPart = '')
-    {
-        $ret = $this->getProperty('goals_home');
-        if (strlen($matchPart)) {
-            $ret = $this->getProperty('goals_home_'.(('last' == $matchPart) ? $this->getProperty('matchparts') : $matchPart));
-        }
-
-        return $ret;
-    }
-
-    public function getGoalsGuest($matchPart = '')
-    {
-        $ret = $this->getProperty('goals_guest');
-        if (strlen($matchPart)) {
-            $ret = $this->getProperty('goals_guest_'.(('last' == $matchPart) ? $this->getProperty('matchparts') : $matchPart));
-        }
-
-        return $ret;
-    }
 
     /**
      * Returns the match report.
      *
      * @return tx_cfcleaguefe_models_matchreport
+     * FIXME
      */
-    public function &getMatchReport()
+    public function getMatchReport()
     {
         return $this->_report;
     }
@@ -164,20 +53,16 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
      *
      * @param tx_cfcleaguefe_models_matchreport $report
      */
-    public function setMatchReport(&$report)
+    public function setMatchReport($report)
     {
         $this->_report = $report;
-    }
-
-    public function getResult()
-    {
-        return $this->getProperty('status') > 0 ? $this->getGoalsHome().' : '.$this->getGoalsGuest() : '- : -';
     }
 
     /**
      * Returns the state as string.
      *
      * @return string
+     * FIXME
      */
     public function getStateName()
     {
@@ -192,105 +77,27 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
     }
 
     /**
-     * Returns true if match is finished.
-     *
-     * @return bool
-     */
-    public function isFinished()
-    {
-        return 2 == (int) $this->getProperty('status');
-    }
-
-    /**
-     * Returns true if match is running.
-     *
-     * @return bool
-     */
-    public function isRunning()
-    {
-        return 1 == (int) $this->getProperty('status');
-    }
-
-    /**
-     * Returns true if match has extra time.
-     *
-     * @return bool
-     */
-    public function isExtraTime()
-    {
-        return 1 == (int) $this->getProperty('is_extratime');
-    }
-
-    /**
-     * Returns true if match has extra time.
-     *
-     * @return bool
-     */
-    public function isPenalty()
-    {
-        return 1 == (int) $this->getProperty('is_penalty');
-    }
-
-    /**
-     * Liefert true, wenn für das Spiel ein Spielbericht vorliegt.
-     */
-    public function hasReport()
-    {
-        return (intval($this->getProperty('has_report')) + intval($this->getProperty('link_report'))) > 0;
-    }
-
-    /**
-     * @return true if live ticker is turn on
-     */
-    public function isTicker()
-    {
-        return $this->getProperty('link_ticker') > 0;
-    }
-
-    /**
-     * Returns true of match is a dummy (free of play).
-     *
-     * @return bool
-     */
-    public function isDummy()
-    {
-        // Aus Performancegründen fragen wir hier den eigenen Record ab
-        return $this->getHome()->isDummy() || $this->getGuest()->isDummy();
-    }
-
-    /**
-     * Liefert alle MatchNotes des Spiels als Referenz auf ein Array.
-     * Die Ticker werden in chronologischer Reihenfolge geliefert.
-     * Alle MatchNotes haben eine Referenz auf das zugehörige Spiel.
-     */
-    public function &getMatchNotes()
-    {
-        $this->_resolveMatchNotes();
-
-        return $this->_matchNotes;
-    }
-
-    /**
      * Fügt diesem Match eine neue Note hinzu.
      * Die Notes werden mit diesem Spiel verlinkt.
+     * FIXME
      */
     public function addMatchNote(&$note)
     {
-        if (!isset($this->_matchNotes)) {
-            $this->_matchNotes = [];
+        if (!isset($this->matchNotes)) {
+            $this->matchNotes = [];
         } // Neues TickerArray erstellen
         $note->setMatch($this);
-        $this->_matchNotes[] = $note;
+        $this->matchNotes[] = $note;
         // Zusätzlich die Notes nach ihrem Typ sortieren
-        $this->_matchNoteTypes[(int) $note->getProperty('type')][] = $note;
+        $this->matchNoteTypes[(int) $note->getProperty('type')][] = $note;
     }
 
-    public function &getMatchNotesByType($type)
+    public function getMatchNotesByType($type)
     {
         if (is_array($type)) {
             $ret = [];
             for ($i = 0, $size = count($type); $i < $size; ++$i) {
-                $notes = $this->_matchNoteTypes[intval($type[$i])];
+                $notes = $this->matchNoteTypes[intval($type[$i])];
                 if (is_array($notes)) {
                     $ret = array_merge($ret, $notes);
                 }
@@ -298,104 +105,10 @@ class tx_cfcleaguefe_models_match extends tx_rnbase_model_base
 
             return $ret;
         } else {
-            return $this->_matchNoteTypes[intval($type)];
+            return $this->matchNoteTypes[intval($type)];
         }
     }
 
-    /**
-     * Lädt die MatchNotes dieses Spiels.
-     * Sollten sie schon geladen sein, dann
-     * wird nix gemacht.
-     */
-    public function _resolveMatchNotes($orderBy = 'asc')
-    {
-        if (isset($this->_matchNotes)) {
-            return;
-        } // Die Ticker sind schon geladen
-
-        $what = '*';
-        $from = 'tx_cfcleague_match_notes';
-        $options['where'] = 'game = '.$this->getUid();
-        $options['wrapperclass'] = 'tx_cfcleaguefe_models_match_note';
-        // HINT: Die Sortierung nach dem Typ ist für die Auswechslungen wichtig.
-        $options['orderby'] = 'minute asc, extra_time asc, uid asc';
-        $this->_matchNotes = tx_rnbase_util_DB::doSelect($what, $from, $options, 0);
-
-        // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
-        $anz = count($this->_matchNotes);
-        for ($i = 0; $i < $anz; ++$i) {
-            $this->_matchNotes[$i]->setMatch($this);
-            // Zusätzlich die Notes nach ihrem Typ sortieren
-            $this->_matchNoteTypes[intval($this->_matchNotes[$i]->getProperty('type'))][] = $this->_matchNotes[$i];
-        }
-    }
-
-    /**
-     * Liefert das Heim-Team als Objekt.
-     *
-     * @return tx_cfcleaguefe_models_team
-     */
-    public function getHome()
-    {
-        $this->_teamHome = isset($this->_teamHome) ? $this->_teamHome : $this->_getTeam($this->getProperty('home'));
-
-        return $this->_teamHome;
-    }
-
-    /**
-     * Setzt das Heim-Team.
-     */
-    public function setHome(&$team)
-    {
-        $this->_teamHome = $team;
-    }
-
-    /**
-     * Liefert das Gast-Team als Objekt.
-     *
-     * @return tx_cfcleaguefe_models_team
-     */
-    public function getGuest()
-    {
-        $this->_teamGuest = isset($this->_teamGuest) ? $this->_teamGuest : $this->_getTeam($this->getProperty('guest'));
-
-        return $this->_teamGuest;
-    }
-
-    public function getHomeNameShort()
-    {
-        return $this->getHome()->getNameShort();
-    }
-
-    public function getGuestNameShort()
-    {
-        return $this->getGuest()->getNameShort();
-    }
-
-    /**
-     * Setzt das Gast-Team.
-     */
-    public function setGuest(&$team)
-    {
-        $this->_teamGuest = $team;
-    }
-
-    /**
-     * Liefert den Referee als Datenobjekt.
-     *
-     * @return tx_cfcleaguefe_models_profile
-     */
-    public function getReferee()
-    {
-        $ret = null;
-        if ($this->getProperty('referee')) {
-            $this->_resolveProfiles();
-            // Wir suchen jetzt den Schiedsrichter
-            $ret = $this->_profiles[$this->getProperty('referee')];
-        }
-
-        return $ret;
-    }
 
     /**
      * Liefert den Heimtrainer als Datenobjekt.

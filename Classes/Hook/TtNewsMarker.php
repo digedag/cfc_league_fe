@@ -3,10 +3,14 @@
 namespace System25\T3sports\Hook;
 
 use Exception;
-use tx_cfcleaguefe_models_match;
 use tx_rnbase;
 use tx_rnbase_util_BaseMarker;
 use Tx_Rnbase_Utility_Strings;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Repository\MatchRepository;
+use Sys25\RnBase\Utility\Strings;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Configuration\Processor;
 
 /***************************************************************
  *  Copyright notice
@@ -54,7 +58,7 @@ class TtNewsMarker
      */
     public function extraItemMarkerProcessor($markerArray, $row, $lConf, $ttnews)
     {
-        $this->configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
+        $this->configurations = tx_rnbase::makeInstance(Processor::class);
         // Dieses cObj wird dem Controller von T3 übergeben
         $this->configurations->init($ttnews->conf, $ttnews->cObj, 'cfc_league_fe', 'cfc_league_fe');
         $this->linkConf = $this->configurations->get('external_links.');
@@ -79,8 +83,8 @@ class TtNewsMarker
         $linkId = $match[1];
         $conf = $this->linkConf[$linkId.'.'];
         $linkParams = [];
-        $params = Tx_Rnbase_Utility_Strings::trimExplode(',', $conf['ext_parameters']);
-        $paramValues = Tx_Rnbase_Utility_Strings::trimExplode(',', $match[2]);
+        $params = Strings::trimExplode(',', $conf['ext_parameters']);
+        $paramValues = Strings::trimExplode(',', $match[2]);
         for ($i = 0, $cnt = count($params); $i < $cnt; ++$i) {
             $linkParams[$params[$i]] = $paramValues[$i];
         }
@@ -90,7 +94,8 @@ class TtNewsMarker
             $uid = $linkParams['matchId'];
 
             try {
-                $t3match = tx_cfcleaguefe_models_match::getMatchInstance($uid);
+                $matchRepo = new MatchRepository();
+                $t3match = $matchRepo->findByUid($uid);
                 $competition = $t3match->getCompetition();
                 $GLOBALS['TSFE']->register['T3SPORTS_GROUP'] = $competition->getProperty('agegroup');
             } catch (Exception $e) {
@@ -100,7 +105,7 @@ class TtNewsMarker
 
         $wrappedSubpartArray = [];
         $empty = [];
-        tx_rnbase_util_BaseMarker::initLink(
+        BaseMarker::initLink(
             $empty,
             $empty,
             $wrappedSubpartArray,
@@ -119,8 +124,4 @@ class TtNewsMarker
     {
         return $marker;
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/hooks/class.tx_cfcleaguefe_hooks_ttnewsMarkers.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/hooks/class.tx_cfcleaguefe_hooks_ttnewsMarkers.php'];
 }

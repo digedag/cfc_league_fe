@@ -56,112 +56,6 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      */
     private static $notFoundProfile;
 
-    /**
-     * Formatiert die Ausgabe der Note über TS.
-     * Die Note besteht aus insgesamt
-     * fünf Teilen:
-     * <ul><li>Die Spielminute TS: ticker.minute
-     * <li>der Typ TS: ticker.type
-     * <li>der Spieler TS: ticker.profile und ticker.profile2
-     * <li>der Kommentar TS: ticker.comment
-     * <li>der Spielstand zum Zeitpunkt der Note TS: ticker.score
-     * </ul>
-     * Für jedes Element kann ein "weight" gesetzt werden, womit die Reihenfolge bestimmt wird.
-     * Das Element mit dem höchsten Gewicht wird zuletzt dargestellt.
-     *
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param tx_cfcleaguefe_models_match_note $ticker
-     */
-    public static function wrap($formatter, $confId, $ticker)
-    {
-        if ('1' == $formatter->configurations->get($confId.'hide')) { // Die Meldung soll nicht gezeigt werden
-            return '';
-        }
-
-        // Wenn der Ticker für den eigene Vereins ist, einen Eintrag im Register setzen
-        $GLOBALS['TSFE']->register['T3SPORTS_NOTE_FAVCLUB'] = $ticker->isFavClub(); // XXX: Access to image size by TS
-
-        $arr = [];
-        $conf = $formatter->getConfigurations()->get($confId.'profile.');
-        // Angezeigt wird ein Spieler, sobald etwas im TS steht
-        if ($conf && is_object($ticker)) {
-            // Bei einem Wechsel ist profile für den ausgewechselten Spieler
-            if ($ticker->isChange()) {
-                $player = $ticker->getPlayerChangeOut();
-            } else {
-                $player = $ticker->getPlayerInstance();
-            }
-            // $value = $player->wrap($formatter, $conf['profile.']);
-            $value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId.'profile.', $player);
-            if (strlen($value) > 0) {
-                $arr[] = [
-                    $value,
-                    $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0,
-                ];
-                $value = '';
-            }
-        }
-
-        // Bei Spielerwechseln gibt es noch ein zweites Profil
-        $conf = $formatter->configurations->get($confId.'profile2.');
-        if ($conf && is_object($ticker) && $ticker->isChange()) {
-            $player2 = $ticker->getPlayerChangeIn();
-            if (!is_object($player2)) {
-                // Hier liegt vermutlich ein Fehler bei der Dateneingabe vor
-                // Es wird ein Hinweistext gezeigt
-                $value = 'ERROR!';
-            } else {
-                $value = tx_cfcleaguefe_models_profile::wrap($formatter, $confId.'profile2.', $player2);
-            }
-            // $value = $player2->wrap($formatter, $conf['profile2.']);
-            if (strlen($value) > 0) {
-                $arr[] = [
-                    $value,
-                    $weights[] = $conf['s_weight'] ? intval($conf['s_weight']) : 0,
-                ];
-                $value = '';
-            }
-        }
-        $cObj = $formatter->configurations->getCObj(1);
-        $cObj->data = $ticker->getProperty();
-        foreach ($ticker->getProperty() as $key => $val) {
-            $conf = $formatter->configurations->get($confId.$key.'.');
-            if ($conf) {
-                $cObj->setCurrentVal($ticker->getProperty($key));
-                $value = $cObj->stdWrap($ticker->getProperty($key), $conf);
-                if (strlen($value) > 0) {
-                    $arr[] = [
-                        $value,
-                        $conf['s_weight'] ? intval($conf['s_weight']) : 0,
-                    ];
-                    $value = '';
-                }
-            }
-        }
-
-        // Jetzt die Teile sortieren
-        usort($arr, function ($a, $b) {
-            if ($a[1] == $b[1]) {
-                return 0;
-            }
-
-            return ($a[1] < $b[1]) ? -1 : 1;
-        });
-        $ret = [];
-        // Jetzt die Strings extrahieren
-        foreach ($arr as $val) {
-            $ret[] = $val[0];
-        }
-
-        // Der Seperator sollte mit zwei Pipes eingeschlossen sein
-        $sep = $formatter->getConfigurations()->get($confId.'seperator');
-        $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
-        $ret = implode($sep, $ret);
-
-        // Abschließend nochmal den Ergebnisstring wrappen
-        return $formatter->wrap($ret, $confId, $ticker->getProperty());
-    }
 
     /**
      * Liefert bei einem Wechsel den eingewechselten Spieler.
@@ -232,6 +126,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * @param array $conf
      *
      * @return bool
+     * @deprecated MatchNoteDecorator
      */
     public function isVisible($conf)
     {
@@ -248,6 +143,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * angegeben werden. NoteTeam ist entweder home oder guest.
      *
      * @param array $typeNumberOrArray
+     * @deprecated MatchNoteDecorator
      */
     public function isType($typeNumberOrArray)
     {
@@ -313,6 +209,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Liefert die Singleton-Instanz des unbekannten Spielers.
      * Dieser hat die ID -1 und
      * wird für MatchNotes verwendet, wenn der Spieler nicht bekannt ist.
+     * @deprecated MatchNoteDecorator
      */
     public function getUnknownPlayer()
     {
@@ -328,6 +225,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Dieses hat die ID -2 und
      * wird für MatchNotes verwendet, wenn das Profil nicht mehr in der Datenbank gefunden wurde.
      * FIXME: Vermutlich ist diese Funktionalität in der Matchklasse besser aufgehoben.
+     * @deprecated MatchNoteDecorator
      */
     public function &getNotFoundProfile()
     {
@@ -341,6 +239,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     /**
      * Liefert das Profil des an der Aktion beteiligten Spielers der Heimmannschaft.
      * Wenn nicht vorhanden wird der Spieler "Unbekannt" geliefert.
+     * @deprecated MatchNoteDecorator
      */
     protected function getInstancePlayerHome()
     {
@@ -361,6 +260,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
     /**
      * Liefert das Profil, des an der Aktion beteiligten Spielers der Gastmannschaft.
+     * @deprecated MatchNoteDecorator
      */
     protected function getInstancePlayerGuest()
     {
@@ -383,6 +283,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Liefert den Spieler dem diese Meldung zugeordnet ist.
      *
      * @return tx_cfcleaguefe_models_profile ein Profil oder 0
+     * @deprecated MatchNoteDecorator
      */
     public function getPlayerInstance()
     {
@@ -448,39 +349,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      */
     public static function &retrieveMatchNotes(&$matches, $types = 1)
     {
-        if (!count($matches)) {
-            return $matches;
-        }
-        // Die Spiele in einen Hash legen, damit wir sofort Zugriff auf ein Spiel haben
-        $matchesHash = [];
-        $matchIds = [];
-        $anz = count($matches);
-        for ($i = 0; $i < $anz; ++$i) {
-            $matchesHash[$matches[$i]->getUid()] = &$matches[$i];
-            $matchIds[] = $matches[$i]->getUid();
-        }
-
-        $matchIds = implode(',', $matchIds); // ID-String erstellen
-
-        $what = '*';
-        $from = 'tx_cfcleague_match_notes';
-        $options['where'] = 'game IN ('.$matchIds.')';
-        if ($types) {
-            $options['where'] .= ' AND type < 100';
-        }
-        $options['orderby'] = 'game asc, minute asc';
-        $options['wrapperclass'] = 'tx_cfcleaguefe_models_match_note';
-
-        $matchNotes = Tx_Rnbase_Database_Connection::getInstance()->doSelect($what, $from, $options);
-
-        // Das Match setzen (foreach geht hier nicht weil es nicht mit Referenzen arbeitet...)
-        $anz = count($matchNotes);
-        for ($i = 0; $i < $anz; ++$i) {
-            // Hier darf nur mit Referenzen gearbeitet werden
-            $matchesHash[$matchNotes[$i]->getProperty('game')]->addMatchNote($matchNotes[$i]);
-        }
-
-        return $matches;
+        throw new Exception('use match note repo');
     }
 
     /**
@@ -525,7 +394,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
     /**
      * Whether or not the match note is for favorite club.
-     *
+     * @deprecated ist im MatchNoteDecorator
      * @return int 0/1
      */
     private function isFavClub()

@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\Service;
 
+use System25\T3sports\Model\Match;
+
 /**
  * *************************************************************
  * Copyright notice.
@@ -113,7 +115,7 @@ class MatchEventService extends \tx_cal_event_service
     public function find($uid, $pidList)
     {
         $this->_init();
-        $match = \tx_rnbase::makeInstance('tx_cfcleaguefe_models_match', $uid);
+        $match = \tx_rnbase::makeInstance(Match::class, $uid);
         $event = $this->createEvent($match, false);
         /*
          * $events = array();

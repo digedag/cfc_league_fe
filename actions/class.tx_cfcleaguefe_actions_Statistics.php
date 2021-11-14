@@ -1,4 +1,7 @@
 <?php
+use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Utility\MatchTicker;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -21,13 +24,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-
-tx_rnbase::load('tx_rnbase_util_Spyc');
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_cfcleaguefe_util_MatchTicker');
-tx_rnbase::load('tx_cfcleaguefe_util_Statistics');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * Controller für die Anzeige von Spielerstatistiken.
@@ -59,7 +55,7 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
     {
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
         // Die notwendigen Statistikklassen ermitteln
-        $types = Tx_Rnbase_Utility_Strings::trimExplode(',', $configurations->get('statisticTypes'), 1);
+        $types = Strings::trimExplode(',', $configurations->get('statisticTypes'), 1);
         if (!count($types)) {
             // Abbruch kein Typ angegeben
             return $configurations->getLL('statistics_noTypeFound');
@@ -76,7 +72,8 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
             $stats = tx_cfcleaguefe_util_Statistics::createInstance();
             $data = $stats->createStatisticsCallback($scopeArr, $services, $configurations, $parameters);
         } else {
-            $matches = &tx_cfcleaguefe_util_MatchTicker::getMatches4Scope($scopeArr);
+            $ticker = new MatchTicker();
+            $matches = $ticker->getMatches4Scope($scopeArr);
             $data = tx_cfcleaguefe_util_Statistics::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
         }
 

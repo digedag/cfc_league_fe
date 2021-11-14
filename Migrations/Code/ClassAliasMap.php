@@ -15,5 +15,9 @@ return [
     'tx_cfcleaguefe_util_AddressMarker' => \System25\T3sports\Frontend\Marker\AddressMarker::class,
     'tx_cfcleaguefe_util_Maps' => \System25\T3sports\Utility\MapsUtil::class,
 
+    'tx_cfcleaguefe_models_address' => \System25\T3sports\Model\Address::class,
     'tx_cfcleaguefe_models_club' => \System25\T3sports\Model\Club::class,
+    'tx_cfcleaguefe_models_competition' => \System25\T3sports\Model\Competition::class,
+    'tx_cfcleaguefe_models_competition_penalty' => \System25\T3sports\Model\CompetitionPenalty::class,
+    'tx_cfcleaguefe_models_competition_round' => \System25\T3sports\Model\CompetitionRound::class,
 ];

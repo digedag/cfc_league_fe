@@ -3,12 +3,15 @@
 namespace System25\T3sports\Statistics\Service;
 
 use System25\T3sports\Statistics\PlayerSummaryStatisticsMarker;
+use System25\T3sports\Model\Competition;
+use tx_rnbase;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 
 /**
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2007-2020 Rene Nitzsche (rene@system25.de)
+ * (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -77,13 +80,13 @@ class PlayerSummaryStatistics extends PlayerStatistics
     /**
      * Returns the marker instance to map result data to HTML markers.
      *
-     * @param \tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      *
      * @return PlayerSummaryStatisticsMarker
      */
-    public function getMarker($configurations)
+    public function getMarker(ConfigurationInterface $configurations)
     {
-        return \tx_rnbase::makeInstance(PlayerSummaryStatisticsMarker::class);
+        return tx_rnbase::makeInstance(PlayerSummaryStatisticsMarker::class);
     }
 
     /**
@@ -96,7 +99,7 @@ class PlayerSummaryStatistics extends PlayerStatistics
         $ret = [];
         $this->result['numberOfMatches'] = 0;
         foreach ($compUids as $compUid) {
-            $comp = \tx_rnbase::makeInstance('tx_cfcleaguefe_models_competition', $compUid);
+            $comp = tx_rnbase::makeInstance(Competition::class, $compUid);
             // Gesucht: Anzahl Spiele der Teams gesamt und beendet
             // Spiele gesamt holen wir über getRounds
             $teamIds = [];

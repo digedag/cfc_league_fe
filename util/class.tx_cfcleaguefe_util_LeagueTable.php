@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_DB');
-tx_rnbase::load('tx_rnbase_util_Extensions');
-require_once tx_rnbase_util_Extensions::extPath('cfc_league_fe').'models/class.tx_cfcleaguefe_models_competition_penalty.php';
-
 /**
  * Die Klasse ist in der Lage, Tabellen einer Liga zu berechnen.
  */
@@ -396,7 +392,7 @@ class tx_cfcleaguefe_util_LeagueTable
     /**
      * Lädt die Namen der Teams in der Tabelle.
      *
-     * @param tx_cfcleaguefe_models_competition $tableProvider
+     * @param tx_cfcleaguefe_util_league_TableProvider $tableProvider
      */
     public function _initTeams(tx_cfcleaguefe_util_league_TableProvider $tableProvider)
     {

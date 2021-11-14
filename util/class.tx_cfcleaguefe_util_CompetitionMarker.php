@@ -1,4 +1,10 @@
 <?php
+use System25\T3sports\Model\Competition;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use tx_cfcleaguefe_util_GroupMarker as GroupMarker;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -26,19 +32,14 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Wettbewerbe verantwortlich.
  */
-class tx_cfcleaguefe_util_CompetitionMarker extends tx_rnbase_util_BaseMarker
+class tx_cfcleaguefe_util_CompetitionMarker extends BaseMarker
 {
     /**
-     * @param string $template
-     *            das HTML-Template
-     * @param tx_cfcleaguefe_models_competition $competition
-     *            der Wettbewerb
-     * @param tx_rnbase_util_FormatUtil $formatter
-     *            der zu verwendente Formatter
-     * @param string $confId
-     *            Pfad der TS-Config des Vereins, z.B. 'matchtable.match.competition.'
-     * @param string $marker
-     *            Name des Markers für den Wettbewerb, z.B. COMPETITION
+     * @param string $template das HTML-Template
+     * @param Competition $competition der Wettbewerb
+     * @param FormatUtil $formatter der zu verwendente Formatter
+     * @param string $confId Pfad der TS-Config des Vereins, z.B. 'matchtable.match.competition.'
+     * @param string $marker Name des Markers für den Wettbewerb, z.B. COMPETITION
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###COMPETITION_NAME###
      *
      * @return string das geparste Template
@@ -47,13 +48,13 @@ class tx_cfcleaguefe_util_CompetitionMarker extends tx_rnbase_util_BaseMarker
     {
         if (!is_object($competition)) {
             // Ist kein Wettbewerb vorhanden wird ein leeres Objekt verwendet.
-            $competition = self::getEmptyInstance('tx_cfcleaguefe_models_competition');
+            $competition = self::getEmptyInstance(Competition::class);
         }
         // Es wird das MarkerArray mit Daten gefüllt.
         $ignore = self::findUnusedCols($competition->getProperty(), $template, $marker);
         $markerArray = $formatter->getItemMarkerArrayWrapped($competition->getProperty(), $confId, $ignore, $marker.'_', $competition->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
-        $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $template = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
         if ($this->containsMarker($template, $marker.'_GROUP')) {
             $template = $this->getGroupMarker()->parseTemplate($template, $competition->getGroup(), $formatter, $confId.'group.', $marker.'_GROUP');
@@ -68,7 +69,7 @@ class tx_cfcleaguefe_util_CompetitionMarker extends tx_rnbase_util_BaseMarker
     private function getGroupMarker()
     {
         if (!is_object($this->groupMarker)) {
-            $this->groupMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_GroupMarker');
+            $this->groupMarker = tx_rnbase::makeInstance(GroupMarker::class);
         }
 
         return $this->groupMarker;

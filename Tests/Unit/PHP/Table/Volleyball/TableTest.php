@@ -98,7 +98,7 @@ class TableTest extends BaseTestCase
      *
      * @param string $leagueName
      *
-     * @return \tx_cfcleaguefe_models_competition
+     * @return Competition
      */
     private function prepareLeague($leagueName)
     {

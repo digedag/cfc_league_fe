@@ -1,5 +1,7 @@
 <?php
 
+use System25\T3sports\Utility\ServiceRegistry;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -87,6 +89,6 @@ class tx_cfcleaguefe_util_ServiceRegistry
      */
     public static function getCompetitionService()
     {
-        return tx_rnbase_util_Misc::getService('cfcleague_data', 'competition');
+        return ServiceRegistry::getCompetitionService();
     }
 }

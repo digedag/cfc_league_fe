@@ -1,8 +1,13 @@
 <?php
+
+use System25\T3sports\Model\Competition;
+use Sys25\RnBase\Utility\Strings;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,9 +26,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-tx_rnbase::load('tx_cfcleaguefe_util_league_TableProvider');
-tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
  * The default table provider can handle match data for a single competition of type league.
@@ -139,7 +141,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
         // die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
         // Haben wir eine $currRound
         if ($this->cfgTableScope) {
-            $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getLeague()->getProperty('teams')));
+            $round = count(Strings::intExplode(',', $this->getLeague()->getProperty('teams')));
             $round = ($round) ? $round - 1 : $round;
             if ($round) {
                 // Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
@@ -198,7 +200,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
     /**
      * Current competition if used.
      *
-     * @return tx_cfcleaguefe_models_competition
+     * @return Competition
      */
     protected function getLeague()
     {
@@ -213,7 +215,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
     /**
      * current config.
      *
-     * @return tx_rnbase_configurations
+     * @return ConfigurationInterface
      */
     protected function getConfigurations()
     {
@@ -223,7 +225,7 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
     /**
      * current fe parameters.
      *
-     * @return array_object
+     * @return ArrayObject
      */
     protected function getParameters()
     {
@@ -255,8 +257,4 @@ class tx_cfcleaguefe_util_league_DefaultTableProvider implements tx_cfcleaguefe_
     {
         $this->matches = $matches;
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/league/class.tx_cfcleaguefe_util_league_DefaultTableProvider.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/league/class.tx_cfcleaguefe_util_league_DefaultTableProvider.php'];
 }

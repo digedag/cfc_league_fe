@@ -3,6 +3,10 @@
 namespace System25\T3sports\Statistics\Service;
 
 use System25\T3sports\Statistics\PlayerStatisticsMarker;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Team;
+use System25\T3sports\Model\Profile;
+use Sys25\RnBase\Utility\Misc;
 
 /***************************************************************
  *  Copyright notice
@@ -81,10 +85,10 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Ein einzelnes Spiel auswerten.
      *
-     * @param \tx_cfcleaguefe_models_match $match
+     * @param Match $match
      * @param int $clubId
      */
-    public function handleMatch($match, $clubId)
+    public function handleMatch(Match $match, $clubId)
     {
         // Zunächst müssen alle Spieler des Spiels ermittelt werden
         // Jeder Spieler, der am Spiel beteiligt ist, steht in der Aufstellung oder als
@@ -134,7 +138,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Liefert die Spieler eines beteiligten Teams.
      *
-     * @param \tx_cfcleaguefe_models_match $match
+     * @param Match $match
      * @param bool $home
      *            true, wenn das Heimteam geholt werden soll
      *
@@ -199,7 +203,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      *
      * @param array $scopeArr
      *
-     * @return array of tx_cfcleagefe_models_team
+     * @return Team[]
      */
     protected function getTeams($scopeArr)
     {
@@ -235,12 +239,9 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * - GOAL_ALL Gesamtzahl der Tore des Spieler
      * </pre>.
      *
-     * @param \tx_cfcleaguefe_models_profile $player
-     *            Spieler, der gezählt werden soll
-     * @param \tx_cfcleaguefe_models_match $match
-     *            Spiel, das ausgewertet wird
-     * @param array $playersArr
-     *            Datenarray, welches die ermittelten Daten aufnimmt
+     * @param Profile $player Spieler, der gezählt werden soll
+     * @param Match $match Spiel, das ausgewertet wird
+     * @param array $playersArr Datenarray, welches die ermittelten Daten aufnimmt
      */
     protected function _countMatch4Player($player, $match, &$playersArr)
     {
@@ -358,8 +359,8 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      *
      * @param int $type 0 oder MatchNote-Typ
      * @param string $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
-     * @param \tx_cfcleaguefe_models_profile $player Referenz auf den Spieler
-     * @param \tx_cfcleaguefe_models_match $match Referenz auf das Spiel
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
      * @param array $playerData Referenz auf die Statistikdaten des Spielers
      */
     protected function _countNote($type, $key, &$player, &$match, &$playerData)
@@ -381,8 +382,8 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      *
      * @param int $type 0 oder MatchNote-Typ
      * @param string $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
-     * @param \tx_cfcleaguefe_models_profile $player Referenz auf den Spieler
-     * @param \tx_cfcleaguefe_models_match $match Referenz auf das Spiel
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
      * @param array $playerData Referenz auf die Statistikdaten des Spielers
      */
     protected function _countGoals($type, $key, $player, $match, &$playerData)
@@ -436,8 +437,8 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Sortiert die Spieler entsprechend der Reihenfolge im Team.
      *
-     * @param \tx_cfcleaguefe_models_profile[] $players
-     * @param \tx_cfcleaguefe_models_team $team
+     * @param Profile[] $players
+     * @param Team $team
      */
     public function _sortPlayer($players, $team)
     {
@@ -470,8 +471,8 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         $player2 = $b['player'];
 
         return strcmp(
-            \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player1->getName(1))),
-            \tx_rnbase_util_Misc::removeUmlauts(strtoupper($player2->getName(1)))
+            Misc::removeUmlauts(strtoupper($player1->getName(1))),
+            Misc::removeUmlauts(strtoupper($player2->getName(1)))
         );
     }
 }

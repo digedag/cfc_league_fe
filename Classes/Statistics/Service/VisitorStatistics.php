@@ -3,6 +3,7 @@
 namespace System25\T3sports\Statistics\Service;
 
 use System25\T3sports\Statistics\TeamStatisticsMarker;
+use System25\T3sports\Model\Match;
 
 /**
  * *************************************************************
@@ -64,10 +65,10 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Handle single match.
      *
-     * @param \tx_cfcleaguefe_models_match $match
+     * @param Match $match
      * @param int $clubId
      */
-    public function handleMatch(&$match, $clubId)
+    public function handleMatch(Match $match, $clubId)
     {
         // Was suche wir?
         // Team Heim/Ausw/Gesamt AnzSp, AnzZuschauer, Zuschauerschnitt

@@ -1,4 +1,10 @@
 <?php
+use System25\T3sports\Model\Competition;
+use Sys25\RnBase\Utility\Math;
+use System25\T3sports\Utility\ServiceRegistry;
+use Sys25\RnBase\Utility\T3General;
+use Sys25\RnBase\Utility\Misc;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -22,14 +28,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_models_saison');
-tx_rnbase::load('tx_cfcleaguefe_models_competition');
-tx_rnbase::load('tx_cfcleague_models_Group');
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_cfcleaguefe_util_LeagueTable');
-tx_rnbase::load('tx_rnbase_util_Math');
-
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Controller für die Anzeige eines Liga-Tabelle
@@ -56,7 +54,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
         // Die Werte des aktuellen Scope ermitteln
         $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
         // Hook to manipulate scopeArray
-        tx_rnbase_util_Misc::callHook(
+        Misc::callHook(
             'cfc_league_fe',
             'action_LeagueTable_handleScope_hook',
             ['scopeArray' => &$scopeArr, 'parameters' => $parameters, 'configurations' => $configurations, 'confId' => $this->getConfId()],
@@ -71,7 +69,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
         // Sollte kein Wettbewerb ausgewählt bzw. konfiguriert worden sein, dann suchen wir eine
         // passende Liga
         if (0 == strlen($compUids)) {
-            $comps = tx_cfcleaguefe_models_competition::findAll($saisonUids, $groupUids, $compUids, '1');
+            $comps = Competition::findAll($saisonUids, $groupUids, $compUids, '1');
             if (count($comps) > 0) {
                 $currCompetition = $comps[0];
             }
@@ -82,11 +80,11 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
             } // Ohne Liga keine Tabelle!
         } else {
             // Die Tabelle wird berechnet, wenn der aktuelle Scope auf eine Liga zeigt
-            if (!(isset($compUids) && tx_rnbase_util_Math::testInt($compUids))) {
+            if (!(isset($compUids) && Math::testInt($compUids))) {
                 return $out;
             }
             // Wir müssen den Typ des Wettbewerbs ermitteln.
-            $currCompetition = new tx_cfcleaguefe_models_competition($compUids);
+            $currCompetition = new Competition($compUids);
             if (!$currCompetition->isTypeLeague()) {
                 return $out;
             }
@@ -119,7 +117,7 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
             //			$items = $this->translateItems($TCA[$table]['columns']['point_system']['config']['items']);
             //			$items = array(1=>0,0=>1);
 
-            $srv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+            $srv = ServiceRegistry::getCompetitionService();
             $systems = $srv->getPointSystems('football');
             $items = [];
             foreach ($systems as $system) {
@@ -175,8 +173,8 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
     {
         static $flex;
         if (!is_array($flex)) {
-            $flex = Tx_Rnbase_Utility_T3General::getURL(tx_rnbase_util_Extensions::extPath($configurations->getExtensionKey()).$configurations->get('flexform'));
-            $flex = Tx_Rnbase_Utility_T3General::xml2array($flex);
+            $flex = T3General::getURL(tx_rnbase_util_Extensions::extPath($configurations->getExtensionKey()).$configurations->get('flexform'));
+            $flex = T3General::xml2array($flex);
         }
 
         return $flex;
@@ -233,8 +231,4 @@ class tx_cfcleaguefe_actions_LeagueTableShow extends tx_rnbase_action_BaseIOC
     {
         return 'tx_cfcleaguefe_views_LeagueTable';
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_LeagueTableShow.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/actions/class.tx_cfcleaguefe_actions_LeagueTableShow.php'];
 }

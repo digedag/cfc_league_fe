@@ -5,7 +5,7 @@ namespace System25\T3sports\Frontend\Marker;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\Templates;
-use tx_cfcleaguefe_models_address as Address;
+use System25\T3sports\Model\Address;
 
 /***************************************************************
  *  Copyright notice

@@ -1,8 +1,17 @@
 <?php
+
+namespace System25\T3sports\Utility;
+
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\MatchNote;
+use System25\T3sports\Model\Repository\MatchNoteRepository;
+use System25\T3sports\Model\Repository\MatchRepository;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,18 +47,24 @@
  * Es muß immer bekannt sein, welche Tickertypen benötigt werden und welche Spiele
  * betrachtet werden sollen.
  */
-class tx_cfcleaguefe_util_MatchTicker
+class MatchTicker
 {
     private static $cache = [];
+    private $mnRepo;
+
+    public function __construct(MatchNoteRepository $mnRepo = null)
+    {
+        $this->mnRepo = $mnRepo ?: new MatchNoteRepository();
+    }
 
     /**
      * Liefert alle Spiele des Scopes mit den geladenen Tickermeldungen.
      */
-    public static function &getMatches4Scope($scopeArr, $types = 0)
+    public function getMatches4Scope($scopeArr, $types = 0)
     {
         // Wir liefern alle Spiele des Scopes mit den zugehörigen Tickermeldungen
         // Die Spiele bekommen wir über die Matchtable
-        $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+        $service = ServiceRegistry::getMatchService();
         $matchtable = $service->getMatchTable();
         $matchtable->setScope($scopeArr);
         $matchtable->setStatus(2);
@@ -60,8 +75,7 @@ class tx_cfcleaguefe_util_MatchTicker
         $matches = $service->search($fields, $options);
 
         // Jetzt holen wir die Tickermeldungen für diese Spiele
-        $matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
-
+        $matches = $this->mnRepo->retrieveMatchNotes($matches->toArray());
         return $matches;
     }
 
@@ -70,19 +84,19 @@ class tx_cfcleaguefe_util_MatchTicker
      * Die Meldungen enthalten den aktuellen Spielstand. Spielerwechsel werden als eine einzelne
      * Tickermeldung zusammengefasst.
      *
-     * @param tx_cfcleaguefe_models_match $match
+     * @param Match $match
      * @param mixed $types unused!
      *
-     * @return tx_cfcleaguefe_models_match_note[]
+     * @return MatchNote[]
      */
-    public static function &getTicker4Match($match, $types = 0)
+    public function getTicker4Match(Match $match, $types = 0)
     {
         $arr = self::get('matchnotes_'.$match->getUid());
         if ($arr) {
             return $arr;
         }
 
-        $arr = &$match->getMatchNotes();
+        $arr = $this->mnRepo->loadMatchNotesByMatch($match);
 
         // Die Notes werden jetzt noch einmal aufbereitet
         $ret = [];
@@ -108,8 +122,7 @@ class tx_cfcleaguefe_util_MatchTicker
      * Dies funktioniert natürlich nur, wenn die Meldungen
      * in chronologischer Reihenfolge ankommen.
      *
-     * @param tx_cfcleaguefe_models_match_note $ticker
-     *            der zuletzt hinzugefügte Ticker
+     * @param MatchNote $ticker der zuletzt hinzugefügte Ticker
      */
     private static function _handleResult(&$ticker)
     {
@@ -138,10 +151,8 @@ class tx_cfcleaguefe_util_MatchTicker
      * Spieler wird unter dem Key 'player_home_2' bzw. 'player_guest_2' abgelegt.
      * Der zweite Datensatz wird aus dem Ergebnisarray entfernt.
      *
-     * @param array $ret
-     *            Referenz auf Array mit den bisher gefundenen Ticker-Daten
-     * @param tx_cfcleaguefe_models_match_note $ticker
-     *            der zuletzt hinzugefügte Ticker
+     * @param array $ret Referenz auf Array mit den bisher gefundenen Ticker-Daten
+     * @param MatchNote $ticker der zuletzt hinzugefügte Ticker
      *
      * @return bool wether or not the ticker record was removed
      */
