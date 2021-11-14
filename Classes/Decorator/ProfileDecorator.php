@@ -9,11 +9,11 @@ use System25\T3sports\Utility\MatchProfileProvider;
 class ProfileDecorator
 {
     private $matchNoteDecorator;
+
     public function __construct(MatchNoteDecorator $matchNoteDecorator = null)
     {
         $this->matchNoteDecorator = $matchNoteDecorator ?: new MatchNoteDecorator($this, new MatchProfileProvider());
     }
-
 
     /**
      * Gibt das Profile formatiert aus.

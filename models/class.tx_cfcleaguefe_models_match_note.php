@@ -56,7 +56,6 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      */
     private static $notFoundProfile;
 
-
     /**
      * Liefert bei einem Wechsel den eingewechselten Spieler.
      */
@@ -126,6 +125,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * @param array $conf
      *
      * @return bool
+     *
      * @deprecated MatchNoteDecorator
      */
     public function isVisible($conf)
@@ -143,6 +143,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * angegeben werden. NoteTeam ist entweder home oder guest.
      *
      * @param array $typeNumberOrArray
+     *
      * @deprecated MatchNoteDecorator
      */
     public function isType($typeNumberOrArray)
@@ -209,6 +210,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Liefert die Singleton-Instanz des unbekannten Spielers.
      * Dieser hat die ID -1 und
      * wird für MatchNotes verwendet, wenn der Spieler nicht bekannt ist.
+     *
      * @deprecated MatchNoteDecorator
      */
     public function getUnknownPlayer()
@@ -225,6 +227,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Dieses hat die ID -2 und
      * wird für MatchNotes verwendet, wenn das Profil nicht mehr in der Datenbank gefunden wurde.
      * FIXME: Vermutlich ist diese Funktionalität in der Matchklasse besser aufgehoben.
+     *
      * @deprecated MatchNoteDecorator
      */
     public function &getNotFoundProfile()
@@ -239,6 +242,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
     /**
      * Liefert das Profil des an der Aktion beteiligten Spielers der Heimmannschaft.
      * Wenn nicht vorhanden wird der Spieler "Unbekannt" geliefert.
+     *
      * @deprecated MatchNoteDecorator
      */
     protected function getInstancePlayerHome()
@@ -260,6 +264,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
     /**
      * Liefert das Profil, des an der Aktion beteiligten Spielers der Gastmannschaft.
+     *
      * @deprecated MatchNoteDecorator
      */
     protected function getInstancePlayerGuest()
@@ -283,6 +288,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * Liefert den Spieler dem diese Meldung zugeordnet ist.
      *
      * @return tx_cfcleaguefe_models_profile ein Profil oder 0
+     *
      * @deprecated MatchNoteDecorator
      */
     public function getPlayerInstance()
@@ -394,7 +400,9 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
 
     /**
      * Whether or not the match note is for favorite club.
+     *
      * @deprecated ist im MatchNoteDecorator
+     *
      * @return int 0/1
      */
     private function isFavClub()

@@ -3,14 +3,12 @@
 namespace System25\T3sports\Hook;
 
 use Exception;
-use tx_rnbase;
-use tx_rnbase_util_BaseMarker;
-use Tx_Rnbase_Utility_Strings;
+use Sys25\RnBase\Configuration\Processor;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\Repository\MatchRepository;
-use Sys25\RnBase\Utility\Strings;
-use Sys25\RnBase\Frontend\Marker\BaseMarker;
-use Sys25\RnBase\Configuration\Processor;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice

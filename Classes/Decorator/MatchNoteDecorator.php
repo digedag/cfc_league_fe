@@ -2,21 +2,18 @@
 
 namespace System25\T3sports\Decorator;
 
-
-use System25\T3sports\Model\MatchNote;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Utility\Strings;
-use System25\T3sports\Model\Profile;
-use tx_rnbase;
-use System25\T3sports\Model\Repository\ProfileRepository;
 use System25\T3sports\Model\Match;
+use System25\T3sports\Model\MatchNote;
+use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchProfileProvider;
+use tx_rnbase;
 
 class MatchNoteDecorator
 {
     private $profileDecorator;
     private $profileProvider;
-
 
     public function __construct(ProfileDecorator $profileDecorator = null, MatchProfileProvider $profileProvider)
     {
@@ -117,21 +114,20 @@ class MatchNoteDecorator
 
             return ($a[1] < $b[1]) ? -1 : 1;
         });
-            $ret = [];
-            // Jetzt die Strings extrahieren
-            foreach ($arr as $val) {
-                $ret[] = $val[0];
-            }
+        $ret = [];
+        // Jetzt die Strings extrahieren
+        foreach ($arr as $val) {
+            $ret[] = $val[0];
+        }
 
-            // Der Seperator sollte mit zwei Pipes eingeschlossen sein
-            $sep = $formatter->getConfigurations()->get($confId.'seperator');
-            $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
-            $ret = implode($sep, $ret);
+        // Der Seperator sollte mit zwei Pipes eingeschlossen sein
+        $sep = $formatter->getConfigurations()->get($confId.'seperator');
+        $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
+        $ret = implode($sep, $ret);
 
-            // Abschließend nochmal den Ergebnisstring wrappen
-            return $formatter->wrap($ret, $confId, $ticker->getProperty());
+        // Abschließend nochmal den Ergebnisstring wrappen
+        return $formatter->wrap($ret, $confId, $ticker->getProperty());
     }
-
 
     /**
      * Entscheidet, ob die Note angezeigt werden soll.
@@ -294,6 +290,7 @@ class MatchNoteDecorator
 
     private static $unknownPlayer;
     private static $notFoundProfile;
+
     /**
      * Liefert die Singleton-Instanz eines nicht gefundenen Profils.
      * Dieses hat die ID -2 und

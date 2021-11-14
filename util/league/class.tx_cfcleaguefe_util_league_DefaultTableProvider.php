@@ -1,8 +1,8 @@
 <?php
 
-use System25\T3sports\Model\Competition;
-use Sys25\RnBase\Utility\Strings;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Model\Competition;
 
 /***************************************************************
 *  Copyright notice

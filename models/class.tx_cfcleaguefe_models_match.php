@@ -79,7 +79,7 @@ class tx_cfcleaguefe_models_match extends Match
     /**
      * Fügt diesem Match eine neue Note hinzu.
      * Die Notes werden mit diesem Spiel verlinkt.
-     * FIXME
+     * FIXME.
      */
     public function addMatchNote(&$note)
     {
@@ -108,7 +108,6 @@ class tx_cfcleaguefe_models_match extends Match
             return $this->matchNoteTypes[intval($type)];
         }
     }
-
 
     /**
      * Liefert den Heimtrainer als Datenobjekt.

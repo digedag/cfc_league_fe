@@ -2,8 +2,8 @@
 
 namespace System25\T3sports\Statistics\Service;
 
-use System25\T3sports\Statistics\TeamStatisticsMarker;
 use System25\T3sports\Model\Match;
+use System25\T3sports\Statistics\TeamStatisticsMarker;
 
 /**
  * *************************************************************

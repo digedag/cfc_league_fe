@@ -1,10 +1,10 @@
 <?php
 
-use System25\T3sports\Model\Repository\ClubRepository;
-use System25\T3sports\Model\Competition;
-use Sys25\RnBase\Utility\Math;
-use System25\T3sports\Model\CompetitionRound;
 use Sys25\RnBase\Search\SearchBase;
+use Sys25\RnBase\Utility\Math;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\CompetitionRound;
+use System25\T3sports\Model\Repository\ClubRepository;
 use System25\T3sports\Utility\ServiceRegistry;
 
 /***************************************************************

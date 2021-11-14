@@ -2,10 +2,10 @@
 
 namespace System25\T3sports\Statistics\Service;
 
-use System25\T3sports\Statistics\PlayerSummaryStatisticsMarker;
-use System25\T3sports\Model\Competition;
-use tx_rnbase;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Statistics\PlayerSummaryStatisticsMarker;
+use tx_rnbase;
 
 /**
  * *************************************************************

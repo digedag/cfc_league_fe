@@ -1,8 +1,9 @@
 <?php
-use System25\T3sports\Model\Competition;
-use Sys25\RnBase\Frontend\Marker\FormatUtil;
+
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\Templates;
+use System25\T3sports\Model\Competition;
 use tx_cfcleaguefe_util_GroupMarker as GroupMarker;
 
 /***************************************************************

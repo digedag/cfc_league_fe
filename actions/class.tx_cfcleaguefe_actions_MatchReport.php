@@ -1,4 +1,5 @@
 <?php
+
 use System25\T3sports\Model\Match;
 use System25\T3sports\Utility\MatchProfileProvider;
 

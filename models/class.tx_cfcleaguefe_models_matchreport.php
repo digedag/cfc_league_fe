@@ -1,12 +1,12 @@
 <?php
 
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Decorator\MatchNoteDecorator;
 use System25\T3sports\Decorator\ProfileDecorator;
 use System25\T3sports\Model\Match;
-use System25\T3sports\Utility\MatchTicker;
 use System25\T3sports\Model\MatchNote;
-use System25\T3sports\Decorator\MatchNoteDecorator;
 use System25\T3sports\Utility\MatchProfileProvider;
+use System25\T3sports\Utility\MatchTicker;
 
 /***************************************************************
  *  Copyright notice
@@ -217,6 +217,7 @@ class tx_cfcleaguefe_models_matchreport
      *
      * @param int $cron chronologischer
      *            Reihenfolge: "0" - 90 bis 0, "1" - 0 bis 90
+     *
      * @return MatchNote[]
      */
     protected function _getMatchTicker($cron = 0)
@@ -232,7 +233,6 @@ class tx_cfcleaguefe_models_matchreport
      * Die Tickermeldungen sind nach dem Aufruf schon für die FE Ausgabe vorbereitet.
      * Spielerwechsel
      * sind z.B. schon zusammengelegt und Spielstände berechnet.
-     *
      */
     public function getMatchTicker()
     {
@@ -316,6 +316,7 @@ class tx_cfcleaguefe_models_matchreport
     public function getLineupHome($confId = 'matchreport.players.')
     {
         $players = $this->matchProfileProvider->getPlayers($this->match, MatchProfileProvider::PLAYERS_HOME, false);
+
         return $this->_getLineUp($players, $this->match->getProperty('system_home'), $confId);
     }
 
@@ -329,6 +330,7 @@ class tx_cfcleaguefe_models_matchreport
     public function getLineupGuest($confId = 'matchreport.players.')
     {
         $players = $this->matchProfileProvider->getPlayers($this->match, MatchProfileProvider::PLAYERS_GUEST, false);
+
         return $this->_getLineUp($players, $this->match->getProperty('system_guest'), $confId);
     }
 

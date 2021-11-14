@@ -1,9 +1,10 @@
 <?php
-use System25\T3sports\Model\Competition;
+
 use Sys25\RnBase\Utility\Math;
-use System25\T3sports\Utility\ServiceRegistry;
-use Sys25\RnBase\Utility\T3General;
 use Sys25\RnBase\Utility\Misc;
+use Sys25\RnBase\Utility\T3General;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Utility\ServiceRegistry;
 
 /***************************************************************
  *  Copyright notice
@@ -27,7 +28,6 @@ use Sys25\RnBase\Utility\Misc;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 
 /**
  * Controller für die Anzeige eines Liga-Tabelle

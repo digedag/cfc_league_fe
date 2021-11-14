@@ -1,12 +1,12 @@
 <?php
 
+use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Club;
+use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Group;
 use System25\T3sports\Model\Repository\ClubRepository;
-use System25\T3sports\Utility\ServiceRegistry;
-use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Team;
-use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Utility\ServiceRegistry;
 
 /***************************************************************
  *  Copyright notice

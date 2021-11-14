@@ -4,24 +4,20 @@ namespace System25\T3sports\Hook;
 
 use Exception;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
-use tx_cfcleaguefe_util_ServiceRegistry;
-use tx_rnbase;
-use tx_rnbase_util_BaseMarker;
-use tx_rnbase_util_Files;
-use tx_rnbase_util_FormatUtil;
-use tx_rnbase_util_Logger;
-use tx_rnbase_util_SearchBase;
-use tx_rnbase_util_Templates;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Search\SearchBase;
+use Sys25\RnBase\Utility\Files;
+use Sys25\RnBase\Utility\Logger;
+use System25\T3sports\Frontend\Marker\MatchMarker;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Match;
-use Sys25\RnBase\Utility\Files;
-use Sys25\RnBase\Frontend\Marker\BaseMarker;
-use Sys25\RnBase\Utility\Logger;
-use Sys25\RnBase\Frontend\Marker\ListBuilder;
-use Sys25\RnBase\Search\SearchBase;
 use System25\T3sports\Utility\ServiceRegistry;
-use Sys25\RnBase\Frontend\Marker\Templates;
-use System25\T3sports\Frontend\Marker\MatchMarker;
+use tx_rnbase;
+use tx_rnbase_util_BaseMarker;
+use tx_rnbase_util_FormatUtil;
+use tx_rnbase_util_Templates;
 
 /***************************************************************
  *  Copyright notice

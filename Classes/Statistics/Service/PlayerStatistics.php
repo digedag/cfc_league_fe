@@ -2,11 +2,11 @@
 
 namespace System25\T3sports\Statistics\Service;
 
-use System25\T3sports\Statistics\PlayerStatisticsMarker;
-use System25\T3sports\Model\Match;
-use System25\T3sports\Model\Team;
-use System25\T3sports\Model\Profile;
 use Sys25\RnBase\Utility\Misc;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Profile;
+use System25\T3sports\Model\Team;
+use System25\T3sports\Statistics\PlayerStatisticsMarker;
 
 /***************************************************************
  *  Copyright notice

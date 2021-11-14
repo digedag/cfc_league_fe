@@ -1,10 +1,9 @@
 <?php
 
-use System25\T3sports\Table\Builder;
-use System25\T3sports\Model\Competition;
 use Sys25\RnBase\Utility\Math;
-use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Table\Builder;
 
 /***************************************************************
  *  Copyright notice

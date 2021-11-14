@@ -66,5 +66,4 @@ class tx_cfcleaguefe_models_profile extends tx_rnbase_model_base
 
         return $ret;
     }
-
 }

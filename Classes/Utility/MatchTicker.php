@@ -5,7 +5,6 @@ namespace System25\T3sports\Utility;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\MatchNote;
 use System25\T3sports\Model\Repository\MatchNoteRepository;
-use System25\T3sports\Model\Repository\MatchRepository;
 use tx_rnbase;
 
 /***************************************************************
@@ -76,6 +75,7 @@ class MatchTicker
 
         // Jetzt holen wir die Tickermeldungen für diese Spiele
         $matches = $this->mnRepo->retrieveMatchNotes($matches->toArray());
+
         return $matches;
     }
 

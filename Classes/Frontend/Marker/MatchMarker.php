@@ -12,11 +12,10 @@ use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\Stadium;
-use System25\T3sports\Utility\ServiceRegistry;
-use tx_rnbase;
-use tx_cfcleaguefe_models_matchreport as MatchReport;
 use System25\T3sports\Utility\MatchTicker;
-
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_cfcleaguefe_models_matchreport as MatchReport;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice

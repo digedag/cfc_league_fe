@@ -2,9 +2,9 @@
 
 namespace System25\T3sports\Utility;
 
-use System25\T3sports\Model\Repository\ProfileRepository;
-use System25\T3sports\Model\Match;
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Repository\ProfileRepository;
 
 /***************************************************************
  *  Copyright notice
@@ -31,8 +31,8 @@ use Sys25\RnBase\Utility\Strings;
 
 class MatchProfileProvider
 {
-    const PLAYERS_HOME = 'getPlayersHome';
-    const PLAYERS_GUEST = 'getPlayersGuest';
+    public const PLAYERS_HOME = 'getPlayersHome';
+    public const PLAYERS_GUEST = 'getPlayersGuest';
 
     private $profileRepo;
     private $players = [];
@@ -45,18 +45,18 @@ class MatchProfileProvider
 
     public function getPlayers(Match $match, $methodName, $all = false)
     {
-        $key = $methodName . '_' . ($all ? 'all' : 'lineup');
+        $key = $methodName.'_'.($all ? 'all' : 'lineup');
         if (!isset($this->players[$match->getUid()][$key])) {
             $this->players[$match->getUid()][$key] = [];
-            $playerUids = $match->$methodName( $all ? 1 : 0);
+            $playerUids = $match->$methodName($all ? 1 : 0);
             $players = $this->profileRepo->findByUids($playerUids);
             foreach ($players as $player) {
                 $this->players[$match->getUid()][$key][$player->getUid()] = $player;
             }
         }
+
         return $this->players[$match->getUid()][$key];
     }
-
 
     /**
      * Liefert die Profiles des UID-Strings als Array.
@@ -64,6 +64,7 @@ class MatchProfileProvider
      *
      * @param Match $match
      * @param string $uidStr
+     *
      * @return array Key ist UID, Value ist Profile als Object
      */
     public function getProfiles(Match $match, $uidStr): array

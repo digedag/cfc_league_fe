@@ -1,9 +1,9 @@
 <?php
-use System25\T3sports\Model\Competition;
-use Sys25\RnBase\Utility\Strings;
-use System25\T3sports\Utility\MatchTableBuilder;
-use System25\T3sports\Model\Team;
+
 use Sys25\RnBase\Database\Connection;
+use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Team;
 
 /***************************************************************
 *  Copyright notice
@@ -160,7 +160,6 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
             $currCompetition = Strings::intExplode(',', $compUids);
             $currCompetition = $currCompetition[0];
         }
-
 
         $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
         $extended = $configurations->get('matchcrosstable.allData');
