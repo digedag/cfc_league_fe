@@ -1,12 +1,20 @@
 <?php
 
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Frontend\View\StatisticsView;
 use System25\T3sports\Utility\MatchTicker;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use tx_cfcleaguefe_util_Statistics;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -41,20 +49,20 @@ use System25\T3sports\Utility\MatchTicker;
  *
  * Diese Klasse zeigt zunächst die Auswertung für die Spieler eines Teams.
  */
-class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
+class Statistics extends AbstractAction
 {
     /**
      * handle request.
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewData
+     * @param RequestInterface $request
      *
-     * @return string
+     * @return string|null
      */
-    protected function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
     {
-        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+        $parameters = $request->getParameters();
+        $configurations = $request->getConfigurations();
+        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
         // Die notwendigen Statistikklassen ermitteln
         $types = Strings::trimExplode(',', $configurations->get('statisticTypes'), 1);
         if (!count($types)) {
@@ -79,7 +87,7 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
         }
 
         // Aufruf der Statistik
-        $viewData->offsetSet('data', $data); // Services bereitstellen
+        $request->getViewContext()->offsetSet('data', $data); // Services bereitstellen
 
         return null;
     }
@@ -91,6 +99,6 @@ class tx_cfcleaguefe_actions_Statistics extends tx_rnbase_action_BaseIOC
 
     protected function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_Statistics';
+        return StatisticsView::class;
     }
 }

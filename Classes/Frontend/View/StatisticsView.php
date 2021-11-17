@@ -1,8 +1,20 @@
 <?php
+
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use Sys25\RnBase\Utility\Misc;
+use Sys25\RnBase\Utility\T3General;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,55 +33,49 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('Tx_Rnbase_Utility_T3General');
-tx_rnbase::load('tx_rnbase_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Viewklasse für die Anzeige der Statistiken.
  */
-class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
+class StatisticsView extends BaseView
 {
     /**
      * Create fe output.
      *
      * @param string $template
-     * @param arrayobject $viewData
-     * @param tx_rnbase_configurations $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param RequestInterface $request
+     * @param FormatUtil $formatter
      *
      * @return string
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
-        $data = &$viewData->offsetGet('data');
+        $configurations = $request->getConfigurations();
+        $data = $request->getViewContext()->offsetGet('data');
         if (!count($data)) {
             return $template;
         } // ohne Daten gibt's keine Marker
 
-        $cObj = $configurations->getCObj(0);
         // Jetzt über die einzelnen Statistiken iterieren
         $markerArray = [];
         $subpartArray = $this->_getSubpartArray($configurations);
-        $parts = [];
-        $services = tx_rnbase_util_Misc::lookupServices('cfcleague_statistics');
+        $services = Misc::lookupServices('cfcleague_statistics');
         foreach ($services as $subtype => $info) {
             // Init all stats with empty subpart
             $subpartArray['###STATISTIC_'.strtoupper($subtype).'###'] = '';
         }
 
         foreach ($data as $type => $stats) {
-            $service = Tx_Rnbase_Utility_T3General::makeInstanceService('cfcleague_statistics', $type);
+            $service = T3General::makeInstanceService('cfcleague_statistics', $type);
             if (!is_object($service)) { // Ohne den Service geht nix
                 continue;
             }
-            $srvTemplate = tx_rnbase_util_Templates::getSubpart($template, '###STATISTIC_'.strtoupper($type).'###');
+            $srvTemplate = Templates::getSubpart($template, '###STATISTIC_'.strtoupper($type).'###');
             // Der Service muss jetzt den Marker liefert
             $srvMarker = $service->getMarker($configurations);
             $subpartArray['###STATISTIC_'.strtoupper($type).'###'] = $srvMarker->parseTemplate($srvTemplate, $stats, $configurations->getFormatter(), 'statistics.'.$type.'.', strtoupper($type));
         }
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); // , $wrappedSubpartArray);
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); // , $wrappedSubpartArray);
 
         return $out;
     }
@@ -79,16 +85,16 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
      * Alle möglichen Servicetemplates sind
      * bereits leer enthalten.
      *
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      *
      * @return array
      */
-    protected function _getSubpartArray($configurations)
+    protected function _getSubpartArray(ConfigurationInterface $configurations)
     {
         $ret = [];
 
         $cfg = [];
-        $types = tx_cfcleaguefe_util_ServiceRegistry::lookupStatistics($cfg);
+        $types = \tx_cfcleaguefe_util_ServiceRegistry::lookupStatistics($cfg);
         $types = $types['items'];
 
         foreach ($types as $type) {
@@ -103,7 +109,7 @@ class tx_cfcleaguefe_views_Statistics extends tx_rnbase_view_Base
         return $flexArr['sheets'][$sheetName]['ROOT']['el'][$valueName]['TCEforms']['config']['items'];
     }
 
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###STATISTICS###';
     }

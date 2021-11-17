@@ -1,8 +1,16 @@
 <?php
+
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,18 +29,17 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
 
 /**
  * Viewklasse für die Anzeige des Teams.
  */
-class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base
+class TeamDetailsView extends BaseView
 {
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
-        $team = &$viewData->offsetGet('team');
+        $team = $request->getViewContext()->offsetGet('team');
         if (is_object($team)) {
-            $out = $this->_createView($template, $team, $configurations);
+            $out = $this->_createView($template, $team, $request->getConfigurations());
         } else {
             $out = 'Sorry, no team found...';
         }
@@ -40,7 +47,7 @@ class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base
         return $out;
     }
 
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###TEAM_VIEW###';
     }
@@ -53,10 +60,5 @@ class tx_cfcleaguefe_views_TeamView extends tx_rnbase_view_Base
         $out .= $teamMarker->parseTemplate($template, $team, $configurations->getFormatter(), 'teamview.team.', 'TEAM');
 
         return $out;
-    }
-
-    public function _init(&$configurations)
-    {
-        $this->formatter = &$configurations->getFormatter();
     }
 }

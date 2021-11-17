@@ -1,8 +1,19 @@
 <?php
+
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use System25\T3sports\Frontend\View\TeamDetailsView;
+use System25\T3sports\Model\Repository\TeamRepository;
+use System25\T3sports\Model\Team;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,28 +32,26 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
 
 /**
  * Controller für die Anzeige eines Teams.
  */
-class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
+class TeamDetails extends AbstractAction
 {
     /**
      * handle request.
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewData
+     * @param RequestInterface $request
      *
      * @return string
      */
-    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
         $teams = [];
         // Im Flexform kann direkt ein Team ausgwählt werden
-        $teamId = intval($configurations->get('teamviewTeam'));
+        $teamId = $configurations->getInt('teamviewTeam');
         if (!$teamId) {
             // Alternativ ist eine Parameterübergabe möglich
             $teamId = intval($parameters->offsetGet('teamId'));
@@ -54,24 +63,23 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
         if ($teamId <= 0) {
             // Nix angegeben also über den Scope suchen
             // Die Werte des aktuellen Scope ermitteln
-            $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+            $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
             $saisonUids = $scopeArr['SAISON_UIDS'];
             $groupUids = $scopeArr['GROUP_UIDS'];
             $club = $configurations->get('teamviewClub');
-
             // Ohne Club können wir nichts zeigen
             if (0 == intval($club)) {
                 return 'Error: No club defined.';
             }
 
-            $club = tx_rnbase::makeInstance('tx_cfcleaguefe_models_club', $club);
-            $teams = $club->getTeams($saisonUids, $groupUids);
+            $teamRepo = new TeamRepository();
+            $teams = $teamRepo->findByClubAndSaison($club, $saisonUids, $groupUids);
         } else {
-            $team = tx_rnbase::makeInstance('tx_cfcleaguefe_models_team', $teamId);
+            $team = tx_rnbase::makeInstance(Team::class, $teamId);
             $teams[] = $team;
         }
 
-        $viewData = &$configurations->getViewData();
+        $viewData = $request->getViewContext();
         // Wir zeigen immer nur das erste Team im Ergebnis, selbst wenn es durch Fehlkonfiguration
         // mehrere sein sollten
         $viewData->offsetSet('team', $teams[0]);
@@ -86,6 +94,6 @@ class tx_cfcleaguefe_actions_TeamView extends tx_rnbase_action_BaseIOC
 
     public function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_TeamView';
+        return TeamDetailsView::class;
     }
 }
