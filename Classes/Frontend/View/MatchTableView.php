@@ -1,6 +1,13 @@
 <?php
 
+namespace System25\T3sports\Frontend\View;
+
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Marker\ListProvider;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use System25\T3sports\Frontend\Marker\MatchMarker;
 use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
 use tx_rnbase;
 
@@ -30,23 +37,24 @@ use tx_rnbase;
 /**
  * Viewklasse für die Anzeige eines Spielplans mit Hilfe eines HTML-Templates.
  */
-class tx_cfcleaguefe_views_MatchTable extends tx_rnbase_view_Base
+class MatchTableView extends BaseView
 {
     /**
      * Erstellung des Outputstrings.
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
+        $viewData = $request->getViewContext();
         $listBuilder = tx_rnbase::makeInstance(ListBuilder::class, tx_rnbase::makeInstance(MatchMarkerBuilderInfo::class));
 
-        /* @var $prov tx_rnbase_util_ListProvider */
+        /* @var $prov ListProvider */
         $prov = $viewData->offsetGet('provider');
-        $out = $listBuilder->renderEach($prov, $viewData, $template, 'tx_cfcleaguefe_util_MatchMarker', 'matchtable.match.', 'MATCH', $formatter);
+        $out = $listBuilder->renderEach($prov, $viewData, $template, MatchMarker::class, 'matchtable.match.', 'MATCH', $formatter);
 
         return $out;
     }
 
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###MATCHTABLE###';
     }

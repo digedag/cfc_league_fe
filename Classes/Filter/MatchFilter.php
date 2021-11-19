@@ -2,10 +2,12 @@
 
 namespace System25\T3sports\Filter;
 
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchTableBuilder;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
 
 /***************************************************************
 *  Copyright notice
@@ -30,7 +32,7 @@ use System25\T3sports\Utility\MatchTableBuilder;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class MatchFilter extends \tx_rnbase_filter_BaseFilter
+class MatchFilter extends BaseFilter
 {
     private $data;
 
@@ -45,10 +47,14 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
      * @param \tx_rnbase_configurations $configurations
      * @param string $confId
      */
-    protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
+    protected function initFilter(&$fields, &$options)
     {
+        $parameters = $this->getParameters();
+        $configurations = $this->getConfigurations();
+        $confId = $this->getConfId();
+
         $options['distinct'] = 1;
-        $scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
         // Spielplan für ein Team
         $teamId = $configurations->get($confId.'teamId');
         if ($configurations->get($confId.'acceptTeamIdFromRequest')) {
@@ -95,6 +101,7 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
 
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
+        $markerArray = [];
         $subpartArray = ['###FILTERITEMS###' => ''];
         $subpart = Templates::getSubpart($template, '###FILTERITEMS###');
         if (is_array($this->data) && count($this->data) > 0) {
@@ -124,5 +131,13 @@ class MatchFilter extends \tx_rnbase_filter_BaseFilter
     public function addFilterData($type, $value)
     {
         $this->data[$type] = $value;
+    }
+
+    /**
+     * Derzeit notwendig, um die Filter zu rendern.
+     */
+    public function getMarker()
+    {
+        return $this;
     }
 }

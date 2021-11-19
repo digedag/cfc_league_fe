@@ -1,8 +1,15 @@
 <?php
 
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Filter\Utility\PageBrowserFilter;
 use Sys25\RnBase\Frontend\Marker\ListProvider;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use System25\T3sports\Frontend\View\MatchTableView;
 use System25\T3sports\Utility\ServiceRegistry;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
@@ -30,26 +37,26 @@ use System25\T3sports\Utility\ServiceRegistry;
 /**
  * Controller für die Anzeige eines Spielplans.
  */
-class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
+class MatchTable extends AbstractAction
 {
     /**
      * Handle request.
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewdata
+     * @param RequestInterface $request
      *
      * @return string error message
      */
-    public function handleRequest(&$parameters, &$configurations, &$viewdata)
+    protected function handleRequest(RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $viewdata = $request->getViewContext();
         // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
         // ggf. die Konfiguration aus der TS-Config lesen
-        $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewdata, $this->getConfId());
+        $filter = BaseFilter::createFilter($request, $this->getConfId());
         $fields = [];
         $options = [];
 
-        $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
+        $filter->init($fields, $options);
         $service = ServiceRegistry::getMatchService();
         // Soll ein PageBrowser verwendet werden
         $pbFilter = new PageBrowserFilter();
@@ -81,6 +88,6 @@ class tx_cfcleaguefe_actions_MatchTable extends tx_rnbase_action_BaseIOC
 
     public function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_MatchTable';
+        return MatchTableView::class;
     }
 }
