@@ -3,14 +3,14 @@
 namespace System25\T3sports\Frontend\View;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
-use Sys25\RnBase\Frontend\View\Marker\BaseView;
-use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
-use Sys25\RnBase\Utility\TYPO3;
-use Sys25\RnBase\Frontend\Marker\Templates;
-use Sys25\RnBase\Utility\Link;
 use Sys25\RnBase\Frontend\Marker\MarkerUtility;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use Sys25\RnBase\Utility\Link;
+use Sys25\RnBase\Utility\TYPO3;
 
 /***************************************************************
  *  Copyright notice
@@ -43,7 +43,6 @@ use Sys25\RnBase\Frontend\View\ContextInterface;
  */
 class ScopeSelectionView extends BaseView
 {
-
     /**
      * Erstellen des Frontend-Outputs.
      *

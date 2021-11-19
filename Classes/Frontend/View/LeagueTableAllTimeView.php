@@ -1,9 +1,15 @@
 <?php
 
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,19 +32,22 @@
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
  */
-class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_LeagueTable
+class LeagueTableAllTimeView extends LeagueTableView
 {
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+//    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
         $marks = $markerArray = $penalties = [];
+        $configurations = $request->getConfigurations();
+        $viewData = $request->getViewContext();
 
         // Die Ligatabelle zusammenbauen
-        $subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $viewData, $penalties, $marks, $configurations);
+        $subpartArray['###ROWS###'] = $this->_createTable(Templates::getSubpart($template, '###ROWS###'), $viewData, $penalties, $marks, $configurations);
 
         // Die Tabellensteuerung
-        $subpartArray['###CONTROLS###'] = $this->_createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'), $viewData, $configurations);
+        $subpartArray['###CONTROLS###'] = $this->_createControls(Templates::getSubpart($template, '###CONTROLS###'), $viewData, $configurations);
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
 
     /**
@@ -49,6 +58,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
     protected function _createTable($templateList, $viewData, &$penalties, &$marks, $configurations)
     {
         $tableData = $viewData->offsetGet('tableData');
+
         // Sollen alle Teams gezeigt werden?
         $tableSize = $configurations->getInt('leagueTableSize');
         if ($tableSize && $tableSize < count($tableData)) {
@@ -59,7 +69,7 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
         // Den ClubMarker erstellen
         $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
 
-        $templateEntry = \tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
+        $templateEntry = Templates::getSubpart($templateList, '###ROW###');
 
         $parts = [];
         $rowRoll = $configurations->getInt('leaguetableAllTime.table.roll.value');
@@ -155,18 +165,18 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
             '###CONTROL_POINTSYSTEM###' => '',
         ];
         if ($viewData->offsetGet('tabletype_select')) {
-            $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
+            $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
         }
 
         if ($viewData->offsetGet('tablescope_select')) {
-            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
+            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate(Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
         }
 
         if ($viewData->offsetGet('pointsystem_select')) {
-            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
+            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
         }
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
 
     /**
@@ -217,6 +227,6 @@ class tx_cfcleaguefe_views_LeagueTableAllTime extends tx_cfcleaguefe_views_Leagu
             $wrappedSubpartArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK###'] = explode($token, $linkStr);
         }
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 }

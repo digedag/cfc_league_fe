@@ -4,8 +4,8 @@ namespace System25\T3sports\Frontend\Action;
 
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
 use System25\T3sports\Frontend\View\ScopeSelectionView;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
 
 /***************************************************************
  *  Copyright notice

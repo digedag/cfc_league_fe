@@ -2,15 +2,15 @@
 
 namespace System25\T3sports\Frontend\Action;
 
-use System25\T3sports\Table\Builder;
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
-use Sys25\RnBase\Utility\Misc;
 use Sys25\RnBase\Utility\Math;
-use System25\T3sports\Model\Competition;
-use tx_rnbase;
+use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Frontend\View\LeagueTableView;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Table\Builder;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice

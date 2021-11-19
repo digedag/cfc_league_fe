@@ -2,16 +2,16 @@
 
 namespace System25\T3sports\Frontend\View;
 
-use System25\T3sports\Table\ITableType;
-use Sys25\RnBase\Frontend\View\Marker\BaseView;
-use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
-use System25\T3sports\Model\Team;
-use tx_rnbase;
-use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Link;
+use System25\T3sports\Model\Team;
+use System25\T3sports\Table\ITableType;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice

@@ -7,6 +7,7 @@ return [
     'tx_cfcleaguefe_actions_ClubView' => \System25\T3sports\Frontend\Action\ClubDetails::class,
     'tx_cfcleaguefe_actions_LeagueTable' => \System25\T3sports\Frontend\Action\LeagueTable::class,
     'tx_cfcleaguefe_actions_LeagueTableShow' => \System25\T3sports\Frontend\Action\LeagueTable::class,
+    'tx_cfcleaguefe_actions_LeagueTableAllTime' => \System25\T3sports\Frontend\Action\LeagueTableAllTime::class,
     'tx_cfcleaguefe_actions_StadiumList' => \System25\T3sports\Frontend\Action\StadiumList::class,
     'tx_cfcleaguefe_actions_ProfileView' => \System25\T3sports\Frontend\Action\ProfileView::class,
     'tx_cfcleaguefe_actions_TeamView' => \System25\T3sports\Frontend\Action\TeamDetails::class,
