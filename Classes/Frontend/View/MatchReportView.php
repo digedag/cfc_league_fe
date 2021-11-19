@@ -1,8 +1,17 @@
 <?php
+
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use System25\T3sports\Frontend\Marker\MatchMarker;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,27 +30,26 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
 
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
  */
-class tx_cfcleaguefe_views_MatchReport extends tx_rnbase_view_Base
+class MatchReportView extends BaseView
 {
-    public function getMainSubpart(&$viewData)
-    {
-        return '###MATCHREPORT###';
-    }
-
     /**
      * Erstellen des Frontend-Outputs.
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
-        $match = $viewData->offsetGet('match');
-        $matchMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchMarker');
+        $match = $request->getViewContext()->offsetGet('match');
+        $matchMarker = tx_rnbase::makeInstance(MatchMarker::class);
         $matchStr = $matchMarker->parseTemplate($template, $match, $formatter, 'matchreport.match.', 'MATCH');
 
         return $matchStr;
+    }
+
+    public function getMainSubpart(ContextInterface $viewData)
+    {
+        return '###MATCHREPORT###';
     }
 }

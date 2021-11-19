@@ -1,12 +1,19 @@
 <?php
 
+namespace System25\T3sports\Frontend\View;
+
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use System25\T3sports\Frontend\Marker\MatchMarker;
 use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
+use tx_rnbase;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,17 +36,18 @@ use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
 /**
  * Viewklasse für die Anzeige einer Liste der anstehenden Liveticker.
  */
-class tx_cfcleaguefe_views_LiveTickerList extends tx_rnbase_view_Base
+class LiveTickerListView extends BaseView
 {
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
+        $viewData = $request->getViewContext();
         $matches = $viewData->offsetGet('matches');
         $listBuilder = tx_rnbase::makeInstance(ListBuilder::class, tx_rnbase::makeInstance(MatchMarkerBuilderInfo::class));
         $out = $listBuilder->render(
             $matches,
             $viewData,
             $template,
-            'tx_cfcleaguefe_util_MatchMarker',
+            MatchMarker::class,
             'tickerlist.match.',
             'MATCH',
             $formatter
@@ -48,7 +56,7 @@ class tx_cfcleaguefe_views_LiveTickerList extends tx_rnbase_view_Base
         return $out;
     }
 
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         $matches = $viewData->offsetGet('matches');
 

@@ -54,7 +54,8 @@ class MatchNoteDecorator
         if ($conf && is_object($ticker)) {
             // Bei einem Wechsel ist profile für den ausgewechselten Spieler
             if ($ticker->isChange()) {
-                $player = $ticker->getPlayerChangeOut();
+                $playerUid = $ticker->getPlayerUidChangeOut();
+                $player = $this->getPlayerInstance($ticker, $playerUid);
             } else {
                 $player = $this->getPlayerInstance($ticker);
             }
@@ -72,7 +73,8 @@ class MatchNoteDecorator
         // Bei Spielerwechseln gibt es noch ein zweites Profil
         $conf = $formatter->configurations->get($confId.'profile2.');
         if ($conf && is_object($ticker) && $ticker->isChange()) {
-            $player2 = $ticker->getPlayerChangeIn();
+            $playerUid2 = $ticker->getPlayerUidChangeIn();
+            $player2 = $this->getPlayerInstance($ticker, $playerUid2);
             if (!is_object($player2)) {
                 // Hier liegt vermutlich ein Fehler bei der Dateneingabe vor
                 // Es wird ein Hinweistext gezeigt
@@ -218,13 +220,13 @@ class MatchNoteDecorator
      *
      * @return Profile ein Profil oder 0
      */
-    public function getPlayerInstance(MatchNote $note)
+    public function getPlayerInstance(MatchNote $note, $playerUid = null)
     {
         if ($note->isHome()) {
-            return $this->getInstancePlayerHome($note);
+            return $this->getInstancePlayerHome($note, $playerUid);
         }
         if ($note->isGuest()) {
-            return $this->getInstancePlayerGuest($note);
+            return $this->getInstancePlayerGuest($note, $playerUid);
         }
 
         return null;
@@ -234,8 +236,11 @@ class MatchNoteDecorator
      * Liefert das Profil des an der Aktion beteiligten Spielers der Heimmannschaft.
      * Wenn nicht vorhanden wird der Spieler "Unbekannt" geliefert.
      */
-    protected function getInstancePlayerHome(MatchNote $note)
+    protected function getInstancePlayerHome(MatchNote $note, $playerUid = null)
     {
+        if (null !== $playerUid) {
+            return $this->findPlayerInstance($playerUid, $note, MatchProfileProvider::PLAYERS_HOME);
+        }
         // Innerhalb der Matchnote gibt es das Konstrukt des unbekannten Spielers. Dieser
         // Wird verwendet, wenn der eigentliche Spieler nicht mehr in der Datenbank gefunden
         // wird, oder wenn die ID des Spielers -1 ist.
@@ -244,11 +249,7 @@ class MatchNoteDecorator
         } elseif (-1 == intval($note->getProperty('player_home'))) {
             $player = $this->getUnknownPlayer();
         } else {
-            $players = $this->profileProvider->getPlayers($note->getMatch(), MatchProfileProvider::PLAYERS_HOME, true);
-            $player = $players[$note->getProperty('player_home')];
-            if (!is_object($player)) {
-                $player = $this->getNotFoundProfile();
-            }
+            $player = $this->findPlayerInstance($note->getProperty('player_home'), $note, MatchProfileProvider::PLAYERS_HOME);
         }
 
         return $player;
@@ -257,18 +258,29 @@ class MatchNoteDecorator
     /**
      * Liefert das Profil, des an der Aktion beteiligten Spielers der Gastmannschaft.
      */
-    protected function getInstancePlayerGuest(MatchNote $note)
+    protected function getInstancePlayerGuest(MatchNote $note, $playerUid = null)
     {
+        if (null !== $playerUid) {
+            return $this->findPlayerInstance($playerUid, $note, MatchProfileProvider::PLAYERS_GUEST);
+        }
+
         if (0 == intval($note->getProperty('player_guest'))) { // ID 0 ist nicht vergeben
             $player = null;
         } elseif (-1 == intval($note->getProperty('player_guest'))) {
             $player = $this->getUnknownPlayer();
         } else {
-            $players = $this->profileProvider->getPlayers($note->getMatch(), MatchProfileProvider::PLAYERS_GUEST, true);
-            $player = $players[$note->getProperty('player_guest')];
-            if (!is_object($player)) {
-                $player = $this->getNotFoundProfile();
-            }
+            $player = $this->findPlayerInstance($note->getProperty('player_guest'), $note, MatchProfileProvider::PLAYERS_GUEST);
+        }
+
+        return $player;
+    }
+
+    protected function findPlayerInstance(int $playerUid, MatchNote $note, string $methodName)
+    {
+        $players = $this->profileProvider->getPlayers($note->getMatch(), $methodName, true);
+        $player = isset($players[$playerUid]) ? $players[$playerUid] : null;
+        if (!is_object($player)) {
+            $player = $this->getNotFoundProfile();
         }
 
         return $player;

@@ -1,12 +1,22 @@
 <?php
 
+namespace System25\T3sports\Frontend\Action;
+
+use Exception;
+use Sys25\RnBase\Exception\PageNotFound404;
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use System25\T3sports\Frontend\View\MatchReportView;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Utility\MatchProfileProvider;
+use Throwable;
+use tx_cfcleaguefe_models_matchreport as MatchReportModel;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,24 +35,25 @@ use System25\T3sports\Utility\MatchProfileProvider;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Action für die Anzeige eines Spielberichts.
  */
-class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
+class MatchReport extends AbstractAction
 {
     /**
      * handle request.
      *
-     * @param arrayobject $parameters
-     * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
-     * @param arrayobject $viewData
+     * @param RequestInterface $request
      *
-     * @return string
+     * @return string|null
      */
-    protected function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $viewData = $request->getViewContext();
+
         // Die MatchID ermittlen
         // Ist sie fest definiert?
         $matchId = intval($configurations->get('matchreportMatchUid'));
@@ -61,12 +72,12 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
                 }
                 $viewData->offsetSet('match', $match); // Den Spielreport für den View bereitstellen
             } else {
-                /* @var $matchReport tx_cfcleaguefe_models_matchreport */
-                $matchReport = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchreport', $match, $configurations, new MatchProfileProvider());
+                /* @var $matchReport MatchReportModel */
+                $matchReport = tx_rnbase::makeInstance(MatchReportModel::class, $match, $configurations, new MatchProfileProvider());
                 $viewData->offsetSet('match', $matchReport->getMatch()); // Den Spielreport für den View bereitstellen
             }
-        } catch (Exception $e) {
-            throw tx_rnbase::makeInstance('Tx_Rnbase_Exception_PageNotFound404', $e->getMessage()."\nX-t3sports-msg: match not found\nX-t3sports-match: ".$matchId);
+        } catch (Throwable $e) {
+            throw tx_rnbase::makeInstance(PageNotFound404::class, $e->getMessage()."\nX-t3sports-msg: match not found\nX-t3sports-match: ".$matchId);
         }
 
         return null;
@@ -79,6 +90,6 @@ class tx_cfcleaguefe_actions_MatchReport extends tx_rnbase_action_BaseIOC
 
     protected function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_MatchReport';
+        return MatchReportView::class;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\Utility;
 
+use Sys25\RnBase\Utility\Queue;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\MatchNote;
 use System25\T3sports\Model\Repository\MatchNoteRepository;
@@ -156,7 +157,7 @@ class MatchTicker
      *
      * @return bool wether or not the ticker record was removed
      */
-    private static function _handleChange(&$ret, &$ticker)
+    private static function _handleChange(&$ret, MatchNote $ticker)
     {
         $isRemoved = false;
         if (!$ticker->isChange()) {
@@ -169,17 +170,17 @@ class MatchTicker
 
         // Bevor es losgeht, müssen einmalig die Arrays initialisiert werden
         if (!is_object($changeInHome)) {
-            $changeInHome = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
-            $changeOutHome = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
-            $changeInGuest = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
-            $changeOutGuest = tx_rnbase::makeInstance('tx_rnbase_util_Queue');
+            $changeInHome = tx_rnbase::makeInstance(Queue::class);
+            $changeOutHome = tx_rnbase::makeInstance(Queue::class);
+            $changeInGuest = tx_rnbase::makeInstance(Queue::class);
+            $changeOutGuest = tx_rnbase::makeInstance(Queue::class);
         }
 
         if ($ticker->isHome()) {
-            if ('81' == $ticker->getType()) { // Wenn Einwechslung
+            if (MatchNote::TYPE_CHANGEIN == $ticker->getType()) { // Wenn Einwechslung
                 // Gibt es schon die Auswechslung?
                 if (!$changeOutHome->isEmpty()) {
-                    $change = &$changeOutHome->get();
+                    $change = $changeOutHome->get();
                     $change->setProperty('player_home_2', $ticker->getProperty('player_home'));
                     $change->setProperty('comment2', $ticker->getProperty('comment'));
                 } else {
@@ -190,7 +191,7 @@ class MatchTicker
                 $isRemoved = true;
             }
 
-            if ('80' == $ticker->getType()) { // Wenn Auswechslung
+            if (MatchNote::TYPE_CHANGEOUT == $ticker->getType()) { // Wenn Auswechslung
                 // Gibt es schon die Einwechslung?
                 if (!$changeInHome->isEmpty()) {
                     // Wartet schon so ein Wechsel
@@ -204,7 +205,7 @@ class MatchTicker
             }
         } // end if HOME
         elseif ($ticker->isGuest()) {
-            if ('81' == $ticker->getType()) { // Ist Einwechslung
+            if (MatchNote::TYPE_CHANGEIN == $ticker->getType()) { // Ist Einwechslung
                 // Gibt es schon die Auswechslung?
                 if (!$changeOutGuest->isEmpty()) {
                     // Die Auswechslung holen
@@ -218,7 +219,7 @@ class MatchTicker
                 array_pop($ret); // Die Einwechslung fliegt aus dem Ticker
                 $isRemoved = true;
             }
-            if ('80' == $ticker->getType()) { // Auswechslung
+            if (MatchNote::TYPE_CHANGEOUT == $ticker->getType()) { // Auswechslung
                 // Gibt es schon die Einwechslung?
                 if (!$changeInGuest->isEmpty()) {
                     // Es muss immer die Auswechslung erhalten bleiben

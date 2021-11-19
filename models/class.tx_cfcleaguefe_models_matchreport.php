@@ -529,6 +529,8 @@ class tx_cfcleaguefe_models_matchreport
         foreach ($tickerArr as $ticker) {
             $ret[] = $this->mnDecorator->wrap($this->_formatter, $confIdAll.'ticker.', $ticker);
         }
+//         \tx_rnbase_util_Debug::debug([$ret, $confIdAll], __FILE__.':'.__LINE__); // TODO: remove me
+        // exit();
         // Die einzelnen Meldungen verbinden
         if (count($ret)) {
             $sep = $this->_configurations->get($confIdAll.'seperator');

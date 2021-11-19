@@ -86,6 +86,7 @@ class MatchMarker extends SimpleMarker
         ], $this);
 
         // Jetzt die dynamischen Werte setzen, dafür müssen die Ticker vorbereitet werden
+        // Der Report wird in der Action gesetzt
         $report = $match->getMatchReport();
         if (is_object($report)) {
             $this->pushTT('addDynamicMarkers');

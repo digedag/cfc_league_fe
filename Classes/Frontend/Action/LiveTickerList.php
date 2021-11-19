@@ -1,8 +1,19 @@
 <?php
+
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Frontend\View\LiveTickerListView;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,26 +32,24 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-tx_rnbase::load('tx_cfcleaguefe_util_MatchTable');
 
 /**
  * Controller für die Anzeige der Spiele, für die ein LiveTicker geschaltet ist.
  */
-class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
+class LiveTickerList extends AbstractAction
 {
     /**
      * Handle request.
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewdata
+     * @param RequestInterface $request
      *
-     * @return string error message
+     * @return string|null error message
      */
-    public function handleRequest(&$parameters, &$configurations, &$viewdata)
+    protected function handleRequest(RequestInterface $request)
     {
+        $parameters = $request->getParameters();
+        $configurations = $request->getConfigurations();
+        $viewdata = $request->getViewContext();
         $fields = [];
         $options = [];
         // $options['debug'] = 1;
@@ -48,33 +57,12 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
 
         // Soll ein PageBrowser verwendet werden
         $this->handlePageBrowser($parameters, $configurations, $viewdata, $fields, $options);
-        $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+        $service = ServiceRegistry::getMatchService();
         $matches = $service->search($fields, $options);
 
         $viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
 
         return '';
-        // ///////////
-
-        $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
-        $matchTable->setTimeRange($configurations->get('tickerlist.timeRangePast'), $configurations->get('tickerlist.timeRangeFuture'));
-        $matchTable->setLimit($configurations->get('tickerlist.limit'));
-        $matchTable->setOrderDesc($configurations->get('tickerlist.orderDesc') ? true : false);
-        $matchTable->setLiveTicker(1); // Nur LiveTickerspiele holen
-
-        $matches = $matchTable->findMatches($saisonUids, $groupUids, $compUids, $club, $roundUid);
-
-        $viewData = &$configurations->getViewData();
-        $viewData->offsetSet('matches', $matches);
-
-        // View
-        $view = tx_rnbase::makeInstance('tx_cfcleaguefe_views_LiveTickerList');
-        $view->setTemplatePath($configurations->getTemplatePath());
-        // Das Template wird komplett angegeben
-        $view->setTemplateFile($configurations->get('templateLiveTickerList'));
-        $out = $view->render('livetickerlist', $configurations);
-
-        return $out;
     }
 
     /**
@@ -89,10 +77,10 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
     {
         $options['distinct'] = 1;
         // $options['debug'] = 1;
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'tickerlist.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'tickerlist.options.');
+        SearchBase::setConfigFields($fields, $configurations, 'tickerlist.fields.');
+        SearchBase::setConfigOptions($options, $configurations, 'tickerlist.options.');
 
-        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
         $matchtable = $this->getMatchTable();
         $matchtable->setScope($scopeArr);
         $teamId = $configurations->get($this->getConfId().'teamId');
@@ -124,7 +112,7 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
     public function handlePageBrowser(&$parameters, &$configurations, &$viewdata, &$fields, &$options)
     {
         if (is_array($configurations->get('tickerlist.match.pagebrowser.'))) {
-            $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+            $service = ServiceRegistry::getMatchService();
             // Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Spiele zu ermitteln
             $options['count'] = 1;
             $listSize = $service->search($fields, $options);
@@ -152,6 +140,6 @@ class tx_cfcleaguefe_actions_LiveTickerList extends tx_rnbase_action_BaseIOC
 
     public function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_LiveTickerList';
+        return LiveTickerListView::class;
     }
 }
