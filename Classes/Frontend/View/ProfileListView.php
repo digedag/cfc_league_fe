@@ -1,8 +1,19 @@
 <?php
+
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use System25\T3sports\Frontend\Marker\ProfileMarker;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,42 +32,35 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Viewklasse für die Anzeige eines Personenprofils.
  */
-class tx_cfcleaguefe_views_ProfileList extends tx_rnbase_view_Base
+class ProfileListView extends BaseView
 {
     /**
-     * Create fe output.
+     * {@inheritDoc}
      *
-     * @param string $template
-     * @param arrayobject $viewData
-     * @param tx_rnbase_configurations $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
-     *
-     * @return string
+     * @see \Sys25\RnBase\Frontend\View\Marker\BaseView::createOutput()
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
         $markerArray = []; // Eventuell später für allgemeine Daten oder Labels
         $subpartArray = [];
 
-        $listCnt = &$viewData->offsetGet('listsize');
+        $viewData = $request->getViewContext();
         $profiles = &$viewData->offsetGet('profiles');
 
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-        $out = $listBuilder->render($profiles, $viewData, $template, 'tx_cfcleaguefe_util_ProfileMarker', 'profilelist.profile.', 'PROFILE', $formatter);
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
+        $out = $listBuilder->render($profiles, $viewData, $template, ProfileMarker::class, 'profilelist.profile.', 'PROFILE', $formatter);
 
         // Zum Schluß das Haupttemplate zusammenstellen
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray); // , $wrappedSubpartArray);
+        $out = Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray); // , $wrappedSubpartArray);
 
         return $out;
     }
 
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###PROFILE_LIST###';
     }

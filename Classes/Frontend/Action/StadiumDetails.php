@@ -1,8 +1,17 @@
 <?php
+
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use System25\T3sports\Frontend\View\StadiumDetailsView;
+use System25\T3sports\Model\Stadium;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2009-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,33 +30,28 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Controller für die Anzeige eines Stadien.
  */
-class tx_cfcleaguefe_actions_StadiumView extends tx_rnbase_action_BaseIOC
+class StadiumDetails extends AbstractAction
 {
     /**
-     * handle request.
+     * {@inheritDoc}
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewData
-     *
-     * @return string
+     * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::handleRequest()
      */
-    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
     {
         // Im Flexform kann direkt ein Team ausgwählt werden
-        $itemId = intval($configurations->get('stadiumview.stadium'));
+        $itemId = $request->getConfigurations()->getInt('stadiumview.stadium');
         if (!$itemId) {
             // Alternativ ist eine Parameterübergabe möglich
-            $itemId = intval($parameters->offsetGet('stadium'));
+            $itemId = (int) $request->getParameters()->offsetGet('stadium');
         }
 
-        $item = tx_rnbase::makeInstance('tx_cfcleague_models_Stadium', $itemId);
-        $viewData->offsetSet('item', $item);
+        $item = tx_rnbase::makeInstance(Stadium::class, $itemId);
+        $request->getViewContext()->offsetSet('item', $item);
 
         return null;
     }
@@ -59,6 +63,6 @@ class tx_cfcleaguefe_actions_StadiumView extends tx_rnbase_action_BaseIOC
 
     public function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_StadiumView';
+        return StadiumDetailsView::class;
     }
 }

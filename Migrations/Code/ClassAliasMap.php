@@ -11,6 +11,8 @@ return [
     'tx_cfcleaguefe_actions_LiveTickerList' => \System25\T3sports\Frontend\Action\LiveTickerList::class,
     'tx_cfcleaguefe_actions_MatchReport' => \System25\T3sports\Frontend\Action\MatchReport::class,
     'tx_cfcleaguefe_actions_MatchTable' => \System25\T3sports\Frontend\Action\MatchTable::class,
+    'tx_cfcleaguefe_actions_ProfileList' => \System25\T3sports\Frontend\Action\ProfileList::class,
+    'tx_cfcleaguefe_actions_StadiumView' => \System25\T3sports\Frontend\Action\StadiumDetails::class,
 
     'tx_cfcleaguefe_actions_StadiumList' => \System25\T3sports\Frontend\Action\StadiumList::class,
     'tx_cfcleaguefe_actions_ProfileView' => \System25\T3sports\Frontend\Action\ProfileView::class,

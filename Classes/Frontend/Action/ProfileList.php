@@ -1,9 +1,19 @@
 <?php
 
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Frontend\View\ProfileListView;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +32,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Controller für die Anzeige einer Personenliste
@@ -30,21 +39,20 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
  * Dabei wird ein Pager verwendet, der für
  * jeden Buchstaben eine eigene Seite erstellt.
  */
-class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
+class ProfileList extends AbstractAction
 {
     /**
-     * handle request.
+     * {@inheritDoc}
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewData
-     *
-     * @return string
+     * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::handleRequest()
      */
-    protected function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $viewData = $request->getViewContext();
         // Zunächst sollten wir die Anfangsbuchstaben ermitteln
-        $service = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
+        $service = ServiceRegistry::getProfileService();
 
         if ($configurations->get('profilelist.charbrowser')) {
             $pagerData = $this->findPagerData($service, $configurations);
@@ -84,8 +92,8 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
     protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar)
     {
         // ggf. die Konfiguration aus der TS-Config lesen
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
+        SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
+        SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
         $timeRange = $configurations->get('profilelist.birthdays');
         if ($timeRange) {
             $timePattern = 'DAY' == $timeRange ? '%d%m' : '%m';
@@ -110,7 +118,7 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
             }
         }
         if ($firstChar) {
-            $specials = tx_rnbase_util_SearchBase::getSpecialChars();
+            $specials = SearchBase::getSpecialChars();
             $firsts = $specials[$firstChar];
             if ($firsts) {
                 $firsts = implode('\',\'', $firsts);
@@ -131,23 +139,23 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
      * Buchstaben überhaupt vorkommen.
      *
      * @param \System25\T3sports\Service\ProfileService $service
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      */
-    protected function findPagerData($service, &$configurations)
+    protected function findPagerData($service, ConfigurationInterface $configurations)
     {
         $options = [];
         $options['what'] = 'LEFT(UCASE(last_name),1) As first_char, count(LEFT(UCASE(last_name),1)) As size';
         $options['groupby'] = 'LEFT(UCASE(last_name),1)';
         $fields = [];
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
+        SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
+        SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
         // replace orderby
         unset($options['orderby']);
         $options['orderby']['first_char'] = 'asc';
 
         $rows = $service->search($fields, $options);
 
-        $specials = tx_rnbase_util_SearchBase::getSpecialChars();
+        $specials = SearchBase::getSpecialChars();
         $wSpecials = [];
         foreach ($specials as $key => $special) {
             foreach ($special as $char) {
@@ -181,13 +189,13 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
      * Liefert die Anzahl der Ergebnisse pro Seite.
      *
      * @param array $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      *
      * @return int
      */
-    protected function getPageSize(&$parameters, &$configurations)
+    protected function getPageSize(&$parameters, ConfigurationInterface $configurations): int
     {
-        return intval($configurations->get('profilelist.profile.pagebrowser.limit'));
+        return $configurations->getInt('profilelist.profile.pagebrowser.limit');
     }
 
     protected function getTemplateName()
@@ -197,6 +205,6 @@ class tx_cfcleaguefe_actions_ProfileList extends tx_rnbase_action_BaseIOC
 
     protected function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_ProfileList';
+        return ProfileListView::class;
     }
 }
