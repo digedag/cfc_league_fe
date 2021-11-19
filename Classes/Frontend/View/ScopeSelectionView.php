@@ -1,11 +1,21 @@
 <?php
 
+namespace System25\T3sports\Frontend\View;
+
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Utility\TYPO3;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Utility\Link;
+use Sys25\RnBase\Frontend\Marker\MarkerUtility;
+use Sys25\RnBase\Frontend\View\ContextInterface;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,25 +41,23 @@ use Sys25\RnBase\Configuration\ConfigurationInterface;
  * erfolgt nicht mehr über ein HTML-Formular, sondern mit echten Links, wodurch die
  * Caching-Mechanismen von TYPO3 zur Wirkung kommen können.
  */
-class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
+class ScopeSelectionView extends BaseView
 {
-    public function getMainSubpart(&$viewData)
-    {
-        return '###SCOPE_SELECTION###';
-    }
 
     /**
      * Erstellen des Frontend-Outputs.
      *
      * @param string $template
-     * @param ArrayObject $viewData
-     * @param tx_rnbase_configurations $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param RequestInterface $request
+     * @param FormatUtil $formatter
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
+        $configurations = $request->getConfigurations();
+//        $viewData = $request->getViewContext();
+        $viewData = $configurations->getViewData();
         $link = $configurations->createLink();
-        $link->destination(\tx_rnbase_util_TYPO3::getTSFE()->id); // Das Ziel der Seite vorbereiten
+        $link->destination(TYPO3::getTSFE()->id); // Das Ziel der Seite vorbereiten
 
         $markerArray = $subpartArray = [];
         $subpartArray['###SAISON_SELECTION###'] = '';
@@ -61,7 +69,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         // Wenn Saison gezeigt werden soll, dann Abschnitt erstellen
         if ($viewData->offsetGet('saison_select')) {
             // Das Template holen
-            $subTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###SAISON_SELECTION###');
+            $subTemplate = Templates::getSubpart($template, '###SAISON_SELECTION###');
 
             $items = $viewData->offsetGet('saison_select');
             $subpartArray['###SAISON_SELECTION###'] = $this->_fillTemplate($subTemplate, $items, $link, 'SAISON', $configurations);
@@ -70,7 +78,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         // Wenn Altersklasse gezeigt werden soll, dann Abschnitt erstellen
         if ($viewData->offsetGet('group_select')) {
             // Das Template holen
-            $subTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###GROUP_SELECTION###');
+            $subTemplate = Templates::getSubpart($template, '###GROUP_SELECTION###');
 
             $items = $viewData->offsetGet('group_select');
             $subpartArray['###GROUP_SELECTION###'] = $this->_fillTemplate($subTemplate, $items, $link, 'GROUP', $configurations);
@@ -79,7 +87,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         // Wenn Wettbewerb gezeigt werden soll, dann Abschnitt erstellen
         if ($viewData->offsetGet('competition_select')) {
             // Das Template holen
-            $subTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###COMPETITION_SELECTION###');
+            $subTemplate = Templates::getSubpart($template, '###COMPETITION_SELECTION###');
 
             $items = $viewData->offsetGet('competition_select');
             $subpartArray['###COMPETITION_SELECTION###'] = $this->_fillTemplate($subTemplate, $items, $link, 'COMPETITION', $configurations);
@@ -87,7 +95,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         // Wenn Spieltag gezeigt werden soll, dann Abschnitt erstellen
         if ($viewData->offsetGet('round_select')) {
             // Das Template holen
-            $subTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###ROUND_SELECTION###');
+            $subTemplate = Templates::getSubpart($template, '###ROUND_SELECTION###');
 
             $items = $viewData->offsetGet('round_select');
             $subpartArray['###ROUND_SELECTION###'] = $this->_fillTemplate($subTemplate, $items, $link, 'ROUND', $configurations);
@@ -95,12 +103,12 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         // Wenn Verein gezeigt werden soll, dann Abschnitt erstellen
         if ($viewData->offsetGet('club_select')) {
             // Das Template holen
-            $subTemplate = \tx_rnbase_util_Templates::getSubpart($template, '###CLUB_SELECTION###');
+            $subTemplate = Templates::getSubpart($template, '###CLUB_SELECTION###');
             $items = $viewData->offsetGet('club_select');
             $subpartArray['###CLUB_SELECTION###'] = $this->_fillTemplate($subTemplate, $items, $link, 'CLUB', $configurations);
         }
 
-        return \tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
     }
 
     /**
@@ -108,11 +116,11 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
      *
      * @param string $template HTML- Template
      * @param array &$itemsArr Datensätze für die Auswahl
-     * @param tx_rnbase_util_Link $link Linkobjekt
+     * @param Link $link Linkobjekt
      * @param string $markerName Name des Markers (SAISON, ROUND usw.)
      * @param ConfigurationInterface $configurations Config-Objekt
      */
-    protected function _fillTemplate($template, &$itemsArr, $link, $markerName, $configurations)
+    protected function _fillTemplate($template, &$itemsArr, Link $link, $markerName, ConfigurationInterface $configurations)
     {
         $items = $itemsArr[0];
         $currItem = $items[$itemsArr[1]];
@@ -128,7 +136,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         }
 
         // Das Template für die einzelnen Datensätze
-        $subTemplate = tx_rnbase_util_Templates::getSubpart($template, '###'.$markerName.'_SELECTION_2###');
+        $subTemplate = Templates::getSubpart($template, '###'.$markerName.'_SELECTION_2###');
 
         $itemConfId = 'scopeSelection.'.$confName.'.';
         $currentNoLink = $configurations->getBool($itemConfId.'current.noLink');
@@ -144,7 +152,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
             $isCurrent = ($item->getUid() == $currItem->getUid());
             $item->setProperty('isCurrent', $isCurrent ? 1 : 0);
 
-            $ignore = Tx_Rnbase_Frontend_Marker_Utility::findUnusedAttributes($item, $subTemplate, $markerName);
+            $ignore = MarkerUtility::findUnusedAttributes($item, $subTemplate, $markerName);
             $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($item->getProperty(), 'scopeSelection.'.$confName.'.', $ignore, $markerName.'_', $item->getColumnNames());
             $markerArray['###'.$markerName.'_LINK_URL###'] = $link->makeUrl(false);
             $linkStr = ($currentNoLink && $isCurrent) ? $token : $link->makeTag();
@@ -154,7 +162,7 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
             $subpartArray = $wrappedSubpartArray = [];
             $wrappedSubpartArray['###'.$markerName.'_LINK###'] = explode($token, $linkStr);
 
-            $parts[] = tx_rnbase_util_Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
+            $parts[] = Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
             unset($keepVars[strtolower($markerName)]);
         }
         // Jetzt die einzelnen Teile zusammenfügen
@@ -164,6 +172,11 @@ class tx_cfcleaguefe_views_ScopeSelection extends tx_rnbase_view_Base
         $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->getProperty(), $itemConfId.'current.', 0, $markerName.'_CURRENT_', $currItem->getColumnNames());
         $subpartArray['###'.$markerName.'_SELECTION_2###'] = $out;
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+    }
+
+    public function getMainSubpart(ContextInterface $viewData)
+    {
+        return '###SCOPE_SELECTION###';
     }
 }

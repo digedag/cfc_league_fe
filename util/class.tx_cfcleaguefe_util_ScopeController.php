@@ -47,6 +47,8 @@ class tx_cfcleaguefe_util_ScopeController
 
     private static $_scopeParams = [];
 
+    //public static function handleCurrentScope(RequestInterface $request, $useObjects = false)
+
     /**
      * Diese Funktion stellt die UIDs der aktuell ausgewählten Ligen bereit.
      * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen

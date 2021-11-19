@@ -112,7 +112,7 @@ class ProfileView extends BaseView
      *
      * @return Profile[]
      */
-    protected function findNextAndPrevProfiles(Profile $profile, Team $team)
+    protected function findNextAndPrevProfiles(Profile $profile, ?Team $team)
     {
         $ret = [];
         $playerIds = [];
@@ -153,18 +153,18 @@ class ProfileView extends BaseView
         if (isset($ret['prev'])) {
             $this->setMemberType($ret['prev'], $coachIds, $supporterIds);
         } else {
-            $ret['prev'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', 0);
+            $ret['prev'] = tx_rnbase::makeInstance(Profile::class, 0);
         }
         if (isset($ret['next'])) {
             $this->setMemberType($ret['next'], $coachIds, $supporterIds);
         } else {
-            $ret['next'] = tx_rnbase::makeInstance('tx_cfcleaguefe_models_profile', 0);
+            $ret['next'] = tx_rnbase::makeInstance(Profile::class, 0);
         }
 
         return $ret;
     }
 
-    private function setMemberType($profile, $coachIds, $supporterIds)
+    private function setMemberType(Profile $profile, $coachIds, $supporterIds)
     {
         $profileUid = $profile->getUid();
         $profile->memberType = 0;

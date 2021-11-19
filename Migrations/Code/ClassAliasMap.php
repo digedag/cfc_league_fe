@@ -5,10 +5,13 @@ declare(strict_types=1);
 return [
     'tx_cfcleaguefe_actions_ClubList' => \System25\T3sports\Frontend\Action\ClubList::class,
     'tx_cfcleaguefe_actions_ClubView' => \System25\T3sports\Frontend\Action\ClubDetails::class,
+    'tx_cfcleaguefe_actions_LeagueTable' => \System25\T3sports\Frontend\Action\LeagueTable::class,
+    'tx_cfcleaguefe_actions_LeagueTableShow' => \System25\T3sports\Frontend\Action\LeagueTable::class,
     'tx_cfcleaguefe_actions_StadiumList' => \System25\T3sports\Frontend\Action\StadiumList::class,
     'tx_cfcleaguefe_actions_ProfileView' => \System25\T3sports\Frontend\Action\ProfileView::class,
     'tx_cfcleaguefe_actions_TeamView' => \System25\T3sports\Frontend\Action\TeamDetails::class,
     'tx_cfcleaguefe_actions_Statistics' => \System25\T3sports\Frontend\Action\Statistics::class,
+    'tx_cfcleaguefe_actions_CompetitionSelection' => \System25\T3sports\Frontend\Action\ScopeSelection::class,
 
     'tx_cfcleaguefe_util_ProfileMarker' => \System25\T3sports\Frontend\Marker\ProfileMarker::class,
     'tx_cfcleaguefe_util_MatchMarker' => \System25\T3sports\Frontend\Marker\MatchMarker::class,

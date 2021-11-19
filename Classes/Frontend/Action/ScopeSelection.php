@@ -1,8 +1,16 @@
 <?php
+
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use System25\T3sports\Frontend\View\ScopeSelectionView;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,19 +29,18 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_cfcleaguefe_util_ScopeController');
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
  * Controller für die Anzeige der Scopeauswahl.
  */
-class tx_cfcleaguefe_actions_CompetitionSelection extends tx_rnbase_action_BaseIOC
+class ScopeSelection extends AbstractAction
 {
-    public function handleRequest(&$parameters, &$configurations, &$viewdata)
+    protected function handleRequest(RequestInterface $request)
     {
-        $this->viewType = $configurations->get('scopeSelection.viewType');
+        $parameters = $request->getParameters();
+        $configurations = $request->getConfigurations();
         // Die Werte des aktuellen Scope ermitteln
-        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations, 'HTML' == $this->viewType);
+        ScopeController::handleCurrentScope($parameters, $configurations, true);
 
         return null;
     }
@@ -45,6 +52,6 @@ class tx_cfcleaguefe_actions_CompetitionSelection extends tx_rnbase_action_BaseI
 
     public function getViewClassName()
     {
-        return ('HTML' == $this->viewType) ? 'tx_cfcleaguefe_views_ScopeSelection' : 'tx_rnbase_view_phpTemplateEngine';
+        return ScopeSelectionView::class;
     }
 }

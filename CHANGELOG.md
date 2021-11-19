@@ -2,6 +2,9 @@
 Changes
 -------
 
+v2.0.0 (??.??.2021)
+* action tx_cfcleaguefe_actions_LeagueTableShow removed
+
 v1.7.2 (19.05.2021)
  * Fix matchtable shows home matches only
 
