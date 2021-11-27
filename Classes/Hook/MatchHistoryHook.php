@@ -1,6 +1,15 @@
 <?php
 
+namespace System25\T3sports\Hook;
+
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_rnbase;
 
 /***************************************************************
 *  Copyright notice
@@ -30,7 +39,7 @@ use Sys25\RnBase\Search\SearchBase;
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
+class MatchHistoryHook
 {
     /**
      * Add historic matches.
@@ -42,13 +51,14 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
     {
         $marker = $params['marker'];
         $template = $params['template'];
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__MATCHHISTORY') ||
-            tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_MATCHHISTORY')) {
+        if (BaseMarker::containsMarker($template, 'MARKERMODULE__MATCHHISTORY') ||
+            BaseMarker::containsMarker($template, $marker.'_MATCHHISTORY')) {
             $formatter = $params['formatter'];
             $matches = $this->getMarkerValue($params, $formatter);
             $markerArray['###MARKERMODULE__MATCHHISTORY###'] = $matches; // backward
             $markerArray['###'.$marker.'_MATCHHISTORY###'] = $matches;
-            $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+            $subpartArray = $wrappedSubpartArray = [];
+            $params['template'] = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
         }
     }
 
@@ -56,9 +66,9 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
      * Generate matchtable.
      *
      * @param array $params
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      */
-    private function getMarkerValue($params, $formatter)
+    private function getMarkerValue($params, FormatUtil $formatter)
     {
         //function parseTemplate($templateCode, $params, $formatter) {
         $match = $this->getMatch($params);
@@ -83,7 +93,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
         SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
         SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
 
-        $srv = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+        $srv = ServiceRegistry::getMatchService();
         $matchTable = $srv->getMatchTable();
 
         if (!intval($formatter->configurations->get($confId.'ignoreAgeGroup'))) {
@@ -97,7 +107,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
         // Wir brauchen das Template
         $subpartName = $formatter->getConfigurations()->get($confId.'subpartName');
         $subpartName = $subpartName ? $subpartName : '###HISTORIC_MATCHES###';
-        $templateCode = tx_rnbase_util_Templates::getSubpartFromFile(
+        $templateCode = Templates::getSubpartFromFile(
             $formatter->getConfigurations()->get($confId.'template'),
             $subpartName
         );
@@ -105,7 +115,7 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
             return '<!-- NO SUBPART '.$subpartName.' FOUND -->';
         }
 
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
         $out = $listBuilder->render(
             $matches,
             false,
@@ -124,12 +134,12 @@ class tx_cfcleaguefe_svmarker_MatchHistory extends Tx_Rnbase_Service_Base
      *
      * @param array $params
      *
-     * @return tx_cfcleaguefe_models_match or false
+     * @return Match|null
      */
     private function getMatch($params)
     {
         if (!isset($params['match'])) {
-            return false;
+            return null;
         }
 
         return $params['match'];

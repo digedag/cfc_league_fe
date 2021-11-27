@@ -1,11 +1,19 @@
 <?php
 
+namespace System25\T3sports\Hook;
+
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use System25\T3sports\Model\Match;
 use System25\T3sports\Table\Builder;
+use System25\T3sports\Utility\MatchTableBuilder;
+use tx_rnbase;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2017 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,24 +38,25 @@ use System25\T3sports\Table\Builder;
  *
  * @author Rene Nitzsche
  */
-class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base
+class MatchChartHook
 {
     public function addChart($params, $parent)
     {
         $marker = $params['marker'];
         $confId = $params['confid'];
         $template = $params['template'];
-        if (!tx_rnbase_util_BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
-            !tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) {
+        if (!BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
+            !BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) {
             return;
         }
+
         $formatter = $params['formatter'];
         $chart = $this->getMarkerValue($params, $formatter, $confId.'chart.');
         //		$chart = '<!-- TODO: convert to JS -->';
         $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $markerArray['###MARKERMODULE__CHARTMATCH###'] = $chart; // backward
         $markerArray['###'.$marker.'_CHARTMATCH###'] = $chart;
-        $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $params['template'] = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
     /**
@@ -55,15 +64,15 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base
      * FIXME: Umstellen auf ChartJS.
      *
      * @param array $params
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      * @param string $confId matchreport.match.
      */
-    protected function getMarkerValue($params, $formatter, $confId)
+    protected function getMarkerValue($params, FormatUtil $formatter, $confId)
     {
         if (!isset($params['match'])) {
             return false;
         }
-        /* @var $match tx_cfcleaguefe_models_match */
+        /* @var $match Match */
         $match = $params['match'];
         $competition = $match->getCompetition();
         if (!$competition->isTypeLeague()) {
@@ -74,29 +83,29 @@ class tx_cfcleaguefe_svmarker_ChartMatch extends Tx_Rnbase_Service_Base
 
         $table = Builder::buildByCompetitionAndMatches(
             $competition,
-            $competition->getMatches(tx_cfcleague_models_Match::MATCH_STATUS_FINISHED),
+            $competition->getMatches(Match::MATCH_STATUS_FINISHED),
             $configurations,
             $confId
         );
 
-        /* @var $builder System25\T3sports\Chart\ChartBuilder */
-        $builder = tx_rnbase::makeInstance(System25\T3sports\Chart\ChartBuilder::class);
+        /* @var $builder \System25\T3sports\Chart\ChartBuilder */
+        $builder = tx_rnbase::makeInstance(\System25\T3sports\Chart\ChartBuilder::class);
         $json = $builder->buildJson($table, [$match->getHome()->getClubUid(), $match->getGuest()->getClubUid()], $formatter->getConfigurations(), $confId);
 
-        $chartTemplate = tx_rnbase_util_Templates::getSubpartFromFile($configurations->get($confId.'template.file'), $configurations->get($confId.'template.subpart'));
+        $chartTemplate = Templates::getSubpartFromFile($configurations->get($confId.'template.file'), $configurations->get($confId.'template.subpart'));
 
         $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $markerArray['###JSON###'] = $json;
-        $chartTemplate = tx_rnbase_util_Templates::substituteMarkerArrayCached($chartTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $chartTemplate = Templates::substituteMarkerArrayCached($chartTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
 
         return $chartTemplate;
     }
 
     /**
-     * @return tx_cfcleaguefe_util_MatchTable
+     * @return MatchTableBuilder
      */
     protected function getMatchTable()
     {
-        return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
+        return tx_rnbase::makeInstance(MatchTableBuilder::class);
     }
 }
