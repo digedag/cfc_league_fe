@@ -33,6 +33,20 @@ return [
     'tx_cfcleaguefe_search_Profile' => \System25\T3sports\Search\ProfileFeSearch::class,
     'tx_cfcleaguefe_search_Team' => \System25\T3sports\Search\TeamFeSearch::class,
 
+    'tx_cfcleaguefe_sv1_Competitions' => \System25\T3sports\Service\CompetitionService::class,
+    'tx_cfcleaguefe_sv1_Teams' => \System25\T3sports\Service\TeamService::class,
+    'tx_cfcleaguefe_sv1_Profiles' => \System25\T3sports\Service\ProfileService::class,
+    'tx_cfcleaguefe_sv1_Matches' => \System25\T3sports\Service\MatchService::class,
+
+    'tx_cfcleaguefe_sv2_PlayerStatistics' => \System25\T3sports\Statistics\Service\PlayerStatistics::class,
+    'tx_cfcleaguefe_sv2_PlayerStatisticsMarker' => \System25\T3sports\Statistics\PlayerStatisticsMarker::class,
+    'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' => \System25\T3sports\Statistics\Service\PlayerSummaryStatistics::class,
+    'tx_cfcleaguefe_sv2_PlayerSummaryStatisticsMarker' => \System25\T3sports\Statistics\PlayerSummaryStatisticsMarker::class,
+    'tx_cfcleaguefe_sv2_AssistStatistics' => \System25\T3sports\Statistics\Service\AssistStatistics::class,
+    'tx_cfcleaguefe_sv2_ScorerStatistics' => \System25\T3sports\Statistics\Service\ScorerStatistics::class,
+    'tx_cfcleaguefe_sv2_VisitorStatistics' => \System25\T3sports\Statistics\Service\VisitorStatistics::class,
+    'tx_cfcleaguefe_sv2_TeamStatisticsMarker' => \System25\T3sports\Statistics\TeamStatisticsMarker::class,
+
     'tx_cfcleaguefe_util_ProfileMarker' => \System25\T3sports\Frontend\Marker\ProfileMarker::class,
     'tx_cfcleaguefe_util_MatchMarker' => \System25\T3sports\Frontend\Marker\MatchMarker::class,
     'tx_cfcleaguefe_util_ClubMarker' => \System25\T3sports\Frontend\Marker\ClubMarker::class,
