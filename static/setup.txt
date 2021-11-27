@@ -71,7 +71,7 @@ lib.t3sports.stadium {
     userFunc = tx_rnbase_util_TSFAL->printImages
     refField = pictures
     refTable = tx_cfcleague_stadiums
-    template = EXT:cfc_league_fe/res/lightboxpics.html
+    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/lightboxpics.html
     subpartName = ###PICTURES###
     media =< lib.t3sports.pictures.mediaBase
   }
@@ -130,7 +130,7 @@ lib.t3sports.group {
 	userFunc = tx_rnbase_util_TSFAL->printImages
     refField = logo
     refTable = tx_cfcleague_group
-#    template = EXT:cfc_league_fe/res/lightboxpics.html
+#    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/lightboxpics.html
 #    subpartName = ###PICTURES###
     media {
       file = IMAGE
@@ -265,7 +265,7 @@ lib.t3sports.profile {
     userFunc = tx_rnbase_util_TSFAL->printImages
     refField = t3images
     refTable = tx_cfcleague_profiles
-    template = EXT:cfc_league_fe/res/lightboxpics.html
+    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/lightboxpics.html
     offset = 1
     subpartName = ###PICTURES###
     media {
@@ -319,7 +319,7 @@ lib.t3sports.club {
     userFunc=tx_rnbase_util_TSFAL->printImages
     refField = logo
     refTable = tx_cfcleague_club
-    template = EXT:cfc_league_fe/res/clublogo.html
+    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/clublogo.html
     limit = 1
     media {
       file = IMAGE
@@ -400,7 +400,7 @@ lib.t3sports.teamLogo {
               userFunc=tx_rnbase_util_TSFAL->printImages
               refField=logo
               refTable=tx_cfcleague_club
-              template = EXT:cfc_league_fe/res/clublogo.html
+              template = EXT:cfc_league_fe/Resources/Private/Templates/Html/clublogo.html
               limit = 1
               media {
                 file = IMAGE
@@ -493,7 +493,7 @@ lib.t3sports.team {
     userFunc = tx_rnbase_util_TSFAL->printImages
     refField = t3images
     refTable = tx_cfcleague_teams
-    template = EXT:cfc_league_fe/res/lightboxpics.html
+    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/lightboxpics.html
     offset = 1
     subpartName = ###PICTURES###
     media =< lib.t3sports.pictures.mediaBase
@@ -592,8 +592,8 @@ lib.t3sports.match {
     userFunc = tx_rnbase_util_TSFAL->printImages
     refField = t3images
     refTable = tx_cfcleague_games
-    template = EXT:cfc_league_fe/res/lightboxpics.html
-#    template = EXT:cfc_league_fe/res/gallerifficpics.html
+    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/lightboxpics.html
+#    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/gallerifficpics.html
     subpartName = ###PICTURES###
     media {
       file = IMG_RESOURCE
@@ -922,6 +922,7 @@ plugin.tx_cfcleaguefe_competition {
   }
 }
 
+# TODO: remove?
 # Define a base layout for chartlines
 lib.t3sports.chart {
   # defaults is used for T3sports settings
@@ -955,8 +956,7 @@ lib.t3sports.chart {
   width = {$plugin.tx_cfcleaguefe_report.chartwidth}
   height = {$plugin.tx_cfcleaguefe_report.chartheight}
   antialias = native
-  font.default = typo3conf/ext/cfc_league_fe/res/nimbus.ttf
-#  font.default = fileadmin/fonts/nimbus.ttf
+  font.default = typo3conf/ext/cfc_league_fe/Ressources/Private/Fonts/nimbus.ttf
   font.default {
     size = 8
   }
@@ -1103,14 +1103,14 @@ lib.t3sports.map {
 
 lib.t3sports.matchreport.imgcard = IMAGE
 lib.t3sports.matchreport.imgcard {
-  file = EXT:cfc_league_fe/res/gelbe-karte.gif
+  file = EXT:cfc_league_fe/Resources/Public/Images/gelbe-karte.gif
   file.width = 7
   file.height = 10
   params = class="cfcleague-card"
 }
 lib.t3sports.matchreport.imggoal = IMAGE
 lib.t3sports.matchreport.imggoal {
-  file = EXT:cfc_league_fe/res/goal.gif
+  file = EXT:cfc_league_fe/Resources/Public/Images/goal.gif
   file.width = 18
   file.height = 16
   params = class="t3sports-mnicon"
@@ -1125,9 +1125,9 @@ lib.t3sports.matchreport.penaltyType.cObject {
   # Die Nummern entsprechen der ID des Tickertyps
   70 =< lib.t3sports.matchreport.imgcard
   71 < .70
-  71.file = EXT:cfc_league_fe/res/gelbrote-karte.gif
+  71.file = EXT:cfc_league_fe/Resources/Public/Images/gelbrote-karte.gif
   72 < .70
-  72.file = EXT:cfc_league_fe/res/rote-karte.gif
+  72.file = EXT:cfc_league_fe/Resources/Public/Images/rote-karte.gif
 #          noTrimWrap = | (|)|
 }
 # Jetzt noch ein CASE für alle anderen Tickertypen
@@ -1219,11 +1219,11 @@ lib.t3sports.matchNote {
     13 =< lib.t3sports.matchreport.imggoal
     30 =< lib.t3sports.matchreport.imggoal
     70 =< lib.t3sports.matchreport.imggoal
-    70.file = EXT:cfc_league_fe/res/gelbe-karte.gif
+    70.file = EXT:cfc_league_fe/Resources/Public/Images/gelbe-karte.gif
     71 =< lib.t3sports.matchreport.imggoal
-    71.file = EXT:cfc_league_fe/res/gelbrote-karte.gif
+    71.file = EXT:cfc_league_fe/Resources/Public/Images/gelbrote-karte.gif
     72 =< lib.t3sports.matchreport.imggoal
-    72.file = EXT:cfc_league_fe/res/rote-karte.gif
+    72.file = EXT:cfc_league_fe/Resources/Public/Images/rote-karte.gif
     
   }
   dcmessage = COA

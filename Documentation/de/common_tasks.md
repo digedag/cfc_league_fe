@@ -204,7 +204,7 @@ lib.t3sports.match {
     userFunc = tx_rnbase_util_TSFAL->printImages
     refField = t3images
     refTable = tx_cfcleague_games
-    template = EXT:cfc_league_fe/res/lightboxpics.html
+    template = EXT:cfc_league_fe/Resources/Private/Templates/Html/lightboxpics.html
     subpartName = ###PICTURES###
     media {
       file = IMG_RESOURCE
@@ -254,11 +254,11 @@ Die entsprechenden Dateien müssen natürlich an der angegebenen URL vorhanden s
 ### Galleriffic
 
 Um die Bildausgabe auf Galleriffic umzustellen, sind zwei Änderungen notwendig. Erstens muss die HTML-Vorlage auf die 
-Datei EXT:cfc_league_fe/res/gallerifficpics.html umgestellt werden. Speziell für den Spielbericht ist folgende TS-Anweisung
+Datei EXT:cfc_league_fe/Resources/Private/Templates/Html/gallerifficpics.html umgestellt werden. Speziell für den Spielbericht ist folgende TS-Anweisung
 möglich:
 ```
 plugin.tx_cfcleaguefe_report {
-  matchreport.match.pictures.template = EXT:cfc_league_fe/res/gallerifficpics.html
+  matchreport.match.pictures.template = EXT:cfc_league_fe/Resources/Private/Templates/Html/gallerifficpics.html
 }
 ```
 
