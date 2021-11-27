@@ -22,6 +22,17 @@ return [
     'tx_cfcleaguefe_actions_Statistics' => \System25\T3sports\Frontend\Action\Statistics::class,
     'tx_cfcleaguefe_actions_CompetitionSelection' => \System25\T3sports\Frontend\Action\ScopeSelection::class,
 
+    'tx_cfcleaguefe_filter_Match' => \System25\T3sports\Filter\MatchFilter::class,
+    'tx_cfcleaguefe_filter_MatchNote' => \System25\T3sports\Filter\MatchNoteFilter::class,
+    'tx_cfcleaguefe_filter_Stadium' => \System25\T3sports\Filter\StadiumFilter::class,
+    'tx_cfcleaguefe_filter_Team' => \System25\T3sports\Filter\TeamFilter::class,
+
+    'tx_cfcleaguefe_search_Builder' => \System25\T3sports\Search\SearchBuilder::class,
+    'tx_cfcleaguefe_search_Competition' => \System25\T3sports\Search\CompetitionFeSearch::class,
+    'tx_cfcleaguefe_search_Match' => \System25\T3sports\Search\MatchFeSearch::class,
+    'tx_cfcleaguefe_search_Profile' => \System25\T3sports\Search\ProfileFeSearch::class,
+    'tx_cfcleaguefe_search_Team' => \System25\T3sports\Search\TeamFeSearch::class,
+
     'tx_cfcleaguefe_util_ProfileMarker' => \System25\T3sports\Frontend\Marker\ProfileMarker::class,
     'tx_cfcleaguefe_util_MatchMarker' => \System25\T3sports\Frontend\Marker\MatchMarker::class,
     'tx_cfcleaguefe_util_ClubMarker' => \System25\T3sports\Frontend\Marker\ClubMarker::class,

@@ -1,33 +1,5 @@
 <?php
 
-class tx_cfcleaguefe_filter_Match extends System25\T3sports\Filter\MatchFilter
-{
-}
-class tx_cfcleaguefe_filter_MatchNote extends System25\T3sports\Filter\MatchNoteFilter
-{
-}
-class tx_cfcleaguefe_filter_Stadium extends System25\T3sports\Filter\StadiumFilter
-{
-}
-class tx_cfcleaguefe_filter_Team extends System25\T3sports\Filter\TeamFilter
-{
-}
-class tx_cfcleaguefe_search_Builder extends System25\T3sports\Search\SearchBuilder
-{
-}
-class tx_cfcleaguefe_search_Competition extends System25\T3sports\Search\CompetitionFeSearch
-{
-}
-class tx_cfcleaguefe_search_Match extends System25\T3sports\Search\MatchFeSearch
-{
-}
-class tx_cfcleaguefe_search_Profile extends System25\T3sports\Search\ProfileFeSearch
-{
-}
-class tx_cfcleaguefe_search_Team extends System25\T3sports\Search\TeamFeSearch
-{
-}
-
 class tx_cfcleaguefe_sv1_Competitions extends System25\T3sports\Service\CompetitionService
 {
 }
