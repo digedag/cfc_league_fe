@@ -1,8 +1,16 @@
 <?php
+
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,33 +29,30 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_view_Base');
-tx_rnbase::load('tx_rnbase_util_ListBuilder');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Viewklasse für die Anzeige einer Stadionliste.
  */
-class tx_cfcleaguefe_views_TableChart extends tx_rnbase_view_Base
+class TableChartView extends BaseView
 {
     /**
      * Erstellen des Frontend-Outputs.
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
         // Die ViewData bereitstellen
-        $json = $viewData->offsetGet('json');
+        $json = $request->getViewContext()->offsetGet('json');
         $markerArray = [
             '###JSON###' => $json,
         ];
-        $lib = $configurations->get($this->getController()->getConfId().'library');
-        $template = tx_rnbase_util_Templates::getSubpart($template, '###'.strtoupper($lib).'###');
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray); // , $wrappedSubpartArray);
+        $lib = $request->getConfigurations()->get($request->getConfId().'library');
+        $template = Templates::getSubpart($template, '###'.strtoupper($lib).'###');
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray); // , $wrappedSubpartArray);
 
         return $out;
     }
 
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###TABLECHART###';
     }

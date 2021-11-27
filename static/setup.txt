@@ -1455,7 +1455,7 @@ plugin.tx_cfcleaguefe_report {
       players_home = 1
       players_guest = 1
       chart {
-      	template.file = EXT:cfc_league_fe/views/templates/tablechart.html
+      	template.file = EXT:cfc_league_fe/Resources/Private/Templates/Html/tablechart.html
       	template.subpart = ###FLOT###
       }
 
@@ -1669,7 +1669,7 @@ plugin.tx_cfcleaguefe_report {
         }
       }
       leaguetable {
-        template = EXT:cfc_league_fe/views/templates/leaguetable_teaser.html
+        template = EXT:cfc_league_fe/Resources/Private/Templates/Html/leaguetable_teaser.html
         subpartName = ###LEAGUE_TABLE###
       }
     }

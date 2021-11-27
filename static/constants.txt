@@ -3,28 +3,28 @@
 
 plugin.tx_cfcleaguefe_competition {
   # cat=T3sports (Templates)/stadiumlist; type=string;label=HTML Template for stadium list
-  stadiumlistTemplate = EXT:cfc_league_fe/views/templates/stadiums.html
+  stadiumlistTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/stadiums.html
 
   # cat=T3sports (Templates)/teamlist; type=string;label=HTML Template for team list
-  teamlistTemplate = EXT:cfc_league_fe/views/templates/teamlist.html
+  teamlistTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/teamlist.html
 
   # cat=T3sports (Templates)/scope; type=string;label=HTML Template for scope selection
-  scopeTemplate = EXT:cfc_league_fe/views/templates/scopeselection.html
+  scopeTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/scopeselection.html
 
   # cat=T3sports (Templates)/matchtable; type=string;label=HTML Template for match table
-  matchtableTemplate = EXT:cfc_league_fe/views/templates/matchtable.html
+  matchtableTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/matchtable.html
   # cat=T3sports (Templates)/matchcrosstable; type=string;label=HTML Template for match crosstable
-  matchcrosstableTemplate = EXT:cfc_league_fe/views/templates/matchcrosstable.html
+  matchcrosstableTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/matchcrosstable.html
 
   # cat=T3sports (Templates)/leaguetable; type=string;label=HTML Template for league table
-  leaguetableTemplate = EXT:cfc_league_fe/views/templates/leaguetable.html
+  leaguetableTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/leaguetable.html
   # cat=T3sports (Templates)/leaguetableAllTime; type=string;label=HTML Template for all-time league table
-  leaguetableAllTimeTemplate = EXT:cfc_league_fe/views/templates/leaguetableAllTime.html
+  leaguetableAllTimeTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/leaguetableAllTime.html
 
   # cat=T3sports (Templates)/statistics; type=string;label=HTML Template for statistics
-  statisticsTemplate = EXT:cfc_league_fe/views/templates/statistics.html
+  statisticsTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/statistics.html
   # cat=T3sports (Templates)/livetickerlist; type=string;label=HTML Template for liveticker list
-  tickerlistTemplate = EXT:cfc_league_fe/views/templates/livetickerlist.html
+  tickerlistTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/livetickerlist.html
 	
 
 
@@ -73,19 +73,19 @@ plugin.tx_cfcleaguefe_competition {
 
 plugin.tx_cfcleaguefe_report {
   # cat=T3sports (Templates)/stadiumview; type=string;label=HTML Template for stadium view
-  stadiumviewTemplate = EXT:cfc_league_fe/views/templates/stadiums.html
+  stadiumviewTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/stadiums.html
   # cat=T3sports (Templates)/matchreport; type=string;label=HTML Template for match report
-  matchreportTemplate = EXT:cfc_league_fe/views/templates/matchreport.html
+  matchreportTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/matchreport.html
   # cat=T3sports (Templates)/clubview; type=string;label=HTML Template for club details
-  clubviewTemplate = EXT:cfc_league_fe/views/templates/clublist.html
+  clubviewTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/clublist.html
   # cat=T3sports (Templates)/clublist; type=string;label=HTML Template for club list
-  clublistTemplate = EXT:cfc_league_fe/views/templates/clublist.html
+  clublistTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/clublist.html
   # cat=T3sports (Templates)/teamview; type=string;label=HTML Template for team view
-  teamviewTemplate = EXT:cfc_league_fe/views/templates/teamview.html
+  teamviewTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/teamview.html
   # cat=T3sports (Templates)/profileview; type=string;label=HTML Template for profile view
-  profileTemplate = EXT:cfc_league_fe/views/templates/profileview.html
+  profileTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/profileview.html
   # cat=T3sports (Templates)/profilelist; type=string;label=HTML Template for profile list
-  profilelistTemplate = EXT:cfc_league_fe/views/templates/profileview.html
+  profilelistTemplate = EXT:cfc_league_fe/Resources/Private/Templates/Html/profileview.html
   
   
  

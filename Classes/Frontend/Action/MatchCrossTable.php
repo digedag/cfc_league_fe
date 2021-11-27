@@ -1,14 +1,21 @@
 <?php
 
+namespace System25\T3sports\Frontend\Action;
+
 use Sys25\RnBase\Database\Connection;
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Strings;
-use System25\T3sports\Model\Competition;
+use System25\T3sports\Frontend\View\MatchCrossTableView;
 use System25\T3sports\Model\Team;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2020 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,31 +38,27 @@ use System25\T3sports\Model\Team;
 /**
  * Controller für die Anzeige eines Spielplans als Kreuztabelle.
  */
-class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
+class MatchCrossTable extends AbstractAction
 {
     /**
-     * Handle request.
+     * @param RequestInterface $request
      *
-     * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param arrayobject $viewdata
-     *
-     * @return string error message
+     * @return string
      */
-    public function handleRequest(&$parameters, &$configurations, &$viewdata)
+    protected function handleRequest(RequestInterface $request)
     {
         // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
         // ggf. die Konfiguration aus der TS-Config lesen
         $fields = $options = [];
 
         //  	$options['debug'] = 1;
-        $this->initSearch($fields, $options, $parameters, $configurations);
+        $this->initSearch($fields, $options, $request);
 
-        $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+        $service = ServiceRegistry::getMatchService();
         $matches = $service->search($fields, $options);
         $teams = $this->_resolveTeams($matches);
-        $viewdata->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
-        $viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
+        $request->getViewContext()->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
+        $request->getViewContext()->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
 
         return '';
     }
@@ -65,19 +68,19 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
      *
      * @param array $fields
      * @param array $options
-     * @param array $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param RequestInterface $request
      */
-    protected function initSearch(&$fields, &$options, &$parameters, &$configurations)
+    protected function initSearch(&$fields, &$options, RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
         $options['distinct'] = 1;
         //  	$options['debug'] = 1;
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, 'matchcrosstable.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'matchcrosstable.options.');
+        SearchBase::setConfigFields($fields, $configurations, 'matchcrosstable.fields.');
+        SearchBase::setConfigOptions($options, $configurations, 'matchcrosstable.options.');
 
-        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+        $scopeArr = ScopeController::handleCurrentScope($request->getParameters(), $configurations);
 
-        $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+        $service = ServiceRegistry::getMatchService();
         $matchtable = $service->getMatchTable();
         $matchtable->setScope($scopeArr);
         $matchtable->getFields($fields, $options);
@@ -137,43 +140,6 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
         return Connection::getInstance()->doSelect($what, $from, $options);
     }
 
-    public function ___handleRequest(&$parameters, &$configurations, &$viewdata)
-    {
-        // Die Werte des aktuellen Scope ermitteln
-        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
-        $saisonUids = $scopeArr['SAISON_UIDS'];
-        $groupUids = $scopeArr['GROUP_UIDS'];
-        $compUids = $scopeArr['COMP_UIDS'];
-        $roundUid = $scopeArr['ROUND_UIDS'];
-        $club = $scopeArr['CLUB_UIDS'];
-        // Die Kreuztabelle wird nur für komplette Wettbewerbe erzeugt
-        if (0 == strlen($compUids)) {
-            $comps = Competition::findAll($saisonUids, $groupUids, $compUids);
-            if (count($comps) > 0) {
-                $currCompetition = $comps[0];
-                $currCompetition = $currCompetition->uid;
-            // Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten.
-            } else {
-                return '';
-            } // Ohne Wettbewerb keine Tabelle!
-        } else {
-            $currCompetition = Strings::intExplode(',', $compUids);
-            $currCompetition = $currCompetition[0];
-        }
-
-        $matchTable = tx_rnbase::makeInstance('tx_cfcleaguefe_models_matchtable');
-        $extended = $configurations->get('matchcrosstable.allData');
-        $matches = $matchTable->findMatches($saisonUids, $groupUids, $currCompetition, '', '', $status, $extended);
-
-        $teams = $this->_resolveTeams($matches);
-
-        $viewData = &$configurations->getViewData();
-        $viewData->offsetSet('matches', $matches); // Die Spiele für den View bereitstellen
-        $viewData->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
-
-        return '';
-    }
-
     public function getTemplateName()
     {
         return 'matchcrosstable';
@@ -181,6 +147,6 @@ class tx_cfcleaguefe_actions_MatchCrossTable extends tx_rnbase_action_BaseIOC
 
     public function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_MatchCrossTable';
+        return MatchCrossTableView::class;
     }
 }

@@ -1,9 +1,18 @@
 <?php
 
+namespace System25\T3sports\Frontend\View;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
 use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\View\ContextInterface;
+use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
+use System25\T3sports\Model\Match;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
@@ -31,25 +40,27 @@ use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
 /**
  * Viewklasse für die Anzeige der Ligatabelle mit Hilfe eines HTML-Templates.
  */
-class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
+class MatchCrossTableView extends BaseView
 {
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(ContextInterface $viewData)
     {
         return '###CROSSTABLE###';
     }
 
     /**
-     * Erstellen des Frontend-Outputs.
-     *
      * @param string $template
-     * @param array $viewData
-     * @param tx_rnbase_configurations $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param RequestInterface $request
+     * @param FormatUtil $formatter
+     *
+     * @return string
      */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    public function createOutput($template, RequestInterface $request, $formatter)
     {
+        $viewData = $request->getViewContext();
+        $configurations = $request->getConfigurations();
+        /* @var $matches \Sys25\RnBase\Domain\Collection\BaseCollection */
         $matches = $viewData->offsetGet('matches');
-        if (!is_array($matches) || !count($matches)) {
+        if ($matches->isEmpty()) {
             return $configurations->getLL('matchcrosstable.noData');
         }
         // Wir benötigen die beteiligten Teams
@@ -119,7 +130,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      * @param int $guest
      *            uid der Gastmannschaft
      *
-     * @return tx_cfcleaguefe_models_match
+     * @return Match|string
      */
     private function findMatch(&$matches, $home, $guest)
     {
@@ -139,10 +150,10 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      * @param string $headlineTemplate
      * @param array $datalines
      * @param array $teams
-     * @param tx_rnbase_configurations $configurations
-     * @param ArrayObject $viewData
+     * @param ConfigurationInterface $configurations
+     * @param ContextInterface $viewData
      */
-    private function _createDatalines($template, $datalines, &$teams, $configurations, $viewData)
+    private function _createDatalines($template, $datalines, &$teams, ConfigurationInterface $configurations, ContextInterface $viewData)
     {
         $subTemplate = '###MATCHS###'.Templates::getSubpart($template, '###MATCHS###').'###MATCHS###';
         $freeTemplate = Templates::getSubpart($template, '###MATCH_FREE###');
@@ -181,9 +192,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
      *
      * @param string $headlineTemplate
      * @param array $teams
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      */
-    private function _createHeadline($template, &$teams, $configurations)
+    private function _createHeadline($template, &$teams, ConfigurationInterface $configurations)
     {
         // Im Prinzip eine normale Teamliste...
         $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
@@ -192,7 +203,7 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
         $rowRollCnt = 0;
         $parts = [];
 
-        tx_rnbase_util_Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'include teams');
+        Misc::pushTT('tx_cfcleaguefe_views_MatchCrossTable', 'include teams');
         foreach ($teams as $team) {
             $team->setProperty('roll', $rowRollCnt);
             $parts[] = $teamMarker->parseTemplate($subTemplate, $team, $this->formatter, 'matchcrosstable.headline.team.', 'TEAM');
@@ -227,9 +238,9 @@ class tx_cfcleaguefe_views_MatchCrossTable extends tx_rnbase_view_Base
     /**
      * Vorbereitung der Link-Objekte.
      */
-    public function _init(&$configurations)
+    public function _init(ConfigurationInterface $configurations)
     {
-        $this->formatter = &$configurations->getFormatter();
+        $this->formatter = $configurations->getFormatter();
 
         // String für Zellen ohne Spielansetzung
         $this->noMatchStr = $configurations->get('matchcrosstable.dataline.nomatch');

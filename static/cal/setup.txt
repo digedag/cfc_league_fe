@@ -3,7 +3,7 @@
 plugin.tx_cal_controller {
   view {
     cfc_league_events {
-      template = EXT:cfc_league_fe/views/templates/match_event.html
+      template = EXT:cfc_league_fe/Resources/Private/Templates/Html/match_event.html
       headerStyle = green_catheader
       bodyStyle = green_catbody
       event_length = 180

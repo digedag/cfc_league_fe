@@ -1,14 +1,24 @@
 <?php
 
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Utility\Math;
+use Sys25\RnBase\Utility\Misc;
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Chart\ChartBuilder;
+use System25\T3sports\Frontend\View\TableChartView;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Table\Builder;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,14 +41,16 @@ use System25\T3sports\Table\Builder;
 /**
  * Controller für die Anzeige einer Tabellenfahrt.
  */
-class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
+class TableChart extends AbstractAction
 {
-    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    protected function handleRequest(RequestInterface $request)
     {
+        $parameters = $request->getParameters();
+        $configurations = $request->getConfigurations();
         // Die Werte des aktuellen Scope ermitteln
-        $scopeArr = tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
         // Hook to manipulate scopeArray
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'action_TableChart_handleScope_hook', [
+        Misc::callHook('cfc_league_fe', 'action_TableChart_handleScope_hook', [
             'scopeArray' => &$scopeArr,
             'parameters' => $parameters,
             'configurations' => $configurations,
@@ -72,40 +84,38 @@ class tx_cfcleaguefe_actions_TableChart extends tx_rnbase_action_BaseIOC
             }
         }
 
-        $mode = $configurations->get($this->getConfId().'library');
-
         $chartData = $this->prepareChartData($scopeArr, $configurations, $this->getConfId());
-        $viewData->offsetSet('json', $chartData);
+        $request->getViewContext()->offsetSet('json', $chartData);
     }
 
     /**
      * @param array $scopeArr
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      * @param string $confId
      *
      * @return multitype:number NULL
      */
-    protected function prepareChartData($scopeArr, $configurations, $confId)
+    protected function prepareChartData($scopeArr, ConfigurationInterface $configurations, $confId)
     {
         $table = Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
 
-        $builder = tx_rnbase::makeInstance(System25\T3sports\Chart\ChartBuilder::class);
+        $builder = tx_rnbase::makeInstance(ChartBuilder::class);
 
-        return $builder->buildJson($table, $this->getChartClubs(), $configurations, $confId);
+        return $builder->buildJson($table, $this->getChartClubs($configurations, $confId), $configurations, $confId);
     }
 
-    protected function getChartClubs()
+    protected function getChartClubs(ConfigurationInterface $configurations, $confId)
     {
-        return Strings::intExplode(',', $this->getConfigurations()->get($this->getConfId().'chartClubs'));
+        return Strings::intExplode(',', $configurations->get($confId.'chartClubs'));
     }
 
-    public function getTemplateName()
+    protected function getTemplateName()
     {
         return 'tablechart';
     }
 
-    public function getViewClassName()
+    protected function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_TableChart';
+        return TableChartView::class;
     }
 }

@@ -2,11 +2,15 @@
 
 namespace System25\T3sports\Filter;
 
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
+use System25\T3sports\Search\SearchBuilder;
+use tx_cfcleaguefe_util_ScopeController as ScopeController;
+
 /**
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2010-2019 Rene Nitzsche
+ * (c) 2010-2021 Rene Nitzsche
  * Contact: rene@system25.de
  * All rights reserved
  *
@@ -31,21 +35,21 @@ namespace System25\T3sports\Filter;
  *
  * @author Rene Nitzsche
  */
-class TeamFilter extends \tx_rnbase_filter_BaseFilter
+class TeamFilter extends BaseFilter
 {
     /**
      * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
      *
      * @param array $fields
      * @param array $options
-     * @param \tx_rnbase_IParameters $parameters
-     * @param \tx_rnbase_configurations $configurations
-     * @param string $confId
      */
-    protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
+    protected function initFilter(&$fields, &$options)
     {
+        $parameters = $this->getParameters();
+        $configurations = $this->getConfigurations();
+
         $options['distinct'] = 1;
-        $scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
-        \System25\T3sports\Search\SearchBuilder::buildTeamByScope($fields, $scopeArr);
+        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
+        SearchBuilder::buildTeamByScope($fields, $scopeArr);
     }
 }

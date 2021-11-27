@@ -70,7 +70,7 @@ static Template der Extension stehen, da es sich auf dessen Angaben bezieht!
 
 Im Plugin des Kalenders muss die Seite mit den Spielen nun als Quelle für Termine mit angegeben werden:
 Die Gestaltung des Layouts geschieht über ein HTML-Template. Eine Vorlage liegt unter 
-**ext:cfc_league_fe/views/templates/match_event.html**.
+**ext:cfc_league_fe/Resources/Private/Templates/Html/match_event.html**.
 
 Damit nun nicht alle Spiele gezeigt werden, kann wie üblich die Auswahl vorher eingeschränkt werden. In diesem Fall aber nur 
 per Typoscript:

@@ -43,9 +43,6 @@ class MatchFilter extends BaseFilter
      *
      * @param array $fields
      * @param array $options
-     * @param \tx_rnbase_IParameters $parameters
-     * @param \tx_rnbase_configurations $configurations
-     * @param string $confId
      */
     protected function initFilter(&$fields, &$options)
     {

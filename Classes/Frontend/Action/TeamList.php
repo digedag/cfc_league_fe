@@ -1,8 +1,18 @@
 <?php
+
+namespace System25\T3sports\Frontend\Action;
+
+use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
+use Sys25\RnBase\Frontend\Filter\Utility\PageBrowserFilter;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use System25\T3sports\Frontend\View\TeamListView;
+use System25\T3sports\Model\Repository\TeamRepository;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,44 +31,51 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 
 /**
  * Controller für die Anzeige einer Teamliste.
  */
-class tx_cfcleaguefe_actions_TeamList extends tx_rnbase_action_BaseIOC
+class TeamList extends AbstractAction
 {
-    public function handleRequest(&$parameters, &$configurations, &$viewdata)
+    private $repo;
+
+    public function __construct(TeamRepository $repo = null)
+    {
+        $this->repo = $repo ?: new TeamRepository();
+    }
+
+    protected function handleRequest(RequestInterface $request)
     {
         // Wir suchen über den Scope, sowie über zusätzlich per TS gesetzte Bedingungen
         // ggf. die Konfiguration aus der TS-Config lesen
-        $srv = tx_cfcleaguefe_util_ServiceRegistry::getTeamService();
-        $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewdata, $this->getConfId());
+        $configurations = $request->getConfigurations();
+        $filter = BaseFilter::createFilter($request, $this->getConfId());
 
         $fields = [];
         $options = [];
         $filter->init($fields, $options, $parameters, $configurations, $this->getConfId());
 
-        tx_rnbase_filter_BaseFilter::handlePageBrowser($configurations, $this->getConfId().'team.pagebrowser', $viewdata, $fields, $options, [
+        // Soll ein PageBrowser verwendet werden
+        $pbFilter = new PageBrowserFilter();
+        $pbFilter->handle($configurations, $request->getConfId().'team.pagebrowser', $request->getViewContext(), $fields, $options, [
             'searchcallback' => [
-                $srv,
+                $this->repo,
                 'search',
             ],
             'pbid' => 'teams',
         ]);
 
-        $teams = $srv->search($fields, $options);
-        $viewdata->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
+        $teams = $this->repo->search($fields, $options);
+        $request->getViewContext()->offsetSet('teams', $teams); // Die Teams für den View bereitstellen
     }
 
-    public function getTemplateName()
+    protected function getTemplateName()
     {
         return 'teamlist';
     }
 
-    public function getViewClassName()
+    protected function getViewClassName()
     {
-        return 'tx_cfcleaguefe_views_TeamList';
+        return TeamListView::class;
     }
 }

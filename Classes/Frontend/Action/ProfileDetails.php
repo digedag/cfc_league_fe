@@ -33,7 +33,7 @@ use System25\T3sports\Utility\ServiceRegistry;
 /**
  * Controller für die Anzeige eines Personenprofils.
  */
-class ProfileView extends AbstractAction
+class ProfileDetails extends AbstractAction
 {
     public static $exclude = [];
 
