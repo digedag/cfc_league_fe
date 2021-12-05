@@ -4,6 +4,7 @@ namespace System25\T3sports\Utility;
 
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Repository\ProfileRepository;
 
 /***************************************************************
@@ -43,6 +44,15 @@ class MatchProfileProvider
         $this->profileRepo = $profileRepo ?: new ProfileRepository();
     }
 
+    /**
+     * Liefert die Spieler eines Spiels.
+     *
+     * @param Match $match
+     * @param string $methodName self::PLAYERS_HOME or self::PLAYERS_GUEST
+     * @param bool $all
+     *
+     * @return Profile[] wenn true dann wird eine Map geliefert. Key ist die UID des Spielers
+     */
     public function getPlayers(Match $match, $methodName, $all = false)
     {
         $key = $methodName.'_'.($all ? 'all' : 'lineup');
@@ -52,6 +62,15 @@ class MatchProfileProvider
             $players = $this->profileRepo->findByUids($playerUids);
             foreach ($players as $player) {
                 $this->players[$match->getUid()][$key][$player->getUid()] = $player;
+            }
+            if (!$all) {
+                $ordered = [];
+                foreach (Strings::intExplode(',', $playerUids) as $uid) {
+                    if (isset($this->players[$match->getUid()][$key][$uid])) {
+                        $ordered[] = $this->players[$match->getUid()][$key][$uid];
+                    }
+                }
+                $this->players[$match->getUid()][$key] = $ordered;
             }
         }
 

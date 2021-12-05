@@ -1,10 +1,12 @@
 <?php
 
 use Sys25\RnBase\Utility\Strings;
+use Sys25\RnBase\Utility\T3General;
 use System25\T3sports\Decorator\MatchNoteDecorator;
 use System25\T3sports\Decorator\ProfileDecorator;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\MatchNote;
+use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchProfileProvider;
 use System25\T3sports\Utility\MatchTicker;
 
@@ -43,7 +45,18 @@ class tx_cfcleaguefe_models_matchreport
 
     protected $_formatter;
 
+    /**
+     * Alle Tickermeldungen des Spiels.
+     *
+     * @var array
+     */
     protected $_tickerArr;
+    /**
+     * Map mit Spieler-UID und Spieler-Instanz. Die Instanz ist mit allen Tickermeldungen des Spiels initialisiert.
+     *
+     * @var array
+     */
+    protected $profileMap = [];
 
     protected $initialized = false;
     protected $mnDecorator;
@@ -242,7 +255,7 @@ class tx_cfcleaguefe_models_matchreport
         $tickerArr = $this->_getMatchTicker();
         if ($this->_configurations->get('tickerTypes')) {
             foreach ($tickerArr as $ticker) {
-                if (!(Tx_Rnbase_Utility_T3General::inList($this->_configurations->get('tickerTypes'), $ticker->getType()))) {
+                if (!(T3General::inList($this->_configurations->get('tickerTypes'), $ticker->getType()))) {
                     $tickers[] = $ticker;
                 }
             }
@@ -445,16 +458,21 @@ class tx_cfcleaguefe_models_matchreport
      */
     protected function _initMatchTicker()
     {
-        $tickerUtil = new MatchTicker();
         if (!is_array($this->_tickerArr)) {
+            $this->profileMap = [];
+            $tickerUtil = new MatchTicker();
             // Der Ticker wird immer chronologisch ermittelt
             $this->_tickerArr = $tickerUtil->getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
             for ($i = 0; $i < count($this->_tickerArr); ++$i) {
+                /* @var $note MatchNote */
                 $note = $this->_tickerArr[$i];
-                $player = $note->getPlayerInstance();
-                if (is_object($player)) {
-                    $player->addMatchNote($note);
+                $profileUid = $note->getPlayer();
+                if ($profileUid) {
+                    /* @var $profile Profile */
+                    $profile = reset($this->matchProfileProvider->getProfiles($this->match, $profileUid));
+                    $profile->addMatchNote($note);
+                    $this->profileMap[$profile->getUid()] = $profile;
                 }
             }
         }
@@ -463,15 +481,14 @@ class tx_cfcleaguefe_models_matchreport
     /**
      * Liefert die gewrappten Namen einer Profilliste.
      *
-     * @param array $profiles
-     *            Array mit den Personen. Kann auch direkt ein Profil sein.
-     * @param string $confIdAll
-     *            TS-Config String. Sollte einen Eintrag profile. enthalten
+     * @param array $profiles Array mit den Personen. Kann auch direkt ein Profil sein.
+     * @param string $confIdAll TS-Config String. Sollte einen Eintrag profile. enthalten
      *
      * @return string mit allen Namen
      */
     protected function _getNames2($profiles, $confIdAll)
     {
+        // Sicherstellen, daß die Notes und die Spieler mit Notes geladen sind.
         $this->_initMatchTicker();
         $ret = $this->_wrapProfiles($profiles, $confIdAll.'profile.');
         // Jetzt noch die einzelnen Strings verbinden
@@ -494,17 +511,19 @@ class tx_cfcleaguefe_models_matchreport
     {
         $ret = [];
         if (!is_array($profiles)) {
-            if (is_object($profiles)) {
-                $profiles = [
-                    $profiles,
-                ];
-            } else {
+            if (!is_object($profiles)) {
                 return [];
             }
+
+            $profiles = [
+                $profiles,
+            ];
         }
 
         foreach ($profiles as $profile) {
             if (is_object($profile)) {
+                // Eine Person mit Spielnotes muss mit Notes verarbeitet werden
+                $profile = array_key_exists($profile->getUid(), $this->profileMap) ? $this->profileMap[$profile->getUid()] : $profile;
                 $name = $this->profileDecorator->wrap($this->_formatter, $confId, $profile);
                 if (strlen($name) > 0) {
                     $ret[] = $name;
@@ -585,7 +604,6 @@ class tx_cfcleaguefe_models_matchreport
             $sep = $hits[1];
         }
         $ret = implode(' - ', $partArr);
-
         // Jetzt noch ein Wrap über alles
         return $this->_formatter->stdWrap($ret, $conf, $this->match->getProperty());
     }

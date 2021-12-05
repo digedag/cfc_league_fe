@@ -1,11 +1,10 @@
 T3sports Frontend
 =================
 
-![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-7.6%20%7C%208.7%20%7C%209.5%20%7C%2010.4-9cf?maxAge=3600&style=flat-square&logo=typo3)
+![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-8.7%20%7C%209.5%20%7C%2010.4-9cf?maxAge=3600&style=flat-square&logo=typo3)
 <a href="https://github.com/digedag/cfc_league_fe"><img src="ext_icon.svg" width="20"></a>
 [![Latest Stable Version](https://img.shields.io/packagist/v/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
 [![Total Downloads](https://img.shields.io/packagist/dt/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
-[![Build Status](https://api.travis-ci.org/digedag/cfc_league_fe.png)](https://travis-ci.org/digedag/cfc_league_fe)
 [![Code Style](https://github.com/digedag/cfc_league_fe/actions/workflows/php.yaml/badge.svg)](https://github.com/digedag/cfc_league_fe/actions/workflows/php.yaml)
 [![License](https://img.shields.io/packagist/l/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
 <a href="https://twitter.com/intent/follow?screen_name=T3sports1">
