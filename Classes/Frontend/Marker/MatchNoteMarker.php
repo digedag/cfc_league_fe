@@ -1,18 +1,20 @@
 <?php
 
+namespace System25\T3sports\Frontend\Marker;
+
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
-use System25\T3sports\Frontend\Marker\MatchMarker;
-use System25\T3sports\Frontend\Marker\ProfileMarker;
-use System25\T3sports\Frontend\Marker\TeamMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\SimpleMarker;
 use System25\T3sports\Model\MatchNote;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Repository\ProfileRepository;
 use System25\T3sports\Model\Team;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,20 +33,17 @@ use System25\T3sports\Model\Team;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_SimpleMarker');
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('tx_rnbase_util_Extensions');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Spielereignisse verantwortlich.
  */
-class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
+class MatchNoteMarker extends SimpleMarker
 {
     private $profileRepo;
 
     public function __construct($options = [])
     {
-        $this->setClassname('tx_cfcleaguefe_models_match_note');
+        $this->setClassname(MatchNote::class);
         parent::__construct($options);
         $this->profileRepo = new ProfileRepository();
     }
@@ -52,7 +51,7 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
     /**
      * @param string $template das HTML-Template
      * @param MatchNote $item das Tickerereignis
-     * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
+     * @param FormatUtil $formatter der zu verwendente Formatter
      * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
      * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll.
      *            Zielseite muss vorbereitet sein.
@@ -90,7 +89,7 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
      *
      * @param string $template
      * @param Profile $sub
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
      *
@@ -113,7 +112,7 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
      *
      * @param string $template
      * @param MatchNote $note
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
      *
@@ -131,7 +130,7 @@ class tx_cfcleaguefe_util_MatchNoteMarker extends tx_rnbase_util_SimpleMarker
     /**
      * @param string $template
      * @param Team $sub
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
      *

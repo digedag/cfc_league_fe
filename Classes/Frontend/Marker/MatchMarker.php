@@ -50,7 +50,7 @@ class MatchMarker extends SimpleMarker
     /** @var TeamMarker */
     private $teamMarker;
 
-    /** @var \tx_cfcleaguefe_util_CompetitionMarker */
+    /** @var CompetitionMarker */
     private $competitionMarker;
 
     /**
@@ -64,7 +64,7 @@ class MatchMarker extends SimpleMarker
         parent::__construct($options);
         // Den TeamMarker erstellen
         $this->teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
-        $this->competitionMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
+        $this->competitionMarker = tx_rnbase::makeInstance(CompetitionMarker::class);
     }
 
     /**
@@ -336,7 +336,7 @@ class MatchMarker extends SimpleMarker
                     $items[] = $tickerHash[$children[$ci]['uid']];
                 }
             }
-            $template = $listBuilder->render($items, false, $template, 'tx_cfcleaguefe_util_MatchNoteMarker', $confId, $markerPrefix, $formatter);
+            $template = $listBuilder->render($items, false, $template, MatchNoteMarker::class, $confId, $markerPrefix, $formatter);
         }
 
         return $template;

@@ -1,8 +1,17 @@
 <?php
+
+namespace System25\T3sports\Frontend\Marker;
+
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Utility\Misc;
+use System25\T3sports\Model\Group;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,35 +30,29 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Altersgruppen verantwortlich.
  */
-class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker
+class GroupMarker extends BaseMarker
 {
     /**
-     * @param string $template
-     *            das HTML-Template
-     * @param tx_cfcleague_models_Group $group
-     *            die Altersklasse
-     * @param tx_rnbase_util_FormatUtil $formatter
-     *            der zu verwendente Formatter
-     * @param string $confId
-     *            Pfad der TS-Config des Vereins, z.B. 'listView.group.'
-     * @param string $marker
-     *            Name des Markers
+     * @param string $template das HTML-Template
+     * @param Group $group die Altersklasse
+     * @param FormatUtil $formatter der zu verwendente Formatter
+     * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.group.'
+     * @param string $marker Name des Markers
      *
      * @return string das geparste Template
      */
-    public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'GROUP')
+    public function parseTemplate($template, $item, $formatter, $confId, $marker = 'GROUP')
     {
         if (!is_object($item)) {
             // Ist kein Objekt vorhanden wird ein leeres Objekt verwendet.
-            $item = self::getEmptyInstance('tx_cfcleague_models_Group');
+            $item = self::getEmptyInstance(Group::class);
         }
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'groupMarker_initRecord', [
-            'item' => &$item,
+        Misc::callHook('cfc_league_fe', 'groupMarker_initRecord', [
+            'item' => $item,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,
@@ -58,10 +61,10 @@ class tx_cfcleaguefe_util_GroupMarker extends tx_rnbase_util_BaseMarker
         // Es wird das MarkerArray mit den Daten des Records gefüllt.
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, 0, $marker.'_', $item->getColumnNames());
         $subpartArray = $wrappedSubpartArray = [];
-        $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $template = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'groupMarker_afterSubst', [
-            'item' => &$item,
+        Misc::callHook('cfc_league_fe', 'groupMarker_afterSubst', [
+            'item' => $item,
             'template' => &$template,
             'confid' => $confId,
             'marker' => $marker,

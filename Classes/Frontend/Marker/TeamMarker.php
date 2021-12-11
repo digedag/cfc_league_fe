@@ -173,7 +173,7 @@ class TeamMarker extends BaseMarker
         $srv = ServiceRegistry::getTeamService();
         $group = $srv->getAgeGroup($item);
 
-        $groupMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_GroupMarker');
+        $groupMarker = tx_rnbase::makeInstance(GroupMarker::class);
         $template = $groupMarker->parseTemplate($template, $group, $formatter, $confId, $markerPrefix);
 
         return $template;

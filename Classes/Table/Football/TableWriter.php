@@ -6,6 +6,7 @@ use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
 use Sys25\RnBase\Frontend\Marker\SimpleMarker;
 use Sys25\RnBase\Frontend\Marker\Templates;
+use System25\T3sports\Frontend\Marker\CompetitionMarker;
 use System25\T3sports\Frontend\Marker\TeamMarker;
 use System25\T3sports\Model\CompetitionPenalty;
 use System25\T3sports\Table\IMatchProvider;
@@ -63,7 +64,7 @@ class TableWriter extends TableWriterBase
         $formatter = $configurations->getFormatter();
         // Zuerst den Wettbewerb
         if (tx_rnbase_util_BaseMarker::containsMarker($template, 'LEAGUE_')) {
-            $compMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
+            $compMarker = tx_rnbase::makeInstance(CompetitionMarker::class);
             $template = $compMarker->parseTemplate($template, $result->getCompetition(), $configurations->getFormatter(), $confId.'league.', 'LEAGUE');
         }
         // $start = microtime(true);

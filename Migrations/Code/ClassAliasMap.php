@@ -47,6 +47,7 @@ return [
     'tx_cfcleaguefe_sv2_VisitorStatistics' => \System25\T3sports\Statistics\Service\VisitorStatistics::class,
     'tx_cfcleaguefe_sv2_TeamStatisticsMarker' => \System25\T3sports\Statistics\TeamStatisticsMarker::class,
 
+    'tx_cfcleaguefe_util_CompetitionMarker' => \System25\T3sports\Frontend\Marker\CompetitionMarker::class,
     'tx_cfcleaguefe_util_ProfileMarker' => \System25\T3sports\Frontend\Marker\ProfileMarker::class,
     'tx_cfcleaguefe_util_MatchMarker' => \System25\T3sports\Frontend\Marker\MatchMarker::class,
     'tx_cfcleaguefe_util_ClubMarker' => \System25\T3sports\Frontend\Marker\ClubMarker::class,
