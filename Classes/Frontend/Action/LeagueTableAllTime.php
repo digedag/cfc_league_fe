@@ -8,6 +8,7 @@ use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\T3General;
 use System25\T3sports\Frontend\View\LeagueTableAllTimeView;
+use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_cfcleaguefe_util_ScopeController as ScopeController;
 use tx_rnbase;
@@ -105,11 +106,11 @@ class LeagueTableAllTime extends LeagueTable
     }
 
     /**
-     * @return tx_cfcleaguefe_util_MatchTable
+     * @return MatchTableBuilder
      */
     protected function getMatchTable()
     {
-        return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
+        return tx_rnbase::makeInstance(MatchTableBuilder::class);
     }
 
     /**

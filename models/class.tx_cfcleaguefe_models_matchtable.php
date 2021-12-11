@@ -151,7 +151,7 @@ class tx_cfcleaguefe_models_matchtable
      *
      * @return array of tx_cfcleaguefe_models_match
      *
-     * @deprecated use tx_cfcleaguefe_util_MatchTable instead
+     * @deprecated use MatchTableBuilder instead
      */
     public function findMatches($saison, $groups, $competitions, $club, $round, $status = '0,1,2', $extended = 0)
     {
