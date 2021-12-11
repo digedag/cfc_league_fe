@@ -3,11 +3,16 @@
 namespace System25\T3sports\Table\Football;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
+use Sys25\RnBase\Frontend\Marker\SimpleMarker;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use System25\T3sports\Frontend\Marker\TeamMarker;
+use System25\T3sports\Model\CompetitionPenalty;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\ITableType;
 use System25\T3sports\Table\TableWriterBase;
-use tx_cfcleague_util_ServiceRegistry;
+use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
 use tx_rnbase_util_BaseMarker;
 use tx_rnbase_util_Templates;
@@ -15,7 +20,7 @@ use tx_rnbase_util_Templates;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -64,19 +69,19 @@ class TableWriter extends TableWriterBase
         // $start = microtime(true);
         $penalties = []; // Strafen sammeln
         $subpartArray = [
-            '###ROWS###' => $this->createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $result, $penalties, $table->getMatchProvider(), $configurations, $confId),
+            '###ROWS###' => $this->createTable(Templates::getSubpart($template, '###ROWS###'), $result, $penalties, $table->getMatchProvider(), $configurations, $confId),
         ];
         // Jetzt die Strafen auflisten
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-        $template = $listBuilder->render($penalties, false, $template, 'tx_rnbase_util_SimpleMarker', $confId.'penalty.', 'PENALTY', $formatter, [
-            'classname' => 'tx_cfcleague_models_CompetitionPenalty',
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
+        $template = $listBuilder->render($penalties, false, $template, SimpleMarker::class, $confId.'penalty.', 'PENALTY', $formatter, [
+            'classname' => CompetitionPenalty::class,
         ]);
 
         $markerArray = [];
         // Die Tabellensteuerung
-        $subpartArray['###CONTROLS###'] = $this->createControls(tx_rnbase_util_Templates::getSubpart($template, '###CONTROLS###'), $result->getConfigurator(), $configurations, $confId.'controls.');
+        $subpartArray['###CONTROLS###'] = $this->createControls(Templates::getSubpart($template, '###CONTROLS###'), $result->getConfigurator(), $configurations, $confId.'controls.');
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
         return $out;
     }
@@ -110,8 +115,8 @@ class TableWriter extends TableWriterBase
             $tableData = $this->cropTable($tableData, $tableSize);
         }
         // Den TeamMarker erstellen
-        $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-        $templateEntry = tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
+        $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
+        $templateEntry = Templates::getSubpart($templateList, '###ROW###');
 
         $parts = [];
         // Die einzelnen Zeilen zusammenbauen
@@ -138,7 +143,7 @@ class TableWriter extends TableWriterBase
             '###ROW###' => implode($configurations->get($confId.'table.implode'), $parts),
         ];
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
 
     /**
@@ -234,7 +239,7 @@ class TableWriter extends TableWriterBase
             ];
             // $arr = Array($items, ($parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : 0));
             $subpartArray['###CONTROL_TABLETYPE###'] = $this->fillControlTemplate(
-                tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'),
+                Templates::getSubpart($template, '###CONTROL_TABLETYPE###'),
                 $arr,
                 $link,
                 'TABLETYPE',
@@ -262,7 +267,7 @@ class TableWriter extends TableWriterBase
             // Die TCA laden
 
             $sports = $configurator->getCompetition()->getSports();
-            $srv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+            $srv = ServiceRegistry::getCompetitionService();
             $systems = $srv->getPointSystems($sports);
             $items = [];
             foreach ($systems as $system) {
@@ -277,9 +282,9 @@ class TableWriter extends TableWriterBase
                 $items,
                 $configurator->getPointSystem(),
             ];
-            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, $link, 'POINTSYSTEM', $configurations, $confId);
+            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, $link, 'POINTSYSTEM', $configurations, $confId);
         }
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
         return $out;
     }
@@ -341,7 +346,7 @@ class TableWriter extends TableWriterBase
             $wrappedSubpartArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK###'] = explode($token, $linkStr);
         }
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
         return $out;
     }

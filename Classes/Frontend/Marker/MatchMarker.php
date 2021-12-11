@@ -47,7 +47,7 @@ class MatchMarker extends SimpleMarker
 {
     private $recursion = 0;
 
-    /** @var \tx_cfcleaguefe_util_TeamMarker */
+    /** @var TeamMarker */
     private $teamMarker;
 
     /** @var \tx_cfcleaguefe_util_CompetitionMarker */
@@ -63,7 +63,7 @@ class MatchMarker extends SimpleMarker
     {
         parent::__construct($options);
         // Den TeamMarker erstellen
-        $this->teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+        $this->teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
         $this->competitionMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_CompetitionMarker');
     }
 
@@ -168,8 +168,9 @@ class MatchMarker extends SimpleMarker
             return '';
         }
         $sets = $item->getSets();
+        /* @var $listBuilder ListBuilder */
         $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
-        $out = $listBuilder->render($sets, false, $template, SimpleMarker::class, $confId, $markerPrefix, $formatter, $options);
+        $out = $listBuilder->render($sets, false, $template, SimpleMarker::class, $confId, $markerPrefix, $formatter);
 
         return $out;
     }
@@ -306,6 +307,7 @@ class MatchMarker extends SimpleMarker
     {
         $configurations = $formatter->getConfigurations();
         $dynaMarkers = $configurations->getKeyNames($matchConfId.'tickerLists.');
+        /* @var $listBuilder ListBuilder */
         $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
 
         for ($i = 0, $size = count($dynaMarkers); $i < $size; ++$i) {

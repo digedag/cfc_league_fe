@@ -9,8 +9,8 @@ use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Maps\Factory;
+use System25\T3sports\Frontend\Marker\TeamMarker;
 use System25\T3sports\Utility\MapsUtil;
-use tx_cfcleaguefe_util_TeamMarker as TeamMarker;
 use tx_rnbase;
 
 /***************************************************************
@@ -76,7 +76,7 @@ class TeamListView extends BaseView
             $map = Factory::createGoogleMap($configurations, $confId);
 
             $template = MapsUtil::getMapTemplate($configurations, $confId, '###TEAM_MAP_MARKER###');
-            $itemMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+            $itemMarker = tx_rnbase::makeInstance(TeamMarker::class);
             foreach ($items as $item) {
                 $marker = $itemMarker->createMapMarker($template, $item, $configurations->getFormatter(), $confId.'team.', $markerPrefix);
                 if (!$marker) {

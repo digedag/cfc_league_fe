@@ -1,6 +1,9 @@
 <?php
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\Templates;
+use System25\T3sports\Frontend\Marker\TeamMarker;
 
 /***************************************************************
  *  Copyright notice
@@ -24,8 +27,6 @@ use Sys25\RnBase\Configuration\ConfigurationInterface;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('Tx_Rnbase_Utility_T3General');
-tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
  * Die Klasse ist in der Lage, Tabellen einer Liga darzustellen.
@@ -37,14 +38,14 @@ class tx_cfcleaguefe_util_LeagueTableWriter
     public function writeLeagueTable($template, $tableData, $marks, &$configurations, $confId)
     {
         $markerArray = $penalties = []; // Strafen sammeln
-        $subpartArray['###ROWS###'] = $this->_createTable(tx_rnbase_util_Templates::getSubpart($template, '###ROWS###'), $tableData, $penalties, $marks, $configurations, $confId);
+        $subpartArray['###ROWS###'] = $this->_createTable(Templates::getSubpart($template, '###ROWS###'), $tableData, $penalties, $marks, $configurations, $confId);
 
         // Jetzt die Strafen auflisten
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'PENALTIES')) {
+        if (BaseMarker::containsMarker($template, 'PENALTIES')) {
             $subpartArray['###PENALTIES###'] = $this->_createPenalties(\tx_rnbase_util_Templates::getSubpart($template, '###PENALTIES###'), $penalties, $configurations);
         }
 
-        $out .= tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
+        $out .= Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
         return $out;
     }
@@ -54,7 +55,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
      *
      * @param ConfigurationInterface $configurations
      */
-    private function _createTable($templateList, $tableData, &$penalties, &$marks, &$configurations, $confId)
+    private function _createTable($templateList, $tableData, &$penalties, &$marks, ConfigurationInterface $configurations, $confId)
     {
         // Sollen alle Teams gezeigt werden?
         $tableSize = $configurations->getInt($confId.'leagueTableSize');
@@ -64,12 +65,12 @@ class tx_cfcleaguefe_util_LeagueTableWriter
             $tableData = $this->_cropTable($tableData, $tableSize);
         }
         // Den TeamMarker erstellen
-        $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
-        $templateEntry = tx_rnbase_util_Templates::getSubpart($templateList, '###ROW###');
+        $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
+        $templateEntry = Templates::getSubpart($templateList, '###ROW###');
 
         $parts = [];
         // Die einzelnen Zeilen zusammenbauen
-        $rowRoll = intval($configurations->get($confId.'table.roll.value'));
+        $rowRoll = $configurations->getInt($confId.'table.roll.value');
         $rowRollCnt = 0;
         foreach ($tableData as $row) {
             $row['roll'] = $rowRollCnt;
@@ -89,7 +90,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
         $markerArray = [];
         $subpartArray['###ROW###'] = implode($parts, $configurations->get($confId.'table.implode'));
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
 
     /**

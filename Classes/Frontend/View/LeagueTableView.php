@@ -9,6 +9,7 @@ use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Link;
+use System25\T3sports\Frontend\Marker\TeamMarker;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Table\ITableType;
 use tx_rnbase;
@@ -147,7 +148,7 @@ class LeagueTableView extends BaseView
             $tableData = $this->_cropTable($tableData, $tableSize);
         }
         // Den TeamMarker erstellen
-        $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+        $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
         $templateEntry = Templates::getSubpart($templateList, '###ROW###');
 
         $parts = [];

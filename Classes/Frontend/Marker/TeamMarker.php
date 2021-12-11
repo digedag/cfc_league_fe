@@ -1,8 +1,24 @@
 <?php
+
+namespace System25\T3sports\Frontend\Marker;
+
+use ArrayObject;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Search\SearchBase;
+use Sys25\RnBase\Utility\Misc;
+use Sys25\RnBase\Utility\Strings;
+use Sys25\RnBase\Utility\TYPO3;
+use System25\T3sports\Model\Club;
+use System25\T3sports\Model\Repository\ProfileRepository;
+use System25\T3sports\Model\Team;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_rnbase;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2017 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,34 +37,29 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
-tx_rnbase::load('tx_rnbase_util_Strings');
 
 /**
  * Diese Klasse ist für die Erstellung von Markerarrays der Teams verantwortlich.
  */
-class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
+class TeamMarker extends BaseMarker
 {
     private $options = null;
+    private $profileRepo;
 
     public function __construct($options = null)
     {
         $this->options = $options;
+        $this->profileRepo = new ProfileRepository();
     }
 
     /**
-     * @param string $template
-     *            das HTML-Template
-     * @param tx_cfcleaguefe_models_team $team
-     *            das Team
-     * @param tx_rnbase_util_FormatUtil $formatter
-     *            der zu verwendente Formatter
-     * @param string $teamConfId
-     *            Pfad der TS-Config des Profils, z.B. 'listView.profile.'
-     * @param array $links
-     *            Array mit Link-Instanzen, wenn Verlinkung möglich sein soll. Zielseite muss vorbereitet sein.
-     * @param string $teamMarker
-     *            Name des Markers für das Team, z.B. TEAM, MATCH_HOME usw.
+     * @param string $template das HTML-Template
+     * @param Team $team das Team
+     * @param FormatUtil $formatter der zu verwendente Formatter
+     * @param string $teamConfId Pfad der TS-Config des Profils, z.B. 'listView.profile.'
+     * @param array $links Array mit Link-Instanzen, wenn Verlinkung möglich sein soll.
+     *          Zielseite muss vorbereitet sein.
+     * @param string $teamMarker Name des Markers für das Team, z.B. TEAM, MATCH_HOME usw.
      *            Von diesem String hängen die entsprechenden weiteren Marker ab: ###COACH_SIGN###, ###COACH_LINK###
      *
      * @return string das geparste Template
@@ -59,7 +70,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             return $formatter->getConfigurations()->getLL('team_notFound');
         }
         $this->prepareRecord($team);
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'teamMarker_initRecord', [
+        Misc::callHook('cfc_league_fe', 'teamMarker_initRecord', [
             'item' => &$team,
             'template' => &$template,
             'confid' => $confId,
@@ -108,7 +119,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
         }
 
         $template = self::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-        tx_rnbase_util_Misc::callHook('cfc_league_fe', 'teamMarker_afterSubst', [
+        Misc::callHook('cfc_league_fe', 'teamMarker_afterSubst', [
             'item' => &$team,
             'template' => &$template,
             'confid' => $confId,
@@ -122,14 +133,15 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     /**
      * Prepare team record before rendering.
      *
-     * @param tx_cfcleaguefe_models_team $item
+     * @param Team $item
      */
-    private function prepareRecord($item)
+    private function prepareRecord(Team $item)
     {
-        $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
+        $srv = ServiceRegistry::getTeamService();
         $group = $srv->getAgeGroup($item);
         // $group = $item->getAgeGroup();
-        $GLOBALS['TSFE']->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->getUid() : 0;
+
+        TYPO3::getTSFE()->register['T3SPORTS_TEAMGROUP'] = is_object($group) ? $group->getUid() : 0;
         $item->setProperty('group', is_object($group) ? $group->getUid() : '0');
         $item->setProperty('agegroup_name', is_object($group) ? $group->getName() : '');
         $item->setProperty('firstpicture', $item->getProperty('dam_images'));
@@ -140,9 +152,9 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
      * Hinzufügen der Daten des Vereins.
      *
      * @param string $template
-     * @param tx_cfcleaguefe_models_club $club
+     * @param Club $club
      */
-    protected function addClubData($template, $club, $formatter, $clubConf, $markerPrefix)
+    protected function addClubData($template, Club $club, $formatter, $clubConf, $markerPrefix)
     {
         $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
         $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
@@ -154,11 +166,11 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
      * Hinzufügen der Altersklasse.
      *
      * @param string $template
-     * @param tx_cfcleaguefe_models_team $item
+     * @param Team $item
      */
     protected function addGroup($template, $item, $formatter, $confId, $markerPrefix)
     {
-        $srv = tx_cfcleague_util_ServiceRegistry::getTeamService();
+        $srv = ServiceRegistry::getTeamService();
         $group = $srv->getAgeGroup($item);
 
         $groupMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_GroupMarker');
@@ -170,31 +182,25 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     /**
      * Hinzufügen der Spieler des Teams.
      *
-     * @param string $template
-     *            HTML-Template für die Profile
-     * @param tx_cfcleaguefe_models_team $team
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     *            Config-String für den Wrap der Profile
-     * @param string $markerPrefix
-     *            Prefix für die Daten des Profile-Records
-     * @param string $joinCol
-     *            Name der Teamspalte mit den Profilen players, coaches, supporters
+     * @param string $template HTML-Template für die Profile
+     * @param Team $team
+     * @param FormatUtil $formatter
+     * @param string $confId Config-String für den Wrap der Profile
+     * @param string $markerPrefix Prefix für die Daten des Profile-Records
+     * @param string $joinCol Name der Teamspalte mit den Profilen players, coaches, supporters
      */
-    private function addProfiles($template, $team, $formatter, $confId, $markerPrefix, $joinCol)
+    private function addProfiles($template, Team $team, FormatUtil $formatter, $confId, $markerPrefix, $joinCol)
     {
         // Ohne Template gibt es nichts zu tun!
         if (0 == strlen(trim($template))) {
             return '';
         }
 
-        // $srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
-        $srv = tx_cfcleaguefe_util_ServiceRegistry::getProfileService();
         $fields = $options = [];
         $fields['PROFILE.UID'][OP_IN_INT] = $team->getProperty($joinCol);
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
-        $children = $srv->search($fields, $options);
+        SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
+        SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
+        $children = $this->profileRepo->search($fields, $options);
         if (!empty($children) && !array_key_exists('orderby', $options)) { // Default sorting
             $children = $this->sortProfiles($children, $team->getProperty($joinCol));
         }
@@ -216,7 +222,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
      */
     protected function sortProfiles($profiles, $sortArr)
     {
-        $sortArr = array_flip(tx_rnbase_util_Strings::intExplode(',', $sortArr));
+        $sortArr = array_flip(Strings::intExplode(',', $sortArr));
         foreach ($profiles as $profile) {
             $sortArr[$profile->uid] = $profile;
         }
@@ -231,7 +237,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     /**
      * Initialisiert die Labels für die Team-Klasse.
      *
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      * @param array $defaultMarkerArr
      */
     public function initLabelMarkers(&$formatter, $confId, $defaultMarkerArr = 0, $marker = 'TEAM')
@@ -240,12 +246,12 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     }
 
     /**
-     * @return tx_cfcleaguefe_util_ClubMarker
+     * @return ClubMarker
      */
-    private function getClubMarker()
+    private function getClubMarker(): ClubMarker
     {
         if (!$this->clubMarker) {
-            $this->clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
+            $this->clubMarker = tx_rnbase::makeInstance(ClubMarker::class);
         }
 
         return $this->clubMarker;
@@ -256,9 +262,9 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
      * This can be done if the team has a club with address data.
      *
      * @param string $template
-     * @param tx_cfcleague_models_Team $item
+     * @param Team $item
      */
-    public function createMapMarker($template, $item, $formatter, $confId, $markerPrefix)
+    public function createMapMarker($template, Team $item, $formatter, $confId, $markerPrefix)
     {
         $club = $item->getClub();
         if (!$club) {
@@ -274,14 +280,14 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     /**
      * Links vorbereiten.
      *
-     * @param tx_cfcleaguefe_models_team $team
+     * @param Team $team
      * @param string $marker
      * @param array $markerArray
      * @param array $wrappedSubpartArray
      * @param string $confId
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      */
-    protected function prepareLinks(&$team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template)
+    protected function prepareLinks($team, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
         $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'showmatchtable', $marker, [
             'teamId' => $team->uid,
@@ -302,8 +308,8 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
      * Add dynamic defined markers for profiles.
      *
      * @param string $template
-     * @param tx_cfcleaguefe_models_team $team
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param Team $team
+     * @param FormatUtil $formatter
      * @param string $listConfId
      * @param string $teamMarker
      *
@@ -324,11 +330,11 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
             $confId = $listConfId.$dynaMarkers[$i].'.';
             // Jetzt der DB Zugriff. Wir benötigen aber eigentlich nur die UIDs. Die eigentlichen Objekte
             // stehen schon im report bereit
-            $srv = tx_cfcleague_util_ServiceRegistry::getProfileService();
+            $srv = ServiceRegistry::getProfileService();
             $fields = [];
             $options = [];
-            tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
-            tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
+            SearchBase::setConfigFields($fields, $configurations, $confId.'filter.fields.');
+            SearchBase::setConfigOptions($options, $configurations, $confId.'filter.options.');
             if ($this->joins($fields, 'TEAMNOTE')) {
                 $fields['TEAMNOTE.TEAM'][OP_EQ_INT] = $team->getUid();
             } else {
@@ -362,7 +368,7 @@ class tx_cfcleaguefe_util_TeamMarker extends tx_rnbase_util_BaseMarker
     protected function joins($fields, $alias)
     {
         foreach ($fields as $key => $op) {
-            if (Tx_Rnbase_Utility_Strings::isFirstPartOfStr($key, $alias)) {
+            if (Strings::isFirstPartOfStr($key, $alias)) {
                 return true;
             }
         }

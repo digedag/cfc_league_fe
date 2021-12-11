@@ -5,6 +5,7 @@ namespace System25\T3sports\Frontend\View;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
+use System25\T3sports\Frontend\Marker\TeamMarker;
 use tx_rnbase;
 
 /***************************************************************
@@ -56,7 +57,7 @@ class TeamDetailsView extends BaseView
     {
         $out = '';
 
-        $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+        $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
         $out .= $teamMarker->parseTemplate($template, $team, $configurations->getFormatter(), 'teamview.team.', 'TEAM');
 
         return $out;

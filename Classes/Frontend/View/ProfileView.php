@@ -9,6 +9,7 @@ use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Frontend\Marker\ProfileMarker;
+use System25\T3sports\Frontend\Marker\TeamMarker;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Utility\ServiceRegistry;
@@ -86,7 +87,7 @@ class ProfileView extends BaseView
         $markerArray = $subpartArray = $wrappedSubpartArray = [];
 
         if ($teamId) {
-            $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+            $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
             $out = $teamMarker->parseTemplate($out, $team, $configurations->getFormatter(), 'profileview.team.', 'TEAM');
             $wrappedSubpartArray['###TEAM###'] = [
                 '',

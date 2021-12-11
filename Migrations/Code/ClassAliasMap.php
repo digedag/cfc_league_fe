@@ -52,6 +52,7 @@ return [
     'tx_cfcleaguefe_util_ClubMarker' => \System25\T3sports\Frontend\Marker\ClubMarker::class,
     'tx_cfcleaguefe_util_StadiumMarker' => \System25\T3sports\Frontend\Marker\StadiumMarker::class,
     'tx_cfcleaguefe_util_AddressMarker' => \System25\T3sports\Frontend\Marker\AddressMarker::class,
+    'tx_cfcleaguefe_util_TeamMarker' => \System25\T3sports\Frontend\Marker\TeamMarker::class,
     'tx_cfcleaguefe_util_Maps' => \System25\T3sports\Utility\MapsUtil::class,
 
     'tx_cfcleaguefe_models_address' => \System25\T3sports\Model\Address::class,

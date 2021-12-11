@@ -290,6 +290,7 @@ class tx_cfcleaguefe_models_match_note extends tx_cfcleague_models_MatchNote
      * @return tx_cfcleaguefe_models_profile ein Profil oder 0
      *
      * @deprecated MatchNoteDecorator
+     * @deprecated use ProfileRepository::findByMatchNote()
      */
     public function getPlayerInstance()
     {

@@ -152,8 +152,8 @@ class ClubMarker extends BaseMarker
         SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
         $children = $srv->searchTeams($fields, $options);
 
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
-        $out = $listBuilder->render($children, false, $template, 'tx_cfcleaguefe_util_TeamMarker', $confId, $markerPrefix, $formatter);
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
+        $out = $listBuilder->render($children, false, $template, TeamMarker::class, $confId, $markerPrefix, $formatter);
 
         return $out;
     }

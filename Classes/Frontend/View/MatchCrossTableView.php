@@ -11,6 +11,7 @@ use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
+use System25\T3sports\Frontend\Marker\TeamMarker;
 use System25\T3sports\Model\Match;
 use tx_rnbase;
 
@@ -159,7 +160,7 @@ class MatchCrossTableView extends BaseView
         $freeTemplate = Templates::getSubpart($template, '###MATCH_FREE###');
         $rowRoll = $configurations->getInt('matchcrosstable.dataline.match.roll.value');
 
-        $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+        $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
         $listBuilder = tx_rnbase::makeInstance(ListBuilder::class, tx_rnbase::makeInstance(MatchMarkerBuilderInfo::class));
 
         $lines = [];
@@ -197,7 +198,7 @@ class MatchCrossTableView extends BaseView
     private function _createHeadline($template, &$teams, ConfigurationInterface $configurations)
     {
         // Im Prinzip eine normale Teamliste...
-        $teamMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_TeamMarker');
+        $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
         $subTemplate = Templates::getSubpart($template, '###TEAM###');
         $rowRoll = $configurations->getInt('matchcrosstable.headline.team.roll.value');
         $rowRollCnt = 0;
