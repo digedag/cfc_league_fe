@@ -1,11 +1,16 @@
 <?php
 
+namespace System25\T3sports\Utility;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
 use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Math;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\CompetitionRound;
+use System25\T3sports\Model\Group;
 use System25\T3sports\Model\Repository\ClubRepository;
-use System25\T3sports\Utility\ServiceRegistry;
+use System25\T3sports\Model\Repository\SaisonRepository;
 
 /***************************************************************
  *  Copyright notice
@@ -40,7 +45,7 @@ use System25\T3sports\Utility\ServiceRegistry;
  * den FE-User geändert werden können, dann werden bei Abruf des aktuellen Scopes
  * automatisch die notwendigen Daten vorbereitet und in der ViewData abgelegt.
  */
-class tx_cfcleaguefe_util_ScopeController
+class ScopeController
 {
     // Speichert die UID des aktuellen cObject
     private static $_cObjectUID = [];
@@ -55,13 +60,13 @@ class tx_cfcleaguefe_util_ScopeController
      * vorbereitet und in die viewData der Config gelegt.
      * Es wird ein Array mit dem aktuell gültigen Scope zurückgeliefert.
      *
-     * @param tx_rnbase_IParameters $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ParametersInterface $parameters
+     * @param ConfigurationInterface $configurations
      * @param bool $useObjects Wenn true werden ganze Objekte
      *
      * @return array mit den UIDs als String
      */
-    public static function handleCurrentScope($parameters, $configurations, $useObjects = false)
+    public static function handleCurrentScope(ParametersInterface $parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
         $cObjUid = $configurations->getCObj()->data['uid'];
         // Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
@@ -90,9 +95,9 @@ class tx_cfcleaguefe_util_ScopeController
      * Setzt die aktuellen Userdaten in ein TYPO3-Register.
      * Damit können sie per Typoscript abgefragt und in Links verwendet werden.
      *
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      */
-    private static function setScopeParams(&$configurations)
+    private static function setScopeParams(ConfigurationInterface $configurations)
     {
         if (!count(self::$_scopeParams)) {
             return;
@@ -111,22 +116,23 @@ class tx_cfcleaguefe_util_ScopeController
      * Durch den Aufruf werden gleichzeitig die Daten für die Select-Boxen
      * vorbereitet und in die viewData der Config gelegt.
      *
-     * @param tx_rnbase_IParameters $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ParametersInterface $parameters
+     * @param ConfigurationInterface $configurations
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentSaison($parameters, &$configurations, $useObjects = false)
+    private static function handleCurrentSaison($parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
-        $viewData = &$configurations->getViewData();
+        $viewData = $configurations->getViewData();
         $saisonUids = $configurations->get('saisonSelection');
 
         // Soll eine SelectBox für Saison gezeigt werden?
         if ($configurations->get('saisonSelectionInput')) {
+            $saisonRepo = new SaisonRepository();
             // Die UIDs der Saisons in Objekte umwandeln, um eine Selectbox zu bauen
             // TODO: Es sollten zusätzliche Kriterien zur Ermittlung der Saisons herangezogen werden
             // Einfach alle Saisons zu zeigen führt zu vielen leeren Seiten
-            $saisons = tx_cfcleaguefe_models_saison::findItems($saisonUids);
+            $saisons = $saisonRepo->findByUids($saisonUids);
             $dataArr = self::_prepareSelect($saisons, $parameters, 'saison', $useObjects ? '' : 'name');
             $saisonUids = $dataArr[1];
             $viewData->offsetSet('saison_select', $dataArr);
@@ -144,15 +150,15 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentCompetitionGroup($parameters, $configurations, $useObjects = false)
+    private static function handleCurrentCompetitionGroup($parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
-        $viewData = &$configurations->getViewData();
+        $viewData = $configurations->getViewData();
         $groupUids = $configurations->get('groupSelection');
 
         // Soll eine SelectBox für Altersgruppe gezeigt werden?
         if ($configurations->get('groupSelectionInput')) {
             // Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
-            $groups = tx_cfcleague_models_Group::findAll($groupUids);
+            $groups = Group::findAll($groupUids);
             $dataArr = self::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
             $groupUids = $dataArr[1];
             $viewData->offsetSet('group_select', $dataArr);
@@ -170,7 +176,7 @@ class tx_cfcleaguefe_util_ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentTeamGroup($parameters, &$configurations, $useObjects = false)
+    private static function handleCurrentTeamGroup($parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
         $viewData = $configurations->getViewData();
         $groupUids = $configurations->get('scope.teamGroup');
@@ -178,7 +184,7 @@ class tx_cfcleaguefe_util_ScopeController
         // Soll eine SelectBox für Altersgruppe gezeigt werden?
         if ($configurations->get('scope.teamGroupSelectionInput')) {
             // Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
-            $groups = tx_cfcleague_models_Group::findAll($groupUids);
+            $groups = Group::findAll($groupUids);
             $dataArr = self::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
             $groupUids = $dataArr[1];
             $viewData->offsetSet('teamgroup_select', $dataArr);
@@ -231,7 +237,7 @@ class tx_cfcleaguefe_util_ScopeController
 
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
         // Wenn die RoundSelection aktiviert ist, dann wird die Wettbewerbs-Selection automatisch mit aktiviert
-        if ($configurations->get('competitionSelectionInput') || ($configurations->get('roundSelectionInput') && !tx_rnbase_util_Math::testInt($compUids))) {
+        if ($configurations->get('competitionSelectionInput') || ($configurations->get('roundSelectionInput') && !Math::isInteger($compUids))) {
             // Die UIDs der Wettkämpfe in Objekte umwandeln, um eine Selectbox zu bauen
             // Suche der Wettbewerbe über den Service
             $compServ = ServiceRegistry::getCompetitionService();
@@ -322,8 +328,8 @@ class tx_cfcleaguefe_util_ScopeController
      * Liefert ein Array für die Erstellung der Select-Box für die Spielrunden einer Liga.
      *
      * @param CompetitionRound $rounds
-     * @param tx_rnbase_IParameters $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ParametersInterface $parameters
+     * @param ConfigurationInterface $configurations
      * @param $confId
      * @param string $displayAttrName
      *

@@ -4,7 +4,7 @@ namespace System25\T3sports\Filter;
 
 use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use System25\T3sports\Search\SearchBuilder;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use System25\T3sports\Utility\ScopeController;
 
 /**
  * *************************************************************

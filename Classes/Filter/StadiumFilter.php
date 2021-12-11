@@ -2,6 +2,9 @@
 
 namespace System25\T3sports\Filter;
 
+use System25\T3sports\Search\SearchBuilder;
+use System25\T3sports\Utility\ScopeController;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -43,7 +46,7 @@ class StadiumFilter extends \tx_rnbase_filter_BaseFilter
     protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
     {
         $options['distinct'] = 1;
-        $scopeArr = \tx_cfcleaguefe_util_ScopeController::handleCurrentScope($parameters, $configurations);
+        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
         SearchBuilder::buildStadiumByScope($fields, $scopeArr);
     }
 }

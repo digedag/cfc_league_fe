@@ -2,12 +2,14 @@
 
 namespace System25\T3sports\Frontend\Action;
 
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Search\SearchBase;
 use System25\T3sports\Frontend\View\LiveTickerListView;
+use System25\T3sports\Utility\MatchTableBuilder;
+use System25\T3sports\Utility\ScopeController;
 use System25\T3sports\Utility\ServiceRegistry;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
 use tx_rnbase;
 
 /***************************************************************
@@ -71,7 +73,7 @@ class LiveTickerList extends AbstractAction
      * @param array $fields
      * @param array $options
      * @param array $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      */
     protected function initSearch(&$fields, &$options, &$parameters, &$configurations)
     {
@@ -93,18 +95,18 @@ class LiveTickerList extends AbstractAction
     }
 
     /**
-     * @return tx_cfcleaguefe_util_MatchTable
+     * @return MatchTableBuilder
      */
     public function getMatchTable()
     {
-        return tx_rnbase::makeInstance('tx_cfcleaguefe_util_MatchTable');
+        return tx_rnbase::makeInstance(MatchTableBuilder::class);
     }
 
     /**
      * Initializes page browser.
      *
      * @param arrayobject $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ConfigurationInterface $configurations
      * @param arrayobject $viewdata
      * @param array $fields
      * @param array $options

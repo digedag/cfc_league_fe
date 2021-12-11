@@ -7,7 +7,7 @@ use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchTableBuilder;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use System25\T3sports\Utility\ScopeController;
 
 /***************************************************************
 *  Copyright notice

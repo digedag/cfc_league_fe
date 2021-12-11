@@ -9,7 +9,7 @@ use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Frontend\View\LeagueTableView;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Table\Builder;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
+use System25\T3sports\Utility\ScopeController;
 use tx_rnbase;
 
 /***************************************************************
