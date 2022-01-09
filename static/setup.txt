@@ -14,7 +14,7 @@ plugin.tx_cfcleaguefe_competition.userFunc       = tx_rnbase_controller->main
 plugin.tx_cfcleaguefe_competition.defaultAction  = tx_cfcleaguefe_actions_MatchTable
 plugin.tx_cfcleaguefe_competition.qualifier      = cfc_league_fe
 plugin.tx_cfcleaguefe_competition.extensionKey   = cfc_league_fe
-plugin.tx_cfcleaguefe_competition.templatePath   = EXT:cfc_league_fe/views/templates
+plugin.tx_cfcleaguefe_competition.templatePath   = EXT:cfc_league_fe/Resources/Private/Templates/Html
 plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallang.xml
 
 # This is the default TS-Setup for team notes.
@@ -652,12 +652,12 @@ plugin.tx_cfcleaguefe_competition {
       roll.value = 1
 #      team.name.wrap = -|-
       markClub {
-        override = cfcleague-leaguetable-rowTeam
+        override = font-weight-bold
         if.value = 1
         if.equals.field = markClub
       }
       markClubsIsRunningGame {
-        override = cfcleague-leaguetable-runningGame
+        override = font-weight-bold text-italic
         if.value = 1
         if.equals.field = markClubsIsRunningGame
       }
@@ -1671,6 +1671,16 @@ plugin.tx_cfcleaguefe_report {
       leaguetable {
         template = EXT:cfc_league_fe/Resources/Private/Templates/Html/leaguetable_teaser.html
         subpartName = ###LEAGUE_TABLE###
+        table =< lib.t3sports.teamSmall
+        table {
+          roll.value = 1
+          team.name.wrap = -|-
+          markClub {
+            override = font-weight-bold
+            if.value = 1
+            if.equals.field = markClub
+          }
+        }
       }
     }
 

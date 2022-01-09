@@ -2,12 +2,15 @@
 
 namespace System25\T3sports\Table;
 
-use tx_cfcleaguefe_models_team;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\CompetitionPenalty;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Team;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,28 +40,28 @@ interface IMatchProvider
      * It is normally used to retrieve some basic
      * configuration for table calculation.
      *
-     * @return \tx_cfcleague_models_Competition
+     * @return Competition
      */
     public function getBaseCompetition();
 
     /**
      * Match penalties to handle.
      *
-     * @return array[tx_cfcleaguefe_models_penalty]
+     * @return CompetitionPenalty[]
      */
     public function getPenalties();
 
     /**
      * Teams to handle.
      *
-     * @return array[tx_cfcleaguefe_models_team]
+     * @return Team[]
      */
     public function getTeams();
 
     /**
      * Matches sorted by rounds.
      *
-     * @return array[int][tx_cfcleaguefe_models_match]
+     * @return array[int][Match]
      */
     public function getRounds();
 
@@ -79,11 +82,8 @@ interface IMatchProvider
      */
     public function getTableMarks();
 
-    // /**
-    // * Return a unique key for a given team. This is not necessarily the uid of the team. Maybe it is
-    // * wanted to join some team results.
-    // *
-    // * @param tx_cfcleaguefe_models_team $team
-    // */
-    // public function getTeamId($team);
+    /**
+     * @param IConfigurator $configurator
+     */
+    public function setConfigurator(IConfigurator $configurator);
 }

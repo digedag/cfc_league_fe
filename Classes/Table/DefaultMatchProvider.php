@@ -3,15 +3,18 @@
 namespace System25\T3sports\Table;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Search\SearchBase;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Repository\MatchRepository;
+use System25\T3sports\Model\Team;
 use System25\T3sports\Search\SearchBuilder;
-use tx_cfcleague_models_Competition;
-use tx_cfcleague_util_ServiceRegistry;
-use tx_rnbase_util_SearchBase;
+use System25\T3sports\Utility\MatchTableBuilder;
+use System25\T3sports\Utility\ServiceRegistry;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -43,24 +46,35 @@ class DefaultMatchProvider implements IMatchProvider
 
     private $confId;
 
-    private $league = 0;
+    /**
+     * @var Competition
+     */
+    private $league = null;
 
     private $scope;
 
     /**
-     * @var \tx_cfcleague_util_MatchTableBuilder
+     * @var int
      */
-    private $matchTable;
+    private $currRound = 0;
 
-    public function __construct($configurations, $confId)
+    private $matchRepo;
+
+    /**
+     * @var MatchTableBuilder
+     */
+    private $matchTableBuilder;
+
+    public function __construct($configurations, $confId, MatchRepository $matchRepo = null)
     {
         $this->configurations = $configurations;
         $this->confId = $confId;
+        $this->matchRepo = $matchRepo ?: new MatchRepository();
     }
 
-    public function setMatchTable($matchTable)
+    public function setMatchTable(MatchTableBuilder $matchTableBuilder)
     {
-        $this->matchTable = $matchTable;
+        $this->matchTableBuilder = $matchTableBuilder;
     }
 
     public function setScope($scope)
@@ -73,7 +87,12 @@ class DefaultMatchProvider implements IMatchProvider
         return $this->scope;
     }
 
-    public function setConfigurator($configurator)
+    /**
+     * {@inheritDoc}
+     *
+     * @see \System25\T3sports\Table\IMatchProvider::setConfigurator()
+     */
+    public function setConfigurator(IConfigurator $configurator)
     {
         $this->configurator = $configurator;
     }
@@ -90,9 +109,9 @@ class DefaultMatchProvider implements IMatchProvider
      * It is possible to set teams from external.
      * Useful to avoid database access.
      *
-     * @param array[\tx_cfcleague_models_Team] $teams
+     * @param Team[] $teams
      */
-    public function setTeams($teams)
+    public function setTeams(array $teams)
     {
         $this->teams = $teams;
     }
@@ -103,7 +122,7 @@ class DefaultMatchProvider implements IMatchProvider
      * But for alltime table, teams are useless. It exists one saison only!
      * So for alltime table clubs are returned.
      *
-     * @return array[\tx_cfcleague_models_Team]
+     * @return Team[]
      */
     public function getTeams()
     {
@@ -133,7 +152,7 @@ class DefaultMatchProvider implements IMatchProvider
 
         $options['distinct'] = 1;
         $options['orderby']['TEAM.SORTING'] = 'asc'; // Nach Sortierung auf Seite
-        $teams = tx_cfcleague_util_ServiceRegistry::getTeamService()->searchTeams($fields, $options);
+        $teams = ServiceRegistry::getTeamService()->searchTeams($fields, $options);
         $useClubs = $this->useClubs();
         foreach ($teams as $team) {
             if (!$useClubs) {
@@ -142,7 +161,7 @@ class DefaultMatchProvider implements IMatchProvider
                 }
             } else {
                 $club = $team->getClub();
-                if ($club->getUid() && !array_key_exists($club->getUid(), $this->teams)) {
+                if ($club && !array_key_exists($club->getUid(), $this->teams)) {
                     $club->setProperty('club', $club->getUid()); // necessary for mark clubs
                     $this->teams[$club->getUid()] = $club;
                 }
@@ -155,19 +174,19 @@ class DefaultMatchProvider implements IMatchProvider
     private function useClubs()
     {
         // Wenn die Tabelle über mehrere Saisons geht, dann müssen Clubs verwendet werden
-        $matchTable = $this->getMatchTable();
+        $matchTable = $this->getMatchTableBuilder();
         $fields = [];
         $options = [];
         $matchTable->getFields($fields, $options);
         $options['what'] = 'count(DISTINCT COMPETITION.SAISON) AS `saison`';
-        $compSrv = tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+        $compSrv = ServiceRegistry::getCompetitionService();
         $result = $compSrv->search($fields, $options);
 
         return intval($result[0]['saison']) > 1;
     }
 
     /**
-     * @return \tx_cfcleague_models_Competition
+     * @return Competition
      */
     public function getBaseCompetition()
     {
@@ -176,11 +195,11 @@ class DefaultMatchProvider implements IMatchProvider
 
     /**
      * If table is written for a single league, this league will be returned.
-     * return tx_cfcleague_models_Competition or false.
+     * return Competition|null.
      */
     protected function getLeague()
     {
-        if (0 === $this->league) {
+        if (null === $this->league) {
             // Den Wettbewerb müssen wir initial auf Basis des Scopes laden.
             $this->league = self::getLeagueFromScope($this->scope);
         }
@@ -217,16 +236,16 @@ class DefaultMatchProvider implements IMatchProvider
     }
 
     /**
-     * @return \tx_cfcleague_util_MatchTableBuilder
+     * @return MatchTableBuilder
      */
-    private function getMatchTable()
+    private function getMatchTableBuilder()
     {
-        if (is_object($this->matchTable)) {
-            return $this->matchTable;
+        if (is_object($this->matchTableBuilder)) {
+            return $this->matchTableBuilder;
         }
 
-        // Todo: Was ist, wenn MatchTable nicht extern gesetzt wurde??
-        $matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
+        // Was ist, wenn der MatchTableBuilder nicht extern gesetzt wurde??
+        $matchSrv = ServiceRegistry::getMatchService();
         $matchTable = $matchSrv->getMatchTableBuilder();
         $matchTable->setStatus($this->getMatchStatus()); // Status der Spiele
         // Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem
@@ -244,9 +263,9 @@ class DefaultMatchProvider implements IMatchProvider
             unset($scopeArr['ROUND_UIDS']);
             $matchTable->setScope($scopeArr);
         }
-        $this->matchTable = $matchTable;
+        $this->matchTableBuilder = $matchTable;
 
-        return $this->matchTable;
+        return $this->matchTableBuilder;
     }
 
     private function getMatchStatus()
@@ -274,19 +293,19 @@ class DefaultMatchProvider implements IMatchProvider
             return $this->matches;
         }
 
-        $matchTable = $this->getMatchTable();
+        $matchTableBuilder = $this->getMatchTableBuilder();
         $fields = [];
         $options = [];
         $options['orderby']['MATCH.ROUND'] = 'asc';
-        $matchTable->getFields($fields, $options);
+        $matchTableBuilder->getFields($fields, $options);
         // Bei der Spielrunde gehen sowohl der TableScope (Hin-Rückrunde) als auch
         // die currRound ein: Rückrundentabelle bis Spieltag X -> JOINED Field
         // Haben wir eine $currRound
-        tx_rnbase_util_SearchBase::setConfigFields($fields, $this->configurations, $this->confId.'filter.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $this->configurations, $this->confId.'filter.options.');
+        SearchBase::setConfigFields($fields, $this->configurations, $this->confId.'filter.fields.');
+        SearchBase::setConfigOptions($options, $this->configurations, $this->confId.'filter.options.');
 
         $this->modifyMatchFields($fields, $options);
-        $this->matches = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
+        $this->matches = $this->matchRepo->search($fields, $options);
 
         return $this->matches;
     }
@@ -317,12 +336,12 @@ class DefaultMatchProvider implements IMatchProvider
      *
      * @param array $scopeArr
      *
-     * @return tx_cfcleague_models_Competition
+     * @return Competition
      */
     public static function getLeagueFromScope($scopeArr)
     {
         if (!($scopeArr['COMP_UIDS'] && $scopeArr['COMP_UIDS'] == intval($scopeArr['COMP_UIDS']))) {
-            $matchSrv = tx_cfcleague_util_ServiceRegistry::getMatchService();
+            $matchSrv = ServiceRegistry::getMatchService();
             $matchTable = $matchSrv->getMatchTableBuilder();
             $matchTable->setScope($scopeArr);
 
@@ -331,16 +350,16 @@ class DefaultMatchProvider implements IMatchProvider
             $matchTable->getFields($fields, $options);
             $options['what'] = 'distinct competition';
 
-            $result = tx_cfcleague_util_ServiceRegistry::getMatchService()->search($fields, $options);
+            $result = ServiceRegistry::getMatchService()->search($fields, $options);
             // es wird immer nur der 1. Wettbewerb verwendet
             $leagueUid = count($result) ? $result[0]['competition'] : false;
         } else {
-            $leagueUid = intval($scopeArr['COMP_UIDS']);
+            $leagueUid = (int) $scopeArr['COMP_UIDS'];
         }
         if (!$leagueUid) {
             throw new \Exception('Could not find a valid competition.');
         }
-        $league = tx_cfcleague_models_Competition::getCompetitionInstance($leagueUid);
+        $league = Competition::getCompetitionInstance($leagueUid);
         if (!$league->isValid()) {
             throw new \Exception('Competition with uid '.intval($leagueUid).' is not valid!');
         }
@@ -358,5 +377,10 @@ class DefaultMatchProvider implements IMatchProvider
     public function getTableMarks()
     {
         return $this->getLeague()->getTableMarks();
+    }
+
+    public function setCurrentRound($round)
+    {
+        $this->currRound = $round;
     }
 }

@@ -1,4 +1,14 @@
 <?php
+
+namespace System25\T3sports\Statistics;
+
+use Sys25\RnBase\Frontend\Marker\ListProvider;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Repository\MatchNoteRepository;
+use System25\T3sports\Model\Repository\MatchRepository;
+use System25\T3sports\Utility\MatchTableBuilder;
+use tx_rnbase;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -22,27 +32,37 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_cfcleaguefe_models_match_note');
-
 /**
  * Erstellung von Statistiken.
  */
-class tx_cfcleaguefe_util_Statistics
+class Statistics
 {
+    private $clubId;
+    private $matchRepo;
+    private $matchNodeRepo;
+    private $servicesArr;
+    private $serviceKeys;
+    private $servicesArrCnt;
+
+    public function __construct(MatchNoteRepository $mnRepo = null)
+    {
+        $this->matchRepo = new MatchRepository();
+        $this->matchNodeRepo = $mnRepo ?: new MatchNoteRepository();
+    }
+
     /**
      * Returns a new instance.
      *
-     * @return tx_cfcleaguefe_util_Statistics
+     * @return Statistics
      */
     public static function createInstance()
     {
-        return tx_rnbase::makeInstance('tx_cfcleaguefe_util_Statistics');
+        return tx_rnbase::makeInstance(Statistics::class);
     }
 
-    public function createStatisticsCallback($scopeArr, &$services, &$configuration, &$parameters)
+    public function createStatisticsCallback($scopeArr, $services, $configuration, $parameters)
     {
-        $service = tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
-        $matchtable = $service->getMatchTable();
+        $matchtable = new MatchTableBuilder();
         $matchtable->setScope($scopeArr);
         $matchtable->setStatus(2);
         $fields = [];
@@ -50,8 +70,8 @@ class tx_cfcleaguefe_util_Statistics
         $options['orderby']['MATCH.DATE'] = 'asc';
         //		$options['debug'] = 1;
         $matchtable->getFields($fields, $options);
-        $prov = tx_rnbase::makeInstance('tx_rnbase_util_ListProvider');
-        $prov->initBySearch([$service, 'search'], $fields, $options);
+        $prov = tx_rnbase::makeInstance(ListProvider::class);
+        $prov->initBySearch([$this->matchRepo, 'search'], $fields, $options);
 
         $this->initServices($services, $scopeArr, $configuration, $parameters);
         $prov->iterateAll([$this, 'handleMatch']);
@@ -62,12 +82,12 @@ class tx_cfcleaguefe_util_Statistics
 
     private function initServices($services, $scopeArr, $configuration, $parameters)
     {
+        // Das scheint unnötig kompliziert zu sein...
         $this->clubId = $scopeArr['CLUB_UIDS'];
         $this->servicesArr = array_values($services);
         $this->serviceKeys = array_keys($services);
         $this->servicesArrCnt = count($this->servicesArr);
-        for ($i = 0; $i < $servicesArrCnt; ++$i) {
-            $service = &$servicesArr[$i];
+        foreach ($services as $service) {
             $service->prepare($scopeArr, $configuration, $parameters);
         }
     }
@@ -75,12 +95,12 @@ class tx_cfcleaguefe_util_Statistics
     /**
      * Callback methode.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      */
-    public function handleMatch($match)
+    public function handleMatch(Match $match)
     {
         $matches = [$match];
-        $matches = tx_cfcleaguefe_models_match_note::retrieveMatchNotes($matches);
+        $matches = $this->matchNodeRepo->retrieveMatchNotes($matches);
 
         for ($i = 0; $i < $this->servicesArrCnt; ++$i) {
             $service = &$this->servicesArr[$i];
@@ -134,8 +154,4 @@ class tx_cfcleaguefe_util_Statistics
 
         return $ret;
     }
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_Statistics.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/cfc_league_fe/util/class.tx_cfcleaguefe_util_Statistics.php'];
 }

@@ -1,5 +1,10 @@
 <?php
 
+namespace System25\T3sports\Statistics;
+
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Profile;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -26,12 +31,10 @@
 /**
  * Statische Methoden zur Ermittlung statistischer Angaben.
  */
-class tx_cfcleaguefe_util_StatisticsHelper
+class StatisticsHelper
 {
     /**
      * No instance necessary.
-     *
-     * @return tx_cfcleaguefe_util_StatisticsHelper
      */
     private function __construct()
     {
@@ -42,18 +45,15 @@ class tx_cfcleaguefe_util_StatisticsHelper
      * Alle gefundenen
      * Notes werden als Ergebnis zurückgeliefert.
      *
-     * @param int $type
-     *            MatchNote-Typ
-     * @param tx_cfcleaguefe_models_profile $player
-     *            Referenz auf den Spieler
-     * @param tx_cfcleaguefe_models_match $match
-     *            Referenz auf das Spiel
+     * @param int $type MatchNote-Typ
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
      * @returns liefert die MatchNotes des Typs als Array oder 0
      */
-    public static function isNote($type, $player, $match)
+    public static function isNote($type, Profile $player, Match $match)
     {
         $ret = [];
-        $tickerArr = &$match->getMatchNotesByType($type);
+        $tickerArr = $match->getMatchNotesByType($type);
 
         for ($i = 0; $i < count($tickerArr); ++$i) {
             $matchNote = &$tickerArr[$i];
@@ -81,18 +81,16 @@ class tx_cfcleaguefe_util_StatisticsHelper
      * Prüft, ob der Spieler ein Tor geschossen hat.
      * Eigentore werden hier ignoriert.
      *
-     * @param int $type
-     *            MatchNote-Typ des Tors oder 0 für alle Tore
-     * @param tx_cfcleaguefe_models_profile $player
-     *            Referenz auf den Spieler
-     * @param tx_cfcleaguefe_models_match $match
-     *            Referenz auf das Spiel
-     * @returns liefert die MatchNotes der Tore als Array oder 0
+     * @param int $type MatchNote-Typ des Tors oder 0 für alle Tore
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
+     *
+     * @return array liefert die MatchNotes der Tore als Array oder 0
      */
-    public static function isGoal($type, $player, $match)
+    public static function isGoal($type, Profile $player, Match $match)
     {
         $tickerType = 0 == $type ? self::$goalTypes : $type;
-        $tickerArr = &$match->getMatchNotesByType($tickerType);
+        $tickerArr = $match->getMatchNotesByType($tickerType);
 
         $ret = [];
         for ($i = 0; $i < count($tickerArr); ++$i) {
@@ -109,11 +107,11 @@ class tx_cfcleaguefe_util_StatisticsHelper
     /**
      * Prüft, ob der Spieler eine gelbe Karte gesehen hat.
      *
-     * @param tx_cfcleaguefe_models_profile $player
-     * @param tx_cfcleaguefe_models_match $match
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    public static function isCardYellow($player, $match)
+    public static function isCardYellow(Profile $player, Match $match)
     {
         return self::_isCard('Y', $player, $match);
     }
@@ -121,11 +119,11 @@ class tx_cfcleaguefe_util_StatisticsHelper
     /**
      * Prüft, ob der Spieler eine gelb-rote Karte gesehen hat.
      *
-     * @param tx_cfcleaguefe_models_profile $player
-     * @param tx_cfcleaguefe_models_match $match
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    public static function isCardRed($player, $match)
+    public static function isCardRed(Profile $player, Match $match)
     {
         return self::_isCard('R', $player, $match);
     }
@@ -133,11 +131,11 @@ class tx_cfcleaguefe_util_StatisticsHelper
     /**
      * Prüft, ob der Spieler eine rote Karte gesehen hat.
      *
-     * @param tx_cfcleaguefe_models_profile $player
-     * @param tx_cfcleaguefe_models_match $match
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    public static function isCardYellowRed($player, $match)
+    public static function isCardYellowRed(Profile $player, Match $match)
     {
         return self::_isCard('YR', $player, $match);
     }
@@ -145,13 +143,12 @@ class tx_cfcleaguefe_util_StatisticsHelper
     /**
      * Prüft, ob der Spieler eine Karte gesehen hat.
      *
-     * @param string $type
-     *            Typ der Karte: Y,R,YR
-     * @param tx_cfcleaguefe_models_profile $player
-     * @param tx_cfcleaguefe_models_match $match
+     * @param string $type Typ der Karte: Y,R,YR
+     * @param Profile $player Referenz auf den Spieler
+     * @param Match $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    private static function _isCard($type, $player, $match)
+    private static function _isCard($type, Profile $player, Match $match)
     {
         $tickerType = 'Y' == $type ? 70 : ('YR' == $type ? 71 : 72);
         $tickerArr = &$match->getMatchNotesByType($tickerType);
@@ -178,7 +175,7 @@ class tx_cfcleaguefe_util_StatisticsHelper
      *
      * @returns liefert die Spielminute oder 0
      */
-    public static function isChangedIn(&$player, &$match)
+    public static function isChangedIn(Profile $player, Match $match)
     {
         return self::_isPlayerChanged('IN', $player, $match);
     }
@@ -188,7 +185,7 @@ class tx_cfcleaguefe_util_StatisticsHelper
      *
      * @returns liefert die Spielminute oder 0
      */
-    public static function isChangedOut(&$player, &$match)
+    public static function isChangedOut(Profile $player, Match $match)
     {
         return self::_isPlayerChanged('OUT', $player, $match);
     }
@@ -196,14 +193,13 @@ class tx_cfcleaguefe_util_StatisticsHelper
     /**
      * Prüft, ob der Spieler ausgewechselt wurde und liefert in diesem Fall die Spielminute.
      *
-     * @param string $inOut
-     *            - Werte sind 'in' oder 'out'
-     * @param tx_cfcleaguefe_models_match $match
+     * @param string $inOut Werte sind 'in' oder 'out'
+     * @param Match $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    private static function _isPlayerChanged($inOut, &$player, &$match)
+    private static function _isPlayerChanged($inOut, Profile $player, Match $match)
     {
-        $tickerArr = &$match->getMatchNotesByType(('IN' == $inOut) ? 81 : 80);
+        $tickerArr = $match->getMatchNotesByType(('IN' == $inOut) ? 81 : 80);
         for ($i = 0, $size = count($tickerArr); $i < $size; ++$i) {
             $matchNote = &$tickerArr[$i];
             $playerChange = ('IN' == $inOut) ? $matchNote->getPlayerChangeIn() : $matchNote->getPlayerChangeOut();

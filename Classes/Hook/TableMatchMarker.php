@@ -5,6 +5,7 @@ namespace System25\T3sports\Hook;
 use Exception;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
 use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Search\SearchBase;
@@ -13,11 +14,9 @@ use Sys25\RnBase\Utility\Logger;
 use System25\T3sports\Frontend\Marker\MatchMarker;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Match;
+use System25\T3sports\Table\Builder;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
-use tx_rnbase_util_BaseMarker;
-use tx_rnbase_util_FormatUtil;
-use tx_rnbase_util_Templates;
 
 /***************************************************************
  *  Copyright notice
@@ -52,13 +51,13 @@ class TableMatchMarker
      * Add match table with current round in match report.
      *
      * @param array $params
-     * @param \tx_cfcleaguefe_util_MatchMarker $parent
+     * @param MatchMarker $parent
      */
     public function addCurrentRound($params, $parent)
     {
         $template = $params['template'];
         $marker = $params['marker'];
-        if (!tx_rnbase_util_BaseMarker::containsMarker($template, $marker.'_MTCURRENTROUND')) {
+        if (!BaseMarker::containsMarker($template, $marker.'_MTCURRENTROUND')) {
             return;
         }
 
@@ -66,19 +65,19 @@ class TableMatchMarker
         $matches = $this->getCurrentRound($params, $formatter);
         $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $markerArray['###'.$marker.'_MTCURRENTROUND###'] = $matches;
-        $params['template'] = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $params['template'] = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
     /**
      * Generate current round.
      *
      * @param array $params
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param FormatUtil $formatter
      */
-    private function getCurrentRound($params, $formatter)
+    private function getCurrentRound($params, FormatUtil $formatter)
     {
         $match = $this->getMatch($params);
-        if (!is_object($match)) {
+        if (null == $match) {
             return '';
         } // The call is not for us
 
@@ -139,26 +138,27 @@ class TableMatchMarker
             return;
         }
 
-        $table = '';
         $markerArray = $subpartArray = $wrappedSubpartArray = [];
         $match = $this->getMatch($params);
-        if (!is_object($match)) {
-            return false;
+        if (null == $match) {
+            return;
         } // The call is not for us
+
+        $table = '';
         $competition = $match->getCompetition();
         if ($competition->isTypeLeague()) {
             $formatter = $params['formatter'];
             $configurations = $formatter->getConfigurations();
             $confId = $params['confid'].'leaguetable.';
-            $table = '#####<!-- Template not found -->';
+            $table = '<!-- Template not found -->';
             $tableTemplate = Files::getFileResource(
                 $configurations->get($confId.'template'),
                 ['subpart' => $configurations->get($confId.'subpartName')]
             );
             if ($tableTemplate) {
-                $tableData = $this->getTableData($formatter->getConfigurations(), $confId, $competition, $match);
-                $writer = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTableWriter');
-                $table = $writer->writeLeagueTable($tableTemplate, $tableData, $competition->getTableMarks(), $configurations, $confId);
+                $tableInstance = Builder::buildByMatch($match, $configurations, $confId);
+                $writer = $tableInstance->getTableWriter();
+                $table = $writer->writeTable($tableInstance, $tableTemplate, $configurations, $confId);
             }
         }
 
@@ -205,12 +205,12 @@ class TableMatchMarker
      *
      * @param array $params
      *
-     * @return Match or false
+     * @return Match
      */
-    private function getMatch($params)
+    private function getMatch($params): ?Match
     {
         if (!isset($params['match'])) {
-            return false;
+            return null;
         }
 
         return $params['match'];

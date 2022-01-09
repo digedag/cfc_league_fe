@@ -3,13 +3,13 @@
 namespace System25\T3sports\Table;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
-use tx_rnbase_util_BaseMarker;
-use tx_rnbase_util_Templates;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\Templates;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2013-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -45,8 +45,8 @@ abstract class TableWriterBase implements ITableWriter
     public function writeTable($table, $template, $configurations, $confId)
     {
         $mainSubpart = 'SPORTS_'.strtoupper($table->getTypeID());
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, $mainSubpart)) {
-            $template = tx_rnbase_util_Templates::getSubpart($template, '###'.$mainSubpart.'###');
+        if (BaseMarker::containsMarker($template, $mainSubpart)) {
+            $template = Templates::getSubpart($template, '###'.$mainSubpart.'###');
         }
 
         return $this->renderTable($table, $template, $configurations, $confId);

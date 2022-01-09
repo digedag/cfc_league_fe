@@ -3,14 +3,16 @@
 namespace System25\T3sports\Frontend\Action;
 
 use Sys25\RnBase\Backend\Utility\TCA;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\T3General;
 use System25\T3sports\Frontend\View\LeagueTableAllTimeView;
 use System25\T3sports\Utility\MatchTableBuilder;
+use System25\T3sports\Utility\ScopeController;
 use System25\T3sports\Utility\ServiceRegistry;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
 use tx_rnbase;
 
 /***************************************************************
@@ -86,10 +88,10 @@ class LeagueTableAllTime extends LeagueTable
      *
      * @param array $fields
      * @param array $options
-     * @param array $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ParametersInterface $parameters
+     * @param ConfigurationInterface $configurations
      */
-    protected function initSearch(&$fields, &$options, &$parameters, &$configurations)
+    protected function initSearch(&$fields, &$options, $parameters, $configurations)
     {
         $options['distinct'] = 1;
         // $options['debug'] = 1;
@@ -116,7 +118,7 @@ class LeagueTableAllTime extends LeagueTable
     /**
      * Sammelt die Daten für die Erstellung der Tabelle.
      */
-    protected function buildTable($parameters, &$configurations, &$matches)
+    protected function buildTable($parameters, $configurations, $matches)
     {
         $tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_AllTimeTableProvider', $parameters, $configurations, $matches, 'leaguetableAllTime.');
 

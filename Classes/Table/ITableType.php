@@ -44,7 +44,7 @@ interface ITableType
      *
      * @return IMatchProvider
      */
-    public function getMatchProvider(): IMatchProvider;
+    public function getMatchProvider(): ?IMatchProvider;
 
     /**
      * Set configuration.
@@ -52,7 +52,7 @@ interface ITableType
      * @param ConfigurationInterface $configuration
      * @param string confId
      */
-    public function setConfigurations($configuration, $confId);
+    public function setConfigurations(ConfigurationInterface $configuration, $confId);
 
     /**
      * Returns the final table data.

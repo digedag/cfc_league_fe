@@ -2,6 +2,11 @@
 
 namespace System25\T3sports\Statistics;
 
+use Sys25\RnBase\Frontend\Marker\Templates;
+use System25\T3sports\Frontend\Marker\ProfileMarker;
+use System25\T3sports\Model\Profile;
+use tx_rnbase;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -47,10 +52,10 @@ class PlayerStatisticsMarker
     {
         $configurations = $formatter->getConfigurations();
         // Das Template für einen Spieler holen
-        $playerTemplate = \tx_rnbase_util_Templates::getSubpart($srvTemplate, '###'.$statsMarker.'_PROFILE###');
+        $playerTemplate = Templates::getSubpart($srvTemplate, '###'.$statsMarker.'_PROFILE###');
 
         // Es wird der ProfileMarker verwendet
-        $profileMarkerObj = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
+        $profileMarkerObj = tx_rnbase::makeInstance(ProfileMarker::class);
         $profileMarkerObj->initLabelMarkers($formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
         $markerArray = $profileMarkerObj->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
 
@@ -58,14 +63,14 @@ class PlayerStatisticsMarker
         $rowRollCnt = 0;
         $parts = [];
         foreach ($stats as $playerStat) {
-            /* @var $player \tx_cfcleague_models_Profile */
+            /* @var $player Profile */
             $player = $playerStat['player'];
             if (!is_object($player)) {
                 continue; // Ohne Spieler wird auch nix gezeigt
             }
             unset($playerStat['player']); // PHP 5.2, sonst klappt der merge nicht
 
-            $player->setProperty(array_merge($playerStat, $player->record));
+            $player->setProperty(array_merge($playerStat, $player->getProperty()));
             $player->setProperty('roll', $rowRollCnt);
             // Jetzt für jedes Profil das Template parsen
             $parts[] = $profileMarkerObj->parseTemplate($playerTemplate, $player, $formatter, $statsConfId.'profile.', $statsMarker.'_PROFILE');
@@ -77,6 +82,6 @@ class PlayerStatisticsMarker
 
         $markerArray['###PLAYERCOUNT###'] = count($parts);
 
-        return \tx_rnbase_util_Templates::substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
     }
 }

@@ -5,21 +5,22 @@ namespace System25\T3sports\Table\Football;
 use Exception;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Typo3Wrapper\Service\AbstractService;
+use Sys25\RnBase\Utility\Misc;
+use System25\T3sports\Model\CompetitionPenalty;
+use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Team;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\ITableType;
 use System25\T3sports\Table\ITableWriter;
 use System25\T3sports\Table\TableResult;
-use tx_cfcleague_models_CompetitionPenalty;
-use tx_cfcleague_models_Match;
 use tx_rnbase;
-use tx_rnbase_util_Misc;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -52,10 +53,9 @@ class Table extends AbstractService implements ITableType
      * Set configuration.
      *
      * @param ConfigurationInterface $configuration
-     * @param
-     *            string confId
+     * @param string confId
      */
-    public function setConfigurations($configuration, $confId)
+    public function setConfigurations(ConfigurationInterface $configuration, $confId)
     {
         $this->configuration = $configuration;
         $this->confId = $confId;
@@ -78,12 +78,13 @@ class Table extends AbstractService implements ITableType
     public function setMatchProvider(IMatchProvider $matchProvider)
     {
         $this->matchProvider = $matchProvider;
+        $matchProvider->setConfigurator($this->getConfigurator(true));
     }
 
     /**
      * @return IMatchProvider
      */
-    public function getMatchProvider(): IMatchProvider
+    public function getMatchProvider(): ?IMatchProvider
     {
         return $this->matchProvider;
     }
@@ -111,7 +112,9 @@ class Table extends AbstractService implements ITableType
     {
         $tableData = tx_rnbase::makeInstance(TableResult::class);
         $configurator = $this->getConfigurator();
+
         $this->initTeams($configurator);
+
         $this->handlePenalties($tableData); // Strafen können direkt berechnet werden
         $tableData->setMarks($this->getMatchProvider()
             ->getTableMarks());
@@ -212,13 +215,14 @@ class Table extends AbstractService implements ITableType
     {
         $this->_teamData = [];
         $teams = $configurator->getTeams();
+
         foreach ($teams as $team) {
-            /* @var $team \tx_cfcleague_models_Team */
+            /* @var $team Team */
             $teamId = $configurator->getTeamId($team);
             if (!$teamId) {
                 continue;
             } // Ignore teams without given id
-            if ($team->isDummy()) {
+            if ($team instanceof Team && $team->isDummy()) {
                 continue;
             } // Ignore dummy teams
             if (array_key_exists($teamId, $this->_teamData)) {
@@ -250,7 +254,7 @@ class Table extends AbstractService implements ITableType
             $this->_teamData[$teamId]['drawCount'] = 0;
             $this->_teamData[$teamId]['loseCount'] = 0;
             $this->_teamData[$teamId]['ppm'] = 0;
-            $this->_teamData[$teamId]['outOfCompetition'] = $team->isOutOfCompetition();
+            $this->_teamData[$teamId]['outOfCompetition'] = $team instanceof Team && $team->isOutOfCompetition();
 
             // Muss das Team hervorgehoben werden?
             $markClubs = $configurator->getMarkClubs();
@@ -296,7 +300,7 @@ class Table extends AbstractService implements ITableType
         $tableData->setPenalties($penalties);
 
         foreach ($penalties as $penalty) {
-            /* @var $penalty tx_cfcleague_models_CompetitionPenalty */
+            /* @var $penalty CompetitionPenalty */
             // Welches Team ist betroffen?
             if (array_key_exists($penalty->getProperty('team'), $this->_teamData)) {
                 // Die Strafe wird für den View mit abgespeichert
@@ -336,7 +340,7 @@ class Table extends AbstractService implements ITableType
     /**
      * Die Spiele werden zum aktuellen Tabellenstand hinzugerechnet.
      *
-     * @param tx_cfcleague_models_Match[] $matches
+     * @param Match[] $matches
      * @param Configurator $configurator
      */
     protected function handleMatches(&$matches, Configurator $configurator)
@@ -349,7 +353,7 @@ class Table extends AbstractService implements ITableType
             $this->assertTeamsInCompetition($match);
             // Wie ist das Spiel ausgegangen?
             $toto = $match->getToto();
-            tx_rnbase_util_Misc::callHook('cfc_league_fe', 'leagueTableFootball_handleMatches', [
+            Misc::callHook('cfc_league_fe', 'leagueTableFootball_handleMatches', [
                 'match' => &$match,
                 'teamdata' => &$this->_teamData,
             ], $this);
@@ -376,7 +380,7 @@ class Table extends AbstractService implements ITableType
      * Check if teams in match are configured in competition. This is a data error check to
      * avoid unexpected situations in table rendering.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      */
     protected function assertTeamsInCompetition($match)
     {
@@ -393,7 +397,7 @@ class Table extends AbstractService implements ITableType
     /**
      * Zählt die Punkte für eine normale Tabelle.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      * @param IConfigurator $configurator
      */
@@ -451,7 +455,7 @@ class Table extends AbstractService implements ITableType
      * Die Ergebnisse werden als nur für die
      * Heimmannschaft gewertet.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      * @param Configurator $configurator
      */
@@ -494,7 +498,7 @@ class Table extends AbstractService implements ITableType
      * Die Ergebnisse werden als nur für die
      * Gastmannschaft gewertet.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      * @param Configurator $configurator
      */

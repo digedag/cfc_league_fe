@@ -3,14 +3,16 @@
 namespace System25\T3sports\Table\Football;
 
 use Exception;
+use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Model\Club;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Team;
 use System25\T3sports\Table\IComparator;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\PointOptions;
-use tx_cfcleague_models_Competition;
-use tx_cfcleague_models_Team;
+use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
-use Tx_Rnbase_Utility_Strings;
 
 /***************************************************************
 *  Copyright notice
@@ -50,6 +52,7 @@ class Configurator implements IConfigurator
     protected $cfgTableStrategy;
 
     protected $confId;
+    protected $markClubs;
 
     public function __construct(IMatchProvider $matchProvider, $configurations, $confId)
     {
@@ -77,15 +80,15 @@ class Configurator implements IConfigurator
     /**
      * Returns the unique key for a team. For alltime table this can be club uid.
      *
-     * @param tx_cfcleague_models_Team $team
+     * @param Team|Club $teamOrClub
      */
-    public function getTeamId($team)
+    public function getTeamId($teamOrClub)
     {
-        if ('club' == $this->getConfValue('teamMode')) {
-            return $team->getProperty('club');
+        if ('club' == $this->getConfValue('teamMode') && $teamOrClub instanceof Club) {
+            return $teamOrClub->getProperty('club');
         }
 
-        return $team->getUid();
+        return $teamOrClub->getUid();
     }
 
     /**
@@ -106,7 +109,7 @@ class Configurator implements IConfigurator
     }
 
     /**
-     * @return tx_cfcleague_models_Competition
+     * @return Competition
      */
     public function getCompetition()
     {
@@ -139,10 +142,15 @@ class Configurator implements IConfigurator
             if (!$values) {
                 $values = $this->configurations->get('markClubs');
             } // used from flexform
-            $this->markClubs = Tx_Rnbase_Utility_Strings::intExplode(',', $values);
+            $this->markClubs = Strings::intExplode(',', $values);
         }
 
         return $this->markClubs;
+    }
+
+    public function setMarkClubs(array $clubIds)
+    {
+        $this->markClubs = $clubIds;
     }
 
     /**
@@ -253,7 +261,7 @@ class Configurator implements IConfigurator
         if (null === $this->cfgTableStrategy) {
             $strategy = $this->getMatchProvider()->getBaseCompetition()->getProperty('tablestrategy');
             if (null === $strategy) {
-                $srv = \tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+                $srv = ServiceRegistry::getCompetitionService();
                 $strategies = reset($srv->getTableStrategies4TCA());
                 $strategy = $strategies[1];
             }

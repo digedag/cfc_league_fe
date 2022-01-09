@@ -7,6 +7,7 @@ use System25\T3sports\Model\Match;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Statistics\PlayerStatisticsMarker;
+use System25\T3sports\Statistics\StatisticsHelper;
 
 /***************************************************************
  *  Copyright notice
@@ -266,14 +267,14 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             $playerData['match_count'] = intval($playerData['match_count']) + 1;
 
             // Wurde der Spieler ausgewechselt?
-            $min = \tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
+            $min = StatisticsHelper::isChangedOut($player, $match);
             if ($min > 0) {
                 $playerData['changed_out'] = intval($playerData['changed_out']) + 1;
             }
 
             // Nicht ausgewechselt, aber wurde der Spieler vom Platz gestellt?
             if (0 == intval($min)) {
-                $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
+                $min = StatisticsHelper::isCardYellowRed($player, $match);
                 if (0 != $min) {
                     $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
                     $isYellowRed = true;
@@ -281,7 +282,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             }
             // Keine gelbrote, aber vielleicht rot?
             if (0 == intval($min)) {
-                $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
+                $min = StatisticsHelper::isCardRed($player, $match);
                 if (0 != $min) {
                     $playerData['card_red'] = intval($playerData['card_red']) + 1;
                 }
@@ -296,27 +297,27 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
 
         if ($ignorePlayer) {
             // Hier betrachten wir die eingewechselten Spieler
-            $min = \tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match);
+            $min = StatisticsHelper::isChangedIn($player, $match);
             if ($min > 0) {
                 $playerData['match_count'] = intval($playerData['match_count']) + 1;
                 $playerData['changed_in'] = intval($playerData['changed_in']) + 1;
 
                 // Wurde der Spieler wieder ausgewechselt?
-                $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isChangedOut($player, $match);
+                $min2 = StatisticsHelper::isChangedOut($player, $match);
                 if ($min2 > 0) {
                     $playerData['changed_out'] = intval($playerData['changed_out']) + 1;
                 }
 
                 // Wurde der Spieler vom Platz gestellt?
                 if (0 == intval($min2)) {
-                    $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellowRed($player, $match);
+                    $min2 = StatisticsHelper::isCardYellowRed($player, $match);
                     if (0 != $min2) {
                         $playerData['card_yellowred'] = intval($playerData['card_yellowred']) + 1;
                         $isYellowRed = true;
                     }
                 }
                 if (0 == intval($min2)) {
-                    $min2 = \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match);
+                    $min2 = StatisticsHelper::isCardRed($player, $match);
                     if (0 != $min2) {
                         $playerData['card_red'] = intval($playerData['card_red']) + 1;
                     }
@@ -332,8 +333,8 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             }
         }
         if ($ignorePlayer) {
-            // Bug 1864066 - Spieler, die nicht im Spiel waren können trotzdem rote Karten bekommen
-            if (0 != \tx_cfcleaguefe_util_StatisticsHelper::isCardRed($player, $match)) {
+            // Bug 1864066 - Spieler, die nicht im Spiel waren, können trotzdem rote Karten bekommen
+            if (0 != StatisticsHelper::isCardRed($player, $match)) {
                 $playerData['card_red'] = intval($playerData['card_red']) + 1;
             }
         }
@@ -341,7 +342,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
             // Der Spieler war im Spiel. Wir suchen die restlichen Daten
             // Bug 1864071 - Gelbe Karten nur zählen, wenn nicht gelbrot
             if (!$isYellowRed) {
-                $min = \tx_cfcleaguefe_util_StatisticsHelper::isCardYellow($player, $match);
+                $min = StatisticsHelper::isCardYellow($player, $match);
                 if (0 != $min) {
                     $playerData['card_yellow'] = intval($playerData['card_yellow']) + 1;
                 }
@@ -366,7 +367,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     protected function _countNote($type, $key, &$player, &$match, &$playerData)
     {
         // Die passenden Notes des Spielers ermitteln
-        $notes = \tx_cfcleaguefe_util_StatisticsHelper::isNote($type, $player, $match);
+        $notes = StatisticsHelper::isNote($type, $player, $match);
         if (is_array($notes)) {
             // Die Anzahl der Notes im Spiel für den Spieler hinzufügen
             $playerData[$key] = intval($playerData[$key]) + count($notes);
@@ -389,7 +390,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     protected function _countGoals($type, $key, $player, $match, &$playerData)
     {
         // Die Tore des Spielers ermitteln
-        $notes = \tx_cfcleaguefe_util_StatisticsHelper::isGoal($type, $player, $match);
+        $notes = StatisticsHelper::isGoal($type, $player, $match);
         if (is_array($notes)) {
             // Die Anzahl der Tore im Spiel für den Spieler hinzufügen
             $playerData[$key] = intval($playerData[$key]) + count($notes);
@@ -401,7 +402,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
                 } else {
                     $playerData['goals_away'] = intval($playerData['goals_away']) + count($notes);
                 }
-                if (\tx_cfcleaguefe_util_StatisticsHelper::isChangedIn($player, $match)) {
+                if (StatisticsHelper::isChangedIn($player, $match)) {
                     $playerData['goals_joker'] = intval($playerData['goals_joker']) + count($notes);
                 }
             }

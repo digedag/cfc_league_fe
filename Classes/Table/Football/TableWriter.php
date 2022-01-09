@@ -100,7 +100,6 @@ class TableWriter extends TableWriterBase
     protected function createTable($templateList, $result, &$penalties, $matchProvider, $configurations, $confId)
     {
         $marks = $result->getMarks();
-
         $round = 0;
         if ($configurations->getInt($confId.'useRoundFromScope')) {
             $scope = $matchProvider->getScope();
@@ -109,7 +108,7 @@ class TableWriter extends TableWriterBase
         $tableData = $result->getScores($round);
 
         // Sollen alle Teams gezeigt werden?
-        $tableSize = intval($configurations->get($confId.'tablecfg.tableSize'));
+        $tableSize = $configurations->getInt($confId.'tablecfg.tableSize');
         if ($tableSize && $tableSize < count($tableData)) {
             // Es sollen weniger Teams gezeigt werden als vorhanden sind
             // Diesen Ausschnitt müssen wir jetzt ermitteln
@@ -318,7 +317,7 @@ class TableWriter extends TableWriterBase
         $currentNoLink = $configurations->getInt($confId.$confName.'.current.noLink');
 
         $token = self::getToken();
-        $markerArray = [];
+        $markerArray = $subpartArray = [];
 
         // Jetzt über die vorhandenen Items iterieren
         foreach ($itemsArr[0] as $key => $value) {

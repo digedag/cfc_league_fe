@@ -6,9 +6,9 @@ use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Frontend\View\StatisticsView;
+use System25\T3sports\Statistics\Statistics as StatisticsUtil;
 use System25\T3sports\Utility\MatchTicker;
-use tx_cfcleaguefe_util_ScopeController as ScopeController;
-use tx_cfcleaguefe_util_Statistics;
+use System25\T3sports\Utility\ScopeController;
 use tx_rnbase;
 
 /***************************************************************
@@ -78,12 +78,12 @@ class Statistics extends AbstractAction
         }
         $mode = $configurations->get('statistic.callbackmode');
         if ($mode) {
-            $stats = tx_cfcleaguefe_util_Statistics::createInstance();
+            $stats = StatisticsUtil::createInstance();
             $data = $stats->createStatisticsCallback($scopeArr, $services, $configurations, $parameters);
         } else {
             $ticker = new MatchTicker();
             $matches = $ticker->getMatches4Scope($scopeArr);
-            $data = tx_cfcleaguefe_util_Statistics::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
+            $data = StatisticsUtil::createStatistics($matches, $scopeArr, $services, $configurations, $parameters);
         }
 
         // Aufruf der Statistik

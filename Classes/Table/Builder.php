@@ -3,8 +3,8 @@
 namespace System25\T3sports\Table;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
-use tx_cfcleague_models_Competition;
-use tx_cfcleaguefe_models_match;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Match;
 
 /***************************************************************
  *  Copyright notice
@@ -35,14 +35,14 @@ use tx_cfcleaguefe_models_match;
 class Builder
 {
     /**
-     * @param tx_cfcleague_models_Competition $league
+     * @param Competition $league
      * @param array $matches
      * @param ConfigurationInterface $configurations
      * @param string $confId
      *
      * @return ITableType
      */
-    public static function buildByCompetitionAndMatches($league, $matches, $configurations, $confId)
+    public static function buildByCompetitionAndMatches(Competition $league, $matches, $configurations, $confId)
     {
         $tableType = $league->getSports();
 
@@ -57,8 +57,6 @@ class Builder
         $table->setConfigurations($configurations, $confId.'tablecfg.');
         // MatchProvider und Configurator müssen sich gegenseitig kennen
         $table->setMatchProvider($prov);
-        $c = $table->getConfigurator(true);
-        $prov->setConfigurator($c);
 
         return $table;
     }
@@ -91,28 +89,50 @@ class Builder
         $table->setConfigurations($configurations, $confId.'tablecfg.');
         // MatchProvider und Configurator müssen sich gegenseitig kennen
         $table->setMatchProvider($prov);
-        $c = $table->getConfigurator(true);
-        $prov->setConfigurator($c);
 
         return $table;
     }
 
     /**
      * Build league table to compare two opponents of a single match.
-     * FIXME: implement!
      *
-     * @param tx_cfcleaguefe_models_match $match
+     * @param Match $match
      * @param ConfigurationInterface $configurations
      * @param string $confId
      *
      * @return ITableType
      */
-    public static function buildByMatch($match, $configurations, $confId)
+    public static function buildByMatch(Match $match, $configurations, $confId): ITableType
     {
+        $league = $match->getCompetition();
         $tableType = $league->getSports();
 
         $prov = Factory::createMatchProvider($tableType, $configurations, $confId);
-        $prov->setLeague($league);
-        $prov->setMatches($matches);
+        $prov->setScope(['COMP_UIDS' => $league->getUid()]);
+        if ($configurations->getBool($confId.'leaguetable.useRoundFromMatch')) {
+            $prov->setCurrentRound($match->getRound());
+        }
+
+        $table = Factory::createTableType($tableType);
+        $table->setConfigurations($configurations, $confId.'tablecfg.');
+        // MatchProvider und Configurator müssen sich gegenseitig kennen
+        $table->setMatchProvider($prov);
+
+        // Wir benötigen noch die beiden Club-UIDs
+        $clubMarks = [];
+        $clubUid = $match->getHome()->getClubUid();
+        if ($clubUid) {
+            $clubMarks[] = $clubUid;
+        }
+        $clubUid = $match->getGuest()->getClubUid();
+        if ($clubUid) {
+            $clubMarks[] = $clubUid;
+        }
+        $configurator = $table->getConfigurator();
+        if (method_exists($configurator, 'setMarkClubs')) {
+            $configurator->setMarkClubs($clubMarks);
+        }
+
+        return $table;
     }
 }
