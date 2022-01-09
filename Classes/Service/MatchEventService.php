@@ -2,7 +2,12 @@
 
 namespace System25\T3sports\Service;
 
+use Sys25\RnBase\Configuration\Processor;
+use Sys25\RnBase\Search\SearchBase;
 use System25\T3sports\Model\Match;
+use System25\T3sports\Utility\MatchTableBuilder;
+use System25\T3sports\Utility\ServiceRegistry;
+use tx_rnbase;
 
 /**
  * *************************************************************
@@ -54,7 +59,7 @@ class MatchEventService extends \tx_cal_event_service
     public function findAllWithin($start_date, $end_date, $pidList)
     {
         /* @var $this->configurations tx_rnbase_configurations */
-        $configurations = \tx_rnbase::makeInstance('tx_rnbase_configurations');
+        $configurations = tx_rnbase::makeInstance(Processor::class);
         $configurations->init($this->conf, null, 'cal', 'cal');
         $this->_init();
         $confId = 'view.cfc_league_events.';
@@ -81,11 +86,11 @@ class MatchEventService extends \tx_cal_event_service
         }
         $matchTable->getFields($fields, $options);
 
-        \tx_rnbase_util_SearchBase::setConfigFields($fields, $configurations, $confId.'fields.');
+        SearchBase::setConfigFields($fields, $configurations, $confId.'fields.');
         // Optionen
-        \tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, $confId.'options.');
+        SearchBase::setConfigOptions($options, $configurations, $confId.'options.');
 
-        $srv = \tx_cfcleaguefe_util_ServiceRegistry::getMatchService();
+        $srv = ServiceRegistry::getMatchService();
         $matches = $srv->search($fields, $options);
 
         $events = [];
@@ -100,11 +105,11 @@ class MatchEventService extends \tx_cal_event_service
     /**
      * Returns a new matchtable instance.
      *
-     * @return \tx_cfcleague_util_MatchTableBuilder
+     * @return MatchTableBuilder
      */
     private function getMatchTable()
     {
-        return \tx_rnbase::makeInstance('tx_cfcleague_util_MatchTableBuilder');
+        return tx_rnbase::makeInstance(MatchTableBuilder::class);
     }
 
     /**
@@ -115,7 +120,7 @@ class MatchEventService extends \tx_cal_event_service
     public function find($uid, $pidList)
     {
         $this->_init();
-        $match = \tx_rnbase::makeInstance(Match::class, $uid);
+        $match = tx_rnbase::makeInstance(Match::class, $uid);
         $event = $this->createEvent($match, false);
         /*
          * $events = array();
@@ -129,7 +134,7 @@ class MatchEventService extends \tx_cal_event_service
 
     public function createEvent($match, $isException)
     {
-        $event = \tx_rnbase::makeInstance('tx_cfcleaguefe_models_match_calevent', $this->controller, $match, $isException, $this->getServiceKey());
+        $event = tx_rnbase::makeInstance('tx_cfcleaguefe_models_match_calevent', $this->controller, $match, $isException, $this->getServiceKey());
 
         return $event;
     }

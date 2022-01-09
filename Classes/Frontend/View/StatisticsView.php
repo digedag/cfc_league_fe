@@ -10,6 +10,7 @@ use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Misc;
 use Sys25\RnBase\Utility\T3General;
+use System25\T3sports\Statistics\Statistics;
 
 /***************************************************************
  *  Copyright notice
@@ -94,7 +95,7 @@ class StatisticsView extends BaseView
         $ret = [];
 
         $cfg = [];
-        $types = \tx_cfcleaguefe_util_ServiceRegistry::lookupStatistics($cfg);
+        $types = Statistics::lookupStatistics($cfg);
         $types = $types['items'];
 
         foreach ($types as $type) {

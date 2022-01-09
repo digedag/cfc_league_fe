@@ -3,6 +3,8 @@
 namespace System25\T3sports\Statistics;
 
 use Sys25\RnBase\Frontend\Marker\ListProvider;
+use Sys25\RnBase\Utility\Language;
+use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\Repository\MatchNoteRepository;
 use System25\T3sports\Model\Repository\MatchRepository;
@@ -153,5 +155,25 @@ class Statistics
         }
 
         return $ret;
+    }
+
+    /**
+     * Liefert die vorhandenen Statistic-Services für die Auswahl im Flexform.
+     */
+    public static function lookupStatistics($config)
+    {
+        $services = Misc::lookupServices('cfcleague_statistics');
+        foreach ($services as $subtype => $info) {
+            $title = $info['title'];
+            if ('LLL:' === substr($title, 0, 4)) {
+                $title = Language::sL($title);
+            }
+            $config['items'][] = [
+                $title,
+                $subtype,
+            ];
+        }
+
+        return $config;
     }
 }

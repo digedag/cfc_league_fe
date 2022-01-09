@@ -32,27 +32,6 @@ use System25\T3sports\Utility\ServiceRegistry;
 class tx_cfcleaguefe_util_ServiceRegistry
 {
     /**
-     * Liefert die vorhandenen Statistic-Services für die Auswahl im Flexform.
-     */
-    public static function lookupStatistics($config)
-    {
-        $services = tx_rnbase_util_Misc::lookupServices('cfcleague_statistics');
-        tx_rnbase::load('tx_rnbase_util_Lang');
-        foreach ($services as $subtype => $info) {
-            $title = $info['title'];
-            if ('LLL:' === substr($title, 0, 4)) {
-                $title = tx_rnbase_util_Lang::sL($title);
-            }
-            $config['items'][] = [
-                $title,
-                $subtype,
-            ];
-        }
-
-        return $config;
-    }
-
-    /**
      * Liefert den Profile-Service.
      *
      * @return System25\T3sports\Service\ProfileService
