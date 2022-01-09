@@ -12,6 +12,7 @@ use System25\T3sports\Model\CompetitionPenalty;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\ITableType;
+use System25\T3sports\Table\ITeam;
 use System25\T3sports\Table\TableWriterBase;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
@@ -21,7 +22,7 @@ use tx_rnbase_util_Templates;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -130,10 +131,11 @@ class TableWriter extends TableWriterBase
             // auf Strafen prüfen
             $this->preparePenalties($row, $penalties);
 
+            /** @var $team ITeam */
             $team = $row['team'];
             unset($row['team']); // Gibt sonst Probleme mit PHP5.2
             $team->setProperty($row + $team->getProperty());
-            $parts[] = $teamMarker->parseTemplate($templateEntry, $team, $configurations->getFormatter(), $confId.'table.', 'ROW');
+            $parts[] = $teamMarker->parseTemplate($templateEntry, $team->getDataModel(), $configurations->getFormatter(), $confId.'table.', 'ROW');
             $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
         }
 

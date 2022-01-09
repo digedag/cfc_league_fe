@@ -5,7 +5,6 @@ namespace System25\T3sports\Table;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\CompetitionPenalty;
 use System25\T3sports\Model\Match;
-use System25\T3sports\Model\Team;
 
 /***************************************************************
  *  Copyright notice
@@ -54,7 +53,7 @@ interface IMatchProvider
     /**
      * Teams to handle.
      *
-     * @return Team[]
+     * @return ITeam[]
      */
     public function getTeams();
 

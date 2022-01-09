@@ -122,7 +122,7 @@ class DefaultMatchProvider implements IMatchProvider
      * But for alltime table, teams are useless. It exists one saison only!
      * So for alltime table clubs are returned.
      *
-     * @return Team[]
+     * @return ITeam[]
      */
     public function getTeams()
     {
@@ -156,14 +156,22 @@ class DefaultMatchProvider implements IMatchProvider
         $useClubs = $this->useClubs();
         foreach ($teams as $team) {
             if (!$useClubs) {
-                if ($team->getUid() && !array_key_exists($team->getUid(), $this->teams)) {
-                    $this->teams[$team->getUid()] = $team;
+                if (!$team->getUid()) { // Wann passiert das?
+                    continue;
+                }
+                $team = new TeamAdapter($team);
+                if (!array_key_exists($team->getTeamId(), $this->teams)) {
+                    $this->teams[$team->getTeamId()] = $team;
                 }
             } else {
                 $club = $team->getClub();
-                if ($club && !array_key_exists($club->getUid(), $this->teams)) {
+                if (!$club) {
+                    continue;
+                }
+                $club = new TeamAdapter($club);
+                if (!array_key_exists($club->getTeamId(), $this->teams)) {
                     $club->setProperty('club', $club->getUid()); // necessary for mark clubs
-                    $this->teams[$club->getUid()] = $club;
+                    $this->teams[$club->getTeamId()] = $club;
                 }
             }
         }
