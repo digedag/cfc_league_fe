@@ -4,12 +4,13 @@ namespace System25\T3sports\Table\Volleyball;
 
 use Exception;
 use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
+use System25\T3sports\Table\IComparator;
 use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -100,7 +101,7 @@ class Configurator extends FootballConfigurator
      */
     public function getComparator()
     {
-        $compareClass = $this->cfgComparatorClass;
+        $comparatorClass = $this->cfgComparatorClass;
         if (!$comparatorClass) {
             $compareClass = self::POINT_SYSTEM_2POINT == $this->getPointSystem() ?
                     Comparator::class :

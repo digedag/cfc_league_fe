@@ -2,16 +2,16 @@
 
 namespace System25\T3sports\Table\Icehockey;
 
+use System25\T3sports\Model\Match;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\PointOptions;
-use tx_cfcleague_models_Match;
 use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2011-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -59,7 +59,7 @@ class Table extends FootballTable
     /**
      * Zählt die Punkte für eine normale Tabelle.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      */
     protected function countStandard($match, $toto, IConfigurator $configurator)
@@ -129,7 +129,7 @@ class Table extends FootballTable
      * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
      * Heimmannschaft gewertet.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      */
     protected function countHome($match, $toto, IConfigurator $configurator)
@@ -179,7 +179,7 @@ class Table extends FootballTable
      * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
      * Gastmannschaft gewertet.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      */
     protected function countGuest($match, $toto, IConfigurator $configurator)

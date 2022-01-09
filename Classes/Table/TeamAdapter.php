@@ -82,9 +82,4 @@ class TeamAdapter implements ITeam
     {
         return $this->getInstance();
     }
-
-//     public function __call($method, array $args)
-//     {
-//         return call_user_func_array([$this->getInstance(), $method], $args);
-//     }
 }

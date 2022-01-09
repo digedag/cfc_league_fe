@@ -2,16 +2,16 @@
 
 namespace System25\T3sports\Table\Volleyball;
 
+use System25\T3sports\Model\Match;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\IConfigurator;
-use tx_cfcleague_models_Match;
-use tx_cfcleague_util_MatchSets;
+use System25\T3sports\Utility\MatchSets;
 use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2011-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -59,7 +59,7 @@ class Table extends FootballTable
     /**
      * Zählt die Punkte für eine normale Tabelle.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      * @param IConfigurator $configurator
      */
@@ -72,7 +72,6 @@ class Table extends FootballTable
         $this->addMatchCount($guestId);
         // Für H2H modus das Spielergebnis merken
         $this->addResult($homeId, $guestId, $match->getResult());
-        $sets = $match->getSets();
 
         // Beim Volleyball gibt es kein Unentschieden
         if (1 == $toto) {  // Heimsieg
@@ -97,8 +96,8 @@ class Table extends FootballTable
             $this->addWinCount($guestId);
         }
 
-        $ballsHome = tx_cfcleague_util_MatchSets::countSetPointsHome($match);
-        $ballsGuest = tx_cfcleague_util_MatchSets::countSetPointsGuest($match);
+        $ballsHome = MatchSets::countSetPointsHome($match);
+        $ballsGuest = MatchSets::countSetPointsGuest($match);
         $this->addBalls($homeId, $ballsHome, $ballsGuest);
         $this->addBalls($guestId, $ballsGuest, $ballsHome);
 
@@ -146,7 +145,7 @@ class Table extends FootballTable
      * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
      * Heimmannschaft gewertet.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      * @param IConfigurator $configurator
      */
@@ -157,7 +156,6 @@ class Table extends FootballTable
         // Anzahl Spiele aktualisieren
         $this->addMatchCount($homeId);
         $this->addResult($homeId, $guestId, $match->getGuest());
-        $sets = $match->getSets();
 
         if (1 == $toto) {  // Heimsieg
             $this->addPoints($homeId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
@@ -169,8 +167,8 @@ class Table extends FootballTable
             }
             $this->addLoseCount($homeId);
         }
-        $ballsHome = tx_cfcleague_util_MatchSets::countSetPointsHome($match);
-        $ballsGuest = tx_cfcleague_util_MatchSets::countSetPointsGuest($match);
+        $ballsHome = MatchSets::countSetPointsHome($match);
+        $ballsGuest = MatchSets::countSetPointsGuest($match);
         $this->addBalls($homeId, $ballsHome, $ballsGuest);
 
         // Jetzt die Sätze summieren
@@ -181,7 +179,7 @@ class Table extends FootballTable
      * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
      * Gastmannschaft gewertet.
      *
-     * @param tx_cfcleague_models_Match $match
+     * @param Match $match
      * @param int $toto
      * @param IConfigurator $configurator
      */
@@ -192,7 +190,6 @@ class Table extends FootballTable
         // Anzahl Spiele aktualisieren
         $this->addMatchCount($guestId);
         $this->addResult($homeId, $guestId, $match->getGuest());
-        $sets = $match->getSets();
 
         if (1 == $toto) {  // Heimsieg
             $this->addPoints($guestId, $configurator->getPointsLooseVolley($match->isExtraTime(), $match->isPenalty()));
@@ -205,8 +202,8 @@ class Table extends FootballTable
             $this->addWinCount($guestId);
         }
 
-        $ballsHome = tx_cfcleague_util_MatchSets::countSetPointsHome($match);
-        $ballsGuest = tx_cfcleague_util_MatchSets::countSetPointsGuest($match);
+        $ballsHome = MatchSets::countSetPointsHome($match);
+        $ballsGuest = MatchSets::countSetPointsGuest($match);
         $this->addBalls($guestId, $ballsGuest, $ballsHome);
 
         // Jetzt die Tore summieren
