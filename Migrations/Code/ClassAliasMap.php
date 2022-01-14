@@ -53,7 +53,7 @@ return [
     'tx_cfcleaguefe_util_Maps' => \System25\T3sports\Utility\MapsUtil::class,
     'tx_cfcleaguefe_util_MatchMarker' => \System25\T3sports\Frontend\Marker\MatchMarker::class,
     'tx_cfcleaguefe_util_ProfileMarker' => \System25\T3sports\Frontend\Marker\ProfileMarker::class,
-    'tx_cfcleaguefe_util_ScopeController' => \System25\T3sports\Frontend\Marker\ScopeController::class,
+    'tx_cfcleaguefe_util_ScopeController' => \System25\T3sports\Utility\ScopeController::class,
     'tx_cfcleaguefe_util_StadiumMarker' => \System25\T3sports\Frontend\Marker\StadiumMarker::class,
     'tx_cfcleaguefe_util_TeamMarker' => \System25\T3sports\Frontend\Marker\TeamMarker::class,
 

@@ -3,7 +3,6 @@
 namespace System25\T3sports\Hook;
 
 use Exception;
-use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
@@ -12,7 +11,6 @@ use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Files;
 use Sys25\RnBase\Utility\Logger;
 use System25\T3sports\Frontend\Marker\MatchMarker;
-use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Table\Builder;
 use System25\T3sports\Utility\ServiceRegistry;
@@ -164,40 +162,6 @@ class TableMatchMarker
 
         $markerArray['###'.$marker.'_LEAGUETABLE###'] = $table;
         $params['template'] = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-    }
-
-    /**
-     * @param ConfigurationInterface $configurations
-     * @param string $confId
-     * @param Competition $competition
-     * @param Match $match
-     *
-     * @return array
-     */
-    private function getTableData($configurations, $confId, $competition, $match)
-    {
-        $tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_DefaultTableProvider', $configurations->getParameters(), $configurations, $competition, $confId);
-        if ($configurations->getInt($confId.'leaguetable.useRoundFromMatch') > 0) {
-            $tableProvider->setCurrentRound($match->getRound());
-        }
-
-        // Wir benötigen noch die beiden Club-UIDs
-        $clubMarks = [];
-        $clubUid = $match->getHome()->getClubUid();
-        if ($clubUid) {
-            $clubMarks[] = $clubUid;
-        }
-        $clubUid = $match->getGuest()->getClubUid();
-        if ($clubUid) {
-            $clubMarks[] = $clubUid;
-        }
-        $tableProvider->setMarkClubs($clubMarks);
-
-        // FIXME: change implementation
-        $leagueTable = tx_rnbase::makeInstance('tx_cfcleaguefe_util_LeagueTable');
-        $tableData = $leagueTable->generateTable($tableProvider);
-
-        return $tableData;
     }
 
     /**
