@@ -62,7 +62,11 @@
             "mkdir -p .Build/Web/typo3conf/ext/",
             "[ -L .Build/Web/typo3conf/ext/cfc_league_fe ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/cfc_league_fe"
         ],
-        "tests:phplint": "find *.php Classes Deprecations mod1 models services Tests util -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
+        "test:phplint": "find *.php Classes Deprecations mod1 models services Tests util -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
+        "test:phpcs": [
+            "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
+            ".Build/bin/php-cs-fixer fix -v --dry-run --diff  --ansi"
+        ],
         "test:phpunit": [
             "[ -e .Build/bin/phpunit ] || composer update --ansi",
             "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit --colors=always"
