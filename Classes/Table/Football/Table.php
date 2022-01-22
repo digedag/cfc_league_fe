@@ -338,6 +338,28 @@ class Table extends AbstractService implements ITableType
     }
 
     /**
+     * @param Match $match
+     * @param array $teams
+     *
+     * @return bool
+     */
+    protected function applyTeams(Match $match, array $teams): bool
+    {
+        $homeId = $match->getProperty('home');
+        if (!isset($teams[$homeId])) {
+            return false; // Ignore Dummy-Matches
+        }
+        $match->setHome($teams[$homeId]['team']);
+        $guestId = $match->getProperty('guest');
+        if (!isset($teams[$guestId])) {
+            return false; // Ignore Dummy-Matches
+        }
+        $match->setGuest($teams[$guestId]['team']);
+
+        return true;
+    }
+
+    /**
      * Die Spiele werden zum aktuellen Tabellenstand hinzugerechnet.
      *
      * @param Match[] $matches
@@ -349,17 +371,9 @@ class Table extends AbstractService implements ITableType
         foreach ($matches as $match) {
             /* @var $match Match */
             // Die Teams dem Spiel zuweisen
-            $homeId = $match->getProperty('home');
-            if (!isset($this->_teamData[$homeId])) {
-                continue; // Ignore Dummy-Matches
+            if (false === $this->applyTeams($match, $this->_teamData)) {
+                continue;
             }
-            $match->setHome($this->_teamData[$homeId]['team']);
-            $guestId = $match->getProperty('guest');
-            if (!isset($this->_teamData[$guestId])) {
-                continue; // Ignore Dummy-Matches
-            }
-            $match->setGuest($this->_teamData[$guestId]['team']);
-
             $this->assertTeamsInCompetition($match);
             // Wie ist das Spiel ausgegangen?
             $toto = $match->getToto();

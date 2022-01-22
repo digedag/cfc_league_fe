@@ -31,7 +31,7 @@ use System25\T3sports\Model\Team;
  ***************************************************************/
 
 /**
- * Adapter for teams in league tables that wrappes teams or clubs.
+ * Adapter for teams in league tables that wraps teams or clubs.
  */
 class TeamAdapter implements ITeam
 {
@@ -81,5 +81,15 @@ class TeamAdapter implements ITeam
     public function getDataModel(): BaseModel
     {
         return $this->getInstance();
+    }
+
+    public function isDummy(): bool
+    {
+        return $this->isTeam ? $this->getInstance()->isDummy() : false;
+    }
+
+    public function isOutOfCompetition(): bool
+    {
+        return $this->isTeam ? $this->getInstance()->isOutOfCompetition() : false;
     }
 }
