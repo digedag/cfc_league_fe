@@ -22,8 +22,7 @@
 		"issues" : "https://github.com/digedag/cfc_league_fe/issues"
 	},
 	"replace" : {
-		"typo3-ter/cfc-league-fe" : "self.version",
-		"digedag/cfc-league-fe" : "self.version"
+		"typo3-ter/cfc-league-fe" : "self.version"
 	},
 	"require" : {
 		"typo3/cms-core": "^7.6 || ^8.7 || ^9.5.17 || ^10.4.3",
