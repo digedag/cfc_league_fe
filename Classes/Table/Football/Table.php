@@ -347,9 +347,19 @@ class Table extends AbstractService implements ITableType
     {
         // Wir laufen jetzt über alle Spiele und legen einen Punktespeicher für jedes Team an
         foreach ($matches as $match) {
-            if ($match->isDummy()) {
+            /* @var $match Match */
+            // Die Teams dem Spiel zuweisen
+            $homeId = $match->getProperty('home');
+            if (!isset($this->_teamData[$homeId])) {
                 continue; // Ignore Dummy-Matches
             }
+            $match->setHome($this->_teamData[$homeId]['team']);
+            $guestId = $match->getProperty('guest');
+            if (!isset($this->_teamData[$guestId])) {
+                continue; // Ignore Dummy-Matches
+            }
+            $match->setGuest($this->_teamData[$guestId]['team']);
+
             $this->assertTeamsInCompetition($match);
             // Wie ist das Spiel ausgegangen?
             $toto = $match->getToto();

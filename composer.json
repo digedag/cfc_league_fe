@@ -27,8 +27,8 @@
 	},
 	"require" : {
 		"typo3/cms-core": "^7.6 || ^8.7 || ^9.5.17 || ^10.4.3",
-		"digedag/cfc-league" : "^1.7.0",
-		"digedag/rn-base" : "~1.14.2"
+		"digedag/cfc-league" : "dev-master",
+		"digedag/rn-base" : "~1.14.1"
 	},
 	"require-dev": {
 		"namelesscoder/typo3-repository-client": "^1.2",
@@ -63,7 +63,11 @@
             "mkdir -p .Build/Web/typo3conf/ext/",
             "[ -L .Build/Web/typo3conf/ext/cfc_league_fe ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/cfc_league_fe"
         ],
-        "tests:phplint": "find *.php Classes Deprecations mod1 models services Tests util -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"
+        "tests:phplint": "find *.php Classes Deprecations mod1 models services Tests util -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
+        "test:phpunit": [
+            "[ -e .Build/bin/phpunit ] || composer update --ansi",
+            "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit --colors=always"
+        ]
     },
     "extra": {
         "typo3/cms": {

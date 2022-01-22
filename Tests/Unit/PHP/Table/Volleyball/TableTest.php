@@ -3,6 +3,8 @@
 namespace System25\T3sports\Tests\Table\Volleyball;
 
 use Sys25\RnBase\Testing\BaseTestCase;
+use Sys25\RnBase\Testing\TestUtility;
+use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\Spyc;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Table\Builder;
@@ -12,7 +14,7 @@ use System25\T3sports\Table\ITableResult;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2013-2021 Rene Nitzsche (rene@system25.de)
+ * (c) 2013-2022 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,6 +36,9 @@ use System25\T3sports\Table\ITableResult;
  */
 class TableTest extends BaseTestCase
 {
+    /**
+     * @group unit
+     */
     public function testLeagueTableWithTwoPointSystem()
     {
         $league = $this->prepareLeague('league_volley_1');
@@ -41,8 +46,7 @@ class TableTest extends BaseTestCase
 
         $matches = $league->getMatches(2);
 
-        $params = new \ArrayObject();
-        $config = $this->createConfigurations([
+        $config = TestUtility::createConfigurations([
             'tableType' => '0',
         ], 'cfc_league_fe');
 
@@ -79,7 +83,7 @@ class TableTest extends BaseTestCase
 
     private function getFixturePath($filename)
     {
-        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe').'tests/fixtures/'.$filename;
+        return Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)
@@ -108,9 +112,6 @@ class TableTest extends BaseTestCase
 
         $league = Competition::getCompetitionInstance($data['record']['uid'], $data['record']);
         $teams = $this->makeInstances($data['teams'], $data['teams']['clazz']);
-        // TODO: so geht das nicht mehr!
-        // foreach ($teams As $team)
-        // tx_cfcleaguefe_models_team::addInstance($team);
         $matches = $this->makeInstances($data['matches'], $data['matches']['clazz']);
         $league->setTeams($teams);
         $league->setPenalties([]);

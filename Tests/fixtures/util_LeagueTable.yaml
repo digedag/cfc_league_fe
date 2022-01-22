@@ -1,13 +1,14 @@
 ---
 league_1: 
   # Diese Liga besteht aus vier Teams und fünf absolvierten Spielen
-  clazz: tx_cfcleaguefe_models_competition
+  clazz: System25\T3sports\Model\Competition
   record: 
     uid: 1
     teams: 1,2,3,4
     point_system: 1
+    tablestrategy: default
   teams: 
-    clazz: tx_cfcleaguefe_models_team
+    clazz: System25\T3sports\Model\Team
     - 
       record: 
         uid: 1
@@ -33,7 +34,7 @@ league_1:
         short_name: Team 4
         club: 4
   matches: 
-    clazz: tx_cfcleaguefe_models_match
+    clazz: System25\T3sports\Model\Match
     - 
       # T1-T2 - 1:1
       record: 
@@ -101,13 +102,14 @@ league_1:
         goals_guest: 0
 league_2: 
   # Diese Liga besteht aus vier Teams wobei Team 2 Spielfrei ist und fünf absolvierten Spielen
-  clazz: tx_cfcleaguefe_models_competition
+  clazz: System25\T3sports\Model\Competition
   record: 
     uid: 2
     teams: 1,2,3,4
     point_system: 1
+    tablestrategy: default
   teams: 
-    clazz: tx_cfcleaguefe_models_team
+    clazz: System25\T3sports\Model\Team
     - 
       record: 
         uid: 1
@@ -134,7 +136,7 @@ league_2:
         short_name: Team 4
         club: 4
   matches: 
-    clazz: tx_cfcleaguefe_models_match
+    clazz: System25\T3sports\Model\Match
     - 
       # T1-T2 - 1:1 - Spielfrei
       record: 
@@ -202,15 +204,16 @@ league_2:
         goals_guest: 0
 league_volley_1: 
   # Diese Liga besteht aus vier Teams und fünf absolvierten Spielen
-  clazz: tx_cfcleague_models_competition
+  clazz: System25\T3sports\Model\Competition
   record: 
     uid: 100
     teams: 1,2,3,4
     point_system: 0
     sports: volleyball
     match_parts: 1
+    tablestrategy: default
   teams: 
-    clazz: tx_cfcleaguefe_models_team
+    clazz: System25\T3sports\Model\Team
     - 
       record: 
         uid: 1
@@ -236,7 +239,7 @@ league_volley_1:
         short_name: Team 4
         club: 4
   matches: 
-    clazz: tx_cfcleaguefe_models_match
+    clazz: System25\T3sports\Model\Match
     - 
       # T1-T2 - 2:1 (25:20;23:25;25:19)
       record: 

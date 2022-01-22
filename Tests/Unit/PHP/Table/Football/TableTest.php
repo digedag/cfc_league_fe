@@ -3,8 +3,11 @@
 namespace System25\T3sports\Tests\Table\Football;
 
 use Sys25\RnBase\Testing\BaseTestCase;
+use Sys25\RnBase\Testing\TestUtility;
+use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\Spyc;
 use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Team;
 use System25\T3sports\Table\Builder;
 use System25\T3sports\Table\ITableResult;
 
@@ -12,7 +15,7 @@ use System25\T3sports\Table\ITableResult;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2011-2021 Rene Nitzsche (rene@system25.de)
+ * (c) 2011-2022 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,9 +38,7 @@ use System25\T3sports\Table\ITableResult;
 class TableTest extends BaseTestCase
 {
     /**
-     * FIXME.
-     *
-     * @_group unit
+     * @group unit
      */
     public function testLeagueTableWithDummyTeam()
     {
@@ -47,10 +48,10 @@ class TableTest extends BaseTestCase
         unset($teams[1]);
         $league->setTeams(array_values($teams));
         $matches = $league->getMatches(2);
-        $params = new \ArrayObject();
-        $config = $this->createConfigurations([
+        $config = TestUtility::createConfigurations([
             'tableType' => '0',
         ], 'cfc_league_fe');
+        $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 
         // Die Teams vorher setzen, damit kein DB-Zugriff erfolgt
@@ -63,9 +64,7 @@ class TableTest extends BaseTestCase
     }
 
     /**
-     * FIXME.
-     *
-     * @_group unit
+     * @group unit
      */
     public function testLeagueTableWithTwoPointSystem()
     {
@@ -74,11 +73,10 @@ class TableTest extends BaseTestCase
 
         $matches = $league->getMatches(2);
 
-        $params = new \ArrayObject();
-        $config = $this->createConfigurations([
+        $config = TestUtility::createConfigurations([
             'tableType' => '0',
         ], 'cfc_league_fe');
-
+        $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams());
 
@@ -101,9 +99,7 @@ class TableTest extends BaseTestCase
     }
 
     /**
-     * FIXME.
-     *
-     * @_group unit
+     * @group unit
      */
     public function testLeagueTableWithThreePointSystem()
     {
@@ -111,10 +107,10 @@ class TableTest extends BaseTestCase
         $league->setProperty('point_system', 0); // Punktsystem umstellen
         $matches = $league->getMatches(2);
 
-        $params = new \ArrayObject();
-        $config = $this->createConfigurations([
+        $config = TestUtility::createConfigurations([
             'tableType' => '0',
         ], 'cfc_league_fe');
+        $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams());
         $result = $leagueTable->getTableData();
@@ -144,7 +140,7 @@ class TableTest extends BaseTestCase
 
     private function getFixturePath($filename)
     {
-        return \tx_rnbase_util_Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
+        return Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)
@@ -165,7 +161,7 @@ class TableTest extends BaseTestCase
      *
      * @return Competition
      */
-    public function prepareLeague($leagueName)
+    private function prepareLeague($leagueName)
     {
         // Laden der Daten
         $data = Spyc::YAMLLoad($this->getFixturePath('util_LeagueTable.yaml'));
@@ -173,9 +169,6 @@ class TableTest extends BaseTestCase
 
         $league = Competition::getCompetitionInstance($data['record']['uid'], $data['record']);
         $teams = $this->makeInstances($data['teams'], $data['teams']['clazz']);
-        foreach ($teams as $team) {
-            \tx_cfcleaguefe_models_team::addInstance($team);
-        }
         $matches = $this->makeInstances($data['matches'], $data['matches']['clazz']);
         $league->setTeams($teams);
         $league->setPenalties([]);

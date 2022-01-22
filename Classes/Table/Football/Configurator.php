@@ -11,6 +11,7 @@ use System25\T3sports\Table\IComparator;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\PointOptions;
+use System25\T3sports\Utility\Misc;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
 
@@ -265,7 +266,7 @@ class Configurator implements IConfigurator
                 $strategies = reset($srv->getTableStrategies4TCA());
                 $strategy = $strategies[1];
             }
-            $this->cfgTableStrategy = \tx_cfcleague_util_Misc::lookupTableStrategy($strategy);
+            $this->cfgTableStrategy = Misc::lookupTableStrategy($strategy);
         }
 
         return array_key_exists($key, $this->cfgTableStrategy) ? $this->cfgTableStrategy[$key] : null;
