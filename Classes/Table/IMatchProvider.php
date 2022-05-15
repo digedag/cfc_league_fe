@@ -85,4 +85,11 @@ interface IMatchProvider
      * @param IConfigurator $configurator
      */
     public function setConfigurator(IConfigurator $configurator);
+
+    /**
+     * Return club uids of all running matches.
+     *
+     * @return array
+     */
+    public function getClubIdsOfRunningMatches();
 }

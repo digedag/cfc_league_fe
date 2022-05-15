@@ -5,6 +5,7 @@ namespace System25\T3sports\Table\Volleyball;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\IConfigurator;
+use System25\T3sports\Table\ITeam;
 use System25\T3sports\Utility\MatchSets;
 use tx_rnbase;
 
@@ -50,7 +51,7 @@ class Table extends FootballTable
         if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
             $configuratorClass = $configuratorClass ? $configuratorClass : Configurator::class;
-            $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
+            $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider()->getBaseCompetition(), $this->configuration, $this->confId);
         }
 
         return $this->configurator;
@@ -66,79 +67,84 @@ class Table extends FootballTable
     protected function countStandard($match, $toto, IConfigurator $configurator)
     {
         // Anzahl Spiele aktualisieren
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
-        $this->addMatchCount($homeId);
-        $this->addMatchCount($guestId);
+        $home = $match->getHome();
+        $guest = $match->getGuest();
+        $this->addMatchCount($home);
+        $this->addMatchCount($guest);
+
         // Für H2H modus das Spielergebnis merken
-        $this->addResult($homeId, $guestId, $match->getResult());
+        $this->addResult($home, $guest, $match->getResult());
 
         // Beim Volleyball gibt es kein Unentschieden
         if (1 == $toto) {  // Heimsieg
             // Für die
-            $this->addPoints($homeId, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
-            $this->addPoints($guestId, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+            $this->addPoints($home, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+            $this->addPoints($guest, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
 
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+                $this->addPoints2($guest, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
             }
 
-            $this->addWinCount($homeId);
-            $this->addLoseCount($guestId);
+            $this->addWinCount($home);
+            $this->addLoseCount($guest);
         } else { // Auswärtssieg
-            $this->addPoints($homeId, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
-            $this->addPoints($guestId, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+            $this->addPoints($home, $configurator->getPointsLooseVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+            $this->addPoints($guest, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
 
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
+                $this->addPoints2($home, $configurator->getPointsWinVolley($match->getGoalsHome(), $match->getGoalsGuest()));
             }
-            $this->addLoseCount($homeId);
-            $this->addWinCount($guestId);
+            $this->addLoseCount($home);
+            $this->addWinCount($guest);
         }
 
         $ballsHome = MatchSets::countSetPointsHome($match);
         $ballsGuest = MatchSets::countSetPointsGuest($match);
-        $this->addBalls($homeId, $ballsHome, $ballsGuest);
-        $this->addBalls($guestId, $ballsGuest, $ballsHome);
+        $this->addBalls($home, $ballsHome, $ballsGuest);
+        $this->addBalls($guest, $ballsGuest, $ballsHome);
 
         // Jetzt die Tore summieren
-        $this->addSets($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
-        $this->addSets($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addSets($home, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addSets($guest, $match->getGoalsGuest(), $match->getGoalsHome());
     }
 
-    protected function initTeam($teamId)
+    protected function initTeam(ITeam $team)
     {
-        $this->_teamData[$teamId]['balls1'] = 0;
-        $this->_teamData[$teamId]['balls2'] = 0;
-        $this->_teamData[$teamId]['balls_diff'] = 0;
-        $this->_teamData[$teamId]['sets1'] = 0;
-        $this->_teamData[$teamId]['sets2'] = 0;
-        $this->_teamData[$teamId]['sets_diff'] = 0;
+        $this->_teamData->setTeamData($team, 'balls1', 0);
+        $this->_teamData->setTeamData($team, 'balls2', 0);
+        $this->_teamData->setTeamData($team, 'balls_diff', 0);
+        $this->_teamData->setTeamData($team, 'sets1', 0);
+        $this->_teamData->setTeamData($team, 'sets2', 0);
+        $this->_teamData->setTeamData($team, 'sets_diff', 0);
     }
 
     /**
      * Addiert Sätze zu einem Team.
      */
-    protected function addSets($teamId, $sets1, $sets2)
+    protected function addSets(ITeam $team, $sets1, $sets2)
     {
-        $this->_teamData[$teamId]['sets1'] = $this->_teamData[$teamId]['sets1'] + $sets1;
-        $this->_teamData[$teamId]['sets2'] = $this->_teamData[$teamId]['sets2'] + $sets2;
-        $this->_teamData[$teamId]['sets_diff'] = $this->_teamData[$teamId]['sets1'] - $this->_teamData[$teamId]['sets2'];
+        $data = $this->_teamData->getTeamData($team->getTeamId());
+        $newSets1 = $data['sets1'] + $sets1;
+        $newSets2 = $data['sets2'] + $sets2;
+        $this->_teamData->setTeamData($team, 'sets1', $newSets1);
+        $this->_teamData->setTeamData($team, 'sets2', $newSets2);
+        $this->_teamData->setTeamData($team, 'sets_diff', $newSets1 - $newSets2);
         // TODO: Muss hier ggf. gerundet werden??
-        $this->_teamData[$teamId]['sets_quot'] = $this->_teamData[$teamId]['sets1'] /
-                                                        ($this->_teamData[$teamId]['sets2'] > 0 ? $this->_teamData[$teamId]['sets2'] : 1);
+        $this->_teamData->setTeamData($team, 'sets_quot', $newSets1 / ($newSets2 > 0 ? $newSets2 : 1));
     }
 
     /**
      * Addiert Bälle zu einem Team.
      */
-    protected function addBalls($teamId, $balls1, $balls2)
+    protected function addBalls(ITeam $team, $balls1, $balls2)
     {
-        $this->_teamData[$teamId]['balls1'] = $this->_teamData[$teamId]['balls1'] + $balls1;
-        $this->_teamData[$teamId]['balls2'] = $this->_teamData[$teamId]['balls2'] + $balls2;
-        $this->_teamData[$teamId]['balls_diff'] = $this->_teamData[$teamId]['balls1'] - $this->_teamData[$teamId]['balls2'];
-        $this->_teamData[$teamId]['balls_quot'] = $this->_teamData[$teamId]['balls1'] /
-                                                        ($this->_teamData[$teamId]['balls2'] > 0 ? $this->_teamData[$teamId]['balls2'] : 1);
+        $data = $this->_teamData->getTeamData($team->getTeamId());
+        $newBalls1 = $data['balls1'] + $balls1;
+        $newBalls2 = $data['balls2'] + $balls2;
+        $this->_teamData->setTeamData($team, 'balls1', $newBalls1);
+        $this->_teamData->setTeamData($team, 'balls2', $newBalls2);
+        $this->_teamData->setTeamData($team, 'balls_diff', $newBalls1 - $newBalls2);
+        $this->_teamData->setTeamData($team, 'balls_quot', $newBalls1 / ($newBalls2 > 0 ? $newBalls2 : 1));
     }
 
     /**
@@ -151,28 +157,29 @@ class Table extends FootballTable
      */
     protected function countHome($match, $toto, IConfigurator $configurator)
     {
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
+        $home = $match->getHome();
+        $guest = $match->getGuest();
+
         // Anzahl Spiele aktualisieren
-        $this->addMatchCount($homeId);
-        $this->addResult($homeId, $guestId, $match->getGuest());
+        $this->addMatchCount($home);
+        $this->addResult($home, $guest, $match->getGuest());
 
         if (1 == $toto) {  // Heimsieg
-            $this->addPoints($homeId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
-            $this->addWinCount($homeId);
+            $this->addPoints($home, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
+            $this->addWinCount($home);
         } else { // Auswärtssieg
-            $this->addPoints($homeId, $configurator->getPointsLooseVolley($match->isExtraTime(), $match->isPenalty()));
+            $this->addPoints($home, $configurator->getPointsLooseVolley($match->isExtraTime(), $match->isPenalty()));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
+                $this->addPoints2($home, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
             }
-            $this->addLoseCount($homeId);
+            $this->addLoseCount($home);
         }
         $ballsHome = MatchSets::countSetPointsHome($match);
         $ballsGuest = MatchSets::countSetPointsGuest($match);
-        $this->addBalls($homeId, $ballsHome, $ballsGuest);
+        $this->addBalls($home, $ballsHome, $ballsGuest);
 
         // Jetzt die Sätze summieren
-        $this->addSets($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addSets($home, $match->getGoalsHome(), $match->getGoalsGuest());
     }
 
     /**
@@ -185,29 +192,29 @@ class Table extends FootballTable
      */
     protected function countGuest($match, $toto, IConfigurator $configurator)
     {
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
+        $home = $match->getHome();
+        $guest = $match->getGuest();
         // Anzahl Spiele aktualisieren
-        $this->addMatchCount($guestId);
-        $this->addResult($homeId, $guestId, $match->getGuest());
+        $this->addMatchCount($guest);
+        $this->addResult($home, $guest, $match->getGuest());
 
         if (1 == $toto) {  // Heimsieg
-            $this->addPoints($guestId, $configurator->getPointsLooseVolley($match->isExtraTime(), $match->isPenalty()));
+            $this->addPoints($guest, $configurator->getPointsLooseVolley($match->isExtraTime(), $match->isPenalty()));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
+                $this->addPoints2($guest, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
             }
-            $this->addLoseCount($guestId);
+            $this->addLoseCount($guest);
         } else { // Auswärtssieg
-            $this->addPoints($guestId, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
-            $this->addWinCount($guestId);
+            $this->addPoints($guest, $configurator->getPointsWinVolley($match->isExtraTime(), $match->isPenalty()));
+            $this->addWinCount($guest);
         }
 
         $ballsHome = MatchSets::countSetPointsHome($match);
         $ballsGuest = MatchSets::countSetPointsGuest($match);
-        $this->addBalls($guestId, $ballsGuest, $ballsHome);
+        $this->addBalls($guest, $ballsGuest, $ballsHome);
 
         // Jetzt die Tore summieren
-        $this->addSets($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addSets($guest, $match->getGoalsGuest(), $match->getGoalsHome());
     }
 
     public function getTypeID(): string

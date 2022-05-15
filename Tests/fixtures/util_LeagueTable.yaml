@@ -106,6 +106,7 @@ league_2:
   record: 
     uid: 2
     teams: 1,2,3,4
+    # 2-Punktsystem
     point_system: 1
     tablestrategy: default
   teams: 

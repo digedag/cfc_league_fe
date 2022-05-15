@@ -35,11 +35,12 @@ use System25\T3sports\Table\ITableResult;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
+
+/**
+ * @group unit
+ */
 class TableTest extends BaseTestCase
 {
-    /**
-     * @group unit
-     */
     public function testLeagueTableWithDummyTeam()
     {
         $league = $this->prepareLeague('league_2');
@@ -48,9 +49,7 @@ class TableTest extends BaseTestCase
         unset($teams[1]);
         $league->setTeams(array_values($teams));
         $matches = $league->getMatches(2);
-        $config = TestUtility::createConfigurations([
-            'tableType' => '0',
-        ], 'cfc_league_fe');
+        $config = TestUtility::createConfigurations([], 'cfc_league_fe');
         $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 
@@ -60,7 +59,31 @@ class TableTest extends BaseTestCase
         $this->assertTrue($result instanceof ITableResult, 'Got no valid result');
 
         $scoreLine = $result->getScores();
+
         $this->assertEquals(3, count($scoreLine), 'Table should contain 3 teams.');
+
+        // Tabelle 2-P.
+        // T1: -NS
+        // T2: --
+        // T3: SS
+        // T4: N-N
+        // Sp Pkt Tore
+        // T3 - 4:0 3:0
+        // T1 - 2:2 3:1
+        // T4 - 0:4 0:5
+
+        $expected = [
+            0 => ['teamId' => 't_3', 'points' => 4, 'goals1' => 3, 'goals2' => 0],
+            1 => ['teamId' => 't_1', 'points' => 2, 'goals1' => 3, 'goals2' => 1],
+            2 => ['teamId' => 't_4', 'points' => 0, 'goals1' => 0, 'goals2' => 5],
+        ];
+        foreach ($scoreLine as $idx => $score) {
+            $this->assertEquals($expected[$idx]['teamId'], $score['team']->getTeamId());
+            $this->assertEquals($expected[$idx]['points'], $score['points']);
+            $this->assertEquals($expected[$idx]['goals1'], $score['goals1']);
+            $this->assertEquals($expected[$idx]['goals2'], $score['goals2']);
+        }
+//        print_r($scoreLine);
     }
 
     /**
@@ -74,7 +97,6 @@ class TableTest extends BaseTestCase
         $matches = $league->getMatches(2);
 
         $config = TestUtility::createConfigurations([
-            'tableType' => '0',
         ], 'cfc_league_fe');
         $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
@@ -92,10 +114,10 @@ class TableTest extends BaseTestCase
         // T2 - 2 3:2 3:1
         // T1 - 3 4:2 3:3
         // T4 - 3 1:7 0:6
-        $this->assertEquals(3, $scoreLine[0]['teamId'], 'Team 3 should be 1. place');
-        $this->assertEquals(2, $scoreLine[1]['teamId'], 'Team 2 should be 2. place');
-        $this->assertEquals(1, $scoreLine[2]['teamId'], 'Team 1 should be 3. place');
-        $this->assertEquals(4, $scoreLine[3]['teamId'], 'Team 4 should be 4. place');
+        $this->assertEquals('t_3', $scoreLine[0]['teamId'], 'Team 3 should be 1. place');
+        $this->assertEquals('t_2', $scoreLine[1]['teamId'], 'Team 2 should be 2. place');
+        $this->assertEquals('t_1', $scoreLine[2]['teamId'], 'Team 1 should be 3. place');
+        $this->assertEquals('t_4', $scoreLine[3]['teamId'], 'Team 4 should be 4. place');
     }
 
     /**
@@ -126,10 +148,10 @@ class TableTest extends BaseTestCase
         $this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');
         $this->assertEquals(6, $scoreLine[0]['points'], 'Team 3 should have 6 points');
         $this->assertEquals(-1, $scoreLine[0]['points2'], 'Team 3 should have no negative points in 3 point system.');
-        $this->assertEquals(3, $scoreLine[0]['teamId'], 'Team 3 should be 1. place');
-        $this->assertEquals(1, $scoreLine[1]['teamId'], 'Team 1 should be 2. place');
-        $this->assertEquals(2, $scoreLine[2]['teamId'], 'Team 2 should be 3. place');
-        $this->assertEquals(4, $scoreLine[3]['teamId'], 'Team 4 should be 4. place');
+        $this->assertEquals('t_3', $scoreLine[0]['teamId'], 'Team 3 should be 1. place');
+        $this->assertEquals('t_1', $scoreLine[1]['teamId'], 'Team 1 should be 2. place');
+        $this->assertEquals('t_2', $scoreLine[2]['teamId'], 'Team 2 should be 3. place');
+        $this->assertEquals('t_4', $scoreLine[3]['teamId'], 'Team 4 should be 4. place');
         $this->assertEquals(6, $scoreLine[0]['points'], 'Team 3 should has wrong points');
         $this->assertEquals(0, $scoreLine[3]['points'], 'Team 4 should has wrong points');
         // Alle Teams müssen bei den Minuspunkten -1 haben

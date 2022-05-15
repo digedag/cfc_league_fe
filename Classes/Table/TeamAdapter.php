@@ -2,7 +2,6 @@
 
 namespace System25\T3sports\Table;
 
-use InvalidArgumentException;
 use Sys25\RnBase\Domain\Model\BaseModel;
 use System25\T3sports\Model\Club;
 use System25\T3sports\Model\Team;
@@ -32,25 +31,31 @@ use System25\T3sports\Model\Team;
 
 /**
  * Adapter for teams in league tables that wraps teams or clubs.
+ *
+ * Eine Tabelle wird für Teams oder Vereine erstellt. Ein Spiel ist aber immer
+ * mit Teams verbunden. Innerhalb eines Wettbewerbs ist das Team eindeutig.
+ * Wenn wir mit mehreren Wettbewerben arbeiten, dann bekommen wir Spiele, bei
+ * denen mehrere Teams zu einem Verein gehören.
+ * Es ist Quatsch das Team per Club zu initialisieren. Es muss nur sichergestellt sein,
+ * das für alle Teams eines Clubs der selbe TeamAdapter verwendet wird. Das geht natürlich nur,
+ * wenn im Team der Club gesetzt ist.
  */
 class TeamAdapter implements ITeam
 {
     /** @var Team */
     private $team;
+    private $teamUids = [];
     /** @var Club */
-    private $club;
-    private $isTeam = true;
+    private $clubUid;
+    private $useClubs = false;
 
-    public function __construct($teamOrClub)
+    public function __construct(Team $team, bool $useClubs = false)
     {
-        if ($teamOrClub instanceof Team) {
-            $this->team = $teamOrClub;
-        } elseif ($teamOrClub instanceof Team) {
-            $this->club = $teamOrClub;
-            $this->isTeam = false;
-        } else {
-            throw new InvalidArgumentException('Unsupported team instance given.');
-        }
+        $this->team = $team;
+        $this->teamUids[] = $team->getUid();
+        $this->useClubs = $useClubs;
+        $clubUid = (int) $team->getClubUid();
+        $this->clubUid = $useClubs ? $clubUid : 0;
     }
 
     public function getUid(): int
@@ -58,14 +63,29 @@ class TeamAdapter implements ITeam
         return $this->getInstance()->getUid();
     }
 
+    public function addTeamUid(int $uid)
+    {
+        $this->teamUids[] = $uid;
+    }
+
+    public function getTeamUids(): array
+    {
+        return $this->teamUids;
+    }
+
+    public function getClubUid(): int
+    {
+        return $this->clubUid;
+    }
+
     public function getTeamId(): string
     {
-        return sprintf('%s_%d', $this->isTeam ? 't' : 'c', $this->isTeam ? $this->team->getUid() : $this->club->getUid());
+        return sprintf('%s_%d', $this->useClubs ? 'c' : 't', $this->useClubs ? $this->clubUid : $this->team->getUid());
     }
 
     private function getInstance(): BaseModel
     {
-        return $this->isTeam ? $this->team : $this->club;
+        return $this->team;
     }
 
     public function getProperty($property = null)
