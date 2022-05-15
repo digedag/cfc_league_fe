@@ -131,7 +131,7 @@ class MatchCrossTable extends AbstractAction
         if (!count($teamIds)) {
             return [];
         }
-        $teamIds = implode($teamIds, ',');
+        $teamIds = implode(',', $teamIds);
         $what = '*';
         $from = 'tx_cfcleague_teams';
         $options['where'] = 'tx_cfcleague_teams.uid IN ('.$teamIds.') ';

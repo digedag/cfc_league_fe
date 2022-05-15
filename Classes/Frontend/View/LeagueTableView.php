@@ -125,7 +125,7 @@ class LeagueTableView extends BaseView
         if (count($parts)) {
             // Zum Schluß das Haupttemplate zusammenstellen
             $markerArray = [];
-            $subpartArray['###PENALTY###'] = implode($parts, $configurations->get('leaguetable.penalty.implode'));
+            $subpartArray['###PENALTY###'] = implode($configurations->get('leaguetable.penalty.implode'), $parts);
             $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray); // , $wrappedSubpartArray);
         } else { // Keine Strafen vorhanden, es wird ein leerer String gesendet
             $out = '';
@@ -172,7 +172,7 @@ class LeagueTableView extends BaseView
         }
         // Jetzt die einzelnen Teile zusammenfügen
         $markerArray = [];
-        $subpartArray['###ROW###'] = implode($parts, $configurations->get('leaguetable.table.implode'));
+        $subpartArray['###ROW###'] = implode($configurations->get('leaguetable.table.implode'), $parts);
 
         return Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }

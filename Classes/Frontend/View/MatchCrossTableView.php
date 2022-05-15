@@ -164,6 +164,7 @@ class MatchCrossTableView extends BaseView
         $listBuilder = tx_rnbase::makeInstance(ListBuilder::class, tx_rnbase::makeInstance(MatchMarkerBuilderInfo::class));
 
         $lines = [];
+        $markerArray = [];
         // Über alle Zeilen iterieren
         foreach ($datalines as $uid => $matches) {
             $rowRollCnt = 0;
@@ -179,13 +180,13 @@ class MatchCrossTableView extends BaseView
                 $rowRollCnt = ($rowRollCnt >= $rowRoll) ? 0 : $rowRollCnt + 1;
             }
             // Jetzt die einzelnen Teile zusammenfügen
-            $subpartArray['###MATCHS###'] = implode($parts, $configurations->get('matchcrosstable.dataline.implode'));
+            $subpartArray['###MATCHS###'] = implode($configurations->get('matchcrosstable.dataline.implode'), $parts);
             // Und das Team ins MarkerArray
             $lineTemplate = $teamMarker->parseTemplate($template, $teams[$uid], $this->formatter, 'matchcrosstable.dataline.team.', 'DATALINE_TEAM');
             $lines[] = Templates::substituteMarkerArrayCached($lineTemplate, $markerArray, $subpartArray);
         }
 
-        return implode($lines, $configurations->get('matchcrosstable.dataline.implode'));
+        return implode($configurations->get('matchcrosstable.dataline.implode'), $lines);
     }
 
     /**
@@ -212,7 +213,7 @@ class MatchCrossTableView extends BaseView
         }
         Misc::pullTT();
 
-        $subpartArray['###TEAM###'] = implode($parts, $configurations->get('matchcrosstable.headline.team.implode'));
+        $subpartArray['###TEAM###'] = implode($configurations->get('matchcrosstable.headline.team.implode'), $parts);
         $markerArray = [
             '###TEAMCOUNT###' => count($teams),
         ];

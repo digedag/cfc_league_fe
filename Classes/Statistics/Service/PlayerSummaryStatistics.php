@@ -106,7 +106,7 @@ class PlayerSummaryStatistics extends PlayerStatistics
             foreach ($teams as $team) {
                 $teamIds[] = $team->getUid();
             }
-            $matchCount = $comp->getNumberOfMatches(implode($teamIds, ',')); // Spiele gesamt
+            $matchCount = $comp->getNumberOfMatches(implode(',', $teamIds)); // Spiele gesamt
             $this->result['numberOfMatches'] = $this->result['numberOfMatches'] + $matchCount;
         }
 

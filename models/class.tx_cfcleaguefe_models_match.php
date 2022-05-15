@@ -243,7 +243,7 @@ class tx_cfcleaguefe_models_match extends Match
         if ($this->getProperty('substitutes_home')) {
             $uids[] = $this->getProperty('substitutes_home');
         }
-        $uids = implode($uids, ',');
+        $uids = implode(',', $uids);
         $uids = Strings::intExplode(',', $uids);
         if (in_array($playerUid, $uids)) {
             return 1;
@@ -256,7 +256,7 @@ class tx_cfcleaguefe_models_match extends Match
         if ($this->getProperty('substitutes_guest')) {
             $uids[] = $this->getProperty('substitutes_guest');
         }
-        $uids = implode($uids, ',');
+        $uids = implode(',', $uids);
         $uids = Strings::intExplode(',', $uids);
         if (in_array($playerUid, $uids)) {
             return 2;
@@ -332,7 +332,7 @@ class tx_cfcleaguefe_models_match extends Match
             $uids[] = $this->getProperty('substitutes_guest');
         }
 
-        $uids = implode($uids, ',');
+        $uids = implode(',', $uids);
 
         $what = '*';
         $from = 'tx_cfcleague_profiles';

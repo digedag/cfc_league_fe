@@ -290,8 +290,8 @@ class tx_cfcleaguefe_models_team extends Team
      */
     public static function getTeams($competitionIds, $clubIds)
     {
-        $competitionIds = implode(Strings::intExplode(',', $competitionIds), ',');
-        $clubIds = implode(Strings::intExplode(',', $clubIds), ',');
+        $competitionIds = implode(',', Strings::intExplode(',', $competitionIds));
+        $clubIds = implode(',', Strings::intExplode(',', $clubIds));
 
         // $what = tx_cfcleaguefe_models_team::getWhat();
         $what = 'tx_cfcleague_teams.*';

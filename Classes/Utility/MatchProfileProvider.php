@@ -139,7 +139,7 @@ class MatchProfileProvider
             $uids[] = $match->getProperty('substitutes_guest');
         }
 
-        $uids = implode($uids, ',');
+        $uids = implode(',', $uids);
 
         $rows = $this->profileRepo->findByUids($uids);
 

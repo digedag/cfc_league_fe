@@ -85,7 +85,7 @@ class TeamStatisticsMarker extends BaseMarker
         }
         // Jetzt die einzelnen Teile zusammenfügen
         $subpartArray = [];
-        $subpartArray['###'.$statsMarker.'_TEAM###'] = implode($parts, $configurations->get($statsMarker.'team.implode'));
+        $subpartArray['###'.$statsMarker.'_TEAM###'] = implode($configurations->get($statsMarker.'team.implode'), $parts);
 
         $markerArray['###TEAMCOUNT###'] = count($parts);
 

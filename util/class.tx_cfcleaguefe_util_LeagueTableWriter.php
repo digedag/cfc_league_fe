@@ -88,7 +88,7 @@ class tx_cfcleaguefe_util_LeagueTableWriter
         }
         // Jetzt die einzelnen Teile zusammenfügen
         $markerArray = [];
-        $subpartArray['###ROW###'] = implode($parts, $configurations->get($confId.'table.implode'));
+        $subpartArray['###ROW###'] = implode($configurations->get($confId.'table.implode'), $parts);
 
         return Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }

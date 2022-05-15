@@ -165,7 +165,7 @@ class ScopeSelectionView extends BaseView
             unset($keepVars[strtolower($markerName)]);
         }
         // Jetzt die einzelnen Teile zusammenfügen
-        $out = implode($parts, $configurations->get('scopeSelection.'.$confName.'.implode'));
+        $out = implode($configurations->get('scopeSelection.'.$confName.'.implode'), $parts);
 
         // Im Haupttemplate stellen wir die ausgewählte Saison als Marker zur Verfügung
         $markerArray = $configurations->getFormatter()->getItemMarkerArrayWrapped($currItem->getProperty(), $itemConfId.'current.', 0, $markerName.'_CURRENT_', $currItem->getColumnNames());

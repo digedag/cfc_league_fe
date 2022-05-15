@@ -78,7 +78,7 @@ class PlayerStatisticsMarker
         }
         // Jetzt die einzelnen Teile zusammenfügen
         $subpartArray = [];
-        $subpartArray['###'.$statsMarker.'_PROFILE###'] = implode($parts, $configurations->get($statsMarker.'profile.implode'));
+        $subpartArray['###'.$statsMarker.'_PROFILE###'] = implode($configurations->get($statsMarker.'profile.implode'), $parts);
 
         $markerArray['###PLAYERCOUNT###'] = count($parts);
 

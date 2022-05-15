@@ -86,7 +86,7 @@ class LeagueTableAllTimeView extends LeagueTableView
         }
         // Jetzt die einzelnen Teile zusammenfügen
         $markerArray = [];
-        $subpartArray['###ROW###'] = implode($parts, $configurations->get('leaguetableAllTime.table.implode'));
+        $subpartArray['###ROW###'] = implode($configurations->get('leaguetableAllTime.table.implode'), $parts);
 
         return \tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
