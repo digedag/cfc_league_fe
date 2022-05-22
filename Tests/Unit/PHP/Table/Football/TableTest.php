@@ -54,7 +54,7 @@ class TableTest extends BaseTestCase
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
 
         // Die Teams vorher setzen, damit kein DB-Zugriff erfolgt
-        $leagueTable->getMatchProvider()->setTeams(array_values($teams));
+        $leagueTable->getMatchProvider()->setTeams(array_values($teams), false);
         $result = $leagueTable->getTableData();
         $this->assertTrue($result instanceof ITableResult, 'Got no valid result');
 
@@ -73,9 +73,9 @@ class TableTest extends BaseTestCase
         // T4 - 0:4 0:5
 
         $expected = [
-            0 => ['teamId' => 't_3', 'points' => 4, 'goals1' => 3, 'goals2' => 0],
-            1 => ['teamId' => 't_1', 'points' => 2, 'goals1' => 3, 'goals2' => 1],
-            2 => ['teamId' => 't_4', 'points' => 0, 'goals1' => 0, 'goals2' => 5],
+            0 => ['teamId' => 't_13', 'points' => 4, 'goals1' => 3, 'goals2' => 0],
+            1 => ['teamId' => 't_11', 'points' => 2, 'goals1' => 3, 'goals2' => 1],
+            2 => ['teamId' => 't_14', 'points' => 0, 'goals1' => 0, 'goals2' => 5],
         ];
         foreach ($scoreLine as $idx => $score) {
             $this->assertEquals($expected[$idx]['teamId'], $score['team']->getTeamId());
@@ -100,7 +100,7 @@ class TableTest extends BaseTestCase
         ], 'cfc_league_fe');
         $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
-        $leagueTable->getMatchProvider()->setTeams($league->getTeams());
+        $leagueTable->getMatchProvider()->setTeams($league->getTeams(), false);
 
         $result = $leagueTable->getTableData();
 
@@ -134,7 +134,7 @@ class TableTest extends BaseTestCase
         ], 'cfc_league_fe');
         $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
-        $leagueTable->getMatchProvider()->setTeams($league->getTeams());
+        $leagueTable->getMatchProvider()->setTeams($league->getTeams(), false);
         $result = $leagueTable->getTableData();
 
         // Tabelle 3-P.

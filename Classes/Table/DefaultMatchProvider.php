@@ -70,6 +70,11 @@ class DefaultMatchProvider implements IMatchProvider
      */
     private $clubIdsOfRunningMatches = null;
 
+    /**
+     * @var array
+     */
+    private $teams;
+
     public function __construct($configurations, $confId, MatchRepository $matchRepo = null)
     {
         $this->configurations = $configurations;
@@ -115,14 +120,23 @@ class DefaultMatchProvider implements IMatchProvider
      * Useful to avoid database access.
      *
      * @param Team[] $teams
+     * @param bool $useClubs
      */
-    public function setTeams(array $teams)
+    public function setTeams(array $teams, bool $useClubs)
     {
-        $newTeams = [];
+        $this->teams = [];
         foreach ($teams as $team) {
-            $newTeams[] = $team instanceof TeamAdapter ? $team : new TeamAdapter($team);
+            // Was passiert mit Teams ohne Verein im Club-Modus? Einfach ignorieren?
+            $team = new TeamAdapter($team, $useClubs);
+            if (!array_key_exists($team->getTeamId(), $this->teams)) {
+                $this->teams[$team->getTeamId()] = $team;
+            } else {
+                // In den Spielen bekommen wir am Ende immer nur die Team-UIDs. Daher müssen wir
+                // uns jede Team-UID merken, damit wird direkten Zugriff auf den TeamAdapter haben.
+                $baseTeam = $this->teams[$team->getTeamId()];
+                $baseTeam->addTeamUid($team->getUid());
+            }
         }
-        $this->teams = $newTeams;
     }
 
     /**
@@ -136,7 +150,7 @@ class DefaultMatchProvider implements IMatchProvider
         if (is_array($this->teams)) {
             return $this->teams;
         }
-        $this->teams = [];
+
         // Es ist keine gute Idee, die Teams über die beendeten Spiele zu holen.
         // Dadurch kann am Saisonbeginn keine Tabelle erstellt werden.
         // Es ist besser die Spiele über die Wettbewerbe zu laden.
@@ -161,18 +175,7 @@ class DefaultMatchProvider implements IMatchProvider
         $options['orderby']['TEAM.SORTING'] = 'asc'; // Nach Sortierung auf Seite
         $teams = ServiceRegistry::getTeamService()->searchTeams($fields, $options);
         $useClubs = $this->useClubs();
-        foreach ($teams as $team) {
-            // Was passiert mit Teams ohne Verein im Club-Modus? Einfach ignorieren?
-            $team = new TeamAdapter($team, $useClubs);
-            if (!array_key_exists($team->getTeamId(), $this->teams)) {
-                $this->teams[$team->getTeamId()] = $team;
-            } else {
-                // In den Spielen bekommen wir am Ende immer nur die Team-UIDs. Daher müssen wir
-                // uns jede Team-UID merken, damit wird direkten Zugriff auf den TeamAdapter haben.
-                $baseTeam = $this->teams[$team->getTeamId()];
-                $baseTeam->addTeamUid($team->getUid());
-            }
-        }
+        $this->setTeams($teams, $useClubs);
 
         return $this->teams;
     }

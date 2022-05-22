@@ -51,7 +51,7 @@ class TableTest extends BaseTestCase
         ], 'cfc_league_fe');
 
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
-        $leagueTable->getMatchProvider()->setTeams($league->getTeams());
+        $leagueTable->getMatchProvider()->setTeams($league->getTeams(), false);
 
         $result = $leagueTable->getTableData();
 
