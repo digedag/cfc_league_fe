@@ -175,7 +175,7 @@ class DefaultMatchProvider implements IMatchProvider
         $options['orderby']['TEAM.SORTING'] = 'asc'; // Nach Sortierung auf Seite
         $teams = ServiceRegistry::getTeamService()->searchTeams($fields, $options);
         $useClubs = $this->useClubs();
-        $this->setTeams($teams, $useClubs);
+        $this->setTeams($teams->toArray(), $useClubs);
 
         return $this->teams;
     }
