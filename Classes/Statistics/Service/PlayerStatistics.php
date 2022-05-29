@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\Statistics\Service;
 
+use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Model\Profile;
@@ -143,7 +144,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * @param bool $home
      *            true, wenn das Heimteam geholt werden soll
      *
-     * @return array[\tx_cfcleaguefe_models_profile]
+     * @return Profile[]
      */
     protected function getPlayer($match, $home)
     {
@@ -151,7 +152,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         // Fehlerhafte Spieler entfernen
         foreach ($players as $key => $player) {
             if (!is_object($player)) {
-                \tx_rnbase_util_Logger::warn('Player with UID '.$key.' not found. Probably the profile was deleted, but still has references.', 'cfc_league_fe');
+                Logger::warn('Player with UID '.$key.' not found. Probably the profile was deleted, but still has references.', 'cfc_league_fe');
                 unset($players[$key]);
             }
         }

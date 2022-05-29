@@ -8,9 +8,9 @@ use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use System25\T3sports\Frontend\View\MatchReportView;
 use System25\T3sports\Model\Match;
+use System25\T3sports\Model\MatchReportModel;
 use System25\T3sports\Utility\MatchProfileProvider;
 use Throwable;
-use tx_cfcleaguefe_models_matchreport as MatchReportModel;
 use tx_rnbase;
 
 /***************************************************************

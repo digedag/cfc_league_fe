@@ -1,19 +1,19 @@
 <?php
 
+namespace System25\T3sports\Model;
+
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Utility\Strings;
 use Sys25\RnBase\Utility\T3General;
 use System25\T3sports\Decorator\MatchNoteDecorator;
 use System25\T3sports\Decorator\ProfileDecorator;
-use System25\T3sports\Model\Match;
-use System25\T3sports\Model\MatchNote;
-use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchProfileProvider;
 use System25\T3sports\Utility\MatchTicker;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2016 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,7 +37,7 @@ use System25\T3sports\Utility\MatchTicker;
  * Model für einen Spielbericht.
  * Über diese Klasse können Informationen zu einem Spiel abgerufen werden.
  */
-class tx_cfcleaguefe_models_matchreport
+class MatchReportModel
 {
     protected $match;
 
@@ -72,7 +72,7 @@ class tx_cfcleaguefe_models_matchreport
      *
      * @param int $matchId UID eines Spiels
      */
-    public function __construct(Match $match, $configurations, MatchProfileProvider $mpProvider)
+    public function __construct(Match $match, ConfigurationInterface $configurations, MatchProfileProvider $mpProvider)
     {
         // Laden des Spiels
         $this->match = $match;
@@ -87,7 +87,7 @@ class tx_cfcleaguefe_models_matchreport
     /**
      * Returns the match instance.
      *
-     * @return tx_cfcleaguefe_models_match
+     * @return Match
      */
     public function getMatch()
     {
@@ -471,8 +471,10 @@ class tx_cfcleaguefe_models_matchreport
                 if ($profileUid) {
                     /* @var $profile Profile */
                     $profile = reset($this->matchProfileProvider->getProfiles($this->match, $profileUid));
-                    $profile->addMatchNote($note);
-                    $this->profileMap[$profile->getUid()] = $profile;
+                    if ($profile) {
+                        $profile->addMatchNote($note);
+                        $this->profileMap[$profile->getUid()] = $profile;
+                    }
                 }
             }
         }
