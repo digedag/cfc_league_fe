@@ -39,8 +39,7 @@
 	"autoload" : {
 		"psr-4": { "System25\\T3sports\\": "Classes" },
 		"classmap" : [
-			"models/",
-			"util/"
+			"models/"
 		]
 	},
 	"autoload-dev": {
