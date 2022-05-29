@@ -8,6 +8,7 @@ use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Repository\MatchRepository;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Search\SearchBuilder;
+use System25\T3sports\Table\Football\Configurator;
 use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ServiceRegistry;
 
@@ -44,7 +45,17 @@ class DefaultMatchProvider implements IMatchProvider
      */
     private $configurations;
 
+    /**
+     * Conf-ID des Views.
+     *
+     * @var string
+     */
     private $confId;
+
+    /**
+     * @var IConfigurator|Configurator
+     */
+    private $configurator;
 
     /**
      * @var Competition
@@ -65,6 +76,21 @@ class DefaultMatchProvider implements IMatchProvider
      */
     private $matchTableBuilder;
 
+    /**
+     * @var array
+     */
+    private $clubIdsOfRunningMatches = null;
+
+    /**
+     * @var array
+     */
+    private $teams;
+
+    /**
+     * @param ConfigurationInterface $configurations
+     * @param string $confId ConfId des Views
+     * @param MatchRepository $matchRepo
+     */
     public function __construct($configurations, $confId, MatchRepository $matchRepo = null)
     {
         $this->configurations = $configurations;
@@ -110,17 +136,28 @@ class DefaultMatchProvider implements IMatchProvider
      * Useful to avoid database access.
      *
      * @param Team[] $teams
+     * @param bool $useClubs
      */
-    public function setTeams(array $teams)
+    public function setTeams(array $teams, bool $useClubs)
     {
-        $this->teams = $teams;
+        $this->teams = [];
+        foreach ($teams as $team) {
+            // Was passiert mit Teams ohne Verein im Club-Modus? Einfach ignorieren?
+            $team = new TeamAdapter($team, $useClubs);
+            if (!array_key_exists($team->getTeamId(), $this->teams)) {
+                $this->teams[$team->getTeamId()] = $team;
+            } else {
+                // In den Spielen bekommen wir am Ende immer nur die Team-UIDs. Daher müssen wir
+                // uns jede Team-UID merken, damit wird direkten Zugriff auf den TeamAdapter haben.
+                $baseTeam = $this->teams[$team->getTeamId()];
+                $baseTeam->addTeamUid($team->getUid());
+            }
+        }
     }
 
     /**
      * Return all teams or clubs of given matches.
-     * It returns teams for simple league tables.
-     * But for alltime table, teams are useless. It exists one saison only!
-     * So for alltime table clubs are returned.
+     * All dummy teams are ignored.
      *
      * @return ITeam[]
      */
@@ -129,7 +166,7 @@ class DefaultMatchProvider implements IMatchProvider
         if (is_array($this->teams)) {
             return $this->teams;
         }
-        $this->teams = [];
+
         // Es ist keine gute Idee, die Teams über die beendeten Spiele zu holen.
         // Dadurch kann am Saisonbeginn keine Tabelle erstellt werden.
         // Es ist besser die Spiele über die Wettbewerbe zu laden.
@@ -154,27 +191,7 @@ class DefaultMatchProvider implements IMatchProvider
         $options['orderby']['TEAM.SORTING'] = 'asc'; // Nach Sortierung auf Seite
         $teams = ServiceRegistry::getTeamService()->searchTeams($fields, $options);
         $useClubs = $this->useClubs();
-        foreach ($teams as $team) {
-            if (!$useClubs) {
-                if (!$team->getUid()) { // Wann passiert das?
-                    continue;
-                }
-                $team = new TeamAdapter($team);
-                if (!array_key_exists($team->getTeamId(), $this->teams)) {
-                    $this->teams[$team->getTeamId()] = $team;
-                }
-            } else {
-                $club = $team->getClub();
-                if (!$club) {
-                    continue;
-                }
-                $club = new TeamAdapter($club);
-                if (!array_key_exists($club->getTeamId(), $this->teams)) {
-                    $club->setProperty('club', $club->getUid()); // necessary for mark clubs
-                    $this->teams[$club->getTeamId()] = $club;
-                }
-            }
-        }
+        $this->setTeams($teams->toArray(), $useClubs);
 
         return $this->teams;
     }
@@ -280,7 +297,7 @@ class DefaultMatchProvider implements IMatchProvider
     {
         $status = $this->configurations->get($this->confId.'filter.matchstatus');
         if (!$status) {
-            $status = $this->configurations->get('showLiveTable') ? '1,2' : '2';
+            $status = $this->configurator->isLiveTable() ? '1,2' : '2';
         }
 
         return $status;
@@ -390,5 +407,29 @@ class DefaultMatchProvider implements IMatchProvider
     public function setCurrentRound($round)
     {
         $this->currRound = $round;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \System25\T3sports\Table\IMatchProvider::getClubIdsOfRunningMatches()
+     */
+    public function getClubIdsOfRunningMatches()
+    {
+        if (!$this->clubIdsOfRunningMatches) {
+            $values = [];
+
+            foreach ($this->getRounds() as $round) {
+                foreach ($round as $matchs) {
+                    if ($matchs->isRunning()) {
+                        $values[] = $matchs->getHome()->getClub()->getUid();
+                        $values[] = $matchs->getGuest()->getClub()->getUid();
+                    }
+                }
+            }
+            $this->clubIdsOfRunningMatches = $values;
+        }
+
+        return $this->clubIdsOfRunningMatches;
     }
 }

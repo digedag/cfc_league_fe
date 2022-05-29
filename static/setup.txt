@@ -708,11 +708,14 @@ plugin.tx_cfcleaguefe_competition {
       }
     }
   }
+  leaguetableAllTime < plugin.tx_cfcleaguefe_competition.leaguetable
   leaguetableAllTime {
   	fields.MATCH.STATUS.OP_IN_INT = 2
   	table < plugin.tx_cfcleaguefe_competition.leaguetable.table
   	table =< lib.t3sports.club
-    tablescopeSelectionInput = 0
+    # 0 - 3-Punktsystem, 1 - 2-Punktsystem
+#    tablecfg.forcePointSystem = 1
+#    tablecfg.tableSize = 20
   }
   # Tabellenfahrt per JS
   tablechart {

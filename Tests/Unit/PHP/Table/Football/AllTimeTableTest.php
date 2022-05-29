@@ -1,6 +1,6 @@
 <?php
 
-namespace System25\T3sports\Tests\Table\Volleyball;
+namespace System25\T3sports\Tests\Table\Football;
 
 use Sys25\RnBase\Testing\BaseTestCase;
 use Sys25\RnBase\Testing\TestUtility;
@@ -14,7 +14,7 @@ use System25\T3sports\Table\ITableResult;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2013-2022 Rene Nitzsche (rene@system25.de)
+ * (c) 2011-2022 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,51 +34,49 @@ use System25\T3sports\Table\ITableResult;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-class TableTest extends BaseTestCase
+
+/**
+ * @group unit
+ */
+class AllTimeTableTest extends BaseTestCase
 {
-    /**
-     * @group unit
-     */
-    public function testLeagueTableWithTwoPointSystem()
+    public function testLeagueTableAllTime()
     {
-        $league = $this->prepareLeague('league_volley_1');
-        $league->setProperty('point_system', 0); // Punktsystem einstellen
+        $league1 = $this->prepareLeague('league_1');
+        $matches1 = $league1->getMatches(2);
 
+        $league = $this->prepareLeague('league_2');
+        // Team 2 ist der Dummy und muss entfernt werden
+        $teams = $league->getTeams();
+        unset($teams[1]);
+        $league->setTeams(array_values($teams));
         $matches = $league->getMatches(2);
-
         $config = TestUtility::createConfigurations([
-            'tableType' => '0',
         ], 'cfc_league_fe');
+        $confId = '';
+        $leagueTable = Builder::buildByCompetitionAndMatches($league, array_merge($matches, $matches1), $config, $confId);
 
-        $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
-        $leagueTable->getMatchProvider()->setTeams($league->getTeams(), false);
+        // Die Teams vorher setzen, damit kein DB-Zugriff erfolgt
+        $leagueTable->getMatchProvider()->setTeams(array_merge(array_values($teams), array_values($league1->getTeams())), true);
 
         $result = $leagueTable->getTableData();
-
         $this->assertTrue($result instanceof ITableResult, 'Got no valid result');
-        $scoreLine = $result->getScores();
 
+        $scoreLine = $result->getScores();
         $this->assertEquals(4, count($scoreLine), 'Table should contain 4 teams.');
 
-        // Tabelle 2-P.
-        // Sp Set Pkt Balls
-        // T1 - 3 6:1 6:0 173:149
-        // T2 - 2 3:3 2:2 134:140
-        // T3 - 2 2:2 2:2 93:93
-        // T4 - 3 1:6 0:6 152:170
-        $this->assertEquals('t_1', $scoreLine[0]['teamId'], 'Team 1 should be 1. place');
-        $this->assertEquals('t_2', $scoreLine[1]['teamId'], 'Team 2 should be 2. place');
-        $this->assertEquals('t_3', $scoreLine[2]['teamId'], 'Team 3 should be 3. place');
-        $this->assertEquals('t_4', $scoreLine[3]['teamId'], 'Team 4 should be 4. place');
-
-        $this->assertEquals(6, $scoreLine[0]['points'], 'Wrong points for team 1');
-        $this->assertEquals(0, $scoreLine[0]['points2'], 'Wrong points for team 1');
-
-        $this->assertEquals(6, $scoreLine[0]['sets1'], 'Wrong sets for team 1');
-        $this->assertEquals(1, $scoreLine[0]['sets2'], 'Wrong sets for team 1');
-
-        $this->assertEquals(173, $scoreLine[0]['balls1'], 'Wrong balls for team 1');
-        $this->assertEquals(149, $scoreLine[0]['balls2'], 'Wrong balls for team 1');
+        $expected = [
+            0 => ['teamId' => 'c_3', 'points' => 8, 'goals1' => 6, 'goals2' => 0],
+            1 => ['teamId' => 'c_1', 'points' => 5, 'goals1' => 7, 'goals2' => 3],
+            2 => ['teamId' => 'c_2', 'points' => 3, 'goals1' => 3, 'goals2' => 2],
+            3 => ['teamId' => 'c_4', 'points' => 0, 'goals1' => 1, 'goals2' => 12],
+        ];
+        foreach ($scoreLine as $idx => $score) {
+            $this->assertEquals($expected[$idx]['teamId'], $score['team']->getTeamId(), sprintf('TeamID of team %d wrong.', $idx));
+            $this->assertEquals($expected[$idx]['points'], $score['points'], sprintf('Points of team %d wrong.', $idx));
+            $this->assertEquals($expected[$idx]['goals1'], $score['goals1'], sprintf('Goals 1 of team %d wrong.', $idx));
+            $this->assertEquals($expected[$idx]['goals2'], $score['goals2'], sprintf('Goals 2 of team %d wrong.', $idx));
+        }
     }
 
     private function getFixturePath($filename)

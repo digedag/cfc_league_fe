@@ -37,6 +37,20 @@ interface ITeam
 
     public function getUid(): int;
 
+    /**
+     * Ordnet der Instanz eine zusätzliche UID eines konkreten Teams zu.
+     *
+     * @param int $uid
+     */
+    public function addTeamUid(int $uid);
+
+    /**
+     * Liefert die UIDs aller konkreten Teams, die dieser Team-Instanz zugeordnet sind.
+     *
+     * @return array
+     */
+    public function getTeamUids(): array;
+
     public function getDataModel(): BaseModel;
 
     public function getProperty($property = null);

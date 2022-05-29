@@ -32,6 +32,8 @@ use System25\T3sports\Table\IComparator;
  */
 class Comparator implements IComparator
 {
+    private $_teamData;
+
     public function setTeamData(array &$teamdata)
     {
         $this->_teamData = $teamdata;

@@ -106,32 +106,33 @@ league_2:
   record: 
     uid: 2
     teams: 1,2,3,4
+    # 2-Punktsystem
     point_system: 1
     tablestrategy: default
   teams: 
     clazz: System25\T3sports\Model\Team
     - 
       record: 
-        uid: 1
+        uid: 11
         name: Team 1
         short_name: Team 1
         club: 1
     - 
       record: 
-        uid: 2
+        uid: 12
         name: Team 2
         short_name: Team 2
         club: 2
         dummy: 1
     - 
       record: 
-        uid: 3
+        uid: 13
         name: Team 3
         short_name: Team 3
         club: 3
     - 
       record: 
-        uid: 4
+        uid: 14
         name: Team 4
         short_name: Team 4
         club: 4
@@ -142,8 +143,8 @@ league_2:
       record: 
         uid: 31
         competition: 2
-        home: 1
-        guest: 2
+        home: 11
+        guest: 12
         round: 1
         status: 2
         goals_home_2: 1
@@ -155,8 +156,8 @@ league_2:
       record: 
         uid: 32
         competition: 2
-        home: 3
-        guest: 4
+        home: 13
+        guest: 14
         round: 1
         status: 2
         goals_home_2: 2
@@ -168,8 +169,8 @@ league_2:
       record: 
         uid: 33
         competition: 2
-        home: 3
-        guest: 1
+        home: 13
+        guest: 11
         round: 2
         status: 2
         goals_home_2: 1
@@ -181,8 +182,8 @@ league_2:
       record: 
         uid: 34
         competition: 2
-        home: 4
-        guest: 2
+        home: 14
+        guest: 12
         round: 2
         status: 2
         goals_home_2: 1
@@ -194,8 +195,8 @@ league_2:
       record: 
         uid: 35
         competition: 2
-        home: 1
-        guest: 4
+        home: 11
+        guest: 14
         round: 3
         status: 2
         goals_home_2: 3

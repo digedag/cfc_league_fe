@@ -5,6 +5,7 @@ namespace System25\T3sports\Table\Handball;
 use System25\T3sports\Model\Match;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\IConfigurator;
+use System25\T3sports\Table\ITeam;
 use System25\T3sports\Table\PointOptions;
 use tx_rnbase;
 
@@ -50,7 +51,7 @@ class Table extends FootballTable
         if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
             $configuratorClass = $configuratorClass ? $configuratorClass : Configurator::class;
-            $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
+            $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider()->getBaseCompetition(), $this->configuration, $this->confId);
         }
 
         return $this->configurator;
@@ -64,64 +65,64 @@ class Table extends FootballTable
      */
     protected function countStandard($match, $toto, IConfigurator $configurator)
     {
+        $home = $match->getHome();
+        $guest = $match->getGuest();
         // Anzahl Spiele aktualisieren
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
-        $this->addMatchCount($homeId);
-        $this->addMatchCount($guestId);
+        $this->addMatchCount($home);
+        $this->addMatchCount($guest);
         // Für H2H modus das Spielergebnis merken
-        $this->addResult($homeId, $guestId, $match->getResult());
+        $this->addResult($home, $guest, $match->getResult());
 
         $options = tx_rnbase::makeInstance(PointOptions::class, [
             PointOptions::AFTER_EXTRA_TIME => $match->isExtraTime(),
             PointOptions::AFTER_EXTRA_PENALTY => $match->isPenalty(),
         ]);
         if (0 == $toto) { // Unentschieden
-            $this->addPoints($homeId, $configurator->getPointsDraw($options));
-            $this->addPoints($guestId, $configurator->getPointsDraw($options));
+            $this->addPoints($home, $configurator->getPointsDraw($options));
+            $this->addPoints($guest, $configurator->getPointsDraw($options));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsDraw($options));
-                $this->addPoints2($guestId, $configurator->getPointsDraw($options));
+                $this->addPoints2($home, $configurator->getPointsDraw($options));
+                $this->addPoints2($guest, $configurator->getPointsDraw($options));
             }
 
-            $this->addDrawCount($homeId);
-            $this->addDrawCount($guestId);
+            $this->addDrawCount($home);
+            $this->addDrawCount($guest);
         } elseif (1 == $toto) { // Heimsieg
-            $this->addPoints($homeId, $configurator->getPointsWin($options));
-            $this->addPoints($guestId, $configurator->getPointsLoose($options));
+            $this->addPoints($home, $configurator->getPointsWin($options));
+            $this->addPoints($guest, $configurator->getPointsLoose($options));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsWin($options));
+                $this->addPoints2($guest, $configurator->getPointsWin($options));
             }
 
-            $this->addWinCount($homeId);
-            $this->addLoseCount($guestId);
+            $this->addWinCount($home);
+            $this->addLoseCount($guest);
             if ($match->isPenalty()) {
-                $this->addWinCountPenalty($homeId);
-                $this->addLooseCountPenalty($guestId);
+                $this->addWinCountPenalty($home);
+                $this->addLooseCountPenalty($guest);
             } elseif ($match->isExtraTime()) {
-                $this->addWinCountOvertime($homeId);
-                $this->addLooseCountOvertime($guestId);
+                $this->addWinCountOvertime($home);
+                $this->addLooseCountOvertime($guest);
             }
         } else { // Auswärtssieg
-            $this->addPoints($homeId, $configurator->getPointsLoose($options));
-            $this->addPoints($guestId, $configurator->getPointsWin($options));
+            $this->addPoints($home, $configurator->getPointsLoose($options));
+            $this->addPoints($guest, $configurator->getPointsWin($options));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsWin($options));
+                $this->addPoints2($home, $configurator->getPointsWin($options));
             }
-            $this->addLoseCount($homeId);
-            $this->addWinCount($guestId);
+            $this->addLoseCount($home);
+            $this->addWinCount($guest);
             if ($match->isPenalty()) {
-                $this->addWinCountPenalty($guestId);
-                $this->addLooseCountPenalty($homeId);
+                $this->addWinCountPenalty($guest);
+                $this->addLooseCountPenalty($home);
             } elseif ($match->isExtraTime()) {
-                $this->addWinCountOvertime($guestId);
-                $this->addLooseCountOvertime($homeId);
+                $this->addWinCountOvertime($guest);
+                $this->addLooseCountOvertime($home);
             }
         }
 
         // Jetzt die Tore summieren
-        $this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
-        $this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addGoals($home, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addGoals($guest, $match->getGoalsGuest(), $match->getGoalsHome());
     }
 
     /**
@@ -134,11 +135,11 @@ class Table extends FootballTable
      */
     protected function countHome($match, $toto, IConfigurator $configurator)
     {
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
+        $home = $match->getHome();
+        $guest = $match->getGuest();
         // Anzahl Spiele aktualisieren
-        $this->addMatchCount($homeId);
-        $this->addResult($homeId, $guestId, $match->getGuest());
+        $this->addMatchCount($home);
+        $this->addResult($home, $guest, $match->getGuest());
 
         $options = tx_rnbase::makeInstance(PointOptions::class, [
             PointOptions::AFTER_EXTRA_TIME => $match->isExtraTime(),
@@ -146,33 +147,33 @@ class Table extends FootballTable
         ]);
 
         if (0 == $toto) { // Unentschieden
-            $this->addPoints($homeId, $configurator->getPointsDraw($options));
+            $this->addPoints($home, $configurator->getPointsDraw($options));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsDraw($options));
+                $this->addPoints2($home, $configurator->getPointsDraw($options));
             }
-            $this->addDrawCount($homeId);
+            $this->addDrawCount($home);
         } elseif (1 == $toto) { // Heimsieg
-            $this->addPoints($homeId, $configurator->getPointsWin($options));
-            $this->addWinCount($homeId);
+            $this->addPoints($home, $configurator->getPointsWin($options));
+            $this->addWinCount($home);
             if ($match->isPenalty()) {
-                $this->addWinCountPenalty($homeId);
+                $this->addWinCountPenalty($home);
             } elseif ($match->isExtraTime()) {
-                $this->addWinCountOvertime($homeId);
+                $this->addWinCountOvertime($home);
             }
         } else { // Auswärtssieg
-            $this->addPoints($homeId, $configurator->getPointsLoose($options));
+            $this->addPoints($home, $configurator->getPointsLoose($options));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsWin($options));
+                $this->addPoints2($home, $configurator->getPointsWin($options));
             }
-            $this->addLoseCount($homeId);
+            $this->addLoseCount($home);
             if ($match->isPenalty()) {
-                $this->addLooseCountPenalty($homeId);
+                $this->addLooseCountPenalty($home);
             } elseif ($match->isExtraTime()) {
-                $this->addLooseCountOvertime($homeId);
+                $this->addLooseCountOvertime($home);
             }
         }
         // Jetzt die Tore summieren
-        $this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addGoals($home, $match->getGoalsHome(), $match->getGoalsGuest());
     }
 
     /**
@@ -185,11 +186,11 @@ class Table extends FootballTable
      */
     protected function countGuest($match, $toto, IConfigurator $configurator)
     {
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
+        $home = $match->getHome();
+        $guest = $match->getGuest();
         // Anzahl Spiele aktualisieren
-        $this->addMatchCount($guestId);
-        $this->addResult($homeId, $guestId, $match->getGuest());
+        $this->addMatchCount($guest);
+        $this->addResult($home, $guest, $match->getGuest());
 
         $options = tx_rnbase::makeInstance(PointOptions::class, [
             PointOptions::AFTER_EXTRA_TIME => $match->isExtraTime(),
@@ -197,74 +198,80 @@ class Table extends FootballTable
         ]);
 
         if (0 == $toto) { // Unentschieden
-            $this->addPoints($guestId, $configurator->getPointsDraw($options));
+            $this->addPoints($guest, $configurator->getPointsDraw($options));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsDraw($options));
+                $this->addPoints2($guest, $configurator->getPointsDraw($options));
             }
-            $this->addDrawCount($guestId);
+            $this->addDrawCount($guest);
         } elseif (1 == $toto) { // Heimsieg
-            $this->addPoints($guestId, $configurator->getPointsLoose($options));
+            $this->addPoints($guest, $configurator->getPointsLoose($options));
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsWin($options));
+                $this->addPoints2($guest, $configurator->getPointsWin($options));
             }
-            $this->addLoseCount($guestId);
+            $this->addLoseCount($guest);
             if ($match->isPenalty()) {
-                $this->addLooseCountPenalty($guestId);
+                $this->addLooseCountPenalty($guest);
             } elseif ($match->isExtraTime()) {
-                $this->addLooseCountOvertime($guestId);
+                $this->addLooseCountOvertime($guest);
             }
         } else { // Auswärtssieg
-            $this->addPoints($guestId, $configurator->getPointsWin($options));
-            $this->addWinCount($guestId);
+            $this->addPoints($guest, $configurator->getPointsWin($options));
+            $this->addWinCount($guest);
             if ($match->isPenalty()) {
-                $this->addWinCountPenalty($guestId);
+                $this->addWinCountPenalty($guest);
             } elseif ($match->isExtraTime()) {
-                $this->addWinCountOvertime($guestId);
+                $this->addWinCountOvertime($guest);
             }
         }
 
         // Jetzt die Tore summieren
-        $this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addGoals($guest, $match->getGoalsGuest(), $match->getGoalsHome());
     }
 
     /**
      * Addiert Siege nach Penalty.
      */
-    protected function addWinCountPenalty($teamId)
+    protected function addWinCountPenalty(ITeam $team)
     {
-        $this->_teamData[$teamId]['wincount_penalty'] = $this->_teamData[$teamId]['wincount_penalty'] + 1;
+        $this->raiseCount($team, 'wincount_penalty');
     }
 
     /**
      * Addiert Niederlagen nach Penalty.
      */
-    protected function addLooseCountPenalty($teamId)
+    protected function addLooseCountPenalty(ITeam $team)
     {
-        $this->_teamData[$teamId]['loosecount_penalty'] = $this->_teamData[$teamId]['loosecount_penalty'] + 1;
+        $this->raiseCount($team, 'loosecount_penalty');
     }
 
     /**
      * Addiert Siege nach Verlängerung.
      */
-    protected function addWinCountOvertime($teamId)
+    protected function addWinCountOvertime(ITeam $team)
     {
-        $this->_teamData[$teamId]['wincount_overtime'] = $this->_teamData[$teamId]['wincount_overtime'] + 1;
+        $this->raiseCount($team, 'wincount_overtime');
     }
 
     /**
      * Addiert Niederlagen nach Verlängerung.
      */
-    protected function addLooseCountOvertime($teamId)
+    protected function addLooseCountOvertime(ITeam $team)
     {
-        $this->_teamData[$teamId]['loosecount_overtime'] = $this->_teamData[$teamId]['loosecount_overtime'] + 1;
+        $this->raiseCount($team, 'loosecount_overtime');
     }
 
-    protected function initTeam($teamId)
+    private function raiseCount(ITeam $team, $countKey)
     {
-        $this->_teamData[$teamId]['wincount_penalty'] = 0;
-        $this->_teamData[$teamId]['loosecount_penalty'] = 0;
-        $this->_teamData[$teamId]['wincount_overtime'] = 0;
-        $this->_teamData[$teamId]['loosecount_overtime'] = 0;
+        $data = $this->_teamData->getTeamData($team->getTeamId());
+        $this->_teamData->setTeamData($team, $countKey, $data[$countKey] + 1);
+    }
+
+    protected function initTeam(ITeam $team)
+    {
+        $this->_teamData->setTeamData($team, 'wincount_penalty', 0);
+        $this->_teamData->setTeamData($team, 'loosecount_penalty', 0);
+        $this->_teamData->setTeamData($team, 'wincount_overtime', 0);
+        $this->_teamData->setTeamData($team, 'loosecount_overtime', 0);
     }
 
     public function getTypeID(): string

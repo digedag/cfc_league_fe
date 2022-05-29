@@ -14,7 +14,9 @@ use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\ITableType;
 use System25\T3sports\Table\ITableWriter;
+use System25\T3sports\Table\ITeam;
 use System25\T3sports\Table\TableResult;
+use System25\T3sports\Table\TeamDataContainer;
 use tx_rnbase;
 
 /***************************************************************
@@ -47,7 +49,8 @@ class Table extends AbstractService implements ITableType
 {
     public const TABLE_TYPE = 'football';
 
-    protected $_teamData = [];
+    /** @var TeamDataContainer */
+    protected $_teamData = null;
 
     /**
      * Set configuration.
@@ -97,7 +100,7 @@ class Table extends AbstractService implements ITableType
         if ($forceNew || !is_object($this->configurator)) {
             $configuratorClass = $this->getConfValue('configuratorClass');
             $configuratorClass = $configuratorClass ? $configuratorClass : Configurator::class;
-            $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider(), $this->configuration, $this->confId);
+            $this->configurator = tx_rnbase::makeInstance($configuratorClass, $this->getMatchProvider()->getBaseCompetition(), $this->configuration, $this->confId);
         }
 
         return $this->configurator;
@@ -113,7 +116,7 @@ class Table extends AbstractService implements ITableType
         $tableData = tx_rnbase::makeInstance(TableResult::class);
         $configurator = $this->getConfigurator();
 
-        $this->initTeams($configurator);
+        $this->initTeams($this->getMatchProvider(), $configurator);
 
         $this->handlePenalties($tableData); // Strafen können direkt berechnet werden
         $tableData->setMarks($this->getMatchProvider()
@@ -124,12 +127,12 @@ class Table extends AbstractService implements ITableType
 
         $rounds = $this->getMatchProvider()->getRounds();
         $comparator = $configurator->getComparator();
-
+        // Hier die Tabledaten sortierbar gestalten
         if (!empty($rounds)) {
             foreach ($rounds as $round => $roundMatches) {
                 $this->handleMatches($roundMatches, $configurator);
                 // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
-                $teamData = $this->_teamData;
+                $teamData = $this->_teamData->getTeamDataArray();
                 $comparator->setTeamData($teamData);
                 usort($teamData, [
                     $comparator,
@@ -143,7 +146,7 @@ class Table extends AbstractService implements ITableType
             }
         } else {
             // Tabelle ohne Spiele, nur die Teams zeigen
-            $teamData = array_values($this->_teamData);
+            $teamData = $this->_teamData->getTeamDataArray();
             $comparator->setTeamData($teamData);
             usort($teamData, [
                 $comparator,
@@ -158,19 +161,15 @@ class Table extends AbstractService implements ITableType
         return $tableData;
     }
 
-    protected function addScore4Round($round, $teamData, $tableData)
+    protected function addScore4Round(int $round, array $teamData, TableResult $tableData)
     {
         for ($i = 0; $i < count($teamData); ++$i) {
             $newPosition = $i + 1;
             $team = $teamData[$i];
-            if ($this->_teamData[$team['teamId']]['position']) {
-                $oldPosition = $this->_teamData[$team['teamId']]['position'];
-                $this->_teamData[$team['teamId']]['oldposition'] = $oldPosition;
-                $this->_teamData[$team['teamId']]['positionchange'] = $this->getPositionChange($oldPosition, $newPosition);
-            }
-            $this->_teamData[$team['teamId']]['position'] = $newPosition;
+            $teamId = $team['teamId'];
+            $this->_teamData->addPosition($teamId, $newPosition);
             // Jetzt die Daten des Teams übernehmen
-            $tableData->addScore($round, $this->_teamData[$team['teamId']]);
+            $tableData->addScore($round, $this->_teamData->getTeamData($teamId));
         }
     }
 
@@ -211,59 +210,63 @@ class Table extends AbstractService implements ITableType
      *
      * @param Configurator $configurator
      */
-    protected function initTeams(Configurator $configurator)
+    protected function initTeams(IMatchProvider $matchProvider, Configurator $configurator)
     {
-        $this->_teamData = [];
-        $teams = $configurator->getTeams();
+        $this->_teamData = new TeamDataContainer();
+        $teams = $matchProvider->getTeams();
 
         foreach ($teams as $team) {
-            /* @var $team Team */
-            $teamId = $configurator->getTeamId($team);
+            $teamId = $team->getTeamId();
             if (!$teamId) {
                 continue;
             } // Ignore teams without given id
-            if ($team instanceof Team && $team->isDummy()) {
-                continue;
-            } // Ignore dummy teams
-            if (array_key_exists($teamId, $this->_teamData)) {
+//             if ($team instanceof Team && $team->isDummy()) {
+//                 continue;
+//             } // Ignore dummy teams
+            if ($this->_teamData->teamExists($team)) {
                 continue;
             }
+            $this->_teamData->addTeam($team);
 
-            $this->_teamData[$teamId]['team'] = $team;
-            $this->_teamData[$teamId]['teamId'] = $teamId;
-            $this->_teamData[$teamId]['teamName'] = $team->getProperty('name');
-            $this->_teamData[$teamId]['teamNameShort'] = $team->getProperty('short_name');
-            $this->_teamData[$teamId]['clubId'] = $team->getProperty('club');
-            $this->_teamData[$teamId]['points'] = 0;
+            $this->_teamData->setTeamData($team, 'team', $team);
+            $this->_teamData->setTeamData($team, 'teamId', $teamId);
+            $this->_teamData->setTeamData($team, 'teamName', $team->getProperty('name'));
+            $this->_teamData->setTeamData($team, 'teamNameShort', $team->getProperty('short_name'));
+            $this->_teamData->setTeamData($team, 'clubId', $team->getProperty('club'));
+            $this->_teamData->setTeamData($team, 'points', 0);
             // Bei 3-Punktssystem muss mit -1 initialisiert werden, damit der Marker später ersetzt wird
             // isLooseCount sollte zunächst über den matchProvider geholt werden
             // Später sollte eine Steuerklasse zwischengeschaltet sein, die ggf. die Information
             // aus der GUI holt.
-            $this->_teamData[$teamId]['points2'] = ($configurator->isCountLoosePoints()) ? 0 : -1;
-            $this->_teamData[$teamId]['goals1'] = 0;
-            $this->_teamData[$teamId]['goals2'] = 0;
-            $this->_teamData[$teamId]['goals_diff'] = 0;
-            $this->_teamData[$teamId]['position'] = 0;
-            $this->_teamData[$teamId]['oldposition'] = 0;
-            $this->_teamData[$teamId]['positionchange'] = 'EQ';
+            $this->_teamData->setTeamData($team, 'points2', ($configurator->isCountLoosePoints()) ? 0 : -1);
+            $this->_teamData->setTeamData($team, 'goals1', 0);
+            $this->_teamData->setTeamData($team, 'goals2', 0);
+            $this->_teamData->setTeamData($team, 'goals_diff', 0);
+            $this->_teamData->setTeamData($team, 'position', 0);
+            $this->_teamData->setTeamData($team, 'oldposition', 0);
+            $this->_teamData->setTeamData($team, 'positionchange', 'EQ');
             // Für die Formatierung im FE muss das Punktsystem bekannt sein.
-            $this->_teamData[$teamId]['point_system'] = $configurator->getPointSystem();
+            $this->_teamData->setTeamData($team, 'point_system', $configurator->getPointSystem());
 
-            $this->_teamData[$teamId]['matchCount'] = 0;
-            $this->_teamData[$teamId]['winCount'] = 0;
-            $this->_teamData[$teamId]['drawCount'] = 0;
-            $this->_teamData[$teamId]['loseCount'] = 0;
-            $this->_teamData[$teamId]['ppm'] = 0;
-            $this->_teamData[$teamId]['outOfCompetition'] = $team instanceof Team && $team->isOutOfCompetition();
+            $this->_teamData->setTeamData($team, 'matchCount', 0);
+            $this->_teamData->setTeamData($team, 'winCount', 0);
+            $this->_teamData->setTeamData($team, 'drawCount', 0);
+            $this->_teamData->setTeamData($team, 'loseCount', 0);
+            $this->_teamData->setTeamData($team, 'ppm', 0);
+            // FIXME: Zugriff auf Team geht so nicht mehr
+            $this->_teamData->setTeamData($team, 'outOfCompetition', $team instanceof Team && $team->isOutOfCompetition());
 
             // Muss das Team hervorgehoben werden?
             $markClubs = $configurator->getMarkClubs();
             if (count($markClubs)) {
-                $this->_teamData[$teamId]['markClub'] = in_array($team->getProperty('club'), $markClubs) ? 1 : 0;
+                $this->_teamData->setTeamData($team, 'markClub', in_array($team->getProperty('club'), $markClubs) ? 1 : 0);
             }
-            $this->_teamData[$teamId]['markClubsIsRunningGame'] = in_array($team->getProperty('club'), $configurator->getRunningClubGames()) ? 1 : 0;
 
-            $this->initTeam($teamId);
+            $this->_teamData->setTeamData($team, 'markClubsIsRunningGame', in_array(
+                $team->getProperty('club'),
+                $this->getMatchProvider()->getClubIdsOfRunningMatches()) ? 1 : 0);
+
+            $this->initTeam($team);
         }
     }
 
@@ -272,21 +275,8 @@ class Table extends AbstractService implements ITableType
      *
      * @param int $teamId
      */
-    protected function initTeam($teamId)
+    protected function initTeam(ITeam $teamId)
     {
-    }
-
-    /**
-     * Returns position change, either UP or DOWN or EQ.
-     *
-     * @param int $oldPosition
-     * @param int $newPosition
-     *
-     * @return string UP, DOWN or EQ
-     */
-    protected function getPositionChange($oldPosition, $newPosition)
-    {
-        return $oldPosition == $newPosition ? 'EQ' : ($oldPosition > $newPosition ? 'UP' : 'DOWN');
     }
 
     /**
@@ -330,31 +320,35 @@ class Table extends AbstractService implements ITableType
     /**
      * Addiert Tore zu einem Team.
      */
-    protected function addGoals($teamId, $goals1, $goals2)
+    protected function addGoals(ITeam $team, $goals1, $goals2)
     {
-        $this->_teamData[$teamId]['goals1'] = $this->_teamData[$teamId]['goals1'] + $goals1;
-        $this->_teamData[$teamId]['goals2'] = $this->_teamData[$teamId]['goals2'] + $goals2;
-        $this->_teamData[$teamId]['goals_diff'] = $this->_teamData[$teamId]['goals1'] - $this->_teamData[$teamId]['goals2'];
+        $this->_teamData->addGoals($team, $goals1, $goals2);
     }
 
     /**
+     * Der Spiel-Instanz werden die Team-Instanzen zugewiesen.
+     * Diese entsprechen jetzt aber den TeamAdaptern. CHECK: Ist das ein Problem?
+     *
      * @param Match $match
      * @param array $teams
      *
      * @return bool
      */
-    protected function applyTeams(Match $match, array $teams): bool
+    protected function applyTeams(Match $match, TeamDataContainer $teams): bool
     {
         $homeId = $match->getProperty('home');
-        if (!isset($teams[$homeId])) {
+        $team = $teams->getTeamByTeamUid($homeId);
+        if (null === $team) {
             return false; // Ignore Dummy-Matches
         }
-        $match->setHome($teams[$homeId]['team']);
+        $match->setHome($team);
+
         $guestId = $match->getProperty('guest');
-        if (!isset($teams[$guestId])) {
+        $team = $teams->getTeamByTeamUid($guestId);
+        if (null === $team) {
             return false; // Ignore Dummy-Matches
         }
-        $match->setGuest($teams[$guestId]['team']);
+        $match->setGuest($team);
 
         return true;
     }
@@ -371,6 +365,7 @@ class Table extends AbstractService implements ITableType
         foreach ($matches as $match) {
             /* @var $match Match */
             // Die Teams dem Spiel zuweisen
+
             if (false === $this->applyTeams($match, $this->_teamData)) {
                 continue;
             }
@@ -397,7 +392,7 @@ class Table extends AbstractService implements ITableType
             }
         }
 
-        unset($this->_teamData[0]); // Remove dummy data from teams without id
+//        unset($this->_teamData[0]); // Remove dummy data from teams without id
     }
 
     /**
@@ -409,11 +404,13 @@ class Table extends AbstractService implements ITableType
     protected function assertTeamsInCompetition($match)
     {
         $home = $match->getHome();
-        if (!array_key_exists($home->getUid(), $this->_teamData)) {
+        $team = $this->_teamData->getTeamByTeamUid($home->getUid());
+        if (null === $team) {
             throw new Exception(sprintf('Team with uid (%d) in match (%d) is not part of this selected competitions', $home->getUid(), $match->getUid()));
         }
         $guest = $match->getGuest();
-        if (!array_key_exists($guest->getUid(), $this->_teamData)) {
+        $team = $this->_teamData->getTeamByTeamUid($guest->getUid());
+        if (null === $team) {
             throw new Exception(sprintf('Team with uid (%d) in match (%d) is not part of this selected competitions', $guest->getUid(), $match->getUid()));
         }
     }
@@ -428,50 +425,50 @@ class Table extends AbstractService implements ITableType
     protected function countStandard($match, $toto, IConfigurator $configurator)
     {
         // Anzahl Spiele aktualisieren
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
-        $this->addMatchCount($homeId);
-        $this->addMatchCount($guestId);
+        $home = $match->getHome();
+        $guest = $match->getGuest();
+        $this->addMatchCount($home);
+        $this->addMatchCount($guest);
         if ($match->isOutOfCompetition()) {
             return;
         }
         // Für H2H modus das Spielergebnis merken
-        $this->addResult($homeId, $guestId, $match->getResult());
+        $this->addResult($home, $guest, $match->getResult());
 
         if (0 == $toto) { // Unentschieden
-            $this->addPoints($homeId, $configurator->getPointsDraw());
-            $this->addPoints($guestId, $configurator->getPointsDraw());
+            $this->addPoints($home, $configurator->getPointsDraw());
+            $this->addPoints($guest, $configurator->getPointsDraw());
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsDraw());
-                $this->addPoints2($guestId, $configurator->getPointsDraw());
+                $this->addPoints2($home, $configurator->getPointsDraw());
+                $this->addPoints2($guest, $configurator->getPointsDraw());
             }
 
-            $this->addDrawCount($homeId);
-            $this->addDrawCount($guestId);
+            $this->addDrawCount($home);
+            $this->addDrawCount($guest);
         } elseif (1 == $toto) { // Heimsieg
-            $this->addPoints($homeId, $configurator->getPointsWin());
-            $this->addPoints($guestId, $configurator->getPointsLoose());
+            $this->addPoints($home, $configurator->getPointsWin());
+            $this->addPoints($guest, $configurator->getPointsLoose());
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsWin());
+                $this->addPoints2($guest, $configurator->getPointsWin());
             }
 
-            $this->addWinCount($homeId);
-            $this->addLoseCount($guestId);
+            $this->addWinCount($home);
+            $this->addLoseCount($guest);
         } else { // Auswärtssieg
-            $this->addPoints($homeId, $configurator->getPointsLoose());
-            $this->addPoints($guestId, $configurator->getPointsWin());
+            $this->addPoints($home, $configurator->getPointsLoose());
+            $this->addPoints($guest, $configurator->getPointsWin());
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsWin());
+                $this->addPoints2($home, $configurator->getPointsWin());
             }
-            $this->addLoseCount($homeId);
-            $this->addWinCount($guestId);
+            $this->addLoseCount($home);
+            $this->addWinCount($guest);
         }
 
         // Jetzt die Tore summieren
-        $this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
-        $this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
-        $this->addPPM($homeId);
-        $this->addPPM($guestId);
+        $this->addGoals($home, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addGoals($guest, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addPPM($home);
+        $this->addPPM($guest);
     }
 
     /**
@@ -485,36 +482,37 @@ class Table extends AbstractService implements ITableType
      */
     protected function countHome($match, $toto, IConfigurator $configurator)
     {
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
+        $home = $match->getHome();
+        $guest = $match->getGuest();
+
         // Anzahl Spiele aktualisieren
-        $this->addMatchCount($homeId);
+        $this->addMatchCount($home);
 
         if ($match->isOutOfCompetition()) {
             return;
         }
 
-        $this->addResult($homeId, $guestId, $match->getGuest());
+        $this->addResult($home, $guest, $match->getGuest());
 
         if (0 == $toto) { // Unentschieden
-            $this->addPoints($homeId, $configurator->getPointsDraw());
+            $this->addPoints($home, $configurator->getPointsDraw());
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsDraw());
+                $this->addPoints2($home, $configurator->getPointsDraw());
             }
-            $this->addDrawCount($homeId);
+            $this->addDrawCount($home);
         } elseif (1 == $toto) { // Heimsieg
-            $this->addPoints($homeId, $configurator->getPointsWin());
-            $this->addWinCount($homeId);
+            $this->addPoints($home, $configurator->getPointsWin());
+            $this->addWinCount($home);
         } else { // Auswärtssieg
-            $this->addPoints($homeId, $configurator->getPointsLoose());
+            $this->addPoints($home, $configurator->getPointsLoose());
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($homeId, $configurator->getPointsWin());
+                $this->addPoints2($home, $configurator->getPointsWin());
             }
-            $this->addLoseCount($homeId);
+            $this->addLoseCount($home);
         }
         // Jetzt die Tore summieren
-        $this->addGoals($homeId, $match->getGoalsHome(), $match->getGoalsGuest());
-        $this->addPPM($homeId);
+        $this->addGoals($home, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addPPM($home);
     }
 
     /**
@@ -528,60 +526,59 @@ class Table extends AbstractService implements ITableType
      */
     protected function countGuest($match, $toto, IConfigurator $configurator)
     {
-        $homeId = $configurator->getTeamId($match->getHome());
-        $guestId = $configurator->getTeamId($match->getGuest());
+        $home = $match->getHome();
+        $guest = $match->getGuest();
+
         // Anzahl Spiele aktualisieren
-        $this->addMatchCount($guestId);
+        $this->addMatchCount($guest);
 
         if ($match->isOutOfCompetition()) {
             return;
         }
 
-        $this->addResult($homeId, $guestId, $match->getGuest());
+        $this->addResult($home, $guest, $match->getGuest());
 
         if (0 == $toto) { // Unentschieden
-            $this->addPoints($guestId, $configurator->getPointsDraw());
+            $this->addPoints($guest, $configurator->getPointsDraw());
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsDraw());
+                $this->addPoints2($guest, $configurator->getPointsDraw());
             }
-            $this->addDrawCount($guestId);
+            $this->addDrawCount($guest);
         } elseif (1 == $toto) { // Heimsieg
-            $this->addPoints($guestId, $configurator->getPointsLoose());
+            $this->addPoints($guest, $configurator->getPointsLoose());
             if ($configurator->isCountLoosePoints()) {
-                $this->addPoints2($guestId, $configurator->getPointsWin());
+                $this->addPoints2($guest, $configurator->getPointsWin());
             }
-            $this->addLoseCount($guestId);
+            $this->addLoseCount($guest);
         } else { // Auswärtssieg
-            $this->addPoints($guestId, $configurator->getPointsWin());
-            $this->addWinCount($guestId);
+            $this->addPoints($guest, $configurator->getPointsWin());
+            $this->addWinCount($guest);
         }
 
         // Jetzt die Tore summieren
-        $this->addGoals($guestId, $match->getGoalsGuest(), $match->getGoalsHome());
-        $this->addPPM($guestId);
+        $this->addGoals($guest, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addPPM($guest);
     }
 
-    protected function addResult($homeId, $guestId, $result)
+    protected function addResult(ITeam $home, ITeam $guest, $result)
     {
-        $this->_teamData[$homeId]['matches'][$guestId] = $result;
+        $this->_teamData->addResult($home, $guest, $result);
     }
 
     /**
      * Berechnet den Punktquotienten (Punkte pro Spiel).
      */
-    protected function addPPM($teamId)
+    protected function addPPM(ITeam $team)
     {
-        if ($this->_teamData[$teamId]['matchCount'] > 0) {
-            $this->_teamData[$teamId]['ppm'] = round($this->_teamData[$teamId]['points'] / $this->_teamData[$teamId]['matchCount'], 3);
-        }
+        $this->_teamData->addPPM($team);
     }
 
     /**
      * Addiert Punkte zu einem Team.
      */
-    protected function addPoints($teamId, $points)
+    protected function addPoints(ITeam $team, int $points)
     {
-        $this->_teamData[$teamId]['points'] = $this->_teamData[$teamId]['points'] + $points;
+        $this->_teamData->addPoints($team, $points);
     }
 
     /**
@@ -589,32 +586,32 @@ class Table extends AbstractService implements ITableType
      * Diese Funktion wird nur im 2-Punkte-System
      * verwendet.
      */
-    protected function addPoints2($teamId, $points)
+    protected function addPoints2(ITeam $team, int $points)
     {
-        $this->_teamData[$teamId]['points2'] = $this->_teamData[$teamId]['points2'] + $points;
+        $this->_teamData->addPoints2($team, $points);
     }
 
     /**
      * Addiert die absolvierten Spiele zu einem Team.
      */
-    protected function addMatchCount($teamId)
+    protected function addMatchCount(ITeam $team)
     {
-        $this->_teamData[$teamId]['matchCount'] = $this->_teamData[$teamId]['matchCount'] + 1;
+        $this->_teamData->addMatchCount($team);
     }
 
-    protected function addWinCount($teamId)
+    protected function addWinCount(ITeam $team)
     {
-        $this->_teamData[$teamId]['winCount'] = $this->_teamData[$teamId]['winCount'] + 1;
+        $this->_teamData->addWinCount($team);
     }
 
-    protected function addDrawCount($teamId)
+    protected function addDrawCount(ITeam $team)
     {
-        $this->_teamData[$teamId]['drawCount'] = $this->_teamData[$teamId]['drawCount'] + 1;
+        $this->_teamData->addDrawCount($team);
     }
 
-    protected function addLoseCount($teamId)
+    protected function addLoseCount(ITeam $team)
     {
-        $this->_teamData[$teamId]['loseCount'] = $this->_teamData[$teamId]['loseCount'] + 1;
+        $this->_teamData->addLoseCount($team);
     }
 
     public function getTypeID(): string

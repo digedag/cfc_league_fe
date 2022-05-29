@@ -3,13 +3,13 @@
 namespace System25\T3sports\Table\Football;
 
 use Exception;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Club;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Table\IComparator;
 use System25\T3sports\Table\IConfigurator;
-use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\PointOptions;
 use System25\T3sports\Utility\Misc;
 use System25\T3sports\Utility\ServiceRegistry;
@@ -18,7 +18,7 @@ use tx_rnbase;
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2021 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,27 +40,69 @@ use tx_rnbase;
 
 /**
  * Configurator for football league tables.
- * Diese Klasse erweitert den MatchProvider und liefert Daten zur Steuerung der Tabellenberechnung.
+ * Diese Klasse liefert Daten zur Steuerung der Tabellenberechnung.
+ * Alle Einstellungen werden im TS unterhalb von tablecfg konfiguriert.
  */
 class Configurator implements IConfigurator
 {
     /**
-     * @var IMatchProvider
+     * @var Competition
      */
-    protected $matchProvider;
+    protected $baseCompetition;
 
+    /**
+     * @var ConfigurationInterface
+     */
     protected $configurations;
+
+    /**
+     * Array mit Angaben zur Berechnung der Tabelle. Einziger Key derzeit "comparator".
+     *
+     * @var array
+     */
     protected $cfgTableStrategy;
+
+    /**
+     * 0-normal, 1-first, 2-second.
+     *
+     * @var int
+     */
+    protected $cfgTableScope;
+    /**
+     * 0-normal, 1-home, 2-away.
+     *
+     * @var int
+     */
+    protected $cfgTableType;
+    /**
+     * 0 - 3-Punktsystem, 1 - 2-Punktsystem.
+     *
+     * @var int
+     */
+    protected $cfgPointSystem;
+
+    /**
+     * Anzeige einer Livetabelle mit Einbeziehung von laufenden Spielen.
+     *
+     * @var bool
+     */
+    protected $cfgLiveTable;
+    protected $cfgComparatorClass;
 
     protected $confId;
     protected $markClubs;
 
-    public function __construct(IMatchProvider $matchProvider, $configurations, $confId)
+    public function __construct(Competition $baseCompetition, $configurations, $confId)
     {
-        $this->matchProvider = $matchProvider;
+        $this->baseCompetition = $baseCompetition;
         $this->configurations = $configurations;
         $this->confId = $confId;
         $this->init();
+    }
+
+    public function isLiveTable(): bool
+    {
+        return $this->cfgLiveTable;
     }
 
     /**
@@ -73,15 +115,13 @@ class Configurator implements IConfigurator
         return '1' == $this->cfgPointSystem; // im 2-Punktesystem die Minuspunkte sammeln
     }
 
-    public function getTeams()
-    {
-        return $this->getMatchProvider()->getTeams();
-    }
-
     /**
      * Returns the unique key for a team. For alltime table this can be club uid.
+     * TODO: die Methode sollte entfallen. Die ID liefert immer der TeamAdapter.
      *
      * @param Team|Club $teamOrClub
+     *
+     * @deprecated
      */
     public function getTeamId($teamOrClub)
     {
@@ -90,14 +130,6 @@ class Configurator implements IConfigurator
         }
 
         return $teamOrClub->getUid();
-    }
-
-    /**
-     * @return IMatchProvider
-     */
-    protected function getMatchProvider()
-    {
-        return $this->matchProvider;
     }
 
     protected function getConfValue($key)
@@ -114,26 +146,7 @@ class Configurator implements IConfigurator
      */
     public function getCompetition()
     {
-        return $this->getMatchProvider()->getBaseCompetition();
-    }
-
-    public function getRunningClubGames()
-    {
-        if (!$this->runningGamesClub) {
-            $values = [];
-
-            foreach ($this->getMatchProvider()->getRounds() as $round) {
-                foreach ($round as $matchs) {
-                    if ($matchs->isRunning()) {
-                        $values[] = $matchs->getHome()->getClub()->getUid();
-                        $values[] = $matchs->getGuest()->getClub()->getUid();
-                    }
-                }
-            }
-            $this->runningGamesClub = $values;
-        }
-
-        return $this->runningGamesClub;
+        return $this->baseCompetition;
     }
 
     public function getMarkClubs()
@@ -220,7 +233,7 @@ class Configurator implements IConfigurator
             throw new Exception('Could not instanciate comparator: '.$compareClass);
         }
         if (!($comparator instanceof IComparator)) {
-            throw new Exception('Comparator is no instance of tx_cfcleaguefe_table_football_IComparator: '.get_class($comparator));
+            throw new Exception('Comparator is no instance of System25\T3sports\Table\IComparator: '.get_class($comparator));
         }
 
         return $comparator;
@@ -243,11 +256,15 @@ class Configurator implements IConfigurator
             $this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
         }
 
-        $this->cfgPointSystem = $this->getMatchProvider()->getBaseCompetition()->getProperty('point_system');
+        $this->cfgPointSystem = $this->getCompetition()->getProperty('point_system');
+        if (null !== $this->configurations->get($this->confId.'forcePointSystem')) {
+            $this->cfgPointSystem = (int) $this->configurations->get($this->confId.'forcePointSystem');
+        }
         if ($this->configurations->get('pointSystemSelectionInput') || $this->getConfValue('pointSystemSelectionInput')) {
             $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
         }
-        $this->cfgLiveTable = (int) $this->getConfValue('showLiveTable');
+
+        $this->cfgLiveTable = $this->configurations->getBool($this->confId.'showLiveTable');
 
         $this->cfgComparatorClass = $this->getStrategyValue('comparator');
     }
@@ -260,7 +277,7 @@ class Configurator implements IConfigurator
     protected function getStrategyValue(string $key)
     {
         if (null === $this->cfgTableStrategy) {
-            $strategy = $this->getMatchProvider()->getBaseCompetition()->getProperty('tablestrategy');
+            $strategy = $this->getCompetition()->getProperty('tablestrategy');
             if (null === $strategy) {
                 $srv = ServiceRegistry::getCompetitionService();
                 $strategies = reset($srv->getTableStrategies4TCA());
