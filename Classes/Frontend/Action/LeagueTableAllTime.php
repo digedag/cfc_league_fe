@@ -3,22 +3,17 @@
 namespace System25\T3sports\Frontend\Action;
 
 use Sys25\RnBase\Backend\Utility\TCA;
-use Sys25\RnBase\Configuration\ConfigurationInterface;
-use Sys25\RnBase\Frontend\Request\ParametersInterface;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
-use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\T3General;
-use System25\T3sports\Frontend\View\LeagueTableAllTimeView;
-use System25\T3sports\Utility\MatchTableBuilder;
+use System25\T3sports\Table\Builder;
 use System25\T3sports\Utility\ScopeController;
 use System25\T3sports\Utility\ServiceRegistry;
-use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,16 +49,13 @@ class LeagueTableAllTime extends LeagueTable
         $parameters = $request->getParameters();
         $configurations = $request->getConfigurations();
         // Die Werte des aktuellen Scope ermitteln
-        ScopeController::handleCurrentScope($parameters, $configurations);
-        $fields = $options = [];
-        $this->initSearch($fields, $options, $parameters, $configurations);
-        $service = ServiceRegistry::getMatchService();
-        $matches = $service->search($fields, $options);
+        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
 
-        $dataArr = $this->buildTable($parameters, $configurations, $matches);
+        // Okay, es ist mindestens eine Liga enthalten
+        $table = Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
+
         $viewData = $request->getViewContext();
-        $viewData->offsetSet('tableData', $dataArr['table']); // Die Tabelle für den View bereitstellen
-        $viewData->offsetSet('tablePointSystem', $dataArr['pointsystem']); // Die Tabelle für den View bereitstellen
+        $viewData->offsetSet('table', $table); // Die Tabelle für den View bereitstellen
 
         // Müssen zusätzliche Selectboxen gezeigt werden?
         $this->_handleSBTableType($parameters, $configurations, $viewData);
@@ -76,59 +68,6 @@ class LeagueTableAllTime extends LeagueTable
     public function getTemplateName()
     {
         return 'leaguetableAllTime';
-    }
-
-    public function getViewClassName()
-    {
-        return LeagueTableAllTimeView::class;
-    }
-
-    /**
-     * Set search criteria.
-     *
-     * @param array $fields
-     * @param array $options
-     * @param ParametersInterface $parameters
-     * @param ConfigurationInterface $configurations
-     */
-    protected function initSearch(&$fields, &$options, $parameters, $configurations)
-    {
-        $options['distinct'] = 1;
-        // $options['debug'] = 1;
-        SearchBase::setConfigFields($fields, $configurations, 'leaguetableAllTime.fields.');
-        SearchBase::setConfigOptions($options, $configurations, 'leaguetableAllTime.options.');
-
-        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
-
-        $matchtable = $this->getMatchTable();
-        $matchtable->setScope($scopeArr);
-        // $matchtable->setStatus(2);
-
-        $matchtable->getFields($fields, $options);
-    }
-
-    /**
-     * @return MatchTableBuilder
-     */
-    protected function getMatchTable()
-    {
-        return tx_rnbase::makeInstance(MatchTableBuilder::class);
-    }
-
-    /**
-     * Sammelt die Daten für die Erstellung der Tabelle.
-     */
-    protected function buildTable($parameters, $configurations, $matches)
-    {
-        $tableProvider = tx_rnbase::makeInstance('tx_cfcleaguefe_util_league_AllTimeTableProvider', $parameters, $configurations, $matches, 'leaguetableAllTime.');
-
-        $leagueTable = new \tx_cfcleaguefe_util_LeagueTable();
-        $arr = [
-            'table' => $leagueTable->generateTable($tableProvider),
-            'pointsystem' => $tableProvider->cfgPointSystem,
-        ];
-
-        return $arr;
     }
 
     /**

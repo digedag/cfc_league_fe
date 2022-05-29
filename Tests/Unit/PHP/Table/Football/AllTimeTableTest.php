@@ -7,7 +7,6 @@ use Sys25\RnBase\Testing\TestUtility;
 use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\Spyc;
 use System25\T3sports\Model\Competition;
-use System25\T3sports\Model\Team;
 use System25\T3sports\Table\Builder;
 use System25\T3sports\Table\ITableResult;
 

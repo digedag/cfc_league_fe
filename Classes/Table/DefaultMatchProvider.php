@@ -8,6 +8,7 @@ use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Repository\MatchRepository;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Search\SearchBuilder;
+use System25\T3sports\Table\Football\Configurator;
 use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ServiceRegistry;
 
@@ -44,7 +45,17 @@ class DefaultMatchProvider implements IMatchProvider
      */
     private $configurations;
 
+    /**
+     * Conf-ID des Views.
+     *
+     * @var string
+     */
     private $confId;
+
+    /**
+     * @var IConfigurator|Configurator
+     */
+    private $configurator;
 
     /**
      * @var Competition
@@ -75,6 +86,11 @@ class DefaultMatchProvider implements IMatchProvider
      */
     private $teams;
 
+    /**
+     * @param ConfigurationInterface $configurations
+     * @param string $confId ConfId des Views
+     * @param MatchRepository $matchRepo
+     */
     public function __construct($configurations, $confId, MatchRepository $matchRepo = null)
     {
         $this->configurations = $configurations;
@@ -281,7 +297,7 @@ class DefaultMatchProvider implements IMatchProvider
     {
         $status = $this->configurations->get($this->confId.'filter.matchstatus');
         if (!$status) {
-            $status = $this->configurations->get('showLiveTable') ? '1,2' : '2';
+            $status = $this->configurator->isLiveTable() ? '1,2' : '2';
         }
 
         return $status;

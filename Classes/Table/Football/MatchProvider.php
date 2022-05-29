@@ -2,13 +2,13 @@
 
 namespace System25\T3sports\Table\Football;
 
+use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Table\DefaultMatchProvider;
-use Tx_Rnbase_Utility_Strings;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2020 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -53,7 +53,7 @@ class MatchProvider extends DefaultMatchProvider
     protected function modifyMatchFields(&$fields, &$options)
     {
         if ($tableScope = $this->getConfigurator()->getTableScope()) {
-            $round = count(Tx_Rnbase_Utility_Strings::intExplode(',', $this->getLeague()->getProperty('teams')));
+            $round = count(Strings::intExplode(',', $this->getLeague()->getProperty('teams')));
             $round = ($round) ? $round - 1 : $round;
             if ($round) {
                 // Wir packen die Bedingung in ein JOINED_FIELD weil nochmal bei $currRound auf die Spalte zugegriffen wird
