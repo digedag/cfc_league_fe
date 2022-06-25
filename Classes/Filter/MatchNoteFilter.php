@@ -2,10 +2,13 @@
 
 namespace System25\T3sports\Filter;
 
+use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010-2019 Rene Nitzsche
+ *  (c) 2010-2022 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -29,7 +32,7 @@ namespace System25\T3sports\Filter;
  *
  * @author Rene Nitzsche
  */
-class MatchNoteFilter extends \tx_rnbase_filter_BaseFilter
+class MatchNoteFilter extends BaseFilter
 {
     /**
      * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
@@ -40,8 +43,10 @@ class MatchNoteFilter extends \tx_rnbase_filter_BaseFilter
      * @param \Tx_Rnbase_Configuration_ProcessorInterface $configurations
      * @param string $confId
      */
-    protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
+    protected function initFilter(&$fields, &$options, RequestInterface $request)
     {
+        $confId = $request->getConfId();
+        $configurations = $request->getConfigurations();
         $daysPast = $configurations->get($confId.'timePastExpression');
         if ($daysPast) {
             $fields['MATCHNOTE.CRDATE'][OP_GT_INT] = strtotime($daysPast);

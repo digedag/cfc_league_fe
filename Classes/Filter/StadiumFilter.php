@@ -4,11 +4,13 @@ namespace System25\T3sports\Filter;
 
 use System25\T3sports\Search\SearchBuilder;
 use System25\T3sports\Utility\ScopeController;
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010-2019 Rene Nitzsche
+ *  (c) 2010-2022 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -32,7 +34,7 @@ use System25\T3sports\Utility\ScopeController;
  *
  * @author Rene Nitzsche
  */
-class StadiumFilter extends \tx_rnbase_filter_BaseFilter
+class StadiumFilter extends BaseFilter
 {
     /**
      * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
@@ -43,10 +45,10 @@ class StadiumFilter extends \tx_rnbase_filter_BaseFilter
      * @param \tx_rnbase_configurations $configurations
      * @param string $confId
      */
-    protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
+    protected function initFilter(&$fields, &$options, RequestInterface $request)
     {
         $options['distinct'] = 1;
-        $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
+        $scopeArr = ScopeController::handleCurrentScope($request->getParameters(), $request->getConfigurations());
         SearchBuilder::buildStadiumByScope($fields, $scopeArr);
     }
 }

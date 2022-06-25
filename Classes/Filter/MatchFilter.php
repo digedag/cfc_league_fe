@@ -8,6 +8,7 @@ use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ScopeController;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 
 /***************************************************************
 *  Copyright notice
@@ -44,12 +45,11 @@ class MatchFilter extends BaseFilter
      * @param array $fields
      * @param array $options
      */
-    protected function initFilter(&$fields, &$options)
+    protected function initFilter(&$fields, &$options, RequestInterface $request)
     {
-        $parameters = $this->getParameters();
-        $configurations = $this->getConfigurations();
-        $confId = $this->getConfId();
-
+        $parameters = $request->getParameters();
+        $configurations = $request->getConfigurations();
+        $confId = $request->getConfId();
         $options['distinct'] = 1;
         $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
         // Spielplan für ein Team

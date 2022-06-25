@@ -3,6 +3,7 @@
 namespace System25\T3sports\Filter;
 
 use Sys25\RnBase\Frontend\Filter\BaseFilter;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 use System25\T3sports\Search\SearchBuilder;
 use System25\T3sports\Utility\ScopeController;
 
@@ -10,7 +11,7 @@ use System25\T3sports\Utility\ScopeController;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2010-2021 Rene Nitzsche
+ * (c) 2010-2022 Rene Nitzsche
  * Contact: rene@system25.de
  * All rights reserved
  *
@@ -43,10 +44,10 @@ class TeamFilter extends BaseFilter
      * @param array $fields
      * @param array $options
      */
-    protected function initFilter(&$fields, &$options)
+    protected function initFilter(&$fields, &$options, RequestInterface $request)
     {
-        $parameters = $this->getParameters();
-        $configurations = $this->getConfigurations();
+        $parameters = $request->getParameters();
+        $configurations = $request->getConfigurations();
 
         $options['distinct'] = 1;
         $scopeArr = ScopeController::handleCurrentScope($parameters, $configurations);
