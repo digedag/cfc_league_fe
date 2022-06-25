@@ -2,6 +2,9 @@
 Changes
 -------
 
+v1.8.1 (??.06.2022)
+* removed all anient model classes
+
 v1.8.0 (19.06.2022)
 * all classes beside from models are moved to PSR-4 namespace
 * action `tx_cfcleaguefe_actions_LeagueTableShow` removed

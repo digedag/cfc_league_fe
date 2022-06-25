@@ -14,8 +14,11 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php'][
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['tx_cfcleaguefe_report']['plugin'] =
     \System25\T3sports\Hook\PageLayout::class.'->getPluginSummary';
 
-// Hook for tt_news
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = \System25\T3sports\Hook\TtNewsMarker::class;
+if (Sys25\RnBase\Utility\Extensions::isLoaded('tt_news')) {
+    // Hook for tt_news
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][] = \System25\T3sports\Hook\TtNewsMarker::class;
+}
+
 // LeagueTable in Match
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league_fe']['matchMarker_afterSubst'][] = \System25\T3sports\Hook\TableMatchMarker::class.'->addLeagueTable';
 // Matchtable current round in Match
@@ -29,23 +32,6 @@ System25\T3sports\Utility\Misc::registerTableStrategy('head2head', 'LLL:EXT:cfc_
 System25\T3sports\Utility\Misc::registerTableStrategy('pointpermatch', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_pointpermatch', System25\T3sports\Table\ComparatorPPM::class);
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball3', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_volleyball_3point', System25\T3sports\Table\Volleyball\Comparator3Point::class);
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball2', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:tablestrategy_volleyball_2point', System25\T3sports\Table\Volleyball\Comparator::class);
-
-$confArr = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cfc_league_fe']);
-
-// Cal-Service nur bei Bedarf einbinden
-if (((int) $confArr['enableCalService']) > 0 && Sys25\RnBase\Utility\Extensions::isLoaded('cal')) {
-    Sys25\RnBase\Utility\Extensions::addService(
-        $_EXTKEY,
-        'cal_event_model' /* sv type */ ,
-        'tx_cfcleaguefe_sv1_MatchEvent' /* sv key */ ,
-        [
-        'title' => 'Cal Match Model', 'description' => '', 'subtype' => 'event',
-        'available' => true, 'priority' => 50, 'quality' => 50,
-        'os' => '', 'exec' => '',
-        'className' => 'System25\T3sports\Service\MatchEventService',
-      ]
-    );
-}
 
 Sys25\RnBase\Utility\Extensions::addService(
     $_EXTKEY,
@@ -104,30 +90,6 @@ Sys25\RnBase\Utility\Extensions::addService(
     'available' => true, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
     'className' => 'System25\T3sports\Statistics\Service\VisitorStatistics',
-  ]
-);
-
-Sys25\RnBase\Utility\Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_data' /* sv type */ ,
-    'tx_cfcleaguefe_sv1_Teams' /* sv key */ ,
-    [
-    'title' => 'Team services', 'description' => 'Service functions for team access', 'subtype' => 'team',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Service\TeamService',
-  ]
-);
-
-Sys25\RnBase\Utility\Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_data' /* sv type */ ,
-    'tx_cfcleaguefe_sv1_Profiles' /* sv key */ ,
-    [
-    'title' => 'Profile services', 'description' => 'Service functions for profile access', 'subtype' => 'profile',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Service\ProfileService',
   ]
 );
 

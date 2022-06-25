@@ -25,7 +25,7 @@ namespace {
     }
 
     /** @deprecated */
-    class tx_cfcleaguefe_uti_ProfileMarker
+    class tx_cfcleaguefe_util_ProfileMarker
     {
     }
     /** @deprecated */

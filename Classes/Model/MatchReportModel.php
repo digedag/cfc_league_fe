@@ -615,8 +615,7 @@ class MatchReportModel
      * Es ist entweder das zugeordnete Logo des Teams oder
      * das Logo des Vereins.
      *
-     * @param
-     *            tx_cfcleaguefe_models_team
+     * @param Team $team
      */
     protected function _getLogo($team)
     {

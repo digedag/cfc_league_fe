@@ -28,10 +28,9 @@ return [
     'tx_cfcleaguefe_filter_Team' => \System25\T3sports\Filter\TeamFilter::class,
 
     'tx_cfcleaguefe_search_Builder' => \System25\T3sports\Search\SearchBuilder::class,
-    'tx_cfcleaguefe_search_Competition' => \System25\T3sports\Search\CompetitionFeSearch::class,
-    'tx_cfcleaguefe_search_Match' => \System25\T3sports\Search\MatchFeSearch::class,
+    'tx_cfcleaguefe_search_Competition' => \System25\T3sports\Search\CompetitionSearch::class,
     'tx_cfcleaguefe_search_Profile' => \System25\T3sports\Search\ProfileSearch::class,
-    'tx_cfcleaguefe_search_Team' => \System25\T3sports\Search\TeamFeSearch::class,
+    'tx_cfcleaguefe_search_Team' => \System25\T3sports\Search\TeamSearch::class,
 
     'tx_cfcleaguefe_sv1_Competitions' => \System25\T3sports\Service\CompetitionService::class,
     'tx_cfcleaguefe_sv1_Teams' => \System25\T3sports\Service\TeamService::class,
@@ -62,6 +61,12 @@ return [
     'tx_cfcleaguefe_models_competition' => \System25\T3sports\Model\Competition::class,
     'tx_cfcleaguefe_models_competition_penalty' => \System25\T3sports\Model\CompetitionPenalty::class,
     'tx_cfcleaguefe_models_competition_round' => \System25\T3sports\Model\CompetitionRound::class,
+    'tx_cfcleaguefe_models_match' => \System25\T3sports\Model\Match::class,
+    'tx_cfcleaguefe_models_match_note' => \System25\T3sports\Model\MatchNote::class,
+    'tx_cfcleaguefe_models_matchtable' => \System25\T3sports\Utility\MatchTableBuilder::class,
     'tx_cfcleaguefe_models_profile' => \System25\T3sports\Model\Profile::class,
     'tx_cfcleaguefe_models_saison' => \System25\T3sports\Model\Saison::class,
+    'tx_cfcleaguefe_models_team' => \System25\T3sports\Model\Team::class,
+    'tx_cfcleaguefe_models_teamNote' => \System25\T3sports\Model\TeamNote::class,
+    'tx_cfcleaguefe_models_teamNoteType' => \System25\T3sports\Model\TeamNoteType::class,
 ];

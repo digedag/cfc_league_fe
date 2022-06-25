@@ -5,6 +5,7 @@ namespace System25\T3sports\Frontend\Marker;
 use ArrayObject;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
+use Sys25\RnBase\Frontend\Marker\ListBuilder;
 use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Misc;
 use Sys25\RnBase\Utility\Strings;
@@ -206,7 +207,7 @@ class TeamMarker extends BaseMarker
         }
 
         $options['team'] = $team;
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+        $listBuilder = tx_rnbase::makeInstance(ListBuilder::class);
         $out = $listBuilder->render($children, new ArrayObject(), $template, 'tx_cfcleaguefe_util_ProfileMarker', $confId, $markerPrefix, $formatter, $options);
 
         return $out;
@@ -242,7 +243,7 @@ class TeamMarker extends BaseMarker
      */
     public function initLabelMarkers(&$formatter, $confId, $defaultMarkerArr = 0, $marker = 'TEAM')
     {
-        return $this->prepareLabelMarkers('tx_cfcleaguefe_models_team', $formatter, $confId, $defaultMarkerArr, $marker);
+        return $this->prepareLabelMarkers(Team::class, $formatter, $confId, $defaultMarkerArr, $marker);
     }
 
     /**

@@ -121,7 +121,7 @@ class MatchCrossTable extends AbstractAction
      *
      * @param mixed $teamIds
      *
-     * @return array of tx_cfcleaguefe_models_team
+     * @return array of Team
      */
     private function getTeamsByUid($teamIds)
     {
