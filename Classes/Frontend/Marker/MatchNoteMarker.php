@@ -7,6 +7,7 @@ use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\SimpleMarker;
 use System25\T3sports\Model\MatchNote;
 use System25\T3sports\Model\Profile;
+use System25\T3sports\Model\Repository\MatchRepository;
 use System25\T3sports\Model\Repository\ProfileRepository;
 use System25\T3sports\Model\Team;
 use tx_rnbase;
@@ -14,7 +15,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2022 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,12 +41,14 @@ use tx_rnbase;
 class MatchNoteMarker extends SimpleMarker
 {
     private $profileRepo;
+    private $matchRepo;
 
     public function __construct($options = [])
     {
         $this->setClassname(MatchNote::class);
         parent::__construct($options);
         $this->profileRepo = new ProfileRepository();
+        $this->matchRepo = new MatchRepository();
     }
 
     /**
@@ -120,7 +123,8 @@ class MatchNoteMarker extends SimpleMarker
      */
     protected function addMatch($template, MatchNote $note, $formatter, $confId, $markerPrefix)
     {
-        $match = $note->getMatch();
+        $matchUid = $note->getProperty('game');
+        $match = $this->matchRepo->findByUid($matchUid);
         $marker = tx_rnbase::makeInstance(MatchMarker::class);
         $template = $marker->parseTemplate($template, $match, $formatter, $confId, $markerPrefix);
 
