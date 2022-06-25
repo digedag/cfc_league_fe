@@ -2,10 +2,10 @@
 
 namespace System25\T3sports\Filter;
 
-use System25\T3sports\Search\SearchBuilder;
-use System25\T3sports\Utility\ScopeController;
 use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
+use System25\T3sports\Search\SearchBuilder;
+use System25\T3sports\Utility\ScopeController;
 
 /***************************************************************
  *  Copyright notice

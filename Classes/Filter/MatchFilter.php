@@ -4,11 +4,11 @@ namespace System25\T3sports\Filter;
 
 use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Marker\Templates;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ScopeController;
-use Sys25\RnBase\Frontend\Request\RequestInterface;
 
 /***************************************************************
 *  Copyright notice

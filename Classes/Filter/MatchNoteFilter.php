@@ -2,8 +2,8 @@
 
 namespace System25\T3sports\Filter;
 
-use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\Filter\BaseFilter;
+use Sys25\RnBase\Frontend\Request\RequestInterface;
 
 /***************************************************************
  *  Copyright notice
