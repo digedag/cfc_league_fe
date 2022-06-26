@@ -48,11 +48,13 @@ class TeamAdapter implements ITeam
     /** @var Club */
     private $clubUid;
     private $useClubs = false;
+    private $isDummy = false;
 
     public function __construct(Team $team, bool $useClubs = false)
     {
         $this->team = $team;
         $this->teamUids[] = $team->getUid();
+        $this->isDummy = $team->isDummy();
         $this->useClubs = $useClubs;
         $clubUid = (int) $team->getClubUid();
         $this->clubUid = $useClubs ? $clubUid : 0;
@@ -105,7 +107,7 @@ class TeamAdapter implements ITeam
 
     public function isDummy(): bool
     {
-        return $this->isTeam ? $this->getInstance()->isDummy() : false;
+        return $this->isDummy;
     }
 
     public function isOutOfCompetition(): bool

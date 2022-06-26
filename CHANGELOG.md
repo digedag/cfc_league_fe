@@ -2,6 +2,9 @@
 Changes
 -------
 
+v1.8.2 (26.06.2022)
+* Fixed dummy teams visible in league table
+
 v1.8.1 (26.06.2022)
 * removed all anient model classes
 * Fix filter classes

@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\Table;
 
+use System25\T3sports\Model\Competition;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -100,7 +102,7 @@ class TableResult implements ITableResult
     }
 
     /**
-     * @return tx_cfcleague_competition
+     * @return Competition
      */
     public function getCompetition()
     {
@@ -108,7 +110,7 @@ class TableResult implements ITableResult
     }
 
     /**
-     * @param tx_cfcleague_competition $competition
+     * @param Competition $competition
      */
     public function setCompetition($competition)
     {

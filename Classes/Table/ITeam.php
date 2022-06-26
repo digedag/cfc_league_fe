@@ -37,6 +37,10 @@ interface ITeam
 
     public function getUid(): int;
 
+    public function isDummy(): bool;
+
+    public function isOutOfCompetition(): bool;
+
     /**
      * Ordnet der Instanz eine zusätzliche UID eines konkreten Teams zu.
      *

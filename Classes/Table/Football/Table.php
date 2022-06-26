@@ -133,6 +133,9 @@ class Table extends AbstractService implements ITableType
                 $this->handleMatches($roundMatches, $configurator);
                 // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
                 $teamData = $this->_teamData->getTeamDataArray();
+                $teamData = array_filter($teamData, function ($teamDataArr) {
+                    return !$teamDataArr['team']->isDummy();
+                });
                 $comparator->setTeamData($teamData);
                 usort($teamData, [
                     $comparator,
@@ -338,14 +341,14 @@ class Table extends AbstractService implements ITableType
     {
         $homeId = $match->getProperty('home');
         $team = $teams->getTeamByTeamUid($homeId);
-        if (null === $team) {
+        if (null === $team || $team->isDummy()) {
             return false; // Ignore Dummy-Matches
         }
         $match->setHome($team);
 
         $guestId = $match->getProperty('guest');
         $team = $teams->getTeamByTeamUid($guestId);
-        if (null === $team) {
+        if (null === $team || $team->isDummy()) {
             return false; // Ignore Dummy-Matches
         }
         $match->setGuest($team);
