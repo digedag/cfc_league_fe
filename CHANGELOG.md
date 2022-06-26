@@ -2,7 +2,7 @@
 Changes
 -------
 
-v1.8.1 (??.06.2022)
+v1.8.1 (26.06.2022)
 * removed all anient model classes
 * Fix filter classes
 * Fix fatal error in stadium list
