@@ -3,19 +3,20 @@ Changes
 -------
 
 v1.8.2 (26.06.2022)
-* Fixed dummy teams visible in league table
+ * Fixed dummy teams visible in league table
+ * Enable automatic TER release
 
 v1.8.1 (26.06.2022)
-* removed all anient model classes
-* Fix filter classes
-* Fix fatal error in stadium list
-* MatchNoteMarker renders match data again
+ * removed all anient model classes
+ * Fix filter classes
+ * Fix fatal error in stadium list
+ * MatchNoteMarker renders match data again
 
 v1.8.0 (19.06.2022)
-* all classes beside from models are moved to PSR-4 namespace
-* action `tx_cfcleaguefe_actions_LeagueTableShow` removed
-* all html templates moved to `Resources/Private/Templates/Html/`
-* league table alltime migrated to new league table calculation
+ * all classes beside from models are moved to PSR-4 namespace
+ * action `tx_cfcleaguefe_actions_LeagueTableShow` removed
+ * all html templates moved to `Resources/Private/Templates/Html/`
+ * league table alltime migrated to new league table calculation
 
 v1.7.2 (19.05.2021)
  * Fix matchtable shows home matches only
