@@ -133,9 +133,6 @@ class Table extends AbstractService implements ITableType
                 $this->handleMatches($roundMatches, $configurator);
                 // Jetzt die Tabelle sortieren, dafür benötigen wir eine Kopie des Arrays
                 $teamData = $this->_teamData->getTeamDataArray();
-                $teamData = array_filter($teamData, function ($teamDataArr) {
-                    return !$teamDataArr['team']->isDummy();
-                });
                 $comparator->setTeamData($teamData);
                 usort($teamData, [
                     $comparator,

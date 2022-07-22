@@ -148,13 +148,17 @@ class TeamDataContainer
     }
 
     /**
-     * Liefert das Daten-Array. Key ist die TeamID.
+     * Liefert das Daten-Array aller Teams. Das Team "spielfrei" ist bereits entfernt. Key ist die TeamID.
      *
      * @return array
      */
     public function getTeamDataArray(): array
     {
-        return $this->dataByTeamId;
+        $teamData = $this->dataByTeamId;
+        $teamData = array_filter($teamData, function ($teamDataArr) {
+            return !$teamDataArr['team']->isDummy();
+        });
+        return $teamData;
     }
 
     /**
