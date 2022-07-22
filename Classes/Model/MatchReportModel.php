@@ -255,7 +255,7 @@ class MatchReportModel
         $tickerArr = $this->_getMatchTicker();
         if ($this->_configurations->get('tickerTypes')) {
             foreach ($tickerArr as $ticker) {
-                if (!(T3General::inList($this->_configurations->get('tickerTypes'), $ticker->getType()))) {
+                if (!T3General::inList($this->_configurations->get('tickerTypes'), $ticker->getType())) {
                     $tickers[] = $ticker;
                 }
             }

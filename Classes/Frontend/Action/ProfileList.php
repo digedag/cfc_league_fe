@@ -97,10 +97,10 @@ class ProfileList extends AbstractAction
         $timeRange = $configurations->get('profilelist.birthdays');
         if ($timeRange) {
             $timePattern = 'DAY' == $timeRange ? '%d%m' : '%m';
-            $where .= " ( (DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), '${timePattern}') = DATE_FORMAT(CURDATE(), '${timePattern}')";
+            $where .= " ( (DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), '{$timePattern}') = DATE_FORMAT(CURDATE(), '{$timePattern}')";
             $where .= ' AND tx_cfcleague_profiles.birthday > 0) OR ';
             // Variante 2 für Zeiten vor 1970
-            $where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( tx_cfcleague_profiles.birthday )), '1970-01-01')), '${timePattern}') = DATE_FORMAT(CURDATE(), '${timePattern}')";
+            $where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( tx_cfcleague_profiles.birthday )), '1970-01-01')), '{$timePattern}') = DATE_FORMAT(CURDATE(), '{$timePattern}')";
             $where .= ' AND tx_cfcleague_profiles.birthday < 0 ))';
             if ($fields[SEARCH_FIELD_CUSTOM]) {
                 $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
@@ -165,7 +165,7 @@ class ProfileList extends AbstractAction
 
         $ret = [];
         foreach ($rows as $row) {
-            if (array_key_exists(($row['first_char']), $wSpecials)) {
+            if (array_key_exists($row['first_char'], $wSpecials)) {
                 $ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];
             } else {
                 $ret[$row['first_char']] = $row['size'];

@@ -155,7 +155,7 @@ class ClubList extends AbstractAction
 
         $ret = [];
         foreach ($rows as $row) {
-            if (array_key_exists(($row['first_char']), $wSpecials)) {
+            if (array_key_exists($row['first_char'], $wSpecials)) {
                 $ret[$wSpecials[$row['first_char']]] = intval($ret[$wSpecials[$row['first_char']]]) + $row['size'];
             } else {
                 $ret[$row['first_char']] = $row['size'];

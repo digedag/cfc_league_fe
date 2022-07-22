@@ -67,7 +67,7 @@ class PageLayout
         if (isset($flexform['data'])) {
             $flexform = $flexform['data'];
             if (isset($flexform[$sheet]['lDEF'][$key]['vDEF'])
-                ) {
+            ) {
                 return $flexform[$sheet]['lDEF'][$key]['vDEF'];
             }
         }
