@@ -68,7 +68,7 @@ class TableChart extends AbstractAction
             if (count($comps) > 0) {
                 $currCompetition = $comps[0];
             // Sind mehrere Wettbewerbe vorhanden, nehmen wir den ersten.
-                // Das ist aber generell eine Fehlkonfiguration.
+            // Das ist aber generell eine Fehlkonfiguration.
             } else {
                 return $out;
             } // Ohne Liga keine Tabelle!

@@ -302,7 +302,7 @@ class Table extends AbstractService implements ITableType
                 $this->_teamData[$penalty->getProperty('team')]['points'] -= $penalty->getProperty('points_pos');
                 $this->_teamData[$penalty->getProperty('team')]['points2'] += $penalty->getProperty('points_neg');
 
-                $this->addGoals($penalty->getProperty('team'), ($penalty->getProperty('goals_pos') * -1), $penalty->getProperty('goals_neg'));
+                $this->addGoals($penalty->getProperty('team'), $penalty->getProperty('goals_pos') * -1, $penalty->getProperty('goals_neg'));
 
                 $this->_teamData[$penalty->getProperty('team')]['matchCount'] += $penalty->getProperty('matches');
                 $this->_teamData[$penalty->getProperty('team')]['winCount'] += $penalty->getProperty('wins');

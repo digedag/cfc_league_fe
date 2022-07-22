@@ -126,7 +126,7 @@ class ProfileMarker extends SimpleMarker
      * @param string $confId
      * @param FormatUtil $formatter
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function prepareLinks($profile, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {

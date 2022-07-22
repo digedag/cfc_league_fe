@@ -158,6 +158,7 @@ class TeamDataContainer
         $teamData = array_filter($teamData, function ($teamDataArr) {
             return !$teamDataArr['team']->isDummy();
         });
+
         return $teamData;
     }
 
