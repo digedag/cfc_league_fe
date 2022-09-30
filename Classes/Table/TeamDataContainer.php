@@ -78,7 +78,7 @@ class TeamDataContainer
         $teamId = $team->getTeamId();
         $this->dataByTeamId[$teamId]['goals1'] = $this->dataByTeamId[$teamId]['goals1'] + $goals1;
         $this->dataByTeamId[$teamId]['goals2'] = $this->dataByTeamId[$teamId]['goals2'] + $goals2;
-        $this->dataByTeamId[$teamId]['goals_diff'] = $this->dataByTeamId[$teamId]['goals1'] - $this->_teamData[$teamId]['goals2'];
+        $this->dataByTeamId[$teamId]['goals_diff'] = $this->dataByTeamId[$teamId]['goals1'] - $this->dataByTeamId[$teamId]['goals2'];
     }
 
     public function addMatchCount(ITeam $team)
