@@ -30,7 +30,6 @@
 		"digedag/rn-base" : "~1.16.0"
 	},
 	"require-dev": {
-		"namelesscoder/typo3-repository-client": "^1.2",
 		"nimut/testing-framework": "^1.1 || ^2.0 || ^4.0 || ^5.0",
 		"mikey179/vfsstream": "^1.4 || ^1.6",
 		"phpunit/phpunit": "^6.5.14 || ^7.5.20",
@@ -85,8 +84,7 @@
 			]
 		},
 		"branch-alias": {
-			"dev-master": "1.8.x-dev",
-			"dev-upgrade/t311": "1.9.x-dev"
+			"dev-master": "1.9.x-dev"
 		}
     }
 }

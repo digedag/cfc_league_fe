@@ -2,6 +2,10 @@
 Changes
 -------
 
+v1.9.0 (27.01.2023)
+ * Allow install in TYPO3 11.5
+ * Some bugfixes
+
 v1.8.2 (26.06.2022)
  * Fixed dummy teams visible in league table
  * Enable automatic TER release
