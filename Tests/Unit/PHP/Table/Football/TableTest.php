@@ -72,9 +72,9 @@ class TableTest extends BaseTestCase
         // T4 - 0:4 0:5
 
         $expected = [
-            0 => ['teamId' => 't_13', 'points' => 4, 'goals1' => 3, 'goals2' => 0, 'goals_diff' => 3,],
-            1 => ['teamId' => 't_11', 'points' => 2, 'goals1' => 3, 'goals2' => 1, 'goals_diff' => 2,],
-            2 => ['teamId' => 't_14', 'points' => 0, 'goals1' => 0, 'goals2' => 5, 'goals_diff' => -5,],
+            0 => ['teamId' => 't_13', 'points' => 4, 'goals1' => 3, 'goals2' => 0, 'goals_diff' => 3],
+            1 => ['teamId' => 't_11', 'points' => 2, 'goals1' => 3, 'goals2' => 1, 'goals_diff' => 2],
+            2 => ['teamId' => 't_14', 'points' => 0, 'goals1' => 0, 'goals2' => 5, 'goals_diff' => -5],
         ];
         foreach ($scoreLine as $idx => $score) {
             $this->assertEquals($expected[$idx]['teamId'], $score['team']->getTeamId());
