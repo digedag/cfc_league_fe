@@ -22,7 +22,7 @@ call_user_func(function () {
 
     tx_rnbase_util_Extensions::addPlugin(
         [
-            'LLL:EXT:'.$extKey.'/Resources/Private/Language/locallang_db.xml:plugin.competition.label',
+            'LLL:EXT:'.$extKey.'/Resources/Private/Language/locallang_db.xlf:plugin.competition.label',
             'tx_cfcleaguefe_competition',
         ],
         'list_type',
@@ -62,7 +62,7 @@ call_user_func(function () {
      */
     tx_rnbase_util_Extensions::addPlugin(
         [
-            'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:plugin.report.label',
+            'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.report.label',
             'tx_cfcleaguefe_report',
         ],
         'list_type',

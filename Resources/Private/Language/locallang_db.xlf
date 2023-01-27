@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" data="2023-01-27T15-23-45" product-name="zsb">
+		<header/>
+		<body>
+			<trans-unit id="plugin.competition.label" xml:space="preserve">
+				<source>T3sports: League Management</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.description" xml:space="preserve">
+				<source>This plugins contains views for: matchtable, league table, table chart, match crosstable, team list, statistics</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tab.TSSetup" xml:space="preserve">
+				<source>Typoscript</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tab.Common" xml:space="preserve">
+				<source>Common</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tab.MatchTable" xml:space="preserve">
+				<source>Match table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tab.LeagueTable" xml:space="preserve">
+				<source>League Table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tab.TableChart" xml:space="preserve">
+				<source>Leaguetable Chart</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tab.TickerList" xml:space="preserve">
+				<source>Liveticker List</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action" xml:space="preserve">
+				<source>View Types</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.CompetitionSelection" xml:space="preserve">
+				<source>Competition Selection</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.MatchTable" xml:space="preserve">
+				<source>Match table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.MatchCrossTable" xml:space="preserve">
+				<source>Match table (cross)</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.LeagueTable" xml:space="preserve">
+				<source>League table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.LeagueTableNew" xml:space="preserve">
+				<source>Leaguetable (new)</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.LeagueTableAllTime" xml:space="preserve">
+				<source>All time league table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.TableChart" xml:space="preserve">
+				<source>Leaguetable Chart</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.TableChartJS" xml:space="preserve">
+				<source>Leaguetable Chart (Javascript)</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.LiveTickerList" xml:space="preserve">
+				<source>Live Ticker List</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.Statistics" xml:space="preserve">
+				<source>Statistics</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.TeamList" xml:space="preserve">
+				<source>Team List</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.action.StadiumList" xml:space="preserve">
+				<source>Stadium List</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.TableType" xml:space="preserve">
+				<source>Table type</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tabletype.Normal" xml:space="preserve">
+				<source>Standard Table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tabletype.Home" xml:space="preserve">
+				<source>Home Table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tabletype.Guest" xml:space="preserve">
+				<source>Away Table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.TableTypeInput" xml:space="preserve">
+				<source>Show Selectbox for table type</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.ShowLiveTable" xml:space="preserve">
+				<source>Show Live-Table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.TableScope" xml:space="preserve">
+				<source>Saison</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tablescope.Normal" xml:space="preserve">
+				<source>Standard Table</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tablescope.FirstHalf" xml:space="preserve">
+				<source>First Round</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tablescope.SecondHalf" xml:space="preserve">
+				<source>Second Round</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.TableScopeInput" xml:space="preserve">
+				<source>Show Selectbox for table scope</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.PointSystemInput" xml:space="preserve">
+				<source>Show Selectbox for point system</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.leaguetable.UseRoundFromScope" xml:space="preserve">
+				<source>Keep table in sync with selected round from scope</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.leaguetable.noSkipOtherRounds" xml:space="preserve">
+				<source>Show current table + last started matchday</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.leaguetable.clubs" xml:space="preserve">
+				<source>Emphasize clubs</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.leaguetable.size" xml:space="preserve">
+				<source>Number of teams to show</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tablechart.clubs" xml:space="preserve">
+				<source>Clubs on chart</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tablechart.colors" xml:space="preserve">
+				<source>Colors for clubs</source>
+			</trans-unit>
+			<trans-unit id="plugin_competition_flexform_tablechart_lib_pbimagegraph" xml:space="preserve">
+				<source>ext:pbimagegraph</source>
+			</trans-unit>
+			<trans-unit id="plugin_competition_flexform_tablechart_lib_flot" xml:space="preserve">
+				<source>jQuery Flot</source>
+			</trans-unit>
+			<trans-unit id="plugin_competition_flexform_tablechart_lib_jqplot" xml:space="preserve">
+				<source>jQuery JqPlot</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.debug" xml:space="preserve">
+				<source>Debug SQL query</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.limit" xml:space="preserve">
+				<source>Max matches to show</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.report_page" xml:space="preserve">
+				<source>Page for report</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.time_range" xml:space="preserve">
+				<source>Time range</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.time_range.past" xml:space="preserve">
+				<source>Days before</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.time_range.future" xml:space="preserve">
+				<source>Days ahead</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.statistics.callbackmode" xml:space="preserve">
+				<source>Callback mode</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.statistics.type" xml:space="preserve">
+				<source>Type of statistics</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.statistics.type.player" xml:space="preserve">
+				<source>Player</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.statistics.type.scorerlist" xml:space="preserve">
+				<source>Scorer</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.statistics.type.assistlist" xml:space="preserve">
+				<source>Assists</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.statistics.type.playersummary" xml:space="preserve">
+				<source>Player summary</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.statistics.type.visitors" xml:space="preserve">
+				<source>Visitors</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tickerlist.ticker_page" xml:space="preserve">
+				<source>Page for live ticker</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tickerlist.ticker_url" xml:space="preserve">
+				<source>Static Url for live ticker</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.template" xml:space="preserve">
+				<source>Template</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.scopeTemplate" xml:space="preserve">
+				<source>Scope template</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.showDistanceBasePoint" xml:space="preserve">
+				<source>Show base point for distance calculation in map</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.saison" xml:space="preserve">
+				<source>Saison</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.saisonInput" xml:space="preserve">
+				<source>Show Selectbox for saison?</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.group" xml:space="preserve">
+				<source>Age group of competition</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.groupInput" xml:space="preserve">
+				<source>Show Selectbox for age group?</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.competition" xml:space="preserve">
+				<source>Competition</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.competitionInput" xml:space="preserve">
+				<source>Show Selectbox for competition?</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.competitionType" xml:space="preserve">
+				<source>Competition Types</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.competitionObligation" xml:space="preserve">
+				<source>Obligation</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.competitionObligation.All" xml:space="preserve">
+				<source>All</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.competitionObligation.Obligate" xml:space="preserve">
+				<source>Obligate</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.competitionObligation.Free" xml:space="preserve">
+				<source>free</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.roundInput" xml:space="preserve">
+				<source>Show Selectbox for competition rounds?</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.club" xml:space="preserve">
+				<source>Club</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.clubInput" xml:space="preserve">
+				<source>Show Selectbox for Club</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.tssetup" xml:space="preserve">
+				<source>plugin.tx_cfcleaguefe_competition.</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.label" xml:space="preserve">
+				<source>T3sports: Reports</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.description" xml:space="preserve">
+				<source>This plugin contains views: match report, team view, profile list, profile view, club list</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.action.MatchReport" xml:space="preserve">
+				<source>Match report</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.action.TeamView" xml:space="preserve">
+				<source>Team view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.action.ProfileView" xml:space="preserve">
+				<source>Profile view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.action.ProfileList" xml:space="preserve">
+				<source>Profile list</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.action.ClubList" xml:space="preserve">
+				<source>Club list</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.action.ClubView" xml:space="preserve">
+				<source>Club details view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.action.StadiumView" xml:space="preserve">
+				<source>Stadium details view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.tab.Common" xml:space="preserve">
+				<source>Common</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.tab.MatchReport" xml:space="preserve">
+				<source>Match Report</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.tickerType" xml:space="preserve">
+				<source>Hide types in Ticker</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.teamview.team" xml:space="preserve">
+				<source>Show single team</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.teamview.club" xml:space="preserve">
+				<source>Club teams only</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.teamview.profile_page" xml:space="preserve">
+				<source>Page for profile single view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.teamview.coach_page" xml:space="preserve">
+				<source>Page for coach single view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.teamview.supporter_page" xml:space="preserve">
+				<source>Page for supporter single view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.teamview.player_page" xml:space="preserve">
+				<source>Page for player single view</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.profileview.profile" xml:space="preserve">
+				<source>Player to show</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.profileview.rand" xml:space="preserve">
+				<source>Show randomized Player</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.profilelist.birthdays" xml:space="preserve">
+				<source>Birthday list</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.profilelist.birthdays.no" xml:space="preserve">
+				<source>No</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.profilelist.birthdays.day" xml:space="preserve">
+				<source>Day</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.profilelist.birthdays.month" xml:space="preserve">
+				<source>Month</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.template" xml:space="preserve">
+				<source>Template</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.matchreport.showTicker" xml:space="preserve">
+				<source>Show ticker</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.matchreport.matchUid" xml:space="preserve">
+				<source>Static match UID</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.capricorn" xml:space="preserve">
+				<source>Capricorn</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.aquarius" xml:space="preserve">
+				<source>Aquarius</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.pisces" xml:space="preserve">
+				<source>Pisces</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.aries" xml:space="preserve">
+				<source>Aries</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.taurus" xml:space="preserve">
+				<source>Taurus</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.gemini" xml:space="preserve">
+				<source>Gemini</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.cancer" xml:space="preserve">
+				<source>Cancer</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.leo" xml:space="preserve">
+				<source>Leo</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.virgo" xml:space="preserve">
+				<source>Virgo</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.libra" xml:space="preserve">
+				<source>Libra</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.scorpio" xml:space="preserve">
+				<source>Scorpio</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.sign.sagittarius" xml:space="preserve">
+				<source>Sagittarius</source>
+			</trans-unit>
+			<trans-unit id="plugin.report.flexform.tssetup" xml:space="preserve">
+				<source>plugin.tx_cfcleaguefe_report.</source>
+			</trans-unit>
+			<trans-unit id="plugin_common_random" xml:space="preserve">
+				<source>randomized ordering</source>
+			</trans-unit>
+			<trans-unit id="plugin_common_debug" xml:space="preserve">
+				<source>Debug</source>
+			</trans-unit>
+			<trans-unit id="plugin_common_charbrowser" xml:space="preserve">
+				<source>Show character browser</source>
+			</trans-unit>
+			<trans-unit id="plugin_common_detailspage" xml:space="preserve">
+				<source>Details page</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_startingpoint" xml:space="preserve">
+				<source>Startingpoint</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_recursive" xml:space="preserve">
+				<source>Recursive</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_recursive_i_0" xml:space="preserve">
+				<source>0 levels (only selected page)</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_recursive_i_1" xml:space="preserve">
+				<source>1 level</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_recursive_i_2" xml:space="preserve">
+				<source>2 level</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_recursive_i_3" xml:space="preserve">
+				<source>3 level</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_recursive_i_4" xml:space="preserve">
+				<source>4 level</source>
+			</trans-unit>
+			<trans-unit id="general_lgl_recursive_i_5" xml:space="preserve">
+				<source>5 level</source>
+			</trans-unit>
+			<trans-unit id="tablestrategy_default" xml:space="preserve">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="tablestrategy_head2head" xml:space="preserve">
+				<source>Direct matches first</source>
+			</trans-unit>
+			<trans-unit id="tablestrategy_pointpermatch" xml:space="preserve">
+				<source>Points per match</source>
+			</trans-unit>
+			<trans-unit id="tablestrategy_volleyball_2point" xml:space="preserve">
+				<source>Volleyball 2 point system</source>
+			</trans-unit>
+			<trans-unit id="tablestrategy_volleyball_3point" xml:space="preserve">
+				<source>Volleyball 3 point system</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
