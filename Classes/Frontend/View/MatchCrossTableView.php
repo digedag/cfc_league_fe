@@ -12,7 +12,7 @@ use Sys25\RnBase\Frontend\View\Marker\BaseView;
 use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Frontend\Marker\MatchMarkerBuilderInfo;
 use System25\T3sports\Frontend\Marker\TeamMarker;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use tx_rnbase;
 
 /***************************************************************
@@ -131,7 +131,7 @@ class MatchCrossTableView extends BaseView
      * @param int $guest
      *            uid der Gastmannschaft
      *
-     * @return Match|string
+     * @return Fixture|string
      */
     private function findMatch(&$matches, $home, $guest)
     {

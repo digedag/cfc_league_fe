@@ -4,7 +4,7 @@ namespace System25\T3sports\Table;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use System25\T3sports\Model\Competition;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 
 /***************************************************************
  *  Copyright notice
@@ -96,13 +96,13 @@ class Builder
     /**
      * Build league table to compare two opponents of a single match.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param ConfigurationInterface $configurations
      * @param string $confId
      *
      * @return ITableType
      */
-    public static function buildByMatch(Match $match, $configurations, $confId): ITableType
+    public static function buildByMatch(Fixture $match, $configurations, $confId): ITableType
     {
         $league = $match->getCompetition();
         $tableType = $league->getSports();

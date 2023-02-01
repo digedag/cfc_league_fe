@@ -2,7 +2,7 @@
 
 namespace System25\T3sports\Table\Handball;
 
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\ITeam;
@@ -60,7 +60,7 @@ class Table extends FootballTable
     /**
      * Zählt die Punkte für eine normale Tabelle.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      */
     protected function countStandard($match, $toto, IConfigurator $configurator)
@@ -130,7 +130,7 @@ class Table extends FootballTable
      * Die Ergebnisse werden als nur für die
      * Heimmannschaft gewertet.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      */
     protected function countHome($match, $toto, IConfigurator $configurator)
@@ -181,7 +181,7 @@ class Table extends FootballTable
      * Die Ergebnisse werden als nur für die
      * Gastmannschaft gewertet.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      */
     protected function countGuest($match, $toto, IConfigurator $configurator)

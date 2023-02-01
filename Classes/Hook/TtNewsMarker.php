@@ -6,14 +6,13 @@ use Exception;
 use Sys25\RnBase\Configuration\Processor;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Utility\Strings;
-use System25\T3sports\Model\Match;
 use System25\T3sports\Model\Repository\MatchRepository;
 use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2020 Rene Nitzsche
+ *  (c) 2008-2023 Rene Nitzsche
  *  Contact: rene@system25.de
  *  All rights reserved
  *
@@ -39,6 +38,9 @@ use tx_rnbase;
  */
 class TtNewsMarker
 {
+    /** @var Processor */
+    private $configurations;
+    private $linkConf;
     /**
      * Hook um weitere Marker in tt_news einzufügen. Es sollte möglich sein auf alle
      * Views von T3sports direkt zu verlinken. Die meisten Einstellungen kommen aus der

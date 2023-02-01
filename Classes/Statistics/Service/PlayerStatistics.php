@@ -4,7 +4,7 @@ namespace System25\T3sports\Statistics\Service;
 
 use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\Misc;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Statistics\PlayerStatisticsMarker;
@@ -87,10 +87,10 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Ein einzelnes Spiel auswerten.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $clubId
      */
-    public function handleMatch(Match $match, $clubId)
+    public function handleMatch(Fixture $match, $clubId)
     {
         // Zunächst müssen alle Spieler des Spiels ermittelt werden
         // Jeder Spieler, der am Spiel beteiligt ist, steht in der Aufstellung oder als
@@ -123,7 +123,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Entscheidet, ob die Spieler des Teams in die Statistik eingehen.
      *
-     * @param \tx_cfcleaguefe_models_team $team
+     * @param Team $team
      *
      * @return bool
      */
@@ -140,7 +140,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Liefert die Spieler eines beteiligten Teams.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param bool $home
      *            true, wenn das Heimteam geholt werden soll
      *
@@ -242,7 +242,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * </pre>.
      *
      * @param Profile $player Spieler, der gezählt werden soll
-     * @param Match $match Spiel, das ausgewertet wird
+     * @param Fixture $match Spiel, das ausgewertet wird
      * @param array $playersArr Datenarray, welches die ermittelten Daten aufnimmt
      */
     protected function _countMatch4Player($player, $match, &$playersArr)
@@ -362,7 +362,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * @param int $type 0 oder MatchNote-Typ
      * @param string $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @param array $playerData Referenz auf die Statistikdaten des Spielers
      */
     protected function _countNote($type, $key, &$player, &$match, &$playerData)
@@ -385,7 +385,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      * @param int $type 0 oder MatchNote-Typ
      * @param string $key der konkrete Statistiktyp, der aktualisiert werden soll. Dieser muss zum Typ passen.
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @param array $playerData Referenz auf die Statistikdaten des Spielers
      */
     protected function _countGoals($type, $key, $player, $match, &$playerData)

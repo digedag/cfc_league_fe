@@ -5,7 +5,7 @@ namespace System25\T3sports\Hook;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\Templates;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Table\Builder;
 use System25\T3sports\Utility\MatchTableBuilder;
 use tx_rnbase;
@@ -72,7 +72,7 @@ class MatchChartHook
         if (!isset($params['match'])) {
             return false;
         }
-        /* @var $match Match */
+        /* @var $match Fixture */
         $match = $params['match'];
         $competition = $match->getCompetition();
         if (!$competition->isTypeLeague()) {
@@ -83,7 +83,7 @@ class MatchChartHook
 
         $table = Builder::buildByCompetitionAndMatches(
             $competition,
-            $competition->getMatches(Match::MATCH_STATUS_FINISHED),
+            $competition->getMatches(Fixture::MATCH_STATUS_FINISHED),
             $configurations,
             $confId
         );

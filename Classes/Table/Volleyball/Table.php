@@ -2,7 +2,7 @@
 
 namespace System25\T3sports\Table\Volleyball;
 
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\ITeam;
@@ -12,7 +12,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011-2022 Rene Nitzsche (rene@system25.de)
+ *  (c) 2011-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -60,7 +60,7 @@ class Table extends FootballTable
     /**
      * Zählt die Punkte für eine normale Tabelle.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      * @param IConfigurator $configurator
      */
@@ -151,7 +151,7 @@ class Table extends FootballTable
      * Zählt die Punkte für eine Heimspieltabelle. Die Ergebnisse werden als nur für die
      * Heimmannschaft gewertet.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      * @param IConfigurator $configurator
      */
@@ -186,7 +186,7 @@ class Table extends FootballTable
      * Zählt die Punkte für eine Auswärtstabelle. Die Ergebnisse werden als nur für die
      * Gastmannschaft gewertet.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      * @param IConfigurator $configurator
      */

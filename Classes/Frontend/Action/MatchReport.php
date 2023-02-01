@@ -7,7 +7,7 @@ use Sys25\RnBase\Exception\PageNotFound404;
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use System25\T3sports\Frontend\View\MatchReportView;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\MatchReportModel;
 use System25\T3sports\Utility\MatchProfileProvider;
 use Throwable;
@@ -16,7 +16,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -65,10 +65,10 @@ class MatchReport extends AbstractAction
         }
         // Das Spiel laden
         try {
-            $match = tx_rnbase::makeInstance(Match::class, $matchId);
+            $match = tx_rnbase::makeInstance(Fixture::class, $matchId);
             if (null != $configurations->get($this->getConfId().'viewClassName')) {
                 if (!$match->isValid()) {
-                    throw new Exception('Match is not valid');
+                    throw new Exception('Fixture is not valid');
                 }
                 $viewData->offsetSet('match', $match); // Den Spielreport für den View bereitstellen
             } else {

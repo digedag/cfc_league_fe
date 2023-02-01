@@ -4,7 +4,6 @@ namespace System25\T3sports\Decorator;
 
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Utility\Strings;
-use System25\T3sports\Model\Match;
 use System25\T3sports\Model\MatchNote;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchProfileProvider;
