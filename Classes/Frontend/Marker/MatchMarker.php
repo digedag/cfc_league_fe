@@ -280,7 +280,6 @@ class MatchMarker extends SimpleMarker
      * @param FormatUtil $formatter
      * @param string $matchConfId
      * @param string $matchMarker
-     *
      */
     private function addDynamicMarkers($template, MatchReport $report, FormatUtil $formatter, $matchConfId, $matchMarker)
     {

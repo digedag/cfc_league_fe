@@ -41,6 +41,7 @@ class TtNewsMarker
     /** @var Processor */
     private $configurations;
     private $linkConf;
+
     /**
      * Hook um weitere Marker in tt_news einzufügen. Es sollte möglich sein auf alle
      * Views von T3sports direkt zu verlinken. Die meisten Einstellungen kommen aus der
