@@ -12,5 +12,5 @@
 *.bak
 .php-cs-fixer.cache
 .scannerwork
-
+.phpunit.result.cache
 
