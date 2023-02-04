@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\Twig\Extension;
 
+use System25\T3sports\Model\Fixture;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -34,7 +36,7 @@ class DataProvider extends \Twig_Extension
         ];
     }
 
-    public function buildMatchReport(\tx_cfcleague_models_Match $match)
+    public function buildMatchReport(Fixture $match)
     {
         return \tx_rnbase::makeInstance(\System25\T3sports\Twig\Data\MatchReport::class, $match);
     }
