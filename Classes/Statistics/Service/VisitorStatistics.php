@@ -202,6 +202,6 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
         $v1 = $a[$attr];
         $v2 = $b[$attr];
 
-        return ($v1 == $v2) ? 0 : ($v1 < $v2) ? 1 : -1;
+        return ($v1 == $v2) ? 0 : ($v1 < $v2 ? 1 : -1);
     }
 }
