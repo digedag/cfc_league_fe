@@ -26,14 +26,15 @@
 	},
 	"require" : {
 		"typo3/cms-core": "^8.7 || ^9.5 || ^10.4 || ^11.5",
-		"digedag/cfc-league" : "dev-upgrade/php8 as 1.9.x-dev",
+		"digedag/cfc-league" : "~1.10.0",
 		"digedag/rn-base" : "~1.16.0"
 	},
 	"require-dev": {
-		"nimut/testing-framework": "^1.1 || ^2.0 || ^4.0 || ^5.0 || ^6.0",
+		"friendsofphp/php-cs-fixer": "^3.1.0",
+		"nimut/testing-framework": "^4.0 || ^5.0 || ^6.0",
 		"mikey179/vfsstream": "^1.4 || ^1.6",
-		"phpunit/phpunit": "^6.5.14 || ^7.5.20 || ^8.0",
-		"friendsofphp/php-cs-fixer": "^3.1.0"
+		"phpcompatibility/php-compatibility": "^9.3.5",
+		"phpunit/phpunit": "^6.5.14 || ^7.5.20 || ^8.0"
 	},
 	"autoload" : {
 		"psr-4": { "System25\\T3sports\\": "Classes" }
@@ -63,6 +64,7 @@
             "[ -L .Build/Web/typo3conf/ext/cfc_league_fe ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/cfc_league_fe"
         ],
         "test:phplint": "find *.php Classes Deprecations mod1 models services Tests util -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
+		"test:phpcompat": ".Build/bin/phpcs --ignore=.Build/*,Resources/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion ",
         "test:phpcs": [
             "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
             ".Build/bin/php-cs-fixer fix -v --dry-run --diff  --ansi"
