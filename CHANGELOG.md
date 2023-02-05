@@ -2,6 +2,9 @@
 Changes
 -------
 
+v1.10.0 (05.02.2023)
+ * #79 Support for PHP 8
+
 v1.9.0 (27.01.2023)
  * Allow install in TYPO3 11.5
  * Some bugfixes

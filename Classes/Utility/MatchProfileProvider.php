@@ -3,7 +3,7 @@
 namespace System25\T3sports\Utility;
 
 use Sys25\RnBase\Utility\Strings;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Repository\ProfileRepository;
 
@@ -47,13 +47,13 @@ class MatchProfileProvider
     /**
      * Liefert die Spieler eines Spiels.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param string $methodName self::PLAYERS_HOME or self::PLAYERS_GUEST
      * @param bool $all
      *
      * @return Profile[] wenn true dann wird eine Map geliefert. Key ist die UID des Spielers
      */
-    public function getPlayers(Match $match, $methodName, $all = false)
+    public function getPlayers(Fixture $match, $methodName, $all = false)
     {
         $key = $methodName.'_'.($all ? 'all' : 'lineup');
         if (!isset($this->players[$match->getUid()][$key])) {
@@ -81,12 +81,12 @@ class MatchProfileProvider
      * Liefert die Profiles des UID-Strings als Array.
      * Key ist die UID, Value das Profile.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param string $uidStr
      *
      * @return array Key ist UID, Value ist Profile als Object
      */
-    public function getProfiles(Match $match, $uidStr): array
+    public function getProfiles(Fixture $match, $uidStr): array
     {
         $ret = [];
         if ($uidStr) {
@@ -107,7 +107,7 @@ class MatchProfileProvider
      *
      * @return array Key ist UID, Value ist Profile als Object
      */
-    private function resolveProfiles(Match $match)
+    private function resolveProfiles(Fixture $match)
     {
         if (isset($this->profiles[$match->getUid()])) {
             return;

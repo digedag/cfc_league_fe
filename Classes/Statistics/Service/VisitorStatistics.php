@@ -2,7 +2,7 @@
 
 namespace System25\T3sports\Statistics\Service;
 
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Statistics\TeamStatisticsMarker;
 
 /**
@@ -65,10 +65,10 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Handle single match.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $clubId
      */
-    public function handleMatch(Match $match, $clubId)
+    public function handleMatch(Fixture $match, $clubId)
     {
         // Was suche wir?
         // Team Heim/Ausw/Gesamt AnzSp, AnzZuschauer, Zuschauerschnitt
@@ -202,6 +202,6 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
         $v1 = $a[$attr];
         $v2 = $b[$attr];
 
-        return ($v1 == $v2) ? 0 : ($v1 < $v2) ? 1 : -1;
+        return ($v1 == $v2) ? 0 : ($v1 < $v2 ? 1 : -1);
     }
 }

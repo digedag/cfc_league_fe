@@ -61,7 +61,7 @@ return [
     'tx_cfcleaguefe_models_competition' => \System25\T3sports\Model\Competition::class,
     'tx_cfcleaguefe_models_competition_penalty' => \System25\T3sports\Model\CompetitionPenalty::class,
     'tx_cfcleaguefe_models_competition_round' => \System25\T3sports\Model\CompetitionRound::class,
-    'tx_cfcleaguefe_models_match' => \System25\T3sports\Model\Match::class,
+    'tx_cfcleaguefe_models_match' => \System25\T3sports\Model\Fixture::class,
     'tx_cfcleaguefe_models_match_note' => \System25\T3sports\Model\MatchNote::class,
     'tx_cfcleaguefe_models_matchtable' => \System25\T3sports\Utility\MatchTableBuilder::class,
     'tx_cfcleaguefe_models_profile' => \System25\T3sports\Model\Profile::class,

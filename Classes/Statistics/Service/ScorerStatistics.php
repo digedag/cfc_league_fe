@@ -6,7 +6,7 @@ namespace System25\T3sports\Statistics\Service;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
+ * (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -63,7 +63,7 @@ class ScorerStatistics extends PlayerStatistics
             $goal1 = $a['goals_all'];
             $goal2 = $b['goals_all'];
 
-            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2) ? 1 : -1;
+            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2 ? 1 : -1);
         });
 
         return $ret;

@@ -63,7 +63,7 @@ class AssistStatistics extends PlayerStatistics
             $goal1 = $a['goals_assist'];
             $goal2 = $b['goals_assist'];
 
-            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2) ? 1 : -1;
+            return ($goal1 == $goal2) ? 0 : ($goal1 < $goal2 ? 1 : -1);
         });
 
         return $ret;

@@ -2,10 +2,14 @@
 
 namespace System25\T3sports\Twig\Data;
 
+use System25\T3sports\Model\Fixture;
+use System25\T3sports\Model\Profile;
+use System25\T3sports\Utility\ServiceRegistry;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017-2019 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2023 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -50,10 +54,10 @@ class MatchReport
 
     protected $profileSrv;
 
-    public function __construct(\tx_cfcleague_models_Match $match)
+    public function __construct(Fixture $match)
     {
         $this->match = $match;
-        $this->profileSrv = \tx_cfcleague_util_ServiceRegistry::getProfileService();
+        $this->profileSrv = ServiceRegistry::getProfileService();
         $this->initMatchTicker();
         $this->getLineupHome();
         $this->getLineupGuest();
@@ -95,7 +99,7 @@ class MatchReport
     /**
      * @param string $all
      *
-     * @return \tx_cfcleague_models_Profile[]
+     * @return Profile[]
      */
     public function getPlayersHome($all = false)
     {
@@ -117,7 +121,7 @@ class MatchReport
     /**
      * @param string $all
      *
-     * @return \tx_cfcleague_models_Profile[]
+     * @return Profile[]
      */
     public function getPlayersGuest($all = false)
     {
@@ -143,7 +147,7 @@ class MatchReport
     }
 
     /**
-     * @return \tx_cfcleague_models_Profile
+     * @return Profile
      */
     public function getCoachHome()
     {
@@ -153,7 +157,7 @@ class MatchReport
     }
 
     /**
-     * @return \tx_cfcleague_models_Profile
+     * @return Profile
      */
     public function getCoachGuest()
     {
@@ -184,7 +188,7 @@ class MatchReport
     }
 
     /**
-     * @return \tx_cfcleague_models_Profile[]
+     * @return Profile[]
      */
     public function getAssists()
     {
@@ -192,7 +196,7 @@ class MatchReport
     }
 
     /**
-     * @param \tx_cfcleague_models_Profile[] $players
+     * @param Profile[] $players
      * @param string $system
      *
      * @return []
@@ -218,11 +222,11 @@ class MatchReport
     }
 
     /**
-     * @param \tx_cfcleague_models_Profile $player
+     * @param Profile $player
      *
      * @return \System25\T3sports\Twig\Data\Player
      */
-    protected function substPlayer(\tx_cfcleague_models_Profile $player)
+    protected function substPlayer(Profile $player)
     {
         return array_key_exists($player->getUid(), $this->players) ?
             $this->players[$player->getUid()] : $this->buildPlayer($player);
@@ -248,7 +252,7 @@ class MatchReport
                     $playerUid = $note->getPlayer();
                     $player = null;
                     if ($playerUid) {
-                        $player = \tx_cfcleague_models_Profile::getProfileInstance($playerUid);
+                        $player = Profile::getProfileInstance($playerUid);
                         $player = $this->buildPlayer($player);
                     }
                     $matchNote = new \System25\T3sports\Twig\Data\MatchNote($note, $player);
@@ -256,7 +260,7 @@ class MatchReport
                         $player->addMatchNote($matchNote);
                     }
                     if ($matchNote->isChange()) {
-                        $player2 = \tx_cfcleague_models_Profile::getProfileInstance($matchNote->getMatchNote()->getPlayer2());
+                        $player2 = Profile::getProfileInstance($matchNote->getMatchNote()->getPlayer2());
                         $player2 = $this->buildPlayer($player2);
                         $matchNote->setPlayer2($player2);
                     }
@@ -285,7 +289,7 @@ class MatchReport
     }
 
     /**
-     * @param \tx_cfcleague_models_Profile $player
+     * @param Profile $player
      *
      * @return \System25\T3sports\Twig\Data\Player
      */

@@ -4,7 +4,7 @@ namespace System25\T3sports\Table;
 
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\CompetitionPenalty;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 
 /***************************************************************
  *  Copyright notice
@@ -44,7 +44,7 @@ interface IMatchProvider
     public function getBaseCompetition();
 
     /**
-     * Match penalties to handle.
+     * Fixture penalties to handle.
      *
      * @return CompetitionPenalty[]
      */
@@ -60,7 +60,7 @@ interface IMatchProvider
     /**
      * Matches sorted by rounds.
      *
-     * @return array[int][Match]
+     * @return array[int][Fixture]
      */
     public function getRounds();
 

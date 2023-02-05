@@ -17,7 +17,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -301,7 +301,7 @@ class LeagueTableView extends BaseView
         $markerArray = $subpartArray = $wrappedSubpartArray = [];
 
         // Jetzt über die vorhandenen Items iterieren
-        while (list($key, $value) = each($itemsArr[0])) {
+        foreach ($itemsArr[0] as $key => $value) {
             $keepVars[$confName] = $key;
             $link->parameters($keepVars);
             $isCurrent = ($key == $currItem);

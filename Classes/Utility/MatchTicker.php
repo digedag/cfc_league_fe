@@ -3,7 +3,7 @@
 namespace System25\T3sports\Utility;
 
 use Sys25\RnBase\Utility\Queue;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\MatchNote;
 use System25\T3sports\Model\Repository\MatchNoteRepository;
 use tx_rnbase;
@@ -11,7 +11,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -85,12 +85,12 @@ class MatchTicker
      * Die Meldungen enthalten den aktuellen Spielstand. Spielerwechsel werden als eine einzelne
      * Tickermeldung zusammengefasst.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param mixed $types unused!
      *
      * @return MatchNote[]
      */
-    public function getTicker4Match(Match $match, $types = 0)
+    public function getTicker4Match(Fixture $match, $types = 0)
     {
         $arr = self::get('matchnotes_'.$match->getUid());
         if ($arr) {

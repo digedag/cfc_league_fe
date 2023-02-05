@@ -6,8 +6,7 @@ use Exception;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Typo3Wrapper\Service\AbstractService;
 use Sys25\RnBase\Utility\Misc;
-use System25\T3sports\Model\CompetitionPenalty;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\IMatchProvider;
@@ -22,7 +21,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -51,6 +50,13 @@ class Table extends AbstractService implements ITableType
 
     /** @var TeamDataContainer */
     protected $_teamData = null;
+
+    /** @var ConfigurationInterface */
+    protected $configuration;
+    protected $confId;
+
+    /** @var Configurator */
+    protected $configurator;
 
     /**
      * Set configuration.
@@ -329,12 +335,12 @@ class Table extends AbstractService implements ITableType
      * Der Spiel-Instanz werden die Team-Instanzen zugewiesen.
      * Diese entsprechen jetzt aber den TeamAdaptern. CHECK: Ist das ein Problem?
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param array $teams
      *
      * @return bool
      */
-    protected function applyTeams(Match $match, TeamDataContainer $teams): bool
+    protected function applyTeams(Fixture $match, TeamDataContainer $teams): bool
     {
         $homeId = $match->getProperty('home');
         $team = $teams->getTeamByTeamUid($homeId);
@@ -356,14 +362,14 @@ class Table extends AbstractService implements ITableType
     /**
      * Die Spiele werden zum aktuellen Tabellenstand hinzugerechnet.
      *
-     * @param Match[] $matches
+     * @param Fixture[] $matches
      * @param Configurator $configurator
      */
     protected function handleMatches(&$matches, Configurator $configurator)
     {
         // Wir laufen jetzt über alle Spiele und legen einen Punktespeicher für jedes Team an
         foreach ($matches as $match) {
-            /* @var $match Match */
+            /* @var $match Fixture */
             // Die Teams dem Spiel zuweisen
 
             if (false === $this->applyTeams($match, $this->_teamData)) {
@@ -399,7 +405,7 @@ class Table extends AbstractService implements ITableType
      * Check if teams in match are configured in competition. This is a data error check to
      * avoid unexpected situations in table rendering.
      *
-     * @param Match $match
+     * @param Fixture $match
      */
     protected function assertTeamsInCompetition($match)
     {
@@ -418,7 +424,7 @@ class Table extends AbstractService implements ITableType
     /**
      * Zählt die Punkte für eine normale Tabelle.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      * @param IConfigurator $configurator
      */
@@ -476,7 +482,7 @@ class Table extends AbstractService implements ITableType
      * Die Ergebnisse werden als nur für die
      * Heimmannschaft gewertet.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      * @param Configurator $configurator
      */
@@ -520,7 +526,7 @@ class Table extends AbstractService implements ITableType
      * Die Ergebnisse werden als nur für die
      * Gastmannschaft gewertet.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param int $toto
      * @param Configurator $configurator
      */

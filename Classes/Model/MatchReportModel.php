@@ -39,6 +39,7 @@ use System25\T3sports\Utility\MatchTicker;
  */
 class MatchReportModel
 {
+    /** @var Fixture */
     protected $match;
 
     protected $_configurations;
@@ -72,7 +73,7 @@ class MatchReportModel
      *
      * @param int $matchId UID eines Spiels
      */
-    public function __construct(Match $match, ConfigurationInterface $configurations, MatchProfileProvider $mpProvider)
+    public function __construct(Fixture $match, ConfigurationInterface $configurations, MatchProfileProvider $mpProvider)
     {
         // Laden des Spiels
         $this->match = $match;
@@ -87,7 +88,7 @@ class MatchReportModel
     /**
      * Returns the match instance.
      *
-     * @return Match
+     * @return Fixture
      */
     public function getMatch()
     {

@@ -11,7 +11,7 @@ use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Files;
 use Sys25\RnBase\Utility\Logger;
 use System25\T3sports\Frontend\Marker\MatchMarker;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Table\Builder;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
@@ -165,13 +165,13 @@ class TableMatchMarker
     }
 
     /**
-     * Liefert das Match.
+     * Liefert das Fixture.
      *
      * @param array $params
      *
-     * @return Match
+     * @return Fixture
      */
-    private function getMatch($params): ?Match
+    private function getMatch($params): ?Fixture
     {
         if (!isset($params['match'])) {
             return null;

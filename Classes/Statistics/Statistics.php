@@ -5,7 +5,7 @@ namespace System25\T3sports\Statistics;
 use Sys25\RnBase\Frontend\Marker\ListProvider;
 use Sys25\RnBase\Utility\Language;
 use Sys25\RnBase\Utility\Misc;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Repository\MatchNoteRepository;
 use System25\T3sports\Model\Repository\MatchRepository;
 use System25\T3sports\Utility\MatchTableBuilder;
@@ -14,7 +14,7 @@ use tx_rnbase;
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Rene Nitzsche (rene@system25.de)
+*  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -97,9 +97,9 @@ class Statistics
     /**
      * Callback methode.
      *
-     * @param Match $match
+     * @param Fixture $match
      */
-    public function handleMatch(Match $match)
+    public function handleMatch(Fixture $match)
     {
         $matches = [$match];
         $matches = $this->matchNodeRepo->retrieveMatchNotes($matches);

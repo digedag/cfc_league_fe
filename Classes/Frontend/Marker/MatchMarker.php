@@ -10,7 +10,7 @@ use Sys25\RnBase\Frontend\Marker\SimpleMarker;
 use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Misc;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\MatchReportModel as MatchReport;
 use System25\T3sports\Model\Stadium;
 use System25\T3sports\Utility\MatchTicker;
@@ -20,7 +20,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -70,7 +70,7 @@ class MatchMarker extends SimpleMarker
     /**
      * {@inheritdoc}
      *
-     * @param Match $match
+     * @param Fixture $match
      *
      * @see SimpleMarker::prepareTemplate()
      */
@@ -154,7 +154,7 @@ class MatchMarker extends SimpleMarker
      * Integriert die Satzergebnisse.
      *
      * @param string $template
-     * @param Match $item
+     * @param Fixture $item
      * @param
      *            $formatter
      * @param
@@ -179,7 +179,7 @@ class MatchMarker extends SimpleMarker
      * Bindet die Arena ein.
      *
      * @param string $template
-     * @param Match $item
+     * @param Fixture $item
      * @param FormatUtil $formatter
      * @param string $confId
      * @param string $markerPrefix
@@ -207,7 +207,7 @@ class MatchMarker extends SimpleMarker
      * werden auch vorhandene MatchNotes berücksichtigt, so daß ein Spieler mit gelber
      * Karte diese z.B. neben seinem Namen angezeigt bekommt.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param FormatUtil $formatter
      * @param string $confId
      */
@@ -260,7 +260,7 @@ class MatchMarker extends SimpleMarker
     }
 
     /**
-     * @param Match $match
+     * @param Fixture $match
      * @param string $fieldName
      */
     private function lookupStaticField($match, $fieldName)
@@ -276,12 +276,10 @@ class MatchMarker extends SimpleMarker
      * Add dynamic defined markers for profiles and matchnotes.
      *
      * @param string $template
-     * @param Match $match
+     * @param Fixture $match
      * @param FormatUtil $formatter
      * @param string $matchConfId
      * @param string $matchMarker
-     *
-     * @return string
      */
     private function addDynamicMarkers($template, MatchReport $report, FormatUtil $formatter, $matchConfId, $matchMarker)
     {
@@ -296,7 +294,7 @@ class MatchMarker extends SimpleMarker
      * Add dynamic defined markers for profiles and matchnotes.
      *
      * @param string $template
-     * @param Match $match
+     * @param Fixture $match
      * @param FormatUtil $formatter
      * @param string $matchConfId
      * @param string $matchMarker
@@ -346,11 +344,11 @@ class MatchMarker extends SimpleMarker
      * Liefert die Ticker als Hash.
      * Key ist die UID des Datensatzes.
      *
-     * @param Match $match
+     * @param Fixture $match
      *
      * @return array
      */
-    protected function getTickerHash(Match $match)
+    protected function getTickerHash(Fixture $match)
     {
         if (!is_array($this->tickerHash)) {
             $this->tickerHash = [];
@@ -374,7 +372,7 @@ class MatchMarker extends SimpleMarker
      * @param array $markerArray
      * @param array $subpartArray
      * @param array $wrappedSubpartArray
-     * @param Match $match
+     * @param Fixture $match
      * @param FormatUtil $formatter
      */
     protected function setMatchSubparts($template, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $match, $formatter)
@@ -396,7 +394,7 @@ class MatchMarker extends SimpleMarker
      *
      * @param array $gSubpartArray
      * @param array $firstMarkerArray
-     * @param Match $match
+     * @param Fixture $match
      * @param FormatUtil $formatter
      * @param string $template
      * @param string $baseConfId
@@ -424,7 +422,7 @@ class MatchMarker extends SimpleMarker
      * Links vorbereiten
      * TODO: auf Linkerzeugung im SimpleMarker umstellen.
      *
-     * @param Match $match
+     * @param Fixture $match
      * @param string $marker
      * @param array $markerArray
      * @param array $wrappedSubpartArray

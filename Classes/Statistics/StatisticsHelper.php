@@ -2,7 +2,7 @@
 
 namespace System25\T3sports\Statistics;
 
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
 
 /***************************************************************
@@ -47,10 +47,10 @@ class StatisticsHelper
      *
      * @param int $type MatchNote-Typ
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @returns liefert die MatchNotes des Typs als Array oder 0
      */
-    public static function isNote($type, Profile $player, Match $match)
+    public static function isNote($type, Profile $player, Fixture $match)
     {
         $ret = [];
         $tickerArr = $match->getMatchNotesByType($type);
@@ -83,11 +83,11 @@ class StatisticsHelper
      *
      * @param int $type MatchNote-Typ des Tors oder 0 für alle Tore
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      *
      * @return array liefert die MatchNotes der Tore als Array oder 0
      */
-    public static function isGoal($type, Profile $player, Match $match)
+    public static function isGoal($type, Profile $player, Fixture $match)
     {
         $tickerType = 0 == $type ? self::$goalTypes : $type;
         $tickerArr = $match->getMatchNotesByType($tickerType);
@@ -108,10 +108,10 @@ class StatisticsHelper
      * Prüft, ob der Spieler eine gelbe Karte gesehen hat.
      *
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    public static function isCardYellow(Profile $player, Match $match)
+    public static function isCardYellow(Profile $player, Fixture $match)
     {
         return self::_isCard('Y', $player, $match);
     }
@@ -120,10 +120,10 @@ class StatisticsHelper
      * Prüft, ob der Spieler eine gelb-rote Karte gesehen hat.
      *
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    public static function isCardRed(Profile $player, Match $match)
+    public static function isCardRed(Profile $player, Fixture $match)
     {
         return self::_isCard('R', $player, $match);
     }
@@ -132,10 +132,10 @@ class StatisticsHelper
      * Prüft, ob der Spieler eine rote Karte gesehen hat.
      *
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    public static function isCardYellowRed(Profile $player, Match $match)
+    public static function isCardYellowRed(Profile $player, Fixture $match)
     {
         return self::_isCard('YR', $player, $match);
     }
@@ -145,10 +145,10 @@ class StatisticsHelper
      *
      * @param string $type Typ der Karte: Y,R,YR
      * @param Profile $player Referenz auf den Spieler
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    private static function _isCard($type, Profile $player, Match $match)
+    private static function _isCard($type, Profile $player, Fixture $match)
     {
         $tickerType = 'Y' == $type ? 70 : ('YR' == $type ? 71 : 72);
         $tickerArr = &$match->getMatchNotesByType($tickerType);
@@ -175,7 +175,7 @@ class StatisticsHelper
      *
      * @returns liefert die Spielminute oder 0
      */
-    public static function isChangedIn(Profile $player, Match $match)
+    public static function isChangedIn(Profile $player, Fixture $match)
     {
         return self::_isPlayerChanged('IN', $player, $match);
     }
@@ -185,7 +185,7 @@ class StatisticsHelper
      *
      * @returns liefert die Spielminute oder 0
      */
-    public static function isChangedOut(Profile $player, Match $match)
+    public static function isChangedOut(Profile $player, Fixture $match)
     {
         return self::_isPlayerChanged('OUT', $player, $match);
     }
@@ -194,10 +194,10 @@ class StatisticsHelper
      * Prüft, ob der Spieler ausgewechselt wurde und liefert in diesem Fall die Spielminute.
      *
      * @param string $inOut Werte sind 'in' oder 'out'
-     * @param Match $match Referenz auf das Spiel
+     * @param Fixture $match Referenz auf das Spiel
      * @returns liefert die Spielminute oder 0
      */
-    private static function _isPlayerChanged($inOut, Profile $player, Match $match)
+    private static function _isPlayerChanged($inOut, Profile $player, Fixture $match)
     {
         $tickerArr = $match->getMatchNotesByType(('IN' == $inOut) ? 81 : 80);
         for ($i = 0, $size = count($tickerArr); $i < $size; ++$i) {

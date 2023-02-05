@@ -34,7 +34,7 @@ league_1:
         short_name: Team 4
         club: 4
   matches: 
-    clazz: System25\T3sports\Model\Match
+    clazz: System25\T3sports\Model\Fixture
     - 
       # T1-T2 - 1:1
       record: 
@@ -137,7 +137,7 @@ league_2:
         short_name: Team 4
         club: 4
   matches: 
-    clazz: System25\T3sports\Model\Match
+    clazz: System25\T3sports\Model\Fixture
     - 
       # T1-T2 - 1:1 - Spielfrei
       record: 
@@ -240,7 +240,7 @@ league_volley_1:
         short_name: Team 4
         club: 4
   matches: 
-    clazz: System25\T3sports\Model\Match
+    clazz: System25\T3sports\Model\Fixture
     - 
       # T1-T2 - 2:1 (25:20;23:25;25:19)
       record: 
