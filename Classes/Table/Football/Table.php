@@ -58,6 +58,9 @@ class Table extends AbstractService implements ITableType
     /** @var Configurator */
     protected $configurator;
 
+    /** @var IMatchProvider */
+    protected $matchProvider;
+
     /**
      * Set configuration.
      *
@@ -119,6 +122,7 @@ class Table extends AbstractService implements ITableType
      */
     public function getTableData(): ITableResult
     {
+        /** @var TableResult $tableData */
         $tableData = tx_rnbase::makeInstance(TableResult::class);
         $configurator = $this->getConfigurator();
 
@@ -279,7 +283,7 @@ class Table extends AbstractService implements ITableType
     /**
      * This methods is intended to be overwritten by subclasses to init team data.
      *
-     * @param int $teamId
+     * @param ITeam $teamId
      */
     protected function initTeam(ITeam $teamId)
     {
@@ -298,26 +302,28 @@ class Table extends AbstractService implements ITableType
         foreach ($penalties as $penalty) {
             /* @var $penalty CompetitionPenalty */
             // Welches Team ist betroffen?
-            if (array_key_exists($penalty->getProperty('team'), $this->_teamData)) {
+            $teamId = $penalty->getProperty('team');
+            $team = $this->_teamData->getTeamByTeamUid($teamId);
+
+            if (null !== $team) {
                 // Die Strafe wird für den View mit abgespeichert
                 // Falls es eine Korrektur ist, dann nicht speichern
                 if (!$penalty->isCorrection()) {
-                    $this->_teamData[$penalty->getProperty('team')]['penalties'][] = $penalty;
+                    $this->_teamData->addPenalty($team, $penalty);
                 }
                 // Die Punkte abziehen
-                $this->_teamData[$penalty->getProperty('team')]['points'] -= $penalty->getProperty('points_pos');
-                $this->_teamData[$penalty->getProperty('team')]['points2'] += $penalty->getProperty('points_neg');
+                $this->_teamData->addPoints($team, $penalty->getProperty('points_pos') * -1);
+                $this->_teamData->addPoints2($team, $penalty->getProperty('points_neg'));
 
-                $this->addGoals($penalty->getProperty('team'), $penalty->getProperty('goals_pos') * -1, $penalty->getProperty('goals_neg'));
-
-                $this->_teamData[$penalty->getProperty('team')]['matchCount'] += $penalty->getProperty('matches');
-                $this->_teamData[$penalty->getProperty('team')]['winCount'] += $penalty->getProperty('wins');
-                $this->_teamData[$penalty->getProperty('team')]['drawCount'] += $penalty->getProperty('draws');
-                $this->_teamData[$penalty->getProperty('team')]['loseCount'] += $penalty->getProperty('loses');
+                $this->addGoals($team, $penalty->getProperty('goals_pos') * -1, $penalty->getProperty('goals_neg'));
+                $this->_teamData->addMatchCount($team, $penalty->getProperty('matches'));
+                $this->_teamData->addWinCount($team, $penalty->getProperty('wins'));
+                $this->_teamData->addDrawCount($team, $penalty->getProperty('draws'));
+                $this->_teamData->addLoseCount($team, $penalty->getProperty('loses'));
 
                 // Den Zwangsabstieg tragen wir nur ein, damit der in die Sortierung eingeht
                 if ($penalty->getProperty('static_position')) {
-                    $this->_teamData[$penalty->getProperty('team')]['static_position'] = (int) $penalty->getProperty('static_position');
+                    $this->_teamData->addStaticPosition($team, (int) $penalty->getProperty('static_position'));
                 }
             }
         }
@@ -336,7 +342,7 @@ class Table extends AbstractService implements ITableType
      * Diese entsprechen jetzt aber den TeamAdaptern. CHECK: Ist das ein Problem?
      *
      * @param Fixture $match
-     * @param array $teams
+     * @param TeamDataContainer $teams
      *
      * @return bool
      */
@@ -431,7 +437,9 @@ class Table extends AbstractService implements ITableType
     protected function countStandard($match, $toto, IConfigurator $configurator)
     {
         // Anzahl Spiele aktualisieren
+        /** @var \System25\T3sports\Table\TeamAdapter $home */
         $home = $match->getHome();
+        /** @var \System25\T3sports\Table\TeamAdapter $guest */
         $guest = $match->getGuest();
         $this->addMatchCount($home);
         $this->addMatchCount($guest);
@@ -488,7 +496,9 @@ class Table extends AbstractService implements ITableType
      */
     protected function countHome($match, $toto, IConfigurator $configurator)
     {
+        /** @var \System25\T3sports\Table\TeamAdapter $home */
         $home = $match->getHome();
+        /** @var \System25\T3sports\Table\TeamAdapter $guest */
         $guest = $match->getGuest();
 
         // Anzahl Spiele aktualisieren
@@ -532,7 +542,9 @@ class Table extends AbstractService implements ITableType
      */
     protected function countGuest($match, $toto, IConfigurator $configurator)
     {
+        /** @var \System25\T3sports\Table\TeamAdapter $home */
         $home = $match->getHome();
+        /** @var \System25\T3sports\Table\TeamAdapter $guest */
         $guest = $match->getGuest();
 
         // Anzahl Spiele aktualisieren
