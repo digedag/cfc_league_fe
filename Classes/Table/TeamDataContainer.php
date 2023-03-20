@@ -81,24 +81,24 @@ class TeamDataContainer
         $this->dataByTeamId[$teamId]['goals_diff'] = $this->dataByTeamId[$teamId]['goals1'] - $this->dataByTeamId[$teamId]['goals2'];
     }
 
-    public function addMatchCount(ITeam $team)
+    public function addMatchCount(ITeam $team, $cnt = 1)
     {
-        $this->dataByTeamId[$team->getTeamId()]['matchCount'] = $this->dataByTeamId[$team->getTeamId()]['matchCount'] + 1;
+        $this->dataByTeamId[$team->getTeamId()]['matchCount'] = $this->dataByTeamId[$team->getTeamId()]['matchCount'] + $cnt;
     }
 
-    public function addWinCount(ITeam $team)
+    public function addWinCount(ITeam $team, $cnt = 1)
     {
-        $this->dataByTeamId[$team->getTeamId()]['winCount'] = $this->dataByTeamId[$team->getTeamId()]['winCount'] + 1;
+        $this->dataByTeamId[$team->getTeamId()]['winCount'] = $this->dataByTeamId[$team->getTeamId()]['winCount'] + $cnt;
     }
 
-    public function addDrawCount(ITeam $team)
+    public function addDrawCount(ITeam $team, $cnt = 1)
     {
-        $this->dataByTeamId[$team->getTeamId()]['drawCount'] = $this->dataByTeamId[$team->getTeamId()]['drawCount'] + 1;
+        $this->dataByTeamId[$team->getTeamId()]['drawCount'] = $this->dataByTeamId[$team->getTeamId()]['drawCount'] + $cnt;
     }
 
-    public function addLoseCount(ITeam $team)
+    public function addLoseCount(ITeam $team, $cnt = 1)
     {
-        $this->dataByTeamId[$team->getTeamId()]['loseCount'] = $this->dataByTeamId[$team->getTeamId()]['loseCount'] + 1;
+        $this->dataByTeamId[$team->getTeamId()]['loseCount'] = $this->dataByTeamId[$team->getTeamId()]['loseCount'] + $cnt;
     }
 
     public function addPoints(ITeam $team, int $points)
@@ -113,11 +113,16 @@ class TeamDataContainer
         $this->dataByTeamId[$teamId]['points2'] = $this->dataByTeamId[$teamId]['points2'] + $points;
     }
 
+    public function addPenalty(ITeam $team, $penalty)
+    {
+        $this->dataByTeamId[$team->getTeamId()]['penalties'][] = $penalty;
+    }
+
     public function addPPM(ITeam $team)
     {
         $teamId = $team->getTeamId();
         if ($this->dataByTeamId[$teamId]['matchCount'] > 0) {
-            $this->dataByTeamId[$teamId]['ppm'] = round($this->_teamData[$teamId]['points'] / $this->dataByTeamId[$teamId]['matchCount'], 3);
+            $this->dataByTeamId[$teamId]['ppm'] = round($this->dataByTeamId[$teamId]['points'] / $this->dataByTeamId[$teamId]['matchCount'], 3);
         }
     }
 
@@ -135,6 +140,11 @@ class TeamDataContainer
             $this->dataByTeamId[$teamId]['positionchange'] = $this->getPositionChange($oldPosition, $newPosition);
         }
         $this->dataByTeamId[$teamId]['position'] = $newPosition;
+    }
+
+    public function addStaticPosition(ITeam $team, $position)
+    {
+        $this->dataByTeamId[$team->getTeamId()]['static_position'] = (int) $position;
     }
 
     /**
