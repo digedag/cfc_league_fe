@@ -1,6 +1,8 @@
 <?php
 
-defined('TYPO3_MODE') or exit;
+if (!(defined('TYPO3') || defined('TYPO3_MODE'))) {
+    exit('Access denied.');
+}
 
 call_user_func(function () {
     $extKey = 'cfc_league_fe';
