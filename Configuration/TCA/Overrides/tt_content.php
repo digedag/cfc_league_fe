@@ -17,12 +17,12 @@ call_user_func(function () {
     // Das tt_content-Feld pi_flexform einblenden
     $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_competition'] = 'pi_flexform';
 
-    tx_rnbase_util_Extensions::addPiFlexFormValue(
+    \Sys25\RnBase\Utility\Extensions::addPiFlexFormValue(
         'tx_cfcleaguefe_competition',
         'FILE:EXT:cfc_league_fe/Configuration/Flexform/plugin_competition.xml'
     );
 
-    tx_rnbase_util_Extensions::addPlugin(
+    \Sys25\RnBase\Utility\Extensions::addPlugin(
         [
             'LLL:EXT:'.$extKey.'/Resources/Private/Language/locallang_db.xlf:plugin.competition.label',
             'tx_cfcleaguefe_competition',
@@ -41,7 +41,7 @@ call_user_func(function () {
     // Das tt_content-Feld pi_flexform einblenden
     $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report'] = 'pi_flexform';
 
-    tx_rnbase_util_Extensions::addPiFlexFormValue(
+    \Sys25\RnBase\Utility\Extensions::addPiFlexFormValue(
         'tx_cfcleaguefe_report',
         'FILE:EXT:cfc_league_fe/Configuration/Flexform/plugin_report.xml'
     );
@@ -62,7 +62,7 @@ call_user_func(function () {
      * @param string $extensionKey The extension key
      * @throws \RuntimeException
      */
-    tx_rnbase_util_Extensions::addPlugin(
+    \Sys25\RnBase\Utility\Extensions::addPlugin(
         [
             'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.report.label',
             'tx_cfcleaguefe_report',

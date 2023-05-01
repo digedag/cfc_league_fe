@@ -1,9 +1,10 @@
 <?php
 
 use Sys25\RnBase\Backend\Utility\Icons;
+use Sys25\RnBase\Utility\TYPO3;
 
 if (!(defined('TYPO3') || defined('TYPO3_MODE'))) {
-  exit('Access denied.');
+    exit('Access denied.');
 }
 
 // Page module hook
@@ -91,15 +92,18 @@ System25\T3sports\Utility\Misc::registerTableStrategy('volleyball2', 'LLL:EXT:cf
 //   ]
 // );
 
-// if (\Sys25\RnBase\Utility\Environment::isBackend()) {
-//     Icons::getIconRegistry()->registerIcon(
-//         't3sports_plugin',
-//         \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-//         ['source' => 'EXT:cfc_league_fe/Resources/Public/Icons/ext_icon.svg']
-//     );
+if (\Sys25\RnBase\Utility\Environment::isBackend()) {
+    Icons::getIconRegistry()->registerIcon(
+        't3sports_plugin',
+        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        ['source' => 'EXT:cfc_league_fe/Resources/Public/Icons/ext_icon.svg']
+    );
 
-//     // Apply PageTSconfig
-//     \Sys25\RnBase\Utility\Extensions::addPageTSConfig(
-//         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:cfc_league_fe/Configuration/PageTS/modWizards.ts">'
-//     );
-// }
+    // Apply PageTSconfig
+    if (!TYPO3::isTYPO121OrHigher()) {
+        // since T3 12 pagets is loaded by convention
+        \Sys25\RnBase\Utility\Extensions::addPageTSConfig(
+            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:cfc_league_fe/Configuration/PageTS/modWizards.tsconfig">'
+        );
+    }
+}
