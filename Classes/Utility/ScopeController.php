@@ -318,7 +318,7 @@ class ScopeController
             if (isset($paramValue) && array_key_exists($paramValue, $ret[0])) {
                 $ret[1] = $paramValue;
             }
-            $ret[1] = $ret[1] ? $ret[1] : $objects[0]->getUid();
+            $ret[1] = $ret[1] ?? $objects[0]->getUid();
         }
 
         return $ret;
