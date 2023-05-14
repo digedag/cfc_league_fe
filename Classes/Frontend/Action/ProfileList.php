@@ -109,7 +109,7 @@ class ProfileList extends AbstractAction
             $where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( PROFILE.birthday )), '1970-01-01')), '{$timePattern}') = DATE_FORMAT(CURDATE(), '{$timePattern}')";
             $where .= ' AND PROFILE.birthday < 0 ))';
             if (isset($fields[SEARCH_FIELD_CUSTOM])) {
-                $fields[SEARCH_FIELD_CUSTOM] .= ' AND ' . $where;
+                $fields[SEARCH_FIELD_CUSTOM] .= ' AND '.$where;
             } else {
                 $fields[SEARCH_FIELD_CUSTOM] = $where;
             }
