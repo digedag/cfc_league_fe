@@ -282,6 +282,7 @@ class ScopeController
      */
     private static function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
     {
+        $roundUid = '';
         $viewData = $configurations->getViewData();
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
         if ($configurations->get('roundSelectionInput') && (isset($compUids) && Math::testInt($compUids))) {

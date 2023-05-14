@@ -45,7 +45,7 @@ class ClubDetails extends AbstractAction
         $itemId = $configurations->getInt($this->getConfId().'club');
         if (!$itemId) {
             // Alternativ ist eine Parameterübergabe möglich
-            $itemId = (int) $parameters->offsetGet('club');
+            $itemId = (int) $parameters->get('club');
         }
 
         $item = tx_rnbase::makeInstance(Club::class, $itemId);

@@ -15,7 +15,7 @@ use Sys25\RnBase\Utility\TYPO3;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -66,7 +66,7 @@ class ScopeSelectionView extends BaseView
         $subpartArray['###CLUB_SELECTION###'] = '';
 
         // Wenn Saison gezeigt werden soll, dann Abschnitt erstellen
-        if ($viewData->offsetGet('saison_select')) {
+        if ($viewData->offsetExists('saison_select') && $viewData->offsetGet('saison_select')) {
             // Das Template holen
             $subTemplate = Templates::getSubpart($template, '###SAISON_SELECTION###');
 
@@ -75,7 +75,7 @@ class ScopeSelectionView extends BaseView
         }
 
         // Wenn Altersklasse gezeigt werden soll, dann Abschnitt erstellen
-        if ($viewData->offsetGet('group_select')) {
+        if ($viewData->offsetExists('group_select') && $viewData->offsetGet('group_select')) {
             // Das Template holen
             $subTemplate = Templates::getSubpart($template, '###GROUP_SELECTION###');
 
@@ -84,7 +84,7 @@ class ScopeSelectionView extends BaseView
         }
 
         // Wenn Wettbewerb gezeigt werden soll, dann Abschnitt erstellen
-        if ($viewData->offsetGet('competition_select')) {
+        if ($viewData->offsetExists('competition_select') && $viewData->offsetGet('competition_select')) {
             // Das Template holen
             $subTemplate = Templates::getSubpart($template, '###COMPETITION_SELECTION###');
 
@@ -92,7 +92,7 @@ class ScopeSelectionView extends BaseView
             $subpartArray['###COMPETITION_SELECTION###'] = $this->_fillTemplate($subTemplate, $items, $link, 'COMPETITION', $configurations);
         }
         // Wenn Spieltag gezeigt werden soll, dann Abschnitt erstellen
-        if ($viewData->offsetGet('round_select')) {
+        if ($viewData->offsetExists('round_select') && $viewData->offsetGet('round_select')) {
             // Das Template holen
             $subTemplate = Templates::getSubpart($template, '###ROUND_SELECTION###');
 
@@ -100,7 +100,7 @@ class ScopeSelectionView extends BaseView
             $subpartArray['###ROUND_SELECTION###'] = $this->_fillTemplate($subTemplate, $items, $link, 'ROUND', $configurations);
         }
         // Wenn Verein gezeigt werden soll, dann Abschnitt erstellen
-        if ($viewData->offsetGet('club_select')) {
+        if ($viewData->offsetExists('club_select') && $viewData->offsetGet('club_select')) {
             // Das Template holen
             $subTemplate = Templates::getSubpart($template, '###CLUB_SELECTION###');
             $items = $viewData->offsetGet('club_select');

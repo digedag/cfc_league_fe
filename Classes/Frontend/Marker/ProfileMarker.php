@@ -12,7 +12,7 @@ use System25\T3sports\Model\Repository\TeamNoteRepository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -81,7 +81,7 @@ class ProfileMarker extends SimpleMarker
      */
     protected function prepareTemplate($template, $profile, $formatter, $confId, $marker = 'PROFILE')
     {
-        $this->tnDecorator->addTeamNotes($profile, $this->options['team']);
+        $this->tnDecorator->addTeamNotes($profile, $this->options['team'] ?? null);
 //        $profile->addTeamNotes($this->options['team']);
         $profile->setProperty('firstpicture', $profile->getProperty('t3images'));
         $profile->setProperty('pictures', $profile->getProperty('t3images'));
@@ -137,7 +137,7 @@ class ProfileMarker extends SimpleMarker
             $params = [
                 'profileId' => $profile->getUid(),
             ];
-            if (is_object($this->options['team'])) {
+            if (is_object($this->options['team'] ?? null)) {
                 // Transfer current team to profile view
                 $params['team'] = $this->options['team']->getUid();
             }
