@@ -44,10 +44,10 @@ class ProfileDecorator
         $arr = [];
         // Über alle Felder im record iterieren
         foreach ($profile->getProperty() as $key => $val) {
-            if ($conf[$key] || $conf[$key.'.']) {
+            if (isset($conf[$key]) || isset($conf[$key.'.'])) {
                 $value = $formatter->wrap($profile->getProperty($key), $confId.$key.'.', $profile->getProperty());
                 if (strlen($value) > 0) {
-                    $weight = intval($formatter->getConfigurations()->get($confId.$key.'.s_weight'));
+                    $weight = $formatter->getConfigurations()->getInt($confId.$key.'.s_weight');
                     $arr[] = [
                         $value,
                         $weight,
@@ -61,7 +61,7 @@ class ProfileDecorator
         if (is_object($ticker) && $conf['ifChangedOut.']['ticker.']) {
             $value = $this->matchNoteDecorator->wrap($formatter, $confId.'ifChangedOut.ticker.', $ticker);
             if (strlen($value) > 0) {
-                $weight = intval($formatter->getConfigurations()->get($confId.'ifChangedOut.s_weight'));
+                $weight = $formatter->getConfigurations()->getInt($confId.'ifChangedOut.s_weight');
                 $arr[] = [
                     $value,
                     $weight,
@@ -74,7 +74,7 @@ class ProfileDecorator
         if (is_object($ticker) && $conf['ifPenalty.']['ticker.']) {
             $value = $this->matchNoteDecorator->wrap($formatter, $confId.'ifPenalty.ticker.', $ticker);
             if (strlen($value) > 0) {
-                $weight = intval($formatter->getConfigurations()->get($confId.'ifPenalty.s_weight'));
+                $weight = $formatter->getConfigurations()->getInt($confId.'ifPenalty.s_weight');
                 $arr[] = [
                     $value,
                     $weight,
@@ -100,7 +100,7 @@ class ProfileDecorator
             $ret[] = $val[0];
         }
 
-        $sep = (strlen($conf['seperator']) > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : $conf['seperator'];
+        $sep = (strlen($conf['seperator'] ?? '') > 2) ? substr($conf['seperator'], 1, strlen($conf['seperator']) - 2) : ($conf['seperator'] ?? '');
         $ret = implode($sep, $ret);
 
         // Abschließend nochmal den Ergebnisstring wrappen

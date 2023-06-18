@@ -112,6 +112,6 @@ class TeamAdapter implements ITeam
 
     public function isOutOfCompetition(): bool
     {
-        return $this->isTeam ? $this->getInstance()->isOutOfCompetition() : false;
+        return $this->getInstance()->isOutOfCompetition();
     }
 }
