@@ -13,7 +13,7 @@ use System25\T3sports\Utility\MatchTicker;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2022 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -596,7 +596,7 @@ class MatchReportModel
                 // Die Spielernamen holen
                 $partArr[$partCnt] = $this->_getNames2($partArr[$partCnt], $confId);
                 ++$partCnt;
-                $splitSum = $system[$partCnt];
+                $splitSum = $system[$partCnt] ?? 0;
             }
         }
 
