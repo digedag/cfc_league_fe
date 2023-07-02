@@ -15,7 +15,7 @@ plugin.tx_cfcleaguefe_competition.defaultAction  = tx_cfcleaguefe_actions_MatchT
 plugin.tx_cfcleaguefe_competition.qualifier      = cfc_league_fe
 plugin.tx_cfcleaguefe_competition.extensionKey   = cfc_league_fe
 plugin.tx_cfcleaguefe_competition.templatePath   = EXT:cfc_league_fe/Resources/Private/Templates/Html
-plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/locallang.xml
+plugin.tx_cfcleaguefe_competition.locallangFilename = EXT:cfc_league_fe/Resources/Private/Language/locallang.xlf
 
 # This is the default TS-Setup for team notes.
 # If you have defined a team note with html marker picture, make this setting in your typoscript

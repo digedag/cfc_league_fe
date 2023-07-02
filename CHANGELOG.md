@@ -2,6 +2,10 @@
 Changes
 -------
 
+v1.11.0 (??.06.2023)
+ * Convert language files to xlf
+ * Many, many warnings for PHP 8 fixed
+
 v1.10.0 (05.02.2023)
  * #79 Support for PHP 8
 

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages" data="2023-07-02T12-08-54" product-name="zsb">
+        <header/>
+        <body>
+            <trans-unit id="label_club" xml:space="preserve">
+                <source>Club</source>
+                <target>Verein</target>
+            </trans-unit>
+            <trans-unit id="label_matches" xml:space="preserve">
+                <source>Matches</source>
+                <target>Spiele</target>
+            </trans-unit>
+            <trans-unit id="label_match" xml:space="preserve">
+                <source>Match</source>
+                <target>Spiel</target>
+            </trans-unit>
+            <trans-unit id="label_diff" xml:space="preserve">
+                <source>Diff</source>
+                <target>Diff</target>
+            </trans-unit>
+            <trans-unit id="label_goal" xml:space="preserve">
+                <source>Goal</source>
+                <target>Tor</target>
+            </trans-unit>
+            <trans-unit id="label_goals" xml:space="preserve">
+                <source>Goals</source>
+                <target>Tore</target>
+            </trans-unit>
+            <trans-unit id="label_points" xml:space="preserve">
+                <source>Points</source>
+                <target>Punkte</target>
+            </trans-unit>
+            <trans-unit id="label_balls" xml:space="preserve">
+                <source>Balls</source>
+                <target>Bälle</target>
+            </trans-unit>
+            <trans-unit id="label_tabletype_normal" xml:space="preserve">
+                <source>Standard Table</source>
+                <target>Normal</target>
+            </trans-unit>
+            <trans-unit id="label_tabletype_home" xml:space="preserve">
+                <source>Home Table</source>
+                <target>Heimtabelle</target>
+            </trans-unit>
+            <trans-unit id="label_tabletype_away" xml:space="preserve">
+                <source>Away Table</source>
+                <target>Auswärtstabelle</target>
+            </trans-unit>
+            <trans-unit id="label_pointsystem_point2" xml:space="preserve">
+                <source>2 Point-Rule</source>
+                <target>2 Punkt-Regel</target>
+            </trans-unit>
+            <trans-unit id="label_pointsystem_point3" xml:space="preserve">
+                <source>3 Point-Rule</source>
+                <target>3 Punkt-Regel</target>
+            </trans-unit>
+            <trans-unit id="label_tablescope_normal" xml:space="preserve">
+                <source>Saison</source>
+                <target>Saison</target>
+            </trans-unit>
+            <trans-unit id="label_tablescope_first" xml:space="preserve">
+                <source>First round</source>
+                <target>Hinrunde</target>
+            </trans-unit>
+            <trans-unit id="label_tablescope_second" xml:space="preserve">
+                <source>Second round</source>
+                <target>Rückrunde</target>
+            </trans-unit>
+            <trans-unit id="statistics_assistlist_label_headline" xml:space="preserve">
+                <source>Best assists</source>
+                <target>Die besten Torvorbereiter</target>
+            </trans-unit>
+            <trans-unit id="statistics_assistlist_label_player" xml:space="preserve">
+                <source>Player</source>
+                <target>Spieler</target>
+            </trans-unit>
+            <trans-unit id="statistics_assistlist_label_assists" xml:space="preserve">
+                <source>Assists</source>
+                <target>Assists</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_headline" xml:space="preserve">
+                <source>Best scorer</source>
+                <target>Die Torschützen</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_player" xml:space="preserve">
+                <source>Player</source>
+                <target>Spieler</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_goals" xml:space="preserve">
+                <source>Goals</source>
+                <target>Tore</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_goals_home" xml:space="preserve">
+                <source>Home</source>
+                <target>Heim</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_goals_away" xml:space="preserve">
+                <source>Away</source>
+                <target>Auswärts</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_goals_head" xml:space="preserve">
+                <source>Head</source>
+                <target>Kopfball</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_goals_penalty" xml:space="preserve">
+                <source>Penalty</source>
+                <target>Elfmeter</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_goals_joker" xml:space="preserve">
+                <source>Joker</source>
+                <target>Jokertore</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_goals_per_match" xml:space="preserve">
+                <source>per Match</source>
+                <target>pro Spiel</target>
+            </trans-unit>
+            <trans-unit id="statistics_scorerlist_label_minutes_per_goal" xml:space="preserve">
+                <source>Minutes per goal</source>
+                <target>Minuten je Tor</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_profile_last_name" xml:space="preserve">
+                <source>Name</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_matches" xml:space="preserve">
+                <source>Matches</source>
+                <target>Spiele</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_matchcount" xml:space="preserve">
+                <source>Count</source>
+                <target>Anz.</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_minutes" xml:space="preserve">
+                <source>Minutes</source>
+                <target>Min.</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_cards" xml:space="preserve">
+                <source>Cards</source>
+                <target>Karten</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_player" xml:space="preserve">
+                <source>Player</source>
+                <target>Spieler</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_card_yellow" xml:space="preserve">
+                <source>Y</source>
+                <target>Gelb</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_card_yellowred" xml:space="preserve">
+                <source>Y/R</source>
+                <target>G/R</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_card_red" xml:space="preserve">
+                <source>R</source>
+                <target>Rot</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_goals" xml:space="preserve">
+                <source>Goals</source>
+                <target>Tore</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_assists" xml:space="preserve">
+                <source>Assists</source>
+                <target>Assists</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_goals_own" xml:space="preserve">
+                <source>Own</source>
+                <target>ET</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_change" xml:space="preserve">
+                <source>Changes</source>
+                <target>Wechsel</target>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_change_in" xml:space="preserve">
+                <source>In</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="statistics_player_label_change_out" xml:space="preserve">
+                <source>Out</source>
+                <target>Ausw.</target>
+            </trans-unit>
+            <trans-unit id="statistics_visitors_label_headline" xml:space="preserve">
+                <source>Visitors</source>
+                <target>Zuschauerstatistik</target>
+            </trans-unit>
+            <trans-unit id="statistics_visitors_label_team" xml:space="preserve">
+                <source>Team</source>
+                <target>Team</target>
+            </trans-unit>
+            <trans-unit id="statistics_visitors_label_home" xml:space="preserve">
+                <source>Home</source>
+                <target>Heim</target>
+            </trans-unit>
+            <trans-unit id="statistics_visitors_label_away" xml:space="preserve">
+                <source>Away</source>
+                <target>Auswärts</target>
+            </trans-unit>
+            <trans-unit id="statistics_visitors_label_all" xml:space="preserve">
+                <source>All</source>
+                <target>Gesamt</target>
+            </trans-unit>
+            <trans-unit id="statistics_visitors_label_total" xml:space="preserve">
+                <source>Total</source>
+                <target>Total</target>
+            </trans-unit>
+            <trans-unit id="statistics_visitors_label_average" xml:space="preserve">
+                <source>Average</source>
+                <target>Schnitt</target>
+            </trans-unit>
+            <trans-unit id="profile_notFound" xml:space="preserve">
+                <source>Profile not found</source>
+                <target>Person nicht gefunden</target>
+            </trans-unit>
+            <trans-unit id="profile_unknownLastname" xml:space="preserve">
+                <source>Unknown</source>
+                <target>unbekannt</target>
+            </trans-unit>
+            <trans-unit id="profile_unknownFirstname" xml:space="preserve">
+                <source/>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_profile_anonymous" xml:space="preserve">
+                <source>Anonymous</source>
+                <target>Anonym</target>
+            </trans-unit>
+            <trans-unit id="match_notFound" xml:space="preserve">
+                <source>Match not found</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="team_notFound" xml:space="preserve">
+                <source>Team not found</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="teamlist_empty" xml:space="preserve">
+                <source>No teams found.</source>
+                <target>Es wurden keine Teams gefunden.</target>
+            </trans-unit>
+            <trans-unit id="statistics_noTypeFound" xml:space="preserve">
+                <source>No statistics type defined.</source>
+                <target>Es wurde kein Statistiktyp definiert.</target>
+            </trans-unit>
+            <trans-unit id="matchcrosstable_noData" xml:space="preserve">
+                <source>No matches found</source>
+                <target>Es wurden keine Spiele gefunden.</target>
+            </trans-unit>
+            <trans-unit id="label_matchtable" xml:space="preserve">
+                <source>Matchtable</source>
+                <target>Spielplan</target>
+            </trans-unit>
+            <trans-unit id="label_mapnotavailable" xml:space="preserve">
+                <source>Map not available. Please install extension wec_map to enable this feature.</source>
+                <target>Kartenansicht nicht verfügbar. Die Extension wec_map muss für dieses Feature installiert werden.</target>
+            </trans-unit>
+            <trans-unit id="label_capacity" xml:space="preserve">
+                <source>Capacity</source>
+                <target>Kapazität</target>
+            </trans-unit>
+            <trans-unit id="label_pictures" xml:space="preserve">
+                <source>Pictures</source>
+                <target>Bilder</target>
+            </trans-unit>
+            <trans-unit id="label_currentround" xml:space="preserve">
+                <source>Current round</source>
+                <target>Aktueller Spieltag</target>
+            </trans-unit>
+            <trans-unit id="label_sets" xml:space="preserve">
+                <source>Sets</source>
+                <target>Sätze</target>
+            </trans-unit>
+            <trans-unit id="label_set" xml:space="preserve">
+                <source>Set</source>
+                <target>Satz</target>
+            </trans-unit>
+            <trans-unit id="label_matchstatus_10" xml:space="preserve">
+                <source>postponed</source>
+                <target>Verlegt</target>
+            </trans-unit>
+            <trans-unit id="label_matchstatus_postponed" xml:space="preserve">
+                <source>postponed</source>
+                <target>Verlegt</target>
+            </trans-unit>
+            <trans-unit id="label_matchstatus_invalid" xml:space="preserve">
+                <source>invalid</source>
+                <target>Ungültig</target>
+            </trans-unit>
+            <trans-unit id="label_afterextratime_short" xml:space="preserve">
+                <source>a.e.</source>
+                <target>n.V.</target>
+            </trans-unit>
+            <trans-unit id="label_onpenalty_short" xml:space="preserve">
+                <source>o.p.</source>
+                <target>u.E.</target>
+            </trans-unit>
+            <trans-unit id="label_basepoint" xml:space="preserve">
+                <source>Base point for distance calculation</source>
+                <target>Ausgangspunkt für Entfernungsberechnung</target>
+            </trans-unit>
+            <trans-unit id="label_distance" xml:space="preserve">
+                <source>Distance</source>
+                <target>Entfernung</target>
+            </trans-unit>
+            <trans-unit id="label_matchnote_10" xml:space="preserve">
+                <source>Goal scored by %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_11" xml:space="preserve">
+                <source>Header goal scored by %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_12" xml:space="preserve">
+                <source>Penalty goal scored by %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_30" xml:space="preserve">
+                <source>Own goal scored by %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_31" xml:space="preserve">
+                <source>Assist scored by %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_32" xml:space="preserve">
+                <source>Penalty forgiven by %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_33" xml:space="preserve">
+                <source>Corner kick executed by %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_70" xml:space="preserve">
+                <source>Yellow card for %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_71" xml:space="preserve">
+                <source>Yellow/red card for %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_72" xml:space="preserve">
+                <source>Red card for %player%</source>
+                <target/>
+            </trans-unit>
+            <trans-unit id="label_matchnote_80" xml:space="preserve">
+                <source>%player% changed in for %player2%</source>
+                <target/>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

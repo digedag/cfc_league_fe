@@ -242,7 +242,6 @@ class TableWriter extends TableWriterBase
             $subpartArray['###CONTROL_TABLETYPE###'] = $this->fillControlTemplate(
                 Templates::getSubpart($template, '###CONTROL_TABLETYPE###'),
                 $arr,
-                $link,
                 'TABLETYPE',
                 $configurations,
                 $confId
@@ -260,7 +259,7 @@ class TableWriter extends TableWriterBase
                 $items,
                 $configurator->getTableScope(),
             ];
-            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, $link, 'TABLESCOPE', $configurations, $confId);
+            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, 'TABLESCOPE', $configurations, $confId);
         }
 
         if ($configurations->get('pointSystemSelectionInput')) {
@@ -283,7 +282,7 @@ class TableWriter extends TableWriterBase
                 $items,
                 $configurator->getPointSystem(),
             ];
-            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, $link, 'POINTSYSTEM', $configurations, $confId);
+            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, 'POINTSYSTEM', $configurations, $confId);
         }
         $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
@@ -295,13 +294,11 @@ class TableWriter extends TableWriterBase
      *
      * @param string $template HTML- Template
      * @param array &$itemsArr Datensätze für die Auswahl
-     * @param tx_rnbase_util_Link &$link Linkobjekt
      * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
      * @param ConfigurationInterface $configurations Konfig-Objekt
      */
-    protected function fillControlTemplate($template, &$itemsArr, $link, $markerName, $configurations, $confId)
+    protected function fillControlTemplate($template, &$itemsArr, $markerName, $configurations, $confId)
     {
-        // $link->initByTS($configurations, $confId.'link.', array());
         $currItem = $itemsArr[1];
         $confName = strtolower($markerName); // Konvention
         $formatter = $configurations->getFormatter();
