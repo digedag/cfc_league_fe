@@ -2,9 +2,14 @@
 
 namespace System25\T3sports\Hook;
 
+use Sys25\RnBase\Backend\Utility\Tables;
+use Sys25\RnBase\Utility\Arrays;
+use Sys25\RnBase\Utility\Strings;
+use tx_rnbase;
+
 class PageLayout
 {
-    public const LLPATH = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xml:';
+    public const LLPATH = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:';
 
     /**
      * Returns information about plugin.
@@ -20,12 +25,13 @@ class PageLayout
         if (!in_array($row['list_type'], ['tx_cfcleaguefe_competition', 'tx_cfcleaguefe_report'])) {
             return '';
         }
-        $pluginType = end(\tx_rnbase_util_Strings::trimExplode('_', $row['list_type']));
-        $flexformData = \tx_rnbase_util_Arrays::xml2array($params['row']['pi_flexform']);
+        $listTypes = Strings::trimExplode('_', $row['list_type']);
+        $pluginType = end($listTypes);
+        $flexformData = Arrays::xml2array($params['row']['pi_flexform']);
         $actions = $this->getFieldFromFlexform($flexformData, 'action');
+        $labels = [];
         if (!empty($actions)) {
-            $labels = [];
-            $actionList = \tx_rnbase_util_Strings::trimExplode(',', $actions);
+            $actionList = Strings::trimExplode(',', $actions);
             foreach ($actionList as $action) {
                 $labels[] = $this->getLanguageService()->sL(self::LLPATH.$this->getActionLabel($action, $pluginType));
             }
@@ -35,8 +41,8 @@ class PageLayout
             ['Field', 'Value'],
             [$lang->sL(self::LLPATH.'plugin.competition.flexform.action'), implode(', ', $labels)],
         ];
-        /* @var $tables \Tx_Rnbase_Backend_Utility_Tables */
-        $tables = \tx_rnbase::makeInstance('Tx_Rnbase_Backend_Utility_Tables');
+        /** @var Tables $tables */
+        $tables = tx_rnbase::makeInstance(Tables::class);
 
         return $tables->buildTable($data);
     }
@@ -44,7 +50,8 @@ class PageLayout
     private function getActionLabel($action, $pluginType)
     {
         $map = ['LeagueTableShow' => 'LeagueTable'];
-        $actionKey = end(\tx_rnbase_util_Strings::trimExplode('_', $action));
+        $actions = Strings::trimExplode('_', $action);
+        $actionKey = end($actions);
         if (array_key_exists($actionKey, $map)) {
             $actionKey = $map[$actionKey];
         }
