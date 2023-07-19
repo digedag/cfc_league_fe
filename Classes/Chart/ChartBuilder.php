@@ -2,12 +2,13 @@
 
 namespace System25\T3sports\Chart;
 
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 use System25\T3sports\Table\ITableType;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2019 Rene Nitzsche (rene@system25.de)
+*  (c) 2010-2023 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,7 +33,7 @@ class ChartBuilder
     /**
      * @param ITableType $table
      */
-    public function buildJson($table, $clubIds, $configurations, $confId)
+    public function buildJson($table, $clubIds, ConfigurationInterface $configurations, $confId)
     {
         // Aus den Table-Daten jetzt die DataSets erzeugen
         $chartData = [];
@@ -56,7 +57,7 @@ class ChartBuilder
                         $team = $scoreArr['team'];
                         $cObj->data = $team->getProperty();
                         $logo = $cObj->cObjGetSingle(
-                            $configurations->get($confId.'team.logo'),
+                            $configurations->get($confId.'team.logo') ?? '',
                             $configurations->get($confId.'team.logo.')
                         );
                         $dataSets[$scoreArr['teamId']] = [
