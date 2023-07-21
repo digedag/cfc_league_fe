@@ -2,7 +2,8 @@
 Changes
 -------
 
-v1.11.0 (??.06.2023)
+v1.11.0 (21.07.2023)
+ * #84 Support for TYPO3 12.4 LTS
  * Convert language files to xlf
  * Many, many warnings for PHP 8 fixed
 
