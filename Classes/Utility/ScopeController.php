@@ -15,7 +15,7 @@ use System25\T3sports\Model\Repository\SaisonRepository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -121,7 +121,7 @@ class ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentSaison($parameters, ConfigurationInterface $configurations, $useObjects = false)
+    private static function handleCurrentSaison(ParametersInterface $parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
         $viewData = $configurations->getViewData();
         $saisonUids = $configurations->get('saisonSelection');
@@ -282,6 +282,7 @@ class ScopeController
      */
     private static function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
     {
+        $roundUid = '';
         $viewData = $configurations->getViewData();
         // Soll eine SelectBox für Wettkämpfe gezeigt werden?
         if ($configurations->get('roundSelectionInput') && (isset($compUids) && Math::testInt($compUids))) {
@@ -306,19 +307,19 @@ class ScopeController
      *            Name eines Attributs, um dessen Wert anzuzeigen. Wenn der
      *            String leer ist, dann wird das gesamten Objekt als Wert verwendet.
      */
-    private static function _prepareSelect($objects, $parameters, $parameterName, $displayAttrName = 'name')
+    private static function _prepareSelect($objects, ParametersInterface $parameters, $parameterName, $displayAttrName = 'name')
     {
         $ret = [];
         if (count($objects)) {
             foreach ($objects as $object) {
                 $ret[0][$object->getUid()] = 0 == strlen($displayAttrName) ? $object : $object->getProperty($displayAttrName);
             }
-            $paramValue = $parameters->offsetGet($parameterName);
+            $paramValue = $parameters->get($parameterName);
             // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
             if (isset($paramValue) && array_key_exists($paramValue, $ret[0])) {
                 $ret[1] = $paramValue;
             }
-            $ret[1] = $ret[1] ? $ret[1] : $objects[0]->getUid();
+            $ret[1] = $ret[1] ?? $objects[0]->getUid();
         }
 
         return $ret;
@@ -358,7 +359,7 @@ class ScopeController
                 $default = $fixedRound;
             }
             // Der Wert im Parameter darf nur übernommen werden, wenn er in der SelectBox vorkommt
-            $paramValue = $parameters->offsetGet('round');
+            $paramValue = $parameters->get('round');
             if (isset($paramValue) && array_key_exists($paramValue, $ret[0])) {
                 $ret[1] = $paramValue;
             }

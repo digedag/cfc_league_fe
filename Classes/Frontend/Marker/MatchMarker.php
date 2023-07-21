@@ -52,6 +52,7 @@ class MatchMarker extends SimpleMarker
 
     /** @var CompetitionMarker */
     private $competitionMarker;
+    private $tickerHash;
 
     /**
      * Erstellt eine neue Instanz.
@@ -350,7 +351,7 @@ class MatchMarker extends SimpleMarker
      */
     protected function getTickerHash(Fixture $match)
     {
-        if (!is_array($this->tickerHash)) {
+        if (!isset($this->tickerHash)) {
             $this->tickerHash = [];
             $matchTicker = new MatchTicker();
             $tickerArr = $matchTicker->getTicker4Match($match);

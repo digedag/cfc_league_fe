@@ -256,7 +256,7 @@ class MatchTicker
      */
     public static function get($key)
     {
-        return self::$cache[$key];
+        return self::$cache[$key] ?? null;
     }
 
     /*

@@ -100,7 +100,7 @@ class MatchNoteDecorator
                 if (strlen($value) > 0) {
                     $arr[] = [
                         $value,
-                        $conf['s_weight'] ? intval($conf['s_weight']) : 0,
+                        (int) ($conf['s_weight'] ?? 0),
                     ];
                     $value = '';
                 }
@@ -142,7 +142,7 @@ class MatchNoteDecorator
      */
     public function isVisible(MatchNote $note, array $conf)
     {
-        $minMinute = intval($conf['noteMinimumMinute']);
+        $minMinute = (int) ($conf['noteMinimumMinute'] ?? 0);
 
         return $minMinute <= $note->getProperty('minute') && $this->isType($note, $conf);
     }
@@ -163,8 +163,14 @@ class MatchNoteDecorator
             $typeArr = $typeNumberOrArray;
             // Wenn es ein Array ist, dann zunächst die Typen ermitteln
             // Keine Typen bedeutet, daß alle verwendet werden
-            $types = $typeArr['noteType'] ? Strings::intExplode(',', $typeArr['noteType']) : [];
-            $ignoreTypes = $typeArr['noteIgnoreType'] ? Strings::intExplode(',', $typeArr['noteIgnoreType']) : [];
+            $types = [];
+            if (isset($typeArr['noteType'])) {
+                $types = Strings::intExplode(',', $typeArr['noteType']);
+            }
+            $ignoreTypes = [];
+            if (isset($typeArr['noteIgnoreType'])) {
+                $ignoreTypes = Strings::intExplode(',', $typeArr['noteIgnoreType']);
+            }
 
             // Wenn Typen definiert sind, dann wird ignoreType nicht betrachtet
             if (in_array($note->getType(), $types) || (!count($types) && !count($ignoreTypes)) || (!in_array($note->getType(), $ignoreTypes) && count($ignoreTypes))) {

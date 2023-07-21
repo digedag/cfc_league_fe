@@ -4,11 +4,13 @@ namespace System25\T3sports\Frontend\Action;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
+use Sys25\RnBase\Frontend\Filter\BaseFilter;
+use Sys25\RnBase\Frontend\Filter\Utility\CharBrowserFilter;
+use Sys25\RnBase\Frontend\Filter\Utility\PageBrowserFilter;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Search\SearchBase;
 use System25\T3sports\Frontend\View\ProfileListView;
-use System25\T3sports\Utility\ServiceRegistry;
-use tx_rnbase;
+use System25\T3sports\Model\Repository\ProfileRepository;
 
 /***************************************************************
  *  Copyright notice
@@ -41,6 +43,13 @@ use tx_rnbase;
  */
 class ProfileList extends AbstractAction
 {
+    private $profileRepo;
+
+    public function __construct(ProfileRepository $repo = null)
+    {
+        $this->profileRepo = $repo ?: new ProfileRepository();
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -51,85 +60,69 @@ class ProfileList extends AbstractAction
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
         $viewData = $request->getViewContext();
-        // Zunächst sollten wir die Anfangsbuchstaben ermitteln
-        $service = ServiceRegistry::getProfileService();
 
-        if ($configurations->get('profilelist.charbrowser')) {
-            $pagerData = $this->findPagerData($service, $configurations);
+        $filter = BaseFilter::createFilter($request, $this->getConfId().'profile.');
+        $fields = $options = [];
+        $filter->init($fields, $options);
 
-            $firstChar = $parameters->offsetGet('charpointer');
-            $firstChar = (strlen(trim($firstChar)) > 0) ? substr($firstChar, 0, 1) : $pagerData['default'];
-            $viewData->offsetSet('pagerData', $pagerData);
-            $viewData->offsetSet('charpointer', $firstChar);
-        }
+        // Soll ein CharBrowser verwendet werden
+        $cbFilter = new CharBrowserFilter();
+        $cbFilter->handle($configurations, $this->getConfId().'profile.charbrowser', $viewData, $fields, $options, [
+            'searchcallback' => [
+                $this->profileRepo,
+                'search',
+            ],
+            'colname' => 'last_name',
+        ]);
 
-        $fields = [];
-        $options = [
-            'count' => 1,
-        ];
-        $this->initSearch($fields, $options, $parameters, $configurations, $firstChar);
-        $listSize = $service->search($fields, $options);
-        unset($options['count']);
-        // PageBrowser initialisieren
-        $pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'profiles');
-        $pageSize = $this->getPageSize($parameters, $configurations);
-        // Wurde neu gesucht?
-        if ($parameters->offsetGet('plnewsearch')) {
-            $pageBrowser->setState(null, $listSize, $pageSize);
-            $configurations->removeKeepVar('plnewsearch');
-        } else {
-            $pageBrowser->setState($parameters, $listSize, $pageSize);
-        }
-        $limit = $pageBrowser->getState();
-        $options = array_merge($options, $limit);
-        $result = $service->search($fields, $options);
+        // FIXME: in Filterklasse auslagern
+        $this->initSearch($fields, $options, $parameters, $configurations);
+
+        // Soll ein PageBrowser verwendet werden
+        $pbFilter = new PageBrowserFilter();
+        $pbFilter->handle($configurations, $this->getConfId().'profile.pagebrowser', $viewData, $fields, $options, [
+            'searchcallback' => [
+                $this->profileRepo,
+                'search',
+            ],
+            'pbid' => 'profile',
+        ]);
+
+        $result = $this->profileRepo->search($fields, $options);
         $viewData->offsetSet('profiles', $result);
-        $viewData->offsetSet('pagebrowser', $pageBrowser);
 
         return null;
     }
 
-    protected function initSearch(&$fields, &$options, &$parameters, &$configurations, $firstChar)
+    protected function initSearch(&$fields, &$options, &$parameters, &$configurations)
     {
         // ggf. die Konfiguration aus der TS-Config lesen
         SearchBase::setConfigFields($fields, $configurations, 'profilelist.fields.');
         SearchBase::setConfigOptions($options, $configurations, 'profilelist.options.');
         $timeRange = $configurations->get('profilelist.birthdays');
         if ($timeRange) {
+            // Die Sortierung funktioniert nicht für Geburtstage vor 1970
             $timePattern = 'DAY' == $timeRange ? '%d%m' : '%m';
-            $where .= " ( (DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), '{$timePattern}') = DATE_FORMAT(CURDATE(), '{$timePattern}')";
-            $where .= ' AND tx_cfcleague_profiles.birthday > 0) OR ';
+            $where = " ( (DATE_FORMAT(FROM_UNIXTIME(PROFILE.birthday), '{$timePattern}') = DATE_FORMAT(CURDATE(), '{$timePattern}')";
+            $where .= ' AND PROFILE.birthday > 0) OR ';
             // Variante 2 für Zeiten vor 1970
-            $where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( tx_cfcleague_profiles.birthday )), '1970-01-01')), '{$timePattern}') = DATE_FORMAT(CURDATE(), '{$timePattern}')";
-            $where .= ' AND tx_cfcleague_profiles.birthday < 0 ))';
-            if ($fields[SEARCH_FIELD_CUSTOM]) {
-                $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
+            $where .= " (DATE_FORMAT(SUBDATE('1970-01-01', DATEDIFF(FROM_UNIXTIME( ABS( PROFILE.birthday )), '1970-01-01')), '{$timePattern}') = DATE_FORMAT(CURDATE(), '{$timePattern}')";
+            $where .= ' AND PROFILE.birthday < 0 ))';
+            if (isset($fields[SEARCH_FIELD_CUSTOM])) {
+                $fields[SEARCH_FIELD_CUSTOM] .= ' AND '.$where;
+            } else {
+                $fields[SEARCH_FIELD_CUSTOM] = $where;
             }
-            $fields[SEARCH_FIELD_CUSTOM] .= $where;
 
             // Sortierung nach Datum
             $sort = [
-                'DATE_FORMAT(FROM_UNIXTIME(tx_cfcleague_profiles.birthday), \'%m%d\')' => 'asc',
+                'DATE_FORMAT(FROM_UNIXTIME(PROFILE.birthday), \'%m%d\')' => 'asc',
             ];
             if (is_array($options['orderby'])) {
                 $options['orderby'] = array_merge($sort, $options['orderby']);
             } else {
                 $options['orderby'] = $sort;
             }
-        }
-        if ($firstChar) {
-            $specials = SearchBase::getSpecialChars();
-            $firsts = $specials[$firstChar];
-            if ($firsts) {
-                $firsts = implode('\',\'', $firsts);
-            } else {
-                $firsts = $firstChar;
-            }
-
-            if ($fields[SEARCH_FIELD_CUSTOM]) {
-                $fields[SEARCH_FIELD_CUSTOM] .= ' AND ';
-            }
-            $fields[SEARCH_FIELD_CUSTOM] .= "LEFT(UCASE(last_name),1) IN ('$firsts') ";
         }
     }
 
@@ -183,19 +176,6 @@ class ProfileList extends AbstractAction
         ];
 
         return $data;
-    }
-
-    /**
-     * Liefert die Anzahl der Ergebnisse pro Seite.
-     *
-     * @param array $parameters
-     * @param ConfigurationInterface $configurations
-     *
-     * @return int
-     */
-    protected function getPageSize(&$parameters, ConfigurationInterface $configurations): int
-    {
-        return $configurations->getInt('profilelist.profile.pagebrowser.limit');
     }
 
     protected function getTemplateName()

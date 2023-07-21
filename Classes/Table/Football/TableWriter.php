@@ -12,7 +12,6 @@ use System25\T3sports\Model\CompetitionPenalty;
 use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\ITableType;
-use System25\T3sports\Table\ITeam;
 use System25\T3sports\Table\TableWriterBase;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
@@ -22,7 +21,7 @@ use tx_rnbase_util_Templates;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -189,7 +188,7 @@ class TableWriter extends TableWriterBase
      */
     protected function preparePenalties(&$row, &$penalties)
     {
-        if (is_array($row['penalties'])) {
+        if (isset($row['penalties']) && is_array($row['penalties'])) {
             $penalties = array_merge($penalties, $row['penalties']);
             $row['penalties'] = count($row['penalties']);
         } else {
@@ -243,7 +242,6 @@ class TableWriter extends TableWriterBase
             $subpartArray['###CONTROL_TABLETYPE###'] = $this->fillControlTemplate(
                 Templates::getSubpart($template, '###CONTROL_TABLETYPE###'),
                 $arr,
-                $link,
                 'TABLETYPE',
                 $configurations,
                 $confId
@@ -261,7 +259,7 @@ class TableWriter extends TableWriterBase
                 $items,
                 $configurator->getTableScope(),
             ];
-            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, $link, 'TABLESCOPE', $configurations, $confId);
+            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, 'TABLESCOPE', $configurations, $confId);
         }
 
         if ($configurations->get('pointSystemSelectionInput')) {
@@ -284,7 +282,7 @@ class TableWriter extends TableWriterBase
                 $items,
                 $configurator->getPointSystem(),
             ];
-            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, $link, 'POINTSYSTEM', $configurations, $confId);
+            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, 'POINTSYSTEM', $configurations, $confId);
         }
         $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
@@ -296,13 +294,11 @@ class TableWriter extends TableWriterBase
      *
      * @param string $template HTML- Template
      * @param array &$itemsArr Datensätze für die Auswahl
-     * @param tx_rnbase_util_Link &$link Linkobjekt
      * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
      * @param ConfigurationInterface $configurations Konfig-Objekt
      */
-    protected function fillControlTemplate($template, &$itemsArr, $link, $markerName, $configurations, $confId)
+    protected function fillControlTemplate($template, &$itemsArr, $markerName, $configurations, $confId)
     {
-        // $link->initByTS($configurations, $confId.'link.', array());
         $currItem = $itemsArr[1];
         $confName = strtolower($markerName); // Konvention
         $formatter = $configurations->getFormatter();

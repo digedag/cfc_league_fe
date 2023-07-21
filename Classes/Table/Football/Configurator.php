@@ -18,7 +18,7 @@ use tx_rnbase;
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
+*  (c) 2008-2023 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -247,13 +247,13 @@ class Configurator implements IConfigurator
         // Wir bleiben mit den alten falschen TS-Einstellungen kompatibel und fragen
         // beide Einstellungen ab
         if ($this->configurations->get('tabletypeSelectionInput') || $this->getConfValue('tablescopeSelectionInput')) {
-            $this->cfgTableScope = $parameters->offsetGet('tablescope') ? $parameters->offsetGet('tablescope') : $this->cfgTableScope;
+            $this->cfgTableScope = $parameters->get('tablescope') ?? $this->cfgTableScope;
         }
 
         // tabletype means home or away matches only
         $this->cfgTableType = $this->getConfValue('tabletype');
         if ($this->configurations->get('tabletypeSelectionInput') || $this->getConfValue('tabletypeSelectionInput')) {
-            $this->cfgTableType = $parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : $this->cfgTableType;
+            $this->cfgTableType = $parameters->get('tabletype') ?? $this->cfgTableType;
         }
 
         $this->cfgPointSystem = $this->getCompetition()->getProperty('point_system');
@@ -261,7 +261,7 @@ class Configurator implements IConfigurator
             $this->cfgPointSystem = (int) $this->configurations->get($this->confId.'forcePointSystem');
         }
         if ($this->configurations->get('pointSystemSelectionInput') || $this->getConfValue('pointSystemSelectionInput')) {
-            $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
+            $this->cfgPointSystem = is_string($parameters->get('pointsystem')) ? intval($parameters->get('pointsystem')) : $this->cfgPointSystem;
         }
 
         $this->cfgLiveTable = $this->configurations->getBool($this->confId.'showLiveTable');
