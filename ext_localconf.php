@@ -1,12 +1,11 @@
 <?php
 
 use Sys25\RnBase\Backend\Utility\Icons;
+use Sys25\RnBase\Utility\TYPO3;
 
-if (!defined('TYPO3_MODE')) {
+if (!(defined('TYPO3') || defined('TYPO3_MODE'))) {
     exit('Access denied.');
 }
-
-// Spiele als Ereignisse für die Extension cal bereitstellen
 
 // Page module hook
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['tx_cfcleaguefe_competition']['plugin'] =
@@ -33,67 +32,67 @@ System25\T3sports\Utility\Misc::registerTableStrategy('pointpermatch', 'LLL:EXT:
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball3', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_volleyball_3point', System25\T3sports\Table\Volleyball\Comparator3Point::class);
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball2', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_volleyball_2point', System25\T3sports\Table\Volleyball\Comparator::class);
 
-Sys25\RnBase\Utility\Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_statistics' /* sv type */ ,
-    'tx_cfcleaguefe_sv2_PlayerStatistics' /* sv key */ ,
-    [
-    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.player', 'description' => 'Statistical data about players', 'subtype' => 'player',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Statistics\Service\PlayerStatistics',
-  ]
-);
+// Sys25\RnBase\Utility\Extensions::addService(
+//     $_EXTKEY,
+//     'cfcleague_statistics' /* sv type */ ,
+//     'tx_cfcleaguefe_sv2_PlayerStatistics' /* sv key */ ,
+//     [
+//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.player', 'description' => 'Statistical data about players', 'subtype' => 'player',
+//     'available' => true, 'priority' => 50, 'quality' => 50,
+//     'os' => '', 'exec' => '',
+//     'className' => 'System25\T3sports\Statistics\Service\PlayerStatistics',
+//   ]
+// );
 
-Sys25\RnBase\Utility\Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_statistics' /* sv type */ ,
-    'tx_cfcleaguefe_sv2_ScorerStatistics' /* sv key */ ,
-    [
-    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.scorerlist', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Statistics\Service\ScorerStatistics',
-  ]
-);
+// Sys25\RnBase\Utility\Extensions::addService(
+//     $_EXTKEY,
+//     'cfcleague_statistics' /* sv type */ ,
+//     'tx_cfcleaguefe_sv2_ScorerStatistics' /* sv key */ ,
+//     [
+//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.scorerlist', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
+//     'available' => true, 'priority' => 50, 'quality' => 50,
+//     'os' => '', 'exec' => '',
+//     'className' => 'System25\T3sports\Statistics\Service\ScorerStatistics',
+//   ]
+// );
 
-Sys25\RnBase\Utility\Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_statistics' /* sv type */ ,
-    'tx_cfcleaguefe_sv2_AssistStatistics' /* sv key */ ,
-    [
-    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.assistlist', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Statistics\Service\AssistStatistics',
-  ]
-);
+// Sys25\RnBase\Utility\Extensions::addService(
+//     $_EXTKEY,
+//     'cfcleague_statistics' /* sv type */ ,
+//     'tx_cfcleaguefe_sv2_AssistStatistics' /* sv key */ ,
+//     [
+//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.assistlist', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
+//     'available' => true, 'priority' => 50, 'quality' => 50,
+//     'os' => '', 'exec' => '',
+//     'className' => 'System25\T3sports\Statistics\Service\AssistStatistics',
+//   ]
+// );
 
-Sys25\RnBase\Utility\Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_statistics' /* sv type */ ,
-    'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' /* sv key */ ,
-    [
-    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.playersummary', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Statistics\Service\PlayerSummaryStatistics',
-  ]
-);
+// Sys25\RnBase\Utility\Extensions::addService(
+//     $_EXTKEY,
+//     'cfcleague_statistics' /* sv type */ ,
+//     'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' /* sv key */ ,
+//     [
+//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.playersummary', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
+//     'available' => true, 'priority' => 50, 'quality' => 50,
+//     'os' => '', 'exec' => '',
+//     'className' => 'System25\T3sports\Statistics\Service\PlayerSummaryStatistics',
+//   ]
+// );
 
-Sys25\RnBase\Utility\Extensions::addService(
-    $_EXTKEY,
-    'cfcleague_statistics' /* sv type */ ,
-    'tx_cfcleaguefe_sv2_VisitorStatistics' /* sv key */ ,
-    [
-    'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.visitors', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
-    'available' => true, 'priority' => 50, 'quality' => 50,
-    'os' => '', 'exec' => '',
-    'className' => 'System25\T3sports\Statistics\Service\VisitorStatistics',
-  ]
-);
+// Sys25\RnBase\Utility\Extensions::addService(
+//     $_EXTKEY,
+//     'cfcleague_statistics' /* sv type */ ,
+//     'tx_cfcleaguefe_sv2_VisitorStatistics' /* sv key */ ,
+//     [
+//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.visitors', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
+//     'available' => true, 'priority' => 50, 'quality' => 50,
+//     'os' => '', 'exec' => '',
+//     'className' => 'System25\T3sports\Statistics\Service\VisitorStatistics',
+//   ]
+// );
 
-if (TYPO3_MODE === 'BE') {
+if (\Sys25\RnBase\Utility\Environment::isBackend()) {
     Icons::getIconRegistry()->registerIcon(
         't3sports_plugin',
         \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
@@ -101,7 +100,10 @@ if (TYPO3_MODE === 'BE') {
     );
 
     // Apply PageTSconfig
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:cfc_league_fe/Configuration/PageTS/modWizards.ts">'
-    );
+    if (!TYPO3::isTYPO121OrHigher()) {
+        // since T3 12 pagets is loaded by convention
+        \Sys25\RnBase\Utility\Extensions::addPageTSConfig(
+            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:cfc_league_fe/Configuration/PageTS/modWizards.tsconfig">'
+        );
+    }
 }
