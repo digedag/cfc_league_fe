@@ -2,6 +2,9 @@
 Changes
 -------
 
+v1.11.1 (23.07.2023)
+ * Fix php warning in profile view
+
 v1.11.0 (21.07.2023)
  * #84 Support for TYPO3 12.4 LTS
  * Convert language files to xlf
