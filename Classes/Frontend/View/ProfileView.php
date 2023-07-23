@@ -18,7 +18,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2021 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,7 +54,17 @@ class ProfileView extends BaseView
 
         $profile = $viewData->offsetGet('profile');
         if (is_object($profile)) {
-            $out = $this->createView($template, $profile, $configurations);
+            $team = null;
+            $teamId = $configurations->getParameters()->getInt('team');
+            if (!$teamId) {
+                // Id per TS suchen
+                $teamId = $configurations->getInt('profileview.staticteam');
+            }
+            if ($teamId) {
+                $team = ServiceRegistry::getTeamService()->getTeam($teamId);
+            }
+
+            $out = $this->createView($template, $profile, $team, $configurations);
         } else {
             $out = 'Sorry, profile not found...';
         }
@@ -62,19 +72,13 @@ class ProfileView extends BaseView
         return $out;
     }
 
-    protected function createView($template, $profile, ConfigurationInterface $configurations)
+    protected function createView($template, Profile $profile, ?Team $team, ConfigurationInterface $configurations)
     {
         $out = '';
         $markerOptions = [];
-        $teamId = $configurations->getParameters()->getInt('team');
-        if (!$teamId) {
-            // Id per TS suchen
-            $teamId = $configurations->getInt('profileview.staticteam');
-        }
-        if ($teamId) {
-            $team = ServiceRegistry::getTeamService()->getTeam($teamId);
-            $markerOptions['team'] = $team;
-        }
+        $markerOptions['team'] = $team;
+
+        /** @var ProfileMarker $profileMarker */
         $profileMarker = tx_rnbase::makeInstance(ProfileMarker::class, $markerOptions);
         $out .= $profileMarker->parseTemplate($template, $profile, $configurations->getFormatter(), 'profileview.profile.', 'PROFILE');
         $profiles = $this->findNextAndPrevProfiles($profile, $markerOptions['team']);
@@ -86,7 +90,7 @@ class ProfileView extends BaseView
 
         $markerArray = $subpartArray = $wrappedSubpartArray = [];
 
-        if ($teamId) {
+        if ($team) {
             $teamMarker = tx_rnbase::makeInstance(TeamMarker::class);
             $out = $teamMarker->parseTemplate($out, $team, $configurations->getFormatter(), 'profileview.team.', 'TEAM');
             $wrappedSubpartArray['###TEAM###'] = [
