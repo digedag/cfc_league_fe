@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\Statistics\Service;
 
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Statistics\TeamStatisticsMarker;
 
@@ -36,12 +37,16 @@ use System25\T3sports\Statistics\TeamStatisticsMarker;
  *
  * @author Rene Nitzsche
  */
-class VisitorStatistics extends \Tx_Rnbase_Service_Base
+class VisitorStatistics implements StatsServiceInterface
 {
     /**
      * Array with statistical results.
      */
     private $result = [];
+
+    private $scopeArr = [];
+    private $configurations;
+    private $parameters;
 
     private $statData = [
         'home_matchcount',
@@ -55,7 +60,12 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
         'all_average',
     ];
 
-    public function prepare($scope, &$configurations, &$parameters)
+    public function getStatsType()
+    {
+        return 'visitors';
+    }
+
+    public function prepare($scope, $configurations, $parameters)
     {
         $this->scopeArr = $scope;
         $this->configurations = $configurations;
@@ -134,11 +144,9 @@ class VisitorStatistics extends \Tx_Rnbase_Service_Base
     /**
      * Returns the marker instance to map result data to HTML markers.
      *
-     * @param \tx_rnbase_configurations $configurations
-     *
      * @return TeamStatisticsMarker
      */
-    public function getMarker($configurations)
+    public function getMarker(ConfigurationInterface $configurations)
     {
         return \tx_rnbase::makeInstance(TeamStatisticsMarker::class);
     }

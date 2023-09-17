@@ -2,8 +2,10 @@
 
 namespace System25\T3sports\Statistics\Service;
 
+use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\Misc;
+use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Model\Team;
@@ -13,7 +15,7 @@ use System25\T3sports\Statistics\StatisticsHelper;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2019 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,7 +40,7 @@ use System25\T3sports\Statistics\StatisticsHelper;
  *
  * @author Rene Nitzsche
  */
-class PlayerStatistics extends \Tx_Rnbase_Service_Base
+class PlayerStatistics implements StatsServiceInterface
 {
     /**
      * Für jeden Spieler wird ein Datenarray erstellt
@@ -70,6 +72,11 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         'goals_assist',
         'goals_joker',
     ];
+
+    public function getStatsType()
+    {
+        return 'player';
+    }
 
     /**
      * This method is called one time before the statistic process starts.
@@ -149,6 +156,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
     protected function getPlayer($match, $home)
     {
         $players = $home ? $match->getPlayersHome(1) : $match->getPlayersGuest(1);
+        $players = explode(',', $players);
         // Fehlerhafte Spieler entfernen
         foreach ($players as $key => $player) {
             if (!is_object($player)) {
@@ -180,12 +188,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         return $this->playersArr;
     }
 
-    /**
-     * Returns the marker instance to map result data to HTML markers.
-     *
-     * @param \tx_rnbase_configurations $configurations
-     */
-    public function getMarker($configurations)
+    public function getMarker(ConfigurationInterface $configurations)
     {
         return \tx_rnbase::makeInstance(PlayerStatisticsMarker::class);
     }
@@ -209,6 +212,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
      */
     protected function getTeams($scopeArr)
     {
+        // FIXME: das kann nicht funktionieren.
         $teams = call_user_func([
             'tx_cfcleaguefe_models_team',
             'getTeams',
@@ -448,7 +452,7 @@ class PlayerStatistics extends \Tx_Rnbase_Service_Base
         if (strlen(trim($team->getProperty('players'))) > 0) {
             if (count($players)) {
                 // Jetzt die Spieler in die richtige Reihenfolge bringen
-                $uids = \Tx_Rnbase_Utility_Strings::intExplode(',', $team->getProperty('players'));
+                $uids = Strings::intExplode(',', $team->getProperty('players'));
                 $uids = array_flip($uids);
                 foreach ($players as $record) {
                     // In $record liegt der Statistikdatensatz des Spielers

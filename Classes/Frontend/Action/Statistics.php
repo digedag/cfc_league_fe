@@ -6,10 +6,10 @@ use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Frontend\View\StatisticsView;
+use System25\T3sports\Statistics\Service\StatsServiceProvider;
 use System25\T3sports\Statistics\Statistics as StatisticsUtil;
 use System25\T3sports\Utility\MatchTicker;
 use System25\T3sports\Utility\ScopeController;
-use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
@@ -71,7 +71,7 @@ class Statistics extends AbstractAction
         }
         $services = [];
         foreach ($types as $type) {
-            $service = tx_rnbase::makeInstanceService('cfcleague_statistics', $type);
+            $service = StatsServiceProvider::getInstance()->getStatsServiceByType($type);
             if (is_object($service)) {
                 $services[$type] = $service;
             }
