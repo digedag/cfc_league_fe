@@ -36,6 +36,11 @@ namespace System25\T3sports\Statistics\Service;
  */
 class ScorerStatistics extends PlayerStatistics
 {
+    public function getStatsType()
+    {
+        return 'scorerlist';
+    }
+
     /**
      * Liefert die Liste der besten Torschützen.
      *

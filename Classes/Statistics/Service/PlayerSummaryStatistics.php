@@ -4,6 +4,7 @@ namespace System25\T3sports\Statistics\Service;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use System25\T3sports\Model\Competition;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Statistics\PlayerSummaryStatisticsMarker;
 use tx_rnbase;
 
@@ -48,12 +49,17 @@ class PlayerSummaryStatistics extends PlayerStatistics
      */
     private $compIds = [];
 
+    public function getStatsType()
+    {
+        return 'playersummary';
+    }
+
     /**
      * {@inheritdoc}
      *
      * @see \System25\T3sports\Statistics\Service\PlayerStatistics::handleMatch()
      */
-    public function handleMatch($match, $clubId)
+    public function handleMatch(Fixture $match, $clubId)
     {
         if ($match->getProperty('players_home') || $match->getProperty('players_guest') || count($match->getMatchNotes())) {
             $this->result['numberOfUsedMatches'] = $this->result['numberOfUsedMatches'] + 1;

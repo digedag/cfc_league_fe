@@ -2,6 +2,9 @@
 Changes
 -------
 
+v1.11.2 (??.09.2023)
+ * Fix statistics view
+
 v1.11.1 (23.07.2023)
  * Fix php warning in profile view
 

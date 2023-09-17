@@ -32,65 +32,15 @@ System25\T3sports\Utility\Misc::registerTableStrategy('pointpermatch', 'LLL:EXT:
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball3', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_volleyball_3point', System25\T3sports\Table\Volleyball\Comparator3Point::class);
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball2', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_volleyball_2point', System25\T3sports\Table\Volleyball\Comparator::class);
 
-// Sys25\RnBase\Utility\Extensions::addService(
-//     $_EXTKEY,
-//     'cfcleague_statistics' /* sv type */ ,
-//     'tx_cfcleaguefe_sv2_PlayerStatistics' /* sv key */ ,
-//     [
-//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.player', 'description' => 'Statistical data about players', 'subtype' => 'player',
-//     'available' => true, 'priority' => 50, 'quality' => 50,
-//     'os' => '', 'exec' => '',
-//     'className' => 'System25\T3sports\Statistics\Service\PlayerStatistics',
-//   ]
-// );
-
-// Sys25\RnBase\Utility\Extensions::addService(
-//     $_EXTKEY,
-//     'cfcleague_statistics' /* sv type */ ,
-//     'tx_cfcleaguefe_sv2_ScorerStatistics' /* sv key */ ,
-//     [
-//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.scorerlist', 'description' => 'A list of best scorer', 'subtype' => 'scorerlist',
-//     'available' => true, 'priority' => 50, 'quality' => 50,
-//     'os' => '', 'exec' => '',
-//     'className' => 'System25\T3sports\Statistics\Service\ScorerStatistics',
-//   ]
-// );
-
-// Sys25\RnBase\Utility\Extensions::addService(
-//     $_EXTKEY,
-//     'cfcleague_statistics' /* sv type */ ,
-//     'tx_cfcleaguefe_sv2_AssistStatistics' /* sv key */ ,
-//     [
-//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.assistlist', 'description' => 'A list of best assists', 'subtype' => 'assistlist',
-//     'available' => true, 'priority' => 50, 'quality' => 50,
-//     'os' => '', 'exec' => '',
-//     'className' => 'System25\T3sports\Statistics\Service\AssistStatistics',
-//   ]
-// );
-
-// Sys25\RnBase\Utility\Extensions::addService(
-//     $_EXTKEY,
-//     'cfcleague_statistics' /* sv type */ ,
-//     'tx_cfcleaguefe_sv2_PlayerSummaryStatistics' /* sv key */ ,
-//     [
-//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.playersummary', 'description' => 'Some additional data of player statistics', 'subtype' => 'playersummary',
-//     'available' => true, 'priority' => 50, 'quality' => 50,
-//     'os' => '', 'exec' => '',
-//     'className' => 'System25\T3sports\Statistics\Service\PlayerSummaryStatistics',
-//   ]
-// );
-
-// Sys25\RnBase\Utility\Extensions::addService(
-//     $_EXTKEY,
-//     'cfcleague_statistics' /* sv type */ ,
-//     'tx_cfcleaguefe_sv2_VisitorStatistics' /* sv key */ ,
-//     [
-//     'title' => 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.visitors', 'description' => 'Count visitors of all teams', 'subtype' => 'visitors',
-//     'available' => true, 'priority' => 50, 'quality' => 50,
-//     'os' => '', 'exec' => '',
-//     'className' => 'System25\T3sports\Statistics\Service\VisitorStatistics',
-//   ]
-// );
+// FIXME: use DI for T3 10.x and higher
+// if (!\Sys25\RnBase\Utility\TYPO3::isTYPO104OrHigher()) {
+// }
+$provider = \System25\T3sports\Statistics\Service\StatsServiceProvider::getInstance();
+$provider->addStatsService(new \System25\T3sports\Statistics\Service\PlayerStatistics());
+$provider->addStatsService(new \System25\T3sports\Statistics\Service\ScorerStatistics());
+$provider->addStatsService(new \System25\T3sports\Statistics\Service\AssistStatistics());
+$provider->addStatsService(new \System25\T3sports\Statistics\Service\PlayerSummaryStatistics());
+$provider->addStatsService(new \System25\T3sports\Statistics\Service\VisitorStatistics());
 
 if (\Sys25\RnBase\Utility\Environment::isBackend()) {
     Icons::getIconRegistry()->registerIcon(

@@ -8,8 +8,7 @@ use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
-use Sys25\RnBase\Utility\Misc;
-use Sys25\RnBase\Utility\T3General;
+use System25\T3sports\Statistics\Service\StatsServiceProvider;
 use System25\T3sports\Statistics\Statistics;
 
 /***************************************************************
@@ -60,14 +59,14 @@ class StatisticsView extends BaseView
         // Jetzt über die einzelnen Statistiken iterieren
         $markerArray = [];
         $subpartArray = $this->_getSubpartArray($configurations);
-        $services = Misc::lookupServices('cfcleague_statistics');
-        foreach ($services as $subtype => $info) {
+        $types = StatsServiceProvider::getInstance()->getStatsTypes();
+        foreach ($types as $subtype) {
             // Init all stats with empty subpart
             $subpartArray['###STATISTIC_'.strtoupper($subtype).'###'] = '';
         }
 
         foreach ($data as $type => $stats) {
-            $service = T3General::makeInstanceService('cfcleague_statistics', $type);
+            $service = StatsServiceProvider::getInstance()->getStatsServiceByType($type);
             if (!is_object($service)) { // Ohne den Service geht nix
                 continue;
             }

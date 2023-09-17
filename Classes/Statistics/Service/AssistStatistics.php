@@ -36,6 +36,11 @@ namespace System25\T3sports\Statistics\Service;
  */
 class AssistStatistics extends PlayerStatistics
 {
+    public function getStatsType()
+    {
+        return 'assistlist';
+    }
+
     /**
      * Liefert die Liste der besten Vorlagengeber.
      *
