@@ -8,7 +8,7 @@ use System25\T3sports\Model\Profile;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2018 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -48,7 +48,8 @@ class StatisticsHelper
      * @param int $type MatchNote-Typ
      * @param Profile $player Referenz auf den Spieler
      * @param Fixture $match Referenz auf das Spiel
-     * @returns liefert die MatchNotes des Typs als Array oder 0
+     *
+     * @return MatchNote[]|int liefert die MatchNotes des Typs als Array oder 0
      */
     public static function isNote($type, Profile $player, Fixture $match)
     {
@@ -56,9 +57,9 @@ class StatisticsHelper
         $tickerArr = $match->getMatchNotesByType($type);
 
         for ($i = 0; $i < count($tickerArr); ++$i) {
-            $matchNote = &$tickerArr[$i];
-            $notePlayer = $matchNote->getPlayerInstance();
-            if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
+            $matchNote = $tickerArr[$i];
+            $notePlayerUid = $matchNote->getPlayer();
+            if ($notePlayerUid && $notePlayerUid == $player->getUid()) {
                 if ($matchNote->isType($type)) {
                     $ret[] = $matchNote;
                 }
@@ -95,8 +96,8 @@ class StatisticsHelper
         $ret = [];
         for ($i = 0; $i < count($tickerArr); ++$i) {
             $matchNote = &$tickerArr[$i];
-            $notePlayer = $matchNote->getPlayerInstance();
-            if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
+            $notePlayerUid = $matchNote->getPlayer();
+            if ($notePlayerUid && $notePlayerUid == $player->getUid()) {
                 $ret[] = $matchNote;
             }
         }
@@ -155,8 +156,8 @@ class StatisticsHelper
 
         for ($i = 0; $i < count($tickerArr); ++$i) {
             $matchNote = &$tickerArr[$i];
-            $notePlayer = $matchNote->getPlayerInstance();
-            if ($notePlayer && $notePlayer->getUid() == $player->getUid()) {
+            $notePlayerUid = $matchNote->getPlayer();
+            if ($notePlayerUid && $notePlayerUid == $player->getUid()) {
                 if ('Y' == $type && $matchNote->isYellowCard()) {
                     return $matchNote->getMinute();
                 }
