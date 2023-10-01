@@ -8,7 +8,9 @@ use Sys25\RnBase\Utility\Misc;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
+use System25\T3sports\Model\Repository\TeamRepository;
 use System25\T3sports\Model\Team;
+use System25\T3sports\Service\ProfileService;
 use System25\T3sports\Statistics\PlayerStatisticsMarker;
 use System25\T3sports\Statistics\StatisticsHelper;
 
@@ -72,6 +74,17 @@ class PlayerStatistics implements StatsServiceInterface
         'goals_assist',
         'goals_joker',
     ];
+
+    /** @var TeamRepository */
+    protected $teamRepo;
+    /** @var ProfileService */
+    protected $profileSrv;
+
+    public function __construct(?TeamRepository $teamRepo = null, ?ProfileService $profileSrv = null)
+    {
+        $this->teamRepo = $teamRepo ?: new TeamRepository();
+        $this->profileSrv = $profileSrv ?: new ProfileService();
+    }
 
     public function getStatsType()
     {
@@ -155,8 +168,9 @@ class PlayerStatistics implements StatsServiceInterface
      */
     protected function getPlayer($match, $home)
     {
-        $players = $home ? $match->getPlayersHome(1) : $match->getPlayersGuest(1);
-        $players = explode(',', $players);
+        $playerUids = $home ? $match->getPlayersHome(true) : $match->getPlayersGuest(true);
+        $players = $this->profileSrv->loadProfiles($playerUids);
+
         // Fehlerhafte Spieler entfernen
         foreach ($players as $key => $player) {
             if (!is_object($player)) {
@@ -212,13 +226,13 @@ class PlayerStatistics implements StatsServiceInterface
      */
     protected function getTeams($scopeArr)
     {
-        // FIXME: das kann nicht funktionieren.
-        $teams = call_user_func([
-            'tx_cfcleaguefe_models_team',
-            'getTeams',
-        ], $scopeArr['COMP_UIDS'], $scopeArr['CLUB_UIDS']);
+        $fields = [];
+        $options = [];
+        $fields['TEAM.CLUB'][OP_IN_INT] = $scopeArr['CLUB_UIDS'];
+        $fields['COMPETITION.UID'][OP_IN_INT] = $scopeArr['COMP_UIDS'];
+        $teams = $this->teamRepo->search($fields, $options);
 
-        return $teams;
+        return $teams->toArray();
     }
 
     /**
@@ -256,7 +270,7 @@ class PlayerStatistics implements StatsServiceInterface
         $playerData = &$this->_getPlayerData($playersArr, $player);
 
         // In welchem Team steht der Spieler?
-        $team = $match->getTeam4Player($player->uid);
+        $team = $match->getTeam4Player($player->getUid());
 
         if (1 == $team) {
             $startPlayer = $match->getPlayersHome();
@@ -266,9 +280,14 @@ class PlayerStatistics implements StatsServiceInterface
             // Wenn der Spieler nicht im Spiel vorkommt, können wir abbrechen
             return;
         }
+        $startPlayer = $this->profileSrv->loadProfiles($startPlayer);
+        $startPlayers = [];
+        foreach ($startPlayer as $p) {
+            $startPlayers[$p->getUid()] = $p;
+        }
 
         // Steht der Spieler in der Startelf
-        if (is_array($startPlayer) && array_key_exists($player->uid, $startPlayer)) {
+        if (array_key_exists($player->getUid(), $startPlayers)) {
             $playerData['match_count'] = intval($playerData['match_count']) + 1;
 
             // Wurde der Spieler ausgewechselt?

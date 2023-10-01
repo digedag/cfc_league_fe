@@ -2,11 +2,14 @@
 
 namespace System25\T3sports\Statistics;
 
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
+use Sys25\RnBase\Frontend\Marker\Templates;
+
 /**
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2007-2019 Rene Nitzsche (rene@system25.de)
+ * (c) 2007-2023 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,14 +35,15 @@ namespace System25\T3sports\Statistics;
  *
  * @author Rene Nitzsche
  */
-class PlayerSummaryStatisticsMarker extends \tx_rnbase_util_BaseMarker
+class PlayerSummaryStatisticsMarker extends BaseMarker
 {
     public function parseTemplate($srvTemplate, &$stats, &$formatter, $statsConfId, $statsMarker)
     {
         $labelArr = $this->initTSLabelMarkers($formatter, $statsConfId, $statsMarker);
         $markerArray = $formatter->getItemMarkerArrayWrapped($stats, $statsConfId, 0, $statsMarker.'_');
         $markerArray = array_merge($markerArray, $labelArr);
+        $subpartArray = [];
 
-        return $formatter->cObj->substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
+        return Templates::substituteMarkerArrayCached($srvTemplate, $markerArray, $subpartArray);
     }
 }

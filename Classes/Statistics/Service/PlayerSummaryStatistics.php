@@ -78,7 +78,7 @@ class PlayerSummaryStatistics extends PlayerStatistics
             $this->result['numberOfUsedMatches'] = 0;
         }
         $teams = $this->getTeams($this->getScopeArray());
-        $this->_setAdditionalData($this->getScopeArray(), $teams, array_unique($this->compIds));
+        $this->_setAdditionalData($teams, array_unique($this->compIds));
 
         return $this->result;
     }
@@ -98,11 +98,10 @@ class PlayerSummaryStatistics extends PlayerStatistics
     /**
      * Einige Zusatzdaten ermitteln.
      */
-    public function _setAdditionalData(&$scopeArr, &$teams, &$compUids)
+    private function _setAdditionalData($teams, $compUids)
     {
         // Wir zählen wieviele Spiele die Wettbewerbe haben, die in der
         // Statistik betrachtet wurden.
-        $ret = [];
         $this->result['numberOfMatches'] = 0;
         foreach ($compUids as $compUid) {
             $comp = tx_rnbase::makeInstance(Competition::class, $compUid);
@@ -115,7 +114,5 @@ class PlayerSummaryStatistics extends PlayerStatistics
             $matchCount = $comp->getNumberOfMatches(implode(',', $teamIds)); // Spiele gesamt
             $this->result['numberOfMatches'] = $this->result['numberOfMatches'] + $matchCount;
         }
-
-        return $ret;
     }
 }
