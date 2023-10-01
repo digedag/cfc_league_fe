@@ -4,7 +4,6 @@ namespace System25\T3sports\Statistics;
 
 use Sys25\RnBase\Frontend\Marker\ListProvider;
 use Sys25\RnBase\Utility\Language;
-use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Repository\MatchNoteRepository;
 use System25\T3sports\Model\Repository\MatchRepository;
@@ -162,12 +161,12 @@ class Statistics
      */
     public static function lookupStatistics($config)
     {
-        $services = Misc::lookupServices('cfcleague_statistics');
-        foreach ($services as $subtype => $info) {
-            $title = $info['title'];
-            if ('LLL:' === substr($title, 0, 4)) {
-                $title = Language::sL($title);
-            }
+        $provider = \System25\T3sports\Statistics\Service\StatsServiceProvider::getInstance();
+        $types = $provider->getStatsTypes();
+        // FIXME: das sollte besser gehen...
+        $labelPrefix = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.%s';
+        foreach ($types as $subtype) {
+            $title = Language::sL(sprintf($labelPrefix, $subtype));
             $config['items'][] = [
                 $title,
                 $subtype,
