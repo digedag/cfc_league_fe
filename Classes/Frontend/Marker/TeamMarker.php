@@ -155,9 +155,9 @@ class TeamMarker extends BaseMarker
      * @param string $template
      * @param Club $club
      */
-    protected function addClubData($template, Club $club, $formatter, $clubConf, $markerPrefix)
+    protected function addClubData($template, ?Club $club, $formatter, $clubConf, $markerPrefix)
     {
-        $clubMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ClubMarker');
+        $clubMarker = tx_rnbase::makeInstance(ClubMarker::class);
         $template = $clubMarker->parseTemplate($template, $club, $formatter, $clubConf, $markerPrefix);
 
         return $template;

@@ -11,7 +11,6 @@ use Sys25\RnBase\Search\SearchBase;
 use System25\T3sports\Model\Club;
 use System25\T3sports\Utility\MapsUtil;
 use System25\T3sports\Utility\ServiceRegistry;
-use tx_cfcleaguefe_util_StadiumMarker as StadiumMarker;
 use tx_rnbase;
 
 /***************************************************************
@@ -53,7 +52,7 @@ class ClubMarker extends BaseMarker
      *
      * @return string das geparste Template
      */
-    public function parseTemplate($template, &$club, &$formatter, $confId, $marker = 'CLUB')
+    public function parseTemplate($template, $club, $formatter, $confId, $marker = 'CLUB')
     {
         if (!is_object($club)) {
             // Ist kein Verein vorhanden wird ein leeres Objekt verwendet.
