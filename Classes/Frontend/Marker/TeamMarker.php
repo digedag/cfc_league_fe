@@ -202,7 +202,7 @@ class TeamMarker extends BaseMarker
         SearchBase::setConfigFields($fields, $formatter->getConfigurations(), $confId.'fields.');
         SearchBase::setConfigOptions($options, $formatter->getConfigurations(), $confId.'options.');
         $children = $this->profileRepo->search($fields, $options);
-        if (!empty($children) && !array_key_exists('orderby', $options)) { // Default sorting
+        if (!$children->isEmpty() && !array_key_exists('orderby', $options)) { // Default sorting
             $children = $this->sortProfiles($children, $team->getProperty($joinCol));
         }
 

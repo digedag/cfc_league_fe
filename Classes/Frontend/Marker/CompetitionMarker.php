@@ -36,6 +36,8 @@ use tx_rnbase;
  */
 class CompetitionMarker extends BaseMarker
 {
+    private $groupMarker;
+
     /**
      * @param string $template das HTML-Template
      * @param Competition $competition der Wettbewerb
@@ -70,7 +72,7 @@ class CompetitionMarker extends BaseMarker
      */
     private function getGroupMarker()
     {
-        if (!is_object($this->groupMarker)) {
+        if (!isset($this->groupMarker)) {
             $this->groupMarker = tx_rnbase::makeInstance(GroupMarker::class);
         }
 

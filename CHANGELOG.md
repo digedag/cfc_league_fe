@@ -2,8 +2,9 @@
 Changes
 -------
 
-v1.11.2 (??.09.2023)
+v1.11.2 (??.12.2023)
  * Fix statistics view
+ * Fix rendering of empty profile lists
 
 v1.11.1 (23.07.2023)
  * Fix php warning in profile view
