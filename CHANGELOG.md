@@ -2,7 +2,7 @@
 Changes
 -------
 
-v1.11.2 (??.12.2023)
+v1.11.2 (09.12.2023)
  * Fix statistics view
  * Fix rendering of empty profile lists
 
