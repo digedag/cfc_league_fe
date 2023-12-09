@@ -1780,6 +1780,10 @@ plugin.tx_cfcleaguefe_report {
     assistsnames{
       seperator = | und |
     }
+    videoassistsnames =< lib.t3sports.matchreport.profiles
+    videoassistsnames{
+      seperator = |, |
+    }
   }
 
   stadiumview {

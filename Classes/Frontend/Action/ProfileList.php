@@ -47,7 +47,7 @@ class ProfileList extends AbstractAction
 {
     private $profileRepo;
 
-    public function __construct(?ProfileRepository $repo = null)
+    public function __construct(ProfileRepository $repo = null)
     {
         $this->profileRepo = $repo ?: new ProfileRepository();
     }

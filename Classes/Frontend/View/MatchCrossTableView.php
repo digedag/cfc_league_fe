@@ -141,6 +141,7 @@ class MatchCrossTableView extends BaseView
                 $ret[] = $matches[$i];
             }
         }
+
         // Die Paarung gibt es nicht.
         return count($ret) ? $ret : $this->noMatchStr;
     }

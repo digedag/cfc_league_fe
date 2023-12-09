@@ -285,6 +285,14 @@ class MatchReportModel
     }
 
     /**
+     * Liefert die Namen der Linienrichters.
+     */
+    public function getVideoAssistNames($confId = 'matchreport.videoassists.')
+    {
+        return $this->_getNames2($this->matchProfileProvider->getVideoAssists($this->match), $confId);
+    }
+
+    /**
      * Liefert den Namen des Heimtrainers.
      */
     public function getCoachNameHome($confId = 'matchreport.coach.')
@@ -499,6 +507,7 @@ class MatchReportModel
         $sep = $this->_configurations->get($confIdAll.'seperator');
         $sep = (strlen($sep) > 2) ? substr($sep, 1, strlen($sep) - 2) : $sep;
         $ret = implode($sep, $ret);
+
         // Jetzt noch ein Wrap über alles
         return $this->_formatter->stdWrap($ret, $this->_configurations->get($confIdAll), $this->match->getProperty());
     }
@@ -513,7 +522,7 @@ class MatchReportModel
     protected function _wrapProfiles($profiles, $confId)
     {
         $ret = [];
-        if (!is_array($profiles)) {
+        if (!is_iterable($profiles)) {
             if (!is_object($profiles)) {
                 return [];
             }
@@ -551,7 +560,7 @@ class MatchReportModel
         foreach ($tickerArr as $ticker) {
             $ret[] = $this->mnDecorator->wrap($this->_formatter, $confIdAll.'ticker.', $ticker);
         }
-//         \tx_rnbase_util_Debug::debug([$ret, $confIdAll], __FILE__.':'.__LINE__); // TODO: remove me
+        //         \tx_rnbase_util_Debug::debug([$ret, $confIdAll], __FILE__.':'.__LINE__); // TODO: remove me
         // exit();
         // Die einzelnen Meldungen verbinden
         if (count($ret)) {
@@ -564,6 +573,7 @@ class MatchReportModel
         }
 
         $conf = $this->_configurations->get($confIdAll);
+
         // Jetzt noch ein Wrap über alles
         return $this->_formatter->stdWrap($ret, $conf, $this->match->getProperty());
     }
@@ -607,6 +617,7 @@ class MatchReportModel
             $sep = $hits[1];
         }
         $ret = implode(' - ', $partArr);
+
         // Jetzt noch ein Wrap über alles
         return $this->_formatter->stdWrap($ret, $conf, $this->match->getProperty());
     }

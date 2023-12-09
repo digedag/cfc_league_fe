@@ -73,6 +73,7 @@ class Comparator implements IComparator
 
                 return $t1diff > $t2diff ? -1 : 1;
             }
+
             // Bei den Minuspunkten ist weniger mehr
             return $t1['points2'] < $t2['points2'] ? -1 : 1;
         }

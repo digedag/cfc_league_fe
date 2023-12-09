@@ -114,6 +114,7 @@ class AllTimeTableTest extends BaseTestCase
         $league->setTeams($teams);
         $league->setPenalties([]);
         $league->setMatches($matches, 2);
+
         // Und jetzt die Spiele
         return $league;
     }

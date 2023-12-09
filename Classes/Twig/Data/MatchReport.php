@@ -2,9 +2,13 @@
 
 namespace System25\T3sports\Twig\Data;
 
+use Exception;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\ServiceRegistry;
+use tx_cfcleague_models_MatchNote;
+use tx_cfcleaguefe_util_MatchTicker;
+use Tx_Rnbase_Utility_Strings;
 
 /***************************************************************
 *  Copyright notice
@@ -38,10 +42,10 @@ class MatchReport
 {
     protected $match;
 
-    /** @var \tx_cfcleague_models_MatchNote[] */
+    /** @var tx_cfcleague_models_MatchNote[] */
     protected $tickerArr;
 
-    /** @var \tx_cfcleague_models_MatchNote[] */
+    /** @var tx_cfcleague_models_MatchNote[] */
     protected $tickerByTeam = [
         'home' => [],
         'guest' => [],
@@ -203,7 +207,7 @@ class MatchReport
      */
     protected function getLineup($players, $system)
     {
-        $system = \Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
+        $system = Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
         $players = is_array($players) ? array_values($players) : [];
 
         $partCnt = 0;
@@ -241,7 +245,7 @@ class MatchReport
         if (!is_array($this->tickerArr)) {
             $this->tickerArr = [];
             // Der Ticker wird immer chronologisch ermittelt
-            $matchNotes = &\tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
+            $matchNotes = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
             for ($i = 0; $i < count($matchNotes); ++$i) {
                 $note = $matchNotes[$i];
@@ -268,7 +272,7 @@ class MatchReport
                     if ($player) {
                         $this->tickerByTeam[$matchNote->getMatchNote()->isHome() ? 'home' : 'guest'][] = $matchNote;
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                 }
             }
         }

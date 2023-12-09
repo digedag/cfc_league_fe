@@ -83,7 +83,7 @@ class TableTest extends BaseTestCase
             $this->assertEquals($expected[$idx]['goals2'], $score['goals2']);
             $this->assertEquals($expected[$idx]['goals_diff'], $score['goals_diff']);
         }
-//        print_r($scoreLine);
+        //        print_r($scoreLine);
     }
 
     /**
@@ -195,6 +195,7 @@ class TableTest extends BaseTestCase
         $league->setTeams($teams);
         $league->setPenalties([]);
         $league->setMatches($matches, 2);
+
         // Und jetzt die Spiele
         return $league;
     }

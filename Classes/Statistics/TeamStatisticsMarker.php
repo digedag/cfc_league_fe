@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\Statistics;
 
+use Exception;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Frontend\Marker\FormatUtil;
 use Sys25\RnBase\Frontend\Marker\Templates;
@@ -74,7 +75,7 @@ class TeamStatisticsMarker extends BaseMarker
         foreach ($stats as $teamStat) {
             try {
                 $team = $this->teamRepo->findByUid($teamStat['team']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 continue; // Ohne Team wird auch nix gezeigt
             }
             $team->setProperty(array_merge($teamStat, $team->getProperties()));
