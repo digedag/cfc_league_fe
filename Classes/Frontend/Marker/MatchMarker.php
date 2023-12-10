@@ -258,6 +258,7 @@ class MatchMarker extends SimpleMarker
         $match->setProperty('coachnames_guest', $report->getCoachNameGuest('matchreport.coachnames.'));
         $match->setProperty('refereenames', $report->getRefereeName('matchreport.refereenames.'));
         $match->setProperty('assistsnames', $report->getAssistNames('matchreport.assistsnames.'));
+        $match->setProperty('videorefereename', $report->getVideoRefereeName('matchreport.videorefereename.'));
         $match->setProperty('videoassistsnames', $report->getVideoAssistNames('matchreport.videoassistsnames.'));
     }
 
