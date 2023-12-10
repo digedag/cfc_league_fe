@@ -13,6 +13,7 @@ use System25\T3sports\Model\Team;
 use System25\T3sports\Service\ProfileService;
 use System25\T3sports\Statistics\PlayerStatisticsMarker;
 use System25\T3sports\Statistics\StatisticsHelper;
+use tx_rnbase;
 
 /***************************************************************
  *  Copyright notice
@@ -80,7 +81,7 @@ class PlayerStatistics implements StatsServiceInterface
     /** @var ProfileService */
     protected $profileSrv;
 
-    public function __construct(?TeamRepository $teamRepo = null, ?ProfileService $profileSrv = null)
+    public function __construct(TeamRepository $teamRepo = null, ProfileService $profileSrv = null)
     {
         $this->teamRepo = $teamRepo ?: new TeamRepository();
         $this->profileSrv = $profileSrv ?: new ProfileService();
@@ -204,7 +205,7 @@ class PlayerStatistics implements StatsServiceInterface
 
     public function getMarker(ConfigurationInterface $configurations)
     {
-        return \tx_rnbase::makeInstance(PlayerStatisticsMarker::class);
+        return tx_rnbase::makeInstance(PlayerStatisticsMarker::class);
     }
 
     /**

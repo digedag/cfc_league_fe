@@ -14,7 +14,7 @@ use System25\T3sports\Table\ITableResult;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2013-2022 Rene Nitzsche (rene@system25.de)
+ * (c) 2013-2023 Rene Nitzsche (rene@system25.de)
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -50,6 +50,7 @@ class TableTest extends BaseTestCase
             'tableType' => '0',
         ], 'cfc_league_fe');
 
+        $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
         $leagueTable->getMatchProvider()->setTeams($league->getTeams(), false);
 
@@ -116,6 +117,7 @@ class TableTest extends BaseTestCase
         $league->setTeams($teams);
         $league->setPenalties([]);
         $league->setMatches($matches, 2);
+
         // Und jetzt die Spiele
         return $league;
     }

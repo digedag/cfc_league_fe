@@ -82,7 +82,7 @@ class ProfileMarker extends SimpleMarker
     protected function prepareTemplate($template, $profile, $formatter, $confId, $marker = 'PROFILE')
     {
         $this->tnDecorator->addTeamNotes($profile, $this->options['team'] ?? null);
-//        $profile->addTeamNotes($this->options['team']);
+        //        $profile->addTeamNotes($this->options['team']);
         $profile->setProperty('firstpicture', $profile->getProperty('t3images'));
         $profile->setProperty('pictures', $profile->getProperty('t3images'));
 

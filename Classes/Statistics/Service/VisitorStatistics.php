@@ -5,6 +5,7 @@ namespace System25\T3sports\Statistics\Service;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Statistics\TeamStatisticsMarker;
+use tx_rnbase;
 
 /**
  * *************************************************************
@@ -148,7 +149,7 @@ class VisitorStatistics implements StatsServiceInterface
      */
     public function getMarker(ConfigurationInterface $configurations)
     {
-        return \tx_rnbase::makeInstance(TeamStatisticsMarker::class);
+        return tx_rnbase::makeInstance(TeamStatisticsMarker::class);
     }
 
     /**

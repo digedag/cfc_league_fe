@@ -37,7 +37,7 @@ class StatsServiceProvider implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @var StatsServiceProvider
      */
-    private static $instance = null;
+    private static $instance;
 
     public function addStatsService(StatsServiceInterface $indexer)
     {

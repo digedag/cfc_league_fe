@@ -8,7 +8,7 @@ use System25\T3sports\Table\Util;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2013-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,6 +34,8 @@ use System25\T3sports\Table\Util;
  */
 class Comparator3Point implements IComparator
 {
+    private $_teamData;
+
     public function setTeamData(array &$teamdata)
     {
         $this->_teamData = $teamdata;

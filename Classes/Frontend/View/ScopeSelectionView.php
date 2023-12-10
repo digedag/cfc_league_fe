@@ -53,7 +53,7 @@ class ScopeSelectionView extends BaseView
     public function createOutput($template, RequestInterface $request, $formatter)
     {
         $configurations = $request->getConfigurations();
-//        $viewData = $request->getViewContext();
+        //        $viewData = $request->getViewContext();
         $viewData = $configurations->getViewData();
         $link = $configurations->createLink();
         $link->destination(TYPO3::getTSFE()->id); // Das Ziel der Seite vorbereiten

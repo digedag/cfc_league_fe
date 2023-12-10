@@ -1776,9 +1776,23 @@ plugin.tx_cfcleaguefe_report {
       }
     }
 
+    videorefereename =< lib.t3sports.matchreport.profiles
+    videorefereename.profile {
+      # Heimatstadt des Schiedsrichters anzeigen
+      home_town {
+        s_weight = 10
+        wrap = &nbsp;(|)
+        required = 1
+      }
+    }
+
     assistsnames =< lib.t3sports.matchreport.profiles
     assistsnames{
       seperator = | und |
+    }
+    videoassistsnames =< lib.t3sports.matchreport.profiles
+    videoassistsnames{
+      seperator = |, |
     }
   }
 

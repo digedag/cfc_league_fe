@@ -6,6 +6,7 @@ use Sys25\RnBase\Frontend\Marker\Templates;
 use System25\T3sports\Frontend\Marker\ProfileMarker;
 use System25\T3sports\Model\Profile;
 use tx_rnbase;
+use tx_rnbase_util_FormatUtil;
 
 /***************************************************************
 *  Copyright notice
@@ -42,7 +43,7 @@ class PlayerStatisticsMarker
      *
      * @param string $srvTemplate
      * @param array $stats
-     * @param \tx_rnbase_util_FormatUtil $formatter
+     * @param tx_rnbase_util_FormatUtil $formatter
      * @param string $statsConfId
      * @param string $statsMarker
      *

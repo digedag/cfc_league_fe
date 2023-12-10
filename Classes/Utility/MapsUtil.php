@@ -144,6 +144,7 @@ class MapsUtil
         if (!Extensions::isLoaded('wec_map')) {
             return false;
         }
+
         // FIXME: integrate rn_base
         return false;
 

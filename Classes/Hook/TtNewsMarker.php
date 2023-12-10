@@ -8,6 +8,7 @@ use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Repository\MatchRepository;
 use tx_rnbase;
+use tx_ttnews;
 
 /***************************************************************
  *  Copyright notice
@@ -55,7 +56,7 @@ class TtNewsMarker
      * @param array $markerArray marker array from tt_news
      * @param array $row tt_news record
      * @param array $lConf tt_news config-array
-     * @param \tx_ttnews $ttnews tt_news plugin instance
+     * @param tx_ttnews $ttnews tt_news plugin instance
      */
     public function extraItemMarkerProcessor($markerArray, $row, $lConf, $ttnews)
     {
@@ -68,6 +69,7 @@ class TtNewsMarker
         foreach ($markerNames as $markerName) {
             $markerArray['###NEWS_'.$markerName.'###'] = $this->handleMarker($markerArray['###NEWS_'.$markerName.'###'], $regExpr);
         }
+
         //  	$GLOBALS['TSFE']->register['SECTION_FRAME'] = $pObj->cObj->data['section_frame']; // Access to section_frame by TS
         return $markerArray;
     }

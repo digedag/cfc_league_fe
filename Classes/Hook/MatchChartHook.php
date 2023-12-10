@@ -45,8 +45,8 @@ class MatchChartHook
         $marker = $params['marker'];
         $confId = $params['confid'];
         $template = $params['template'];
-        if (!BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH') &&
-            !BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) {
+        if (!BaseMarker::containsMarker($template, 'MARKERMODULE__CHARTMATCH')
+            && !BaseMarker::containsMarker($template, $marker.'_CHARTMATCH')) {
             return;
         }
 
