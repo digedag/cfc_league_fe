@@ -362,6 +362,38 @@
 							</config>
 						</TCEforms>
 					</matchtable.options.limit>
+					<matchtable.options.orderby>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.matchtable.orderby
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectSingle</renderType>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.matchtable.orderby.typoscript</numIndex>
+										<numIndex index="1"></numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.matchtable.orderby.date.desc</numIndex>
+										<numIndex index="1">MATCH.DATE=desc</numIndex>
+									</numIndex>
+									<numIndex index="6" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.matchtable.orderby.date.asc</numIndex>
+										<numIndex index="1">MATCH.DATE=asc</numIndex>
+									</numIndex>
+									<numIndex index="10" type="array">
+										<numIndex index="0">LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.matchtable.orderby.number.asc</numIndex>
+										<numIndex index="1">MATCH.MATCH_NO=asc</numIndex>
+									</numIndex>
+								</items>
+								<multiple>0</multiple>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</matchtable.options.orderby>
 
 					<matchtable.timeRangePast>
 						<TCEforms>

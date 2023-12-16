@@ -179,6 +179,26 @@
 				<source>Max matches to show</source>
 				<target>Max. Anzahl Spiele</target>
 			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby" xml:space="preserve">
+				<source>Sort order of matches</source>
+				<target>Sortierung der Spiele</target>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.typoscript" xml:space="preserve">
+				<source>As configured by typoscript</source>
+				<target>Per Typoscript konfiguriert</target>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.date.asc" xml:space="preserve">
+				<source>Kickoff date ascending</source>
+				<target>Spielbeginn ansteigend</target>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.date.desc" xml:space="preserve">
+				<source>Kickoff date descending</source>
+				<target>Spielbeginn absteigend</target>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.number.desc" xml:space="preserve">
+				<source>Fixture number ascending</source>
+				<target>Spielnummer ansteigend</target>
+			</trans-unit>
 			<trans-unit id="plugin.competition.flexform.matchtable.report_page" xml:space="preserve">
 				<source>Page for report</source>
 				<target>Seite für Spielbericht</target>

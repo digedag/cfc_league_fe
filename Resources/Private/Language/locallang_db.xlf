@@ -135,6 +135,21 @@
 			<trans-unit id="plugin.competition.flexform.matchtable.limit" xml:space="preserve">
 				<source>Max matches to show</source>
 			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby" xml:space="preserve">
+				<source>Sort order of matches</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.typoscript" xml:space="preserve">
+				<source>As configured by typoscript</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.date.asc" xml:space="preserve">
+				<source>Kickoff date ascending</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.date.desc" xml:space="preserve">
+				<source>Kickoff date descending</source>
+			</trans-unit>
+			<trans-unit id="plugin.competition.flexform.matchtable.orderby.number.desc" xml:space="preserve">
+				<source>Fixture number ascending</source>
+			</trans-unit>
 			<trans-unit id="plugin.competition.flexform.matchtable.report_page" xml:space="preserve">
 				<source>Page for report</source>
 			</trans-unit>

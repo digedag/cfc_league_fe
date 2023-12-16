@@ -6,6 +6,7 @@ use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Utility\Misc;
+use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ScopeController;
@@ -59,6 +60,10 @@ class MatchFilter extends BaseFilter
             $teamId = $parameters->get('teamId');
         }
 
+        if (!is_array($options['orderby'] ?? null) && $orderby = $options['orderby']) {
+            list($key, $value) = Strings::trimExplode('=', $orderby);
+            $options['orderby'] = [$key => $value];
+        }
         $matchtable = new MatchTableBuilder();
         $matchtable->setScope($scopeArr);
         $matchtable->setTeams($teamId);
