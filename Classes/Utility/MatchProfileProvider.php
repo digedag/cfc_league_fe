@@ -44,6 +44,11 @@ class MatchProfileProvider
         $this->profileRepo = $profileRepo ?: new ProfileRepository();
     }
 
+    public function getVideoAssists(Fixture $match)
+    {
+        return $this->profileRepo->findByFixtureRelation($match->getUid(), 'videoassists');
+    }
+
     /**
      * Liefert die Spieler eines Spiels.
      *

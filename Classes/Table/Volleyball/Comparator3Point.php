@@ -8,7 +8,7 @@ use System25\T3sports\Table\Util;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2013-2023 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
