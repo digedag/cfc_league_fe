@@ -4,6 +4,8 @@ namespace System25\T3sports\Filter;
 
 use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
+use Tx_Rnbase_Configuration_ProcessorInterface;
+use tx_rnbase_IParameters;
 
 /***************************************************************
  *  Copyright notice
@@ -39,8 +41,8 @@ class MatchNoteFilter extends BaseFilter
      *
      * @param array $fields
      * @param array $options
-     * @param \tx_rnbase_IParameters $parameters
-     * @param \Tx_Rnbase_Configuration_ProcessorInterface $configurations
+     * @param tx_rnbase_IParameters $parameters
+     * @param Tx_Rnbase_Configuration_ProcessorInterface $configurations
      * @param string $confId
      */
     protected function initFilter(&$fields, &$options, RequestInterface $request)

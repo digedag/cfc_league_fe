@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\Frontend\View;
 
+use Exception;
 use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
 use Sys25\RnBase\Frontend\Marker\Templates;
@@ -96,7 +97,7 @@ class StadiumList extends BaseView
                 $map->addMarker($marker);
             }
             $ret = $map->draw();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $ret = '###LABEL_mapNotAvailable###';
         }
 

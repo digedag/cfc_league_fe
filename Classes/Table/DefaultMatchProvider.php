@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\Table;
 
+use Exception;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Search\SearchBase;
 use System25\T3sports\Model\Competition;
@@ -60,7 +61,7 @@ class DefaultMatchProvider implements IMatchProvider
     /**
      * @var Competition
      */
-    private $league = null;
+    private $league;
 
     private $scope;
 
@@ -79,7 +80,7 @@ class DefaultMatchProvider implements IMatchProvider
     /**
      * @var array
      */
-    private $clubIdsOfRunningMatches = null;
+    private $clubIdsOfRunningMatches;
 
     /**
      * @var array
@@ -387,11 +388,11 @@ class DefaultMatchProvider implements IMatchProvider
             $leagueUid = (int) $scopeArr['COMP_UIDS'];
         }
         if (!$leagueUid) {
-            throw new \Exception('Could not find a valid competition.');
+            throw new Exception('Could not find a valid competition.');
         }
         $league = Competition::getCompetitionInstance($leagueUid);
         if (!$league->isValid()) {
-            throw new \Exception('Competition with uid '.intval($leagueUid).' is not valid!');
+            throw new Exception('Competition with uid '.intval($leagueUid).' is not valid!');
         }
 
         return $league;

@@ -49,7 +49,7 @@ class Table extends AbstractService implements ITableType
     public const TABLE_TYPE = 'football';
 
     /** @var TeamDataContainer */
-    protected $_teamData = null;
+    protected $_teamData;
 
     /** @var ConfigurationInterface */
     protected $configuration;
@@ -230,9 +230,9 @@ class Table extends AbstractService implements ITableType
             if (!$teamId) {
                 continue;
             } // Ignore teams without given id
-//             if ($team instanceof Team && $team->isDummy()) {
-//                 continue;
-//             } // Ignore dummy teams
+            //             if ($team instanceof Team && $team->isDummy()) {
+            //                 continue;
+            //             } // Ignore dummy teams
             if ($this->_teamData->teamExists($team)) {
                 continue;
             }
@@ -404,7 +404,7 @@ class Table extends AbstractService implements ITableType
             }
         }
 
-//        unset($this->_teamData[0]); // Remove dummy data from teams without id
+        //        unset($this->_teamData[0]); // Remove dummy data from teams without id
     }
 
     /**

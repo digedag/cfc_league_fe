@@ -7,7 +7,7 @@ use System25\T3sports\Table\IComparator;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2011-2024 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,6 +32,8 @@ use System25\T3sports\Table\IComparator;
  */
 class Comparator implements IComparator
 {
+    private $_teamData;
+
     public function setTeamData(array &$teamdata)
     {
         $this->_teamData = $teamdata;
@@ -43,10 +45,10 @@ class Comparator implements IComparator
     public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if ($t1['static_position']) {
+        if (-1 == ($t1['static_position'] ?? 0)) {
             return 1;
         }
-        if ($t2['static_position']) {
+        if (-1 == ($t2['static_position'] ?? 0)) {
             return -1;
         }
 
@@ -73,6 +75,7 @@ class Comparator implements IComparator
 
                 return $t1diff > $t2diff ? -1 : 1;
             }
+
             // Bei den Minuspunkten ist weniger mehr
             return $t1['points2'] < $t2['points2'] ? -1 : 1;
         }

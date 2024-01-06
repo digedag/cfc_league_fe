@@ -4,7 +4,6 @@ namespace System25\T3sports\Tests\Table\Football;
 
 use Sys25\RnBase\Testing\BaseTestCase;
 use Sys25\RnBase\Testing\TestUtility;
-use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\Spyc;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Table\Builder;
@@ -83,7 +82,7 @@ class TableTest extends BaseTestCase
             $this->assertEquals($expected[$idx]['goals2'], $score['goals2']);
             $this->assertEquals($expected[$idx]['goals_diff'], $score['goals_diff']);
         }
-//        print_r($scoreLine);
+        //        print_r($scoreLine);
     }
 
     /**
@@ -162,7 +161,7 @@ class TableTest extends BaseTestCase
 
     private function getFixturePath($filename)
     {
-        return Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
+        return __DIR__.'/../../../../fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)
@@ -195,6 +194,7 @@ class TableTest extends BaseTestCase
         $league->setTeams($teams);
         $league->setPenalties([]);
         $league->setMatches($matches, 2);
+
         // Und jetzt die Spiele
         return $league;
     }

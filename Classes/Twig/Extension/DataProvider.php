@@ -3,6 +3,9 @@
 namespace System25\T3sports\Twig\Extension;
 
 use System25\T3sports\Model\Fixture;
+use Twig_Extension;
+use Twig_SimpleFunction;
+use tx_rnbase;
 
 /***************************************************************
 *  Copyright notice
@@ -27,18 +30,18 @@ use System25\T3sports\Model\Fixture;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class DataProvider extends \Twig_Extension
+class DataProvider extends Twig_Extension
 {
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('buildMatchReport', [$this, 'buildMatchReport']),
+            new Twig_SimpleFunction('buildMatchReport', [$this, 'buildMatchReport']),
         ];
     }
 
     public function buildMatchReport(Fixture $match)
     {
-        return \tx_rnbase::makeInstance(\System25\T3sports\Twig\Data\MatchReport::class, $match);
+        return tx_rnbase::makeInstance(\System25\T3sports\Twig\Data\MatchReport::class, $match);
     }
 
     /**

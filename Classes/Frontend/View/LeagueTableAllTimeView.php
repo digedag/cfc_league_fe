@@ -5,6 +5,8 @@ namespace System25\T3sports\Frontend\View;
 use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use tx_rnbase;
+use tx_rnbase_util_Templates;
+use tx_rnbase_util_TYPO3;
 
 /***************************************************************
  *  Copyright notice
@@ -34,7 +36,7 @@ use tx_rnbase;
  */
 class LeagueTableAllTimeView extends LeagueTableView
 {
-//    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    //    public function createOutput($template, &$viewData, &$configurations, &$formatter)
     public function createOutput($template, RequestInterface $request, $formatter)
     {
         $marks = $markerArray = $penalties = [];
@@ -88,7 +90,7 @@ class LeagueTableAllTimeView extends LeagueTableView
         $markerArray = [];
         $subpartArray['###ROW###'] = implode($configurations->get('leaguetableAllTime.table.implode'), $parts);
 
-        return \tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
+        return tx_rnbase_util_Templates::substituteMarkerArrayCached($templateList, $markerArray, $subpartArray);
     }
 
     /**
@@ -155,7 +157,7 @@ class LeagueTableAllTimeView extends LeagueTableView
     protected function _createControls($template, $viewData, $configurations)
     {
         $link = $configurations->createLink();
-        $pid = \tx_rnbase_util_TYPO3::getTSFE()->id; // Das Ziel der Seite vorbereiten
+        $pid = tx_rnbase_util_TYPO3::getTSFE()->id; // Das Ziel der Seite vorbereiten
         $link->destination($pid); // Das Ziel der Seite vorbereiten
 
         $markerArray = [];

@@ -2,6 +2,10 @@
 
 namespace System25\T3sports\Twig\Data;
 
+use tx_cfcleague_models_MatchNote;
+use tx_cfcleague_models_Profile;
+use tx_cfcleague_util_ServiceRegistry;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -32,7 +36,7 @@ namespace System25\T3sports\Twig\Data;
  */
 class Player
 {
-    /** @var \tx_cfcleague_models_MatchNote[] */
+    /** @var tx_cfcleague_models_MatchNote[] */
     protected $matchNotes = [];
 
     protected $matchNotesByType = [];
@@ -43,10 +47,10 @@ class Player
 
     protected $uniqueName = true;
 
-    public function __construct(\tx_cfcleague_models_Profile $profile)
+    public function __construct(tx_cfcleague_models_Profile $profile)
     {
         $this->profile = $profile;
-        $this->profileSrv = \tx_cfcleague_util_ServiceRegistry::getProfileService();
+        $this->profileSrv = tx_cfcleague_util_ServiceRegistry::getProfileService();
     }
 
     public function getUid()
@@ -76,7 +80,7 @@ class Player
     /**
      * @param int $type
      *
-     * @return \tx_cfcleague_models_MatchNote[]
+     * @return tx_cfcleague_models_MatchNote[]
      */
     public function getMatchNotesByType($type)
     {
@@ -88,15 +92,15 @@ class Player
      */
     public function isCardYellow()
     {
-        return $this->hasMatchNoteType(\tx_cfcleague_models_MatchNote::TYPE_CARD_YELLOW);
+        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CARD_YELLOW);
     }
 
     /**
-     * @return \tx_cfcleague_models_MatchNote[]
+     * @return tx_cfcleague_models_MatchNote[]
      */
     public function getChangedOut()
     {
-        return $this->getMatchNotesByType(\tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT);
+        return $this->getMatchNotesByType(tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT);
     }
 
     /**
@@ -104,7 +108,7 @@ class Player
      */
     public function isCardYellowRed()
     {
-        return $this->hasMatchNoteType(\tx_cfcleague_models_MatchNote::TYPE_CARD_YELLOWRED);
+        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CARD_YELLOWRED);
     }
 
     /**
@@ -112,7 +116,7 @@ class Player
      */
     public function isCardRed()
     {
-        return $this->hasMatchNoteType(\tx_cfcleague_models_MatchNote::TYPE_CARD_RED);
+        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CARD_RED);
     }
 
     /**
@@ -120,11 +124,11 @@ class Player
      */
     public function isCaptain()
     {
-        return $this->hasMatchNoteType(\tx_cfcleague_models_MatchNote::TYPE_CAPTAIN);
+        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CAPTAIN);
     }
 
     /**
-     * @return \tx_cfcleague_models_MatchNote[]
+     * @return tx_cfcleague_models_MatchNote[]
      */
     public function getMatchNotes()
     {
@@ -132,7 +136,7 @@ class Player
     }
 
     /**
-     * @return \tx_cfcleague_models_Profile
+     * @return tx_cfcleague_models_Profile
      */
     public function getProfile()
     {

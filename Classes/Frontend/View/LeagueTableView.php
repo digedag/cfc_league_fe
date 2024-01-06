@@ -13,6 +13,7 @@ use System25\T3sports\Frontend\Marker\TeamMarker;
 use System25\T3sports\Model\Team;
 use System25\T3sports\Table\ITableType;
 use tx_rnbase;
+use tx_rnbase_util_Templates;
 
 /***************************************************************
  *  Copyright notice
@@ -56,6 +57,7 @@ class LeagueTableView extends BaseView
         $table = $viewData->offsetGet('table');
         if (is_object($table)) {
             $viewData->offsetUnset('table');
+
             // Ausgabe mit neuem Verfahren
             return $this->showLeagueTable($table, $template, $request);
         }
@@ -259,15 +261,15 @@ class LeagueTableView extends BaseView
             '###CONTROL_POINTSYSTEM###' => '',
         ];
         if ($viewData->offsetGet('tabletype_select')) {
-            $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(\tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
+            $subpartArray['###CONTROL_TABLETYPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLETYPE###'), $viewData->offsetGet('tabletype_select'), $link, 'TABLETYPE', $configurations);
         }
 
         if ($viewData->offsetGet('tablescope_select')) {
-            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate(\tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
+            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $viewData->offsetGet('tablescope_select'), $link, 'TABLESCOPE', $configurations);
         }
 
         if ($viewData->offsetGet('pointsystem_select')) {
-            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(\tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
+            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->_fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $viewData->offsetGet('pointsystem_select'), $link, 'POINTSYSTEM', $configurations);
         }
 
         return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);

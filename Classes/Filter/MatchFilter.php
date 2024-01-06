@@ -9,6 +9,7 @@ use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\Model\Profile;
 use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ScopeController;
+use tx_rnbase;
 
 /***************************************************************
 *  Copyright notice
@@ -114,7 +115,7 @@ class MatchFilter extends BaseFilter
                     $profileSubpart = Templates::getSubpart($template, $profSubpartName);
 
                     $profile = Profile::getProfileInstance($filterData);
-                    $profileMarker = \tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
+                    $profileMarker = tx_rnbase::makeInstance('tx_cfcleaguefe_util_ProfileMarker');
                     $subpartArray[$profSubpartName] = $profileMarker->parseTemplate($profileSubpart, $profile, $formatter, $confId.$key.'.', strtoupper($key));
                 }
             }

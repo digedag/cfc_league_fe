@@ -6,6 +6,8 @@ use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use System25\T3sports\Search\SearchBuilder;
 use System25\T3sports\Utility\ScopeController;
+use tx_rnbase_configurations;
+use tx_rnbase_IParameters;
 
 /***************************************************************
  *  Copyright notice
@@ -41,8 +43,8 @@ class StadiumFilter extends BaseFilter
      *
      * @param array $fields
      * @param array $options
-     * @param \tx_rnbase_IParameters $parameters
-     * @param \tx_rnbase_configurations $configurations
+     * @param tx_rnbase_IParameters $parameters
+     * @param tx_rnbase_configurations $configurations
      * @param string $confId
      */
     protected function initFilter(&$fields, &$options, RequestInterface $request)

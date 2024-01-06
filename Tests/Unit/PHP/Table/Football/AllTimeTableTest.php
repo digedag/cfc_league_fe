@@ -81,7 +81,8 @@ class AllTimeTableTest extends BaseTestCase
 
     private function getFixturePath($filename)
     {
-        return Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
+        return __DIR__.'/../../../../fixtures/'.$filename;
+        //        return Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)
@@ -114,6 +115,7 @@ class AllTimeTableTest extends BaseTestCase
         $league->setTeams($teams);
         $league->setPenalties([]);
         $league->setMatches($matches, 2);
+
         // Und jetzt die Spiele
         return $league;
     }

@@ -51,8 +51,8 @@ class MatchHistoryHook
     {
         $marker = $params['marker'];
         $template = $params['template'];
-        if (BaseMarker::containsMarker($template, 'MARKERMODULE__MATCHHISTORY') ||
-            BaseMarker::containsMarker($template, $marker.'_MATCHHISTORY')) {
+        if (BaseMarker::containsMarker($template, 'MARKERMODULE__MATCHHISTORY')
+            || BaseMarker::containsMarker($template, $marker.'_MATCHHISTORY')) {
             $formatter = $params['formatter'];
             $matches = $this->getMarkerValue($params, $formatter);
             $markerArray['###MARKERMODULE__MATCHHISTORY###'] = $matches; // backward

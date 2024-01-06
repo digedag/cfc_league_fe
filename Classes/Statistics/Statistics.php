@@ -161,7 +161,7 @@ class Statistics
      */
     public static function lookupStatistics($config)
     {
-        $provider = \System25\T3sports\Statistics\Service\StatsServiceProvider::getInstance();
+        $provider = Service\StatsServiceProvider::getInstance();
         $types = $provider->getStatsTypes();
         // FIXME: das sollte besser gehen...
         $labelPrefix = 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.statistics.type.%s';

@@ -44,7 +44,7 @@ use tx_rnbase;
  */
 class TeamMarker extends BaseMarker
 {
-    private $options = null;
+    private $options;
     private $profileRepo;
 
     public function __construct($options = null)

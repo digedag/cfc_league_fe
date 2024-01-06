@@ -2,6 +2,9 @@
 
 namespace System25\T3sports\Twig\Data;
 
+use tx_cfcleague_models_MatchNote;
+use tx_cfcleague_util_ServiceRegistry;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -32,7 +35,7 @@ class MatchNote
 {
     protected $profileSrv;
 
-    /** @var \tx_cfcleague_models_MatchNote[] */
+    /** @var tx_cfcleague_models_MatchNote[] */
     protected $matchNote;
 
     /** @var Player */
@@ -42,14 +45,14 @@ class MatchNote
     protected $player2;
 
     /**
-     * @param \tx_cfcleague_models_MatchNote $note
+     * @param tx_cfcleague_models_MatchNote $note
      * @param Player $player
      */
-    public function __construct(\tx_cfcleague_models_MatchNote $note, $player = null)
+    public function __construct(tx_cfcleague_models_MatchNote $note, $player = null)
     {
         $this->matchNote = $note;
         $this->player = $player;
-        $this->profileSrv = \tx_cfcleague_util_ServiceRegistry::getProfileService();
+        $this->profileSrv = tx_cfcleague_util_ServiceRegistry::getProfileService();
     }
 
     public function getUid()
@@ -104,23 +107,23 @@ class MatchNote
 
     public function isChange()
     {
-        return \tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT == $this->getType();
+        return tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT == $this->getType();
     }
 
     public function isGoal()
     {
         $goalTypes = [
-            \tx_cfcleague_models_MatchNote::TYPE_GOAL,
-            \tx_cfcleague_models_MatchNote::TYPE_GOAL_HEADER,
-            \tx_cfcleague_models_MatchNote::TYPE_GOAL_PENALTY,
-            \tx_cfcleague_models_MatchNote::TYPE_GOAL_OWN,
+            tx_cfcleague_models_MatchNote::TYPE_GOAL,
+            tx_cfcleague_models_MatchNote::TYPE_GOAL_HEADER,
+            tx_cfcleague_models_MatchNote::TYPE_GOAL_PENALTY,
+            tx_cfcleague_models_MatchNote::TYPE_GOAL_OWN,
         ];
 
         return in_array($this->getType(), $goalTypes);
     }
 
     /**
-     * @return \tx_cfcleague_models_MatchNote
+     * @return tx_cfcleague_models_MatchNote
      */
     public function getMatchNote()
     {
