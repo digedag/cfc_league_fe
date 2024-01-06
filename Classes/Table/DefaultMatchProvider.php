@@ -15,7 +15,7 @@ use System25\T3sports\Utility\ServiceRegistry;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2024 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -421,7 +421,7 @@ class DefaultMatchProvider implements IMatchProvider
      */
     public function getClubIdsOfRunningMatches()
     {
-        if (!$this->clubIdsOfRunningMatches) {
+        if (null === $this->clubIdsOfRunningMatches) {
             $values = [];
 
             foreach ($this->getRounds() as $round) {
