@@ -7,7 +7,11 @@ use System25\T3sports\Table\IComparator;
 /***************************************************************
  *  Copyright notice
  *
+<<<<<<< HEAD
+ *  (c) 2011-2024 Rene Nitzsche (rene@system25.de)
+=======
  *  (c) 2011-2023 Rene Nitzsche (rene@system25.de)
+>>>>>>> master
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -45,10 +49,10 @@ class Comparator implements IComparator
     public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if ($t1['static_position'] ?? false) {
+        if (-1 == ($t1['static_position'] ?? 0)) {
             return 1;
         }
-        if ($t2['static_position'] ?? false) {
+        if (-1 == ($t2['static_position'] ?? 0)) {
             return -1;
         }
 

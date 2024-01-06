@@ -4,7 +4,6 @@ namespace System25\T3sports\Tests\Table\Volleyball;
 
 use Sys25\RnBase\Testing\BaseTestCase;
 use Sys25\RnBase\Testing\TestUtility;
-use Sys25\RnBase\Utility\Extensions;
 use Sys25\RnBase\Utility\Spyc;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Table\Builder;
@@ -49,6 +48,7 @@ class TableTest extends BaseTestCase
         $config = TestUtility::createConfigurations([
             'tableType' => '0',
         ], 'cfc_league_fe');
+        $confId = '';
 
         $confId = '';
         $leagueTable = Builder::buildByCompetitionAndMatches($league, $matches, $config, $confId);
@@ -84,7 +84,7 @@ class TableTest extends BaseTestCase
 
     private function getFixturePath($filename)
     {
-        return Extensions::extPath('cfc_league_fe').'Tests/fixtures/'.$filename;
+        return __DIR__.'/../../../../fixtures/'.$filename;
     }
 
     private function makeInstances($yamlData, $clazzName)

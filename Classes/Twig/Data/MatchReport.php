@@ -228,7 +228,7 @@ class MatchReport
     /**
      * @param Profile $player
      *
-     * @return \System25\T3sports\Twig\Data\Player
+     * @return Player
      */
     protected function substPlayer(Profile $player)
     {
@@ -259,7 +259,7 @@ class MatchReport
                         $player = Profile::getProfileInstance($playerUid);
                         $player = $this->buildPlayer($player);
                     }
-                    $matchNote = new \System25\T3sports\Twig\Data\MatchNote($note, $player);
+                    $matchNote = new MatchNote($note, $player);
                     if ($player) {
                         $player->addMatchNote($matchNote);
                     }
@@ -295,7 +295,7 @@ class MatchReport
     /**
      * @param Profile $player
      *
-     * @return \System25\T3sports\Twig\Data\Player
+     * @return Player
      */
     protected function buildPlayer($player)
     {
@@ -303,7 +303,7 @@ class MatchReport
             if (isset($this->players[$player->getUid()])) {
                 $player = $this->players[$player->getUid()];
             } else {
-                $player = new \System25\T3sports\Twig\Data\Player($player);
+                $player = new Player($player);
                 // Keep a reference to each player
                 $this->players[$player->getUid()] = $player;
 
