@@ -13,7 +13,7 @@ class StadiumList extends AbstractAction
 {
     private $repo;
 
-    public function __construct(StadiumRepository $repo = null)
+    public function __construct(?StadiumRepository $repo = null)
     {
         $this->repo = $repo ?: new StadiumRepository();
     }

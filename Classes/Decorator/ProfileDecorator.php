@@ -10,7 +10,7 @@ class ProfileDecorator
 {
     private $matchNoteDecorator;
 
-    public function __construct(MatchNoteDecorator $matchNoteDecorator = null)
+    public function __construct(?MatchNoteDecorator $matchNoteDecorator = null)
     {
         $this->matchNoteDecorator = $matchNoteDecorator ?: new MatchNoteDecorator($this, new MatchProfileProvider());
     }

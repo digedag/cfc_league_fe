@@ -39,7 +39,7 @@ class MatchProfileProvider
     private $players = [];
     protected $profiles;
 
-    public function __construct(ProfileRepository $profileRepo = null)
+    public function __construct(?ProfileRepository $profileRepo = null)
     {
         $this->profileRepo = $profileRepo ?: new ProfileRepository();
     }

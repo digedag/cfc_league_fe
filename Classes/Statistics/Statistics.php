@@ -45,7 +45,7 @@ class Statistics
     private $serviceKeys;
     private $servicesArrCnt;
 
-    public function __construct(MatchNoteRepository $mnRepo = null)
+    public function __construct(?MatchNoteRepository $mnRepo = null)
     {
         $this->matchRepo = new MatchRepository();
         $this->matchNodeRepo = $mnRepo ?: new MatchNoteRepository();
