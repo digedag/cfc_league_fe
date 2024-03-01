@@ -14,7 +14,7 @@ class MatchNoteDecorator
     private $profileDecorator;
     private $profileProvider;
 
-    public function __construct(ProfileDecorator $profileDecorator = null, MatchProfileProvider $profileProvider)
+    public function __construct(?ProfileDecorator $profileDecorator = null, MatchProfileProvider $profileProvider)
     {
         $this->profileDecorator = $profileDecorator ?: new ProfileDecorator($this);
         $this->profileProvider = $profileProvider ?: new MatchProfileProvider();

@@ -39,7 +39,7 @@ class TeamList extends AbstractAction
 {
     private $repo;
 
-    public function __construct(TeamRepository $repo = null)
+    public function __construct(?TeamRepository $repo = null)
     {
         $this->repo = $repo ?: new TeamRepository();
     }

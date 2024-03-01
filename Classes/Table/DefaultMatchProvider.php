@@ -97,7 +97,7 @@ class DefaultMatchProvider implements IMatchProvider
      * @param string $confId ConfId des Views
      * @param MatchRepository $matchRepo
      */
-    public function __construct($configurations, $confId, MatchRepository $matchRepo = null)
+    public function __construct($configurations, $confId, ?MatchRepository $matchRepo = null)
     {
         $this->configurations = $configurations;
         $this->confId = $confId;

@@ -40,7 +40,7 @@ class ClubList extends AbstractAction
     /** @var ClubRepository */
     private $clubRepo;
 
-    public function __construct(ClubRepository $repo = null)
+    public function __construct(?ClubRepository $repo = null)
     {
         $this->clubRepo = $repo ?: new ClubRepository();
     }

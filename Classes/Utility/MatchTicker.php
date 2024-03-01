@@ -52,7 +52,7 @@ class MatchTicker
     private static $cache = [];
     private $mnRepo;
 
-    public function __construct(MatchNoteRepository $mnRepo = null)
+    public function __construct(?MatchNoteRepository $mnRepo = null)
     {
         $this->mnRepo = $mnRepo ?: new MatchNoteRepository();
     }

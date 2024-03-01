@@ -81,7 +81,7 @@ class PlayerStatistics implements StatsServiceInterface
     /** @var ProfileService */
     protected $profileSrv;
 
-    public function __construct(TeamRepository $teamRepo = null, ProfileService $profileSrv = null)
+    public function __construct(?TeamRepository $teamRepo = null, ?ProfileService $profileSrv = null)
     {
         $this->teamRepo = $teamRepo ?: new TeamRepository();
         $this->profileSrv = $profileSrv ?: new ProfileService();
