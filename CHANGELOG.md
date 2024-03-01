@@ -2,9 +2,10 @@
 Changes
 -------
 
-v1.11.3 (??.12.2023)
+v1.11.3 (01.03.2024)
  * Add video assists to fixtures
  * Add option for sort order in match table view
+ * Fix broken backend in non-composer-mode
 
 v1.11.2 (09.12.2023)
  * Fix statistics view
