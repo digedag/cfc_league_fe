@@ -6,6 +6,7 @@ use Sys25\RnBase\Configuration\ConfigurationInterface;
 use System25\T3sports\Table\Football\Table as FootballTable;
 use System25\T3sports\Table\Handball\Table as HandballTable;
 use System25\T3sports\Table\Icehockey\Table as IcehockeyTable;
+use System25\T3sports\Table\Judo\Table as JudoTable;
 use System25\T3sports\Table\Volleyball\Table as VolleyballTable;
 use tx_rnbase;
 
@@ -64,6 +65,7 @@ class Factory
             FootballTable::TABLE_TYPE => FootballTable::class,
             HandballTable::TABLE_TYPE => HandballTable::class,
             IcehockeyTable::TABLE_TYPE => IcehockeyTable::class,
+            JudoTable::TABLE_TYPE => JudoTable::class,
             VolleyballTable::TABLE_TYPE => VolleyballTable::class,
         ];
 
