@@ -3,7 +3,6 @@
 namespace System25\T3sports\Table\Judo;
 
 use Exception;
-use System25\T3sports\Table\Football\Comparator;
 use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
 use System25\T3sports\Table\IComparator;
 use tx_rnbase;
@@ -65,7 +64,7 @@ class Configurator extends FootballConfigurator
             throw new Exception('Could not instanciate comparator: '.$compareClass);
         }
         if (!($comparator instanceof IComparator)) {
-            throw new Exception('Comparator is no instance of tx_cfcleaguefe_table_football_IComparator: '.get_class($comparator));
+            throw new Exception('Comparator is no instance of System25\T3sports\Table\IComparator: '.get_class($comparator));
         }
 
         return $comparator;

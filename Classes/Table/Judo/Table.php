@@ -108,53 +108,40 @@ class Table extends FootballTable
             $this->addWinCount($guest);
         }
 
-        // $ballsHome = MatchSets::countSetPointsHome($match);
-        // $ballsGuest = MatchSets::countSetPointsGuest($match);
-        // $this->addBalls($home, $ballsHome, $ballsGuest);
-        // $this->addBalls($guest, $ballsGuest, $ballsHome);
-
-        // Jetzt die Tore summieren
-        $this->addSets($home, $match->getGoalsHome(), $match->getGoalsGuest());
-        $this->addSets($guest, $match->getGoalsGuest(), $match->getGoalsHome());
+        // Jetzt die Kämpfe und Wertungen summieren
+        $this->addScores($home, $match->getGoalsHome(), $match->getGoalsGuest(), $match->getScoreHome(), $match->getScoreGuest());
+        $this->addScores($guest, $match->getGoalsGuest(), $match->getGoalsHome(), $match->getScoreGuest(), $match->getScoreHome());
     }
 
     protected function initTeam(ITeam $team)
     {
-        $this->_teamData->setTeamData($team, 'balls1', 0);
-        $this->_teamData->setTeamData($team, 'balls2', 0);
-        $this->_teamData->setTeamData($team, 'balls_diff', 0);
-        $this->_teamData->setTeamData($team, 'sets1', 0);
-        $this->_teamData->setTeamData($team, 'sets2', 0);
-        $this->_teamData->setTeamData($team, 'sets_diff', 0);
+        $this->_teamData->setTeamData($team, 'scores1', 0); // score -> point
+        $this->_teamData->setTeamData($team, 'scores2', 0);
+        $this->_teamData->setTeamData($team, 'scores_diff', 0);
+        $this->_teamData->setTeamData($team, 'fights1', 0); // fight -> goal
+        $this->_teamData->setTeamData($team, 'fights2', 0);
+        $this->_teamData->setTeamData($team, 'fights_diff', 0);
     }
 
     /**
-     * Addiert Sätze zu einem Team.
+     * Addiert Kämpfe und Wertungen zu einem Team.
      */
-    protected function addSets(ITeam $team, $sets1, $sets2)
+    protected function addScores(ITeam $team, $fights1, $fights2, $scores1, $scores2)
     {
         $data = $this->_teamData->getTeamData($team->getTeamId());
-        $newSets1 = $data['sets1'] + $sets1;
-        $newSets2 = $data['sets2'] + $sets2;
-        $this->_teamData->setTeamData($team, 'sets1', $newSets1);
-        $this->_teamData->setTeamData($team, 'sets2', $newSets2);
-        $this->_teamData->setTeamData($team, 'sets_diff', $newSets1 - $newSets2);
-        // TODO: Muss hier ggf. gerundet werden??
-        $this->_teamData->setTeamData($team, 'sets_quot', $newSets1 / ($newSets2 > 0 ? $newSets2 : 1));
-    }
+        $newFights1 = $data['fights1'] + $fights1;
+        $newFights2 = $data['fights2'] + $fights2;
+        $this->_teamData->setTeamData($team, 'fights1', $newFights1);
+        $this->_teamData->setTeamData($team, 'fights2', $newFights2);
+        $this->_teamData->setTeamData($team, 'fights_diff', $newFights1 - $newFights2);
+        $this->_teamData->setTeamData($team, 'fights_quot', $newFights1 / ($newFights2 > 0 ? $newFights2 : 1));
 
-    /**
-     * Addiert Bälle zu einem Team.
-     */
-    protected function addBalls(ITeam $team, $balls1, $balls2)
-    {
-        $data = $this->_teamData->getTeamData($team->getTeamId());
-        $newBalls1 = $data['balls1'] + $balls1;
-        $newBalls2 = $data['balls2'] + $balls2;
-        $this->_teamData->setTeamData($team, 'balls1', $newBalls1);
-        $this->_teamData->setTeamData($team, 'balls2', $newBalls2);
-        $this->_teamData->setTeamData($team, 'balls_diff', $newBalls1 - $newBalls2);
-        $this->_teamData->setTeamData($team, 'balls_quot', $newBalls1 / ($newBalls2 > 0 ? $newBalls2 : 1));
+        $newScores1 = $data['scores1'] + $scores1;
+        $newScores2 = $data['scores2'] + $scores2;
+        $this->_teamData->setTeamData($team, 'scores1', $newScores1);
+        $this->_teamData->setTeamData($team, 'scores2', $newScores2);
+        $this->_teamData->setTeamData($team, 'scores_diff', $newScores1 - $newScores2);
+        $this->_teamData->setTeamData($team, 'scores_quot', $newScores1 / ($newScores2 > 0 ? $newScores2 : 1));
     }
 
     /**
@@ -190,12 +177,9 @@ class Table extends FootballTable
             }
             $this->addLoseCount($home);
         }
-        // $ballsHome = MatchSets::countSetPointsHome($match);
-        // $ballsGuest = MatchSets::countSetPointsGuest($match);
-        // $this->addBalls($home, $ballsHome, $ballsGuest);
 
         // Jetzt die Sätze summieren
-        $this->addSets($home, $match->getGoalsHome(), $match->getGoalsGuest());
+        $this->addScores($home, $match->getGoalsHome(), $match->getGoalsGuest(), $match->getScoreHome(), $match->getScoreGuest());
     }
 
     /**
@@ -233,10 +217,10 @@ class Table extends FootballTable
 
         $ballsHome = MatchSets::countSetPointsHome($match);
         $ballsGuest = MatchSets::countSetPointsGuest($match);
-        $this->addBalls($guest, $ballsGuest, $ballsHome);
+        $this->addScores($guest, $ballsGuest, $ballsHome);
 
         // Jetzt die Tore summieren
-        $this->addSets($guest, $match->getGoalsGuest(), $match->getGoalsHome());
+        $this->addScores($home, $match->getGoalsGuest(), $match->getGoalsHome(), $match->getScoreGuest(), $match->getScoreHome());
     }
 
     public function getTypeID(): string
