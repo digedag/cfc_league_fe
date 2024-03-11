@@ -9,6 +9,9 @@
             <trans-unit id="label_matches" xml:space="preserve">
                 <source>Matches</source>
             </trans-unit>
+            <trans-unit id="label_encounters" xml:space="preserve">
+                <source>Encounters</source>
+            </trans-unit>
             <trans-unit id="label_match" xml:space="preserve">
                 <source>Match</source>
             </trans-unit>
@@ -26,6 +29,12 @@
             </trans-unit>
             <trans-unit id="label_balls" xml:space="preserve">
                 <source>Balls</source>
+            </trans-unit>
+            <trans-unit id="label_fights" xml:space="preserve">
+                <source>Fights</source>
+            </trans-unit>
+            <trans-unit id="label_scores" xml:space="preserve">
+                <source>Scores</source>
             </trans-unit>
             <trans-unit id="label_tabletype_normal" xml:space="preserve">
                 <source>Standard Table</source>
