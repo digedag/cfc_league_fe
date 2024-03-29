@@ -61,13 +61,13 @@ class ChartBuilder
                             $configurations->get($confId.'team.logo.')
                         );
                         $dataSets[$scoreArr['teamId']] = [
-                                'info' => [
-                                        'teamid' => $team->getProperty('uid'),
-                                        'clubid' => $scoreArr['clubId'],
-                                        'name' => $team->getProperty('name'),
-                                        'short_name' => $team->getProperty('short_name'),
-                                        'logo' => $logo,
-                                ],
+                            'info' => [
+                                'teamid' => $team->getProperty('uid'),
+                                'clubid' => $scoreArr['clubId'],
+                                'name' => $team->getProperty('name'),
+                                'short_name' => $team->getProperty('short_name'),
+                                'logo' => $logo,
+                            ],
                         ];
                     }
                     $dataSets[$scoreArr['teamId']]['data'][] = $point;
