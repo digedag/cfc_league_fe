@@ -1,6 +1,6 @@
 <?php
 
-namespace System25\T3sports\Table\Volleyball;
+namespace System25\T3sports\Table\Judo;
 
 use Exception;
 use System25\T3sports\Table\Football\Configurator as FootballConfigurator;
@@ -10,7 +10,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2022 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2024 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,14 +31,10 @@ use tx_rnbase;
  ***************************************************************/
 
 /**
- * Configurator for volleyball league tables.
+ * Configurator for handball league tables.
  */
 class Configurator extends FootballConfigurator
 {
-    public const POINT_SYSTEM_2POINT = 0;
-
-    public const POINT_SYSTEM_3POINT = 1;
-
     /**
      * Whether or not loose points are count.
      *
@@ -46,50 +42,11 @@ class Configurator extends FootballConfigurator
      */
     public function isCountLoosePoints()
     {
-        // Im Volleyball werden zukünftig auch Minuspunkte gezählt.
-        return self::POINT_SYSTEM_2POINT == $this->getPointSystem();
+        return false;
     }
 
     /**
-     * Für die Punktberechnung ist im Volleyball die Satzverteilung relevant.
-     */
-    public function getPointsWinVolley($winSetsHome, $winSetsGuest)
-    {
-        //	tx_rnbase_util_Debug::debug($this->getPointSystem(), 'volley_Conf'.__LINE__);
-        $points = 2;
-        if (self::POINT_SYSTEM_3POINT == $this->getPointSystem()) {
-            $points = $this->isSplitResult($winSetsHome, $winSetsGuest) ? 2 : 3;
-        }
-
-        return $points;
-    }
-
-    protected function isSplitResult($winSetsHome, $winSetsGuest)
-    {
-        // Wenn die Satzdifferenz 1 ist, werden die Punkte geteilt
-        return 1 == abs($winSetsHome - $winSetsGuest);
-    }
-
-    public function getPointsDrawVolley($afterExtraTime, $afterPenalty)
-    {
-        return 0; // Unentschieden gibt es eigentlich nicht...
-    }
-
-    public function getPointsLooseVolley($winSetsHome, $winSetsGuest)
-    {
-        $points = 0;
-        if (self::POINT_SYSTEM_3POINT == $this->getPointSystem()) {
-            // Wenn die Satzdifferenz 1 ist, werden die Punkte geteilt
-            $points = $this->isSplitResult($winSetsHome, $winSetsGuest) ? 1 : 0;
-        }
-
-        return $points;
-    }
-
-    /**
-     * Quelle: https://sourceforge.net/apps/trac/cfcleague/ticket/74
-     * 0- 2-Punktsystem
-     * 1- 3-Punktsystem.
+     * 0- 2-Punktsystem.
      */
     public function getPointSystem()
     {
@@ -99,20 +56,15 @@ class Configurator extends FootballConfigurator
     /**
      * @return IComparator
      */
-    public function getComparator()
+    public function getComparator(): IComparator
     {
-        $comparatorClass = $this->cfgComparatorClass;
-        if (!$comparatorClass) {
-            $comparatorClass = self::POINT_SYSTEM_2POINT == $this->getPointSystem() ?
-                    Comparator::class :
-                    Comparator3Point::class;
-        }
-        $comparator = tx_rnbase::makeInstance($comparatorClass);
+        $compareClass = $this->cfgComparatorClass ? $this->cfgComparatorClass : Comparator::class;
+        $comparator = tx_rnbase::makeInstance($compareClass);
         if (!is_object($comparator)) {
-            throw new Exception('Could not instanciate comparator: '.$comparatorClass);
+            throw new Exception('Could not instanciate comparator: '.$compareClass);
         }
         if (!($comparator instanceof IComparator)) {
-            throw new Exception('Comparator is no instance of tx_cfcleaguefe_table_volleyball_IComparator: '.get_class($comparator));
+            throw new Exception('Comparator is no instance of System25\T3sports\Table\IComparator: '.get_class($comparator));
         }
 
         return $comparator;
@@ -139,7 +91,7 @@ class Configurator extends FootballConfigurator
         if ($this->configurations->get('pointSystemSelectionInput') || $this->getConfValue('pointSystemSelectionInput')) {
             $this->cfgPointSystem = is_string($parameters->offsetGet('pointsystem')) ? intval($parameters->offsetGet('pointsystem')) : $this->cfgPointSystem;
         }
-        $this->cfgLiveTable = intval($this->getConfValue('showLiveTable'));
+        $this->cfgLiveTable = (int) $this->getConfValue('showLiveTable');
         $this->cfgComparatorClass = $this->getStrategyValue('comparator');
     }
 }
