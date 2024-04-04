@@ -28,6 +28,7 @@ System25\T3sports\Utility\Misc::registerTableStrategy('head2head', 'LLL:EXT:cfc_
 System25\T3sports\Utility\Misc::registerTableStrategy('pointpermatch', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_pointpermatch', System25\T3sports\Table\ComparatorPPM::class);
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball3', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_volleyball_3point', System25\T3sports\Table\Volleyball\Comparator3Point::class);
 System25\T3sports\Utility\Misc::registerTableStrategy('volleyball2', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_volleyball_2point', System25\T3sports\Table\Volleyball\Comparator::class);
+System25\T3sports\Utility\Misc::registerTableStrategy('judo2', 'LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:tablestrategy_judo_2point', System25\T3sports\Table\Judo\Comparator::class);
 
 // FIXME: use DI for T3 10.x and higher
 // if (!\Sys25\RnBase\Utility\TYPO3::isTYPO104OrHigher()) {

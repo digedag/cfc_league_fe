@@ -414,6 +414,9 @@
 			<trans-unit id="tablestrategy_volleyball_3point" xml:space="preserve">
 				<source>Volleyball 3 point system</source>
 			</trans-unit>
+			<trans-unit id="tablestrategy_judo_2point" xml:space="preserve">
+				<source>Judo 2 point system</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -54,12 +54,12 @@ class Comparator implements IComparator
 
         if ($t1['points'] == $t2['points']) {
             // Punkte sind gleich, also Differenzen der Siege prüfen
-            $t1diff = $t1['goals1'] - $t1['goals2'];
-            $t2diff = $t2['goals1'] - $t2['goals2'];
+            $t1diff = $t1['fights1'] - $t1['fights2'];
+            $t2diff = $t2['fights1'] - $t2['fights2'];
             if ($t1diff == $t2diff) {
                 // Jetzt zählt die Differenz der Unterbewertung
-                $t1scorediff = $t1['score1'] - $t1['score2'];
-                $t2scorediff = $t2['score1'] - $t2['score2'];
+                $t1scorediff = $t1['scores1'] - $t1['scores2'];
+                $t2scorediff = $t2['scores1'] - $t2['scores2'];
                 if ($t1scorediff == $t2scorediff) {
                     return 0; // Punkt und Torgleich
                 }
