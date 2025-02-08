@@ -51,7 +51,7 @@ class MatchReport
         'guest' => [],
     ];
 
-    /** @var \System25\T3sports\Twig\Data\Player[] */
+    /** @var Player[] */
     protected $players = [];
 
     protected $playersByLastname = [];
@@ -87,7 +87,7 @@ class MatchReport
      *
      * @param string $confId
      *
-     * @return \System25\T3sports\Twig\Data\Player[]
+     * @return Player[]
      */
     public function getSubstitutesHome()
     {
@@ -137,7 +137,7 @@ class MatchReport
      *
      * @param string $confId
      *
-     * @return \System25\T3sports\Twig\Data\Player[]
+     * @return Player[]
      */
     public function getSubstitutesGuest()
     {
@@ -176,7 +176,7 @@ class MatchReport
     }
 
     /**
-     * @return \System25\T3sports\Twig\Data\MatchNote[]
+     * @return MatchNote[]
      */
     public function getMatchNotesHome()
     {
@@ -184,7 +184,7 @@ class MatchReport
     }
 
     /**
-     * @return \System25\T3sports\Twig\Data\MatchNote[]
+     * @return MatchNote[]
      */
     public function getMatchNotesGuest()
     {
