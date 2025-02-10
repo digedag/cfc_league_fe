@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  System25\T3sports\:
+    resource: '../Classes/*'
+    exclude: 
+      - '../Classes/Model/*'
+      # FIXME: exclude Decorator for now
+      - '../Classes/Decorator/*'
+

@@ -52,7 +52,7 @@ class Configurator extends FootballConfigurator
      *
      * @see Configurator::getPointsWin()
      */
-    public function getPointsWin($options)
+    public function getPointsWin($options = null)
     {
         $afterExtraTime = $options->getOption(PointOptions::AFTER_EXTRA_TIME);
         $afterPenalty = $options->getOption(PointOptions::AFTER_EXTRA_PENALTY);
@@ -70,7 +70,7 @@ class Configurator extends FootballConfigurator
      *
      * @see FootballConfigurator::getPointsDraw()
      */
-    public function getPointsDraw($options)
+    public function getPointsDraw($options = null)
     {
         return 1; // Unentschieden gibt es eigentlich nicht...
     }
@@ -80,7 +80,7 @@ class Configurator extends FootballConfigurator
      *
      * @see FootballConfigurator::getPointsLoose()
      */
-    public function getPointsLoose($options)
+    public function getPointsLoose($options = null)
     {
         $afterExtraTime = $options->getOption(PointOptions::AFTER_EXTRA_TIME);
         $afterPenalty = $options->getOption(PointOptions::AFTER_EXTRA_PENALTY);
