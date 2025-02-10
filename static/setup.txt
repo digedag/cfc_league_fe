@@ -718,6 +718,10 @@ plugin.tx_cfcleaguefe_competition {
   }
   # Tabellenfahrt per JS
   tablechart {
+    includeJSFooter {
+     flot = EXT:rn_base/Resources/Public/JavaScript/Flot/jquery.flot.min.js
+    }
+
     team {
       logo =< lib.t3sports.teamLogo.small
 /*

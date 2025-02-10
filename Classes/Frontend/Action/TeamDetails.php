@@ -38,6 +38,13 @@ use tx_rnbase;
  */
 class TeamDetails extends AbstractAction
 {
+    private $repo;
+
+    public function __construct(?TeamRepository $repo = null)
+    {
+        $this->repo = $repo ?: new TeamRepository();
+    }
+
     /**
      * handle request.
      *
@@ -54,7 +61,7 @@ class TeamDetails extends AbstractAction
         $teamId = $configurations->getInt('teamviewTeam');
         if (!$teamId) {
             // Alternativ ist eine Parameterübergabe möglich
-            $teamId = intval($parameters->offsetGet('teamId'));
+            $teamId = $parameters->getInt('teamId');
             // Wenn die TeamID über den Parameter übergeben wird, dann müssen wir sie aus den
             // Keepvars entfernen. Sonst funktionieren die Links auf den Scope nicht mehr.
             $configurations->removeKeepVar('teamId');
@@ -71,9 +78,7 @@ class TeamDetails extends AbstractAction
             if (0 == intval($club)) {
                 return 'Error: No club defined.';
             }
-
-            $teamRepo = new TeamRepository();
-            $teams = $teamRepo->findByClubAndSaison($club, $saisonUids, $groupUids);
+            $teams = $this->repo->findByClubAndSaison($club, $saisonUids, $groupUids);
         } else {
             $team = tx_rnbase::makeInstance(Team::class, $teamId);
             $teams[] = $team;
