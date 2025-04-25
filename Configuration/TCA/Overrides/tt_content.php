@@ -1,5 +1,7 @@
 <?php
 
+use Sys25\RnBase\Utility\TYPO3;
+
 if (!(defined('TYPO3') || defined('TYPO3_MODE'))) {
     exit('Access denied.');
 }
@@ -17,9 +19,10 @@ call_user_func(function () {
     // Das tt_content-Feld pi_flexform einblenden
     $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_competition'] = 'pi_flexform';
 
+    $flexForm = TYPO3::isTYPO130OrHigher() ? 'plugin_competition.xml' : 'plugin_competition_12.xml';
     Sys25\RnBase\Utility\Extensions::addPiFlexFormValue(
         'tx_cfcleaguefe_competition',
-        'FILE:EXT:cfc_league_fe/Configuration/Flexform/plugin_competition.xml'
+        'FILE:EXT:cfc_league_fe/Configuration/Flexform/'.$flexForm
     );
 
     Sys25\RnBase\Utility\Extensions::addPlugin(
@@ -41,6 +44,7 @@ call_user_func(function () {
     // Das tt_content-Feld pi_flexform einblenden
     $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_cfcleaguefe_report'] = 'pi_flexform';
 
+    $flexForm = TYPO3::isTYPO130OrHigher() ? 'plugin_report.xml' : 'plugin_report_12.xml';
     Sys25\RnBase\Utility\Extensions::addPiFlexFormValue(
         'tx_cfcleaguefe_report',
         'FILE:EXT:cfc_league_fe/Configuration/Flexform/plugin_report.xml'
