@@ -25,9 +25,9 @@
 		"typo3-ter/cfc-league-fe" : "self.version"
 	},
 	"require" : {
-		"typo3/cms-core": "^8.7 || ^9.5 || ^10.4 || ^11.5 || ^12.1",
+		"typo3/cms-core": "^10.4 || ^11.5 || ^12.4 || ^13.4",
 		"digedag/cfc-league" : "~1.11.4",
-		"digedag/rn-base" : "~1.18"
+		"digedag/rn-base" : "~1.19"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.0",
