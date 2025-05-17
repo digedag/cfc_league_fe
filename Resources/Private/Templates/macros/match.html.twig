@@ -11,16 +11,14 @@
 {% endmacro %}
 
 {% macro lineup_player(player) %}
-{% spaceless %}
     {% import '@EXT:cfc_league_fe/macros/profile.html.twig' as prm %}
-    {% set name = player.uniqueName ? prm.name_short(player.profile) : prm.name_medium(player.profile) %}
+    {% set name = player.uniqueName ? prm.name_short(player.profile)|spaceless : prm.name_medium(player.profile)|spaceless %}
     {% if player.isCaptain %}
       <strong>{{ name }} (C)</strong>
     {% else %}
       {{ name }}
     {% endif %}
     {{ _self.lineup_card(player) }}
-{% endspaceless %}
 {% endmacro %}
 
 {#
@@ -38,19 +36,17 @@ render cards of player in lineup
 {% endmacro %}
 
 {% macro lineup_changes(player) %}
-{% spaceless %}
   {% set notes = player.changedout %}
   {% if notes %}
   	{% set changes = '' %}
     {% for note in notes %}
-			{% set changes = note.minute ~ '. ' ~ _self.lineup_player(note.player2) %}
+			{% set changes = note.minute ~ '. ' ~ _self.lineup_player(note.player2)|spaceless %}
 	    {% if note.player2.changedout %}
-	    	{% set changes = changes ~ ', ' ~ _self.lineup_changes(note.player2) %}
+	    	{% set changes = changes ~ ', ' ~ _self.lineup_changes(note.player2)|spaceless %}
 	    {% endif %}
     {% endfor %}
    {{ changes|raw }}
   {% endif %}
-{% endspaceless %}
 {% endmacro %}
 
 {#
@@ -60,9 +56,9 @@ render lineup of players
   {% if lineup %}
     {% for line in lineup %}
       {% for player in line %}
-	      {% set changes = _self.lineup_changes(player) %}
+	      {% set changes = _self.lineup_changes(player)|spaceless %}
 	      {% set changes = changes ? (' ('~changes~')') : '' %}
-        <span>{{ _self.lineup_player(player)|raw }}{{ changes|raw }}{{ loop.last ? '' : ', ' }}</span>
+        <span>{{ _self.lineup_player(player)|spaceless|raw }}{{ changes|raw }}{{ loop.last ? '' : ', ' }}</span>
       {% endfor %}
       {{ loop.last ? '' : ' - ' }}
     {% endfor %}
@@ -77,7 +73,7 @@ render list of substitutes
 {% macro substitutes(players) %}
   {% if players %}
       {% for player in players %}
-        <span>{{ _self.lineup_player(player) }}{{ loop.last ? '' : ', ' }}</span>
+        <span>{{ _self.lineup_player(player)|spaceless }}{{ loop.last ? '' : ', ' }}</span>
       {% endfor %}
   {% else %}
   Unbekannt
@@ -87,7 +83,7 @@ render list of substitutes
 {% macro coach(profile) %}
   {% import '@EXT:cfc_league_fe/macros/profile.html.twig' as prm %}
   {% if profile %}
-  {{ prm.name_medium(profile) }} [{{ profile.uid }}]
+  {{ prm.name_medium(profile)|spaceless }} [{{ profile.uid }}]
   {% else %}
   Unbekannt
   {% endif %}
@@ -98,7 +94,7 @@ render list of substitutes
   {% set goals = '' %}
   {% for note in notes %}
   	{% if note.isGoal and (home ? note.isHome() : note.isGuest()) %}
-	  	{% set goals = goals ~ '<li>' ~ _self.score(note) ~ prm.name_full(note.player.profile) ~ ' (' ~ note.minute~'.) ' ~ '</li>' %}
+	  	{% set goals = goals ~ '<li>' ~ _self.score(note) ~ prm.name_full(note.player.profile)|spaceless ~ ' (' ~ note.minute~'.) ' ~ '</li>' %}
 	  {% endif %}
   {% endfor %}
 
@@ -152,9 +148,9 @@ render list of substitutes
   {% if label %}
       {{ _self.icon(note) }}
       {% if note.player2 %}
-      {{ ('label_matchnote_'~note.type)|t3trans({'%player%':prm.name_full(note.player.profile), '%player2%' : prm.name_full(note.player2.profile)} ) }}
+      {{ ('label_matchnote_'~note.type)|t3trans({'%player%':prm.name_full(note.player.profile)|spaceless, '%player2%' : prm.name_full(note.player2.profile)|spaceless} ) }}
       {% else %}
-      {{ ('label_matchnote_'~note.type)|t3trans({'%player%':prm.name_full(note.player.profile)}) }}
+      {{ ('label_matchnote_'~note.type)|t3trans({'%player%':prm.name_full(note.player.profile)|spaceless}) }}
       {% endif %}
   {% endif %}
 

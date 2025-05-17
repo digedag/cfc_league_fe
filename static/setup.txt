@@ -1323,7 +1323,7 @@ plugin.tx_cfcleaguefe_report {
   defaultAction  = tx_cfcleaguefe_actions_MatchReport
   qualifier      = cfc_league_fe
   extensionKey   = cfc_league_fe
-  templatePath   = EXT:cfc_league_fe/views/templates
+  templatePath   = EXT:cfc_league_fe/Resources/Private/Templates
   locallangFilename = EXT:cfc_league_fe/locallang.xml
 
   scopeTemplate = {$plugin.tx_cfcleaguefe_competition.scopeTemplate}
@@ -1825,7 +1825,7 @@ plugin.tt_news {
   }
 }
 
-lib.tx_t3twig {
+lib.tx_t3twigs {
     extensions {
         t3sports_DataProvider = System25\T3sports\Twig\Extension\DataProvider
     }

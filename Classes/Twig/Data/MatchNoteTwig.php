@@ -2,13 +2,14 @@
 
 namespace System25\T3sports\Twig\Data;
 
+use System25\T3sports\Model\MatchNote;
+use System25\T3sports\Utility\ServiceRegistry;
 use tx_cfcleague_models_MatchNote;
-use tx_cfcleague_util_ServiceRegistry;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017-2019 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2025 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,11 +32,11 @@ use tx_cfcleague_util_ServiceRegistry;
 /**
  * Provide additional data for match notes.
  */
-class MatchNote
+class MatchNoteTwig
 {
     protected $profileSrv;
 
-    /** @var tx_cfcleague_models_MatchNote[] */
+    /** @var MatchNote */
     protected $matchNote;
 
     /** @var Player */
@@ -45,14 +46,14 @@ class MatchNote
     protected $player2;
 
     /**
-     * @param tx_cfcleague_models_MatchNote $note
+     * @param MatchNote $note
      * @param Player $player
      */
-    public function __construct(tx_cfcleague_models_MatchNote $note, $player = null)
+    public function __construct(MatchNote $note, $player = null)
     {
         $this->matchNote = $note;
         $this->player = $player;
-        $this->profileSrv = tx_cfcleague_util_ServiceRegistry::getProfileService();
+        $this->profileSrv = ServiceRegistry::getProfileService();
     }
 
     public function getUid()
@@ -107,16 +108,16 @@ class MatchNote
 
     public function isChange()
     {
-        return tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT == $this->getType();
+        return MatchNote::TYPE_CHANGEOUT == $this->getType();
     }
 
     public function isGoal()
     {
         $goalTypes = [
-            tx_cfcleague_models_MatchNote::TYPE_GOAL,
-            tx_cfcleague_models_MatchNote::TYPE_GOAL_HEADER,
-            tx_cfcleague_models_MatchNote::TYPE_GOAL_PENALTY,
-            tx_cfcleague_models_MatchNote::TYPE_GOAL_OWN,
+            MatchNote::TYPE_GOAL,
+            MatchNote::TYPE_GOAL_HEADER,
+            MatchNote::TYPE_GOAL_PENALTY,
+            MatchNote::TYPE_GOAL_OWN,
         ];
 
         return in_array($this->getType(), $goalTypes);

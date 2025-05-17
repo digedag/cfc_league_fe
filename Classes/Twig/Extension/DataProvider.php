@@ -3,14 +3,14 @@
 namespace System25\T3sports\Twig\Extension;
 
 use System25\T3sports\Model\Fixture;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 use tx_rnbase;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017-2019 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2025 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,12 +30,12 @@ use tx_rnbase;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class DataProvider extends Twig_Extension
+class DataProvider extends AbstractExtension
 {
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('buildMatchReport', [$this, 'buildMatchReport']),
+            new TwigFunction('buildMatchReport', [$this, 'buildMatchReport']),
         ];
     }
 
