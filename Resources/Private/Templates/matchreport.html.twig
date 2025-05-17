@@ -6,7 +6,7 @@
 <h2>Der Spielbericht {{ match.competition.name }} {{ match.getround_name }}</h2>
 {% set referee %}
     {% if match.referee %}
-    {{pr.name_full(match.referee)}} ({{ match.referee.homeTown }})
+    {{pr.name_full(match.referee)|spaceless}} ({{ match.referee.homeTown }})
     {% else %}
     {{ 'profile_unknownLastname'|t3trans }}
     {% endif %}
@@ -16,7 +16,7 @@
     {% if matchReport.assists %}
     	{% set names = [] %}
     	{% for assist in matchReport.assists %}
-    		{% set names = names|merge([pr.name_full(assist)]) %}
+    		{% set names = names|merge([pr.name_full(assist)|spaceless]) %}
     	{% endfor %}
     	{{ names|join(', ') }}
     {% else %}

@@ -3,17 +3,16 @@
 namespace System25\T3sports\Twig\Data;
 
 use Exception;
+use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
+use System25\T3sports\Utility\MatchTicker;
 use System25\T3sports\Utility\ServiceRegistry;
-use tx_cfcleague_models_MatchNote;
-use tx_cfcleaguefe_util_MatchTicker;
-use Tx_Rnbase_Utility_Strings;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017-2023 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2025 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -42,10 +41,10 @@ class MatchReport
 {
     protected $match;
 
-    /** @var tx_cfcleague_models_MatchNote[] */
+    /** @var MatchNoteTwig[] */
     protected $tickerArr;
 
-    /** @var tx_cfcleague_models_MatchNote[] */
+    /** @var MatchNoteTwig[] */
     protected $tickerByTeam = [
         'home' => [],
         'guest' => [],
@@ -176,7 +175,7 @@ class MatchReport
     }
 
     /**
-     * @return MatchNote[]
+     * @return MatchNoteTwig[]
      */
     public function getMatchNotesHome()
     {
@@ -184,7 +183,7 @@ class MatchReport
     }
 
     /**
-     * @return MatchNote[]
+     * @return MatchNoteTwig[]
      */
     public function getMatchNotesGuest()
     {
@@ -207,7 +206,7 @@ class MatchReport
      */
     protected function getLineup($players, $system)
     {
-        $system = Tx_Rnbase_Utility_Strings::trimExplode('-', $system);
+        $system = Strings::trimExplode('-', $system);
         $players = is_array($players) ? array_values($players) : [];
 
         $partCnt = 0;
@@ -245,7 +244,8 @@ class MatchReport
         if (!is_array($this->tickerArr)) {
             $this->tickerArr = [];
             // Der Ticker wird immer chronologisch ermittelt
-            $matchNotes = &tx_cfcleaguefe_util_MatchTicker::getTicker4Match($this->match);
+            $ticker = new MatchTicker();
+            $matchNotes = $ticker->getTicker4Match($this->match);
             // Jetzt die Tickermeldungen noch den Spielern zuordnen
             for ($i = 0; $i < count($matchNotes); ++$i) {
                 $note = $matchNotes[$i];
@@ -259,7 +259,7 @@ class MatchReport
                         $player = Profile::getProfileInstance($playerUid);
                         $player = $this->buildPlayer($player);
                     }
-                    $matchNote = new MatchNote($note, $player);
+                    $matchNote = new MatchNoteTwig($note, $player);
                     if ($player) {
                         $player->addMatchNote($matchNote);
                     }

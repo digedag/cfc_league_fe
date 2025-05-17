@@ -1,5 +1,4 @@
 {% macro name_full(profile) %}
-{% spaceless %}
   {% if not profile or profile.uid == -1 %}
     {{ 'profile_unknownLastname'|t3trans }}
   {% elseif profile.getStage_name %}
@@ -7,11 +6,9 @@
   {% else %}
   	{{ profile.getfirst_name }} {{ profile.getlastName }}
   {% endif %}
-{% endspaceless %}
 {% endmacro %}
 
 {% macro name_medium(profile) %}
-{% spaceless %}
   {% if not profile or profile.uid == -1 %}
     {{ 'profile_unknownLastname'|t3trans }}
   {% elseif profile.getStage_name %}
@@ -19,12 +16,10 @@
   {% else %}
   	{{ profile.getfirst_name ? (profile.getfirst_name|first ~ '. ') : '' }}{{ profile.getlastName }}
   {% endif %}
-{% endspaceless %}
 {% endmacro %}
 
 
 {% macro name_short(profile) %}
-{% spaceless %}
   {% if not profile or profile.uid == -1 %}
     {{ 'profile_unknownLastname'|t3trans }}
   {% elseif profile.getStage_name %}
@@ -32,5 +27,4 @@
   {% else %}
   	{{ profile.getlastName }}
   {% endif %}
-{% endspaceless %}
 {% endmacro %}

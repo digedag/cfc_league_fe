@@ -2,14 +2,14 @@
 
 namespace System25\T3sports\Twig\Data;
 
-use tx_cfcleague_models_MatchNote;
-use tx_cfcleague_models_Profile;
-use tx_cfcleague_util_ServiceRegistry;
+use System25\T3sports\Model\MatchNote;
+use System25\T3sports\Model\Profile;
+use System25\T3sports\Utility\ServiceRegistry;
 
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2017 Rene Nitzsche (rene@system25.de)
+*  (c) 2017-2025 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,7 +36,7 @@ use tx_cfcleague_util_ServiceRegistry;
  */
 class Player
 {
-    /** @var tx_cfcleague_models_MatchNote[] */
+    /** @var MatchNoteTwig[] */
     protected $matchNotes = [];
 
     protected $matchNotesByType = [];
@@ -47,10 +47,10 @@ class Player
 
     protected $uniqueName = true;
 
-    public function __construct(tx_cfcleague_models_Profile $profile)
+    public function __construct(Profile $profile)
     {
         $this->profile = $profile;
-        $this->profileSrv = tx_cfcleague_util_ServiceRegistry::getProfileService();
+        $this->profileSrv = ServiceRegistry::getProfileService();
     }
 
     public function getUid()
@@ -58,7 +58,7 @@ class Player
         return $this->profile->getUid();
     }
 
-    public function addMatchNote(MatchNote $note)
+    public function addMatchNote(MatchNoteTwig $note)
     {
         $this->matchNotes[] = $note;
         if (!array_key_exists($note->getType(), $this->matchNotesByType)) {
@@ -92,15 +92,15 @@ class Player
      */
     public function isCardYellow()
     {
-        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CARD_YELLOW);
+        return $this->hasMatchNoteType(MatchNote::TYPE_CARD_YELLOW);
     }
 
     /**
-     * @return tx_cfcleague_models_MatchNote[]
+     * @return MatchNote[]
      */
     public function getChangedOut()
     {
-        return $this->getMatchNotesByType(tx_cfcleague_models_MatchNote::TYPE_CHANGEOUT);
+        return $this->getMatchNotesByType(MatchNote::TYPE_CHANGEOUT);
     }
 
     /**
@@ -108,7 +108,7 @@ class Player
      */
     public function isCardYellowRed()
     {
-        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CARD_YELLOWRED);
+        return $this->hasMatchNoteType(MatchNote::TYPE_CARD_YELLOWRED);
     }
 
     /**
@@ -116,7 +116,7 @@ class Player
      */
     public function isCardRed()
     {
-        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CARD_RED);
+        return $this->hasMatchNoteType(MatchNote::TYPE_CARD_RED);
     }
 
     /**
@@ -124,11 +124,11 @@ class Player
      */
     public function isCaptain()
     {
-        return $this->hasMatchNoteType(tx_cfcleague_models_MatchNote::TYPE_CAPTAIN);
+        return $this->hasMatchNoteType(MatchNote::TYPE_CAPTAIN);
     }
 
     /**
-     * @return tx_cfcleague_models_MatchNote[]
+     * @return MatchNote[]
      */
     public function getMatchNotes()
     {
@@ -136,7 +136,7 @@ class Player
     }
 
     /**
-     * @return tx_cfcleague_models_Profile
+     * @return Profile
      */
     public function getProfile()
     {

@@ -58,6 +58,27 @@ Seite, auf der die Ausgabe erfolgen soll. Die Typoscript-Konfiguration sollte da
 
 ![Eine korrekte TS-Konfiguration für Team-Notizen](../img/ts_team_note_2.png)
 
+## Verwendung von Twig
+
+Man kann für den Spielbericht Twig nutzen. Dafür muss die Extension t3twigs installiert werden.
+Die Umstellung des Renderung erfolgt per Typoscript:
+
+```
+plugin.tx_cfcleaguefe_report {
+  matchreport.viewClassName=System25\T3twigs\View\TwigView
+  matchreport.template.file = EXT:cfc_league_fe/Resources/Private/Templates/matchreport.html.twig
+}
+```
+
+Zusätzliche Include-Folder kann man auch per TS angeben:
+
+```
+plugin.tx_cfcleaguefe_report {
+  t3twigs.templatepaths {
+    my_namespace = EXT:myext/path/to/folder
+  }
+}
+```
 
 ## Integration der Spiele als Event in der Extension Calendar base (cal)
 
