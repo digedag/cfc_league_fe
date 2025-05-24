@@ -2,9 +2,12 @@
 Changes
 -------
 
-v1.11.4 (??.??.2025)
+v1.12.0 (??.06.2025)
  * #92 Support for judo competitions
  * jquery flot charts not loaded in TYPO3 12
+ * Support for TYPO3 13.4
+ * Support for TYPO3 8 and 9 dropped
+ * [example configuration](./Configuration/SiteConfiguration/Routing.yaml) for speaking url
 
 v1.11.3 (01.03.2024)
  * Add video assists to fixtures
