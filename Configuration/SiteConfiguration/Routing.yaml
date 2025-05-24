@@ -1,0 +1,11 @@
+routeEnhancers:
+  T3sportsMatch:
+    type: Plugin
+    routePath: '/spiel/{matchId}'
+    namespace: 'cfc_league_fe'
+    aspects:
+      matchId:
+        type: PersistedAliasMapper
+        tableName: 'tx_cfcleague_games'
+        routeFieldName: 'slug'
+        lookupField: 'uid'
