@@ -304,6 +304,14 @@
                 <source>o.p.</source>
                 <target>u.E.</target>
             </trans-unit>
+            <trans-unit id="label_afterextratime" xml:space="preserve">
+                <source>after extratime</source>
+                <target>nach Verlängerung</target>
+            </trans-unit>
+            <trans-unit id="label_onpenalty" xml:space="preserve">
+                <source>on penalty</source>
+                <target>und Elfmeterschießen</target>
+            </trans-unit>
             <trans-unit id="label_basepoint" xml:space="preserve">
                 <source>Base point for distance calculation</source>
                 <target>Ausgangspunkt für Entfernungsberechnung</target>

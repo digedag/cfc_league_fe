@@ -1,0 +1,110 @@
+
+{% macro renderProfile(profile, team) %}
+    <figure>
+    {# Zuerst die Teamnotes in das Profile laden #}
+    {% set teamNotes = addTeamNotes(profile, team) %}
+    {% set pic = profile.tnpicture|t3ts('team.player.tnpicture', {'data': profile}) %}
+    {% if pic is not empty %}
+        {{ pic|raw }}
+    {% else %}
+        Kein Bild
+    {% endif %}
+
+    {% set trikot = profile.tntrikot|t3ts('team.player.tntrikot', {'data': profile}) %}
+
+    </figure>
+    <div class="playerinfo">
+        <h3 class="name">{{ player.uid|t3ts('team.player.dcname', {'data': profile}) }}</h3>
+        <span class="position">{{ profile.tnposition|t3ts('team.player.tnposition', {'data': profile}) }}</span>
+        <p>
+            {% if trikot is not empty %}
+            Trikot: {{ trikot }}<br>
+            {% endif %}
+            {% if profile.height > 0 %}
+            Größe: {{ profile.height }}cm<br>
+            {% endif %}
+            Geboren: {{ player.birthday|t3ts('team.player.birthday', {'data': profile}) }} ({{ profile.nationality }})
+        </p>
+    </div>
+
+{% endmacro %}
+
+
+<div class="well">
+<h2>{{ team.name }}</h2>
+    <section class="narrow">
+        <div class="container flex">
+            <figure>
+                {{ team.t3images|t3ts('team.firstpicture', {'data': team}) }}
+            </figure>
+        </div>
+    </section>
+
+    {% set players = team.players %}
+    {% if players is not empty %}
+    <section class="">
+        <div class="container">
+            <h2 class="small">Die Spieler</h2>
+            <div class="flex">
+            {% for player in players %}
+                <div class="item w25">
+                    <div class="item-inner">
+                    {{ _self.renderProfile(player, team)|t3link({'ts_path': 'team.player.links.showprofile.', 'params': {'profileId':player.uid}}) }}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        {{ team.players_comment }}
+    </section>
+    {% endif %}
+
+    {% set coaches = team.coaches %}
+    {% if coaches is not empty %}
+    <section class="">
+        <div class="container">
+            <h2 class="small">Die Trainer</h2>
+            <div class="flex">
+            {% for coach in coaches %}
+                <div class="item w25">
+                    <div class="item-inner">
+                    {{ _self.renderProfile(coach, team)|t3link({'ts_path': 'team.coach.links.showprofile.', 'params': {'profileId':coach.uid}}) }}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        {{ team.coaches_comment }}
+    </section>
+    {% endif %}
+
+    {% set supporters = team.supporters %}
+    {% if supporters is not empty %}
+    <section class="">
+        <div class="container">
+            <h2 class="small">Das Team dahinter</h2>
+            <div class="flex">
+            {% for supporter in supporters %}
+                <div class="item w25">
+                    <div class="item-inner">
+                    {{ _self.renderProfile(supporter, team)|t3link({'ts_path': 'team.supporter.links.showprofile.', 'params': {'profileId':supporter.uid}}) }}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        {{ team.supporters_comment }}
+
+    </section>
+    {% endif %}
+
+    <section class="narrow">
+        <div class="container flex">
+            <figure>
+                {{ team.t3images|t3ts('team.pictures', {'data': team}) }}
+            </figure>
+        </div>
+    </section>
+
+
+</div>

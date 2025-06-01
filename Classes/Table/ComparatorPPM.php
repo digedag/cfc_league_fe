@@ -42,10 +42,10 @@ class ComparatorPPM implements IComparator
     public function compare($t1, $t2)
     {
         // Zwangsabstieg prüfen
-        if (-1 == $t1['static_position']) {
+        if (-1 == ($t1['static_position'] ?? 0)) {
             return 1;
         }
-        if (-1 == $t2['static_position']) {
+        if (-1 == ($t2['static_position'] ?? 0)) {
             return -1;
         }
         if ($t1['ppm'] == $t2['ppm']) {

@@ -11,3 +11,7 @@ services:
       # FIXME: exclude Decorator for now
       - '../Classes/Decorator/*'
 
+  System25\T3sports\Filter\MatchFilter:
+    public: true
+  System25\T3sports\Twig\Extension\DataProvider:
+    public: true

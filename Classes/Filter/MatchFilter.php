@@ -7,7 +7,9 @@ use Sys25\RnBase\Frontend\Marker\Templates;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Utility\Misc;
 use Sys25\RnBase\Utility\Strings;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Profile;
+use System25\T3sports\Model\Repository\MatchRepository;
 use System25\T3sports\Utility\MatchTableBuilder;
 use System25\T3sports\Utility\ScopeController;
 use tx_rnbase;
@@ -15,7 +17,7 @@ use tx_rnbase;
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2023 Rene Nitzsche (rene@system25.de)
+*  (c) 2010-2025 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,6 +42,12 @@ class MatchFilter extends BaseFilter
     private $data;
 
     private static $profileData = ['profile', 'player', 'coach', 'referee'];
+    private $matchRepo;
+
+    public function __construct(?MatchRepository $matchRepo = null)
+    {
+        $this->matchRepo = $matchRepo ?: tx_rnbase::makeInstance(MatchRepository::class);
+    }
 
     /**
      * Abgeleitete Filter können diese Methode überschreiben und zusätzliche Filter setzen.
@@ -77,6 +85,21 @@ class MatchFilter extends BaseFilter
             }
             $matchtable->setHomeClubs($clubId);
             $matchtable->setGuestClubs($clubId);
+        }
+        if ($matchId = $parameters->get('historic')) {
+            /** @var Fixture $fixture */
+            $fixture = $this->matchRepo->findByUid($matchId);
+            $clubHomeId = $fixture->getHome()->getClubUid();
+            $clubGuestId = $fixture->getGuest()->getClubUid();
+            $comp = $fixture->getCompetition();
+            if ($comp && $comp->getGroup()) {
+                $matchtable->setAgeGroups($comp->getGroup()->getUid());
+            }
+
+            if ($clubHomeId && $clubGuestId) {
+                $matchtable->setHomeClubs($clubHomeId.','.$clubGuestId);
+                $matchtable->setGuestClubs($clubHomeId.','.$clubGuestId);
+            }
         }
 
         $matchtable->setTimeRange($configurations->get($confId.'timeRangePast'), $configurations->get($confId.'timeRangeFuture'));

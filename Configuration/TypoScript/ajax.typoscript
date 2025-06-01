@@ -1,0 +1,23 @@
+
+# used for ajax calls on calendar view
+t3sFixtures = PAGE
+t3sFixtures {
+    typeNum = 2590
+    10 =< plugin.tx_cfcleaguefe_competition
+    10 {
+        action = System25\T3sports\Frontend\Action\MatchTable
+        matchtable.match {
+            pagebrowser.limit = 5
+            #FIXME: add constant
+            pagebrowser.link.typolink.parameter = 133,2590
+        }
+    }
+
+    config {
+        disableAllHeaderCode = 1
+        additionalHeaders.10.header = Content-type:text/html
+        xhtml_cleaning = 0
+        admPanel = 0
+        locale_all = en
+    }
+}

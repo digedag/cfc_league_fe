@@ -228,6 +228,12 @@
             <trans-unit id="label_onpenalty_short" xml:space="preserve">
                 <source>o.p.</source>
             </trans-unit>
+            <trans-unit id="label_afterextratime" xml:space="preserve">
+                <source>after extratime</source>
+            </trans-unit>
+            <trans-unit id="label_onpenalty" xml:space="preserve">
+                <source>on penalty</source>
+            </trans-unit>
             <trans-unit id="label_basepoint" xml:space="preserve">
                 <source>Base point for distance calculation</source>
             </trans-unit>

@@ -93,10 +93,10 @@ class Comparator implements IComparator
         $isH2HComparison = true; // = "is Head-to-head-comparison"
 
         // Zwangsabstieg prüfen
-        if ($t1['static_position']) {
+        if ($t1['static_position'] ?? false) {
             return 1;
         }
-        if ($t2['static_position']) {
+        if ($t2['static_position'] ?? false) {
             return -1;
         }
 

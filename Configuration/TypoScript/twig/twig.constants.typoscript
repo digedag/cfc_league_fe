@@ -1,0 +1,18 @@
+
+plugin.tx_cfcleaguefe_competition.twig {
+  # cat=T3sports (Twig-Templates)/stadiumlist; type=string;label=Twig Template for stadium list
+  stadiumlistTemplate = EXT:cfc_league_fe/Resources/Private/Templates/stadiums.html.twig
+
+  # cat=T3sports (Twig-Templates)/matchtable; type=string;label=Twig Template for fixtures list
+  matchtableTemplate = EXT:cfc_league_fe/Resources/Private/Templates/matchtable.html.twig
+}
+
+plugin.tx_cfcleaguefe_report.twig {
+  # cat=T3sports (Twig-Templates)/stadiumview; type=string;label=Twig Template for stadium view
+  stadiumviewTemplate = EXT:cfc_league_fe/Resources/Private/Templates/stadiums.html.twig
+  # cat=T3sports (Twig-Templates)/matchreport; type=string;label=Twig Template for match report
+  matchreportTemplate = EXT:cfc_league_fe/Resources/Private/Templates/matchreport.html.twig
+
+  # cat=T3sports (Twig-Templates)/teamview; type=string;label=Twig Template for team view
+  teamviewTemplate = EXT:cfc_league_fe/Resources/Private/Templates/teamview.html.twig
+}

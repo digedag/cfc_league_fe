@@ -8,6 +8,7 @@ v1.12.0 (??.06.2025)
  * Support for TYPO3 13.4
  * Support for TYPO3 8 and 9 dropped
  * [example configuration](./Configuration/SiteConfiguration/Routing.yaml) for speaking url
+ * some enhancements for Twig rendering (t3twigs)
 
 v1.11.3 (01.03.2024)
  * Add video assists to fixtures

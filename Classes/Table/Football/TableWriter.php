@@ -3,6 +3,7 @@
 namespace System25\T3sports\Table\Football;
 
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Frontend\Marker\BaseMarker;
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
 use Sys25\RnBase\Frontend\Marker\SimpleMarker;
 use Sys25\RnBase\Frontend\Marker\Templates;
@@ -15,8 +16,6 @@ use System25\T3sports\Table\ITableType;
 use System25\T3sports\Table\TableWriterBase;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
-use tx_rnbase_util_BaseMarker;
-use tx_rnbase_util_Templates;
 
 /***************************************************************
  *  Copyright notice
@@ -63,7 +62,7 @@ class TableWriter extends TableWriterBase
         $result = $table->getTableData();
         $formatter = $configurations->getFormatter();
         // Zuerst den Wettbewerb
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'LEAGUE_')) {
+        if (BaseMarker::containsMarker($template, 'LEAGUE_')) {
             $compMarker = tx_rnbase::makeInstance(CompetitionMarker::class);
             $template = $compMarker->parseTemplate($template, $result->getCompetition(), $configurations->getFormatter(), $confId.'league.', 'LEAGUE');
         }
@@ -130,7 +129,7 @@ class TableWriter extends TableWriterBase
             // auf Strafen prüfen
             $this->preparePenalties($row, $penalties);
 
-            /** @var $team ITeam */
+            /** @var ITeam $team */
             $team = $row['team'];
             unset($row['team']); // Gibt sonst Probleme mit PHP5.2
             $team->setProperty($row + $team->getProperty());
@@ -259,7 +258,7 @@ class TableWriter extends TableWriterBase
                 $items,
                 $configurator->getTableScope(),
             ];
-            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(tx_rnbase_util_Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, 'TABLESCOPE', $configurations, $confId);
+            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, 'TABLESCOPE', $configurations, $confId);
         }
 
         if ($configurations->get('pointSystemSelectionInput')) {

@@ -84,7 +84,7 @@ class Player
      */
     public function getMatchNotesByType($type)
     {
-        return $this->matchNotesByType[$type];
+        return $this->matchNotesByType[$type] ?? [];
     }
 
     /**

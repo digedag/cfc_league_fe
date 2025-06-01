@@ -3,6 +3,32 @@
 <span>{{  note.goalsHome }} : {{  note.goalsGuest }}</span>
 {% endmacro %}
 
+{% macro result(match) %}
+  {% if match.status == '-10' %}
+    {{ 'label_matchstatus_postponed'|t3trans }}
+  {% elseif match.status == '1' %}
+    {{ match.goalsHome }}:{{ match.goalsGuest }}
+  {% elseif match.status == '2' %}
+    {{ _self._result_final(match) }}
+  {% else %}
+    -:-
+  {% endif %}
+{% endmacro %}
+
+{% macro _result_final(match) %}
+  {{ match.goalsHome }}:{{ match.goalsGuest }}
+  {% if match.is_extratime %}
+    {% set extra = 'label_afterextratime_short'|t3trans %}
+    {% set extra_long = 'label_afterextratime'|t3trans %}
+  {% endif %}
+  {% if match.is_penalty %}
+    {% set extra = extra ~ 'label_onpenalty_short'|t3trans %}
+    {% set extra_long = extra_long ~ ' ' ~ 'label_onpenalty'|t3trans %}
+  {% endif %}
+  {% if extra %}
+  <span title="{{extra_long}}">{{ extra|raw }}</span>
+  {% endif %}
+{% endmacro %}
 
 {% macro mn_message(note) %}
   {% if note.type == 10 %}
