@@ -11,4 +11,5 @@ call_user_func(function () {
     Sys25\RnBase\Utility\Extensions::addStaticFile($extKey, 'static/', 'T3sports');
     Sys25\RnBase\Utility\Extensions::addStaticFile($extKey, 'static/cal/', 'T3sports cal-events');
     Sys25\RnBase\Utility\Extensions::addStaticFile($extKey, 'static/volleyball/', 'T3sports for Volleyball');
+    Sys25\RnBase\Utility\Extensions::addStaticFile($extKey, 'Configuration/TypoScript/twig/', 'T3sports (twig templates)');
 });

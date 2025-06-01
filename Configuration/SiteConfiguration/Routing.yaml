@@ -9,3 +9,14 @@ routeEnhancers:
         tableName: 'tx_cfcleague_games'
         routeFieldName: 'slug'
         lookupField: 'uid'
+
+  T3sportsProfile:
+    type: Plugin
+    routePath: '/person/{profileId}'
+    namespace: 'cfc_league_fe'
+    aspects:
+      profileId:
+        type: PersistedAliasMapper
+        tableName: 'tx_cfcleague_profiles'
+        routeFieldName: 'slug'
+        lookupField: 'uid'

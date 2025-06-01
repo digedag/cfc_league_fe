@@ -5,16 +5,14 @@ namespace System25\T3sports\Frontend\Action;
 use Sys25\RnBase\Frontend\Controller\AbstractAction;
 use Sys25\RnBase\Frontend\Filter\BaseFilter;
 use Sys25\RnBase\Frontend\Filter\Utility\PageBrowserFilter;
-use Sys25\RnBase\Frontend\Marker\ListProvider;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use System25\T3sports\Frontend\View\MatchTableView;
-use System25\T3sports\Utility\ServiceRegistry;
-use tx_rnbase;
+use System25\T3sports\Model\Repository\MatchRepository;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2025 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,6 +37,13 @@ use tx_rnbase;
  */
 class MatchTable extends AbstractAction
 {
+    private $repo;
+
+    public function __construct(?MatchRepository $repo = null)
+    {
+        $this->repo = $repo ?: new MatchRepository();
+    }
+
     /**
      * Handle request.
      *
@@ -57,26 +62,18 @@ class MatchTable extends AbstractAction
         $options = [];
 
         $filter->init($fields, $options);
-        $service = ServiceRegistry::getMatchService();
         // Soll ein PageBrowser verwendet werden
         $pbFilter = new PageBrowserFilter();
         $pbFilter->handle($configurations, $this->getConfId().'match.pagebrowser', $viewdata, $fields, $options, [
             'searchcallback' => [
-                $service,
+                $this->repo,
                 'search',
             ],
             'pbid' => 'mt'.$configurations->getPluginId(),
         ]);
-
-        $prov = tx_rnbase::makeInstance(ListProvider::class);
-        $prov->initBySearch([
-            $service,
-            'search',
-        ], $fields, $options);
-        $viewdata->offsetSet('provider', $prov);
-
-        // View
-        $this->viewType = $configurations->get($this->getConfId().'viewType');
+        $options['collection'] = 'iterator';
+        $rows = $this->repo->search($fields, $options);
+        $viewdata->offsetSet('items', $rows);
 
         return '';
     }

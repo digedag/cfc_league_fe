@@ -1,0 +1,102 @@
+lib.tx_t3twigs {
+    extensions {
+        t3sports_DataProvider = System25\T3sports\Twig\Extension\DataProvider
+    }
+}
+
+lib.t3sports.relations {
+    
+}
+
+lib.t3sports.twig {
+    relations {
+        match2home {
+            join {
+                alias = TEAMHOME
+                field = uid
+            }
+
+            callback {
+                class = System25\T3sports\Model\Repository\TeamRepository
+                method = search
+            }
+        }
+        match2guest {
+            join {
+                alias = TEAMGUEST
+                field = uid
+            }
+
+            callback {
+                class = System25\T3sports\Model\Repository\TeamRepository
+                method = search
+            }
+        }
+    }
+    search {
+        historic {
+
+            options.orderby.MATCH.DATE = desc
+            options.distinct = 1
+            callback {
+                class = System25\T3sports\Model\Repository\MatchRepository
+                method = search
+            }
+        }
+    }
+    ts {
+        links {
+            fixtures {
+                #FIXME: add constant
+                pid = 133,2590
+            }
+        }
+    }
+}
+
+plugin.tx_cfcleaguefe_competition {
+    t3twigs.templatepath {
+        cfc = EXT:cfc_league_fe/Resources/Private/Templates/
+    }
+
+    matchtable {
+        viewClassName=System25\T3twigs\View\TwigView
+        template {
+            file = EXT:cfc_league_fe/Resources/Private/Templates/matchtable.html.twig
+            ts {
+                fixture =< lib.t3sports.match
+            }
+        }
+    }
+}
+
+
+plugin.tx_cfcleaguefe_report {
+    t3twigs =< lib.tx_t3twigs
+    matchreport {
+        template =< lib.t3sports.twig
+        template {
+            file = {$plugin.tx_cfcleaguefe_report.twig.matchreportTemplate}
+            ts {
+                fixture =< lib.t3sports.match
+                stadium =< lib.t3sports.stadium
+                relations =< lib.t3sports.relations
+            }
+        }
+        viewClassName=System25\T3twigs\View\TwigView
+    }
+
+    teamview {
+        template =< lib.t3sports.twig
+        template {
+            file = {$plugin.tx_cfcleaguefe_report.twig.teamviewTemplate}
+            ts {
+                team < plugin.tx_cfcleaguefe_report.teamview.team
+#                team =< lib.t3sports.team
+            }
+
+        }
+        viewClassName=System25\T3twigs\View\TwigView
+    }
+
+}

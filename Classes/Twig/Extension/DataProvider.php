@@ -2,7 +2,11 @@
 
 namespace System25\T3sports\Twig\Extension;
 
+use System25\T3sports\Decorator\TeamNoteDecorator;
 use System25\T3sports\Model\Fixture;
+use System25\T3sports\Model\Profile;
+use System25\T3sports\Model\Repository\TeamNoteRepository;
+use System25\T3sports\Model\Team;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use tx_rnbase;
@@ -32,16 +36,29 @@ use tx_rnbase;
 
 class DataProvider extends AbstractExtension
 {
+    private $teamNoteDecorator;
+
+    public function __construct(TeamNoteRepository $teamNoteRepo)
+    {
+        $this->teamNoteDecorator = new TeamNoteDecorator($teamNoteRepo);
+    }
+
     public function getFunctions()
     {
         return [
             new TwigFunction('buildMatchReport', [$this, 'buildMatchReport']),
+            new TwigFunction('addTeamNotes', [$this, 'addTeamNotes']),
         ];
     }
 
     public function buildMatchReport(Fixture $match)
     {
         return tx_rnbase::makeInstance(\System25\T3sports\Twig\Data\MatchReport::class, $match);
+    }
+
+    public function addTeamNotes(Profile $profile, Team $team)
+    {
+        $this->teamNoteDecorator->addTeamNotes($profile, $team);
     }
 
     /**

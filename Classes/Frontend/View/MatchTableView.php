@@ -3,7 +3,6 @@
 namespace System25\T3sports\Frontend\View;
 
 use Sys25\RnBase\Frontend\Marker\ListBuilder;
-use Sys25\RnBase\Frontend\Marker\ListProvider;
 use Sys25\RnBase\Frontend\Request\RequestInterface;
 use Sys25\RnBase\Frontend\View\ContextInterface;
 use Sys25\RnBase\Frontend\View\Marker\BaseView;
@@ -47,9 +46,8 @@ class MatchTableView extends BaseView
         $viewData = $request->getViewContext();
         $listBuilder = tx_rnbase::makeInstance(ListBuilder::class, tx_rnbase::makeInstance(MatchMarkerBuilderInfo::class));
 
-        /* @var $prov ListProvider */
-        $prov = $viewData->offsetGet('provider');
-        $out = $listBuilder->renderEach($prov, $viewData, $template, MatchMarker::class, 'matchtable.match.', 'MATCH', $formatter);
+        $items = $viewData->offsetGet('items');
+        $out = $listBuilder->render($items, $viewData, $template, MatchMarker::class, 'matchtable.match.', 'MATCH', $formatter);
 
         return $out;
     }

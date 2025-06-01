@@ -217,7 +217,10 @@ class MatchReport
             // Muss umgeschaltet werden?
             if (count($partArr[$partCnt]) >= $splitSum) {
                 ++$partCnt;
-                $splitSum = $system[$partCnt];
+                $splitSum = $system[$partCnt] ?? null;
+            }
+            if (null === $splitSum) {
+                break;
             }
         }
 
