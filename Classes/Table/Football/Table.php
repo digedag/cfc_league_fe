@@ -508,7 +508,7 @@ class Table extends AbstractService implements ITableType
             return;
         }
 
-        $this->addResult($home, $guest, $match->getGuest());
+        $this->addResult($home, $guest, $match->getResult());
 
         if (0 == $toto) { // Unentschieden
             $this->addPoints($home, $configurator->getPointsDraw());
@@ -554,7 +554,7 @@ class Table extends AbstractService implements ITableType
             return;
         }
 
-        $this->addResult($home, $guest, $match->getGuest());
+        $this->addResult($home, $guest, $match->getResult());
 
         if (0 == $toto) { // Unentschieden
             $this->addPoints($guest, $configurator->getPointsDraw());

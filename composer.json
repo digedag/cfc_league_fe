@@ -26,8 +26,8 @@
 	},
 	"require" : {
 		"typo3/cms-core": "^10.4 || ^11.5 || ^12.4 || ^13.4",
-		"digedag/cfc-league" : "~1.11.4",
-		"digedag/rn-base" : "~1.19"
+		"digedag/cfc-league" : "~1.12.0",
+		"digedag/rn-base": "^1.20.0"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.0",
@@ -86,8 +86,7 @@
 			]
 		},
 		"branch-alias": {
-			"dev-master": "1.11.x-dev",
-			"dev-upgrade/13_4": "1.11.x-dev"
+			"dev-master": "1.12.x-dev"
 		}
     }
 }

@@ -5,7 +5,7 @@ namespace System25\T3sports\Table;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2020 Rene Nitzsche (rene@system25.de)
+ *  (c) 2013-2025 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,10 +35,10 @@ class Util
      *
      * @return array with keys t1H2HPoints, t2H2HPoints, t1vst2, t2vst1
      */
-    public static function prepareH2H($teamData, $t1, $t2)
+    public static function prepareH2H($teamData, $t1, $t2): array
     {
-        $t1vst2 = preg_split('[ : ]', $teamData[$t1['teamId']]['matches'][$t2['teamId']]);
-        $t2vst1 = preg_split('[ : ]', $teamData[$t2['teamId']]['matches'][$t1['teamId']]);
+        $t1vst2 = self::parseResult($teamData[$t1['teamId']]['matches'][$t2['teamId']] ?? null);
+        $t2vst1 = self::parseResult($teamData[$t2['teamId']]['matches'][$t1['teamId']] ?? null);
 
         $t1H2HPoints = 0;
         $t2H2HPoints = 0;
@@ -59,5 +59,20 @@ class Util
             't1vst2' => $t1vst2,
             't2vst1' => $t2vst1,
         ];
+    }
+
+    private static function parseResult(?string $result): array
+    {
+        if (!$result) {
+            return [0, 0];
+        }
+
+        [$goalsHome, $goalsGuest] = array_pad(
+            preg_split('/\s*:\s*/', trim($result)),
+            2,
+            0
+        );
+
+        return [(int) $goalsHome, (int) $goalsGuest];
     }
 }

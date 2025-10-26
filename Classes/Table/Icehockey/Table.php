@@ -65,7 +65,9 @@ class Table extends FootballTable
      */
     protected function countStandard($match, $toto, IConfigurator $configurator)
     {
+        /** @var \System25\T3sports\Table\TeamAdapter $home */
         $home = $match->getHome();
+        /** @var \System25\T3sports\Table\TeamAdapter $guest */
         $guest = $match->getGuest();
         // Anzahl Spiele aktualisieren
         $this->addMatchCount($home);
@@ -135,11 +137,13 @@ class Table extends FootballTable
      */
     protected function countHome($match, $toto, IConfigurator $configurator)
     {
+        /** @var \System25\T3sports\Table\TeamAdapter $home */
         $home = $match->getHome();
+        /** @var \System25\T3sports\Table\TeamAdapter $guest */
         $guest = $match->getGuest();
         // Anzahl Spiele aktualisieren
         $this->addMatchCount($home);
-        $this->addResult($home, $guest, $match->getGuest());
+        $this->addResult($home, $guest, $match->getResult());
 
         $options = tx_rnbase::makeInstance(PointOptions::class, [
             PointOptions::AFTER_EXTRA_TIME => $match->isExtraTime(),
@@ -185,11 +189,13 @@ class Table extends FootballTable
      */
     protected function countGuest($match, $toto, IConfigurator $configurator)
     {
+        /** @var \System25\T3sports\Table\TeamAdapter $home */
         $home = $match->getHome();
+        /** @var \System25\T3sports\Table\TeamAdapter $guest */
         $guest = $match->getGuest();
         // Anzahl Spiele aktualisieren
         $this->addMatchCount($guest);
-        $this->addResult($home, $guest, $match->getGuest());
+        $this->addResult($home, $guest, $match->getResult());
 
         if (0 == $toto) { // Unentschieden
             $this->addPoints($guest, $configurator->getPointsDraw());
