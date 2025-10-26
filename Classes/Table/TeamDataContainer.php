@@ -126,7 +126,13 @@ class TeamDataContainer
         }
     }
 
-    public function addResult(ITeam $teamHome, ITeam $teamGuest, $result)
+    /**
+     * @param ITeam $teamHome
+     * @param ITeam $teamGuest
+     * @param string $result Ergebnis in der Form "0 : 0"
+     * @return void
+     */
+    public function addResult(ITeam $teamHome, ITeam $teamGuest, string $result)
     {
         // TODO: das funktioniert in der Alltime vermutlich so nicht...
         $this->dataByTeamId[$teamHome->getTeamId()]['matches'][$teamGuest->getTeamId()] = $result;

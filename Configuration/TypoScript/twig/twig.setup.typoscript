@@ -4,10 +4,6 @@ lib.tx_t3twigs {
     }
 }
 
-lib.t3sports.relations {
-    
-}
-
 lib.t3sports.twig {
     relations {
         match2home {
@@ -34,9 +30,8 @@ lib.t3sports.twig {
         }
     }
     search {
-        historic {
-
-            options.orderby.MATCH.DATE = desc
+        fixtures {
+            options.orderby.MATCH.DATE = asc
             options.distinct = 1
             callback {
                 class = System25\T3sports\Model\Repository\MatchRepository
@@ -65,6 +60,9 @@ plugin.tx_cfcleaguefe_competition {
             file = EXT:cfc_league_fe/Resources/Private/Templates/matchtable.html.twig
             ts {
                 fixture =< lib.t3sports.match
+                stadium =< lib.t3sports.stadium
+                relations =< lib.t3sports.twig.relations
+                search =< lib.t3sports.twig.search
             }
         }
     }
@@ -80,7 +78,8 @@ plugin.tx_cfcleaguefe_report {
             ts {
                 fixture =< lib.t3sports.match
                 stadium =< lib.t3sports.stadium
-                relations =< lib.t3sports.relations
+                relations =< lib.t3sports.twig.relations
+                search =< lib.t3sports.twig.search
             }
         }
         viewClassName=System25\T3twigs\View\TwigView

@@ -92,29 +92,6 @@ jobs:
         runs-on: ubuntu-latest
         needs: ["php-lint", "php-cs-fixer"]
 
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    -
-                        typo3-version: "typo3/minimal:^9.5"
-                        php-version: "7.2"
-                    -
-                        typo3-version: "typo3/minimal:^9.5"
-                        php-version: "7.3"
-                    -
-                        typo3-version: "typo3/minimal:^9.5"
-                        php-version: "7.4"
-                    -
-                        typo3-version: "typo3/minimal:^10.4"
-                        php-version: "7.2"
-                    -
-                        typo3-version: "typo3/minimal:^10.4"
-                        php-version: "7.3"
-                    -
-                        typo3-version: "typo3/minimal:^10.4"
-                        php-version: "7.4"
-
         steps:
             -
                 name: "Checkout"
@@ -140,10 +117,30 @@ jobs:
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
-                name: "Install composer dependencies"
+                name: "drop security advisories"
+                run: "composer config --global audit.block-insecure false"
+            -
+                name: "Install TYPO3 Core"
+                env:
+                    TYPO3: "${{ matrix.typo3-version }}"
                 run: |
-                    composer remove --no-update typo3/cms typo3/cms-core
-                    composer require "${{ matrix.typo3-version }}"
+                    composer require --no-install --no-progress typo3/minimal:"$TYPO3"
+                    composer show
+            -
+                name: "Install dependencies with composer"
+                run: |
+                    composer update --no-ansi --no-interaction --no-progress --with-dependencies
+                    composer show
             -
                 name: "Run PHP unit tests"
                 run: "composer test:phpunit"
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - typo3-version: ^10.4
+                      php-version: 7.4
+                    - typo3-version: ^11.5
+                      php-version: 8.1
+                    - typo3-version: ^12.4
+                      php-version: 8.1        

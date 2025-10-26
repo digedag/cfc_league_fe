@@ -1,7 +1,7 @@
 T3sports Frontend
 =================
 
-![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-8.7%20%7C%209.5%20%7C%2010.4%20%7C%2011.5%20%7C%2012.4-9cf?maxAge=3600&style=flat-square&logo=typo3)
+![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-10.4%20%7C%2011.5%20%7C%2012.4%20%7C%2013.4-9cf?maxAge=3600&style=flat-square&logo=typo3)
 <a href="https://github.com/digedag/cfc_league_fe"><img src="ext_icon.svg" width="20"></a>
 [![Latest Stable Version](https://img.shields.io/packagist/v/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
 [![Total Downloads](https://img.shields.io/packagist/dt/digedag/cfc-league-fe.svg?maxAge=3600)](https://packagist.org/packages/digedag/cfc-league-fe)
