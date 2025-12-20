@@ -37,8 +37,14 @@ class Util
      */
     public static function prepareH2H($teamData, $t1, $t2)
     {
-        $t1vst2 = preg_split('[ : ]', $teamData[$t1['teamId']]['matches'][$t2['teamId']]);
-        $t2vst1 = preg_split('[ : ]', $teamData[$t2['teamId']]['matches'][$t1['teamId']]);
+        $t1vst2 = [0, 0];
+        if (isset($teamData[$t1['teamId']]['matches'][$t2['teamId']])) {
+            $t1vst2 = preg_split('[ : ]', $teamData[$t1['teamId']]['matches'][$t2['teamId']]);
+        }
+        $t2vst1 = [0, 0];
+        if (isset($teamData[$t2['teamId']]['matches'][$t1['teamId']])) {
+            $t2vst1 = preg_split('[ : ]', $teamData[$t2['teamId']]['matches'][$t1['teamId']]);
+        }
 
         $t1H2HPoints = 0;
         $t2H2HPoints = 0;
