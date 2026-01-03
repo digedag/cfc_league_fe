@@ -96,7 +96,7 @@ class MatchHistoryHook
         $srv = ServiceRegistry::getMatchService();
         $matchTable = $srv->getMatchTable();
 
-        if (!intval($formatter->configurations->get($confId.'ignoreAgeGroup'))) {
+        if ($group && !intval($formatter->configurations->get($confId.'ignoreAgeGroup'))) {
             $matchTable->setAgeGroups($group->getUid());
         }
         $matchTable->setHomeClubs($home->getUid().','.$guest->getUid());
