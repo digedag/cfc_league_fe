@@ -41,7 +41,7 @@ class ProfileListView extends BaseView
     /**
      * {@inheritDoc}
      *
-     * @see \Sys25\RnBase\Frontend\View\Marker\BaseView::createOutput()
+     * @see BaseView::createOutput()
      */
     public function createOutput($template, RequestInterface $request, $formatter)
     {

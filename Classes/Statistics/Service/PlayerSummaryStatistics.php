@@ -57,7 +57,7 @@ class PlayerSummaryStatistics extends PlayerStatistics
     /**
      * {@inheritdoc}
      *
-     * @see \System25\T3sports\Statistics\Service\PlayerStatistics::handleMatch()
+     * @see PlayerStatistics::handleMatch()
      */
     public function handleMatch(Fixture $match, $clubId)
     {

@@ -25,6 +25,21 @@ return $config->setFinder($finder)
                 'arrays',
             ],
         ],
+        'no_unneeded_control_parentheses' => [
+            'statements' => [
+                'break', 
+                'clone', 
+                'continue', 
+                'echo_print', 
+                'others', 
+                'return', 
+                'switch_case', 
+                'yield', 
+                'yield_from',
+                // 'negative_instanceof' // this is spooky
+            ],
+        ],
+
     ])
     ->setLineEnding("\n")
 ;
