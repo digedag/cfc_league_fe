@@ -322,47 +322,47 @@
             </trans-unit>
             <trans-unit id="label_matchnote_10" xml:space="preserve">
                 <source>Goal scored by %player%</source>
-                <target/>
+                <target>Tor %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_11" xml:space="preserve">
                 <source>Header goal scored by %player%</source>
-                <target/>
+                <target>Kopfballtor %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_12" xml:space="preserve">
                 <source>Penalty goal scored by %player%</source>
-                <target/>
+                <target>Elfmetertor %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_30" xml:space="preserve">
                 <source>Own goal scored by %player%</source>
-                <target/>
+                <target>Eigentor %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_31" xml:space="preserve">
                 <source>Assist scored by %player%</source>
-                <target/>
+                <target>Torvorlage %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_32" xml:space="preserve">
                 <source>Penalty forgiven by %player%</source>
-                <target/>
+                <target>Elfmeter verschossen %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_33" xml:space="preserve">
                 <source>Corner kick executed by %player%</source>
-                <target/>
+                <target>Eckball %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_70" xml:space="preserve">
                 <source>Yellow card for %player%</source>
-                <target/>
+                <target>Gelbe Karte %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_71" xml:space="preserve">
                 <source>Yellow/red card for %player%</source>
-                <target/>
+                <target>Gelb-rot %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_72" xml:space="preserve">
                 <source>Red card for %player%</source>
-                <target/>
+                <target>Rote Karte %player%</target>
             </trans-unit>
             <trans-unit id="label_matchnote_80" xml:space="preserve">
                 <source>%player% changed in for %player2%</source>
-                <target/>
+                <target>%player% kommt für %player2%</target>
             </trans-unit>
         </body>
     </file>
