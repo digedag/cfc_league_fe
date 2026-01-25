@@ -55,7 +55,7 @@ class ProfileList extends AbstractAction
     /**
      * {@inheritDoc}
      *
-     * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::handleRequest()
+     * @see AbstractAction::handleRequest()
      */
     protected function handleRequest(RequestInterface $request)
     {

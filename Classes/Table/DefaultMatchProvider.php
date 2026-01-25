@@ -122,7 +122,7 @@ class DefaultMatchProvider implements IMatchProvider
     /**
      * {@inheritDoc}
      *
-     * @see \System25\T3sports\Table\IMatchProvider::setConfigurator()
+     * @see IMatchProvider::setConfigurator()
      */
     public function setConfigurator(IConfigurator $configurator)
     {
@@ -418,7 +418,7 @@ class DefaultMatchProvider implements IMatchProvider
     /**
      * {@inheritDoc}
      *
-     * @see \System25\T3sports\Table\IMatchProvider::getClubIdsOfRunningMatches()
+     * @see IMatchProvider::getClubIdsOfRunningMatches()
      */
     public function getClubIdsOfRunningMatches()
     {
