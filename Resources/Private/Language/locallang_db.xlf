@@ -120,8 +120,8 @@
 			<trans-unit id="plugin.competition.flexform.tablechart.colors" xml:space="preserve">
 				<source>Colors for clubs</source>
 			</trans-unit>
-			<trans-unit id="plugin_competition_flexform_tablechart_lib_pbimagegraph" xml:space="preserve">
-				<source>ext:pbimagegraph</source>
+			<trans-unit id="plugin_competition_flexform_tablechart_lib_apex" xml:space="preserve">
+				<source>Apex Charts</source>
 			</trans-unit>
 			<trans-unit id="plugin_competition_flexform_tablechart_lib_flot" xml:space="preserve">
 				<source>jQuery Flot</source>

@@ -606,8 +606,13 @@
 						</label>
 						<config>
 							<type>select</type>
-							<renderType>selectMultipleSideBySide</renderType>
+							<renderType>selectSingle</renderType>
 							<items type="array">
+								<numIndex index="0" type="array">
+									<numIndex index="0">LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin_competition_flexform_tablechart_lib_apex
+									</numIndex>
+									<numIndex index="1">apex</numIndex>
+								</numIndex>
 								<numIndex index="1" type="array">
 									<numIndex index="0">LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin_competition_flexform_tablechart_lib_flot
 									</numIndex>

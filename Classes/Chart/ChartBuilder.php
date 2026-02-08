@@ -8,7 +8,7 @@ use System25\T3sports\Table\ITableType;
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2023 Rene Nitzsche (rene@system25.de)
+*  (c) 2010-2026 Rene Nitzsche (rene@system25.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@ class ChartBuilder
     /**
      * @param ITableType $table
      */
-    public function buildJson($table, $clubIds, ConfigurationInterface $configurations, $confId)
+    public function buildJson($table, $clubIds, ConfigurationInterface $configurations, $confId): ?string
     {
         // Aus den Table-Daten jetzt die DataSets erzeugen
         $chartData = [];
@@ -77,6 +77,6 @@ class ChartBuilder
         $cObj->data = $cObjData;
         $chartData['datasets'] = array_values($dataSets);
 
-        return json_encode($chartData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_QUOT);
+        return json_encode($chartData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_QUOT) ?: null;
     }
 }
