@@ -2,7 +2,7 @@
 /.Build
 /var
 /composer.lock
-
+node_modules/
 
 ### eclipse files
 .settings

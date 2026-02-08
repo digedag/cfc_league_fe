@@ -159,8 +159,8 @@
 				<source>Colors for clubs</source>
 				<target>Farben der Vereine</target>
 			</trans-unit>
-			<trans-unit id="plugin_competition_flexform_tablechart_lib_pbimagegraph" xml:space="preserve">
-				<source>ext:pbimagegraph</source>
+			<trans-unit id="plugin_competition_flexform_tablechart_lib_apex" xml:space="preserve">
+				<source>Apex Charts</source>
 				<target/>
 			</trans-unit>
 			<trans-unit id="plugin_competition_flexform_tablechart_lib_flot" xml:space="preserve">

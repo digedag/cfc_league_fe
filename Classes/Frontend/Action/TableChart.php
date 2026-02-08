@@ -18,7 +18,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2022 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2026 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -85,7 +85,7 @@ class TableChart extends AbstractAction
         }
 
         $chartData = $this->prepareChartData($scopeArr, $configurations, $this->getConfId());
-        $request->getViewContext()->offsetSet('json', $chartData);
+        $request->getViewContext()->offsetSet('json', base64_encode($chartData ?: ''));
     }
 
     /**
@@ -93,9 +93,9 @@ class TableChart extends AbstractAction
      * @param ConfigurationInterface $configurations
      * @param string $confId
      *
-     * @return multitype:number NULL
+     * @return string|null
      */
-    protected function prepareChartData($scopeArr, ConfigurationInterface $configurations, $confId)
+    protected function prepareChartData($scopeArr, ConfigurationInterface $configurations, $confId): ?string
     {
         $table = Builder::buildByRequest($scopeArr, $configurations, $this->getConfId());
 

@@ -23,6 +23,13 @@ http://www.jqplot.com/
 This is just an example. The sources of jqplot are not included!
 ----------------------------------------------------------------- -->
 
+###APEX###
+<div class="container">
+	<div class="tablerun" data-chartdata="###JSON###"></div>
+</div>
+###APEX###
+
+
 ###JQPLOT###
 
 <script type="text/javascript" src="/fileadmin/scripts/jqplot/jquery.jqplot.min.js"></script>
@@ -36,7 +43,7 @@ This is just an example. The sources of jqplot are not included!
 <script type="text/javascript">
 
 jQuery(document).ready(function(){
-	  var chartData = ###JSON###;
+		var chartData = JSON.parse(decodeURIComponent(atob('###JSON###')));
 		var series = [];
 		var seriesConfig = [];
 		// fill the series data
@@ -145,7 +152,7 @@ http://www.flotcharts.org/
 <script type="text/javascript">
 // note: jquery.flot is loaded by typoscript
 jQuery(document).ready(function(){
-	var chartData = ###JSON###;
+	var chartData = JSON.parse(decodeURIComponent(atob('###JSON###')));
 	var series = [];
 	var seriesConfig = [];
 	// fill the series data
