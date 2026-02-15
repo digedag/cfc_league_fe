@@ -50,18 +50,21 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 ###ROW_PPM### Marker für Anzahl Punkte pro Spiel
 </pre>
 
-
+<!--
+The class "t3sports-leaguetable" around the complete table is required for ajax replacement.
+-->
 
 <!-- ------------------------------------------------ -->
 <!-- START MAIN TEMPLATE -->
 <!-- ------------------------------------------------ -->
 ###LEAGUE_TABLE###
+<div class="t3sports-leaguetable">
 
 ###SPORTS_FOOTBALL###
 <h2>###LEAGUE_NAME### ###LEAGUE_LOGO###</h2>
 
 <!-- ###CONTROLS### start -->
-<div class="cfcleague-scopeselection">
+<div class="t3sports-table-controls">
 ###CONTROL_TABLETYPE###
 <p>
 ###CONTROL_TABLETYPE_NORMAL_LINK### ###LABEL_TABLETYPE_NORMAL### ###CONTROL_TABLETYPE_NORMAL_LINK###
@@ -356,6 +359,7 @@ Hinweis: Per TS können die Links und URLs zusätzlich gewrapped werden wobei ak
 
 ###SPORTS_JUDO###
 
+</div>
 ###LEAGUE_TABLE###
 
 

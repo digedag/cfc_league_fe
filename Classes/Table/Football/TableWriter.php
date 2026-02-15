@@ -226,7 +226,7 @@ class TableWriter extends TableWriterBase
         ];
 
         // Tabletype => Home/Away
-        if ($configurations->get('tabletypeSelectionInput')) {
+        if ($configurations->get('tabletypeSelectionInput') || $configurations->get('leaguetable.tablecfg.tabletypeSelectionInput')) {
             $items = [
                 0,
                 1,
@@ -247,7 +247,7 @@ class TableWriter extends TableWriterBase
             );
         }
 
-        if ($configurations->get('tablescopeSelectionInput') || $configurations->get($confId.'tablescopeSelectionInput')) {
+        if ($configurations->get('tablescopeSelectionInput') || $configurations->get('leaguetable.tablecfg.tablescopeSelectionInput')) {
             $items = [
                 0,
                 1,
@@ -261,7 +261,7 @@ class TableWriter extends TableWriterBase
             $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, 'TABLESCOPE', $configurations, $confId);
         }
 
-        if ($configurations->get('pointSystemSelectionInput')) {
+        if ($configurations->get('pointSystemSelectionInput') || $configurations->get('leaguetable.tablecfg.pointSystemSelectionInput')) {
             // Die Daten für das Punktsystem kommen aus dem TCA der Tabelle tx_cfcleague_competition
             // Die TCA laden
 
@@ -320,9 +320,13 @@ class TableWriter extends TableWriterBase
         foreach ($itemsArr[0] as $key => $value) {
             $link = $configurations->createLink();
             $link->label($token);
-            $link->initByTS($configurations, $confId.$confName.'.link.', [
-                $confName => $key,
-            ]);
+            // die overrules als Parameter setzen, damit sie per tsConfig nicht überschrieben werden
+            // Das passiert im Moment, weil sie nur aus den Requestparametern übernommen werden.
+            $params = array_merge(
+                $link->overruledParameters,
+                [$confName => $key],
+            );
+            $link->initByTS($configurations, $confId.$confName.'.link.', $params);
 
             $isCurrent = ($key == $currItem);
             $markerLabel = $formatter->wrap($key, $confId.$confName.'.'.$key.'.');

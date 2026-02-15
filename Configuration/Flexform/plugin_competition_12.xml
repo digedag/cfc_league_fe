@@ -705,19 +705,6 @@
 							</config>
 						</TCEforms>
 					</tablechart.library>
-					<chart.defaults.colors>
-						<TCEforms>
-							<exclude>1</exclude>
-							<label>LLL:EXT:cfc_league_fe/Resources/Private/Language/locallang_db.xlf:plugin.competition.flexform.tablechart.colors
-							</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-								<max>200</max>
-								<eval>trim</eval>
-							</config>
-						</TCEforms>
-					</chart.defaults.colors>
 				</el>
 			</ROOT>
 		</s_tablechart>

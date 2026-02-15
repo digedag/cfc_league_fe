@@ -124,10 +124,17 @@ class ScopeSelectionView extends BaseView
         $items = $itemsArr[0];
         $currItem = $items[$itemsArr[1]];
         $confName = strtolower($markerName); // Konvention
+        $overruled = $link->overruledParameters;
 
         // Aus den KeepVars den aktuellen Wert entfernen
         $keepVars = $configurations->getKeepVars()->getArrayCopy();
-        unset($keepVars[strtolower($markerName)]);
+        if ('saison' === $confName) {
+            // Beim Saisonwechsel sollten die restlichen Werte zurückgesetzt werden.
+            $keepVars = [];
+            $link->overruled([]);
+        }
+
+        unset($keepVars[$confName]);
 
         if ($link) {
             $token = md5(microtime());
@@ -164,6 +171,8 @@ class ScopeSelectionView extends BaseView
             $parts[] = Templates::substituteMarkerArrayCached($subTemplate, $markerArray, $subpartArray, $wrappedSubpartArray);
             unset($keepVars[strtolower($markerName)]);
         }
+        $link->overruled($overruled);
+
         // Jetzt die einzelnen Teile zusammenfügen
         $out = implode($configurations->get('scopeSelection.'.$confName.'.implode'), $parts);
 

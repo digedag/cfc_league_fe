@@ -1,1 +1,2 @@
-import './modules/leagueTable'
+import './modules/leagueTableChart'
+import './modules/leagueTableControl'

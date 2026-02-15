@@ -76,7 +76,7 @@ class TableResult implements ITableResult
             }
             $round = $usedRound;
         }
-        $ret = $this->tableData[$round];
+        $ret = $this->tableData[$round] ?? reset($this->tableData);
 
         return is_array($ret) ? $ret : [];
     }
