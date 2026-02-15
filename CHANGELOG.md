@@ -5,6 +5,8 @@ Changes
 v1.12.1 (??.0?.2026)
  * #106 fix history hook when no age groups needed. Thanks to @derhecht
  * new tablechart implementation based on apex charts.
+ * legacy chart typoscript removed
+ * use ajax calls in league table controls
 
 v1.12.0 (24.12.2025)
  * #92 Support for judo competitions

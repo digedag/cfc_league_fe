@@ -689,6 +689,8 @@ plugin.tx_cfcleaguefe_competition {
         1.override = HOME
         2.override = AWAY
         link.useKeepVars = 1
+        # override this line to avoid ajax calls
+        link.useKeepVars.add = ::type=7150, cfc_league_fe::*
       }
       tablescope {
         current.noLink = 1
@@ -697,6 +699,7 @@ plugin.tx_cfcleaguefe_competition {
         1.override = FIRST
         2.override = SECOND
         link.useKeepVars = 1
+        link.useKeepVars.add = ::type=7150, cfc_league_fe::*
       }
       pointsystem {
         current.noLink = 1
@@ -704,6 +707,7 @@ plugin.tx_cfcleaguefe_competition {
         0.override = POINT3
         1.override = POINT2
         link.useKeepVars = 1
+        link.useKeepVars.add = ::type=7150, cfc_league_fe::*
       }
     }
   }
@@ -718,7 +722,7 @@ plugin.tx_cfcleaguefe_competition {
   # Tabellenfahrt per JS
   tablechart {
     includeJSFooter {
-#     flot = EXT:rn_base/Resources/Public/JavaScript/Flot/jquery.flot.min.js
+     # flot = EXT:rn_base/Resources/Public/JavaScript/Flot/jquery.flot.min.js
      t3sports = EXT:cfc_league_fe/Resources/Public/JS/t3sports/t3sports.js
     }
 
@@ -737,14 +741,14 @@ plugin.tx_cfcleaguefe_competition {
     # select what matches you want to show
     fields {
       # Find matches by state (0-schedules, 1-running, 2-finished, -10 rescheduled)
-#      MATCH.STATUS.OP_IN_INT = 0,1,2
+      # MATCH.STATUS.OP_IN_INT = 0,1,2
     }
     # With options you can set some additional params for sql query
     options {
       # Limit the number of matches
-#     limit = 0
+      # limit = 0
       # Show sql-query in FE (for test purposes)
-#     debug = 1
+      # debug = 1
       # Defined how to order matches
       orderby {
         MATCH.DATE = asc
@@ -767,7 +771,7 @@ plugin.tx_cfcleaguefe_competition {
       stadium.wrap = (|)
 
       # Optional ein String, der zwischen den Spielen steht
-#      implode = <br />
+      # implode = <br />
       home =< lib.t3sports.teamSmall
       guest =< lib.t3sports.teamSmall
     }
@@ -777,7 +781,7 @@ plugin.tx_cfcleaguefe_competition {
     _caching.disableSubstCache = 1
     headline.team =< lib.t3sports.teamSmall
     dataline.team =< lib.t3sports.teamSmall
-#    dataline.implode =
+    # dataline.implode =
     # aus Performancegründen nur die Basismarker des Spiels aktivieren
 		dataline.matchFullMode = 0
 		dataline.match =< lib.t3sports.match
@@ -833,8 +837,8 @@ plugin.tx_cfcleaguefe_competition {
     player.profileSortOrder = 0
     player.profile =< lib.t3sports.profile
     player.profile {
-#      last_name.wrap = <i>|</i>
-#      label_last_name.wrap = <i>|</i>
+      # last_name.wrap = <i>|</i>
+      # label_last_name.wrap = <i>|</i>
 	    match_count.wrap = <b>|</b>
 	    match_count.ifEmpty = -
 	    match_minutes.ifEmpty = -
@@ -892,12 +896,12 @@ plugin.tx_cfcleaguefe_competition {
     round < plugin.tx_cfcleaguefe_competition.scopeSelection.group
     club < plugin.tx_cfcleaguefe_competition.scopeSelection.group
 
-#    competition.current.noLink = 1
-#    round.current.noLink = 1
-#    club.current.noLink = 1
-#    club.isCurrent.if.value = 1
-#    club.isCurrent.if.equals.field = isCurrent
-#    club.isCurrent.override = selected="selected"
+    # competition.current.noLink = 1
+    # round.current.noLink = 1
+    # club.current.noLink = 1
+    # club.isCurrent.if.value = 1
+    # club.isCurrent.if.equals.field = isCurrent
+    # club.isCurrent.override = selected="selected"
   }
   teamlist {
     filter = System25\T3sports\Filter\TeamFilter
@@ -919,143 +923,6 @@ plugin.tx_cfcleaguefe_competition {
     map.stadium =< lib.t3sports.stadium
   }
 }
-
-# TODO: remove?
-# Define a base layout for chartlines
-lib.t3sports.chart {
-  # defaults is used for T3sports settings
-  defaults {
-    # The chart title
-    title = Tabellenfahrt der COMPETITION_NAME
-    # The is a line definition. Some part are replace dynamically
-    line = LINE
-    line {
-      # title is replaced with team name so don't care
-      title = egal
-      # The color is used from defaults.colors
-      lineColor = egal
-      lineStyle = solid
-      lineStyle{
-        thickness = 2
-        color = blue
-      }
-#      shadow = true
-      marker = circle
-      marker {
-        fillColor = white@0.4
-        size = 3
-        shadow = true
-      }
-    }
-    colors = {$plugin.tx_cfcleaguefe_report.chartcolors}
-  }
-
-  factory = png
-  width = {$plugin.tx_cfcleaguefe_report.chartwidth}
-  height = {$plugin.tx_cfcleaguefe_report.chartheight}
-  antialias = native
-  font.default = typo3conf/ext/cfc_league_fe/Ressources/Private/Fonts/nimbus.ttf
-  font.default {
-    size = 8
-  }
-  background = gradient
-  background {
-    direction = vertical_mirrored
-    startColor = steelblue
-    endColor = lightcyan
-  }
-  borderColor = black
-  10 = VERTICAL
-    10 {
-    percentage = 5
-    10 = TITLE
-    10 {
-      text = Eine Tabellenfahrt
-      font {
-        size = 10
-      }
-    }
-    20 = VERTICAL
-    20 {
-      percentage = 88
-      10 = PLOTAREA
-      10 {
-        id = plotarea1
-        axis{
-          y {
-            inverted = 1
-            forceMinimum = 1
-            labelInterval = 1
-            title = Tabellenplatz
-            title {
-              angle = 90
-              size = 8
-            }
-#            forceMinimum = 20
-          }
-          x {
-            label = minimum
-            axisIntersection = max
-            title = Spieltag
-            title {
-              angle = 0
-              size = 8
-            }
-          }
-        }
-        axisPadding = 10
-# Hintergrund der Diagrammfläche: Bild, Farbe oder Gradient
-# Beispiel für Farbe
-#        fillStyle = image
-#        fillStyle {
-#          image = fileadmin/images/website/cfc_schraeg_420.jpg
-#        }
-# Beispiel für Farbe ohne Alpha-Channel
-#        fillColor = yellow
-# Beispiel für Farbe mit Alpha-Channel
-#       fillColor = lightgrey@0.5
-
-# Beispiel für Gradient
-        fillStyle = gradient
-        fillStyle {
-          direction = vertical
-          startColor = white@50
-          endColor = lightgrey@50
-        }
-
-        10 = GRID
-        10 {
-          axis = y
-          type = line
-          lineColor = gray@0.2
-        }
-## Dieser Teil wird komplett ersetzt
-## Einstellungen bei chartline setzen
-        20 = LINE
-        20 {
-          title = Error: No Data delivered
-          lineColor = red
-          dataset {
-            10 = random
-            10 {
-              count = 10
-              minimum = 2
-              maximum = 15
-              includeZero = true
-            }
-          }
-      	}
-##
-      }
-      20 = LEGEND
-      20 {
-        plotarea.1 = plotarea1
-      }
-    }
-  }
-}
-
-plugin.tx_cfcleaguefe_competition.chart =< lib.t3sports.chart
 
 tt_content.list.20.tx_cfcleaguefe_competition    =< plugin.tx_cfcleaguefe_competition
 
@@ -1253,8 +1120,8 @@ lib.t3sports.matchNote {
     72.value = Rote Karte ###MATCH_TICKER_PLAYER_DCNAME### (<strong>###MATCH_TICKER_TEAM_NAME###</strong>).
     80 = TEXT
     80.value = Spielerwechsel <strong>###MATCH_TICKER_TEAM_NAME###</strong>: ###MATCH_TICKER_PLAYERCHANGEIN_DCNAME### kommt für ###MATCH_TICKER_PLAYERCHANGEOUT_DCNAME###
-#    default = TEXT
-#    default.field = type
+    # default = TEXT
+    # default.field = type
   }
   dcmessage.20 = TEXT
   dcmessage.20.field = comment
@@ -1404,7 +1271,7 @@ plugin.tx_cfcleaguefe_report {
         	profile =< lib.t3sports.profile
           filter.fields.TEAMNOTE.COMMENT.OP_EQ = Abwehr
           filter.options {
-#            debug = 1
+            # debug = 1
             enableFieldsForAdditionalTableAliases = TEAMNOTE
           }
         }
@@ -1567,8 +1434,8 @@ plugin.tx_cfcleaguefe_report {
           # Possible values are home and guest. Empty for both
           noteTeam = home
           noteType = 10,11,12,30
-#          noteIgnoreType = ??
-#          implode = <br />
+          # noteIgnoreType = ??
+          # implode = <br />
 		      seperator = |<br/>|
 		      ticker {
 		        minute.s_weight = 0
@@ -1729,7 +1596,7 @@ plugin.tx_cfcleaguefe_report {
             }
             # Wenn der auch wieder raus musste, könnte es hier weitergehen...
           }
-#          wrap = &nbsp;(|)
+          # wrap = &nbsp;(|)
           noTrimWrap = | (|)|
         }
       }
@@ -1760,7 +1627,7 @@ plugin.tx_cfcleaguefe_report {
             type =< lib.t3sports.matchreport.penaltyType
           }
         }
-#        seperator = |, |
+        # seperator = |, |
       }
     }
     substnamesguest =< plugin.tx_cfcleaguefe_report.matchreport.substnameshome
@@ -1803,19 +1670,34 @@ plugin.tx_cfcleaguefe_report {
 
 tt_content.list.20.tx_cfcleaguefe_report    =< plugin.tx_cfcleaguefe_report
 
-# Prepare some links from tt_news
-plugin.tt_news {
-  external_links {
-    matchreport {
-      ext_parameters = matchId
-      pid = {$plugin.tx_cfcleaguefe_report.matchreportpage}
+t3sLeagueTable = PAGE
+t3sLeagueTable {
+    typeNum = 7150
+    10 =< plugin.tx_cfcleaguefe_competition
+    10 {
+        action = System25\T3sports\Frontend\Action\LeagueTable
+        leaguetableTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableTemplate}
+
+        leaguetable {
+            tablecfg {
+              ajaxControls = 1
+              tabletypeSelectionInput = 1
+              tablescopeSelectionInput = 1
+              pointSystemSelectionInput = 1
+            }
+            includeJSFooter >
+        }
     }
-    profile {
-      ext_parameters = profileId
-      pid = {$plugin.tx_cfcleaguefe_competition.playerpage}
+
+    config {
+        disableAllHeaderCode = 1
+        additionalHeaders.10.header = Content-type:text/html
+        xhtml_cleaning = 0
+        admPanel = 0
+        locale_all = en
     }
-  }
 }
+
 
 plugin.tx_cfcleaguefe_report {
 	_CSS_DEFAULT_STYLE (

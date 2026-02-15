@@ -138,6 +138,13 @@ class ScopeController
             $viewData->offsetSet('saison_select', $dataArr);
             $configurations->addKeepVar('saison', $saisonUids);
             self::$_scopeParams['saison'] = $saisonUids;
+        } elseif ($configurations->getBool('leaguetable.tablecfg.ajaxControls')) {
+            // Wenn keine SelectBox, aber eine Saison konfiguriert ist, dann diese in die ScopeParams übernehmen
+            $saisonUids = $parameters->get('saison');
+            if ($saisonUids) {
+                $configurations->addKeepVar('saison', $saisonUids);
+                self::$_scopeParams['saison'] = $saisonUids;
+            }
         }
 
         return $saisonUids;
@@ -252,6 +259,13 @@ class ScopeController
             $viewData->offsetSet('competition_select', $dataArr);
             $configurations->addKeepVar('competition', $compUids);
             self::$_scopeParams['competition'] = $compUids;
+        } elseif ($configurations->getBool('leaguetable.tablecfg.ajaxControls')) {
+            // Wenn keine SelectBox, aber eine Saison konfiguriert ist, dann diese in die ScopeParams übernehmen
+            $compUids = $parameters->get('competition');
+            if ($compUids) {
+                $configurations->addKeepVar('competition', $compUids);
+                self::$_scopeParams['competition'] = $compUids;
+            }
         }
         $scopeArr['COMP_UIDS'] = $compUids;
         // Zusätzlich noch die weiteren Einschränkungen mit in das ScopeArray legen, weil diese Infos auch
