@@ -123,6 +123,8 @@ lib.t3sports.pagebrowser {
   pagefloat = CENTER
   hideIfSinglePage = 1
   link.useKeepVars = 1
+  link.useKeepVars.add = cfc_league_fe::*
+
 }
 lib.t3sports.group {
   logo = USER

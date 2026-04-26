@@ -60,6 +60,11 @@ plugin.tx_cfcleaguefe_competition {
             file = EXT:cfc_league_fe/Resources/Private/Templates/matchtable.html.twig
             ts {
                 fixture =< lib.t3sports.match
+                fixture {
+                    pagebrowser =< lib.t3sports.pagebrowser
+                    home =< lib.t3sports.teamSmall
+                    guest =< lib.t3sports.teamSmall
+                }
                 stadium =< lib.t3sports.stadium
                 relations =< lib.t3sports.twig.relations
                 search =< lib.t3sports.twig.search

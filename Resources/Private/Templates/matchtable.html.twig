@@ -1,0 +1,60 @@
+{% import '@EXT:t3twigs/Twig/macros.html.twig' as t3twigs %}
+{% import '@EXT:cfc_league_fe/macros/match.html.twig' as mr %}
+
+{{ t3twigs.pb(pagebrowser, 'fixture.pagebrowser.') }}
+{{ t3twigs.pb_pageinfo(pagebrowser, 'fixture.pagebrowser.') }}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="list-group">
+            {% for fixture in items %}
+                <div class="list-group-item p-3 mb-2 shadow-sm border-0 rounded">
+                    
+                    {# Datum und Spieltag Info #}
+                    <div class="d-flex justify-content-between small text-muted mb-3 border-bottom pb-2">
+                        <span>{{ fixture.date|t3ts('lib.t3sports.match.date', {'data': fixture.property}) }}</span>
+                        <span class="fw-bold">{{ fixture.round_name }}</span>
+                    </div>
+
+                    {# Die Begegnung #}
+                    <div class="row align-items-center text-center">
+                        
+                        {# Heimteam #}
+                        <div class="col-4">
+                            <div class="mb-1">
+                                {{ fixture.home.logo|t3ts('fixture.home.logo', {'data': fixture.home}) }}
+                            </div>
+                            <div class="fw-semibold">{{ fixture.home.name }}</div>
+                        </div>
+
+                        {# Ergebnis / Status #}
+                        <div class="col-4">
+                            <div class="h3 mb-0">
+                                {% if (fixture.link_report) %}
+                                    {{ mr.result(fixture)|t3link({'ts_path': 'fixture.links.report.', 'params': {'matchId':fixture.uid}}) }}
+                                {% else %}
+                                    {{ mr.result(fixture) }}
+                                {% endif %}
+                            </div>
+                            {% if fixture.addinfo %}
+                                <div class="small text-muted mt-1">({{ fixture.addinfo }})</div>
+                            {% endif %}
+                        </div>
+
+                        {# Gastteam #}
+                        <div class="col-4">
+                            <div class="mb-1">
+                                {{ fixture.guest.logo|t3ts('fixture.home.logo', {'data': fixture.guest}) }}
+                            </div>
+                            <div class="fw-semibold">{{ fixture.guest.name }}</div>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{{ t3twigs.pb_pageinfo(pagebrowser, 'fixture.pagebrowser.') }}
+{{ t3twigs.pb(pagebrowser, 'fixture.pagebrowser.') }}

@@ -7,6 +7,7 @@ v1.12.1 (??.0?.2026)
  * new tablechart implementation based on apex charts.
  * legacy chart typoscript removed
  * use ajax calls in league table controls
+ * add twig template for matchtable
 
 v1.12.0 (24.12.2025)
  * #92 Support for judo competitions
