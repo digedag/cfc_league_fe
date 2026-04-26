@@ -36,6 +36,9 @@
 		"phpcompatibility/php-compatibility": "^9.3.5",
 		"phpunit/phpunit": "^6.5.14 || ^7.5.20 || ^8.0 || ^9.0"
 	},
+	"suggest": {
+		"digedag/t3twigs": "*"
+	},
 	"autoload" : {
 		"psr-4": { "System25\\T3sports\\": "Classes" }
 	},
