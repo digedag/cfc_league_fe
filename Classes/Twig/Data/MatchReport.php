@@ -206,6 +206,7 @@ class MatchReport
      */
     protected function getLineup($players, $system)
     {
+        $system = '0' == $system ? '1-1-1-1-1-1-1-1-1-1-1' : $system;
         $system = Strings::trimExplode('-', $system);
         $players = is_array($players) ? array_values($players) : [];
 
