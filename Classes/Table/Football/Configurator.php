@@ -11,6 +11,7 @@ use System25\T3sports\Model\Team;
 use System25\T3sports\Table\IComparator;
 use System25\T3sports\Table\IConfigurator;
 use System25\T3sports\Table\PointOptions;
+use System25\T3sports\Table\TableModeConfig;
 use System25\T3sports\Utility\Misc;
 use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
@@ -92,11 +93,17 @@ class Configurator implements IConfigurator
     protected $confId;
     protected $markClubs;
 
+    /**
+     * @var TableModeConfig
+     */
+    protected $tableModeConfig;
+
     public function __construct(Competition $baseCompetition, $configurations, $confId)
     {
         $this->baseCompetition = $baseCompetition;
         $this->configurations = $configurations;
         $this->confId = $confId;
+        $this->tableModeConfig = new TableModeConfig($configurations, $confId);
         $this->init();
     }
 
@@ -241,27 +248,17 @@ class Configurator implements IConfigurator
 
     protected function init()
     {
-        // Der TableScope wirkt sich auf die betrachteten Spiele (Hin-Rückrunde) aus
-        $parameters = $this->configurations->getParameters();
-        $this->cfgTableScope = $this->getConfValue('tablescope');
-        // Wir bleiben mit den alten falschen TS-Einstellungen kompatibel und fragen
-        // beide Einstellungen ab
-        if ($this->configurations->get('tabletypeSelectionInput') || $this->getConfValue('tablescopeSelectionInput')) {
-            $this->cfgTableScope = $parameters->get('tablescope') ?? $this->cfgTableScope;
-        }
+        // Get table mode settings from TableModeConfig
+        $this->cfgTableType = $this->tableModeConfig->getTableType();
+        $this->cfgTableScope = $this->tableModeConfig->getTableScope();
+        $this->cfgPointSystem = $this->tableModeConfig->getPointSystem();
 
-        // tabletype means home or away matches only
-        $this->cfgTableType = $this->getConfValue('tabletype');
-        if ($this->configurations->get('tabletypeSelectionInput') || $this->getConfValue('tabletypeSelectionInput')) {
-            $this->cfgTableType = $parameters->get('tabletype') ?? $this->cfgTableType;
-        }
-
-        $this->cfgPointSystem = $this->getCompetition()->getProperty('point_system');
-        if (null !== $this->configurations->get($this->confId.'forcePointSystem')) {
-            $this->cfgPointSystem = (int) $this->configurations->get($this->confId.'forcePointSystem');
-        }
-        if ($this->configurations->get('pointSystemSelectionInput') || $this->getConfValue('pointSystemSelectionInput')) {
-            $this->cfgPointSystem = is_string($parameters->get('pointsystem')) ? intval($parameters->get('pointsystem')) : $this->cfgPointSystem;
+        // Override with competition-specific point system if not forced
+        if (null === $this->configurations->get($this->confId.'forcePointSystem')) {
+            $competitionPointSystem = $this->getCompetition()->getProperty('point_system');
+            if (null !== $competitionPointSystem) {
+                $this->cfgPointSystem = (int) $competitionPointSystem;
+            }
         }
 
         $this->cfgLiveTable = $this->configurations->getBool($this->confId.'showLiveTable');
