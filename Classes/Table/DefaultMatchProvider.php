@@ -16,7 +16,7 @@ use System25\T3sports\Utility\ServiceRegistry;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2008-2024 Rene Nitzsche (rene@system25.de)
+ *  (c) 2008-2026 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -63,8 +63,6 @@ class DefaultMatchProvider implements IMatchProvider
      */
     private $league;
 
-    private $scope;
-
     /**
      * @var int
      */
@@ -93,6 +91,11 @@ class DefaultMatchProvider implements IMatchProvider
     private $matches;
 
     /**
+     * @var MatchSelectionConfig
+     */
+    private $matchSelectionConfig;
+
+    /**
      * @param ConfigurationInterface $configurations
      * @param string $confId ConfId des Views
      * @param MatchRepository $matchRepo
@@ -102,6 +105,7 @@ class DefaultMatchProvider implements IMatchProvider
         $this->configurations = $configurations;
         $this->confId = $confId;
         $this->matchRepo = $matchRepo ?: new MatchRepository();
+        $this->matchSelectionConfig = new MatchSelectionConfig($configurations, $confId);
     }
 
     public function setMatchTable(MatchTableBuilder $matchTableBuilder)
@@ -109,14 +113,14 @@ class DefaultMatchProvider implements IMatchProvider
         $this->matchTableBuilder = $matchTableBuilder;
     }
 
-    public function setScope($scope)
+    public function setScope(array $scope)
     {
-        $this->scope = $scope;
+        $this->matchSelectionConfig->setScope($scope);
     }
 
-    public function getScope()
+    public function getScope(): array
     {
-        return $this->scope;
+        return $this->matchSelectionConfig->getScope();
     }
 
     /**
@@ -172,26 +176,27 @@ class DefaultMatchProvider implements IMatchProvider
         if (is_array($this->teams)) {
             return $this->teams;
         }
+        $scope = $this->getScope();
 
         // Es ist keine gute Idee, die Teams über die beendeten Spiele zu holen.
         // Dadurch kann am Saisonbeginn keine Tabelle erstellt werden.
         // Es ist besser die Spiele über die Wettbewerbe zu laden.
         $fields = $options = [];
-        SearchBuilder::setField($fields, 'COMPETITION.SAISON', OP_IN_INT, $this->scope['SAISON_UIDS'] ?? '');
-        SearchBuilder::setField($fields, 'COMPETITION.AGEGROUP', OP_INSET_INT, $this->scope['GROUP_UIDS'] ?? '');
-        SearchBuilder::setField($fields, 'COMPETITION.UID', OP_IN_INT, $this->scope['COMP_UIDS'] ?? '');
-        SearchBuilder::setField($fields, 'TEAM.CLUB', OP_IN_INT, $this->scope['CLUB_UIDS'] ?? '');
+        SearchBuilder::setField($fields, 'COMPETITION.SAISON', OP_IN_INT, $scope['SAISON_UIDS'] ?? '');
+        SearchBuilder::setField($fields, 'COMPETITION.AGEGROUP', OP_INSET_INT, $scope['GROUP_UIDS'] ?? '');
+        SearchBuilder::setField($fields, 'COMPETITION.UID', OP_IN_INT, $scope['COMP_UIDS'] ?? '');
+        SearchBuilder::setField($fields, 'TEAM.CLUB', OP_IN_INT, $scope['CLUB_UIDS'] ?? '');
 
-        if (isset($this->scope['COMP_OBLIGATION'])) {
-            if (1 == intval($this->scope['COMP_OBLIGATION'])) {
+        if (isset($scope['COMP_OBLIGATION'])) {
+            if (1 == intval($scope['COMP_OBLIGATION'])) {
                 $fields['COMPETITION.OBLIGATION'][OP_EQ_INT] = 1;
             } else {
                 $fields['COMPETITION.OBLIGATION'][OP_NOTEQ_INT] = 1;
             }
         }
 
-        SearchBuilder::setField($fields, 'COMPETITION.TYPE', OP_IN_INT, $this->scope['COMP_TYPES'] ?? '');
-        SearchBuilder::setField($fields, 'TEAM.AGEGROUP', OP_IN_INT, $this->scope['TEAMGROUP_UIDS'] ?? '');
+        SearchBuilder::setField($fields, 'COMPETITION.TYPE', OP_IN_INT, $scope['COMP_TYPES'] ?? '');
+        SearchBuilder::setField($fields, 'TEAM.AGEGROUP', OP_IN_INT, $scope['TEAMGROUP_UIDS'] ?? '');
 
         $options['distinct'] = 1;
         $options['orderby']['TEAM.SORTING'] = 'asc'; // Nach Sortierung auf Seite
@@ -232,7 +237,7 @@ class DefaultMatchProvider implements IMatchProvider
     {
         if (null === $this->league) {
             // Den Wettbewerb müssen wir initial auf Basis des Scopes laden.
-            $this->league = self::getLeagueFromScope($this->scope);
+            $this->league = self::getLeagueFromScope($this->getScope());
         }
 
         return $this->league;
@@ -278,22 +283,23 @@ class DefaultMatchProvider implements IMatchProvider
         // Was ist, wenn der MatchTableBuilder nicht extern gesetzt wurde??
         $matchSrv = ServiceRegistry::getMatchService();
         $matchTable = $matchSrv->getMatchTableBuilder();
-        $matchTable->setStatus($this->getMatchStatus()); // Status der Spiele
+        $matchTable->setStatus($this->matchSelectionConfig->getMatchStatus()); // Status der Spiele
         // Der Scope zählt. Wenn da mehrere Wettbewerbe drin sind, ist das ein Problem
         // in der Plugineinstellung. Somit funktionieren aber auch gleich die Alltimetabellen
-        $matchTable->setScope($this->scope);
+        $matchTable->setScope($this->matchSelectionConfig->getScope());
         // $matchTable->setCompetitionTypes(1);
 
-        if ($this->currRound) {
+        if ($this->matchSelectionConfig->getCurrentRound()) {
             // Nur bis zum Spieltag anzeigen
-            $matchTable->setMaxRound($this->currRound);
+            $matchTable->setMaxRound($this->matchSelectionConfig->getCurrentRound());
         }
-        if (is_array($this->scope)) {
-            $scopeArr = $this->scope;
-            // Die Runde im Scope wird gesondert gesetzt.
-            unset($scopeArr['ROUND_UIDS']);
-            $matchTable->setScope($scopeArr);
-        }
+
+        // Ohne Scope sollte es nicht geben.
+        // hier machen wir eine Kopie und entfernen die Runden.
+        $scopeArr = $this->matchSelectionConfig->getScope();
+        // Die Runde im Scope wird gesondert gesetzt.
+        unset($scopeArr['ROUND_UIDS']);
+        $matchTable->setScope($scopeArr);
         $this->matchTableBuilder = $matchTable;
 
         return $this->matchTableBuilder;
@@ -301,12 +307,7 @@ class DefaultMatchProvider implements IMatchProvider
 
     private function getMatchStatus()
     {
-        $status = $this->configurations->get($this->confId.'filter.matchstatus');
-        if (!$status) {
-            $status = $this->configurator->isLiveTable() ? '1,2' : '2';
-        }
-
-        return $status;
+        return $this->matchSelectionConfig->getMatchStatus();
     }
 
     public function setMatches($matches)
@@ -413,6 +414,7 @@ class DefaultMatchProvider implements IMatchProvider
     public function setCurrentRound($round)
     {
         $this->currRound = $round;
+        $this->matchSelectionConfig->setCurrentRound($round);
     }
 
     /**
