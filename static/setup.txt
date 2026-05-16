@@ -712,6 +712,9 @@ plugin.tx_cfcleaguefe_competition {
         link.useKeepVars.add = ::type=7150, cfc_league_fe::*
       }
     }
+    includeJSFooter {
+     t3sports = EXT:cfc_league_fe/Resources/Public/JS/t3sports/t3sports.js
+    }
   }
   leaguetableAllTime < plugin.tx_cfcleaguefe_competition.leaguetable
   leaguetableAllTime {
@@ -1679,6 +1682,7 @@ t3sLeagueTable {
     10 {
         action = System25\T3sports\Frontend\Action\LeagueTable
         leaguetableTemplate = {$plugin.tx_cfcleaguefe_competition.leaguetableTemplate}
+        scope.readFromPlugin = 1
 
         leaguetable {
             tablecfg {

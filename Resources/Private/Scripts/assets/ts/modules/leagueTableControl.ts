@@ -61,7 +61,7 @@ function init(): void {
                     init(); // Rekursiver Aufruf für neue Inhalte
                 }
             } catch (error) {
-                console.error('AJAX Error:', error);
+                console.error('T3sports AJAX Error:', error);
                 alert('Fehler beim Laden der Daten.');
                 overlay.remove(); // Spinner bei Fehler entfernen
             }

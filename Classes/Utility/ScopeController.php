@@ -2,20 +2,27 @@
 
 namespace System25\T3sports\Utility;
 
+use PDO;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
+use Sys25\RnBase\Configuration\Processor;
+use Sys25\RnBase\Database\Connection;
 use Sys25\RnBase\Frontend\Request\ParametersInterface;
 use Sys25\RnBase\Search\SearchBase;
 use Sys25\RnBase\Utility\Math;
+use Sys25\RnBase\Utility\TYPO3;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\CompetitionRound;
 use System25\T3sports\Model\Group;
 use System25\T3sports\Model\Repository\ClubRepository;
 use System25\T3sports\Model\Repository\SaisonRepository;
+use tx_rnbase;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2026 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -47,12 +54,106 @@ use System25\T3sports\Model\Repository\SaisonRepository;
  */
 class ScopeController
 {
+    private const PARAM_PLUGIN = 'plgid';
+
     // Speichert die UID des aktuellen cObject
-    private static $_cObjectUID = [];
+    private array $cObjectUID = [];
 
-    private static $_scopeParams = [];
+    private array $scopeParams = [];
+    /** @var SaisonRepository */
+    private $saisonRepo;
+    /** @var ClubRepository */
+    private $clubRepo;
 
-    //public static function handleCurrentScope(RequestInterface $request, $useObjects = false)
+    public function __construct(SaisonRepository $saisonRepo, ClubRepository $clubRepo)
+    {
+        $this->saisonRepo = $saisonRepo;
+        $this->clubRepo = $clubRepo;
+    }
+
+    public function handleScope(ParametersInterface $parameters, ConfigurationInterface $configurations, $useObjects = false)
+    {
+        if ($configurations->getBool('scope.readFromPlugin')) {
+            $pluginId = $parameters->getInt(self::PARAM_PLUGIN);
+            if ($pluginId) {
+                $configurations = $this->getConfigurationForPluginUid($pluginId);
+            }
+        }
+
+        $cObjUid = $configurations->getCObj()->data['uid'];
+        // Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
+        if (!$cObjUid || !isset($this->cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
+            // Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
+            $ret = [];
+            $ret['SAISON_UIDS'] = $this->handleCurrentSaison($parameters, $configurations, $useObjects);
+            $ret['GROUP_UIDS'] = $this->handleCurrentCompetitionGroup($parameters, $configurations, $useObjects);
+            $ret['TEAMGROUP_UIDS'] = $this->handleCurrentTeamGroup($parameters, $configurations, $useObjects);
+            $this->handleCurrentCompetition($ret, $parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $useObjects);
+            $ret['CLUB_UIDS'] = $this->handleCurrentClub($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $useObjects);
+            $ret['ROUND_UIDS'] = $this->handleCurrentRound($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $ret['CLUB_UIDS'], $useObjects);
+
+            // Die Daten für das Plugin cachen
+            $this->cObjectUID[$cObjUid] = $ret;
+            // die variablen Parameter in ein T3-Register schreiben
+            if (!intval($configurations->get('scope.noScopeParams'))) {
+                $this->setScopeParams($configurations);
+            }
+            // ensure that the plugin block is preserved for AJAX requests even when
+            // no scope parameters are present in the current request
+            $this->ensurePluginIdKeepVar($configurations);
+        }
+
+        return $this->cObjectUID[$cObjUid];
+    }
+
+    private function getConfigurationForPluginUid($pluginIdFromRequest)
+    {
+        $pluginId = (int) $pluginIdFromRequest;
+        if (!$pluginId) {
+            return null;
+        }
+
+        // Try direct match: often the unique id is simply the tt_content.uid
+        $record = $this->fetchTtContentByUid($pluginId);
+        if (!$record) {
+            // Das funktioniert nicht für Plugins, die per TS erstellt werden.
+            return null;
+        }
+
+        $listType = $record['list_type'] ?? '';
+        // Sicherheitscheck: nur erwartetes Plugin (optional)
+        if ('tx_cfcleaguefe_competition' !== $listType) {
+            // falls du mehrere plugin keys hast, prüfe hier entsprechend oder entferne die Prüfung.
+            return null;
+        }
+
+        // Erzeuge cObj mit Record-Daten
+        /** @var ContentObjectRenderer $cObj */
+        $cObj = tx_rnbase::makeInstance(ContentObjectRenderer::class);
+        $cObj->start($record, 'tt_content');
+
+        // TypoScript-Subtree für das Plugin holen
+
+        $tsSetup = TYPO3::getTSFE()->tmpl->setup['plugin.'][$listType.'.'] ?? [];
+
+        /** @var Processor $processor */
+        $processor = tx_rnbase::makeInstance(Processor::class);
+        $processor->init($tsSetup, $cObj, 'cfc_league_fe', 'cfc_league_fe');
+
+        return $processor;
+    }
+
+    private function fetchTtContentByUid($uid)
+    {
+        $options['where'] = function (QueryBuilder $qb) use ($uid) {
+            $qb->andWhere($qb->expr()->eq(
+                'uid',
+                $qb->createNamedParameter($uid, PDO::PARAM_INT)));
+        };
+        $result = Connection::getInstance()->doSelect('*', 'tt_content', $options);
+
+        return $result[0] ?? null;
+    }
 
     /**
      * Diese Funktion stellt die UIDs der aktuell ausgewählten Ligen bereit.
@@ -65,30 +166,14 @@ class ScopeController
      * @param bool $useObjects Wenn true werden ganze Objekte
      *
      * @return array mit den UIDs als String
+     *
+     * @deprecated inject service
      */
     public static function handleCurrentScope(ParametersInterface $parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
-        $cObjUid = $configurations->getCObj()->data['uid'];
-        // Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
-        if (!$cObjUid || !isset(self::$_cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
-            // Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
-            $ret = [];
-            $ret['SAISON_UIDS'] = self::handleCurrentSaison($parameters, $configurations, $useObjects);
-            $ret['GROUP_UIDS'] = self::handleCurrentCompetitionGroup($parameters, $configurations, $useObjects);
-            $ret['TEAMGROUP_UIDS'] = self::handleCurrentTeamGroup($parameters, $configurations, $useObjects);
-            self::handleCurrentCompetition($ret, $parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $useObjects);
-            $ret['CLUB_UIDS'] = self::handleCurrentClub($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $useObjects);
-            $ret['ROUND_UIDS'] = self::handleCurrentRound($parameters, $configurations, $ret['SAISON_UIDS'], $ret['GROUP_UIDS'], $ret['COMP_UIDS'], $ret['CLUB_UIDS'], $useObjects);
+        $controller = tx_rnbase::makeInstance(self::class);
 
-            // Die Daten für das Plugin cachen
-            self::$_cObjectUID[$cObjUid] = $ret;
-            // die variablen Parameter in ein T3-Register schreiben
-            if (!intval($configurations->get('scope.noScopeParams'))) {
-                self::setScopeParams($configurations);
-            }
-        }
-
-        return self::$_cObjectUID[$cObjUid];
+        return $controller->handleScope($parameters, $configurations, $useObjects);
     }
 
     /**
@@ -97,18 +182,32 @@ class ScopeController
      *
      * @param ConfigurationInterface $configurations
      */
-    private static function setScopeParams(ConfigurationInterface $configurations)
+    private function setScopeParams(ConfigurationInterface $configurations)
     {
-        if (!count(self::$_scopeParams)) {
+        if (!count($this->scopeParams)) {
             return;
         }
 
         $params = '';
         $qualifier = $configurations->getQualifier();
-        foreach (self::$_scopeParams as $key => $value) {
+        foreach ($this->scopeParams as $key => $value) {
             $params .= '&'.$qualifier.'['.$key.']='.rawurlencode($value);
         }
-        $GLOBALS['TSFE']->register['T3SPORTS_SCOPEPARAMS'] = $params;
+        TYPO3::getTSFE()->register['T3SPORTS_SCOPEPARAMS'] = $params;
+    }
+
+    /**
+     * Ensure the plugin-specific parameter container remains available in links.
+     *
+     * This adds a dummy keepVar for the plugin UID when no scope parameters
+     * are present in the current request. It allows AJAX requests using unique
+     * parameters to rehydrate the plugin configuration and scope from the
+     * original plugin record, rather than requiring the scope values to be
+     * passed explicitly.
+     */
+    private function ensurePluginIdKeepVar(ConfigurationInterface $configurations)
+    {
+        $configurations->addKeepVar(self::PARAM_PLUGIN, $configurations->getPluginId());
     }
 
     /**
@@ -121,29 +220,28 @@ class ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentSaison(ParametersInterface $parameters, ConfigurationInterface $configurations, $useObjects = false)
+    private function handleCurrentSaison(ParametersInterface $parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
         $viewData = $configurations->getViewData();
         $saisonUids = $configurations->get('saisonSelection');
 
         // Soll eine SelectBox für Saison gezeigt werden?
         if ($configurations->get('saisonSelectionInput')) {
-            $saisonRepo = new SaisonRepository();
             // Die UIDs der Saisons in Objekte umwandeln, um eine Selectbox zu bauen
             // TODO: Es sollten zusätzliche Kriterien zur Ermittlung der Saisons herangezogen werden
             // Einfach alle Saisons zu zeigen führt zu vielen leeren Seiten
-            $saisons = $saisonRepo->findByUids($saisonUids);
-            $dataArr = self::_prepareSelect($saisons, $parameters, 'saison', $useObjects ? '' : 'name');
+            $saisons = $this->saisonRepo->findByUids($saisonUids);
+            $dataArr = $this->prepareSelect($saisons, $parameters, 'saison', $useObjects ? '' : 'name');
             $saisonUids = $dataArr[1];
             $viewData->offsetSet('saison_select', $dataArr);
             $configurations->addKeepVar('saison', $saisonUids);
-            self::$_scopeParams['saison'] = $saisonUids;
+            $this->scopeParams['saison'] = $saisonUids;
         } elseif ($configurations->getBool('leaguetable.tablecfg.ajaxControls')) {
             // Wenn keine SelectBox, aber eine Saison konfiguriert ist, dann diese in die ScopeParams übernehmen
             $saisonUids = $parameters->get('saison');
             if ($saisonUids) {
                 $configurations->addKeepVar('saison', $saisonUids);
-                self::$_scopeParams['saison'] = $saisonUids;
+                $this->scopeParams['saison'] = $saisonUids;
             }
         }
 
@@ -157,7 +255,7 @@ class ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentCompetitionGroup($parameters, ConfigurationInterface $configurations, $useObjects = false)
+    private function handleCurrentCompetitionGroup($parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
         $viewData = $configurations->getViewData();
         $groupUids = $configurations->get('groupSelection');
@@ -166,11 +264,11 @@ class ScopeController
         if ($configurations->get('groupSelectionInput')) {
             // Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
             $groups = Group::findAll($groupUids);
-            $dataArr = self::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
+            $dataArr = $this->prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
             $groupUids = $dataArr[1];
             $viewData->offsetSet('group_select', $dataArr);
             $configurations->addKeepVar('group', $groupUids);
-            self::$_scopeParams['group'] = $groupUids;
+            $this->scopeParams['group'] = $groupUids;
         }
 
         return $groupUids;
@@ -183,7 +281,7 @@ class ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentTeamGroup($parameters, ConfigurationInterface $configurations, $useObjects = false)
+    private function handleCurrentTeamGroup($parameters, ConfigurationInterface $configurations, $useObjects = false)
     {
         $viewData = $configurations->getViewData();
         $groupUids = $configurations->get('scope.teamGroup');
@@ -192,11 +290,11 @@ class ScopeController
         if ($configurations->get('scope.teamGroupSelectionInput')) {
             // Die UIDs der Altersklasse in Objekte umwandeln um eine Selectbox zu bauen
             $groups = Group::findAll($groupUids);
-            $dataArr = self::_prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
+            $dataArr = $this->prepareSelect($groups, $parameters, 'group', $useObjects ? '' : 'name');
             $groupUids = $dataArr[1];
             $viewData->offsetSet('teamgroup_select', $dataArr);
             $configurations->addKeepVar('teamgroup', $groupUids);
-            self::$_scopeParams['teamgroup'] = $groupUids;
+            $this->scopeParams['teamgroup'] = $groupUids;
         }
 
         return $groupUids;
@@ -209,22 +307,21 @@ class ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentClub($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $useObjects = false)
+    private function handleCurrentClub($parameters, &$configurations, $saisonUids, $groupUids, $compUids, $useObjects = false)
     {
         $viewData = $configurations->getViewData();
         $clubUids = $configurations->get('clubSelection');
-        $clubRepo = new ClubRepository();
 
         // Soll eine SelectBox für den Verein gezeigt werden?
         // Das machen wir nur, wenn mindestens ein Verein konfiguriert wurde
         if ($configurations->get('clubSelectionInput')) {
             // Die UIDs der Vereine in Objekte umwandeln, um eine Selectbox zu bauen
-            $clubs = $clubRepo->findAllByScope($clubUids, $saisonUids, $groupUids, $compUids);
-            $dataArr = self::_prepareSelect($clubs, $parameters, 'club', $useObjects ? '' : 'name');
+            $clubs = $this->clubRepo->findAllByScope($clubUids, $saisonUids, $groupUids, $compUids);
+            $dataArr = $this->prepareSelect($clubs, $parameters, 'club', $useObjects ? '' : 'name');
             $clubUids = $dataArr[1];
             $viewData->offsetSet('club_select', $dataArr);
             $configurations->addKeepVar('club', $clubUids);
-            self::$_scopeParams['club'] = $clubUids;
+            $this->scopeParams['club'] = $clubUids;
         }
 
         return $clubUids;
@@ -237,7 +334,7 @@ class ScopeController
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentCompetition(&$scopeArr, $parameters, $configurations, $saisonUids, $groupUids, $useObjects = false)
+    private function handleCurrentCompetition(&$scopeArr, $parameters, $configurations, $saisonUids, $groupUids, $useObjects = false)
     {
         $viewData = $configurations->getViewData();
         $compUids = $configurations->get('competitionSelection');
@@ -254,17 +351,17 @@ class ScopeController
             \System25\T3sports\Search\SearchBuilder::buildCompetitionByScope($fields, $parameters, $configurations, $saisonUids, $groupUids, $compUids);
 
             $competitions = $compServ->search($fields, $options);
-            $dataArr = self::_prepareSelect($competitions, $parameters, 'competition', $useObjects ? '' : 'name');
+            $dataArr = $this->prepareSelect($competitions, $parameters, 'competition', $useObjects ? '' : 'name');
             $compUids = $dataArr[1];
             $viewData->offsetSet('competition_select', $dataArr);
             $configurations->addKeepVar('competition', $compUids);
-            self::$_scopeParams['competition'] = $compUids;
+            $this->scopeParams['competition'] = $compUids;
         } elseif ($configurations->getBool('leaguetable.tablecfg.ajaxControls')) {
             // Wenn keine SelectBox, aber eine Saison konfiguriert ist, dann diese in die ScopeParams übernehmen
             $compUids = $parameters->get('competition');
             if ($compUids) {
                 $configurations->addKeepVar('competition', $compUids);
-                self::$_scopeParams['competition'] = $compUids;
+                $this->scopeParams['competition'] = $compUids;
             }
         }
         $scopeArr['COMP_UIDS'] = $compUids;
@@ -289,12 +386,11 @@ class ScopeController
      * <li> Im Flexform ist der Wert roundSelectionInput gesetzt
      * </ul>.
      *
-     * @param
-     *            compUids String die UIDs der aktuell eingestellten Wettbewerbe
+     * @param string $compUids String die UIDs der aktuell eingestellten Wettbewerbe
      *
      * @return string Die UIDs als String
      */
-    private static function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
+    private function handleCurrentRound($parameters, $configurations, $saisonUids, $groupUids, $compUids, $clubUids, $useObjects = false)
     {
         $roundUid = '';
         $viewData = $configurations->getViewData();
@@ -303,7 +399,7 @@ class ScopeController
             $currCompetition = new Competition($compUids);
             // Die Spielrunden ermitteln
             $rounds = $currCompetition->getRounds();
-            $dataArr = self::prepareRoundSelect($rounds, $parameters, $configurations, 'scope.rounds.', $useObjects ? '' : 'uid');
+            $dataArr = $this->prepareRoundSelect($rounds, $parameters, $configurations, 'scope.rounds.', $useObjects ? '' : 'uid');
             $roundUid = $dataArr[1];
             $viewData->offsetSet('round_select', $dataArr);
             $configurations->addKeepVar('round', $roundUid);
@@ -321,7 +417,7 @@ class ScopeController
      *            Name eines Attributs, um dessen Wert anzuzeigen. Wenn der
      *            String leer ist, dann wird das gesamten Objekt als Wert verwendet.
      */
-    private static function _prepareSelect($objects, ParametersInterface $parameters, $parameterName, $displayAttrName = 'name')
+    private function prepareSelect($objects, ParametersInterface $parameters, $parameterName, $displayAttrName = 'name')
     {
         $ret = [];
         if (count($objects)) {
@@ -350,7 +446,7 @@ class ScopeController
      *
      * @return array
      */
-    private static function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
+    private function prepareRoundSelect($rounds, $parameters, $configurations, $confId, $displayAttrName = 'name')
     {
         $ret = [];
         if (count($rounds)) {

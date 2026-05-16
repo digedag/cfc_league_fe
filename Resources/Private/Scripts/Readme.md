@@ -25,7 +25,8 @@ Generated `t3sports.js` can be found in folder **Public/JS/t3sports/**.
 
 # Content
 
-## LeageTable
+## LeagueTable
 
 The table run with Apex Charts
 
+Ajax controls for league table scope

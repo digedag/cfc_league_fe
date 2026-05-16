@@ -14,7 +14,6 @@ use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\ITableType;
 use System25\T3sports\Table\TableWriterBase;
-use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
 
 /***************************************************************
@@ -79,7 +78,13 @@ class TableWriter extends TableWriterBase
 
         $markerArray = [];
         // Die Tabellensteuerung
-        $subpartArray['###CONTROLS###'] = $this->createControls(Templates::getSubpart($template, '###CONTROLS###'), $result->getConfigurator(), $configurations, $confId.'controls.');
+        $renderer = new \System25\T3sports\Table\TableControlRenderer();
+        $subpartArray['###CONTROLS###'] = $renderer->renderControls(
+            Templates::getSubpart($template, '###CONTROLS###'),
+            $result->getConfigurator(),
+            $configurations,
+            $confId.'controls.'
+        );
 
         $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
 
@@ -208,161 +213,5 @@ class TableWriter extends TableWriterBase
             $row['mark'] = '';
             $row['markLabel'] = '';
         }
-    }
-
-    /**
-     * Erstellt das Steuerungspanel für die Tabelle.
-     *
-     * @param ConfigurationInterface $configurations
-     * @param Configurator $configurator
-     */
-    protected function createControls($template, $configurator, $configurations, $confId)
-    {
-        $markerArray = [];
-        $subpartArray = [
-            '###CONTROL_TABLETYPE###' => '',
-            '###CONTROL_TABLESCOPE###' => '',
-            '###CONTROL_POINTSYSTEM###' => '',
-        ];
-
-        // Tabletype => Home/Away
-        if ($configurations->get('tabletypeSelectionInput') || $configurations->get('leaguetable.tablecfg.tabletypeSelectionInput')) {
-            $items = [
-                0,
-                1,
-                2,
-            ];
-            // Wir bereiten die Selectbox vor
-            $arr = [
-                $items,
-                $configurator->getTableType(),
-            ];
-            // $arr = Array($items, ($parameters->offsetGet('tabletype') ? $parameters->offsetGet('tabletype') : 0));
-            $subpartArray['###CONTROL_TABLETYPE###'] = $this->fillControlTemplate(
-                Templates::getSubpart($template, '###CONTROL_TABLETYPE###'),
-                $arr,
-                'TABLETYPE',
-                $configurations,
-                $confId
-            );
-        }
-
-        if ($configurations->get('tablescopeSelectionInput') || $configurations->get('leaguetable.tablecfg.tablescopeSelectionInput')) {
-            $items = [
-                0,
-                1,
-                2,
-            ];
-            // Wir bereiten die Selectbox vor
-            $arr = [
-                $items,
-                $configurator->getTableScope(),
-            ];
-            $subpartArray['###CONTROL_TABLESCOPE###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_TABLESCOPE###'), $arr, 'TABLESCOPE', $configurations, $confId);
-        }
-
-        if ($configurations->get('pointSystemSelectionInput') || $configurations->get('leaguetable.tablecfg.pointSystemSelectionInput')) {
-            // Die Daten für das Punktsystem kommen aus dem TCA der Tabelle tx_cfcleague_competition
-            // Die TCA laden
-
-            $sports = $configurator->getCompetition()->getSports();
-            $srv = ServiceRegistry::getCompetitionService();
-            $systems = $srv->getPointSystems($sports);
-            $items = [];
-            foreach ($systems as $system) {
-                $items[] = $system[1];
-            }
-
-            // Wir bereiten die Selectbox vor
-            // $items = array(0,1);
-            // $items = array(1=>0,0=>1);
-
-            $arr = [
-                $items,
-                $configurator->getPointSystem(),
-            ];
-            $subpartArray['###CONTROL_POINTSYSTEM###'] = $this->fillControlTemplate(Templates::getSubpart($template, '###CONTROL_POINTSYSTEM###'), $arr, 'POINTSYSTEM', $configurations, $confId);
-        }
-        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray);
-
-        return $out;
-    }
-
-    /**
-     * Die Auswahl für Tabellentyp, Tabellenscope und Punktesystem.
-     *
-     * @param string $template HTML- Template
-     * @param array &$itemsArr Datensätze für die Auswahl
-     * @param string $markerName Name des Markers (TYPE, SCOPE oder SYSTEM)
-     * @param ConfigurationInterface $configurations Konfig-Objekt
-     */
-    protected function fillControlTemplate($template, &$itemsArr, $markerName, $configurations, $confId)
-    {
-        $currItem = $itemsArr[1];
-        $confName = strtolower($markerName); // Konvention
-        $formatter = $configurations->getFormatter();
-
-        // Aus den KeepVars den aktuellen Wert entfernen
-        // $keepVars = $configurations->getKeepVars()->getArrayCopy();
-        // unset($keepVars[$confName]);
-
-        // if($link) {
-        // $token = md5(microtime());
-        // $link->label($token);
-        // }
-
-        $currentNoLink = $configurations->getInt($confId.$confName.'.current.noLink');
-
-        $token = self::getToken();
-        $markerArray = $subpartArray = [];
-
-        // Jetzt über die vorhandenen Items iterieren
-        foreach ($itemsArr[0] as $key => $value) {
-            $link = $configurations->createLink();
-            $link->label($token);
-            // die overrules als Parameter setzen, damit sie per tsConfig nicht überschrieben werden
-            // Das passiert im Moment, weil sie nur aus den Requestparametern übernommen werden.
-            $params = array_merge(
-                $link->overruledParameters,
-                [$confName => $key],
-            );
-            $link->initByTS($configurations, $confId.$confName.'.link.', $params);
-
-            $isCurrent = ($key == $currItem);
-            $markerLabel = $formatter->wrap($key, $confId.$confName.'.'.$key.'.');
-
-            $data['iscurrent'] = $isCurrent ? 1 : 0;
-            $data['value'] = $value;
-
-            $tempArray = $formatter->getItemMarkerArrayWrapped($data, $confId.$confName.'.', 0, 'CONTROL_'.$markerName.'_'.$markerLabel.'_');
-            $tempArray['###CONTROL_'.$markerName.'_'.$markerLabel.'###'] = $tempArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_VALUE###'];
-            $markerArray = array_merge($markerArray, $tempArray);
-            $url = $formatter->wrap($link->makeUrl(false), $confId.$confName.($isCurrent ? '.current.' : '.normal.'));
-            $markerArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK_URL###'] = $url;
-            $markerArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINKURL###'] = $url;
-
-            $linkStr = ($currentNoLink && $key == $currItem) ? $token : $link->makeTag();
-            // Einen zusätzliche Wrap um das generierte Element inkl. Link
-            $linkStr = $formatter->wrap($linkStr, $confId.$confName.($isCurrent ? '.current.' : '.normal.'));
-            $wrappedSubpartArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK###'] = explode($token, $linkStr);
-        }
-
-        $out = Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
-        return $out;
-    }
-
-    /**
-     * Returns a token string.
-     *
-     * @return string
-     */
-    protected static function getToken()
-    {
-        if (!self::$token) {
-            self::$token = md5(microtime());
-        }
-
-        return self::$token;
     }
 }
