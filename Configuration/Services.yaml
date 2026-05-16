@@ -15,3 +15,5 @@ services:
     public: true
   System25\T3sports\Twig\Extension\DataProvider:
     public: true
+  System25\T3sports\Utility\ScopeController:
+    public: true

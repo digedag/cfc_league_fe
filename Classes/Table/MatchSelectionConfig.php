@@ -27,8 +27,8 @@ class MatchSelectionConfig
     private function init(): void
     {
         // Match status (live table or finished)
-        $this->matchStatus = $this->configurations->get($this->confId . 'filter.matchstatus') ?: '2';
-        $this->liveTable = $this->configurations->getBool($this->confId . 'showLiveTable');
+        $this->matchStatus = $this->configurations->get($this->confId.'filter.matchstatus') ?: '2';
+        $this->liveTable = $this->configurations->getBool($this->confId.'showLiveTable');
         if ($this->liveTable) {
             $this->matchStatus = '1,2'; // Include running and finished matches
         }

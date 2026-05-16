@@ -33,8 +33,8 @@ class TableModeConfig
 
         // Point system: 3-point or 2-point
         $this->pointSystem = (int) $this->getConfValue('pointSystem');
-        if (null !== $this->configurations->get($this->confId . 'forcePointSystem')) {
-            $this->pointSystem = (int) $this->configurations->get($this->confId . 'forcePointSystem');
+        if (null !== $this->configurations->get($this->confId.'forcePointSystem')) {
+            $this->pointSystem = (int) $this->configurations->get($this->confId.'forcePointSystem');
         }
 
         // Handle request parameters for dynamic selection
@@ -53,7 +53,7 @@ class TableModeConfig
 
     private function getConfValue(string $key): ?string
     {
-        return $this->configurations->get($this->confId . $key);
+        return $this->configurations->get($this->confId.$key);
     }
 
     public function getTableType(): int

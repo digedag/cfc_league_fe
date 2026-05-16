@@ -14,7 +14,6 @@ use System25\T3sports\Table\IMatchProvider;
 use System25\T3sports\Table\ITableResult;
 use System25\T3sports\Table\ITableType;
 use System25\T3sports\Table\TableWriterBase;
-use System25\T3sports\Utility\ServiceRegistry;
 use tx_rnbase;
 
 /***************************************************************

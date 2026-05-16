@@ -94,7 +94,7 @@ class TableControlRenderer
         $confName = strtolower($markerName);
         $formatter = $configurations->getFormatter();
 
-        $currentNoLink = $configurations->getInt($confId . $confName . '.current.noLink');
+        $currentNoLink = $configurations->getInt($confId.$confName.'.current.noLink');
 
         $token = $this->getToken();
         $markerArray = $subpartArray = [];
@@ -103,25 +103,25 @@ class TableControlRenderer
             $link = $configurations->createLink();
             $link->label($token);
             $params = array_merge($link->overruledParameters, [$confName => $key]);
-            $link->initByTS($configurations, $confId . $confName . '.link.', $params);
+            $link->initByTS($configurations, $confId.$confName.'.link.', $params);
 
             $isCurrent = ($key == $currItem);
-            $markerLabel = $formatter->wrap($key, $confId . $confName . '.' . $key . '.');
+            $markerLabel = $formatter->wrap($key, $confId.$confName.'.'.$key.'.');
 
             $data['iscurrent'] = $isCurrent ? 1 : 0;
             $data['value'] = $value;
 
-            $tempArray = $formatter->getItemMarkerArrayWrapped($data, $confId . $confName . '.', 0, 'CONTROL_' . $markerName . '_' . $markerLabel . '_');
-            $tempArray['###CONTROL_' . $markerName . '_' . $markerLabel . '###'] = $tempArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_VALUE###'];
+            $tempArray = $formatter->getItemMarkerArrayWrapped($data, $confId.$confName.'.', 0, 'CONTROL_'.$markerName.'_'.$markerLabel.'_');
+            $tempArray['###CONTROL_'.$markerName.'_'.$markerLabel.'###'] = $tempArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_VALUE###'];
             $markerArray = array_merge($markerArray, $tempArray);
 
-            $url = $formatter->wrap($link->makeUrl(false), $confId . $confName . ($isCurrent ? '.current.' : '.normal.'));
-            $markerArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK_URL###'] = $url;
-            $markerArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINKURL###'] = $url;
+            $url = $formatter->wrap($link->makeUrl(false), $confId.$confName.($isCurrent ? '.current.' : '.normal.'));
+            $markerArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK_URL###'] = $url;
+            $markerArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINKURL###'] = $url;
 
             $linkStr = ($currentNoLink && $key == $currItem) ? $token : $link->makeTag();
-            $linkStr = $formatter->wrap($linkStr, $confId . $confName . ($isCurrent ? '.current.' : '.normal.'));
-            $wrappedSubpartArray['###CONTROL_' . $markerName . '_' . $markerLabel . '_LINK###'] = explode($token, $linkStr);
+            $linkStr = $formatter->wrap($linkStr, $confId.$confName.($isCurrent ? '.current.' : '.normal.'));
+            $wrappedSubpartArray['###CONTROL_'.$markerName.'_'.$markerLabel.'_LINK###'] = explode($token, $linkStr);
         }
 
         return Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -138,6 +138,7 @@ class TableControlRenderer
         if (!$token) {
             $token = md5(microtime());
         }
+
         return $token;
     }
 }
