@@ -2,7 +2,6 @@
 
 namespace System25\T3sports\Utility;
 
-use PDO;
 use Sys25\RnBase\Configuration\ConfigurationInterface;
 use Sys25\RnBase\Configuration\Processor;
 use Sys25\RnBase\Database\Connection;
@@ -16,6 +15,7 @@ use System25\T3sports\Model\Group;
 use System25\T3sports\Model\Repository\ClubRepository;
 use System25\T3sports\Model\Repository\SaisonRepository;
 use tx_rnbase;
+use TYPO3\CMS\Core\Database\Connection as DatabaseConnection;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -148,7 +148,7 @@ class ScopeController
         $options['where'] = function (QueryBuilder $qb) use ($uid) {
             $qb->andWhere($qb->expr()->eq(
                 'uid',
-                $qb->createNamedParameter($uid, PDO::PARAM_INT)));
+                $qb->createNamedParameter($uid, DatabaseConnection::PARAM_INT)));
         };
         $result = Connection::getInstance()->doSelect('*', 'tt_content', $options);
 
