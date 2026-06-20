@@ -16,7 +16,7 @@ use tx_rnbase;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007-2023 Rene Nitzsche (rene@system25.de)
+ *  (c) 2007-2026 Rene Nitzsche (rene@system25.de)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -56,9 +56,9 @@ class MatchReport extends AbstractAction
 
         // Die MatchID ermittlen
         // Ist sie fest definiert?
-        $matchId = intval($configurations->get('matchreportMatchUid'));
+        $matchId = $configurations->getInt('matchreportMatchUid');
         if (!$matchId) {
-            $matchId = intval($parameters->offsetGet('matchId'));
+            $matchId = $parameters->getInt('matchId');
             if (0 == $matchId) {
                 return 'No matchId found!';
             }
