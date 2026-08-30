@@ -80,7 +80,7 @@ class ScopeController
             }
         }
 
-        $cObjUid = $configurations->getCObj()->data['uid'];
+        $cObjUid = $configurations->getCObj()->data['uid'] ?? null;
         // Wenn das Plugin als lib-Objekt eingebunden wird, dann gibt es keine cObject-UID
         if (!$cObjUid || !isset($this->cObjectUID[$cObjUid]) || intval($configurations->get('scope.noCache'))) {
             // Dieser Teil wird pro Plugin (cObject) nur einmal aufgerufen
